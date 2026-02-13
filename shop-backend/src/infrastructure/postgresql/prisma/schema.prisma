@@ -1,0 +1,466 @@
+generator client {
+  provider = "prisma-client"
+  output   = "generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+/////**** ENUMS ****/////
+
+enum ProductType { 
+  ACCESSORY
+  PHONE
+  SERVICE
+  OTHER
+}
+
+enum StockMovementType {
+  STOCK_IN
+  STOCK_OUT
+  ADJUSTMENT
+}
+
+enum PaymentMethod {
+  CASH
+  TRANSFER
+  POS
+}
+
+enum CashFlowType {
+INFLOW
+OUTFLOW
+}
+enum LiabilityType {
+  LOAN
+  CREDIT
+  SALARY_ADVANCE
+  }
+
+  
+enum Role {
+  ADMIN
+  STAFF
+}
+
+
+enum SaleStatus {
+  COMPLETED
+  REFUNDED
+  VOIDED
+}
+
+enum ExpenseStatus {
+  APPROVED
+  PENDING
+  CANCELLED
+}
+
+enum InventoryTransactionType {
+  PURCHASE
+  SALE
+  ADJUSTMENT
+  RETURN
+}
+
+enum CapitalTransactionType {
+  INJECTION
+  WITHDRAWAL
+}
+enum LiabilityStatus {
+  ACTIVE 
+  SETTLED
+}
+
+///**** MODELS****///
+
+
+model Business {
+  id          String    @id @default(uuid())
+  name        String
+  address     String?
+  onboardingStep  Int   @default(1)
+  onboardingCompleted   Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+
+  branch     Branch[]
+  users      User[]
+  business   BusinessSubscription[]
+  categories Category[]
+  products   Product[]
+  sales      Sale[]
+  cashFlows  CashFlow[] 
+  liabilities Liability[]
+  loan        Loan[] 
+  employees    Employee[]
+  assets      Asset[]
+  expenses    Expense[]
+  expenseCategories ExpenseCategory[]
+
+}
+model Branch {
+  id      String    @id     @default(uuid())
+  businessId    String  
+  name          String
+  address       String?
+  createdAt     DateTime      @default(now())
+  business      Business      @relation(fields: [businessId], references: [id])
+
+  users         User[]
+  products      Product[]
+  sales         Sale[]
+  cashflows     CashFlow[]
+  assets        Asset[]
+  liabilities   Liability[]
+  expenses      Expense[]
+}
+
+model User {
+  id          String    @id @default(uuid())
+  name        String
+  email       String    @unique
+  password    String
+  isActive    Boolean   @default(true)
+  role        Role      @default(STAFF)
+  branchId    String?
+  businessId  String?
+  createdAt   DateTime  @default(now())
+
+  business    Business? @relation(fields: [businessId], references: [id])
+  branch      Branch?    @relation(fields: [branchId], references: [id])
+  passwordResetTokens passwordResetToken[]
+
+
+  @@index([businessId])
+}
+
+
+model passwordResetToken {
+  id          String    @id @default(uuid())
+  userId      String
+  token       String    @unique
+  expiresAt   DateTime
+  used        Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+
+  user        User      @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model SubscriptionPlan {
+  id    String  @id   @default(uuid())
+  name  String
+  price   Decimal
+  maxUsers    Int
+  maxBranch   Int
+  createdAt   DateTime    @default(now())
+
+  business    BusinessSubscription[]
+}
+
+model BusinessSubscription {
+  id              String    @id     @default(uuid())
+  businessId      String    
+  subscriptionId  String
+  startedAt       DateTime        @default(now())
+  trialEndDate    DateTime?
+  status          String          @default("ACTIVE")
+
+  business        Business @relation(fields: [businessId], references: [id])
+  subscription    SubscriptionPlan @relation(fields: [subscriptionId], references: [id])
+}
+
+model Category {
+  id          String    @id @default(uuid())
+  name        String
+  businessId  String
+  imageUrl    String?
+  createdAt   DateTime  @default(now())
+  business    Business  @relation(fields: [businessId], references: [id])
+
+  products    Product[]
+
+  @@unique([name, businessId])
+}
+
+model Brand {
+  id          String    @id @default(uuid())
+  name        String
+
+  products    Product[]
+
+}
+
+model Product {
+  id          String    @id @default(uuid())
+  businessId  String
+  branchId    String?
+  categoryId  String
+  brandId     String?
+  name        String
+  type        ProductType
+  model       String?
+  costPrice   Decimal?
+  sellingPrice Decimal?
+  quantity    Int       @default(0)
+  imageUrl    String?
+  sku         String?
+  reorderLevel  Int?
+
+  //Accessories only 
+  imei        String?   @unique
+  condition    String?
+  isActive    Boolean   @default(true)
+
+  createdAt   DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  business    Business  @relation(fields: [businessId], references: [id])
+  branch      Branch?    @relation(fields: [branchId], references: [id])
+  category    Category  @relation(fields: [categoryId], references: [id])
+  brand       Brand?    @relation(fields: [brandId], references: [id])
+
+  stockMoves StockMovement[]  
+  saleItem   SaleItem[]
+
+  @@index([businessId])
+  @@index([type])
+}
+model StockMovement {
+  id          String            @id @default(uuid())
+  productId   String
+  type        StockMovementType
+  quantity    Int
+  remainintQty  Int           @default(0)
+  costPrice   Decimal?
+  sellingPrice Decimal?
+  date        DateTime          @default(now())
+  createdAt   DateTime          @default(now())
+
+  product     Product           @relation(fields: [productId], references: [id])
+
+  @@index([productId])
+  @@index([createdAt])
+}
+
+
+model Sale {
+  id            String        @id @default(uuid())
+  businessId    String
+  branchId      String?
+  discount      Decimal?
+  totalAmount   Decimal
+  createdAt     DateTime      @default(now())
+  status        SaleStatus    @default(COMPLETED)
+  refundedAt     DateTime?
+  refundReason   String?
+  taxAmount      Decimal?
+
+
+  business      Business      @relation(fields: [businessId], references: [id])
+  branch        Branch?        @relation(fields: [branchId], references: [id])
+  items         SaleItem[]
+  payments     Payment[]
+
+  @@index([businessId])
+  @@index([createdAt])
+}
+
+model SaleItem {
+  id          String    @id @default(uuid())
+  saleId      String
+  productId   String
+  quantity    Int
+  unitPrice   Decimal
+  totalPrice  Decimal
+
+  sale        Sale      @relation(fields: [saleId], references: [id])
+  product     Product   @relation(fields: [productId], references: [id])
+
+  @@index([saleId])
+  @@index([productId])
+}
+
+model Payment {
+  id          String        @id @default(uuid())
+  saleId      String
+  amount      Decimal
+  method      PaymentMethod
+  date        DateTime      @default(now())
+
+  sale        Sale          @relation(fields: [saleId], references: [id])
+
+  @@index([saleId])
+  @@index([date])
+}
+
+model CashFlow {
+  id          String        @id @default(uuid())
+  businessId  String
+  branchId    String?
+  type        CashFlowType
+  amount      Decimal
+  source      String?
+  description String?
+  createdAt   DateTime      @default(now())
+
+  business    Business      @relation(fields: [businessId], references: [id])
+  branch      Branch?        @relation(fields: [branchId], references: [id])
+
+  @@index([businessId])
+  @@index([createdAt])
+}
+
+model Liability {
+  id           String        @id @default(uuid())
+  businessId   String
+  branchId     String?
+  title        String
+  type         LiabilityType
+  principalAmount       Float
+  interestRate Float?         @default(0)
+  startDate    DateTime
+  dueDate      DateTime?
+  lender       String?
+  outstandingAmount   Float
+  description  String?
+  status       LiabilityStatus
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  business     Business     @relation(fields: [businessId], references: [id])
+  branch       Branch?       @relation(fields: [branchId], references: [id])
+
+  liability    LiabilityPayment[]
+}
+model LiabilityPayment {
+  id           String     @id   @default(uuid())
+  liabilityId  String
+  liabilities  Liability        @relation(fields: [liabilityId], references: [id])
+  amount       Float?
+  paymentDate  DateTime?
+}
+
+model Asset {
+  id               String    @id @default(uuid())
+  businessId       String
+  branchId         String?
+  name             String
+  category         String
+  purchaseCost     Float
+  purchaseDate     DateTime?
+  totalCost        Float?
+  currentValue     Float?
+  quantity         Int
+  condition        String?
+  supplier         String?
+  usefulLifeMonths Int
+  salvageValue     Float?
+  accumulatedDepreciation   Float?
+  disposedAt       DateTime?
+  disposalAmount   Float?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  business         Business  @relation(fields: [businessId], references: [id])
+  branch           Branch?   @relation(fields: [branchId], references: [id])
+}
+
+
+model Expense {
+  id            String        @id @default(uuid())
+  businessId    String
+  branchId      String?
+  categoryId    String?
+  amount        Float
+  paymentMethod PaymentMethod @default(CASH)
+  reference     String?
+  supplier      String?
+  status        ExpenseStatus @default(APPROVED)
+  description   String?
+  date          DateTime      @default(now())
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  business      Business      @relation(fields: [businessId], references: [id])
+  branch        Branch?        @relation(fields: [branchId], references: [id])
+  category      ExpenseCategory? @relation(fields: [categoryId], references: [id])
+
+  @@index([businessId])
+  @@index([categoryId])
+}
+
+model CapitalExpenditure {
+  id            String   @id @default(uuid())
+  type          String
+  amount        Float
+  referenceType String
+  referenceId   String
+  description   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+}
+
+model Loan {
+  id          String                 @id @default(uuid())
+  businessId  String
+  principal   Decimal?
+  amount      Float
+  interestRate Float                @default(0)
+  dueDate     DateTime?
+  lender      String?
+  description String?
+  createdById String?
+  
+  business    Business               @relation(fields: [businessId], references: [id])
+  repayments  LoanRepayment[]
+}
+
+model LoanRepayment {
+  id          String                 @id @default(uuid())
+  loanId      String
+  amount      Float
+  date        DateTime               @default(now())
+
+  loan        Loan                   @relation(fields: [loanId], references: [id])
+}
+
+model Employee {
+  id          String    @id @default(uuid())
+  businessId String
+  name        String
+  position    String
+  salary      Float
+  salaryType  String
+  hiredAt     DateTime  @default(now())
+  createdAt   DateTime  @default(now())
+
+  business    Business  @relation(fields: [businessId], references: [id])
+  salaryAccruals SalaryAccrual[]
+}
+
+model SalaryAccrual {
+  id          String    @id @default(uuid())
+  employeeId  String
+  amount      Float
+  month       Int
+  year        Int
+  createdAt   DateTime  @default(now())
+
+  employee    Employee  @relation(fields: [employeeId], references: [id])
+}
+
+model  ExpenseCategory {
+  id          String    @id @default(uuid())
+  businessId  String
+  name        String    @unique
+  createdAt   DateTime  @default(now())
+  business    Business  @relation(fields: [businessId], references: [id])
+
+  expenses    Expense[]
+
+  @@unique([name, businessId])
+}
+

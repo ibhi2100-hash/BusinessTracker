@@ -1,0 +1,161 @@
+###Register Route
+POST http://localhost:2100/api/auth/register
+Content-Type: application/json
+
+{   
+    "name": "tuloko",
+    "email": "mrshre479k@gmail.com",
+    "password": "Teem@t212",
+    "role": "ADMIN"
+}
+###Login Route
+POST http://localhost:2100/api/auth/login
+Content-Type: application/json
+
+{   
+    "email": "mrshre490k@gmail.com",
+    "password": "Teem@t212"
+}
+
+
+###products Route
+POST  http://localhost:2100/api/products/create 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ5MDhlMmM2LTE1MzYtNGZmZS04NDdjLWQ5ODg0YzhjYzJkZiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3MDU1NjgyOCwiZXhwIjoxNzcxMTYxNjI4fQ.C7H-onhpnuzqLqbc6-OLTLxX0MoV7bbKV6IOBkYd_hs
+Content-Type: application/json
+
+{   
+    "name": "Shplus 48W",
+    "type": "ACCESSORY",
+    "costPrice": 2000,
+    "sellingPrice": 3500,
+    "quantity": 6,
+    "categoryName": "Charger",
+    "brandName": "Shplus"
+}   
+
+###Get All products
+GET http://localhost:2100/api/products
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ5MDhlMmM2LTE1MzYtNGZmZS04NDdjLWQ5ODg0YzhjYzJkZiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3MDU1NjgyOCwiZXhwIjoxNzcxMTYxNjI4fQ.C7H-onhpnuzqLqbc6-OLTLxX0MoV7bbKV6IOBkYd_hs
+
+###Delete product 
+DELETE http://localhost:2100/api/products/c6b48173-0583-4dd8-b516-80c59400c3fe
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYyY2YxNjMzLTAwNjgtNGMxZC1iNmQzLTg3OWM1NzIyYTgwNSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3MDI4NTk3MywiZXhwIjoxNzcwODkwNzczfQ.ayMHkZomqgycltLReVD26QmvaKlSm_mU8_RBtvbLa-U
+
+### Update product 
+PUT http://localhost:2100/api/products/70f376fc-592b-44ce-a209-421d4c3ebc9a
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ5MDhlMmM2LTE1MzYtNGZmZS04NDdjLWQ5ODg0YzhjYzJkZiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3MDI5NTQ5MiwiZXhwIjoxNzcwOTAwMjkyfQ.K2m-xsIyFwKZ_jLUlajzWeb8XAR8Gs3Nv0KwHlwzZYU
+Content-Type: application/json
+{   
+    "name": "Shplus 150W",
+    "type": "ACCESSORY",
+    "costPrice": 2500,
+    "sellingPrice": 4000,
+    "quantity": 30,
+    "categoryName": "Charger",
+    "brandName": "Shplus"
+}
+### Sales Creation
+
+POST  http://localhost:2100/api/sales
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ5MDhlMmM2LTE1MzYtNGZmZS04NDdjLWQ5ODg0YzhjYzJkZiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3MDU1NjgyOCwiZXhwIjoxNzcxMTYxNjI4fQ.C7H-onhpnuzqLqbc6-OLTLxX0MoV7bbKV6IOBkYd_hs
+Content-Type: application/json
+
+{
+    "items": [
+        {
+           "productId": "eb7a675c-66d3-4f8f-981c-f05de7c49a9b",
+           "quantity": 1,
+           "unitPrice": 3500,
+           "totalPrice": 3500
+        }
+    ],
+    "payments": [
+        {
+            "method": "CASH",
+            "amount": 3500
+        }
+    ]
+}
+
+### Sale Refund 
+POST  http://localhost:2100/api/sales/refund
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ5MDhlMmM2LTE1MzYtNGZmZS04NDdjLWQ5ODg0YzhjYzJkZiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3MDU1NjgyOCwiZXhwIjoxNzcxMTYxNjI4fQ.C7H-onhpnuzqLqbc6-OLTLxX0MoV7bbKV6IOBkYd_hs
+Content-Type: application/json
+
+{
+    "saleId": "bfd2daca-6a0f-4872-9940-d1b32b5cd653"
+}
+
+
+### Asset Purchase
+POST http://localhost:2100/api/asset
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ5MDhlMmM2LTE1MzYtNGZmZS04NDdjLWQ5ODg0YzhjYzJkZiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3MDU1NjgyOCwiZXhwIjoxNzcxMTYxNjI4fQ.C7H-onhpnuzqLqbc6-OLTLxX0MoV7bbKV6IOBkYd_hs
+Content-Type: application/json
+
+{ 
+    "name": "computer",
+    "category": " Fixed Asset",
+    "purchaseCost": 40000,
+    "quantity": 3,
+    "usefulLifeMonths": 50
+    
+}
+
+###liability
+POST http://localhost:2100/api/liability
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ5MDhlMmM2LTE1MzYtNGZmZS04NDdjLWQ5ODg0YzhjYzJkZiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3MDU1NjgyOCwiZXhwIjoxNzcxMTYxNjI4fQ.C7H-onhpnuzqLqbc6-OLTLxX0MoV7bbKV6IOBkYd_hs
+Content-Type: application/json
+
+{
+    "title": "EasyBuy",
+    "type": "LOAN",
+    "principalAmount": 60000
+
+}
+
+### Get Assets list
+GET http://localhost:2100/api/asset
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ5MDhlMmM2LTE1MzYtNGZmZS04NDdjLWQ5ODg0YzhjYzJkZiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3MDU1NjgyOCwiZXhwIjoxNzcxMTYxNjI4fQ.C7H-onhpnuzqLqbc6-OLTLxX0MoV7bbKV6IOBkYd_hs
+
+### Report Request
+GET  http://localhost:2100/api/report/balance-sheet
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ5MDhlMmM2LTE1MzYtNGZmZS04NDdjLWQ5ODg0YzhjYzJkZiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3MDU1NjgyOCwiZXhwIjoxNzcxMTYxNjI4fQ.C7H-onhpnuzqLqbc6-OLTLxX0MoV7bbKV6IOBkYd_hs
+
+
+
+### Liability payment
+POST http://localhost:2100/api/liability/02048611-774c-4e4f-93cd-f3efffd57244/repay
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ5MDhlMmM2LTE1MzYtNGZmZS04NDdjLWQ5ODg0YzhjYzJkZiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3MDU1NjgyOCwiZXhwIjoxNzcxMTYxNjI4fQ.C7H-onhpnuzqLqbc6-OLTLxX0MoV7bbKV6IOBkYd_hs
+Content-Type: application/json
+
+{
+    "amount": 30000
+
+}
+
+### Liability payment
+POST http://localhost:2100/api/report/cashflow
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ5MDhlMmM2LTE1MzYtNGZmZS04NDdjLWQ5ODg0YzhjYzJkZiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3MDU1NjgyOCwiZXhwIjoxNzcxMTYxNjI4fQ.C7H-onhpnuzqLqbc6-OLTLxX0MoV7bbKV6IOBkYd_hs
+Content-Type: application/json
+
+{
+    "startDate": "09/02/2026",
+    "endDate": "10/02/2026"
+
+}
+
+### Report Request
+GET  http://localhost:2100/api/liability
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ5MDhlMmM2LTE1MzYtNGZmZS04NDdjLWQ5ODg0YzhjYzJkZiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3MDU1NjgyOCwiZXhwIjoxNzcxMTYxNjI4fQ.C7H-onhpnuzqLqbc6-OLTLxX0MoV7bbKV6IOBkYd_hs
+
+###CreateBusiness
+POST http://localhost:2100/api/onboarding/create
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxNzVkOGNjLTUyOGItNGRhOC1hNGZmLTNjZmU5YmZmYmY3MSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3MDkyNjA4NSwiZXhwIjoxNzcxNTMwODg1fQ.12TUlvoMbr2en3JWKiytgf54NVpui6gAIWxXfklB1vs
+Content-Type: application/json
+
+{
+    "name": "MrShrek Phone Solution"
+}
+###Get business Branches 
+GET  http://localhost:2100/api/business/branches
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxNzVkOGNjLTUyOGItNGRhOC1hNGZmLTNjZmU5YmZmYmY3MSIsInJvbGUiOiJBRE1JTiIsImJ1c2luZXNzSWQiOiI3NmE0OTVlZS01N2E1LTQzNDctYjBlYy00YWE3MjNiNGUwOGYiLCJpYXQiOjE3NzA5MjYyMTgsImV4cCI6MTc3MTUzMTAxOH0.jRs9_77BKtSnWVa-Wb0n4oUBo3KvYZHmHb8TykEVLRg

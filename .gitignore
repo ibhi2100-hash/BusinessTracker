@@ -1,0 +1,9 @@
+shop-frontend/node_modules/
+shop-backend/node_modules/
+
+
+shop-frontend/dist/
+shop-backend/build/
+
+shop-frontend/.env.local
+shop-frontend/.env

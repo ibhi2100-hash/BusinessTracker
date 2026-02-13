@@ -1,0 +1,61 @@
+{
+  "compilerOptions": {
+    /* =========================
+       Project Structure
+    ========================== */
+    "rootDir": "src",
+    "outDir": "dist",
+
+    /* =========================
+       Module System (Node ESM)
+    ========================== */
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2023",
+
+    /* =========================
+       Interop & Runtime Safety
+    ========================== */
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* =========================
+       Type Safety (Strict but sane)
+    ========================== */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    /* =========================
+       Decorators
+    ========================== */
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
+    /* =========================
+       Build Outputs
+    ========================== */
+    "sourceMap": true,
+    "declaration": false,
+    "declarationMap": false,
+
+    /* =========================
+       Environment / Types
+    ========================== */
+    "types": ["node", "express"],
+
+    /* =========================
+       Performance & Tooling
+    ========================== */
+    "isolatedModules": true,
+    "skipLibCheck": true,
+
+    "typeRoots": ["./src/types", "./node_modules/@types"]
+  },
+
+  /* =========================
+     Compilation Scope
+  ========================== */
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
