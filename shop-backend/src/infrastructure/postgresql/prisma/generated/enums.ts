@@ -20,8 +20,10 @@ export type ProductType = (typeof ProductType)[keyof typeof ProductType]
 
 
 export const StockMovementType = {
-  STOCK_IN: 'STOCK_IN',
-  STOCK_OUT: 'STOCK_OUT',
+  OPENING: 'OPENING',
+  PURCHASE: 'PURCHASE',
+  SALE: 'SALE',
+  RETURN: 'RETURN',
   ADJUSTMENT: 'ADJUSTMENT'
 } as const
 
@@ -38,6 +40,7 @@ export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
 
 
 export const CashFlowType = {
+  OPENING: 'OPENING',
   INFLOW: 'INFLOW',
   OUTFLOW: 'OUTFLOW'
 } as const

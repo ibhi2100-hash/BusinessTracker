@@ -28,7 +28,7 @@ export default function Step2Business() {
       }
 
 
-      router.push("/onboarding/step3-plan");
+      router.push("/dashboard");
     } catch (err: any) {
       setError(err.message);
     } finally {

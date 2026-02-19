@@ -41,13 +41,14 @@ export class LiabilityService {
             if(dto.amount <= 0) {
                 throw new Error("Repayment amount must be greater that zero");
             };
+            const oustanding = liability.outstandingAmount.toNumber();
 
-            if(dto.amount > liability.outstandingAmount){
+            if(dto.amount > oustanding){
                 throw new Error("Repayment exceeds outstanding balance")
             }
              
             const newOutstanding = 
-                liability.outstandingAmount - dto.amount;
+                    oustanding - dto.amount;
 
             await this.liabilityRepo.recordLiabilityPayment(liabilityId, {amount:dto.amount, paymentDate: dto.paymentDate}, tx);
 

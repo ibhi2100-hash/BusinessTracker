@@ -28,24 +28,24 @@ export type AggregateAsset = {
 
 export type AssetAvgAggregateOutputType = {
   purchaseCost: number | null
-  totalCost: number | null
-  currentValue: number | null
+  totalCost: runtime.Decimal | null
+  currentValue: runtime.Decimal | null
   quantity: number | null
   usefulLifeMonths: number | null
-  salvageValue: number | null
+  salvageValue: runtime.Decimal | null
   accumulatedDepreciation: number | null
-  disposalAmount: number | null
+  disposalAmount: runtime.Decimal | null
 }
 
 export type AssetSumAggregateOutputType = {
   purchaseCost: number | null
-  totalCost: number | null
-  currentValue: number | null
+  totalCost: runtime.Decimal | null
+  currentValue: runtime.Decimal | null
   quantity: number | null
   usefulLifeMonths: number | null
-  salvageValue: number | null
+  salvageValue: runtime.Decimal | null
   accumulatedDepreciation: number | null
-  disposalAmount: number | null
+  disposalAmount: runtime.Decimal | null
 }
 
 export type AssetMinAggregateOutputType = {
@@ -56,16 +56,16 @@ export type AssetMinAggregateOutputType = {
   category: string | null
   purchaseCost: number | null
   purchaseDate: Date | null
-  totalCost: number | null
-  currentValue: number | null
+  totalCost: runtime.Decimal | null
+  currentValue: runtime.Decimal | null
   quantity: number | null
   condition: string | null
   supplier: string | null
   usefulLifeMonths: number | null
-  salvageValue: number | null
+  salvageValue: runtime.Decimal | null
   accumulatedDepreciation: number | null
   disposedAt: Date | null
-  disposalAmount: number | null
+  disposalAmount: runtime.Decimal | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -78,16 +78,16 @@ export type AssetMaxAggregateOutputType = {
   category: string | null
   purchaseCost: number | null
   purchaseDate: Date | null
-  totalCost: number | null
-  currentValue: number | null
+  totalCost: runtime.Decimal | null
+  currentValue: runtime.Decimal | null
   quantity: number | null
   condition: string | null
   supplier: string | null
   usefulLifeMonths: number | null
-  salvageValue: number | null
+  salvageValue: runtime.Decimal | null
   accumulatedDepreciation: number | null
   disposedAt: Date | null
-  disposalAmount: number | null
+  disposalAmount: runtime.Decimal | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -299,16 +299,16 @@ export type AssetGroupByOutputType = {
   category: string
   purchaseCost: number
   purchaseDate: Date | null
-  totalCost: number | null
-  currentValue: number | null
+  totalCost: runtime.Decimal | null
+  currentValue: runtime.Decimal | null
   quantity: number
   condition: string | null
   supplier: string | null
   usefulLifeMonths: number
-  salvageValue: number | null
+  salvageValue: runtime.Decimal | null
   accumulatedDepreciation: number | null
   disposedAt: Date | null
-  disposalAmount: number | null
+  disposalAmount: runtime.Decimal | null
   createdAt: Date
   updatedAt: Date
   _count: AssetCountAggregateOutputType | null
@@ -344,16 +344,16 @@ export type AssetWhereInput = {
   category?: Prisma.StringFilter<"Asset"> | string
   purchaseCost?: Prisma.FloatFilter<"Asset"> | number
   purchaseDate?: Prisma.DateTimeNullableFilter<"Asset"> | Date | string | null
-  totalCost?: Prisma.FloatNullableFilter<"Asset"> | number | null
-  currentValue?: Prisma.FloatNullableFilter<"Asset"> | number | null
+  totalCost?: Prisma.DecimalNullableFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentValue?: Prisma.DecimalNullableFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFilter<"Asset"> | number
   condition?: Prisma.StringNullableFilter<"Asset"> | string | null
   supplier?: Prisma.StringNullableFilter<"Asset"> | string | null
   usefulLifeMonths?: Prisma.IntFilter<"Asset"> | number
-  salvageValue?: Prisma.FloatNullableFilter<"Asset"> | number | null
+  salvageValue?: Prisma.DecimalNullableFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   accumulatedDepreciation?: Prisma.FloatNullableFilter<"Asset"> | number | null
   disposedAt?: Prisma.DateTimeNullableFilter<"Asset"> | Date | string | null
-  disposalAmount?: Prisma.FloatNullableFilter<"Asset"> | number | null
+  disposalAmount?: Prisma.DecimalNullableFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFilter<"Asset"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Asset"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
@@ -395,16 +395,16 @@ export type AssetWhereUniqueInput = Prisma.AtLeast<{
   category?: Prisma.StringFilter<"Asset"> | string
   purchaseCost?: Prisma.FloatFilter<"Asset"> | number
   purchaseDate?: Prisma.DateTimeNullableFilter<"Asset"> | Date | string | null
-  totalCost?: Prisma.FloatNullableFilter<"Asset"> | number | null
-  currentValue?: Prisma.FloatNullableFilter<"Asset"> | number | null
+  totalCost?: Prisma.DecimalNullableFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentValue?: Prisma.DecimalNullableFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFilter<"Asset"> | number
   condition?: Prisma.StringNullableFilter<"Asset"> | string | null
   supplier?: Prisma.StringNullableFilter<"Asset"> | string | null
   usefulLifeMonths?: Prisma.IntFilter<"Asset"> | number
-  salvageValue?: Prisma.FloatNullableFilter<"Asset"> | number | null
+  salvageValue?: Prisma.DecimalNullableFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   accumulatedDepreciation?: Prisma.FloatNullableFilter<"Asset"> | number | null
   disposedAt?: Prisma.DateTimeNullableFilter<"Asset"> | Date | string | null
-  disposalAmount?: Prisma.FloatNullableFilter<"Asset"> | number | null
+  disposalAmount?: Prisma.DecimalNullableFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFilter<"Asset"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Asset"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
@@ -449,16 +449,16 @@ export type AssetScalarWhereWithAggregatesInput = {
   category?: Prisma.StringWithAggregatesFilter<"Asset"> | string
   purchaseCost?: Prisma.FloatWithAggregatesFilter<"Asset"> | number
   purchaseDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Asset"> | Date | string | null
-  totalCost?: Prisma.FloatNullableWithAggregatesFilter<"Asset"> | number | null
-  currentValue?: Prisma.FloatNullableWithAggregatesFilter<"Asset"> | number | null
+  totalCost?: Prisma.DecimalNullableWithAggregatesFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentValue?: Prisma.DecimalNullableWithAggregatesFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntWithAggregatesFilter<"Asset"> | number
   condition?: Prisma.StringNullableWithAggregatesFilter<"Asset"> | string | null
   supplier?: Prisma.StringNullableWithAggregatesFilter<"Asset"> | string | null
   usefulLifeMonths?: Prisma.IntWithAggregatesFilter<"Asset"> | number
-  salvageValue?: Prisma.FloatNullableWithAggregatesFilter<"Asset"> | number | null
+  salvageValue?: Prisma.DecimalNullableWithAggregatesFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   accumulatedDepreciation?: Prisma.FloatNullableWithAggregatesFilter<"Asset"> | number | null
   disposedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Asset"> | Date | string | null
-  disposalAmount?: Prisma.FloatNullableWithAggregatesFilter<"Asset"> | number | null
+  disposalAmount?: Prisma.DecimalNullableWithAggregatesFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Asset"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Asset"> | Date | string
 }
@@ -469,16 +469,16 @@ export type AssetCreateInput = {
   category: string
   purchaseCost: number
   purchaseDate?: Date | string | null
-  totalCost?: number | null
-  currentValue?: number | null
+  totalCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity: number
   condition?: string | null
   supplier?: string | null
   usefulLifeMonths: number
-  salvageValue?: number | null
+  salvageValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   accumulatedDepreciation?: number | null
   disposedAt?: Date | string | null
-  disposalAmount?: number | null
+  disposalAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutAssetsInput
@@ -493,16 +493,16 @@ export type AssetUncheckedCreateInput = {
   category: string
   purchaseCost: number
   purchaseDate?: Date | string | null
-  totalCost?: number | null
-  currentValue?: number | null
+  totalCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity: number
   condition?: string | null
   supplier?: string | null
   usefulLifeMonths: number
-  salvageValue?: number | null
+  salvageValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   accumulatedDepreciation?: number | null
   disposedAt?: Date | string | null
-  disposalAmount?: number | null
+  disposalAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -513,16 +513,16 @@ export type AssetUpdateInput = {
   category?: Prisma.StringFieldUpdateOperationsInput | string
   purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
   purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totalCost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  currentValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  totalCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   usefulLifeMonths?: Prisma.IntFieldUpdateOperationsInput | number
-  salvageValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salvageValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   accumulatedDepreciation?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   disposedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  disposalAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  disposalAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutAssetsNestedInput
@@ -537,16 +537,16 @@ export type AssetUncheckedUpdateInput = {
   category?: Prisma.StringFieldUpdateOperationsInput | string
   purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
   purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totalCost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  currentValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  totalCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   usefulLifeMonths?: Prisma.IntFieldUpdateOperationsInput | number
-  salvageValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salvageValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   accumulatedDepreciation?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   disposedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  disposalAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  disposalAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -559,16 +559,16 @@ export type AssetCreateManyInput = {
   category: string
   purchaseCost: number
   purchaseDate?: Date | string | null
-  totalCost?: number | null
-  currentValue?: number | null
+  totalCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity: number
   condition?: string | null
   supplier?: string | null
   usefulLifeMonths: number
-  salvageValue?: number | null
+  salvageValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   accumulatedDepreciation?: number | null
   disposedAt?: Date | string | null
-  disposalAmount?: number | null
+  disposalAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -579,16 +579,16 @@ export type AssetUpdateManyMutationInput = {
   category?: Prisma.StringFieldUpdateOperationsInput | string
   purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
   purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totalCost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  currentValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  totalCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   usefulLifeMonths?: Prisma.IntFieldUpdateOperationsInput | number
-  salvageValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salvageValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   accumulatedDepreciation?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   disposedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  disposalAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  disposalAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -601,16 +601,16 @@ export type AssetUncheckedUpdateManyInput = {
   category?: Prisma.StringFieldUpdateOperationsInput | string
   purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
   purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totalCost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  currentValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  totalCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   usefulLifeMonths?: Prisma.IntFieldUpdateOperationsInput | number
-  salvageValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salvageValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   accumulatedDepreciation?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   disposedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  disposalAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  disposalAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -803,16 +803,16 @@ export type AssetCreateWithoutBusinessInput = {
   category: string
   purchaseCost: number
   purchaseDate?: Date | string | null
-  totalCost?: number | null
-  currentValue?: number | null
+  totalCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity: number
   condition?: string | null
   supplier?: string | null
   usefulLifeMonths: number
-  salvageValue?: number | null
+  salvageValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   accumulatedDepreciation?: number | null
   disposedAt?: Date | string | null
-  disposalAmount?: number | null
+  disposalAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   branch?: Prisma.BranchCreateNestedOneWithoutAssetsInput
@@ -825,16 +825,16 @@ export type AssetUncheckedCreateWithoutBusinessInput = {
   category: string
   purchaseCost: number
   purchaseDate?: Date | string | null
-  totalCost?: number | null
-  currentValue?: number | null
+  totalCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity: number
   condition?: string | null
   supplier?: string | null
   usefulLifeMonths: number
-  salvageValue?: number | null
+  salvageValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   accumulatedDepreciation?: number | null
   disposedAt?: Date | string | null
-  disposalAmount?: number | null
+  disposalAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -876,16 +876,16 @@ export type AssetScalarWhereInput = {
   category?: Prisma.StringFilter<"Asset"> | string
   purchaseCost?: Prisma.FloatFilter<"Asset"> | number
   purchaseDate?: Prisma.DateTimeNullableFilter<"Asset"> | Date | string | null
-  totalCost?: Prisma.FloatNullableFilter<"Asset"> | number | null
-  currentValue?: Prisma.FloatNullableFilter<"Asset"> | number | null
+  totalCost?: Prisma.DecimalNullableFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentValue?: Prisma.DecimalNullableFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFilter<"Asset"> | number
   condition?: Prisma.StringNullableFilter<"Asset"> | string | null
   supplier?: Prisma.StringNullableFilter<"Asset"> | string | null
   usefulLifeMonths?: Prisma.IntFilter<"Asset"> | number
-  salvageValue?: Prisma.FloatNullableFilter<"Asset"> | number | null
+  salvageValue?: Prisma.DecimalNullableFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   accumulatedDepreciation?: Prisma.FloatNullableFilter<"Asset"> | number | null
   disposedAt?: Prisma.DateTimeNullableFilter<"Asset"> | Date | string | null
-  disposalAmount?: Prisma.FloatNullableFilter<"Asset"> | number | null
+  disposalAmount?: Prisma.DecimalNullableFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFilter<"Asset"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Asset"> | Date | string
 }
@@ -896,16 +896,16 @@ export type AssetCreateWithoutBranchInput = {
   category: string
   purchaseCost: number
   purchaseDate?: Date | string | null
-  totalCost?: number | null
-  currentValue?: number | null
+  totalCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity: number
   condition?: string | null
   supplier?: string | null
   usefulLifeMonths: number
-  salvageValue?: number | null
+  salvageValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   accumulatedDepreciation?: number | null
   disposedAt?: Date | string | null
-  disposalAmount?: number | null
+  disposalAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutAssetsInput
@@ -918,16 +918,16 @@ export type AssetUncheckedCreateWithoutBranchInput = {
   category: string
   purchaseCost: number
   purchaseDate?: Date | string | null
-  totalCost?: number | null
-  currentValue?: number | null
+  totalCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity: number
   condition?: string | null
   supplier?: string | null
   usefulLifeMonths: number
-  salvageValue?: number | null
+  salvageValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   accumulatedDepreciation?: number | null
   disposedAt?: Date | string | null
-  disposalAmount?: number | null
+  disposalAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -965,16 +965,16 @@ export type AssetCreateManyBusinessInput = {
   category: string
   purchaseCost: number
   purchaseDate?: Date | string | null
-  totalCost?: number | null
-  currentValue?: number | null
+  totalCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity: number
   condition?: string | null
   supplier?: string | null
   usefulLifeMonths: number
-  salvageValue?: number | null
+  salvageValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   accumulatedDepreciation?: number | null
   disposedAt?: Date | string | null
-  disposalAmount?: number | null
+  disposalAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -985,16 +985,16 @@ export type AssetUpdateWithoutBusinessInput = {
   category?: Prisma.StringFieldUpdateOperationsInput | string
   purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
   purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totalCost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  currentValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  totalCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   usefulLifeMonths?: Prisma.IntFieldUpdateOperationsInput | number
-  salvageValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salvageValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   accumulatedDepreciation?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   disposedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  disposalAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  disposalAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   branch?: Prisma.BranchUpdateOneWithoutAssetsNestedInput
@@ -1007,16 +1007,16 @@ export type AssetUncheckedUpdateWithoutBusinessInput = {
   category?: Prisma.StringFieldUpdateOperationsInput | string
   purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
   purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totalCost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  currentValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  totalCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   usefulLifeMonths?: Prisma.IntFieldUpdateOperationsInput | number
-  salvageValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salvageValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   accumulatedDepreciation?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   disposedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  disposalAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  disposalAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1028,16 +1028,16 @@ export type AssetUncheckedUpdateManyWithoutBusinessInput = {
   category?: Prisma.StringFieldUpdateOperationsInput | string
   purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
   purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totalCost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  currentValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  totalCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   usefulLifeMonths?: Prisma.IntFieldUpdateOperationsInput | number
-  salvageValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salvageValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   accumulatedDepreciation?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   disposedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  disposalAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  disposalAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1049,16 +1049,16 @@ export type AssetCreateManyBranchInput = {
   category: string
   purchaseCost: number
   purchaseDate?: Date | string | null
-  totalCost?: number | null
-  currentValue?: number | null
+  totalCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity: number
   condition?: string | null
   supplier?: string | null
   usefulLifeMonths: number
-  salvageValue?: number | null
+  salvageValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   accumulatedDepreciation?: number | null
   disposedAt?: Date | string | null
-  disposalAmount?: number | null
+  disposalAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1069,16 +1069,16 @@ export type AssetUpdateWithoutBranchInput = {
   category?: Prisma.StringFieldUpdateOperationsInput | string
   purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
   purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totalCost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  currentValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  totalCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   usefulLifeMonths?: Prisma.IntFieldUpdateOperationsInput | number
-  salvageValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salvageValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   accumulatedDepreciation?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   disposedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  disposalAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  disposalAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutAssetsNestedInput
@@ -1091,16 +1091,16 @@ export type AssetUncheckedUpdateWithoutBranchInput = {
   category?: Prisma.StringFieldUpdateOperationsInput | string
   purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
   purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totalCost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  currentValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  totalCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   usefulLifeMonths?: Prisma.IntFieldUpdateOperationsInput | number
-  salvageValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salvageValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   accumulatedDepreciation?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   disposedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  disposalAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  disposalAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1112,16 +1112,16 @@ export type AssetUncheckedUpdateManyWithoutBranchInput = {
   category?: Prisma.StringFieldUpdateOperationsInput | string
   purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
   purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  totalCost?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  currentValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  totalCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currentValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   usefulLifeMonths?: Prisma.IntFieldUpdateOperationsInput | number
-  salvageValue?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  salvageValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   accumulatedDepreciation?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   disposedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  disposalAmount?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  disposalAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1250,16 +1250,16 @@ export type $AssetPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     category: string
     purchaseCost: number
     purchaseDate: Date | null
-    totalCost: number | null
-    currentValue: number | null
+    totalCost: runtime.Decimal | null
+    currentValue: runtime.Decimal | null
     quantity: number
     condition: string | null
     supplier: string | null
     usefulLifeMonths: number
-    salvageValue: number | null
+    salvageValue: runtime.Decimal | null
     accumulatedDepreciation: number | null
     disposedAt: Date | null
-    disposalAmount: number | null
+    disposalAmount: runtime.Decimal | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["asset"]>
@@ -1694,16 +1694,16 @@ export interface AssetFieldRefs {
   readonly category: Prisma.FieldRef<"Asset", 'String'>
   readonly purchaseCost: Prisma.FieldRef<"Asset", 'Float'>
   readonly purchaseDate: Prisma.FieldRef<"Asset", 'DateTime'>
-  readonly totalCost: Prisma.FieldRef<"Asset", 'Float'>
-  readonly currentValue: Prisma.FieldRef<"Asset", 'Float'>
+  readonly totalCost: Prisma.FieldRef<"Asset", 'Decimal'>
+  readonly currentValue: Prisma.FieldRef<"Asset", 'Decimal'>
   readonly quantity: Prisma.FieldRef<"Asset", 'Int'>
   readonly condition: Prisma.FieldRef<"Asset", 'String'>
   readonly supplier: Prisma.FieldRef<"Asset", 'String'>
   readonly usefulLifeMonths: Prisma.FieldRef<"Asset", 'Int'>
-  readonly salvageValue: Prisma.FieldRef<"Asset", 'Float'>
+  readonly salvageValue: Prisma.FieldRef<"Asset", 'Decimal'>
   readonly accumulatedDepreciation: Prisma.FieldRef<"Asset", 'Float'>
   readonly disposedAt: Prisma.FieldRef<"Asset", 'DateTime'>
-  readonly disposalAmount: Prisma.FieldRef<"Asset", 'Float'>
+  readonly disposalAmount: Prisma.FieldRef<"Asset", 'Decimal'>
   readonly createdAt: Prisma.FieldRef<"Asset", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Asset", 'DateTime'>
 }

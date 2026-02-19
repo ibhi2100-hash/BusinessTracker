@@ -1,8 +1,8 @@
 'use client';
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { StepHeader } from "../../../../components/onboarding/StepHeader";
-import { StepFooter } from "../../../../components/onboarding/StepFooter";
+import { StepHeader } from "../../../components/onboarding/StepHeader";
+import { StepFooter } from "../../../components/onboarding/StepFooter";
 
 interface Product {
   name: string;
@@ -40,9 +40,10 @@ export default function Step4Products() {
       await fetch("/api/products/create-many", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ products }),
       });
-      router.push("/onboarding/step5-summary");
+      router.push("/onboarding/complete");
     } catch (err) {
       console.error(err);
     } finally {

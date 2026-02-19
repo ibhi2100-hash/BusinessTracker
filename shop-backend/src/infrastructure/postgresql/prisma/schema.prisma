@@ -18,8 +18,10 @@ enum ProductType {
 }
 
 enum StockMovementType {
-  STOCK_IN
-  STOCK_OUT
+  OPENING
+  PURCHASE
+  SALE
+  RETURN
   ADJUSTMENT
 }
 
@@ -30,6 +32,7 @@ enum PaymentMethod {
 }
 
 enum CashFlowType {
+OPENING
 INFLOW
 OUTFLOW
 }
@@ -90,6 +93,7 @@ model Business {
   business   BusinessSubscription[]
   categories Category[]
   products   Product[]
+  stockMovement     StockMovement[]
   sales      Sale[]
   cashFlows  CashFlow[] 
   liabilities Liability[]
@@ -104,13 +108,17 @@ model Branch {
   id      String    @id     @default(uuid())
   businessId    String  
   name          String
-  address       String?
+  address       String?   
+  phone         String?
+  isDefault     Boolean       @default(false)
   createdAt     DateTime      @default(now())
   business      Business      @relation(fields: [businessId], references: [id])
 
   users         User[]
   products      Product[]
+  category      Category[]
   sales         Sale[]
+  stockMovement StockMovement[]
   cashflows     CashFlow[]
   assets        Asset[]
   liabilities   Liability[]
@@ -123,6 +131,7 @@ model User {
   email       String    @unique
   password    String
   isActive    Boolean   @default(true)
+  onboardingCompleted   Boolean     @default(false)
   role        Role      @default(STAFF)
   branchId    String?
   businessId  String?
@@ -178,11 +187,14 @@ model Category {
   id          String    @id @default(uuid())
   name        String
   businessId  String
+  branchId    String
   imageUrl    String?
   createdAt   DateTime  @default(now())
   business    Business  @relation(fields: [businessId], references: [id])
+  branch      Branch    @relation(fields: [branchId], references: [id])
 
   products    Product[]
+  brand       Brand[]
 
   @@unique([name, businessId])
 }
@@ -190,7 +202,8 @@ model Category {
 model Brand {
   id          String    @id @default(uuid())
   name        String
-
+  categoryId  String
+  category    Category  @relation(fields: [categoryId], references: [id])
   products    Product[]
 
 }
@@ -231,16 +244,20 @@ model Product {
   @@index([type])
 }
 model StockMovement {
-  id          String            @id @default(uuid())
+  id          String           @id @default(uuid())
+  businessId  String
+  branchId    String
   productId   String
   type        StockMovementType
   quantity    Int
-  remainintQty  Int           @default(0)
+  remainingQty  Int           @default(0)
   costPrice   Decimal?
   sellingPrice Decimal?
   date        DateTime          @default(now())
   createdAt   DateTime          @default(now())
 
+  business    Business          @relation(fields: [businessId], references: [id])
+  branch      Branch            @relation(fields: [branchId], references: [id])
   product     Product           @relation(fields: [productId], references: [id])
 
   @@index([productId])
@@ -275,6 +292,7 @@ model SaleItem {
   saleId      String
   productId   String
   quantity    Int
+  costPrice   Decimal?
   unitPrice   Decimal
   totalPrice  Decimal
 
@@ -291,6 +309,7 @@ model Payment {
   amount      Decimal
   method      PaymentMethod
   date        DateTime      @default(now())
+  reference   String?
 
   sale        Sale          @relation(fields: [saleId], references: [id])
 
@@ -304,6 +323,7 @@ model CashFlow {
   branchId    String?
   type        CashFlowType
   amount      Decimal
+  balanceAfter  Decimal?
   source      String?
   description String?
   createdAt   DateTime      @default(now())
@@ -326,7 +346,7 @@ model Liability {
   startDate    DateTime
   dueDate      DateTime?
   lender       String?
-  outstandingAmount   Float
+  outstandingAmount   Decimal
   description  String?
   status       LiabilityStatus
   createdAt    DateTime      @default(now())
@@ -352,16 +372,16 @@ model Asset {
   category         String
   purchaseCost     Float
   purchaseDate     DateTime?
-  totalCost        Float?
-  currentValue     Float?
+  totalCost        Decimal?
+  currentValue     Decimal?
   quantity         Int
   condition        String?
   supplier         String?
   usefulLifeMonths Int
-  salvageValue     Float?
+  salvageValue     Decimal?
   accumulatedDepreciation   Float?
   disposedAt       DateTime?
-  disposalAmount   Float?
+  disposalAmount   Decimal?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
   business         Business  @relation(fields: [businessId], references: [id])
@@ -374,7 +394,7 @@ model Expense {
   businessId    String
   branchId      String?
   categoryId    String?
-  amount        Float
+  amount        Decimal
   paymentMethod PaymentMethod @default(CASH)
   reference     String?
   supplier      String?
@@ -394,7 +414,7 @@ model Expense {
 model CapitalExpenditure {
   id            String   @id @default(uuid())
   type          String
-  amount        Float
+  amount        Decimal
   referenceType String
   referenceId   String
   description   String?
@@ -407,8 +427,8 @@ model Loan {
   id          String                 @id @default(uuid())
   businessId  String
   principal   Decimal?
-  amount      Float
-  interestRate Float                @default(0)
+  amount      Decimal
+  interestRate Decimal                @default(0)
   dueDate     DateTime?
   lender      String?
   description String?
@@ -421,7 +441,7 @@ model Loan {
 model LoanRepayment {
   id          String                 @id @default(uuid())
   loanId      String
-  amount      Float
+  amount      Decimal
   date        DateTime               @default(now())
 
   loan        Loan                   @relation(fields: [loanId], references: [id])
@@ -432,7 +452,7 @@ model Employee {
   businessId String
   name        String
   position    String
-  salary      Float
+  salary      Decimal
   salaryType  String
   hiredAt     DateTime  @default(now())
   createdAt   DateTime  @default(now())
@@ -444,7 +464,7 @@ model Employee {
 model SalaryAccrual {
   id          String    @id @default(uuid())
   employeeId  String
-  amount      Float
+  amount      Decimal
   month       Int
   year        Int
   createdAt   DateTime  @default(now())
@@ -455,7 +475,7 @@ model SalaryAccrual {
 model  ExpenseCategory {
   id          String    @id @default(uuid())
   businessId  String
-  name        String    @unique
+  name        String 
   createdAt   DateTime  @default(now())
   business    Business  @relation(fields: [businessId], references: [id])
 

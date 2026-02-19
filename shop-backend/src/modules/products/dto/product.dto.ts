@@ -1,45 +1,41 @@
 import { IsNotEmpty, IsOptional, IsNumber, isNotEmpty } from "class-validator";
 import { ProductType } from "../../../infrastructure/postgresql/prisma/generated/enums.js";
 
-export class ProductDto {
-    @IsNotEmpty()
-    name!: string;
+export interface ProductDto {
 
-    @IsNotEmpty()
-    type!: ProductType;
+    name: string;
 
-    @IsNotEmpty()
+    
+    type: ProductType;
+
+    
     categoryId?: string;
 
-    @IsNotEmpty()
+    
     categoryName?: string;
 
-    @IsOptional()
+    
     brandId?: string;
 
-    @IsNotEmpty()
+    
     brandName?: string
 
-    @IsOptional()
+
     model?: string;
 
-    @IsNumber()
-    @IsOptional()
+    
     costPrice?: number;
 
-    @IsNumber()
-    @IsOptional()
+    
     sellingPrice?: number;
 
-    @IsNumber()
-    @IsOptional()
     quantity?: number;
 
-    @IsOptional()
     imei?: string;
 
-    @IsOptional()
     condition?: string;
+
+    stockMode?: "OPENING" | "PURCHASE"; // NEW
 }
 export class ProductUpdateDto {
     @IsNotEmpty()

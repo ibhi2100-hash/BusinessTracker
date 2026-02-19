@@ -27,17 +27,17 @@ export type AggregateCapitalExpenditure = {
 }
 
 export type CapitalExpenditureAvgAggregateOutputType = {
-  amount: number | null
+  amount: runtime.Decimal | null
 }
 
 export type CapitalExpenditureSumAggregateOutputType = {
-  amount: number | null
+  amount: runtime.Decimal | null
 }
 
 export type CapitalExpenditureMinAggregateOutputType = {
   id: string | null
   type: string | null
-  amount: number | null
+  amount: runtime.Decimal | null
   referenceType: string | null
   referenceId: string | null
   description: string | null
@@ -48,7 +48,7 @@ export type CapitalExpenditureMinAggregateOutputType = {
 export type CapitalExpenditureMaxAggregateOutputType = {
   id: string | null
   type: string | null
-  amount: number | null
+  amount: runtime.Decimal | null
   referenceType: string | null
   referenceId: string | null
   description: string | null
@@ -200,7 +200,7 @@ export type CapitalExpenditureGroupByArgs<ExtArgs extends runtime.Types.Extensio
 export type CapitalExpenditureGroupByOutputType = {
   id: string
   type: string
-  amount: number
+  amount: runtime.Decimal
   referenceType: string
   referenceId: string
   description: string | null
@@ -234,7 +234,7 @@ export type CapitalExpenditureWhereInput = {
   NOT?: Prisma.CapitalExpenditureWhereInput | Prisma.CapitalExpenditureWhereInput[]
   id?: Prisma.StringFilter<"CapitalExpenditure"> | string
   type?: Prisma.StringFilter<"CapitalExpenditure"> | string
-  amount?: Prisma.FloatFilter<"CapitalExpenditure"> | number
+  amount?: Prisma.DecimalFilter<"CapitalExpenditure"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   referenceType?: Prisma.StringFilter<"CapitalExpenditure"> | string
   referenceId?: Prisma.StringFilter<"CapitalExpenditure"> | string
   description?: Prisma.StringNullableFilter<"CapitalExpenditure"> | string | null
@@ -259,7 +259,7 @@ export type CapitalExpenditureWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.CapitalExpenditureWhereInput[]
   NOT?: Prisma.CapitalExpenditureWhereInput | Prisma.CapitalExpenditureWhereInput[]
   type?: Prisma.StringFilter<"CapitalExpenditure"> | string
-  amount?: Prisma.FloatFilter<"CapitalExpenditure"> | number
+  amount?: Prisma.DecimalFilter<"CapitalExpenditure"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   referenceType?: Prisma.StringFilter<"CapitalExpenditure"> | string
   referenceId?: Prisma.StringFilter<"CapitalExpenditure"> | string
   description?: Prisma.StringNullableFilter<"CapitalExpenditure"> | string | null
@@ -289,7 +289,7 @@ export type CapitalExpenditureScalarWhereWithAggregatesInput = {
   NOT?: Prisma.CapitalExpenditureScalarWhereWithAggregatesInput | Prisma.CapitalExpenditureScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"CapitalExpenditure"> | string
   type?: Prisma.StringWithAggregatesFilter<"CapitalExpenditure"> | string
-  amount?: Prisma.FloatWithAggregatesFilter<"CapitalExpenditure"> | number
+  amount?: Prisma.DecimalWithAggregatesFilter<"CapitalExpenditure"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   referenceType?: Prisma.StringWithAggregatesFilter<"CapitalExpenditure"> | string
   referenceId?: Prisma.StringWithAggregatesFilter<"CapitalExpenditure"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"CapitalExpenditure"> | string | null
@@ -300,7 +300,7 @@ export type CapitalExpenditureScalarWhereWithAggregatesInput = {
 export type CapitalExpenditureCreateInput = {
   id?: string
   type: string
-  amount: number
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   referenceType: string
   referenceId: string
   description?: string | null
@@ -311,7 +311,7 @@ export type CapitalExpenditureCreateInput = {
 export type CapitalExpenditureUncheckedCreateInput = {
   id?: string
   type: string
-  amount: number
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   referenceType: string
   referenceId: string
   description?: string | null
@@ -322,7 +322,7 @@ export type CapitalExpenditureUncheckedCreateInput = {
 export type CapitalExpenditureUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   referenceType?: Prisma.StringFieldUpdateOperationsInput | string
   referenceId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -333,7 +333,7 @@ export type CapitalExpenditureUpdateInput = {
 export type CapitalExpenditureUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   referenceType?: Prisma.StringFieldUpdateOperationsInput | string
   referenceId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -344,7 +344,7 @@ export type CapitalExpenditureUncheckedUpdateInput = {
 export type CapitalExpenditureCreateManyInput = {
   id?: string
   type: string
-  amount: number
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   referenceType: string
   referenceId: string
   description?: string | null
@@ -355,7 +355,7 @@ export type CapitalExpenditureCreateManyInput = {
 export type CapitalExpenditureUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   referenceType?: Prisma.StringFieldUpdateOperationsInput | string
   referenceId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -366,7 +366,7 @@ export type CapitalExpenditureUpdateManyMutationInput = {
 export type CapitalExpenditureUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   referenceType?: Prisma.StringFieldUpdateOperationsInput | string
   referenceId?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -469,7 +469,7 @@ export type $CapitalExpenditurePayload<ExtArgs extends runtime.Types.Extensions.
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     type: string
-    amount: number
+    amount: runtime.Decimal
     referenceType: string
     referenceId: string
     description: string | null
@@ -900,7 +900,7 @@ export interface Prisma__CapitalExpenditureClient<T, Null = never, ExtArgs exten
 export interface CapitalExpenditureFieldRefs {
   readonly id: Prisma.FieldRef<"CapitalExpenditure", 'String'>
   readonly type: Prisma.FieldRef<"CapitalExpenditure", 'String'>
-  readonly amount: Prisma.FieldRef<"CapitalExpenditure", 'Float'>
+  readonly amount: Prisma.FieldRef<"CapitalExpenditure", 'Decimal'>
   readonly referenceType: Prisma.FieldRef<"CapitalExpenditure", 'String'>
   readonly referenceId: Prisma.FieldRef<"CapitalExpenditure", 'String'>
   readonly description: Prisma.FieldRef<"CapitalExpenditure", 'String'>

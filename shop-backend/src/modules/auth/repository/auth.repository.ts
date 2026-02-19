@@ -63,4 +63,31 @@ export class AuthRepository {
       },
     });
   }
+
+  getBusinessBranches = async ( businessId?: string)=> {
+    return prisma.branch.findMany({
+      where: {
+      ...(businessId && { businessId}),
+      }
+    })
+  }
+  getDefaultBranch = async (businessId: string) => {
+    // Try to find branch marked as default
+    let defaultBranch = await prisma.branch.findFirst({
+      where: {
+        businessId,
+        isDefault: true,
+      },
+    });
+
+    // Fallback: first branch if no default marked
+    if (!defaultBranch) {
+      defaultBranch = await prisma.branch.findFirst({
+        where: { businessId },
+        orderBy: { createdAt: "asc" }, // oldest first
+      });
+    }
+
+    return defaultBranch;
+  }
 }

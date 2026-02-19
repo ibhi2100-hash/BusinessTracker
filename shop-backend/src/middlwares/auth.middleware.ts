@@ -1,53 +1,42 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { prisma } from "../infrastructure/postgresql/prismaClient.js";
+import { AuthUser } from "../types/auth-user.js";
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
-if (!JWT_SECRET) {
-  throw new Error("JWT_SECRET is not defined in environment variables");
+
+interface JwtPayload {
+  userId: string;
+  businessId: string;
+  branchId: string;
+  role: string;
 }
 
-interface JwtUserPayload {
-  id: string;
-}
-
-export async function authMiddleware(
+export function authMiddleware(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   try {
-  const token = req.cookies.token
+    const token = req.cookies.token;
 
-if (!token) {
-  return res.status(401).json({ message: "Unauthorized" });
-}
-
-    const decoded = jwt.verify(token, JWT_SECRET as string);
-
-    if(typeof decoded !== 'object' || !('id' in decoded)) {
-        return res.status(401).json({ message: "decoded token is object" });
-    }
-    const { id } = decoded as JwtUserPayload;
-
-    const user = await prisma.user.findUnique({
-      where: { id }
-    });
-
-    if (!user || !user.isActive) {
+    if (!token) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    req.user = {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      password: user.password,
-      role: user.role,
-      businessId: user.businessId,
-      createdAt: user.createdAt,
-      isActive: user.isActive
+    const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
+
+    if (!decoded.userId ) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+
+    const authUser: AuthUser = {
+      id: decoded.userId,
+      businessId: decoded.businessId,
+      role: decoded.role,
+      branchId: decoded.branchId
     };
+
+    req.user = authUser;
 
     next();
   } catch {

@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {   
     "name": "tuloko",
-    "email": "mrshre479k@gmail.com",
+    "email": "mrshre4jj9k@gmail.com",
     "password": "Teem@t212",
     "role": "ADMIN"
 }
@@ -13,7 +13,7 @@ POST http://localhost:2100/api/auth/login
 Content-Type: application/json
 
 {   
-    "email": "mrshre490k@gmail.com",
+    "email": "mrshre4jj9k@gmail.com",
     "password": "Teem@t212"
 }
 

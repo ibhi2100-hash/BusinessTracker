@@ -46,7 +46,7 @@ export default function RegisterPage() {
       }
 
       // Redirect to onboarding step 1
-      router.push("/onboarding/step2-business");
+      router.push("/onboarding/step1-business");
 
     } catch (error: any) {
       setServerError(error.message);

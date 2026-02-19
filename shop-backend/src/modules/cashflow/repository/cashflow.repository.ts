@@ -1,6 +1,8 @@
 import { join } from "node:path";
 import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
+import { CashFlowType } from "../../../infrastructure/postgresql/prisma/generated/client.js";
+
 
 export class CashflowRepository{
     async inflow(data: any, tx: Prisma.TransactionClient){
@@ -47,6 +49,18 @@ export class CashflowRepository{
             net: inflow - outflow
         }
     };
+
+    async createCashFlow(data: {
+        businessId: string;
+        branchId?: string;
+        type: CashFlowType;
+        amount: number;
+        source: string;
+        description?: string;
+        }, tx: Prisma.TransactionClient) {
+        return tx.cashFlow.create({ data });
+}
+
 
     
 }

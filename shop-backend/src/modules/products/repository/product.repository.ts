@@ -1,92 +1,101 @@
 import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
-import { ProductDto, ProductUpdateDto } from "../dto/product.dto.js";
-import { Product, ProductFilter } from "../entity/product.entity.js";
+
+
 
 
 export class ProductRepository {
 
-    async getOrCreateCategory(name: string, businessId: string) {
+    async getOrCreateCategory(name: string, businessId: string, branchId: string) {
         let category = await prisma.category.findFirst({
             where: { name, businessId }
         });
 
         if (!category) {
             category = await prisma.category.create({
-                data: { name, businessId }
+                data: { name, businessId, branchId: branchId }
             });
         }
 
         return category;
     }
 
-    async getOrCreateBrand(name: string) {
+    async getOrCreateBrand(name: string, categoryId: string) {
         let brand = await prisma.brand.findFirst({
             where: { name }
         });
 
         if (!brand) {
             brand = await prisma.brand.create({
-                data: { name }
+                data: { 
+                    name,
+                    categoryId: categoryId  
+                }
             });
         }
 
         return brand;
     }
 
-    async createProduct(dto: ProductDto, businessId: string): Promise<Product | null> {
-        // Handle category
-        const category = dto.categoryName
-            ? await this.getOrCreateCategory(dto.categoryName, businessId)
-            : await this.findCategoryById(dto.categoryId!, businessId);
+  async createProduct(data: any, businessId: string, branchId: string, tx?: Prisma.TransactionClient) {
+    const db = tx ?? prisma;
 
-        if (!category) throw new Error("Category not found for your business");
+    // Handle category
+    const category = data.categoryName
+        ? await this.getOrCreateCategory(data.categoryName, businessId, branchId)
+        : await this.findCategoryById(data.categoryId!, businessId);
 
-        // Handle brand (optional)
-        let brandId: string | null = null;
-        if (dto.brandName) {
-            const brand = await this.getOrCreateBrand(dto.brandName);
-            brandId = brand.id;
-        } else if (dto.brandId) {
-            const brand = await this.findBrandById(dto.brandId, businessId);
-            if (!brand) throw new Error("Brand not found");
-            brandId = brand.id;
-        }
+    if (!category) throw new Error("Category not found for your business");
+    const categoryId = category.id;
 
-        // Create product
-        const product = await prisma.product.create({
-            data: {
-                name: dto.name,
-                type: dto.type,
-                model: dto.model || null,
-                costPrice: dto.costPrice ?? null,
-                sellingPrice: dto.sellingPrice ?? null,
-                quantity: dto.quantity ?? 0,
-                imei: dto.imei || null,
-                condition: dto.condition || null,
-                businessId,
-                categoryId: category.id,
-                brandId
-            },
-            select: {
-                id: true,
-                name: true,
-                type: true,
-                model: true,
-                costPrice: true,
-                sellingPrice: true,
-                quantity: true,
-                imei: true,
-                createdAt: true,
-                updatedAt: true,
-                businessId: true,
-                brandId: true,
-                categoryId: true
-            }
-        });
+    // Handle brand
+    let brandId: string | null = null;
 
-        return product as Product;
+    if (data.brandName) {
+        // Pass categoryId when creating brand
+        const brand = await this.getOrCreateBrand(data.brandName, categoryId);
+        brandId = brand.id;
+    } else if (data.brandId) {
+        const brand = await this.findBrandById(data.brandId, businessId);
+        if (!brand) throw new Error("Brand not found");
+        brandId = brand.id;
     }
+
+    // Create product
+    const product = await db.product.create({
+        data: {
+            name: data.name,
+            type: data.type,
+            model: data.model || null,
+            costPrice: data.costPrice ?? null,
+            sellingPrice: data.sellingPrice ?? null,
+            quantity: data.quantity ?? 0,
+            imei: data.imei || null,
+            condition: data.condition || null,
+            businessId,
+            categoryId,
+            brandId,
+        },
+        select: {
+            id: true,
+            name: true,
+            type: true,
+            model: true,
+            costPrice: true,
+            sellingPrice: true,
+            quantity: true,
+            imei: true,
+            createdAt: true,
+            updatedAt: true,
+            businessId: true,
+            brandId: true,
+            categoryId: true,
+        },
+    });
+
+    return product;
+}
+
 
     async findCategoryById(categoryId: string, businessId: string) {
         return prisma.category.findFirst({
@@ -99,7 +108,7 @@ export class ProductRepository {
             where: { id: brandId }
         });
     }
-    async getProductById(productId: string): Promise<Product | null> {
+    async getProductById(productId: string) {
         const product = await prisma.product.findUnique({
             where: { id: productId },
             select: {
@@ -118,10 +127,10 @@ export class ProductRepository {
                 categoryId: true
             }
         });
-        return product as Product | null;
+        return product;
     }
 
-    async getProductsByBusinessId(businessId: string): Promise<Product[]> {
+    async getProductsByBusinessId(businessId: string) {
         const products = await prisma.product.findMany({
             where: { businessId },
             select: {
@@ -140,10 +149,10 @@ export class ProductRepository {
                 categoryId: true
             }
         });
-        return products as Product[];
+        return products;
     }
 
-    async updateProduct(productId: string, dto: ProductDto, businessId: string): Promise<Product | null> {
+    async updateProduct(productId: string, dto: any,  businessId: string) {
         const product = await prisma.product.updateMany({
             where: { id: productId, businessId },
             data: { ...dto }
@@ -156,11 +165,11 @@ export class ProductRepository {
             where: { id: productId, businessId }
         });
     } 
-    async updateProductPartial(productId: string, dto: ProductUpdateDto, businessId: string): Promise<Product|null>{
+    async updateProductPartial(productId: string, dto: any , businessId: string, branchId: string){
         // Handle category
         let categoryId: string | undefined;
         if(dto.categoryName) {
-            const category = await this.getOrCreateCategory(dto.categoryName, businessId);
+            const category = await this.getOrCreateCategory(dto.categoryName, businessId, branchId);
             categoryId = category.id;
         }else if (dto.categoryId){
             const category = await prisma.category.findFirst({
@@ -173,7 +182,7 @@ export class ProductRepository {
         //Handle brand
         let brandId: string | null = null;
         if(dto.brandName) {
-            const brand = await this.getOrCreateBrand(dto.brandName);
+            const brand = await this.getOrCreateBrand(dto.brandName, branchId);
             brandId = brand.id;
         } else if (dto.brandId){
             const brand = await prisma.brand.findFirst({
@@ -203,7 +212,7 @@ export class ProductRepository {
         })
         if(updated.count === 0 ) throw new Error(" No product updated");
 
-        return prisma.product.findFirst({ where: { id: productId}})as Promise<Product>
+        return prisma.product.findFirst({ where: { id: productId}})
 
     }  
 /*
@@ -228,5 +237,9 @@ export class ProductRepository {
         return tx.product.findFirst({
             where:{id: productId, businessId, isActive: true}
         })
+    }
+
+    createManyProduct = async ( businessId: string, products: any)=> {
+
     }
 }

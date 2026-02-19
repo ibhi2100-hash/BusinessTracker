@@ -1,4 +1,4 @@
-import { cloudinary } from "../../../infrastructure/cloudinary/cloudinary.js";
+import cloudinary  from "../../../lib/cloudinary/cloudinary.js";
 import streamifier from "streamifier";
 
 export class UploadService {
@@ -6,7 +6,7 @@ export class UploadService {
     return new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
         { folder },
-        (error, result) => {
+        (error: any, result: any) => {
           if (error) return reject(error);
           resolve(result);
         }

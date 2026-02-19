@@ -189,16 +189,16 @@ export type ExpenseCategoryOrderByWithRelationInput = {
 
 export type ExpenseCategoryWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  name?: string
   name_businessId?: Prisma.ExpenseCategoryNameBusinessIdCompoundUniqueInput
   AND?: Prisma.ExpenseCategoryWhereInput | Prisma.ExpenseCategoryWhereInput[]
   OR?: Prisma.ExpenseCategoryWhereInput[]
   NOT?: Prisma.ExpenseCategoryWhereInput | Prisma.ExpenseCategoryWhereInput[]
   businessId?: Prisma.StringFilter<"ExpenseCategory"> | string
+  name?: Prisma.StringFilter<"ExpenseCategory"> | string
   createdAt?: Prisma.DateTimeFilter<"ExpenseCategory"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
   expenses?: Prisma.ExpenseListRelationFilter
-}, "id" | "name" | "name_businessId">
+}, "id" | "name_businessId">
 
 export type ExpenseCategoryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder

@@ -14,7 +14,7 @@ export class SaleService {
   private inventoryService = new InventoryService
   
 
-  async createSale(dto: any, businessId: string) {
+  async createSale(dto: any, businessId: string, branchId: string) {
     return prisma.$transaction(async (tx) => {
 
       let totalAmount = 0;
@@ -56,6 +56,7 @@ export class SaleService {
 
       await this.inventoryService.validateAndReduceStock(
         businessId,
+        branchId,
         dto.items,
         tx
       );

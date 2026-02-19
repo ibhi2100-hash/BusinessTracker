@@ -1,8 +1,13 @@
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
 import { CreateBusinessDto } from "../dto/businessReg.dto.js";
 import { signToken } from "../../../helpers/jwtHelper/jwthelper.js";
+import { OpeningBalanceDto } from "../dto/openingBalance.dto.js";
+import { PrismaClient } from "@prisma/client/extension";
+import { sourceMapsEnabled } from "node:process";
+import { AuthService } from "../../auth/service/auth.service.js";
 
 export class OnboardingService {
+  constructor(private authService: AuthService){}
   
 
   async createBusiness(userId: string, dto: CreateBusinessDto) {
@@ -35,10 +40,11 @@ export class OnboardingService {
         where: { id: userId },
         data: {
           role: "ADMIN",
-          businessId: business.id
+          businessId: business.id,
+          onboardingCompleted: true,
+          
         }
       });
-      console.log(userupdate)
 
       // 4️⃣ Create Default Branch
       const firstBranch = await tx.branch.create({
@@ -49,7 +55,7 @@ export class OnboardingService {
       });
 
       // 5️⃣ Issue new JWT
-      const newToken = signToken(user.id, user.role, business.id)
+      const newToken = signToken(user.id, user.role, business.id, firstBranch.id )
 
       
 
@@ -60,5 +66,63 @@ export class OnboardingService {
         firstBranch
       };
     });
+  }
+
+  async setOpeningBalance(
+    dto: OpeningBalanceDto,
+    businessId: string
+  ){
+      const total = 
+        (dto.cashInHand ||  0) +
+        (dto.bankBalance || 0 ) + 
+        (dto.posBalance || 0)
+
+        if(total <= 0 ) {
+          throw new Error("Opening balance must be greater than zero");
+        }
+
+        return prisma.$transaction(async (tx: PrismaClient)=> {
+          const flows = [];
+
+          if(dto.cashInHand > 0){
+            flows.push({
+              businessId,
+              branchId: dto.branchId,
+              type: "INFLOW",
+              amount: dto.cashInHand,
+              source: "Opening Balance",
+              description: "Cash in hand at onboarding"
+              
+            })
+          }
+
+           if (dto.bankBalance) {
+        flows.push({
+          businessId,
+          branchId: dto.branchId,
+          type: "INFLOW",
+          amount: dto.bankBalance,
+          source: "Opening Balance",
+          description: "Bank balance at onboarding"
+        });
+      }
+      if (dto.posBalance) {
+        flows.push({
+          businessId,
+          branchId: dto.branchId,
+          type: "INFLOW",
+          amount: dto.posBalance,
+          source: "Opening Balance",
+          description: "POS balance at onboarding"
+        });
+      }
+      await tx.cashFlow.createMany({
+        data: flows
+      });
+
+      return {
+        totalOpeningBalance: total
+      };
+        })
   }
 }

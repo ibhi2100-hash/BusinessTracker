@@ -1,9 +1,9 @@
-import { User } from "../modules/auth/entity/user.ts";
+import { AuthUser } from "./auth-user.ts";
 
 declare global {
     namespace Express {
         interface Request {
-            user?: User;
+            user?: AuthUser;
         }
     }
 }

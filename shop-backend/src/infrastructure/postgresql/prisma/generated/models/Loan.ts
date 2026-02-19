@@ -28,22 +28,22 @@ export type AggregateLoan = {
 
 export type LoanAvgAggregateOutputType = {
   principal: runtime.Decimal | null
-  amount: number | null
-  interestRate: number | null
+  amount: runtime.Decimal | null
+  interestRate: runtime.Decimal | null
 }
 
 export type LoanSumAggregateOutputType = {
   principal: runtime.Decimal | null
-  amount: number | null
-  interestRate: number | null
+  amount: runtime.Decimal | null
+  interestRate: runtime.Decimal | null
 }
 
 export type LoanMinAggregateOutputType = {
   id: string | null
   businessId: string | null
   principal: runtime.Decimal | null
-  amount: number | null
-  interestRate: number | null
+  amount: runtime.Decimal | null
+  interestRate: runtime.Decimal | null
   dueDate: Date | null
   lender: string | null
   description: string | null
@@ -54,8 +54,8 @@ export type LoanMaxAggregateOutputType = {
   id: string | null
   businessId: string | null
   principal: runtime.Decimal | null
-  amount: number | null
-  interestRate: number | null
+  amount: runtime.Decimal | null
+  interestRate: runtime.Decimal | null
   dueDate: Date | null
   lender: string | null
   description: string | null
@@ -215,8 +215,8 @@ export type LoanGroupByOutputType = {
   id: string
   businessId: string
   principal: runtime.Decimal | null
-  amount: number
-  interestRate: number
+  amount: runtime.Decimal
+  interestRate: runtime.Decimal
   dueDate: Date | null
   lender: string | null
   description: string | null
@@ -250,8 +250,8 @@ export type LoanWhereInput = {
   id?: Prisma.StringFilter<"Loan"> | string
   businessId?: Prisma.StringFilter<"Loan"> | string
   principal?: Prisma.DecimalNullableFilter<"Loan"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.FloatFilter<"Loan"> | number
-  interestRate?: Prisma.FloatFilter<"Loan"> | number
+  amount?: Prisma.DecimalFilter<"Loan"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestRate?: Prisma.DecimalFilter<"Loan"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   dueDate?: Prisma.DateTimeNullableFilter<"Loan"> | Date | string | null
   lender?: Prisma.StringNullableFilter<"Loan"> | string | null
   description?: Prisma.StringNullableFilter<"Loan"> | string | null
@@ -281,8 +281,8 @@ export type LoanWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.LoanWhereInput | Prisma.LoanWhereInput[]
   businessId?: Prisma.StringFilter<"Loan"> | string
   principal?: Prisma.DecimalNullableFilter<"Loan"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.FloatFilter<"Loan"> | number
-  interestRate?: Prisma.FloatFilter<"Loan"> | number
+  amount?: Prisma.DecimalFilter<"Loan"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestRate?: Prisma.DecimalFilter<"Loan"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   dueDate?: Prisma.DateTimeNullableFilter<"Loan"> | Date | string | null
   lender?: Prisma.StringNullableFilter<"Loan"> | string | null
   description?: Prisma.StringNullableFilter<"Loan"> | string | null
@@ -315,8 +315,8 @@ export type LoanScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Loan"> | string
   businessId?: Prisma.StringWithAggregatesFilter<"Loan"> | string
   principal?: Prisma.DecimalNullableWithAggregatesFilter<"Loan"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.FloatWithAggregatesFilter<"Loan"> | number
-  interestRate?: Prisma.FloatWithAggregatesFilter<"Loan"> | number
+  amount?: Prisma.DecimalWithAggregatesFilter<"Loan"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestRate?: Prisma.DecimalWithAggregatesFilter<"Loan"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   dueDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Loan"> | Date | string | null
   lender?: Prisma.StringNullableWithAggregatesFilter<"Loan"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"Loan"> | string | null
@@ -326,8 +326,8 @@ export type LoanScalarWhereWithAggregatesInput = {
 export type LoanCreateInput = {
   id?: string
   principal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount: number
-  interestRate?: number
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   dueDate?: Date | string | null
   lender?: string | null
   description?: string | null
@@ -340,8 +340,8 @@ export type LoanUncheckedCreateInput = {
   id?: string
   businessId: string
   principal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount: number
-  interestRate?: number
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   dueDate?: Date | string | null
   lender?: string | null
   description?: string | null
@@ -352,8 +352,8 @@ export type LoanUncheckedCreateInput = {
 export type LoanUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   principal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
-  interestRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -366,8 +366,8 @@ export type LoanUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   principal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
-  interestRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -379,8 +379,8 @@ export type LoanCreateManyInput = {
   id?: string
   businessId: string
   principal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount: number
-  interestRate?: number
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   dueDate?: Date | string | null
   lender?: string | null
   description?: string | null
@@ -390,8 +390,8 @@ export type LoanCreateManyInput = {
 export type LoanUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   principal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
-  interestRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -402,8 +402,8 @@ export type LoanUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   principal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
-  interestRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -532,8 +532,8 @@ export type LoanUpdateOneRequiredWithoutRepaymentsNestedInput = {
 export type LoanCreateWithoutBusinessInput = {
   id?: string
   principal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount: number
-  interestRate?: number
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   dueDate?: Date | string | null
   lender?: string | null
   description?: string | null
@@ -544,8 +544,8 @@ export type LoanCreateWithoutBusinessInput = {
 export type LoanUncheckedCreateWithoutBusinessInput = {
   id?: string
   principal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount: number
-  interestRate?: number
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   dueDate?: Date | string | null
   lender?: string | null
   description?: string | null
@@ -586,8 +586,8 @@ export type LoanScalarWhereInput = {
   id?: Prisma.StringFilter<"Loan"> | string
   businessId?: Prisma.StringFilter<"Loan"> | string
   principal?: Prisma.DecimalNullableFilter<"Loan"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.FloatFilter<"Loan"> | number
-  interestRate?: Prisma.FloatFilter<"Loan"> | number
+  amount?: Prisma.DecimalFilter<"Loan"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestRate?: Prisma.DecimalFilter<"Loan"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   dueDate?: Prisma.DateTimeNullableFilter<"Loan"> | Date | string | null
   lender?: Prisma.StringNullableFilter<"Loan"> | string | null
   description?: Prisma.StringNullableFilter<"Loan"> | string | null
@@ -597,8 +597,8 @@ export type LoanScalarWhereInput = {
 export type LoanCreateWithoutRepaymentsInput = {
   id?: string
   principal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount: number
-  interestRate?: number
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   dueDate?: Date | string | null
   lender?: string | null
   description?: string | null
@@ -610,8 +610,8 @@ export type LoanUncheckedCreateWithoutRepaymentsInput = {
   id?: string
   businessId: string
   principal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount: number
-  interestRate?: number
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   dueDate?: Date | string | null
   lender?: string | null
   description?: string | null
@@ -637,8 +637,8 @@ export type LoanUpdateToOneWithWhereWithoutRepaymentsInput = {
 export type LoanUpdateWithoutRepaymentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   principal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
-  interestRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -650,8 +650,8 @@ export type LoanUncheckedUpdateWithoutRepaymentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   principal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
-  interestRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -661,8 +661,8 @@ export type LoanUncheckedUpdateWithoutRepaymentsInput = {
 export type LoanCreateManyBusinessInput = {
   id?: string
   principal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount: number
-  interestRate?: number
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   dueDate?: Date | string | null
   lender?: string | null
   description?: string | null
@@ -672,8 +672,8 @@ export type LoanCreateManyBusinessInput = {
 export type LoanUpdateWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   principal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
-  interestRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -684,8 +684,8 @@ export type LoanUpdateWithoutBusinessInput = {
 export type LoanUncheckedUpdateWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   principal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
-  interestRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -696,8 +696,8 @@ export type LoanUncheckedUpdateWithoutBusinessInput = {
 export type LoanUncheckedUpdateManyWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   principal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
-  interestRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  interestRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   dueDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -811,8 +811,8 @@ export type $LoanPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     id: string
     businessId: string
     principal: runtime.Decimal | null
-    amount: number
-    interestRate: number
+    amount: runtime.Decimal
+    interestRate: runtime.Decimal
     dueDate: Date | null
     lender: string | null
     description: string | null
@@ -1245,8 +1245,8 @@ export interface LoanFieldRefs {
   readonly id: Prisma.FieldRef<"Loan", 'String'>
   readonly businessId: Prisma.FieldRef<"Loan", 'String'>
   readonly principal: Prisma.FieldRef<"Loan", 'Decimal'>
-  readonly amount: Prisma.FieldRef<"Loan", 'Float'>
-  readonly interestRate: Prisma.FieldRef<"Loan", 'Float'>
+  readonly amount: Prisma.FieldRef<"Loan", 'Decimal'>
+  readonly interestRate: Prisma.FieldRef<"Loan", 'Decimal'>
   readonly dueDate: Prisma.FieldRef<"Loan", 'DateTime'>
   readonly lender: Prisma.FieldRef<"Loan", 'String'>
   readonly description: Prisma.FieldRef<"Loan", 'String'>

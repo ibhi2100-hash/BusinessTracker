@@ -110,6 +110,8 @@ export const BranchScalarFieldEnum = {
   businessId: 'businessId',
   name: 'name',
   address: 'address',
+  phone: 'phone',
+  isDefault: 'isDefault',
   createdAt: 'createdAt'
 } as const
 
@@ -122,6 +124,7 @@ export const UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   isActive: 'isActive',
+  onboardingCompleted: 'onboardingCompleted',
   role: 'role',
   branchId: 'branchId',
   businessId: 'businessId',
@@ -171,6 +174,7 @@ export const CategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
   businessId: 'businessId',
+  branchId: 'branchId',
   imageUrl: 'imageUrl',
   createdAt: 'createdAt'
 } as const
@@ -180,7 +184,8 @@ export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typ
 
 export const BrandScalarFieldEnum = {
   id: 'id',
-  name: 'name'
+  name: 'name',
+  categoryId: 'categoryId'
 } as const
 
 export type BrandScalarFieldEnum = (typeof BrandScalarFieldEnum)[keyof typeof BrandScalarFieldEnum]
@@ -213,10 +218,12 @@ export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeo
 
 export const StockMovementScalarFieldEnum = {
   id: 'id',
+  businessId: 'businessId',
+  branchId: 'branchId',
   productId: 'productId',
   type: 'type',
   quantity: 'quantity',
-  remainintQty: 'remainintQty',
+  remainingQty: 'remainingQty',
   costPrice: 'costPrice',
   sellingPrice: 'sellingPrice',
   date: 'date',
@@ -247,6 +254,7 @@ export const SaleItemScalarFieldEnum = {
   saleId: 'saleId',
   productId: 'productId',
   quantity: 'quantity',
+  costPrice: 'costPrice',
   unitPrice: 'unitPrice',
   totalPrice: 'totalPrice'
 } as const
@@ -259,7 +267,8 @@ export const PaymentScalarFieldEnum = {
   saleId: 'saleId',
   amount: 'amount',
   method: 'method',
-  date: 'date'
+  date: 'date',
+  reference: 'reference'
 } as const
 
 export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
@@ -271,6 +280,7 @@ export const CashFlowScalarFieldEnum = {
   branchId: 'branchId',
   type: 'type',
   amount: 'amount',
+  balanceAfter: 'balanceAfter',
   source: 'source',
   description: 'description',
   createdAt: 'createdAt'

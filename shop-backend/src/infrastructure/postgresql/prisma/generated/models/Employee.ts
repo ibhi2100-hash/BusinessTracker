@@ -27,11 +27,11 @@ export type AggregateEmployee = {
 }
 
 export type EmployeeAvgAggregateOutputType = {
-  salary: number | null
+  salary: runtime.Decimal | null
 }
 
 export type EmployeeSumAggregateOutputType = {
-  salary: number | null
+  salary: runtime.Decimal | null
 }
 
 export type EmployeeMinAggregateOutputType = {
@@ -39,7 +39,7 @@ export type EmployeeMinAggregateOutputType = {
   businessId: string | null
   name: string | null
   position: string | null
-  salary: number | null
+  salary: runtime.Decimal | null
   salaryType: string | null
   hiredAt: Date | null
   createdAt: Date | null
@@ -50,7 +50,7 @@ export type EmployeeMaxAggregateOutputType = {
   businessId: string | null
   name: string | null
   position: string | null
-  salary: number | null
+  salary: runtime.Decimal | null
   salaryType: string | null
   hiredAt: Date | null
   createdAt: Date | null
@@ -202,7 +202,7 @@ export type EmployeeGroupByOutputType = {
   businessId: string
   name: string
   position: string
-  salary: number
+  salary: runtime.Decimal
   salaryType: string
   hiredAt: Date
   createdAt: Date
@@ -236,7 +236,7 @@ export type EmployeeWhereInput = {
   businessId?: Prisma.StringFilter<"Employee"> | string
   name?: Prisma.StringFilter<"Employee"> | string
   position?: Prisma.StringFilter<"Employee"> | string
-  salary?: Prisma.FloatFilter<"Employee"> | number
+  salary?: Prisma.DecimalFilter<"Employee"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   salaryType?: Prisma.StringFilter<"Employee"> | string
   hiredAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
@@ -265,7 +265,7 @@ export type EmployeeWhereUniqueInput = Prisma.AtLeast<{
   businessId?: Prisma.StringFilter<"Employee"> | string
   name?: Prisma.StringFilter<"Employee"> | string
   position?: Prisma.StringFilter<"Employee"> | string
-  salary?: Prisma.FloatFilter<"Employee"> | number
+  salary?: Prisma.DecimalFilter<"Employee"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   salaryType?: Prisma.StringFilter<"Employee"> | string
   hiredAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
@@ -297,7 +297,7 @@ export type EmployeeScalarWhereWithAggregatesInput = {
   businessId?: Prisma.StringWithAggregatesFilter<"Employee"> | string
   name?: Prisma.StringWithAggregatesFilter<"Employee"> | string
   position?: Prisma.StringWithAggregatesFilter<"Employee"> | string
-  salary?: Prisma.FloatWithAggregatesFilter<"Employee"> | number
+  salary?: Prisma.DecimalWithAggregatesFilter<"Employee"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   salaryType?: Prisma.StringWithAggregatesFilter<"Employee"> | string
   hiredAt?: Prisma.DateTimeWithAggregatesFilter<"Employee"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Employee"> | Date | string
@@ -307,7 +307,7 @@ export type EmployeeCreateInput = {
   id?: string
   name: string
   position: string
-  salary: number
+  salary: runtime.Decimal | runtime.DecimalJsLike | number | string
   salaryType: string
   hiredAt?: Date | string
   createdAt?: Date | string
@@ -320,7 +320,7 @@ export type EmployeeUncheckedCreateInput = {
   businessId: string
   name: string
   position: string
-  salary: number
+  salary: runtime.Decimal | runtime.DecimalJsLike | number | string
   salaryType: string
   hiredAt?: Date | string
   createdAt?: Date | string
@@ -331,7 +331,7 @@ export type EmployeeUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.StringFieldUpdateOperationsInput | string
-  salary?: Prisma.FloatFieldUpdateOperationsInput | number
+  salary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   salaryType?: Prisma.StringFieldUpdateOperationsInput | string
   hiredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -344,7 +344,7 @@ export type EmployeeUncheckedUpdateInput = {
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.StringFieldUpdateOperationsInput | string
-  salary?: Prisma.FloatFieldUpdateOperationsInput | number
+  salary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   salaryType?: Prisma.StringFieldUpdateOperationsInput | string
   hiredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -356,7 +356,7 @@ export type EmployeeCreateManyInput = {
   businessId: string
   name: string
   position: string
-  salary: number
+  salary: runtime.Decimal | runtime.DecimalJsLike | number | string
   salaryType: string
   hiredAt?: Date | string
   createdAt?: Date | string
@@ -366,7 +366,7 @@ export type EmployeeUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.StringFieldUpdateOperationsInput | string
-  salary?: Prisma.FloatFieldUpdateOperationsInput | number
+  salary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   salaryType?: Prisma.StringFieldUpdateOperationsInput | string
   hiredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -377,7 +377,7 @@ export type EmployeeUncheckedUpdateManyInput = {
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.StringFieldUpdateOperationsInput | string
-  salary?: Prisma.FloatFieldUpdateOperationsInput | number
+  salary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   salaryType?: Prisma.StringFieldUpdateOperationsInput | string
   hiredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -499,7 +499,7 @@ export type EmployeeCreateWithoutBusinessInput = {
   id?: string
   name: string
   position: string
-  salary: number
+  salary: runtime.Decimal | runtime.DecimalJsLike | number | string
   salaryType: string
   hiredAt?: Date | string
   createdAt?: Date | string
@@ -510,7 +510,7 @@ export type EmployeeUncheckedCreateWithoutBusinessInput = {
   id?: string
   name: string
   position: string
-  salary: number
+  salary: runtime.Decimal | runtime.DecimalJsLike | number | string
   salaryType: string
   hiredAt?: Date | string
   createdAt?: Date | string
@@ -551,7 +551,7 @@ export type EmployeeScalarWhereInput = {
   businessId?: Prisma.StringFilter<"Employee"> | string
   name?: Prisma.StringFilter<"Employee"> | string
   position?: Prisma.StringFilter<"Employee"> | string
-  salary?: Prisma.FloatFilter<"Employee"> | number
+  salary?: Prisma.DecimalFilter<"Employee"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   salaryType?: Prisma.StringFilter<"Employee"> | string
   hiredAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
@@ -561,7 +561,7 @@ export type EmployeeCreateWithoutSalaryAccrualsInput = {
   id?: string
   name: string
   position: string
-  salary: number
+  salary: runtime.Decimal | runtime.DecimalJsLike | number | string
   salaryType: string
   hiredAt?: Date | string
   createdAt?: Date | string
@@ -573,7 +573,7 @@ export type EmployeeUncheckedCreateWithoutSalaryAccrualsInput = {
   businessId: string
   name: string
   position: string
-  salary: number
+  salary: runtime.Decimal | runtime.DecimalJsLike | number | string
   salaryType: string
   hiredAt?: Date | string
   createdAt?: Date | string
@@ -599,7 +599,7 @@ export type EmployeeUpdateWithoutSalaryAccrualsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.StringFieldUpdateOperationsInput | string
-  salary?: Prisma.FloatFieldUpdateOperationsInput | number
+  salary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   salaryType?: Prisma.StringFieldUpdateOperationsInput | string
   hiredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -611,7 +611,7 @@ export type EmployeeUncheckedUpdateWithoutSalaryAccrualsInput = {
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.StringFieldUpdateOperationsInput | string
-  salary?: Prisma.FloatFieldUpdateOperationsInput | number
+  salary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   salaryType?: Prisma.StringFieldUpdateOperationsInput | string
   hiredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -621,7 +621,7 @@ export type EmployeeCreateManyBusinessInput = {
   id?: string
   name: string
   position: string
-  salary: number
+  salary: runtime.Decimal | runtime.DecimalJsLike | number | string
   salaryType: string
   hiredAt?: Date | string
   createdAt?: Date | string
@@ -631,7 +631,7 @@ export type EmployeeUpdateWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.StringFieldUpdateOperationsInput | string
-  salary?: Prisma.FloatFieldUpdateOperationsInput | number
+  salary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   salaryType?: Prisma.StringFieldUpdateOperationsInput | string
   hiredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -642,7 +642,7 @@ export type EmployeeUncheckedUpdateWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.StringFieldUpdateOperationsInput | string
-  salary?: Prisma.FloatFieldUpdateOperationsInput | number
+  salary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   salaryType?: Prisma.StringFieldUpdateOperationsInput | string
   hiredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -653,7 +653,7 @@ export type EmployeeUncheckedUpdateManyWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.StringFieldUpdateOperationsInput | string
-  salary?: Prisma.FloatFieldUpdateOperationsInput | number
+  salary?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   salaryType?: Prisma.StringFieldUpdateOperationsInput | string
   hiredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -763,7 +763,7 @@ export type $EmployeePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     businessId: string
     name: string
     position: string
-    salary: number
+    salary: runtime.Decimal
     salaryType: string
     hiredAt: Date
     createdAt: Date
@@ -1196,7 +1196,7 @@ export interface EmployeeFieldRefs {
   readonly businessId: Prisma.FieldRef<"Employee", 'String'>
   readonly name: Prisma.FieldRef<"Employee", 'String'>
   readonly position: Prisma.FieldRef<"Employee", 'String'>
-  readonly salary: Prisma.FieldRef<"Employee", 'Float'>
+  readonly salary: Prisma.FieldRef<"Employee", 'Decimal'>
   readonly salaryType: Prisma.FieldRef<"Employee", 'String'>
   readonly hiredAt: Prisma.FieldRef<"Employee", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Employee", 'DateTime'>

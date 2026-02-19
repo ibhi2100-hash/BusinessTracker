@@ -27,13 +27,13 @@ export type AggregateSalaryAccrual = {
 }
 
 export type SalaryAccrualAvgAggregateOutputType = {
-  amount: number | null
+  amount: runtime.Decimal | null
   month: number | null
   year: number | null
 }
 
 export type SalaryAccrualSumAggregateOutputType = {
-  amount: number | null
+  amount: runtime.Decimal | null
   month: number | null
   year: number | null
 }
@@ -41,7 +41,7 @@ export type SalaryAccrualSumAggregateOutputType = {
 export type SalaryAccrualMinAggregateOutputType = {
   id: string | null
   employeeId: string | null
-  amount: number | null
+  amount: runtime.Decimal | null
   month: number | null
   year: number | null
   createdAt: Date | null
@@ -50,7 +50,7 @@ export type SalaryAccrualMinAggregateOutputType = {
 export type SalaryAccrualMaxAggregateOutputType = {
   id: string | null
   employeeId: string | null
-  amount: number | null
+  amount: runtime.Decimal | null
   month: number | null
   year: number | null
   createdAt: Date | null
@@ -196,7 +196,7 @@ export type SalaryAccrualGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
 export type SalaryAccrualGroupByOutputType = {
   id: string
   employeeId: string
-  amount: number
+  amount: runtime.Decimal
   month: number
   year: number
   createdAt: Date
@@ -228,7 +228,7 @@ export type SalaryAccrualWhereInput = {
   NOT?: Prisma.SalaryAccrualWhereInput | Prisma.SalaryAccrualWhereInput[]
   id?: Prisma.StringFilter<"SalaryAccrual"> | string
   employeeId?: Prisma.StringFilter<"SalaryAccrual"> | string
-  amount?: Prisma.FloatFilter<"SalaryAccrual"> | number
+  amount?: Prisma.DecimalFilter<"SalaryAccrual"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   month?: Prisma.IntFilter<"SalaryAccrual"> | number
   year?: Prisma.IntFilter<"SalaryAccrual"> | number
   createdAt?: Prisma.DateTimeFilter<"SalaryAccrual"> | Date | string
@@ -251,7 +251,7 @@ export type SalaryAccrualWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.SalaryAccrualWhereInput[]
   NOT?: Prisma.SalaryAccrualWhereInput | Prisma.SalaryAccrualWhereInput[]
   employeeId?: Prisma.StringFilter<"SalaryAccrual"> | string
-  amount?: Prisma.FloatFilter<"SalaryAccrual"> | number
+  amount?: Prisma.DecimalFilter<"SalaryAccrual"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   month?: Prisma.IntFilter<"SalaryAccrual"> | number
   year?: Prisma.IntFilter<"SalaryAccrual"> | number
   createdAt?: Prisma.DateTimeFilter<"SalaryAccrual"> | Date | string
@@ -278,7 +278,7 @@ export type SalaryAccrualScalarWhereWithAggregatesInput = {
   NOT?: Prisma.SalaryAccrualScalarWhereWithAggregatesInput | Prisma.SalaryAccrualScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"SalaryAccrual"> | string
   employeeId?: Prisma.StringWithAggregatesFilter<"SalaryAccrual"> | string
-  amount?: Prisma.FloatWithAggregatesFilter<"SalaryAccrual"> | number
+  amount?: Prisma.DecimalWithAggregatesFilter<"SalaryAccrual"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   month?: Prisma.IntWithAggregatesFilter<"SalaryAccrual"> | number
   year?: Prisma.IntWithAggregatesFilter<"SalaryAccrual"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SalaryAccrual"> | Date | string
@@ -286,7 +286,7 @@ export type SalaryAccrualScalarWhereWithAggregatesInput = {
 
 export type SalaryAccrualCreateInput = {
   id?: string
-  amount: number
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   month: number
   year: number
   createdAt?: Date | string
@@ -296,7 +296,7 @@ export type SalaryAccrualCreateInput = {
 export type SalaryAccrualUncheckedCreateInput = {
   id?: string
   employeeId: string
-  amount: number
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   month: number
   year: number
   createdAt?: Date | string
@@ -304,7 +304,7 @@ export type SalaryAccrualUncheckedCreateInput = {
 
 export type SalaryAccrualUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   month?: Prisma.IntFieldUpdateOperationsInput | number
   year?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -314,7 +314,7 @@ export type SalaryAccrualUpdateInput = {
 export type SalaryAccrualUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   month?: Prisma.IntFieldUpdateOperationsInput | number
   year?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -323,7 +323,7 @@ export type SalaryAccrualUncheckedUpdateInput = {
 export type SalaryAccrualCreateManyInput = {
   id?: string
   employeeId: string
-  amount: number
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   month: number
   year: number
   createdAt?: Date | string
@@ -331,7 +331,7 @@ export type SalaryAccrualCreateManyInput = {
 
 export type SalaryAccrualUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   month?: Prisma.IntFieldUpdateOperationsInput | number
   year?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -340,7 +340,7 @@ export type SalaryAccrualUpdateManyMutationInput = {
 export type SalaryAccrualUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   month?: Prisma.IntFieldUpdateOperationsInput | number
   year?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -439,7 +439,7 @@ export type SalaryAccrualUncheckedUpdateManyWithoutEmployeeNestedInput = {
 
 export type SalaryAccrualCreateWithoutEmployeeInput = {
   id?: string
-  amount: number
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   month: number
   year: number
   createdAt?: Date | string
@@ -447,7 +447,7 @@ export type SalaryAccrualCreateWithoutEmployeeInput = {
 
 export type SalaryAccrualUncheckedCreateWithoutEmployeeInput = {
   id?: string
-  amount: number
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   month: number
   year: number
   createdAt?: Date | string
@@ -485,7 +485,7 @@ export type SalaryAccrualScalarWhereInput = {
   NOT?: Prisma.SalaryAccrualScalarWhereInput | Prisma.SalaryAccrualScalarWhereInput[]
   id?: Prisma.StringFilter<"SalaryAccrual"> | string
   employeeId?: Prisma.StringFilter<"SalaryAccrual"> | string
-  amount?: Prisma.FloatFilter<"SalaryAccrual"> | number
+  amount?: Prisma.DecimalFilter<"SalaryAccrual"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   month?: Prisma.IntFilter<"SalaryAccrual"> | number
   year?: Prisma.IntFilter<"SalaryAccrual"> | number
   createdAt?: Prisma.DateTimeFilter<"SalaryAccrual"> | Date | string
@@ -493,7 +493,7 @@ export type SalaryAccrualScalarWhereInput = {
 
 export type SalaryAccrualCreateManyEmployeeInput = {
   id?: string
-  amount: number
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   month: number
   year: number
   createdAt?: Date | string
@@ -501,7 +501,7 @@ export type SalaryAccrualCreateManyEmployeeInput = {
 
 export type SalaryAccrualUpdateWithoutEmployeeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   month?: Prisma.IntFieldUpdateOperationsInput | number
   year?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -509,7 +509,7 @@ export type SalaryAccrualUpdateWithoutEmployeeInput = {
 
 export type SalaryAccrualUncheckedUpdateWithoutEmployeeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   month?: Prisma.IntFieldUpdateOperationsInput | number
   year?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -517,7 +517,7 @@ export type SalaryAccrualUncheckedUpdateWithoutEmployeeInput = {
 
 export type SalaryAccrualUncheckedUpdateManyWithoutEmployeeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   month?: Prisma.IntFieldUpdateOperationsInput | number
   year?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -583,7 +583,7 @@ export type $SalaryAccrualPayload<ExtArgs extends runtime.Types.Extensions.Inter
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     employeeId: string
-    amount: number
+    amount: runtime.Decimal
     month: number
     year: number
     createdAt: Date
@@ -1013,7 +1013,7 @@ export interface Prisma__SalaryAccrualClient<T, Null = never, ExtArgs extends ru
 export interface SalaryAccrualFieldRefs {
   readonly id: Prisma.FieldRef<"SalaryAccrual", 'String'>
   readonly employeeId: Prisma.FieldRef<"SalaryAccrual", 'String'>
-  readonly amount: Prisma.FieldRef<"SalaryAccrual", 'Float'>
+  readonly amount: Prisma.FieldRef<"SalaryAccrual", 'Decimal'>
   readonly month: Prisma.FieldRef<"SalaryAccrual", 'Int'>
   readonly year: Prisma.FieldRef<"SalaryAccrual", 'Int'>
   readonly createdAt: Prisma.FieldRef<"SalaryAccrual", 'DateTime'>

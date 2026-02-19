@@ -40,10 +40,8 @@ export default function LoginPage() {
         throw new Error(result.message || "Login failed");
       }
 
-      localStorage.setItem("token", result.token);
-
       if (!result.user.onboardingCompleted) {
-        router.push("/onboarding/business");
+        router.push("/onboarding/step1-business");
       } else {
         router.push("/dashboard");
       }

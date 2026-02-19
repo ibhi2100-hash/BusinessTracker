@@ -1,0 +1,41 @@
+services:
+  api:
+    build:
+      context: .
+      args:
+        DATABASE_URL: postgresql://postgres:11223344@postgres:5432/shop
+
+    container_name: shop_api
+
+    ports:
+      - "2100:2100"
+
+    depends_on:
+      - postgres
+
+    env_file:
+      - .env   # ✅ correct placement
+
+    environment:
+      DATABASE_URL: postgresql://postgres:11223344@postgres:5432/shop
+      NODE_ENV: development
+
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+  postgres:
+    image: postgres:15
+    container_name: shop_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "11223344"
+      POSTGRES_DB: shop
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

@@ -11,8 +11,11 @@ export class SaleController {
             if(!businessId) {
                 return res.status(400).json({ message: "businessId not found in user context" })
             }
+            const branchId = req.user?.branchId;
+            if(!branchId) throw new Error("branch id does not exist")
             const dto = req.body;
-            const sale = await saleService.createSale(dto, businessId)
+            
+            const sale = await saleService.createSale(dto, businessId, branchId)
 
             res.status(201).json(sale);
 

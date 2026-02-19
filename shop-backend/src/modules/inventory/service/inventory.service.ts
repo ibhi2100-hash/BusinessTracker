@@ -7,6 +7,7 @@ export class InventoryService {
     private inventoryRepo = new inventoryRepository();
     async validateAndReduceStock(
         businessId: string,
+        branchId: string,
         items: {
             productId: string;
             quantity: number;
@@ -32,9 +33,12 @@ export class InventoryService {
 
             //Record stock Movement
             await this.inventoryRepo.recordStockOut(
+                businessId,
+                branchId,
                 product.id,
                 item.quantity,
                 product.sellingPrice,
+                product.costPrice,
                 tx
             );
         } 
@@ -51,13 +55,6 @@ export class InventoryService {
         await this.inventoryRepo.incrementStock(
             params.productId,
             params.quantity,
-            tx
-        );
-
-        await this.inventoryRepo.recordStockIn(
-            params.productId,
-            params.quantity,
-            params.costPrice ?? 0,
             tx
         );
     }

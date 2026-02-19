@@ -27,24 +27,24 @@ export type AggregateLoanRepayment = {
 }
 
 export type LoanRepaymentAvgAggregateOutputType = {
-  amount: number | null
+  amount: runtime.Decimal | null
 }
 
 export type LoanRepaymentSumAggregateOutputType = {
-  amount: number | null
+  amount: runtime.Decimal | null
 }
 
 export type LoanRepaymentMinAggregateOutputType = {
   id: string | null
   loanId: string | null
-  amount: number | null
+  amount: runtime.Decimal | null
   date: Date | null
 }
 
 export type LoanRepaymentMaxAggregateOutputType = {
   id: string | null
   loanId: string | null
-  amount: number | null
+  amount: runtime.Decimal | null
   date: Date | null
 }
 
@@ -176,7 +176,7 @@ export type LoanRepaymentGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
 export type LoanRepaymentGroupByOutputType = {
   id: string
   loanId: string
-  amount: number
+  amount: runtime.Decimal
   date: Date
   _count: LoanRepaymentCountAggregateOutputType | null
   _avg: LoanRepaymentAvgAggregateOutputType | null
@@ -206,7 +206,7 @@ export type LoanRepaymentWhereInput = {
   NOT?: Prisma.LoanRepaymentWhereInput | Prisma.LoanRepaymentWhereInput[]
   id?: Prisma.StringFilter<"LoanRepayment"> | string
   loanId?: Prisma.StringFilter<"LoanRepayment"> | string
-  amount?: Prisma.FloatFilter<"LoanRepayment"> | number
+  amount?: Prisma.DecimalFilter<"LoanRepayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeFilter<"LoanRepayment"> | Date | string
   loan?: Prisma.XOR<Prisma.LoanScalarRelationFilter, Prisma.LoanWhereInput>
 }
@@ -225,7 +225,7 @@ export type LoanRepaymentWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.LoanRepaymentWhereInput[]
   NOT?: Prisma.LoanRepaymentWhereInput | Prisma.LoanRepaymentWhereInput[]
   loanId?: Prisma.StringFilter<"LoanRepayment"> | string
-  amount?: Prisma.FloatFilter<"LoanRepayment"> | number
+  amount?: Prisma.DecimalFilter<"LoanRepayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeFilter<"LoanRepayment"> | Date | string
   loan?: Prisma.XOR<Prisma.LoanScalarRelationFilter, Prisma.LoanWhereInput>
 }, "id">
@@ -248,13 +248,13 @@ export type LoanRepaymentScalarWhereWithAggregatesInput = {
   NOT?: Prisma.LoanRepaymentScalarWhereWithAggregatesInput | Prisma.LoanRepaymentScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"LoanRepayment"> | string
   loanId?: Prisma.StringWithAggregatesFilter<"LoanRepayment"> | string
-  amount?: Prisma.FloatWithAggregatesFilter<"LoanRepayment"> | number
+  amount?: Prisma.DecimalWithAggregatesFilter<"LoanRepayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeWithAggregatesFilter<"LoanRepayment"> | Date | string
 }
 
 export type LoanRepaymentCreateInput = {
   id?: string
-  amount: number
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Date | string
   loan: Prisma.LoanCreateNestedOneWithoutRepaymentsInput
 }
@@ -262,13 +262,13 @@ export type LoanRepaymentCreateInput = {
 export type LoanRepaymentUncheckedCreateInput = {
   id?: string
   loanId: string
-  amount: number
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Date | string
 }
 
 export type LoanRepaymentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   loan?: Prisma.LoanUpdateOneRequiredWithoutRepaymentsNestedInput
 }
@@ -276,27 +276,27 @@ export type LoanRepaymentUpdateInput = {
 export type LoanRepaymentUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   loanId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LoanRepaymentCreateManyInput = {
   id?: string
   loanId: string
-  amount: number
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Date | string
 }
 
 export type LoanRepaymentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LoanRepaymentUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   loanId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -383,13 +383,13 @@ export type LoanRepaymentUncheckedUpdateManyWithoutLoanNestedInput = {
 
 export type LoanRepaymentCreateWithoutLoanInput = {
   id?: string
-  amount: number
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Date | string
 }
 
 export type LoanRepaymentUncheckedCreateWithoutLoanInput = {
   id?: string
-  amount: number
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Date | string
 }
 
@@ -425,31 +425,31 @@ export type LoanRepaymentScalarWhereInput = {
   NOT?: Prisma.LoanRepaymentScalarWhereInput | Prisma.LoanRepaymentScalarWhereInput[]
   id?: Prisma.StringFilter<"LoanRepayment"> | string
   loanId?: Prisma.StringFilter<"LoanRepayment"> | string
-  amount?: Prisma.FloatFilter<"LoanRepayment"> | number
+  amount?: Prisma.DecimalFilter<"LoanRepayment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeFilter<"LoanRepayment"> | Date | string
 }
 
 export type LoanRepaymentCreateManyLoanInput = {
   id?: string
-  amount: number
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Date | string
 }
 
 export type LoanRepaymentUpdateWithoutLoanInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LoanRepaymentUncheckedUpdateWithoutLoanInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LoanRepaymentUncheckedUpdateManyWithoutLoanInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.FloatFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -505,7 +505,7 @@ export type $LoanRepaymentPayload<ExtArgs extends runtime.Types.Extensions.Inter
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     loanId: string
-    amount: number
+    amount: runtime.Decimal
     date: Date
   }, ExtArgs["result"]["loanRepayment"]>
   composites: {}
@@ -933,7 +933,7 @@ export interface Prisma__LoanRepaymentClient<T, Null = never, ExtArgs extends ru
 export interface LoanRepaymentFieldRefs {
   readonly id: Prisma.FieldRef<"LoanRepayment", 'String'>
   readonly loanId: Prisma.FieldRef<"LoanRepayment", 'String'>
-  readonly amount: Prisma.FieldRef<"LoanRepayment", 'Float'>
+  readonly amount: Prisma.FieldRef<"LoanRepayment", 'Decimal'>
   readonly date: Prisma.FieldRef<"LoanRepayment", 'DateTime'>
 }
     

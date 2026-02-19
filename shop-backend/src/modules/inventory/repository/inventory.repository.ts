@@ -1,4 +1,5 @@
-import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
+import { connect } from "node:http2";
+import { Prisma, StockMovementType } from "../../../infrastructure/postgresql/prisma/generated/client.js";
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
 
 export class inventoryRepository {
@@ -50,36 +51,52 @@ export class inventoryRepository {
     }
 
     async recordStockOut(
+        businessId: string,
+        branchId: string,
         productId: string,
         quantity: number,
         sellingPrice: any,
+        costPrice: any,
         tx: Prisma.TransactionClient
     ){
         return tx.stockMovement.create({
             data: {
+                businessId,
+                branchId,
                 productId,
-                type: "STOCK_OUT",
+                type: "SALE",
                 quantity,
                 sellingPrice,
-            },
-        });
-
-    }
-
-    async recordStockIn(
-        productId: string,
-        quantity: number,
-        costPrice: number,
-        tx: Prisma.TransactionClient
-    ){
-        return tx.stockMovement.create({
-            data: {
-                productId,
-                type: "STOCK_IN",
-                quantity,
                 costPrice,
             },
         });
+
     }
+
+    async createStockMovement(data: {
+        productId: string;
+        businessId: string;
+        branchId: string;
+        type: StockMovementType;
+        quantity: number;
+        costPrice?: number;
+        }, tx: Prisma.TransactionClient) {
+        const movement = await tx.stockMovement.create({
+            data: {
+                productId: data.productId,
+                type: data.type,
+                quantity: data.quantity,
+                costPrice: data.costPrice ?? null,
+                businessId: data.businessId,
+                branchId: data.branchId
+            }
+        });
+        await tx.product.update({
+            where: { id: data.productId },
+            data: { quantity: { increment: data.quantity } }
+        });
+        return movement;
+        }
+
 
 }
