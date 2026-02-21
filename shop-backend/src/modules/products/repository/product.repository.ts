@@ -1,8 +1,6 @@
 import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
-
-
-
+import { ProductDto } from "../dto/product.dto.js";
 
 export class ProductRepository {
 
@@ -73,6 +71,7 @@ export class ProductRepository {
             imei: data.imei || null,
             condition: data.condition || null,
             businessId,
+            branchId,
             categoryId,
             brandId,
         },
@@ -88,7 +87,9 @@ export class ProductRepository {
             createdAt: true,
             updatedAt: true,
             businessId: true,
+            branchId: true,
             brandId: true,
+            brand: true,
             categoryId: true,
         },
     });
@@ -165,56 +166,63 @@ export class ProductRepository {
             where: { id: productId, businessId }
         });
     } 
-    async updateProductPartial(productId: string, dto: any , businessId: string, branchId: string){
-        // Handle category
-        let categoryId: string | undefined;
-        if(dto.categoryName) {
-            const category = await this.getOrCreateCategory(dto.categoryName, businessId, branchId);
-            categoryId = category.id;
-        }else if (dto.categoryId){
-            const category = await prisma.category.findFirst({
-                where: {id: dto.categoryId, businessId}
-            });
-            if(!category) throw new Error("Category not found for your business")
-            categoryId = category.id;
-        }
+async updateProductPartial(
+  productId: string,
+  dto: ProductDto,
+  businessId: string,
+  branchId?: string
+) {
+  // Resolve category
+  let categoryId: string | undefined;
+  if (dto.categoryName) {
+    const category = await prisma.category.findFirst({
+      where: { name: dto.categoryName, businessId, ...(branchId ? { branchId } : {}) },
+    }) ?? await prisma.category.create({
+      data: { name: dto.categoryName, businessId, ...(branchId ? { branchId } : {}) },
+    });
+    categoryId = category.id;
+  } else if (dto.categoryId) {
+    const category = await prisma.category.findUnique({ where: { id: dto.categoryId } });
+    if (!category) throw new Error("Category not found");
+    categoryId = category.id;
+  }
 
-        //Handle brand
-        let brandId: string | null = null;
-        if(dto.brandName) {
-            const brand = await this.getOrCreateBrand(dto.brandName, branchId);
-            brandId = brand.id;
-        } else if (dto.brandId){
-            const brand = await prisma.brand.findFirst({
-                where: { id: dto.brandId}
-            });
-            if(!brand) throw new Error("Brand not found");
-            brandId = brand.id
-        }
+  // Resolve brand
+  let brandId: string | undefined;
+  if (dto.brandName) {
+    const brand = await prisma.brand.findFirst({ where: { name: dto.brandName, ...(categoryId ? { categoryId}: {}), } })
+      ?? await prisma.brand.create({ data: { name: dto.brandName, ...(categoryId ? {categoryId}: {}) } });
+    brandId = brand.id;
+  } else if (dto.brandId) {
+    const brand = await prisma.brand.findUnique({ where: { id: dto.brandId } });
+    if (!brand) throw new Error("Brand not found");
+    brandId = brand.id;
+  }
 
-        // Build data object dynamically
+  // Build update object
+  const data: any = {};
+  if (dto.name !== undefined) data.name = dto.name;
+  if (dto.type !== undefined) data.type = dto.type;
+  if (dto.model !== undefined) data.model = dto.model;
+  if (dto.costPrice !== undefined) data.costPrice = Number(dto.costPrice);
+  if (dto.sellingPrice !== undefined) data.sellingPrice = Number(dto.sellingPrice);
+  if (dto.quantity !== undefined) data.quantity = Number(dto.quantity);
+  if (dto.imei !== undefined) data.imei = dto.imei;
+  if (dto.condition !== undefined) data.condition = dto.condition;
+  if (dto.isActive !== undefined) data.isActive = dto.isActive;
 
-        const data: any = {};
-        if(dto.name !== undefined) data.name = dto.name;
-        if(dto.type !== undefined) data.type = dto.type;
-        if(dto.model !== undefined) data.model = dto.model;
-        if(dto.costPrice !== undefined) data.costPrice = dto.costPrice;
-        if(dto.sellingPrice !== undefined) data.sellingPrice = dto.sellingPrice;
-        if(dto.quantity !== undefined) data.quantity = dto.quantity;
-        if(dto.imei !== undefined) data.imei = dto.imei;
-        if(dto.condition !== undefined) data.condition = dto.condition;
-        if(categoryId !== undefined) data.categoryId = categoryId;
-        if(brandId !== undefined) data.brandId = brandId;
 
-        const updated = await prisma.product.updateMany({
-            where: { id: productId, businessId},
-            data
-        })
-        if(updated.count === 0 ) throw new Error(" No product updated");
+  // Connect relations
+  if (categoryId) data.category = { connect: { id: categoryId } };
+  if (brandId) data.brand = { connect: { id: brandId } };
+  if (branchId) data.branch = { connect: { id: branchId } };
 
-        return prisma.product.findFirst({ where: { id: productId}})
-
-    }  
+  // Update product
+  return prisma.product.update({
+    where: { id: productId },
+    data,
+  });
+}
 /*
     async listProducts(businessId:string, filter?:ProductFilter):Promise<Product>{
         const where:any = { businessId};
@@ -224,7 +232,7 @@ export class ProductRepository {
         }
 
         if(filter?.type){
-            where.type = filter.type;
+            where.tyxpe = filter.type;
         }
         if(filter?.inStock !== undefined){
             where.quantity = filter.inStock
@@ -242,4 +250,23 @@ export class ProductRepository {
     createManyProduct = async ( businessId: string, products: any)=> {
 
     }
+    getBrandProducts = async (businessId: string, branchId: string, brandId: string)=> {
+        return prisma.product.findMany({
+            where: {
+                businessId,
+                branchId,
+                brandId
+            },
+            include: {
+                brand: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
+            },
+        });
+    }
 }
+
+

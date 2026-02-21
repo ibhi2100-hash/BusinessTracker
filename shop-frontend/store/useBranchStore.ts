@@ -15,6 +15,7 @@ interface BranchState {
     businessName: string;
     branches: Branch[];
     role: "ADMIN" | "STAFF";
+    activeBranchId: string;
   }) => void;
 
   setActiveBranch: (id: string) => void;
@@ -24,18 +25,19 @@ export const useBranchStore = create<BranchState>((set) => ({
   businessName: "",
   branches: [],
   activeBranchId: null,
+  branchTokens: {},
+  branchData: {},
   role: "STAFF",
 
-  setContext: ({ businessName, branches, role }) =>
-    set({
-      businessName,
-      branches,
-      role,
-      activeBranchId:
-        typeof window !== "undefined"
-          ? localStorage.getItem("activeBranchId") || branches?.[0]?.id || null
-          : branches?.[0]?.id || null,
-    }),
+
+setContext: ({ businessName, branches, role }) =>
+  set((state) => ({
+    businessName,
+    branches,
+    role,
+    activeBranchId:
+      state.activeBranchId || branches?.[0]?.id || null, // don't overwrite if undefined
+  })),
 
   setActiveBranch: (id) => {
     if (typeof window !== "undefined") {

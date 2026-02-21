@@ -202,8 +202,8 @@ model Category {
 model Brand {
   id          String    @id @default(uuid())
   name        String
-  categoryId  String
-  category    Category  @relation(fields: [categoryId], references: [id])
+  categoryId  String?
+  category    Category?  @relation(fields: [categoryId], references: [id])
   products    Product[]
 
 }
@@ -217,8 +217,8 @@ model Product {
   name        String
   type        ProductType
   model       String?
-  costPrice   Decimal?
-  sellingPrice Decimal?
+  costPrice   Decimal
+  sellingPrice Decimal
   quantity    Int       @default(0)
   imageUrl    String?
   sku         String?
@@ -320,7 +320,7 @@ model Payment {
 model CashFlow {
   id          String        @id @default(uuid())
   businessId  String
-  branchId    String?
+  branchId    String
   type        CashFlowType
   amount      Decimal
   balanceAfter  Decimal?
@@ -329,7 +329,7 @@ model CashFlow {
   createdAt   DateTime      @default(now())
 
   business    Business      @relation(fields: [businessId], references: [id])
-  branch      Branch?        @relation(fields: [branchId], references: [id])
+  branch      Branch       @relation(fields: [branchId], references: [id])
 
   @@index([businessId])
   @@index([createdAt])

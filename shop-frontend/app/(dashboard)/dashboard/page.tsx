@@ -1,24 +1,34 @@
-"use client"
+"use client";
 
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { FinancialCarousel } from "@/components/dashboard/FinancialCarousel";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import { BranchPerformance } from "@/components/dashboard/BranchPerformance";
 import { AlertsSection } from "@/components/dashboard/AlertsSection";
-import { useAuth } from "@/features/auth/useAuth";
-
+import { useBranchStore } from "@/store/useBranchStore";
+import { useDashboardFinancialData } from "@/hooks/financialData";
 
 const DashboardPage = () => {
-    const { data: user } = useAuth()
-    return(
-        <div className="space-y-6">
-            <DashboardHeader />
-            <FinancialCarousel />
-            <QuickActions />
-            <BranchPerformance />
-            <AlertsSection />
-        </div>
-    )
-}
+  // Get the active branch ID from your branch store
+  const { activeBranchId } = useBranchStore();
+
+  // If branch is not yet selected, show a loading state
+  if (!activeBranchId) return <div>Loading dashboard...</div>;
+
+  // Trigger fetching all financial data
+  // Make sure to pass startDate and endDate (e.g., today)
+  const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+  useDashboardFinancialData(activeBranchId, today, today);
+
+  return (
+    <div className="space-y-6">
+      <DashboardHeader />
+      <FinancialCarousel />
+      <QuickActions />
+      <BranchPerformance />
+      <AlertsSection />
+    </div>
+  );
+};
 
 export default DashboardPage;

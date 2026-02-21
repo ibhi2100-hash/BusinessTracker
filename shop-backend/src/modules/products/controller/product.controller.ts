@@ -78,13 +78,40 @@ export class ProductController {
             if(!businessId) {
                 return res.status(400).json({ message: "Business ID not found in user context"});
             }
+            const branchId = req.user!.branchId;
+
+            if(!branchId) {
+                res.status(400).json({ message: "Branch ID not found in user context"})
+            }
             const productId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
             if (!productId) {
                 return res.status(400).json({ message: "Product ID is required"});
             }
             const dto = req.body;
-            const product = await this.productService.updateProduct(productId, dto, businessId);
+            const product = await this.productService.updateProductPartial(productId, dto, businessId, branchId);
             res.status(200).json(product);
+        } catch (error) {
+            res.status(500).json({ message: error instanceof Error ? error.message : String(error)})
+        }
+    }
+    async getProductsForBrand (req: Request, res: Response) {
+        try {
+            const businessId = req.user?.businessId;
+            if(!businessId) {
+                return res.status(400).json({ message: "Business ID not found in user context"});
+            }
+                 const branchId = req.user?.branchId;
+            if(!branchId) {
+                return res.status(400).json({ message: "Branch ID not found in user context"});
+            }
+            const { brandId } = req.query;
+
+            if (typeof brandId !== "string") {
+            return res.status(400).json({ message: "BrandId is required" });
+            }
+
+           const products = await this.productService.getProductForBrand(businessId, branchId, brandId);
+            res.status(200).json(products);
         } catch (error) {
             res.status(500).json({ message: error instanceof Error ? error.message : String(error)})
         }

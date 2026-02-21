@@ -49,7 +49,7 @@ export default function ProductModal({ isOpen, onClose, onSave, product }: Props
   // Fetch brands when category changes
   useEffect(() => {
     if (!selectedCategory) return setBrands([]);
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/brands?categoryId=${selectedCategory.id}`, { credentials: "include" })
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/business/brands?categoryId=${selectedCategory.id}`, { credentials: "include" })
       .then(res => res.json())
       .then(data => setBrands(data))
       .catch(console.error);

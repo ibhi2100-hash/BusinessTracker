@@ -1,8 +1,8 @@
 'use client';
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { StepHeader } from "../../../components/onboarding/StepHeader";
-import { StepFooter } from "../../../components/onboarding/StepFooter";
+import { StepHeader } from "../../../../components/onboarding/StepHeader";
+import { StepFooter } from "../../../../components/onboarding/StepFooter";
 
 interface Product {
   name: string;

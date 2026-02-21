@@ -210,7 +210,7 @@ export type CashFlowGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 export type CashFlowGroupByOutputType = {
   id: string
   businessId: string
-  branchId: string | null
+  branchId: string
   type: $Enums.CashFlowType
   amount: runtime.Decimal
   balanceAfter: runtime.Decimal | null
@@ -245,7 +245,7 @@ export type CashFlowWhereInput = {
   NOT?: Prisma.CashFlowWhereInput | Prisma.CashFlowWhereInput[]
   id?: Prisma.StringFilter<"CashFlow"> | string
   businessId?: Prisma.StringFilter<"CashFlow"> | string
-  branchId?: Prisma.StringNullableFilter<"CashFlow"> | string | null
+  branchId?: Prisma.StringFilter<"CashFlow"> | string
   type?: Prisma.EnumCashFlowTypeFilter<"CashFlow"> | $Enums.CashFlowType
   amount?: Prisma.DecimalFilter<"CashFlow"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfter?: Prisma.DecimalNullableFilter<"CashFlow"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -253,13 +253,13 @@ export type CashFlowWhereInput = {
   description?: Prisma.StringNullableFilter<"CashFlow"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CashFlow"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
-  branch?: Prisma.XOR<Prisma.BranchNullableScalarRelationFilter, Prisma.BranchWhereInput> | null
+  branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
 }
 
 export type CashFlowOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
-  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   balanceAfter?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -276,7 +276,7 @@ export type CashFlowWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.CashFlowWhereInput[]
   NOT?: Prisma.CashFlowWhereInput | Prisma.CashFlowWhereInput[]
   businessId?: Prisma.StringFilter<"CashFlow"> | string
-  branchId?: Prisma.StringNullableFilter<"CashFlow"> | string | null
+  branchId?: Prisma.StringFilter<"CashFlow"> | string
   type?: Prisma.EnumCashFlowTypeFilter<"CashFlow"> | $Enums.CashFlowType
   amount?: Prisma.DecimalFilter<"CashFlow"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfter?: Prisma.DecimalNullableFilter<"CashFlow"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -284,13 +284,13 @@ export type CashFlowWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"CashFlow"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CashFlow"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
-  branch?: Prisma.XOR<Prisma.BranchNullableScalarRelationFilter, Prisma.BranchWhereInput> | null
+  branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
 }, "id">
 
 export type CashFlowOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
-  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   balanceAfter?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -310,7 +310,7 @@ export type CashFlowScalarWhereWithAggregatesInput = {
   NOT?: Prisma.CashFlowScalarWhereWithAggregatesInput | Prisma.CashFlowScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"CashFlow"> | string
   businessId?: Prisma.StringWithAggregatesFilter<"CashFlow"> | string
-  branchId?: Prisma.StringNullableWithAggregatesFilter<"CashFlow"> | string | null
+  branchId?: Prisma.StringWithAggregatesFilter<"CashFlow"> | string
   type?: Prisma.EnumCashFlowTypeWithAggregatesFilter<"CashFlow"> | $Enums.CashFlowType
   amount?: Prisma.DecimalWithAggregatesFilter<"CashFlow"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfter?: Prisma.DecimalNullableWithAggregatesFilter<"CashFlow"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -328,13 +328,13 @@ export type CashFlowCreateInput = {
   description?: string | null
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutCashFlowsInput
-  branch?: Prisma.BranchCreateNestedOneWithoutCashflowsInput
+  branch: Prisma.BranchCreateNestedOneWithoutCashflowsInput
 }
 
 export type CashFlowUncheckedCreateInput = {
   id?: string
   businessId: string
-  branchId?: string | null
+  branchId: string
   type: $Enums.CashFlowType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -352,13 +352,13 @@ export type CashFlowUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutCashFlowsNestedInput
-  branch?: Prisma.BranchUpdateOneWithoutCashflowsNestedInput
+  branch?: Prisma.BranchUpdateOneRequiredWithoutCashflowsNestedInput
 }
 
 export type CashFlowUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCashFlowTypeFieldUpdateOperationsInput | $Enums.CashFlowType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -370,7 +370,7 @@ export type CashFlowUncheckedUpdateInput = {
 export type CashFlowCreateManyInput = {
   id?: string
   businessId: string
-  branchId?: string | null
+  branchId: string
   type: $Enums.CashFlowType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -392,7 +392,7 @@ export type CashFlowUpdateManyMutationInput = {
 export type CashFlowUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCashFlowTypeFieldUpdateOperationsInput | $Enums.CashFlowType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -553,12 +553,12 @@ export type CashFlowCreateWithoutBusinessInput = {
   source?: string | null
   description?: string | null
   createdAt?: Date | string
-  branch?: Prisma.BranchCreateNestedOneWithoutCashflowsInput
+  branch: Prisma.BranchCreateNestedOneWithoutCashflowsInput
 }
 
 export type CashFlowUncheckedCreateWithoutBusinessInput = {
   id?: string
-  branchId?: string | null
+  branchId: string
   type: $Enums.CashFlowType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -599,7 +599,7 @@ export type CashFlowScalarWhereInput = {
   NOT?: Prisma.CashFlowScalarWhereInput | Prisma.CashFlowScalarWhereInput[]
   id?: Prisma.StringFilter<"CashFlow"> | string
   businessId?: Prisma.StringFilter<"CashFlow"> | string
-  branchId?: Prisma.StringNullableFilter<"CashFlow"> | string | null
+  branchId?: Prisma.StringFilter<"CashFlow"> | string
   type?: Prisma.EnumCashFlowTypeFilter<"CashFlow"> | $Enums.CashFlowType
   amount?: Prisma.DecimalFilter<"CashFlow"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfter?: Prisma.DecimalNullableFilter<"CashFlow"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -658,7 +658,7 @@ export type CashFlowUpdateManyWithWhereWithoutBranchInput = {
 
 export type CashFlowCreateManyBusinessInput = {
   id?: string
-  branchId?: string | null
+  branchId: string
   type: $Enums.CashFlowType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -675,12 +675,12 @@ export type CashFlowUpdateWithoutBusinessInput = {
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  branch?: Prisma.BranchUpdateOneWithoutCashflowsNestedInput
+  branch?: Prisma.BranchUpdateOneRequiredWithoutCashflowsNestedInput
 }
 
 export type CashFlowUncheckedUpdateWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCashFlowTypeFieldUpdateOperationsInput | $Enums.CashFlowType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -691,7 +691,7 @@ export type CashFlowUncheckedUpdateWithoutBusinessInput = {
 
 export type CashFlowUncheckedUpdateManyWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCashFlowTypeFieldUpdateOperationsInput | $Enums.CashFlowType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   balanceAfter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -757,7 +757,7 @@ export type CashFlowSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   description?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
-  branch?: boolean | Prisma.CashFlow$branchArgs<ExtArgs>
+  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["cashFlow"]>
 
 export type CashFlowSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -771,7 +771,7 @@ export type CashFlowSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   description?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
-  branch?: boolean | Prisma.CashFlow$branchArgs<ExtArgs>
+  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["cashFlow"]>
 
 export type CashFlowSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -785,7 +785,7 @@ export type CashFlowSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   description?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
-  branch?: boolean | Prisma.CashFlow$branchArgs<ExtArgs>
+  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["cashFlow"]>
 
 export type CashFlowSelectScalar = {
@@ -803,27 +803,27 @@ export type CashFlowSelectScalar = {
 export type CashFlowOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "type" | "amount" | "balanceAfter" | "source" | "description" | "createdAt", ExtArgs["result"]["cashFlow"]>
 export type CashFlowInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
-  branch?: boolean | Prisma.CashFlow$branchArgs<ExtArgs>
+  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
 }
 export type CashFlowIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
-  branch?: boolean | Prisma.CashFlow$branchArgs<ExtArgs>
+  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
 }
 export type CashFlowIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
-  branch?: boolean | Prisma.CashFlow$branchArgs<ExtArgs>
+  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
 }
 
 export type $CashFlowPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "CashFlow"
   objects: {
     business: Prisma.$BusinessPayload<ExtArgs>
-    branch: Prisma.$BranchPayload<ExtArgs> | null
+    branch: Prisma.$BranchPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     businessId: string
-    branchId: string | null
+    branchId: string
     type: $Enums.CashFlowType
     amount: runtime.Decimal
     balanceAfter: runtime.Decimal | null
@@ -1225,7 +1225,7 @@ readonly fields: CashFlowFieldRefs;
 export interface Prisma__CashFlowClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   business<T extends Prisma.BusinessDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BusinessDefaultArgs<ExtArgs>>): Prisma.Prisma__BusinessClient<runtime.Types.Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  branch<T extends Prisma.CashFlow$branchArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CashFlow$branchArgs<ExtArgs>>): Prisma.Prisma__BranchClient<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  branch<T extends Prisma.BranchDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BranchDefaultArgs<ExtArgs>>): Prisma.Prisma__BranchClient<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1657,25 +1657,6 @@ export type CashFlowDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many CashFlows to delete.
    */
   limit?: number
-}
-
-/**
- * CashFlow.branch
- */
-export type CashFlow$branchArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Branch
-   */
-  select?: Prisma.BranchSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Branch
-   */
-  omit?: Prisma.BranchOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.BranchInclude<ExtArgs> | null
-  where?: Prisma.BranchWhereInput
 }
 
 /**

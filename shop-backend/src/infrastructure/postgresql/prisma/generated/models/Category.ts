@@ -361,6 +361,11 @@ export type CategoryMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
 }
 
+export type CategoryNullableScalarRelationFilter = {
+  is?: Prisma.CategoryWhereInput | null
+  isNot?: Prisma.CategoryWhereInput | null
+}
+
 export type CategoryScalarRelationFilter = {
   is?: Prisma.CategoryWhereInput
   isNot?: Prisma.CategoryWhereInput
@@ -456,10 +461,12 @@ export type CategoryCreateNestedOneWithoutBrandInput = {
   connect?: Prisma.CategoryWhereUniqueInput
 }
 
-export type CategoryUpdateOneRequiredWithoutBrandNestedInput = {
+export type CategoryUpdateOneWithoutBrandNestedInput = {
   create?: Prisma.XOR<Prisma.CategoryCreateWithoutBrandInput, Prisma.CategoryUncheckedCreateWithoutBrandInput>
   connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutBrandInput
   upsert?: Prisma.CategoryUpsertWithoutBrandInput
+  disconnect?: Prisma.CategoryWhereInput | boolean
+  delete?: Prisma.CategoryWhereInput | boolean
   connect?: Prisma.CategoryWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.CategoryUpdateToOneWithWhereWithoutBrandInput, Prisma.CategoryUpdateWithoutBrandInput>, Prisma.CategoryUncheckedUpdateWithoutBrandInput>
 }

@@ -41,8 +41,13 @@ router.get(
   requireBusiness,
   productController.getProducts.bind(productController)
 )
-
 /*========================================================
+        Get Products For A Branch under a specific branch
+==========================================================*/
+router.get('/brands', authMiddleware, requireBusiness, productController.getProductsForBrand.bind(productController))
+
+
+/*=======================================================
         Delete Product - Admins with Business ID Only
 =========================================================*/
 router.delete(

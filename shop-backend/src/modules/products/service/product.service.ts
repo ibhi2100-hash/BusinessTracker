@@ -66,7 +66,14 @@ export class ProductService {
         return this.repo.updateProduct(productId, dto, businessId);
 
 1    }
-    async updateProductPartial(productId: string, dto: ProductUpdateDto, businessId:string, branchId: string ){
+    async updateProductPartial(productId: string, dto:ProductDto, businessId:string, branchId: string ){
+           const existingProduct = await this.repo.getProductById(productId);
+        if (!existingProduct) {
+            throw new Error("Product not found");
+        }
+        if (existingProduct.businessId !== businessId) {
+            throw new Error("Unauthorized to update this product");
+        }
         return this.repo.updateProductPartial(productId, dto, businessId, branchId)
     }
     async getProductById(productId: string, businessId: string){
@@ -104,6 +111,13 @@ export class ProductService {
             )
             )
         );
+}
+
+getProductForBrand = async (businessId: string, branchId: string, brandId: string) => {
+    if(!brandId) throw new Error("Brand ID does not exist");
+    const products = await this.repo.getBrandProducts(businessId, branchId, brandId)
+
+    return products
 }
 
     

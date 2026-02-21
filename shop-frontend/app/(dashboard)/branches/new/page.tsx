@@ -9,7 +9,6 @@ export default function AddBranchPage() {
   const [branchName, setBranchName] = useState("");
   const addBranchMutation = useAddBranch();
   const branches = useBranchStore((s) => s.branches);
-  console.log(branches)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

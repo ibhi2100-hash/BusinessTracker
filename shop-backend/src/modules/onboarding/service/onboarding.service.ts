@@ -51,6 +51,14 @@ export class OnboardingService {
         data: {
           name: "Main Branch",
           businessId: business.id
+        },
+        include: {
+          business: {
+            select: {
+              id: true,
+              name: true,
+            }
+          }
         }
       });
 

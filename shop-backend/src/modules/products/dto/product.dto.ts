@@ -34,6 +34,7 @@ export interface ProductDto {
     imei?: string;
 
     condition?: string;
+    isActive: boolean;
 
     stockMode?: "OPENING" | "PURCHASE"; // NEW
 }

@@ -1,8 +1,9 @@
-import { CashFlowType, Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
+import { CashFlowType, PaymentMethod, Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
 import { SaleItemDto } from "../dto/saleItem.dto.js";
 export class SaleRepository {
   async create(data: {
     businessId: string;
+    branchId: string;
     totalAmount: number;
     items: {
         productId: string;
@@ -12,7 +13,7 @@ export class SaleRepository {
     }[];
     payments: {
         amount: number;
-        method: any;
+        method: PaymentMethod;
     }[];
 
   }, tx: Prisma.TransactionClient) {
@@ -30,9 +31,9 @@ export class SaleRepository {
     });
   }
 
-  async findCompletedSale(id: string, businessId: string, tx: Prisma.TransactionClient) {
+  async findCompletedSale(id: string, businessId: string, branchId: string, tx: Prisma.TransactionClient) {
     return tx.sale.findFirst({
-      where: { id, businessId, status: "COMPLETED" },
+      where: { id, businessId,branchId, status: "COMPLETED" },
       include: { items: true },
     });
   }
@@ -49,6 +50,7 @@ export class SaleRepository {
   async createCashflow (
   params: {
     businessId: string;
+    branchId: string;
     amount: number;
     type: CashFlowType;
     source: string;
@@ -59,6 +61,7 @@ export class SaleRepository {
   return tx.cashFlow.create({
     data: {
       businessId: params.businessId,
+      branchId: params.branchId,
       amount: params.amount,
       type: params.type,
       source: params.source,
@@ -70,6 +73,7 @@ export class SaleRepository {
 async createRefundCashflow(
   params: {
     businessId: string;
+    branchId: string;
     amount: number;
     saleId: string
   },
@@ -78,6 +82,7 @@ async createRefundCashflow(
   return tx.cashFlow.create({
     data: {
       businessId: params.businessId,
+      branchId: params.branchId,
       type: "OUTFLOW",
       amount: params.amount,
       source: "SALE_REFUND",

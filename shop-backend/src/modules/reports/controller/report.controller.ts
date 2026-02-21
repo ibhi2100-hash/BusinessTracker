@@ -1,35 +1,87 @@
 import type { Request, Response } from "express";
 import { ReportService } from "../service/report.service.js";
+import { ReportPeriodDto } from "../dto/report-period.dto.js";
 
-const reportService = new ReportService();
+export class ReportController {
+  constructor(private reportService: ReportService) {}
 
-export class ReportController{
-    async profitAndLoss(req: Request, res: Response){
-        const businessId = req.user!.businessId!;
-        const report = await reportService.profitAndLoss(businessId, req.body);
+  // Helper to parse branchId and query dates safely
+  private parseBranchAndDates(req: Request) {
+    // --- Branch ID ---
+    const branchIdRaw = req.params.branchId;
+    const branchId = Array.isArray(branchIdRaw) ? branchIdRaw[0] : branchIdRaw;
+    if (!branchId) throw new Error("BranchId is required");
 
-        res.json(report)
+    // --- Dates from query ---
+    const startRaw = req.query.startDate;
+    const endRaw = req.query.endDate;
+
+    // Only use strings, ignore objects
+    const startStr = typeof startRaw === "string" ? startRaw : undefined;
+    const endStr = typeof endRaw === "string" ? endRaw : undefined;
+
+    // Convert to Date safely
+    const startDate = startStr ? new Date(startStr) : new Date();
+    const endDate = endStr ? new Date(endStr) : new Date();
+
+    return { branchId, period: { startDate, endDate } as ReportPeriodDto };
+  }
+
+  async profitAndLoss(req: Request, res: Response) {
+    try {
+      const businessId = req.user?.businessId;
+      if (!businessId) return res.status(400).json({ message: "Business ID is required" });
+
+      const { branchId, period } = this.parseBranchAndDates(req);
+
+      const report = await this.reportService.profitAndLoss(businessId, branchId, period);
+      res.json(report);
+    } catch (err: any) {
+      res.status(400).json({ message: err.message });
     }
+  }
 
-    async cashflow(req: Request, res: Response){
-        const businessId = req.user!.businessId!;
-        const report = await reportService.cashflow(businessId, req.body);
+  async cashflow(req: Request, res: Response) {
+    try {
+      const businessId = req.user?.businessId;
+      if (!businessId) return res.status(400).json({ message: "Business ID is required" });
 
-        res.json(report);
+      const { branchId, period } = this.parseBranchAndDates(req);
 
+      const report = await this.reportService.cashflow(businessId, branchId, period);
+      res.json(report);
+    } catch (err: any) {
+      res.status(400).json({ message: err.message });
     }
+  }
 
-    async balanceSheet(req: Request, res: Response){
-        const businessId = req.user!.businessId!;
-        const report = await reportService.balanceSheet(businessId);
+  async balanceSheet(req: Request, res: Response) {
+    try {
+      const businessId = req.user?.businessId;
+      if (!businessId) return res.status(400).json({ message: "Business ID is required" });
 
-        res.json(report);
+      const branchIdRaw = req.params.branchId;
+      const branchId = Array.isArray(branchIdRaw) ? branchIdRaw[0] : branchIdRaw;
+      if (!branchId) return res.status(400).json({ message: "BranchId is required" });
+
+      const report = await this.reportService.balanceSheet(businessId, branchId);
+      res.json(report);
+    } catch (err: any) {
+      res.status(400).json({ message: err.message });
     }
+  }
 
-    async summary(req: Request, res: Response){
-        const businessId = req.user!.businessId!;
-        const report = await reportService.businessSummary(businessId, req.body);
+  async summary(req: Request, res: Response) {
+    try {
+      const businessId = req.user?.businessId;
+      if (!businessId) return res.status(400).json({ message: "Business ID is required" });
 
-        res.json(report)
+      const { branchId, period } = this.parseBranchAndDates(req);
+
+      const report = await this.reportService.businessSummary(businessId, branchId, period);
+      res.json(report);
+    } catch (err: any) {
+      res.status(400).json({ message: err.message });
     }
+  }
 }

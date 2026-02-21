@@ -6,6 +6,8 @@ import { useInventoryStore, Product as StoreProduct } from "../../store/inventor
 import BrandDropdown from "../../components/inventory/brandDropdown";
 import ProductCard from "../../components/inventory/productCard";
 import ProductModal from "../../components/inventory/product-modal";
+import { useSalesStore } from "../../store/SalesStore";
+import { toast } from "react-hot-toast"; 
 
 export default function InventoryPage({ context }: { context: "sell" | "admin" }) {
   const {
@@ -34,7 +36,6 @@ export default function InventoryPage({ context }: { context: "sell" | "admin" }
     })
       .then(res => res.json())
       .then(data => {
-        console.log("categories Response:", data);
         setCategories(data);
       })
       .catch(err => console.error("Failed to fetch categories:", err));
@@ -64,27 +65,15 @@ export default function InventoryPage({ context }: { context: "sell" | "admin" }
       return;
     }
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/products?brandId=${selectedBrand.id}`, {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/brands?brandId=${selectedBrand.id}`, {
       credentials: "include"
     })
       .then(res => res.json())
-      .then(data => {
-            const normalizedProducts = data.map((p: any) => ({
-                ...p,
-                sellingPrice: Number(p.sellingPrice),
-                costPrice: Number(p.costPrice),
-                brand: {
-                id: p.brandId,
-                name: "", // optional until brands loaded
-                categoryId: p.categoryId
-                }
-            }));
+      .then(data => 
+        { 
+          setProducts(data)});
+}, [selectedBrand, setProducts]);
 
-  setProducts(normalizedProducts);
-})
-      .catch(err => console.error("Failed to fetch products:", err));
-  }, [selectedBrand, setProducts]);
-  console.log(products)
 
   // Save (add or edit) product
   const handleSave = async (product: any) => {
@@ -138,35 +127,69 @@ export default function InventoryPage({ context }: { context: "sell" | "admin" }
       alert("Failed to delete product");
     }
   };
+// optional for notifications
 
-  const handleSell = (productId: string, quantity: number) => {
-    console.log("Sell", productId, quantity);
-    // Implement sell logic here
-  };
+const handleSell = async (productId: string, quantity: number) => {
+  const updateProduct = useInventoryStore.getState().updateProduct;
+  const addSale = useSalesStore.getState().addSale;
+  const products = useInventoryStore.getState().products;
 
+  try {
+    const product = products.find((p) => p.id === productId);
+    if (!product) throw new Error("Product not found");
+
+    const totalAmount = product.sellingPrice * quantity;
+
+    const saleDto = {
+      items: [{ productId, quantity }],
+      payments: [{ method: "CASH", amount: totalAmount }],
+    };
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sales`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(saleDto),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Sale failed");
+    }
+
+    const sale = await response.json();
+
+    // Update product quantity in inventory store
+    updateProduct({
+      ...product,
+      quantity: product.quantity - quantity,
+    });
+
+    toast.success("Sale completed!");
+
+    // Add sale to sales store
+    addSale(sale);
+
+  } catch (error: any) {
+    console.error(error);
+  }
+};
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">
-        {context === "sell" ? "Sell Products" : "Inventory"}
-      </h1>
+    <div className="p-4 sm:p-6 md:p-8">
+        <h1 className="text-[clamp(1.5rem,5vw,2rem)] font-bold mb-4 text-gray-800">
+          {context === "sell" ? "Sell Products" : "Inventory"}
+        </h1>
 
-      {/* Category selection */}
-      <div className="grid grid-cols-3 gap-4 mb-4">
-        {categories.map((cat) => (
-          <div
-            key={cat.id}
-            className={`border p-2 rounded cursor-pointer ${
-              selectedCategory?.id === cat.id ? "border-blue-600" : "border-gray-300"
-            }`}
-            onClick={() => setSelectedCategory(cat)}
-          >
-            {cat.imageUrl && (
-              <img src={cat.imageUrl} alt={cat.name} className="w-full h-16 object-cover mb-2 rounded" />
-            )}
-            <div className="text-center">{cat.name}</div>
-          </div>
-        ))}
-      </div>
+        {/* Category grid */}
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-4">
+          {categories.map(cat => (
+            <div key={cat.id} className={`cursor-pointer border p-2 rounded-lg hover:shadow-md transition`} onClick={() => setSelectedCategory(cat)}>
+              {cat.imageUrl && <img src={cat.imageUrl} className="w-full h-[clamp(3rem,10vw,5rem)] object-cover rounded" />}
+              <p className="text-center text-[clamp(0.75rem,1.5vw,0.875rem)]">{cat.name}</p>
+            </div>
+          ))}
+        </div>
+
 
       {/* Brand dropdown */}
       {selectedCategory && <BrandDropdown />}
@@ -182,16 +205,9 @@ export default function InventoryPage({ context }: { context: "sell" | "admin" }
       )}
 
       {/* Product grid */}
-      <div className="grid grid-cols-3 gap-4 mt-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
         {products.map((p) => (
-          <ProductCard
-            key={p.id}
-            product={p}
-            context={context}
-            onSell={handleSell}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
+          <ProductCard key={p.id} product={p} context={context} onSell={handleSell} onEdit={handleEdit} onDelete={handleDelete} />
         ))}
       </div>
 

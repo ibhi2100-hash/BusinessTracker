@@ -6,11 +6,27 @@ import { useBranchStore } from "@/store/useBranchStore";
 import { useRouter } from "next/navigation";
 
 export const DashboardHeader = () => {
-  useBusinessContext(); // hydrates the store
+  const query = useBusinessContext(); // hydrates the store
   const router = useRouter();
 
   const { businessName, branches, activeBranchId, setActiveBranch, role } =
     useBranchStore();
+
+  // Don't render until store is hydrated
+  if (query.isLoading){
+        return (
+      <div className="flex items-center justify-between animate-pulse">
+        <div className="space-y-2">
+          <div className="w-32 h-4 bg-gray-300 rounded"></div>
+          <div className="w-48 h-6 bg-gray-300 rounded"></div>
+          <div className="w-32 h-4 bg-gray-300 rounded mt-2"></div>
+        </div>
+        <div className="flex gap-3">
+          <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
+        </div>
+      </div>
+    );
+  } // or return a skeleton loader
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (e.target.value === "add_new") {
@@ -25,9 +41,7 @@ export const DashboardHeader = () => {
       {/* LEFT */}
       <div>
         <p className="text-sm text-gray-500">Good Morning</p>
-        <h1 className="text-xl font-semibold">
-          {businessName || "Loading..."}
-        </h1>
+        <h1 className="text-xl font-semibold">{businessName}</h1>
 
         <select
           value={activeBranchId ?? ""}

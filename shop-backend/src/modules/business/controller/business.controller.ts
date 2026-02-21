@@ -35,7 +35,6 @@ export class BusinessController {
     }
 
     const context = await this.businessService.getBusinessContext(user);
-    console.log(context)
     return res.json(context);
   };
 

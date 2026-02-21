@@ -558,12 +558,10 @@ export type BranchCreateNestedOneWithoutCashflowsInput = {
   connect?: Prisma.BranchWhereUniqueInput
 }
 
-export type BranchUpdateOneWithoutCashflowsNestedInput = {
+export type BranchUpdateOneRequiredWithoutCashflowsNestedInput = {
   create?: Prisma.XOR<Prisma.BranchCreateWithoutCashflowsInput, Prisma.BranchUncheckedCreateWithoutCashflowsInput>
   connectOrCreate?: Prisma.BranchCreateOrConnectWithoutCashflowsInput
   upsert?: Prisma.BranchUpsertWithoutCashflowsInput
-  disconnect?: Prisma.BranchWhereInput | boolean
-  delete?: Prisma.BranchWhereInput | boolean
   connect?: Prisma.BranchWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.BranchUpdateToOneWithWhereWithoutCashflowsInput, Prisma.BranchUpdateWithoutCashflowsInput>, Prisma.BranchUncheckedUpdateWithoutCashflowsInput>
 }

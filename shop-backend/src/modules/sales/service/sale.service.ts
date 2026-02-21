@@ -64,6 +64,7 @@ export class SaleService {
       const sale = await this.saleRepo.create(
         {
           businessId,
+          branchId,
           totalAmount,
           items: saleItems,
           payments: dto.payments,
@@ -74,6 +75,7 @@ export class SaleService {
       await this.saleRepo.createCashflow(
         {
             businessId,
+            branchId,
             amount: totalAmount,
             type: "INFLOW",
             source: "SALE",
@@ -86,12 +88,13 @@ export class SaleService {
     });
   }
 
-  async refundSale(saleid: string, businessId: string ){
+  async refundSale(saleid: string, businessId: string, branchId: string ){
     return prisma.$transaction(async (tx) => {
         const sale = 
             await this.saleRepo.findCompletedSale(
                 saleid,
                 businessId,
+                branchId,
                 tx
             )
             if(!sale) {
@@ -111,6 +114,7 @@ export class SaleService {
             await this.saleRepo.createRefundCashflow(
                 {
                     businessId,
+                    branchId,
                     amount: sale.totalAmount.toNumber(),
                     saleId: sale.id
                 },

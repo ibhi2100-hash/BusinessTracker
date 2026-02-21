@@ -19,6 +19,7 @@ export class OnboardingController {
             secure: false, 
             sameSite: "lax",
         })
+        console.log(result)
 
         return res.status(201).json(result)
     }
