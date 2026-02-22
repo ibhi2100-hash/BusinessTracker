@@ -14,8 +14,18 @@ const DashboardPage = () => {
 
   // Trigger fetching all financial data
   // Make sure to pass startDate and endDate (e.g., today)
-  const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
-  useDashboardFinancialData(today, today);
+  
+  const today = new Date();
+
+  // start date = 7 days ago
+  const lastweek =  new Date();
+  lastweek.setDate(today.getDate() - 7);
+
+  //format to YYYY_MM_DD
+  const endDate = today.toISOString().split("T")[0];
+  const startDate = lastweek.toISOString().split("T")[0]
+
+  useDashboardFinancialData(startDate, endDate);
 
   
   // If branch is not yet selected, show a loading state

@@ -1,4 +1,4 @@
-import { signToken } from "../../../helpers/jwtHelper/jwthelper.js";
+import { signTokenWithExpiry } from "../../../helpers/jwtHelper/jwthelper.js";
 import { BusinessRepository } from "../repository/business.repository.js";
 export class BusinessService {
     constructor(private repo: BusinessRepository){}
@@ -42,9 +42,9 @@ getSwitchedBranch = async (userId: string, branchId: string, businessId: string,
   if(!branchId) throw new Error("branchId does not exist")
   const branch = await this.repo.switchBranch(branchId, businessId)
 
-  const token = signToken(userId, role, businessId, branchId)
+  const {token, expiresIn} = signTokenWithExpiry(userId, role, businessId, branchId)
 
-  return {branch, token}
+  return {branch, token, expiresIn}
 
 }
 getBranchCategory = async (businessId: string, branchId: string)=> {

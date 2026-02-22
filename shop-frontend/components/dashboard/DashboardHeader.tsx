@@ -3,6 +3,7 @@
 import { Bell, Plus } from "lucide-react";
 import { useBusinessContext } from "@/hooks/useBusinessContext";
 import { useBranchStore } from "@/store/useBranchStore";
+import { useAuthStore } from "@/store/useAuthStore";
 import { useRouter } from "next/navigation";
 import { switchBranch } from "@/services/branch.service";
 import { useQueryClient } from "@tanstack/react-query";
@@ -20,6 +21,8 @@ export const DashboardHeader = () => {
     setActiveBranch,
     role,
   } = useBranchStore();
+
+  
 
   const [isSwitching, setIsSwitching] = useState(false);
 
@@ -54,10 +57,12 @@ export const DashboardHeader = () => {
       setIsSwitching(true);
 
       // 1️⃣ request new token for selected branch
-      await switchBranch(value);
+      const data = await switchBranch(value);
+      
 
       // 2️⃣ update UI state
       setActiveBranch(value);
+      useAuthStore.getState().setAccessToken(data.accessToken, data.expiresIn)
 
       // 3️⃣ clear server cache tied to previous branch
       queryClient.clear();

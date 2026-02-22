@@ -35,7 +35,7 @@ export class BusinessController {
     }
 
     const context = await this.businessService.getBusinessContext(user);
-    console.log(context)
+
     return res.json(context);
   };
 
@@ -69,7 +69,7 @@ export class BusinessController {
         user.role
       );
 
-      const { branch, token } = result;
+      const { branch, token, expiresIn } = result;
 
       res.cookie("token", token, {
         httpOnly: true,
@@ -80,6 +80,8 @@ export class BusinessController {
       res.json({
         success: true,
         branch,
+        token,
+        expiresIn,
       });
     } catch (error) {
       console.error(error);

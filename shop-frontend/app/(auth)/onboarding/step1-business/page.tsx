@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { StepHeader } from "../../../../components/onboarding/StepHeader";
 import { StepFooter } from "../../../../components/onboarding/StepFooter";
 import { useBranchStore } from "@/store/useBranchStore";
+import { useAuthStore } from "@/store/useAuthStore";
 
 
 
@@ -13,6 +14,8 @@ export default function Step2Business() {
   const [address, setAddress] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const setLogin = useAuthStore((state)=> state.setLogin)
 
   const handleNext = async () => {
     setLoading(true);
@@ -41,6 +44,17 @@ try {
     role: "ADMIN",
     activeBranchId: branch.id
   })
+
+  //2 Update auth Store with new token from the backend
+  if(data.token & data.expiresIn){
+    setLogin(
+      useAuthStore.getState().user!,
+      data.accessToken,
+      data.expiresIn,
+      [branch],
+      branch
+    );
+  }
   router.push("/dashboard");
 } catch (err: any) {
   setError(err.message);

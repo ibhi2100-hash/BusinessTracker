@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { signToken } from "../../../helpers/jwtHelper/jwthelper.js";
+import { signTokenWithExpiry } from "../../../helpers/jwtHelper/jwthelper.js";
 import { AuthRepository } from "../repository/auth.repository.js";
 import { LoginDto } from "../dto/login.dto.js";
 import { RegisterDto } from "../dto/register.dto.js";
@@ -7,8 +7,7 @@ import { User } from "../entity/user.js";
 
 export class AuthService {
   constructor(private authRepo: AuthRepository) {}
-
-  async registerUser(
+async registerUser(
     dto: RegisterDto
   ){
     const existingUser = await this.authRepo.findByEmail(dto.email!);
@@ -20,13 +19,14 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(dto.password, 10);
 
     const userData = {
-      ...dto,
+      ...dto
+  ,
       password: hashedPassword,
     };
 
     const user = await this.authRepo.createUser(userData);
     
-    const token = signToken(
+    const { token, expiresIn } = signTokenWithExpiry(
       user.id,
       user.role,
     );
@@ -34,6 +34,7 @@ export class AuthService {
     return { 
         user,
         token,
+        expiresIn,
      };
   }
 
@@ -42,6 +43,7 @@ export class AuthService {
   ): Promise<{
     user: User;
     token: string;
+    expiresIn: number;
     activeBranch: any;
     branches: any[];
   }> {
@@ -79,7 +81,7 @@ export class AuthService {
         throw new Error('no Active Branch')
     }
 
-    const token = signToken(
+    const { token, expiresIn}= signTokenWithExpiry(
         user.id,
         user.role,
         user.businessId,
@@ -89,6 +91,7 @@ export class AuthService {
     return {
       user,
       token,
+      expiresIn,
       activeBranch,
       branches,
     };

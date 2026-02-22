@@ -32,6 +32,7 @@ export class ProductService {
                     type: stockMode,
                     quantity: dto.quantity,
                     costPrice: dto.costPrice,
+                    sellingPrice: dto.sellingPrice
                 }, tx)
 
                  if (stockMode === "PURCHASE") {

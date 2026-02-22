@@ -1,6 +1,6 @@
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
 import { CreateBusinessDto } from "../dto/businessReg.dto.js";
-import { signToken } from "../../../helpers/jwtHelper/jwthelper.js";
+import { signTokenWithExpiry } from "../../../helpers/jwtHelper/jwthelper.js";
 import { OpeningBalanceDto } from "../dto/openingBalance.dto.js";
 import { PrismaClient } from "@prisma/client/extension";
 import { sourceMapsEnabled } from "node:process";
@@ -63,13 +63,14 @@ export class OnboardingService {
       });
 
       // 5️⃣ Issue new JWT
-      const newToken = signToken(user.id, user.role, business.id, firstBranch.id )
+      const { token , expiresIn} = signTokenWithExpiry(user.id, user.role, business.id, firstBranch.id )
 
       
 
       return {
         message: "Business created successfully",
-        token: newToken,
+        token: token,
+        expiresIn,
         onboardingStep: 2,
         firstBranch
       };

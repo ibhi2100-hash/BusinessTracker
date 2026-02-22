@@ -80,6 +80,7 @@ export class inventoryRepository {
         type: StockMovementType;
         quantity: number;
         costPrice?: number;
+        sellingPrice?: number
         }, tx: Prisma.TransactionClient) {
         const movement = await tx.stockMovement.create({
             data: {
@@ -87,6 +88,7 @@ export class inventoryRepository {
                 type: data.type,
                 quantity: data.quantity,
                 costPrice: data.costPrice ?? null,
+                sellingPrice: data.sellingPrice ?? null,
                 businessId: data.businessId,
                 branchId: data.branchId
             }

@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { AuthService } from "../service/auth.service.js";
 import { LoginDto } from "../dto/login.dto.js";
+import { access } from "node:fs";
 
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -13,12 +14,14 @@ export class AuthController {
         return res.status(400).json({ message: "Registration failed" });
       }
 
-      const { user, token } = result;
+      const { user, token, expiresIn } = result;
 
       this.setAuthCookie(res, token);
 
       return res.status(201).json({
         user: this.safeUser(user),
+        accessToken: token,
+        expiresIn,
       });
 
     } catch (error: any) {
@@ -42,12 +45,14 @@ export class AuthController {
         return res.status(401).json({ message: "Invalid email or password" });
       }
 
-      const { user, token, branches, activeBranch } = result;
+      const { user, token, expiresIn,  branches, activeBranch } = result;
 
       this.setAuthCookie(res, token);
 
       return res.status(200).json({
         user: this.safeUser(user),
+        accessToken: token,
+        expiresIn,
         activeBranch,
         branches, // enables branch switch UI immediately
       });

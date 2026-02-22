@@ -1,4 +1,5 @@
 import { prisma  } from "../../../infrastructure/postgresql/prismaClient.js";
+import { ReportPeriodDto } from "../dto/report-period.dto.js";
 
 export class ReportRepository{
     async getRevenue( businessId: string,branchId: string, start: Date, end: Date) {
@@ -67,22 +68,26 @@ export class ReportRepository{
         return Number(result._sum.outstandingAmount ?? 0);
     }
     async getCOGS(businessId: string, branchId: string, start: Date, end: Date) {
-        const result = await prisma.saleItem.aggregate({
+        const items = await prisma.saleItem.findMany({
             where: {
-            sale: {
+                sale: {
                 businessId,
                 branchId,
                 createdAt: { gte: start, lte: end },
                 status: "COMPLETED"
-            }
+                }
             },
-            _sum: {
-            costPrice: true,   // OR costAtSale
-            quantity: true
+            select: {
+                quantity: true,
+                costPrice: true
             }
-        });
+            });
 
-        return Number(result._sum.costPrice ?? 0);
+            return items.reduce(
+            (sum, item) =>
+                sum + Number(item.costPrice) * Number(item.quantity),
+            0
+            );
         }
 
     async getAssets(businessId: string, branchId: string) {
@@ -113,7 +118,59 @@ export class ReportRepository{
         return Number(result._sum.amount ?? 0);
         }
 
+        async salesTrend(
+            businessId: string,
+            branchId: string,
+            period: ReportPeriodDto
+            ) {
+            return prisma.sale.groupBy({
+                by: ["createdAt"],
+                where: {
+                businessId,
+                branchId,
+                createdAt: { gte: period.startDate, lte: period.endDate },
+                status: "COMPLETED",
+                },
+                _sum: { totalAmount: true },
+                orderBy: { createdAt: "asc" },
+            });
+}
 
-       
+       async expenseBreakdown(
+            businessId: string,
+            branchId: string,
+            period: ReportPeriodDto
+            ) {
+            return prisma.expense.groupBy({
+                by: ["categoryId"],
+                where: {
+                businessId,
+                branchId,
+                createdAt: { gte: period.startDate, lte: period.endDate },
+                },
+                _sum: { amount: true },
+            });
+            }
+
+            async topProducts(
+                businessId: string,
+                branchId: string,
+                period: ReportPeriodDto
+                ) {
+                return prisma.saleItem.groupBy({
+                    by: ["productId"],
+                    where: {
+                    sale: {
+                        businessId,
+                        branchId,
+                        createdAt: { gte: period.startDate, lte: period.endDate },
+                        status: "COMPLETED",
+                    },
+                    },
+                    _sum: { quantity: true },
+                    orderBy: { _sum: { quantity: "desc" } },
+                    take: 5,
+                });
+                }
 
 }

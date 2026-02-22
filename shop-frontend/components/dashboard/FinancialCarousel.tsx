@@ -8,12 +8,20 @@ import {
   DollarSign,
   TrendingUp,
 } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeloton"; // optional: create a simple Skeleton component
+import { Skeleton } from "@/components/ui/skeloton";
 
 export function FinancialCarousel() {
-const summary = useFinancialStore((state) => state.summary) 
-  // If data isn't ready, show skeleton cards
-  if (!summary) {
+  // Pull all relevant data from store
+const dashboardSummary = useFinancialStore((state)=> state.dashboardSummary)
+console.log("Dashboard Summary:", dashboardSummary)
+const cashAtHand = useFinancialStore((state)=> state.reports.cashAtHand)
+
+
+  // Skeleton loader if data is not yet populated
+  const isLoading =
+    dashboardSummary === undefined 
+
+  if (isLoading) {
     return (
       <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory py-4 px-2 scrollbar-hide">
         {Array.from({ length: 5 }).map((_, i) => (
@@ -33,39 +41,39 @@ const summary = useFinancialStore((state) => state.summary)
     );
   }
 
-  // Map store data to cards
+  // Define card data dynamically
   const cards = [
     {
       title: "Today's Sales",
-      value: `₦${summary.todaySales?.toLocaleString()}`,
+      value: `₦${dashboardSummary.todaySales?.toLocaleString()}`,
       change: "vs yesterday",
       icon: <ShoppingCart className="w-6 h-6 text-blue-600" />,
       color: "from-blue-100 to-blue-50",
     },
     {
       title: "Cash at Hand",
-      value: `₦${summary.cashAtHand?.toLocaleString()}`,
+      value: `₦${cashAtHand?.toLocaleString()}`,
       change: "Updated just now",
       icon: <CreditCard className="w-6 h-6 text-green-600" />,
       color: "from-green-100 to-green-50",
     },
     {
       title: "Inventory Value",
-      value: `₦${summary.inventoryValue?.toLocaleString()}`,
+      value: `₦${dashboardSummary.inventoryValue?.toLocaleString()}`,
       change: "Across all products",
       icon: <Package className="w-6 h-6 text-yellow-600" />,
       color: "from-yellow-100 to-yellow-50",
     },
     {
       title: "Outstanding Liabilities",
-      value: `₦${summary.outstandingLiabilities?.toLocaleString()}`,
+      value: `₦${dashboardSummary.outstandingLiabilities?.toLocaleString()}`,
       change: "Active liabilities",
       icon: <DollarSign className="w-6 h-6 text-red-600" />,
       color: "from-red-100 to-red-50",
     },
     {
       title: "Net Profit",
-      value: `₦${summary.netProfit?.toLocaleString()}`,
+      value: `₦${dashboardSummary.netProfit?.toLocaleString()}`,
       change: "For the selected period",
       icon: <TrendingUp className="w-6 h-6 text-purple-600" />,
       color: "from-purple-100 to-purple-50",

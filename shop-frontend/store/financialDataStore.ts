@@ -1,23 +1,54 @@
 import { create } from "zustand";
 
-interface FinancialState {
-  summary: any;
+interface DashboardSummary {
+  todaySales: number;
+  netProfit: number;
+  inventoryValue: number;
+  outstandingLiabilities: number;
+  
+}
+
+interface FinancialReports {
   profitLoss: any;
   cashflow: any;
   balanceSheet: any;
-  setSummary: (data: any) => void;
-  setProfitLoss: (data: any) => void;
-  setCashflow: (data: any) => void;
-  setBalanceSheet: (data: any) => void;
+  cashAtHand: number;
+  salesTrend: any[];
+  expenseBreakdown: any[];
+  topProducts: any[];
+}
+
+interface FinancialState {
+  dashboardSummary: DashboardSummary;
+  reports: FinancialReports;
+
+  setDashboardSummary: (data: DashboardSummary) => void;
+  setReports: (data: Partial<FinancialReports>) => void;
 }
 
 export const useFinancialStore = create<FinancialState>((set) => ({
-  summary: null,
-  profitLoss: null,
-  cashflow: null,
-  balanceSheet: null,
-  setSummary: (data) => set({ summary: data }),
-  setProfitLoss: (data) => set({ profitLoss: data }),
-  setCashflow: (data) => set({ cashflow: data }),
-  setBalanceSheet: (data) => set({ balanceSheet: data }),
+  dashboardSummary: {
+    todaySales: 0,
+    netProfit: 0,
+    inventoryValue: 0,
+    outstandingLiabilities: 0,
+  },
+
+  reports: {
+    cashAtHand: 0,
+    profitLoss: null,
+    cashflow: 0,
+    balanceSheet: null,
+    salesTrend: [],
+    expenseBreakdown: [],
+    topProducts: [],
+  },
+
+  setDashboardSummary: (data) =>
+    set({ dashboardSummary: data }),
+
+  setReports: (data) =>
+    set((state) => ({
+      reports: { ...state.reports, ...data },
+    })),
 }));

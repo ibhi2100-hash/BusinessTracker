@@ -5,10 +5,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginInput } from "@/lib/validations/auth.schema";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useAuthStore } from "@/store/useAuthStore";
 import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
+  const login = useAuthStore((state)=> state.setLogin)
   const [serverError, setServerError] = useState<string | null>(null);
 
   const {
@@ -35,11 +37,19 @@ export default function LoginPage() {
       );
 
       const result = await res.json();
-      console.log(result)
 
       if (!res.ok) {
         throw new Error(result.message || "Login failed");
       }
+
+      login(
+        result.user,
+        result.accessToken,
+        result.expiresIn,
+        result.branches,
+        result.activeBranch
+      );
+      
 
       if (!result.user.onboardingCompleted) {
         router.push("/onboarding/step1-business");

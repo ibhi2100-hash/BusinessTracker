@@ -12,15 +12,20 @@ export class OnboardingController {
 
         const result = await this.onboardingService.createBusiness(user!.id, dto);
 
-        const { token } = result;
+        const { token ,expiresIn, firstBranch, message  } = result;
 
         res.cookie("token", token , {
             httpOnly: true,
             secure: false, 
             sameSite: "lax",
         })
-        console.log(result)
+        
 
-        return res.status(201).json(result)
+        return res.status(201).json({
+            message,
+            accessToken: token,
+            expiresIn,
+            firstBranch,
+        })
     }
 }
