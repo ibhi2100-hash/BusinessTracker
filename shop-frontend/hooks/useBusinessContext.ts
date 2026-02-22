@@ -27,7 +27,6 @@ export const useBusinessContext = () => {
       });
       if (!res.ok) throw new Error("Failed to load context");
       const data = (await res.json()) as BusinessContext;
-      console.log("fetching business context...", data);
       return data;
     },
     staleTime: 1000 * 60 * 5, // cache 5 minutes

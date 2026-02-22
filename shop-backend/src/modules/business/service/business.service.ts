@@ -38,7 +38,7 @@ export class BusinessService {
 
     return ["create_sales", "view_products"];
 }
-getSwitchedBranch = async (userId: string, role: string, businessId: string, branchId?: string)=> {
+getSwitchedBranch = async (userId: string, branchId: string, businessId: string,   role: string)=> {
   if(!branchId) throw new Error("branchId does not exist")
   const branch = await this.repo.switchBranch(branchId, businessId)
 

@@ -35,6 +35,7 @@ export class BusinessController {
     }
 
     const context = await this.businessService.getBusinessContext(user);
+    console.log(context)
     return res.json(context);
   };
 
@@ -102,7 +103,8 @@ export class BusinessController {
         });
       }
 
-      const { branchId } = user;
+      const  branchId = req.user?.branchId
+      console.log(branchId)
 
       if (!branchId) {
         return res.status(400).json({
@@ -122,6 +124,7 @@ export class BusinessController {
     try {
       const businessId = req.user?.businessId;
       const branchId = req.user?.branchId;
+      console.log(branchId)
       if(!businessId) return res.status(400).json({ meassage: "Business ID does not Exists"})
       
       const categoryId = req.query.categoryId as string;

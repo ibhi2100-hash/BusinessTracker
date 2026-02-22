@@ -14,9 +14,9 @@ const reportController = new ReportController(reportService)
 
 router.use(authMiddleware, isAdminMiddleware, requireBusiness);
 
-router.get("/:branchId/profit-loss", reportController.profitAndLoss.bind(reportController));
-router.get("/:branchId/cashflow", reportController.cashflow.bind(reportController));
-router.get("/:brancId/balance-sheet", reportController.balanceSheet.bind(reportController));
-router.get("/:branchId/summary", reportController.summary.bind(reportController));
+router.get("/profit-loss", reportController.profitAndLoss.bind(reportController));
+router.get("/cashflow", reportController.cashflow.bind(reportController));
+router.get("/balance-sheet", reportController.balanceSheet.bind(reportController));
+router.get("/financial-summary", reportController.summary.bind(reportController));
 
 export default router

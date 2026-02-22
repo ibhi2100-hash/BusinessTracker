@@ -24,7 +24,7 @@ export class BusinessRepository{
       orderBy: { name: "asc" }
     });
   }
-  switchBranch = async (businessId: string ,branchId: string )=>{
+  switchBranch = async (branchId: string, businessId: string )=>{
     return await prisma.branch.findFirst({
                 where: { id: branchId , businessId }
   });

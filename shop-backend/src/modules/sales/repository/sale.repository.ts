@@ -20,6 +20,7 @@ export class SaleRepository {
     return tx.sale.create({
       data: {
         businessId: data.businessId,
+        branchId: data.branchId,
         totalAmount: data.totalAmount,
         items: { create: data.items },
         payments: { create: data.payments },

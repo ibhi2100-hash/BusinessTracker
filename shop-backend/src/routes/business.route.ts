@@ -32,6 +32,8 @@ router.get('/categories', requireBranch, businessController.getBranchCategory)
 
 router.get('/brands', requireBranch, businessController.getBrands);
 
+router.post('/switch-branch', requireBranch, businessController.switchBranch)
+
 
 
 
