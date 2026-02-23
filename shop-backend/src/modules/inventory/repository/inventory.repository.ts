@@ -1,40 +1,43 @@
-import { connect } from "node:http2";
 import { Prisma, StockMovementType } from "../../../infrastructure/postgresql/prisma/generated/client.js";
-import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
+
 
 export class inventoryRepository {
     async findActiveProduct(
         productId: string,
         businessId: string,
+        branchId: string,
         tx: Prisma.TransactionClient
     ){
         return tx.product.findFirst({
             where:{
                 id: productId,
                 businessId,
+                branchId,
                 isActive: true
             },
         });
 
     }
 
-    async decrementStock(
-        productId: string,
-        quantity: number,
-        tx: Prisma.TransactionClient,
-    ){
-        return tx.product.update({
-            where: {
-                id: productId
-            },
-            data:{
-                quantity: {
-                    decrement: quantity
-                },
-            },
-        });
-    }
+async decrementStock(
+  productId: string,
+  quantity: number,
+  tx: Prisma.TransactionClient,
+){
+  const updated = await tx.product.updateMany({
+    where: {
+      id: productId,
+      quantity: { gte: quantity }   // 👈 prevents negative stock
+    },
+    data: {
+      quantity: { decrement: quantity },
+    },
+  });
 
+  if (updated.count === 0) {
+    throw new Error("Insufficient stock or concurrent update detected.");
+  }
+}
     async incrementStock(
         productId: string,
         quantity:number,
@@ -55,22 +58,23 @@ export class inventoryRepository {
         branchId: string,
         productId: string,
         quantity: number,
-        sellingPrice: any,
-        costPrice: any,
+        sellingPrice: Prisma.Decimal,
+        costPrice: Prisma.Decimal,
         tx: Prisma.TransactionClient
     ){
-        return tx.stockMovement.create({
-            data: {
-                businessId,
-                branchId,
-                productId,
-                type: "SALE",
-                quantity,
-                sellingPrice,
-                costPrice,
-            },
-        });
-
+        const stockmove = await tx.stockMovement.create({
+                            data: {
+                                businessId,
+                                branchId,
+                                productId,
+                                type: "SALE",
+                                quantity,
+                                sellingPrice,
+                                costPrice,
+                            },
+                        });
+        console.log("Saved:", stockmove.costPrice)
+        return stockmove
     }
 
     async createStockMovement(data: {
@@ -79,8 +83,8 @@ export class inventoryRepository {
         branchId: string;
         type: StockMovementType;
         quantity: number;
-        costPrice?: number;
-        sellingPrice?: number
+        costPrice?: Prisma.Decimal;
+        sellingPrice?: Prisma.Decimal
         }, tx: Prisma.TransactionClient) {
         const movement = await tx.stockMovement.create({
             data: {

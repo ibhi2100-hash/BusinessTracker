@@ -1,3 +1,5 @@
+import { hydrate } from "@tanstack/react-query";
+import { Vault } from "lucide-react";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
@@ -13,6 +15,7 @@ interface User {
   role: "ADMIN" | "USER" | string;
   businessId?: string;
   branchId?: string;
+  onboardingCompleted?: boolean
 }
 
 interface AuthState {
@@ -24,6 +27,8 @@ interface AuthState {
   branches: Branch[];
   activeBranch: Branch | null;
 
+  hydrated: boolean;
+
   setLogin: (
     user: User,
     token: string,
@@ -31,6 +36,8 @@ interface AuthState {
     branches?: Branch[],
     activeBranch?: Branch
   ) => void;
+
+  setHydrated: (value: boolean)=> void
 
   setUser: (user: User) => void;
   setAccessToken: (token: string, expiryInSeconds?: number) => void;
@@ -50,6 +57,7 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
       branches: [],
       activeBranch: null,
+      hydrated: false,
 
       // ✅ Unified login method
       setLogin: (user, token, expiresIn, branches, activeBranch) =>
@@ -90,10 +98,17 @@ export const useAuthStore = create<AuthState>()(
         if (!tokenExpiry) return true;
         return Date.now() < tokenExpiry;
       },
+
+      setHydrated: (value: boolean) => set({ hydrated: value}),
     }),
     {
       name: "auth-storage",
       storage: createJSONStorage(() => localStorage),
+      onRehydrateStorage: () => (state, error) => {
+        if (!error && state) {
+          state.setHydrated(true); // mark store as hydrated
+        }
+      },
     }
   )
 );

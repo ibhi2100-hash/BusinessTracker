@@ -9,6 +9,7 @@ export class SaleRepository {
         productId: string;
         quantity: number;
         unitPrice: number;
+        costPrice: number;
         totalPrice: number;
     }[];
     payments: {
@@ -31,7 +32,21 @@ export class SaleRepository {
       }
     });
   }
-
+  async findSellableProduct(
+    productId: string,
+    businessId: string,
+    branchId: string,
+    tx: Prisma.TransactionClient
+  ) {
+    return tx.product.findFirst({
+      where: {
+        id: productId,
+        businessId,
+        branchId,
+        isActive: true,
+      },
+    });
+  }
   async findCompletedSale(id: string, businessId: string, branchId: string, tx: Prisma.TransactionClient) {
     return tx.sale.findFirst({
       where: { id, businessId,branchId, status: "COMPLETED" },

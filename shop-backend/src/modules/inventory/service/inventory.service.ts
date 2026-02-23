@@ -2,6 +2,7 @@ import { errorMonitor } from "node:events";
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
 import { inventoryRepository } from "../repository/inventory.repository.js";
 import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
+import { SaleProductSnapshot } from "../../sales/dto/saleproductsnap.js";
 
 export class InventoryService {
     private inventoryRepo = new inventoryRepository();
@@ -15,7 +16,7 @@ export class InventoryService {
         tx: Prisma.TransactionClient
     ) {
         for ( const item of items ){
-            const product = await this.inventoryRepo.findActiveProduct(item.productId, businessId, tx)
+            const product = await this.inventoryRepo.findActiveProduct(item.productId, businessId, branchId, tx)
             
             if(!product){
                 throw new Error(`Product with ID ${item.productId} not found or inactive.`);
@@ -32,7 +33,7 @@ export class InventoryService {
             )
 
             //Record stock Movement
-            await this.inventoryRepo.recordStockOut(
+            const stockmovement = await this.inventoryRepo.recordStockOut(
                 businessId,
                 branchId,
                 product.id,
@@ -41,9 +42,50 @@ export class InventoryService {
                 product.costPrice,
                 tx
             );
-        } 
+        }
     }
 
+    async reduceStockFromSnapshot(
+        businessId: string,
+        branchId: string,
+        snapshots: SaleProductSnapshot[],
+        tx: Prisma.TransactionClient
+    ) {
+        for (const item of snapshots) {
+
+    const product = await this.inventoryRepo.findActiveProduct(
+        item.productId,
+        businessId,
+        branchId,
+        tx
+        );
+
+        if (!product) {
+        throw new Error(`Product not found`);
+        }
+
+        if (product.quantity < item.quantity) {
+        throw new Error(`Insufficient stock`);
+        }
+
+        await this.inventoryRepo.decrementStock(
+        product.id,
+        item.quantity,
+        tx
+        );
+
+      // record movement using snapshot pricing
+      await this.inventoryRepo.recordStockOut(
+        businessId,
+        branchId,
+        item.productId,
+        item.quantity,
+        new Prisma.Decimal(item.sellingPrice),
+        new Prisma.Decimal(item.costPrice),
+        tx
+      );
+    }
+  }
     async reverseStock(
         params:{
             productId: string,

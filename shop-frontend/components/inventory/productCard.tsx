@@ -45,7 +45,7 @@ export default function ProductCard({ product, context, onSell, onEdit, onDelete
         {/* Brand and Price */}
         <div className="flex justify-between items-center mt-1">
           <span className="flex items-center gap-1 text-[clamp(0.65rem,2.5vw,0.75rem)] text-gray-600">
-            <Package className="w-4 h-4 text-gray-500" /> {product.brand.name}
+            <Package className="w-4 h-4 text-gray-500" /> {product.brand?.name ?? "No Brand"}
           </span>
           <span className="flex items-center gap-1 text-[clamp(0.75rem,3vw,1rem)] font-semibold text-green-700">
             <Tag className="w-4 h-4 text-green-700 text-3xl" /> ₦{product.sellingPrice.toLocaleString()}

@@ -12,27 +12,23 @@ interface AuthGuardProps {
 
 export function AuthGuard({ children, adminOnly = false }: AuthGuardProps) {
   const router = useRouter();
-
-  // Get both user and auth status
-  const user = useAuthStore((state)=> state.user);
-  const isAuthenticated = useAuthStore((state)=> state.isAuthenticated)
+  const hydrated = useAuthStore(state => state.hydrated);
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+  const user = useAuthStore(state => state.user);
 
   useEffect(() => {
-    // redirect if not logged in
+    if (!hydrated) return; // wait until store is ready
     if (!isAuthenticated) {
       router.replace("/login");
       return;
     }
-
-    // redirect if adminOnly and user is not admin
     if (adminOnly && user?.role !== "ADMIN") {
       router.replace("/unauthorized");
     }
-  }, [isAuthenticated, user, router, adminOnly]);
+  }, [hydrated, isAuthenticated, user, router, adminOnly]);
 
-  // show nothing while redirecting
-  if (!isAuthenticated || (adminOnly && user?.role !== "ADMIN")) {
-    return null;
+  if (!hydrated || !isAuthenticated || (adminOnly && user?.role !== "ADMIN")) {
+    return null; // show loading or blank
   }
 
   return <>{children}</>;

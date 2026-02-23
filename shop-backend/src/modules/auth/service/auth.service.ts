@@ -61,33 +61,31 @@ async registerUser(
     if (!isPasswordValid) {
       throw new Error("Invalid password");
     }
-
-    if(!user.businessId){
-        throw new Error("Business context is missing")
-    }
-    // load branches for business
-    const branches = await this.authRepo.getBusinessBranches(
-      user.businessId
-    );
-
-    if (!branches.length) {
-      throw new Error("No branches found for business");
-    }
-
-    // choose active branch (default or first)
-    const [activeBranch] = branches;
-
-    if(!activeBranch){
-        throw new Error('no Active Branch')
-    }
-
-    const { token, expiresIn}= signTokenWithExpiry(
+    if(!user.businessId  || !user.onboardingCompleted){
+      const { token, expiresIn } = signTokenWithExpiry(
         user.id,
         user.role,
-        user.businessId,
-        activeBranch.id
-    );
+      )
+      return {
+        user,
+        token,
+        expiresIn,
+        activeBranch: null,
+        branches: []
+      }
+    }
 
+
+    // Normal LOGIN FLOW
+    const branches = await this.authRepo.getBusinessBranches(user.businessId);
+    const activeBranch = branches[0];
+
+    const { token, expiresIn } = signTokenWithExpiry(
+      user.id,
+      user.role,
+      user.businessId,
+      activeBranch?.id
+    )
     return {
       user,
       token,
