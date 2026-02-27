@@ -1,7 +1,13 @@
-import React from 'react'
+import React from "react";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export const BranchPerformance = () => {
-    const branches = [
+  const { user } = useAuthStore();
+
+  // Only business owner can view cross-branch performance
+  if (!user || user.role !== "ADMIN") return null;
+
+  const branches = [
     { name: "Ikeja", amount: "₦85,000" },
     { name: "Yaba", amount: "₦63,000" },
   ];
@@ -23,4 +29,4 @@ export const BranchPerformance = () => {
       </div>
     </div>
   );
-}
+};

@@ -54,10 +54,9 @@ getBranchCategory = async (businessId: string, branchId: string)=> {
 
     return categories;
 }
-getBrandsByCategory = async (categoryId: string, businessId: string, branchId?: string )=> {
-  if(!categoryId) throw new Error(" Category Id is required")
-
-  const brands = await this.repo.getBrandsByCategory(categoryId, businessId, branchId)
+getBrandsByCategory = async ( businessId: string, categoryId: string )=> {
+  
+  const brands = await this.repo.getBrandsByBusiness( businessId, categoryId)
   return brands
 }
 }

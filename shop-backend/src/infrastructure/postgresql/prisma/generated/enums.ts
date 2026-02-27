@@ -107,3 +107,23 @@ export const LiabilityStatus = {
 } as const
 
 export type LiabilityStatus = (typeof LiabilityStatus)[keyof typeof LiabilityStatus]
+
+
+export const AlertType = {
+  LOW_STOCK: 'LOW_STOCK',
+  SUBSCRIPTION: 'SUBSCRIPTION',
+  LIABILITY_DUE: 'LIABILITY_DUE',
+  CASH_VARIANCE: 'CASH_VARIANCE',
+  SYSTEM: 'SYSTEM'
+} as const
+
+export type AlertType = (typeof AlertType)[keyof typeof AlertType]
+
+
+export const AlertSeverity = {
+  INFO: 'INFO',
+  WARNING: 'WARNING',
+  CRITICAL: 'CRITICAL'
+} as const
+
+export type AlertSeverity = (typeof AlertSeverity)[keyof typeof AlertSeverity]

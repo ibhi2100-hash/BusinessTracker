@@ -77,6 +77,20 @@ enum LiabilityStatus {
   SETTLED
 }
 
+enum AlertType {
+  LOW_STOCK
+  SUBSCRIPTION
+  LIABILITY_DUE
+  CASH_VARIANCE
+  SYSTEM
+}
+
+enum AlertSeverity {
+  INFO
+  WARNING
+  CRITICAL
+}
+
 ///**** MODELS****///
 
 
@@ -92,6 +106,7 @@ model Business {
   users      User[]
   business   BusinessSubscription[]
   categories Category[]
+  brands      Brand[]
   products   Product[]
   stockMovement     StockMovement[]
   sales      Sale[]
@@ -102,6 +117,7 @@ model Business {
   assets      Asset[]
   expenses    Expense[]
   expenseCategories ExpenseCategory[]
+  alerts      Alert[]
 
 }
 model Branch {
@@ -117,12 +133,14 @@ model Branch {
   users         User[]
   products      Product[]
   category      Category[]
+  brand         Brand[]
   sales         Sale[]
   stockMovement StockMovement[]
   cashflows     CashFlow[]
   assets        Asset[]
   liabilities   Liability[]
   expenses      Expense[]
+  alerts        Alert[]
 }
 
 model User {
@@ -193,27 +211,35 @@ model Category {
   business    Business  @relation(fields: [businessId], references: [id])
   branch      Branch    @relation(fields: [branchId], references: [id])
 
-  products    Product[]
-  brand       Brand[]
+  product     Product[]
+  brands      Brand[]
 
-  @@unique([name, businessId])
+  @@unique([name, businessId, branchId])
 }
 
 model Brand {
   id          String    @id @default(uuid())
   name        String
-  categoryId  String?
-  category    Category?  @relation(fields: [categoryId], references: [id])
+  businessId  String
+  categoryId  String
+  branchId     String
+  business    Business  @relation(fields: [businessId], references: [id])
+  branch      Branch    @relation(fields: [branchId], references: [id])
+  category    Category  @relation(fields: [categoryId], references: [id])
   products    Product[]
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([name, categoryId, branchId])
 }
 
 model Product {
   id          String    @id @default(uuid())
   businessId  String
-  branchId    String?
-  categoryId  String
-  brandId     String?
+  branchId    String
+  categoryId String
+  brandId     String
   name        String
   type        ProductType
   model       String?
@@ -223,6 +249,7 @@ model Product {
   imageUrl    String?
   sku         String?
   reorderLevel  Int?
+  isDeleted    Boolean    @default(false)
 
   //Accessories only 
   imei        String?   @unique
@@ -233,9 +260,9 @@ model Product {
   updatedAt  DateTime  @updatedAt
 
   business    Business  @relation(fields: [businessId], references: [id])
-  branch      Branch?    @relation(fields: [branchId], references: [id])
-  category    Category  @relation(fields: [categoryId], references: [id])
-  brand       Brand?    @relation(fields: [brandId], references: [id])
+  branch      Branch    @relation(fields: [branchId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id])
+  brand       Brand    @relation(fields: [brandId], references: [id])
 
   stockMoves StockMovement[]  
   saleItem   SaleItem[]
@@ -484,3 +511,25 @@ model  ExpenseCategory {
   @@unique([name, businessId])
 }
 
+model Alert {
+  id            String   @id @default(uuid())
+  businessId    String
+  branchId      String?   // null = global alert
+  type          AlertType
+  severity      AlertSeverity
+  title         String
+  message       String
+  isResolved    Boolean   @default(false)
+  isRead        Boolean   @default(false)
+  metadata      Json?
+  createdAt     DateTime  @default(now())
+  resolvedAt    DateTime?
+
+  business Business @relation(fields: [businessId], references: [id])
+  branch   Branch?  @relation(fields: [branchId], references: [id])
+
+  @@index([branchId, isResolved])
+  @@index([businessId, isResolved])
+  @@index([type])
+  @@unique([branchId, type, isResolved, metadata])
+}

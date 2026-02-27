@@ -1,3 +1,4 @@
+import { after } from "node:test";
 import { Prisma, StockMovementType } from "../../../infrastructure/postgresql/prisma/generated/client.js";
 
 
@@ -24,7 +25,13 @@ async decrementStock(
   quantity: number,
   tx: Prisma.TransactionClient,
 ){
-  const updated = await tx.product.updateMany({
+
+    const productBefore = await tx.product.findUniqueOrThrow({
+        where: { id: productId},
+        select: { quantity: true}
+    });
+
+  const result = await tx.product.updateMany({
     where: {
       id: productId,
       quantity: { gte: quantity }   // 👈 prevents negative stock
@@ -34,9 +41,16 @@ async decrementStock(
     },
   });
 
-  if (updated.count === 0) {
+  if (result.count === 0) {
     throw new Error("Insufficient stock or concurrent update detected.");
   }
+  const productAfter = await tx.product.findUniqueOrThrow({
+    where: { id: productId},
+  });
+return {
+    before: productBefore,
+    after: productAfter
+}
 }
     async incrementStock(
         productId: string,
@@ -96,10 +110,6 @@ async decrementStock(
                 businessId: data.businessId,
                 branchId: data.branchId
             }
-        });
-        await tx.product.update({
-            where: { id: data.productId },
-            data: { quantity: { increment: data.quantity } }
         });
         return movement;
         }

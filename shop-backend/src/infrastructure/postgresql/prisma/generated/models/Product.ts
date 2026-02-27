@@ -55,6 +55,7 @@ export type ProductMinAggregateOutputType = {
   imageUrl: string | null
   sku: string | null
   reorderLevel: number | null
+  isDeleted: boolean | null
   imei: string | null
   condition: string | null
   isActive: boolean | null
@@ -77,6 +78,7 @@ export type ProductMaxAggregateOutputType = {
   imageUrl: string | null
   sku: string | null
   reorderLevel: number | null
+  isDeleted: boolean | null
   imei: string | null
   condition: string | null
   isActive: boolean | null
@@ -99,6 +101,7 @@ export type ProductCountAggregateOutputType = {
   imageUrl: number
   sku: number
   reorderLevel: number
+  isDeleted: number
   imei: number
   condition: number
   isActive: number
@@ -137,6 +140,7 @@ export type ProductMinAggregateInputType = {
   imageUrl?: true
   sku?: true
   reorderLevel?: true
+  isDeleted?: true
   imei?: true
   condition?: true
   isActive?: true
@@ -159,6 +163,7 @@ export type ProductMaxAggregateInputType = {
   imageUrl?: true
   sku?: true
   reorderLevel?: true
+  isDeleted?: true
   imei?: true
   condition?: true
   isActive?: true
@@ -181,6 +186,7 @@ export type ProductCountAggregateInputType = {
   imageUrl?: true
   sku?: true
   reorderLevel?: true
+  isDeleted?: true
   imei?: true
   condition?: true
   isActive?: true
@@ -278,9 +284,9 @@ export type ProductGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 export type ProductGroupByOutputType = {
   id: string
   businessId: string
-  branchId: string | null
+  branchId: string
   categoryId: string
-  brandId: string | null
+  brandId: string
   name: string
   type: $Enums.ProductType
   model: string | null
@@ -290,6 +296,7 @@ export type ProductGroupByOutputType = {
   imageUrl: string | null
   sku: string | null
   reorderLevel: number | null
+  isDeleted: boolean
   imei: string | null
   condition: string | null
   isActive: boolean
@@ -323,9 +330,9 @@ export type ProductWhereInput = {
   NOT?: Prisma.ProductWhereInput | Prisma.ProductWhereInput[]
   id?: Prisma.StringFilter<"Product"> | string
   businessId?: Prisma.StringFilter<"Product"> | string
-  branchId?: Prisma.StringNullableFilter<"Product"> | string | null
+  branchId?: Prisma.StringFilter<"Product"> | string
   categoryId?: Prisma.StringFilter<"Product"> | string
-  brandId?: Prisma.StringNullableFilter<"Product"> | string | null
+  brandId?: Prisma.StringFilter<"Product"> | string
   name?: Prisma.StringFilter<"Product"> | string
   type?: Prisma.EnumProductTypeFilter<"Product"> | $Enums.ProductType
   model?: Prisma.StringNullableFilter<"Product"> | string | null
@@ -335,15 +342,16 @@ export type ProductWhereInput = {
   imageUrl?: Prisma.StringNullableFilter<"Product"> | string | null
   sku?: Prisma.StringNullableFilter<"Product"> | string | null
   reorderLevel?: Prisma.IntNullableFilter<"Product"> | number | null
+  isDeleted?: Prisma.BoolFilter<"Product"> | boolean
   imei?: Prisma.StringNullableFilter<"Product"> | string | null
   condition?: Prisma.StringNullableFilter<"Product"> | string | null
   isActive?: Prisma.BoolFilter<"Product"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Product"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Product"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
-  branch?: Prisma.XOR<Prisma.BranchNullableScalarRelationFilter, Prisma.BranchWhereInput> | null
+  branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
   category?: Prisma.XOR<Prisma.CategoryScalarRelationFilter, Prisma.CategoryWhereInput>
-  brand?: Prisma.XOR<Prisma.BrandNullableScalarRelationFilter, Prisma.BrandWhereInput> | null
+  brand?: Prisma.XOR<Prisma.BrandScalarRelationFilter, Prisma.BrandWhereInput>
   stockMoves?: Prisma.StockMovementListRelationFilter
   saleItem?: Prisma.SaleItemListRelationFilter
 }
@@ -351,9 +359,9 @@ export type ProductWhereInput = {
 export type ProductOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
-  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
-  brandId?: Prisma.SortOrderInput | Prisma.SortOrder
+  brandId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   model?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -363,6 +371,7 @@ export type ProductOrderByWithRelationInput = {
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   sku?: Prisma.SortOrderInput | Prisma.SortOrder
   reorderLevel?: Prisma.SortOrderInput | Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
   imei?: Prisma.SortOrderInput | Prisma.SortOrder
   condition?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -383,9 +392,9 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.ProductWhereInput[]
   NOT?: Prisma.ProductWhereInput | Prisma.ProductWhereInput[]
   businessId?: Prisma.StringFilter<"Product"> | string
-  branchId?: Prisma.StringNullableFilter<"Product"> | string | null
+  branchId?: Prisma.StringFilter<"Product"> | string
   categoryId?: Prisma.StringFilter<"Product"> | string
-  brandId?: Prisma.StringNullableFilter<"Product"> | string | null
+  brandId?: Prisma.StringFilter<"Product"> | string
   name?: Prisma.StringFilter<"Product"> | string
   type?: Prisma.EnumProductTypeFilter<"Product"> | $Enums.ProductType
   model?: Prisma.StringNullableFilter<"Product"> | string | null
@@ -395,14 +404,15 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
   imageUrl?: Prisma.StringNullableFilter<"Product"> | string | null
   sku?: Prisma.StringNullableFilter<"Product"> | string | null
   reorderLevel?: Prisma.IntNullableFilter<"Product"> | number | null
+  isDeleted?: Prisma.BoolFilter<"Product"> | boolean
   condition?: Prisma.StringNullableFilter<"Product"> | string | null
   isActive?: Prisma.BoolFilter<"Product"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Product"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Product"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
-  branch?: Prisma.XOR<Prisma.BranchNullableScalarRelationFilter, Prisma.BranchWhereInput> | null
+  branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
   category?: Prisma.XOR<Prisma.CategoryScalarRelationFilter, Prisma.CategoryWhereInput>
-  brand?: Prisma.XOR<Prisma.BrandNullableScalarRelationFilter, Prisma.BrandWhereInput> | null
+  brand?: Prisma.XOR<Prisma.BrandScalarRelationFilter, Prisma.BrandWhereInput>
   stockMoves?: Prisma.StockMovementListRelationFilter
   saleItem?: Prisma.SaleItemListRelationFilter
 }, "id" | "imei">
@@ -410,9 +420,9 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
 export type ProductOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
-  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
-  brandId?: Prisma.SortOrderInput | Prisma.SortOrder
+  brandId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   model?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -422,6 +432,7 @@ export type ProductOrderByWithAggregationInput = {
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   sku?: Prisma.SortOrderInput | Prisma.SortOrder
   reorderLevel?: Prisma.SortOrderInput | Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
   imei?: Prisma.SortOrderInput | Prisma.SortOrder
   condition?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -440,9 +451,9 @@ export type ProductScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ProductScalarWhereWithAggregatesInput | Prisma.ProductScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Product"> | string
   businessId?: Prisma.StringWithAggregatesFilter<"Product"> | string
-  branchId?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
+  branchId?: Prisma.StringWithAggregatesFilter<"Product"> | string
   categoryId?: Prisma.StringWithAggregatesFilter<"Product"> | string
-  brandId?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
+  brandId?: Prisma.StringWithAggregatesFilter<"Product"> | string
   name?: Prisma.StringWithAggregatesFilter<"Product"> | string
   type?: Prisma.EnumProductTypeWithAggregatesFilter<"Product"> | $Enums.ProductType
   model?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
@@ -452,6 +463,7 @@ export type ProductScalarWhereWithAggregatesInput = {
   imageUrl?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
   sku?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
   reorderLevel?: Prisma.IntNullableWithAggregatesFilter<"Product"> | number | null
+  isDeleted?: Prisma.BoolWithAggregatesFilter<"Product"> | boolean
   imei?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
   condition?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
   isActive?: Prisma.BoolWithAggregatesFilter<"Product"> | boolean
@@ -470,15 +482,16 @@ export type ProductCreateInput = {
   imageUrl?: string | null
   sku?: string | null
   reorderLevel?: number | null
+  isDeleted?: boolean
   imei?: string | null
   condition?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutProductsInput
-  branch?: Prisma.BranchCreateNestedOneWithoutProductsInput
-  category: Prisma.CategoryCreateNestedOneWithoutProductsInput
-  brand?: Prisma.BrandCreateNestedOneWithoutProductsInput
+  branch: Prisma.BranchCreateNestedOneWithoutProductsInput
+  category: Prisma.CategoryCreateNestedOneWithoutProductInput
+  brand: Prisma.BrandCreateNestedOneWithoutProductsInput
   stockMoves?: Prisma.StockMovementCreateNestedManyWithoutProductInput
   saleItem?: Prisma.SaleItemCreateNestedManyWithoutProductInput
 }
@@ -486,9 +499,9 @@ export type ProductCreateInput = {
 export type ProductUncheckedCreateInput = {
   id?: string
   businessId: string
-  branchId?: string | null
+  branchId: string
   categoryId: string
-  brandId?: string | null
+  brandId: string
   name: string
   type: $Enums.ProductType
   model?: string | null
@@ -498,6 +511,7 @@ export type ProductUncheckedCreateInput = {
   imageUrl?: string | null
   sku?: string | null
   reorderLevel?: number | null
+  isDeleted?: boolean
   imei?: string | null
   condition?: string | null
   isActive?: boolean
@@ -518,15 +532,16 @@ export type ProductUpdateInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imei?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutProductsNestedInput
-  branch?: Prisma.BranchUpdateOneWithoutProductsNestedInput
-  category?: Prisma.CategoryUpdateOneRequiredWithoutProductsNestedInput
-  brand?: Prisma.BrandUpdateOneWithoutProductsNestedInput
+  branch?: Prisma.BranchUpdateOneRequiredWithoutProductsNestedInput
+  category?: Prisma.CategoryUpdateOneRequiredWithoutProductNestedInput
+  brand?: Prisma.BrandUpdateOneRequiredWithoutProductsNestedInput
   stockMoves?: Prisma.StockMovementUpdateManyWithoutProductNestedInput
   saleItem?: Prisma.SaleItemUpdateManyWithoutProductNestedInput
 }
@@ -534,9 +549,9 @@ export type ProductUpdateInput = {
 export type ProductUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
-  brandId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brandId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -546,6 +561,7 @@ export type ProductUncheckedUpdateInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imei?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -558,9 +574,9 @@ export type ProductUncheckedUpdateInput = {
 export type ProductCreateManyInput = {
   id?: string
   businessId: string
-  branchId?: string | null
+  branchId: string
   categoryId: string
-  brandId?: string | null
+  brandId: string
   name: string
   type: $Enums.ProductType
   model?: string | null
@@ -570,6 +586,7 @@ export type ProductCreateManyInput = {
   imageUrl?: string | null
   sku?: string | null
   reorderLevel?: number | null
+  isDeleted?: boolean
   imei?: string | null
   condition?: string | null
   isActive?: boolean
@@ -588,6 +605,7 @@ export type ProductUpdateManyMutationInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imei?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -598,9 +616,9 @@ export type ProductUpdateManyMutationInput = {
 export type ProductUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
-  brandId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brandId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -610,6 +628,7 @@ export type ProductUncheckedUpdateManyInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imei?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -642,6 +661,7 @@ export type ProductCountOrderByAggregateInput = {
   imageUrl?: Prisma.SortOrder
   sku?: Prisma.SortOrder
   reorderLevel?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
   imei?: Prisma.SortOrder
   condition?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -671,6 +691,7 @@ export type ProductMaxOrderByAggregateInput = {
   imageUrl?: Prisma.SortOrder
   sku?: Prisma.SortOrder
   reorderLevel?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
   imei?: Prisma.SortOrder
   condition?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -693,6 +714,7 @@ export type ProductMinOrderByAggregateInput = {
   imageUrl?: Prisma.SortOrder
   sku?: Prisma.SortOrder
   reorderLevel?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
   imei?: Prisma.SortOrder
   condition?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -931,23 +953,24 @@ export type ProductCreateWithoutBusinessInput = {
   imageUrl?: string | null
   sku?: string | null
   reorderLevel?: number | null
+  isDeleted?: boolean
   imei?: string | null
   condition?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  branch?: Prisma.BranchCreateNestedOneWithoutProductsInput
-  category: Prisma.CategoryCreateNestedOneWithoutProductsInput
-  brand?: Prisma.BrandCreateNestedOneWithoutProductsInput
+  branch: Prisma.BranchCreateNestedOneWithoutProductsInput
+  category: Prisma.CategoryCreateNestedOneWithoutProductInput
+  brand: Prisma.BrandCreateNestedOneWithoutProductsInput
   stockMoves?: Prisma.StockMovementCreateNestedManyWithoutProductInput
   saleItem?: Prisma.SaleItemCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateWithoutBusinessInput = {
   id?: string
-  branchId?: string | null
+  branchId: string
   categoryId: string
-  brandId?: string | null
+  brandId: string
   name: string
   type: $Enums.ProductType
   model?: string | null
@@ -957,6 +980,7 @@ export type ProductUncheckedCreateWithoutBusinessInput = {
   imageUrl?: string | null
   sku?: string | null
   reorderLevel?: number | null
+  isDeleted?: boolean
   imei?: string | null
   condition?: string | null
   isActive?: boolean
@@ -998,9 +1022,9 @@ export type ProductScalarWhereInput = {
   NOT?: Prisma.ProductScalarWhereInput | Prisma.ProductScalarWhereInput[]
   id?: Prisma.StringFilter<"Product"> | string
   businessId?: Prisma.StringFilter<"Product"> | string
-  branchId?: Prisma.StringNullableFilter<"Product"> | string | null
+  branchId?: Prisma.StringFilter<"Product"> | string
   categoryId?: Prisma.StringFilter<"Product"> | string
-  brandId?: Prisma.StringNullableFilter<"Product"> | string | null
+  brandId?: Prisma.StringFilter<"Product"> | string
   name?: Prisma.StringFilter<"Product"> | string
   type?: Prisma.EnumProductTypeFilter<"Product"> | $Enums.ProductType
   model?: Prisma.StringNullableFilter<"Product"> | string | null
@@ -1010,6 +1034,7 @@ export type ProductScalarWhereInput = {
   imageUrl?: Prisma.StringNullableFilter<"Product"> | string | null
   sku?: Prisma.StringNullableFilter<"Product"> | string | null
   reorderLevel?: Prisma.IntNullableFilter<"Product"> | number | null
+  isDeleted?: Prisma.BoolFilter<"Product"> | boolean
   imei?: Prisma.StringNullableFilter<"Product"> | string | null
   condition?: Prisma.StringNullableFilter<"Product"> | string | null
   isActive?: Prisma.BoolFilter<"Product"> | boolean
@@ -1028,14 +1053,15 @@ export type ProductCreateWithoutBranchInput = {
   imageUrl?: string | null
   sku?: string | null
   reorderLevel?: number | null
+  isDeleted?: boolean
   imei?: string | null
   condition?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutProductsInput
-  category: Prisma.CategoryCreateNestedOneWithoutProductsInput
-  brand?: Prisma.BrandCreateNestedOneWithoutProductsInput
+  category: Prisma.CategoryCreateNestedOneWithoutProductInput
+  brand: Prisma.BrandCreateNestedOneWithoutProductsInput
   stockMoves?: Prisma.StockMovementCreateNestedManyWithoutProductInput
   saleItem?: Prisma.SaleItemCreateNestedManyWithoutProductInput
 }
@@ -1044,7 +1070,7 @@ export type ProductUncheckedCreateWithoutBranchInput = {
   id?: string
   businessId: string
   categoryId: string
-  brandId?: string | null
+  brandId: string
   name: string
   type: $Enums.ProductType
   model?: string | null
@@ -1054,6 +1080,7 @@ export type ProductUncheckedCreateWithoutBranchInput = {
   imageUrl?: string | null
   sku?: string | null
   reorderLevel?: number | null
+  isDeleted?: boolean
   imei?: string | null
   condition?: string | null
   isActive?: boolean
@@ -1100,14 +1127,15 @@ export type ProductCreateWithoutCategoryInput = {
   imageUrl?: string | null
   sku?: string | null
   reorderLevel?: number | null
+  isDeleted?: boolean
   imei?: string | null
   condition?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutProductsInput
-  branch?: Prisma.BranchCreateNestedOneWithoutProductsInput
-  brand?: Prisma.BrandCreateNestedOneWithoutProductsInput
+  branch: Prisma.BranchCreateNestedOneWithoutProductsInput
+  brand: Prisma.BrandCreateNestedOneWithoutProductsInput
   stockMoves?: Prisma.StockMovementCreateNestedManyWithoutProductInput
   saleItem?: Prisma.SaleItemCreateNestedManyWithoutProductInput
 }
@@ -1115,8 +1143,8 @@ export type ProductCreateWithoutCategoryInput = {
 export type ProductUncheckedCreateWithoutCategoryInput = {
   id?: string
   businessId: string
-  branchId?: string | null
-  brandId?: string | null
+  branchId: string
+  brandId: string
   name: string
   type: $Enums.ProductType
   model?: string | null
@@ -1126,6 +1154,7 @@ export type ProductUncheckedCreateWithoutCategoryInput = {
   imageUrl?: string | null
   sku?: string | null
   reorderLevel?: number | null
+  isDeleted?: boolean
   imei?: string | null
   condition?: string | null
   isActive?: boolean
@@ -1172,14 +1201,15 @@ export type ProductCreateWithoutBrandInput = {
   imageUrl?: string | null
   sku?: string | null
   reorderLevel?: number | null
+  isDeleted?: boolean
   imei?: string | null
   condition?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutProductsInput
-  branch?: Prisma.BranchCreateNestedOneWithoutProductsInput
-  category: Prisma.CategoryCreateNestedOneWithoutProductsInput
+  branch: Prisma.BranchCreateNestedOneWithoutProductsInput
+  category: Prisma.CategoryCreateNestedOneWithoutProductInput
   stockMoves?: Prisma.StockMovementCreateNestedManyWithoutProductInput
   saleItem?: Prisma.SaleItemCreateNestedManyWithoutProductInput
 }
@@ -1187,7 +1217,7 @@ export type ProductCreateWithoutBrandInput = {
 export type ProductUncheckedCreateWithoutBrandInput = {
   id?: string
   businessId: string
-  branchId?: string | null
+  branchId: string
   categoryId: string
   name: string
   type: $Enums.ProductType
@@ -1198,6 +1228,7 @@ export type ProductUncheckedCreateWithoutBrandInput = {
   imageUrl?: string | null
   sku?: string | null
   reorderLevel?: number | null
+  isDeleted?: boolean
   imei?: string | null
   condition?: string | null
   isActive?: boolean
@@ -1244,24 +1275,25 @@ export type ProductCreateWithoutStockMovesInput = {
   imageUrl?: string | null
   sku?: string | null
   reorderLevel?: number | null
+  isDeleted?: boolean
   imei?: string | null
   condition?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutProductsInput
-  branch?: Prisma.BranchCreateNestedOneWithoutProductsInput
-  category: Prisma.CategoryCreateNestedOneWithoutProductsInput
-  brand?: Prisma.BrandCreateNestedOneWithoutProductsInput
+  branch: Prisma.BranchCreateNestedOneWithoutProductsInput
+  category: Prisma.CategoryCreateNestedOneWithoutProductInput
+  brand: Prisma.BrandCreateNestedOneWithoutProductsInput
   saleItem?: Prisma.SaleItemCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateWithoutStockMovesInput = {
   id?: string
   businessId: string
-  branchId?: string | null
+  branchId: string
   categoryId: string
-  brandId?: string | null
+  brandId: string
   name: string
   type: $Enums.ProductType
   model?: string | null
@@ -1271,6 +1303,7 @@ export type ProductUncheckedCreateWithoutStockMovesInput = {
   imageUrl?: string | null
   sku?: string | null
   reorderLevel?: number | null
+  isDeleted?: boolean
   imei?: string | null
   condition?: string | null
   isActive?: boolean
@@ -1306,24 +1339,25 @@ export type ProductUpdateWithoutStockMovesInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imei?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutProductsNestedInput
-  branch?: Prisma.BranchUpdateOneWithoutProductsNestedInput
-  category?: Prisma.CategoryUpdateOneRequiredWithoutProductsNestedInput
-  brand?: Prisma.BrandUpdateOneWithoutProductsNestedInput
+  branch?: Prisma.BranchUpdateOneRequiredWithoutProductsNestedInput
+  category?: Prisma.CategoryUpdateOneRequiredWithoutProductNestedInput
+  brand?: Prisma.BrandUpdateOneRequiredWithoutProductsNestedInput
   saleItem?: Prisma.SaleItemUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateWithoutStockMovesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
-  brandId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brandId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1333,6 +1367,7 @@ export type ProductUncheckedUpdateWithoutStockMovesInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imei?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1352,24 +1387,25 @@ export type ProductCreateWithoutSaleItemInput = {
   imageUrl?: string | null
   sku?: string | null
   reorderLevel?: number | null
+  isDeleted?: boolean
   imei?: string | null
   condition?: string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutProductsInput
-  branch?: Prisma.BranchCreateNestedOneWithoutProductsInput
-  category: Prisma.CategoryCreateNestedOneWithoutProductsInput
-  brand?: Prisma.BrandCreateNestedOneWithoutProductsInput
+  branch: Prisma.BranchCreateNestedOneWithoutProductsInput
+  category: Prisma.CategoryCreateNestedOneWithoutProductInput
+  brand: Prisma.BrandCreateNestedOneWithoutProductsInput
   stockMoves?: Prisma.StockMovementCreateNestedManyWithoutProductInput
 }
 
 export type ProductUncheckedCreateWithoutSaleItemInput = {
   id?: string
   businessId: string
-  branchId?: string | null
+  branchId: string
   categoryId: string
-  brandId?: string | null
+  brandId: string
   name: string
   type: $Enums.ProductType
   model?: string | null
@@ -1379,6 +1415,7 @@ export type ProductUncheckedCreateWithoutSaleItemInput = {
   imageUrl?: string | null
   sku?: string | null
   reorderLevel?: number | null
+  isDeleted?: boolean
   imei?: string | null
   condition?: string | null
   isActive?: boolean
@@ -1414,24 +1451,25 @@ export type ProductUpdateWithoutSaleItemInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imei?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutProductsNestedInput
-  branch?: Prisma.BranchUpdateOneWithoutProductsNestedInput
-  category?: Prisma.CategoryUpdateOneRequiredWithoutProductsNestedInput
-  brand?: Prisma.BrandUpdateOneWithoutProductsNestedInput
+  branch?: Prisma.BranchUpdateOneRequiredWithoutProductsNestedInput
+  category?: Prisma.CategoryUpdateOneRequiredWithoutProductNestedInput
+  brand?: Prisma.BrandUpdateOneRequiredWithoutProductsNestedInput
   stockMoves?: Prisma.StockMovementUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateWithoutSaleItemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
-  brandId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brandId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1441,6 +1479,7 @@ export type ProductUncheckedUpdateWithoutSaleItemInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imei?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1451,9 +1490,9 @@ export type ProductUncheckedUpdateWithoutSaleItemInput = {
 
 export type ProductCreateManyBusinessInput = {
   id?: string
-  branchId?: string | null
+  branchId: string
   categoryId: string
-  brandId?: string | null
+  brandId: string
   name: string
   type: $Enums.ProductType
   model?: string | null
@@ -1463,6 +1502,7 @@ export type ProductCreateManyBusinessInput = {
   imageUrl?: string | null
   sku?: string | null
   reorderLevel?: number | null
+  isDeleted?: boolean
   imei?: string | null
   condition?: string | null
   isActive?: boolean
@@ -1481,23 +1521,24 @@ export type ProductUpdateWithoutBusinessInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imei?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  branch?: Prisma.BranchUpdateOneWithoutProductsNestedInput
-  category?: Prisma.CategoryUpdateOneRequiredWithoutProductsNestedInput
-  brand?: Prisma.BrandUpdateOneWithoutProductsNestedInput
+  branch?: Prisma.BranchUpdateOneRequiredWithoutProductsNestedInput
+  category?: Prisma.CategoryUpdateOneRequiredWithoutProductNestedInput
+  brand?: Prisma.BrandUpdateOneRequiredWithoutProductsNestedInput
   stockMoves?: Prisma.StockMovementUpdateManyWithoutProductNestedInput
   saleItem?: Prisma.SaleItemUpdateManyWithoutProductNestedInput
 }
 
 export type ProductUncheckedUpdateWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
-  brandId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brandId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1507,6 +1548,7 @@ export type ProductUncheckedUpdateWithoutBusinessInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imei?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1518,9 +1560,9 @@ export type ProductUncheckedUpdateWithoutBusinessInput = {
 
 export type ProductUncheckedUpdateManyWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
-  brandId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brandId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1530,6 +1572,7 @@ export type ProductUncheckedUpdateManyWithoutBusinessInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imei?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1541,7 +1584,7 @@ export type ProductCreateManyBranchInput = {
   id?: string
   businessId: string
   categoryId: string
-  brandId?: string | null
+  brandId: string
   name: string
   type: $Enums.ProductType
   model?: string | null
@@ -1551,6 +1594,7 @@ export type ProductCreateManyBranchInput = {
   imageUrl?: string | null
   sku?: string | null
   reorderLevel?: number | null
+  isDeleted?: boolean
   imei?: string | null
   condition?: string | null
   isActive?: boolean
@@ -1569,14 +1613,15 @@ export type ProductUpdateWithoutBranchInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imei?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutProductsNestedInput
-  category?: Prisma.CategoryUpdateOneRequiredWithoutProductsNestedInput
-  brand?: Prisma.BrandUpdateOneWithoutProductsNestedInput
+  category?: Prisma.CategoryUpdateOneRequiredWithoutProductNestedInput
+  brand?: Prisma.BrandUpdateOneRequiredWithoutProductsNestedInput
   stockMoves?: Prisma.StockMovementUpdateManyWithoutProductNestedInput
   saleItem?: Prisma.SaleItemUpdateManyWithoutProductNestedInput
 }
@@ -1585,7 +1630,7 @@ export type ProductUncheckedUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
-  brandId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brandId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1595,6 +1640,7 @@ export type ProductUncheckedUpdateWithoutBranchInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imei?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1608,7 +1654,7 @@ export type ProductUncheckedUpdateManyWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
-  brandId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brandId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1618,6 +1664,7 @@ export type ProductUncheckedUpdateManyWithoutBranchInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imei?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1628,8 +1675,8 @@ export type ProductUncheckedUpdateManyWithoutBranchInput = {
 export type ProductCreateManyCategoryInput = {
   id?: string
   businessId: string
-  branchId?: string | null
-  brandId?: string | null
+  branchId: string
+  brandId: string
   name: string
   type: $Enums.ProductType
   model?: string | null
@@ -1639,6 +1686,7 @@ export type ProductCreateManyCategoryInput = {
   imageUrl?: string | null
   sku?: string | null
   reorderLevel?: number | null
+  isDeleted?: boolean
   imei?: string | null
   condition?: string | null
   isActive?: boolean
@@ -1657,14 +1705,15 @@ export type ProductUpdateWithoutCategoryInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imei?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutProductsNestedInput
-  branch?: Prisma.BranchUpdateOneWithoutProductsNestedInput
-  brand?: Prisma.BrandUpdateOneWithoutProductsNestedInput
+  branch?: Prisma.BranchUpdateOneRequiredWithoutProductsNestedInput
+  brand?: Prisma.BrandUpdateOneRequiredWithoutProductsNestedInput
   stockMoves?: Prisma.StockMovementUpdateManyWithoutProductNestedInput
   saleItem?: Prisma.SaleItemUpdateManyWithoutProductNestedInput
 }
@@ -1672,8 +1721,8 @@ export type ProductUpdateWithoutCategoryInput = {
 export type ProductUncheckedUpdateWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brandId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  brandId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1683,6 +1732,7 @@ export type ProductUncheckedUpdateWithoutCategoryInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imei?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1695,8 +1745,8 @@ export type ProductUncheckedUpdateWithoutCategoryInput = {
 export type ProductUncheckedUpdateManyWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brandId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  brandId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
   model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1706,6 +1756,7 @@ export type ProductUncheckedUpdateManyWithoutCategoryInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imei?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1716,7 +1767,7 @@ export type ProductUncheckedUpdateManyWithoutCategoryInput = {
 export type ProductCreateManyBrandInput = {
   id?: string
   businessId: string
-  branchId?: string | null
+  branchId: string
   categoryId: string
   name: string
   type: $Enums.ProductType
@@ -1727,6 +1778,7 @@ export type ProductCreateManyBrandInput = {
   imageUrl?: string | null
   sku?: string | null
   reorderLevel?: number | null
+  isDeleted?: boolean
   imei?: string | null
   condition?: string | null
   isActive?: boolean
@@ -1745,14 +1797,15 @@ export type ProductUpdateWithoutBrandInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imei?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutProductsNestedInput
-  branch?: Prisma.BranchUpdateOneWithoutProductsNestedInput
-  category?: Prisma.CategoryUpdateOneRequiredWithoutProductsNestedInput
+  branch?: Prisma.BranchUpdateOneRequiredWithoutProductsNestedInput
+  category?: Prisma.CategoryUpdateOneRequiredWithoutProductNestedInput
   stockMoves?: Prisma.StockMovementUpdateManyWithoutProductNestedInput
   saleItem?: Prisma.SaleItemUpdateManyWithoutProductNestedInput
 }
@@ -1760,7 +1813,7 @@ export type ProductUpdateWithoutBrandInput = {
 export type ProductUncheckedUpdateWithoutBrandInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
@@ -1771,6 +1824,7 @@ export type ProductUncheckedUpdateWithoutBrandInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imei?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1783,7 +1837,7 @@ export type ProductUncheckedUpdateWithoutBrandInput = {
 export type ProductUncheckedUpdateManyWithoutBrandInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumProductTypeFieldUpdateOperationsInput | $Enums.ProductType
@@ -1794,6 +1848,7 @@ export type ProductUncheckedUpdateManyWithoutBrandInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reorderLevel?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   imei?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1856,15 +1911,16 @@ export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   imageUrl?: boolean
   sku?: boolean
   reorderLevel?: boolean
+  isDeleted?: boolean
   imei?: boolean
   condition?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
-  branch?: boolean | Prisma.Product$branchArgs<ExtArgs>
+  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
-  brand?: boolean | Prisma.Product$brandArgs<ExtArgs>
+  brand?: boolean | Prisma.BrandDefaultArgs<ExtArgs>
   stockMoves?: boolean | Prisma.Product$stockMovesArgs<ExtArgs>
   saleItem?: boolean | Prisma.Product$saleItemArgs<ExtArgs>
   _count?: boolean | Prisma.ProductCountOutputTypeDefaultArgs<ExtArgs>
@@ -1885,15 +1941,16 @@ export type ProductSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   imageUrl?: boolean
   sku?: boolean
   reorderLevel?: boolean
+  isDeleted?: boolean
   imei?: boolean
   condition?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
-  branch?: boolean | Prisma.Product$branchArgs<ExtArgs>
+  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
-  brand?: boolean | Prisma.Product$brandArgs<ExtArgs>
+  brand?: boolean | Prisma.BrandDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["product"]>
 
 export type ProductSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1911,15 +1968,16 @@ export type ProductSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   imageUrl?: boolean
   sku?: boolean
   reorderLevel?: boolean
+  isDeleted?: boolean
   imei?: boolean
   condition?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
-  branch?: boolean | Prisma.Product$branchArgs<ExtArgs>
+  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
-  brand?: boolean | Prisma.Product$brandArgs<ExtArgs>
+  brand?: boolean | Prisma.BrandDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["product"]>
 
 export type ProductSelectScalar = {
@@ -1937,6 +1995,7 @@ export type ProductSelectScalar = {
   imageUrl?: boolean
   sku?: boolean
   reorderLevel?: boolean
+  isDeleted?: boolean
   imei?: boolean
   condition?: boolean
   isActive?: boolean
@@ -1944,45 +2003,45 @@ export type ProductSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "categoryId" | "brandId" | "name" | "type" | "model" | "costPrice" | "sellingPrice" | "quantity" | "imageUrl" | "sku" | "reorderLevel" | "imei" | "condition" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
+export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "categoryId" | "brandId" | "name" | "type" | "model" | "costPrice" | "sellingPrice" | "quantity" | "imageUrl" | "sku" | "reorderLevel" | "isDeleted" | "imei" | "condition" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
 export type ProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
-  branch?: boolean | Prisma.Product$branchArgs<ExtArgs>
+  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
-  brand?: boolean | Prisma.Product$brandArgs<ExtArgs>
+  brand?: boolean | Prisma.BrandDefaultArgs<ExtArgs>
   stockMoves?: boolean | Prisma.Product$stockMovesArgs<ExtArgs>
   saleItem?: boolean | Prisma.Product$saleItemArgs<ExtArgs>
   _count?: boolean | Prisma.ProductCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProductIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
-  branch?: boolean | Prisma.Product$branchArgs<ExtArgs>
+  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
-  brand?: boolean | Prisma.Product$brandArgs<ExtArgs>
+  brand?: boolean | Prisma.BrandDefaultArgs<ExtArgs>
 }
 export type ProductIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
-  branch?: boolean | Prisma.Product$branchArgs<ExtArgs>
+  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
-  brand?: boolean | Prisma.Product$brandArgs<ExtArgs>
+  brand?: boolean | Prisma.BrandDefaultArgs<ExtArgs>
 }
 
 export type $ProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Product"
   objects: {
     business: Prisma.$BusinessPayload<ExtArgs>
-    branch: Prisma.$BranchPayload<ExtArgs> | null
+    branch: Prisma.$BranchPayload<ExtArgs>
     category: Prisma.$CategoryPayload<ExtArgs>
-    brand: Prisma.$BrandPayload<ExtArgs> | null
+    brand: Prisma.$BrandPayload<ExtArgs>
     stockMoves: Prisma.$StockMovementPayload<ExtArgs>[]
     saleItem: Prisma.$SaleItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     businessId: string
-    branchId: string | null
+    branchId: string
     categoryId: string
-    brandId: string | null
+    brandId: string
     name: string
     type: $Enums.ProductType
     model: string | null
@@ -1992,6 +2051,7 @@ export type $ProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     imageUrl: string | null
     sku: string | null
     reorderLevel: number | null
+    isDeleted: boolean
     imei: string | null
     condition: string | null
     isActive: boolean
@@ -2392,9 +2452,9 @@ readonly fields: ProductFieldRefs;
 export interface Prisma__ProductClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   business<T extends Prisma.BusinessDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BusinessDefaultArgs<ExtArgs>>): Prisma.Prisma__BusinessClient<runtime.Types.Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  branch<T extends Prisma.Product$branchArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$branchArgs<ExtArgs>>): Prisma.Prisma__BranchClient<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  branch<T extends Prisma.BranchDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BranchDefaultArgs<ExtArgs>>): Prisma.Prisma__BranchClient<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   category<T extends Prisma.CategoryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CategoryDefaultArgs<ExtArgs>>): Prisma.Prisma__CategoryClient<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  brand<T extends Prisma.Product$brandArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$brandArgs<ExtArgs>>): Prisma.Prisma__BrandClient<runtime.Types.Result.GetResult<Prisma.$BrandPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  brand<T extends Prisma.BrandDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BrandDefaultArgs<ExtArgs>>): Prisma.Prisma__BrandClient<runtime.Types.Result.GetResult<Prisma.$BrandPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   stockMoves<T extends Prisma.Product$stockMovesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$stockMovesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   saleItem<T extends Prisma.Product$saleItemArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Product$saleItemArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SaleItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -2440,6 +2500,7 @@ export interface ProductFieldRefs {
   readonly imageUrl: Prisma.FieldRef<"Product", 'String'>
   readonly sku: Prisma.FieldRef<"Product", 'String'>
   readonly reorderLevel: Prisma.FieldRef<"Product", 'Int'>
+  readonly isDeleted: Prisma.FieldRef<"Product", 'Boolean'>
   readonly imei: Prisma.FieldRef<"Product", 'String'>
   readonly condition: Prisma.FieldRef<"Product", 'String'>
   readonly isActive: Prisma.FieldRef<"Product", 'Boolean'>
@@ -2838,44 +2899,6 @@ export type ProductDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Products to delete.
    */
   limit?: number
-}
-
-/**
- * Product.branch
- */
-export type Product$branchArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Branch
-   */
-  select?: Prisma.BranchSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Branch
-   */
-  omit?: Prisma.BranchOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.BranchInclude<ExtArgs> | null
-  where?: Prisma.BranchWhereInput
-}
-
-/**
- * Product.brand
- */
-export type Product$brandArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Brand
-   */
-  select?: Prisma.BrandSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Brand
-   */
-  omit?: Prisma.BrandOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.BrandInclude<ExtArgs> | null
-  where?: Prisma.BrandWhereInput
 }
 
 /**

@@ -36,21 +36,19 @@ export class BusinessRepository{
       })
   }
 
-  getBrandsByCategory = async (categoryId: string, businessId: string, branchId?: string)=> {
-    return prisma.brand.findMany({
-      where: {
-        categoryId,
-        category: {
-          businessId,
-          ...(branchId ? { branchId}: {})
-        }
-       
-      },
-      select: {
-        id: true,
-        name: true,
-        categoryId: true,
-      },
-    });
-  }
+ getBrandsByBusiness = async (businessId: string, categoryId: string) => {
+  return prisma.brand.findMany({
+    where: {
+      businessId,
+      categoryId,
+    },
+    select: {
+      id: true,
+      name: true,
+    },
+    orderBy: {
+      name: "asc"
+    }
+  });
+}
 }

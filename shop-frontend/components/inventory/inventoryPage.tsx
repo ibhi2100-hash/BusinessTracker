@@ -7,6 +7,9 @@ import BrandDropdown from "../../components/inventory/brandDropdown";
 import ProductCard from "../../components/inventory/productCard";
 import ProductModal from "../../components/inventory/product-modal";
 import { useSalesStore } from "../../store/SalesStore";
+// Fetch Services
+import { fetchCategories, fetchBrands, fetchInventoryProducts } from "@/services/inventory.service";
+
 import { toast } from "react-hot-toast"; 
 
 export default function InventoryPage({ context }: { context: "sell" | "admin" }) {
@@ -14,13 +17,13 @@ export default function InventoryPage({ context }: { context: "sell" | "admin" }
     categories,
     brands,
     products,
-    selectedCategory,
-    selectedBrand,
+    selectedCategoryId,
+    selectedBrandId,
     setCategories,
     setBrands,
     setProducts,
-    setSelectedCategory,
-    setSelectedBrand,
+    setSelectedCategoryId,
+    setSelectedBrandId,
     addProduct,
     updateProduct,
     removeProduct
@@ -31,48 +34,20 @@ export default function InventoryPage({ context }: { context: "sell" | "admin" }
 
   // Fetch categories
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/business/categories`, {
-      credentials: "include"
-    })
-      .then(res => res.json())
-      .then(data => {
-        setCategories(data);
-      })
-      .catch(err => console.error("Failed to fetch categories:", err));
-  }, [setCategories]);
+    fetchCategories(setCategories)
+  }, []);
 
   // Fetch brands when category changes
   useEffect(() => {
-    if (!selectedCategory) {
-      setBrands([]);
-      setProducts([]);
-      setSelectedBrand(undefined);
-      return;
-    }
-
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/business/brands?categoryId=${selectedCategory.id}`, {
-      credentials: "include"
-    })
-      .then(res => res.json())
-      .then(data => setBrands(data))
-      .catch(err => console.error("Failed to fetch brands:", err));
-  }, [selectedCategory, setBrands, setProducts, setSelectedBrand]);
+    if (!selectedCategoryId) return;
+    fetchBrands(selectedCategoryId, setBrands);
+  }, [selectedCategoryId]);
 
   // Fetch products when brand changes
   useEffect(() => {
-    if (!selectedBrand) {
-      setProducts([]);
-      return;
-    }
-
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/brands?brandId=${selectedBrand.id}`, {
-      credentials: "include"
-    })
-      .then(res => res.json())
-      .then(data => 
-        { 
-          setProducts(data)});
-}, [selectedBrand, setProducts]);
+    if (!selectedBrandId) return;
+    fetchInventoryProducts(selectedBrandId, setProducts);
+}, [selectedBrandId]);
 
 
   // Save (add or edit) product
@@ -82,14 +57,7 @@ export default function InventoryPage({ context }: { context: "sell" | "admin" }
       ? `${process.env.NEXT_PUBLIC_API_URL}/products/${editingProduct.id}`
       : `${process.env.NEXT_PUBLIC_API_URL}/products/create`;
 
-    // Optimistic UI update
-    if (editingProduct) {
-      updateProduct({ ...editingProduct, ...product });
-    } else {
-      const tempId = "temp-" + Math.random().toString(36).substring(2);
-      addProduct({ ...product, id: tempId, brand: selectedBrand });
-    }
-
+    
     setModalOpen(false);
     setEditingProduct(undefined);
 
@@ -102,11 +70,20 @@ export default function InventoryPage({ context }: { context: "sell" | "admin" }
       });
       const saved = await res.json();
 
-      // Replace temp product with actual server product
-      if (!editingProduct) updateProduct(saved);
+      toast.success(editingProduct ? "Product updated" : "Product created");
+      
+      if(selectedCategoryId) {
+        await fetchBrands(selectedCategoryId, setBrands)
+      }
+      if(selectedBrandId) {
+        await fetchInventoryProducts(selectedBrandId, setProducts);
+      }
+
+      await fetchCategories(setCategories)
+      
     } catch (err) {
       console.error(err);
-      alert("Failed to save product");
+      toast.error("Failed to save Product")
     }
   };
 
@@ -183,7 +160,7 @@ const handleSell = async (productId: string, quantity: number) => {
         {/* Category grid */}
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-4">
           {categories.map(cat => (
-            <div key={cat.id} className={`cursor-pointer border p-2 rounded-lg hover:shadow-md transition`} onClick={() => setSelectedCategory(cat)}>
+            <div key={cat.id} className={`cursor-pointer border p-2 rounded-lg hover:shadow-md transition`} onClick={() => setSelectedCategoryId(cat.id)}>
               {cat.imageUrl && <img src={cat.imageUrl} className="w-full h-[clamp(3rem,10vw,5rem)] object-cover rounded" />}
               <p className="text-center text-[clamp(0.75rem,1.5vw,0.875rem)]">{cat.name}</p>
             </div>
@@ -192,7 +169,7 @@ const handleSell = async (productId: string, quantity: number) => {
 
 
       {/* Brand dropdown */}
-      {selectedCategory && <BrandDropdown />}
+      {selectedCategoryId && <BrandDropdown />}
 
       {/* Add product button */}
       {context === "admin" && (

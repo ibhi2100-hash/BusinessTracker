@@ -1,4 +1,3 @@
-// stores/inventoryStore.ts
 import { create } from "zustand";
 
 export interface Category {
@@ -27,25 +26,30 @@ export interface Product {
   imei?: string;
   condition?: string;
   brand: Brand;
-  categoryId?: string;    // optional, useful for filtering
-  categoryName?: string;  // for new categories
-  brandName?: string;     // for new brands
+  categoryId?: string;
+  categoryName?: string;
+  brandName?: string;
 }
 
 interface InventoryStore {
   categories: Category[];
   brands: Brand[];
   products: Product[];
-  selectedCategory?: Category;
-  selectedBrand?: Brand;
+
+  selectedCategoryId: string | null;
+  selectedBrandId: string | null;
+
   setCategories: (categories: Category[]) => void;
   setBrands: (brands: Brand[]) => void;
   setProducts: (products: Product[]) => void;
-  setSelectedCategory: (category?: Category) => void;
-  setSelectedBrand: (brand?: Brand) => void;
+
+  setSelectedCategoryId: (id: string | null) => void;
+  setSelectedBrandId: (id: string | null) => void;
+
   addProduct: (product: Product) => void;
   updateProduct: (product: Product) => void;
   removeProduct: (productId: string) => void;
+
   resetInventory: () => void;
 }
 
@@ -53,24 +57,38 @@ export const useInventoryStore = create<InventoryStore>((set) => ({
   categories: [],
   brands: [],
   products: [],
-  selectedCategory: undefined,
-  selectedBrand: undefined,
+
+  selectedCategoryId: null,
+  selectedBrandId: null,
 
   setCategories: (categories) => set({ categories }),
   setBrands: (brands) => set({ brands }),
   setProducts: (products) => set({ products }),
 
-  setSelectedCategory: (selectedCategory) =>
-    set({ selectedCategory, selectedBrand: undefined }),
+  setSelectedCategoryId: (id) =>
+    set({
+      selectedCategoryId: id,
+      selectedBrandId: null,
+      brands: [],
+      products: [],
+    }),
 
-  setSelectedBrand: (selectedBrand) => set({ selectedBrand }),
+  setSelectedBrandId: (id) =>
+    set({
+      selectedBrandId: id,
+      products: [],
+    }),
 
   addProduct: (product) =>
-    set((state) => ({ products: [...state.products, product] })),
+    set((state) => ({
+      products: [...state.products, product],
+    })),
 
   updateProduct: (product) =>
     set((state) => ({
-      products: state.products.map((p) => (p.id === product.id ? product : p)),
+      products: state.products.map((p) =>
+        p.id === product.id ? product : p
+      ),
     })),
 
   removeProduct: (productId) =>
@@ -83,7 +101,7 @@ export const useInventoryStore = create<InventoryStore>((set) => ({
       categories: [],
       brands: [],
       products: [],
-      selectedCategory: undefined,
-      selectedBrand: undefined,
+      selectedCategoryId: null,
+      selectedBrandId: null,
     }),
 }));

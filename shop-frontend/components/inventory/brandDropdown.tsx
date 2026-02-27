@@ -2,17 +2,21 @@
 import { useInventoryStore } from "../../store/inventoryStore";
 
 export default function BrandDropdown() {
-  const brands = useInventoryStore(state => state.brands);
-  const selectedBrand = useInventoryStore(state => state.selectedBrand);
-  const setSelectedBrand = useInventoryStore(state => state.setSelectedBrand);
+  const brands = useInventoryStore((state) => state.brands);
+  const selectedBrandId = useInventoryStore(
+    (state) => state.selectedBrandId
+  );
+  const setSelectedBrandId = useInventoryStore(
+    (state) => state.setSelectedBrandId
+  );
 
   if (brands.length === 0) return null;
 
   return (
     <select
-      value={selectedBrand?.id || ""}
+      value={selectedBrandId ?? ""}
       onChange={(e) =>
-        setSelectedBrand(brands.find((b) => b.id === e.target.value))
+        setSelectedBrandId(e.target.value || null)
       }
       className="border p-2 rounded mb-4"
     >

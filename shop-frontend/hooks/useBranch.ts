@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useBranchStore } from "@/store/BranchStore";
 import { BranchData } from "@/types/branchTypes";
+import { useEffect } from "react";
 
 const fetchBranchData = async (token: string): Promise<BranchData> => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/business/branchdata`, {
@@ -13,15 +14,16 @@ const fetchBranchData = async (token: string): Promise<BranchData> => {
 export const useBranchData = ()=> {
     const {activeBranchId, branchTokens, branchData, setBranchData} = useBranchStore();
 
-    return useQuery<BranchData, Error>(
-        ["branchData", activeBranchId],
-        ()=> fetchBranchData(branchTokens[activeBranchId!]),
-        {
-            enable: !!activeBranchId,
-            initialData: ()=> (activeBranchId ?  branchData[activeBranchId] : undefined),
-            onSuccess: (data) => {
-                if(activeBranchId) setBranchData(activeBranchId, data);
-            }
-        }
-    )
+ const query = useQuery<BranchData, Error>({
+    queryKey: ["branchData", activeBranchId],
+    queryFn: ()=> fetchBranchData(branchTokens[activeBranchId!]),
+    enabled: !!activeBranchId,
+    initialData: ()=> (activeBranchId ?  branchData[activeBranchId] : undefined),
+
+ });
+
+ useEffect(()=> {
+    if(!query.data || !activeBranchId) return;
+    setBranchData(activeBranchId, query.data)
+ },[activeBranchId, query.data])
 }

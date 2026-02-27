@@ -106,7 +106,7 @@ export class BusinessController {
       }
 
       const  branchId = req.user?.branchId
-      console.log(branchId)
+  
 
       if (!branchId) {
         return res.status(400).json({
@@ -125,14 +125,11 @@ export class BusinessController {
   getBrands = async (req: Request, res: Response)=> {
     try {
       const businessId = req.user?.businessId;
-      const branchId = req.user?.branchId;
-      console.log(branchId)
       if(!businessId) return res.status(400).json({ meassage: "Business ID does not Exists"})
+      const { categoryId } = req.query;
       
-      const categoryId = req.query.categoryId as string;
-      if(!categoryId) return res.status(400).json({ message: " Category ID does not Exists"});
-
-      const brands = await this.businessService.getBrandsByCategory(categoryId, businessId, branchId);
+    if(!categoryId || typeof categoryId !== "string" ) return res.status(400).json({ message: "Category ID does not exist"})
+      const brands = await this.businessService.getBrandsByCategory(businessId, categoryId);
       res.status(200).json(brands ?? [])
     } catch (error) {
       console.error(error);

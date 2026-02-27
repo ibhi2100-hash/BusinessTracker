@@ -2,6 +2,8 @@ import { prisma } from "../../../infrastructure/postgresql/prismaClient.js"
 import { SaleRepository } from "../repository/sale.repository.js";
 import { InventoryService } from "../../inventory/service/inventory.service.js";
 import { SaleProductSnapshot } from "../dto/saleproductsnap.js";
+import { AlertService } from "../../alerts/service/alerts.service.js";
+import { LOW_STOCK_THRESHOLD } from "../../../config/inventory.config.js";
 
 
 
@@ -12,7 +14,9 @@ import { SaleProductSnapshot } from "../dto/saleproductsnap.js";
 export class SaleService {
   constructor(
     private saleRepo: SaleRepository,
-    private inventoryService: InventoryService){}
+    private inventoryService: InventoryService,
+    private alertService: AlertService
+  ){}
   
   
 
@@ -52,6 +56,7 @@ async createSale(dto: any, businessId: string, branchId: string) {
         sellingPrice,
         costPrice
       });
+
     }
 
     // Validate payments
@@ -65,12 +70,32 @@ async createSale(dto: any, businessId: string, branchId: string) {
     }
 
     // Inventory operation (NO re-fetch)
-    await this.inventoryService.reduceStockFromSnapshot(
-      businessId,
-      branchId,
-      snapshots,
-      tx
-    );
+    const updatedProducts = await this.inventoryService.reduceStockFromSnapshot(
+                              businessId,
+                              branchId,
+                              snapshots,
+                              tx
+                            );
+    for ( const p of updatedProducts){
+
+      const before = p.before;
+      const after = p.after;
+      const crossedThreshold = 
+      before.quantity > LOW_STOCK_THRESHOLD &&
+      after.quantity <= LOW_STOCK_THRESHOLD;
+
+      if(crossedThreshold) {
+        await this.alertService.createAlert({
+          businessId,
+          branchId,
+          type: "LOW_STOCK",
+          severity: after.quantity === 0 ? "CRITICAL" : "WARNING",
+          title: "Low Stock",
+          message: `${after.name} only ${after.quantity} left`,
+          metadata: { productId: after.id}
+        })
+      }
+    }
 
     const sale = await this.saleRepo.create({
       businessId,
@@ -94,6 +119,7 @@ async createSale(dto: any, businessId: string, branchId: string) {
       source: "SALE",
       description: `Sale ID: ${sale.id}`
     }, tx);
+    
 
     return sale;
   });

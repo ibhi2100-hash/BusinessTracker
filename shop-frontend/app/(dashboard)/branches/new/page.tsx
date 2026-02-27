@@ -4,9 +4,11 @@
 import { useState } from "react";
 import { useAddBranch } from "@/hooks/useAddBranch";
 import { useBranchStore } from "@/store/useBranchStore";
+import { useRouter } from "next/navigation";
 
 export default function AddBranchPage() {
   const [branchName, setBranchName] = useState("");
+  const router = useRouter();
   const addBranchMutation = useAddBranch();
   const branches = useBranchStore((s) => s.branches);
 
@@ -17,6 +19,7 @@ export default function AddBranchPage() {
     try {
       await addBranchMutation.mutateAsync(branchName);
       setBranchName(""); // reset form after successful add
+      router.push('/dashboard')
     } catch (err) {
       console.error(err);
     }

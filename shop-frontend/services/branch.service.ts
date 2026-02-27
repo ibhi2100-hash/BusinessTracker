@@ -14,3 +14,13 @@ export async function switchBranch(branchId: string) {
 
   return res.json();
 }
+export const getBranchAlerts = async (branchId: string) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/alerts/${branchId}`,
+    { credentials: "include" }
+  );
+
+  if (!res.ok) throw new Error("Failed to fetch alerts");
+
+  return res.json();
+};

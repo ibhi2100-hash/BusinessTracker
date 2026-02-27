@@ -228,6 +228,7 @@ export type BusinessWhereInput = {
   users?: Prisma.UserListRelationFilter
   business?: Prisma.BusinessSubscriptionListRelationFilter
   categories?: Prisma.CategoryListRelationFilter
+  brands?: Prisma.BrandListRelationFilter
   products?: Prisma.ProductListRelationFilter
   stockMovement?: Prisma.StockMovementListRelationFilter
   sales?: Prisma.SaleListRelationFilter
@@ -238,6 +239,7 @@ export type BusinessWhereInput = {
   assets?: Prisma.AssetListRelationFilter
   expenses?: Prisma.ExpenseListRelationFilter
   expenseCategories?: Prisma.ExpenseCategoryListRelationFilter
+  alerts?: Prisma.AlertListRelationFilter
 }
 
 export type BusinessOrderByWithRelationInput = {
@@ -251,6 +253,7 @@ export type BusinessOrderByWithRelationInput = {
   users?: Prisma.UserOrderByRelationAggregateInput
   business?: Prisma.BusinessSubscriptionOrderByRelationAggregateInput
   categories?: Prisma.CategoryOrderByRelationAggregateInput
+  brands?: Prisma.BrandOrderByRelationAggregateInput
   products?: Prisma.ProductOrderByRelationAggregateInput
   stockMovement?: Prisma.StockMovementOrderByRelationAggregateInput
   sales?: Prisma.SaleOrderByRelationAggregateInput
@@ -261,6 +264,7 @@ export type BusinessOrderByWithRelationInput = {
   assets?: Prisma.AssetOrderByRelationAggregateInput
   expenses?: Prisma.ExpenseOrderByRelationAggregateInput
   expenseCategories?: Prisma.ExpenseCategoryOrderByRelationAggregateInput
+  alerts?: Prisma.AlertOrderByRelationAggregateInput
 }
 
 export type BusinessWhereUniqueInput = Prisma.AtLeast<{
@@ -277,6 +281,7 @@ export type BusinessWhereUniqueInput = Prisma.AtLeast<{
   users?: Prisma.UserListRelationFilter
   business?: Prisma.BusinessSubscriptionListRelationFilter
   categories?: Prisma.CategoryListRelationFilter
+  brands?: Prisma.BrandListRelationFilter
   products?: Prisma.ProductListRelationFilter
   stockMovement?: Prisma.StockMovementListRelationFilter
   sales?: Prisma.SaleListRelationFilter
@@ -287,6 +292,7 @@ export type BusinessWhereUniqueInput = Prisma.AtLeast<{
   assets?: Prisma.AssetListRelationFilter
   expenses?: Prisma.ExpenseListRelationFilter
   expenseCategories?: Prisma.ExpenseCategoryListRelationFilter
+  alerts?: Prisma.AlertListRelationFilter
 }, "id">
 
 export type BusinessOrderByWithAggregationInput = {
@@ -326,6 +332,7 @@ export type BusinessCreateInput = {
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
@@ -336,6 +343,7 @@ export type BusinessCreateInput = {
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateInput = {
@@ -349,6 +357,7 @@ export type BusinessUncheckedCreateInput = {
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
@@ -359,6 +368,7 @@ export type BusinessUncheckedCreateInput = {
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUpdateInput = {
@@ -372,6 +382,7 @@ export type BusinessUpdateInput = {
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
@@ -382,6 +393,7 @@ export type BusinessUpdateInput = {
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateInput = {
@@ -395,6 +407,7 @@ export type BusinessUncheckedUpdateInput = {
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
@@ -405,6 +418,7 @@ export type BusinessUncheckedUpdateInput = {
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateManyInput = {
@@ -561,6 +575,20 @@ export type BusinessUpdateOneRequiredWithoutCategoriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutCategoriesInput, Prisma.BusinessUpdateWithoutCategoriesInput>, Prisma.BusinessUncheckedUpdateWithoutCategoriesInput>
 }
 
+export type BusinessCreateNestedOneWithoutBrandsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBrandsInput, Prisma.BusinessUncheckedCreateWithoutBrandsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBrandsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutBrandsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBrandsInput, Prisma.BusinessUncheckedCreateWithoutBrandsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBrandsInput
+  upsert?: Prisma.BusinessUpsertWithoutBrandsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutBrandsInput, Prisma.BusinessUpdateWithoutBrandsInput>, Prisma.BusinessUncheckedUpdateWithoutBrandsInput>
+}
+
 export type BusinessCreateNestedOneWithoutProductsInput = {
   create?: Prisma.XOR<Prisma.BusinessCreateWithoutProductsInput, Prisma.BusinessUncheckedCreateWithoutProductsInput>
   connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutProductsInput
@@ -701,6 +729,20 @@ export type BusinessUpdateOneRequiredWithoutExpenseCategoriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutExpenseCategoriesInput, Prisma.BusinessUpdateWithoutExpenseCategoriesInput>, Prisma.BusinessUncheckedUpdateWithoutExpenseCategoriesInput>
 }
 
+export type BusinessCreateNestedOneWithoutAlertsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutAlertsInput, Prisma.BusinessUncheckedCreateWithoutAlertsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutAlertsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutAlertsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutAlertsInput, Prisma.BusinessUncheckedCreateWithoutAlertsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutAlertsInput
+  upsert?: Prisma.BusinessUpsertWithoutAlertsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutAlertsInput, Prisma.BusinessUpdateWithoutAlertsInput>, Prisma.BusinessUncheckedUpdateWithoutAlertsInput>
+}
+
 export type BusinessCreateWithoutBranchInput = {
   id?: string
   name: string
@@ -711,6 +753,7 @@ export type BusinessCreateWithoutBranchInput = {
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
@@ -721,6 +764,7 @@ export type BusinessCreateWithoutBranchInput = {
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBranchInput = {
@@ -733,6 +777,7 @@ export type BusinessUncheckedCreateWithoutBranchInput = {
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
@@ -743,6 +788,7 @@ export type BusinessUncheckedCreateWithoutBranchInput = {
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBranchInput = {
@@ -771,6 +817,7 @@ export type BusinessUpdateWithoutBranchInput = {
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
@@ -781,6 +828,7 @@ export type BusinessUpdateWithoutBranchInput = {
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBranchInput = {
@@ -793,6 +841,7 @@ export type BusinessUncheckedUpdateWithoutBranchInput = {
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
@@ -803,6 +852,7 @@ export type BusinessUncheckedUpdateWithoutBranchInput = {
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutUsersInput = {
@@ -815,6 +865,7 @@ export type BusinessCreateWithoutUsersInput = {
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
@@ -825,6 +876,7 @@ export type BusinessCreateWithoutUsersInput = {
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutUsersInput = {
@@ -837,6 +889,7 @@ export type BusinessUncheckedCreateWithoutUsersInput = {
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
@@ -847,6 +900,7 @@ export type BusinessUncheckedCreateWithoutUsersInput = {
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutUsersInput = {
@@ -875,6 +929,7 @@ export type BusinessUpdateWithoutUsersInput = {
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
@@ -885,6 +940,7 @@ export type BusinessUpdateWithoutUsersInput = {
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutUsersInput = {
@@ -897,6 +953,7 @@ export type BusinessUncheckedUpdateWithoutUsersInput = {
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
@@ -907,6 +964,7 @@ export type BusinessUncheckedUpdateWithoutUsersInput = {
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBusinessInput = {
@@ -919,6 +977,7 @@ export type BusinessCreateWithoutBusinessInput = {
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
@@ -929,6 +988,7 @@ export type BusinessCreateWithoutBusinessInput = {
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBusinessInput = {
@@ -941,6 +1001,7 @@ export type BusinessUncheckedCreateWithoutBusinessInput = {
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
@@ -951,6 +1012,7 @@ export type BusinessUncheckedCreateWithoutBusinessInput = {
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBusinessInput = {
@@ -979,6 +1041,7 @@ export type BusinessUpdateWithoutBusinessInput = {
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
@@ -989,6 +1052,7 @@ export type BusinessUpdateWithoutBusinessInput = {
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBusinessInput = {
@@ -1001,6 +1065,7 @@ export type BusinessUncheckedUpdateWithoutBusinessInput = {
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1011,6 +1076,7 @@ export type BusinessUncheckedUpdateWithoutBusinessInput = {
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutCategoriesInput = {
@@ -1023,6 +1089,7 @@ export type BusinessCreateWithoutCategoriesInput = {
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
@@ -1033,6 +1100,7 @@ export type BusinessCreateWithoutCategoriesInput = {
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutCategoriesInput = {
@@ -1045,6 +1113,7 @@ export type BusinessUncheckedCreateWithoutCategoriesInput = {
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
@@ -1055,6 +1124,7 @@ export type BusinessUncheckedCreateWithoutCategoriesInput = {
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutCategoriesInput = {
@@ -1083,6 +1153,7 @@ export type BusinessUpdateWithoutCategoriesInput = {
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
@@ -1093,6 +1164,7 @@ export type BusinessUpdateWithoutCategoriesInput = {
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutCategoriesInput = {
@@ -1105,6 +1177,7 @@ export type BusinessUncheckedUpdateWithoutCategoriesInput = {
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1115,6 +1188,119 @@ export type BusinessUncheckedUpdateWithoutCategoriesInput = {
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutBrandsInput = {
+  id?: string
+  name: string
+  address?: string | null
+  onboardingStep?: number
+  onboardingCompleted?: boolean
+  createdAt?: Date | string
+  branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
+  sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
+  cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
+  liabilities?: Prisma.LiabilityCreateNestedManyWithoutBusinessInput
+  loan?: Prisma.LoanCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
+  assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutBrandsInput = {
+  id?: string
+  name: string
+  address?: string | null
+  onboardingStep?: number
+  onboardingCompleted?: boolean
+  createdAt?: Date | string
+  branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
+  cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
+  liabilities?: Prisma.LiabilityUncheckedCreateNestedManyWithoutBusinessInput
+  loan?: Prisma.LoanUncheckedCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutBrandsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBrandsInput, Prisma.BusinessUncheckedCreateWithoutBrandsInput>
+}
+
+export type BusinessUpsertWithoutBrandsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutBrandsInput, Prisma.BusinessUncheckedUpdateWithoutBrandsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBrandsInput, Prisma.BusinessUncheckedCreateWithoutBrandsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutBrandsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutBrandsInput, Prisma.BusinessUncheckedUpdateWithoutBrandsInput>
+}
+
+export type BusinessUpdateWithoutBrandsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
+  cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
+  liabilities?: Prisma.LiabilityUpdateManyWithoutBusinessNestedInput
+  loan?: Prisma.LoanUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
+  assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutBrandsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
+  cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
+  liabilities?: Prisma.LiabilityUncheckedUpdateManyWithoutBusinessNestedInput
+  loan?: Prisma.LoanUncheckedUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+  assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutProductsInput = {
@@ -1128,6 +1314,7 @@ export type BusinessCreateWithoutProductsInput = {
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
   cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
@@ -1137,6 +1324,7 @@ export type BusinessCreateWithoutProductsInput = {
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutProductsInput = {
@@ -1150,6 +1338,7 @@ export type BusinessUncheckedCreateWithoutProductsInput = {
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
   cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
@@ -1159,6 +1348,7 @@ export type BusinessUncheckedCreateWithoutProductsInput = {
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutProductsInput = {
@@ -1188,6 +1378,7 @@ export type BusinessUpdateWithoutProductsInput = {
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
   cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
@@ -1197,6 +1388,7 @@ export type BusinessUpdateWithoutProductsInput = {
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutProductsInput = {
@@ -1210,6 +1402,7 @@ export type BusinessUncheckedUpdateWithoutProductsInput = {
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
   cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1219,6 +1412,7 @@ export type BusinessUncheckedUpdateWithoutProductsInput = {
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutStockMovementInput = {
@@ -1232,6 +1426,7 @@ export type BusinessCreateWithoutStockMovementInput = {
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
   cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
@@ -1241,6 +1436,7 @@ export type BusinessCreateWithoutStockMovementInput = {
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutStockMovementInput = {
@@ -1254,6 +1450,7 @@ export type BusinessUncheckedCreateWithoutStockMovementInput = {
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
   cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
@@ -1263,6 +1460,7 @@ export type BusinessUncheckedCreateWithoutStockMovementInput = {
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutStockMovementInput = {
@@ -1292,6 +1490,7 @@ export type BusinessUpdateWithoutStockMovementInput = {
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
   cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
@@ -1301,6 +1500,7 @@ export type BusinessUpdateWithoutStockMovementInput = {
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutStockMovementInput = {
@@ -1314,6 +1514,7 @@ export type BusinessUncheckedUpdateWithoutStockMovementInput = {
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
   cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1323,6 +1524,7 @@ export type BusinessUncheckedUpdateWithoutStockMovementInput = {
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutSalesInput = {
@@ -1336,6 +1538,7 @@ export type BusinessCreateWithoutSalesInput = {
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
@@ -1345,6 +1548,7 @@ export type BusinessCreateWithoutSalesInput = {
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutSalesInput = {
@@ -1358,6 +1562,7 @@ export type BusinessUncheckedCreateWithoutSalesInput = {
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
@@ -1367,6 +1572,7 @@ export type BusinessUncheckedCreateWithoutSalesInput = {
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutSalesInput = {
@@ -1396,6 +1602,7 @@ export type BusinessUpdateWithoutSalesInput = {
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
@@ -1405,6 +1612,7 @@ export type BusinessUpdateWithoutSalesInput = {
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutSalesInput = {
@@ -1418,6 +1626,7 @@ export type BusinessUncheckedUpdateWithoutSalesInput = {
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1427,6 +1636,7 @@ export type BusinessUncheckedUpdateWithoutSalesInput = {
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutCashFlowsInput = {
@@ -1440,6 +1650,7 @@ export type BusinessCreateWithoutCashFlowsInput = {
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
@@ -1449,6 +1660,7 @@ export type BusinessCreateWithoutCashFlowsInput = {
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutCashFlowsInput = {
@@ -1462,6 +1674,7 @@ export type BusinessUncheckedCreateWithoutCashFlowsInput = {
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
@@ -1471,6 +1684,7 @@ export type BusinessUncheckedCreateWithoutCashFlowsInput = {
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutCashFlowsInput = {
@@ -1500,6 +1714,7 @@ export type BusinessUpdateWithoutCashFlowsInput = {
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
@@ -1509,6 +1724,7 @@ export type BusinessUpdateWithoutCashFlowsInput = {
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutCashFlowsInput = {
@@ -1522,6 +1738,7 @@ export type BusinessUncheckedUpdateWithoutCashFlowsInput = {
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1531,6 +1748,7 @@ export type BusinessUncheckedUpdateWithoutCashFlowsInput = {
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutLiabilitiesInput = {
@@ -1544,6 +1762,7 @@ export type BusinessCreateWithoutLiabilitiesInput = {
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
@@ -1553,6 +1772,7 @@ export type BusinessCreateWithoutLiabilitiesInput = {
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutLiabilitiesInput = {
@@ -1566,6 +1786,7 @@ export type BusinessUncheckedCreateWithoutLiabilitiesInput = {
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
@@ -1575,6 +1796,7 @@ export type BusinessUncheckedCreateWithoutLiabilitiesInput = {
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutLiabilitiesInput = {
@@ -1604,6 +1826,7 @@ export type BusinessUpdateWithoutLiabilitiesInput = {
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
@@ -1613,6 +1836,7 @@ export type BusinessUpdateWithoutLiabilitiesInput = {
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutLiabilitiesInput = {
@@ -1626,6 +1850,7 @@ export type BusinessUncheckedUpdateWithoutLiabilitiesInput = {
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1635,6 +1860,7 @@ export type BusinessUncheckedUpdateWithoutLiabilitiesInput = {
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutAssetsInput = {
@@ -1648,6 +1874,7 @@ export type BusinessCreateWithoutAssetsInput = {
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
@@ -1657,6 +1884,7 @@ export type BusinessCreateWithoutAssetsInput = {
   employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutAssetsInput = {
@@ -1670,6 +1898,7 @@ export type BusinessUncheckedCreateWithoutAssetsInput = {
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
@@ -1679,6 +1908,7 @@ export type BusinessUncheckedCreateWithoutAssetsInput = {
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutAssetsInput = {
@@ -1708,6 +1938,7 @@ export type BusinessUpdateWithoutAssetsInput = {
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
@@ -1717,6 +1948,7 @@ export type BusinessUpdateWithoutAssetsInput = {
   employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutAssetsInput = {
@@ -1730,6 +1962,7 @@ export type BusinessUncheckedUpdateWithoutAssetsInput = {
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1739,6 +1972,7 @@ export type BusinessUncheckedUpdateWithoutAssetsInput = {
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutExpensesInput = {
@@ -1752,6 +1986,7 @@ export type BusinessCreateWithoutExpensesInput = {
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
@@ -1761,6 +1996,7 @@ export type BusinessCreateWithoutExpensesInput = {
   employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutExpensesInput = {
@@ -1774,6 +2010,7 @@ export type BusinessUncheckedCreateWithoutExpensesInput = {
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
@@ -1783,6 +2020,7 @@ export type BusinessUncheckedCreateWithoutExpensesInput = {
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutExpensesInput = {
@@ -1812,6 +2050,7 @@ export type BusinessUpdateWithoutExpensesInput = {
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
@@ -1821,6 +2060,7 @@ export type BusinessUpdateWithoutExpensesInput = {
   employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutExpensesInput = {
@@ -1834,6 +2074,7 @@ export type BusinessUncheckedUpdateWithoutExpensesInput = {
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1843,6 +2084,7 @@ export type BusinessUncheckedUpdateWithoutExpensesInput = {
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutLoanInput = {
@@ -1856,6 +2098,7 @@ export type BusinessCreateWithoutLoanInput = {
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
@@ -1865,6 +2108,7 @@ export type BusinessCreateWithoutLoanInput = {
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutLoanInput = {
@@ -1878,6 +2122,7 @@ export type BusinessUncheckedCreateWithoutLoanInput = {
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
@@ -1887,6 +2132,7 @@ export type BusinessUncheckedCreateWithoutLoanInput = {
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutLoanInput = {
@@ -1916,6 +2162,7 @@ export type BusinessUpdateWithoutLoanInput = {
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
@@ -1925,6 +2172,7 @@ export type BusinessUpdateWithoutLoanInput = {
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutLoanInput = {
@@ -1938,6 +2186,7 @@ export type BusinessUncheckedUpdateWithoutLoanInput = {
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1947,6 +2196,7 @@ export type BusinessUncheckedUpdateWithoutLoanInput = {
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutEmployeesInput = {
@@ -1960,6 +2210,7 @@ export type BusinessCreateWithoutEmployeesInput = {
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
@@ -1969,6 +2220,7 @@ export type BusinessCreateWithoutEmployeesInput = {
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutEmployeesInput = {
@@ -1982,6 +2234,7 @@ export type BusinessUncheckedCreateWithoutEmployeesInput = {
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
@@ -1991,6 +2244,7 @@ export type BusinessUncheckedCreateWithoutEmployeesInput = {
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutEmployeesInput = {
@@ -2020,6 +2274,7 @@ export type BusinessUpdateWithoutEmployeesInput = {
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
@@ -2029,6 +2284,7 @@ export type BusinessUpdateWithoutEmployeesInput = {
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutEmployeesInput = {
@@ -2042,6 +2298,7 @@ export type BusinessUncheckedUpdateWithoutEmployeesInput = {
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2051,6 +2308,7 @@ export type BusinessUncheckedUpdateWithoutEmployeesInput = {
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
   expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutExpenseCategoriesInput = {
@@ -2064,6 +2322,7 @@ export type BusinessCreateWithoutExpenseCategoriesInput = {
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
@@ -2073,6 +2332,7 @@ export type BusinessCreateWithoutExpenseCategoriesInput = {
   employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutExpenseCategoriesInput = {
@@ -2086,6 +2346,7 @@ export type BusinessUncheckedCreateWithoutExpenseCategoriesInput = {
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
@@ -2095,6 +2356,7 @@ export type BusinessUncheckedCreateWithoutExpenseCategoriesInput = {
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutExpenseCategoriesInput = {
@@ -2124,6 +2386,7 @@ export type BusinessUpdateWithoutExpenseCategoriesInput = {
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
@@ -2133,6 +2396,7 @@ export type BusinessUpdateWithoutExpenseCategoriesInput = {
   employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutExpenseCategoriesInput = {
@@ -2146,6 +2410,7 @@ export type BusinessUncheckedUpdateWithoutExpenseCategoriesInput = {
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2155,6 +2420,119 @@ export type BusinessUncheckedUpdateWithoutExpenseCategoriesInput = {
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutAlertsInput = {
+  id?: string
+  name: string
+  address?: string | null
+  onboardingStep?: number
+  onboardingCompleted?: boolean
+  createdAt?: Date | string
+  branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
+  sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
+  cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
+  liabilities?: Prisma.LiabilityCreateNestedManyWithoutBusinessInput
+  loan?: Prisma.LoanCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
+  assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutAlertsInput = {
+  id?: string
+  name: string
+  address?: string | null
+  onboardingStep?: number
+  onboardingCompleted?: boolean
+  createdAt?: Date | string
+  branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
+  cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
+  liabilities?: Prisma.LiabilityUncheckedCreateNestedManyWithoutBusinessInput
+  loan?: Prisma.LoanUncheckedCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutAlertsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutAlertsInput, Prisma.BusinessUncheckedCreateWithoutAlertsInput>
+}
+
+export type BusinessUpsertWithoutAlertsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutAlertsInput, Prisma.BusinessUncheckedUpdateWithoutAlertsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutAlertsInput, Prisma.BusinessUncheckedCreateWithoutAlertsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutAlertsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutAlertsInput, Prisma.BusinessUncheckedUpdateWithoutAlertsInput>
+}
+
+export type BusinessUpdateWithoutAlertsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
+  cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
+  liabilities?: Prisma.LiabilityUpdateManyWithoutBusinessNestedInput
+  loan?: Prisma.LoanUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
+  assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutAlertsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
+  cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
+  liabilities?: Prisma.LiabilityUncheckedUpdateManyWithoutBusinessNestedInput
+  loan?: Prisma.LoanUncheckedUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+  assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 
@@ -2167,6 +2545,7 @@ export type BusinessCountOutputType = {
   users: number
   business: number
   categories: number
+  brands: number
   products: number
   stockMovement: number
   sales: number
@@ -2177,6 +2556,7 @@ export type BusinessCountOutputType = {
   assets: number
   expenses: number
   expenseCategories: number
+  alerts: number
 }
 
 export type BusinessCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2184,6 +2564,7 @@ export type BusinessCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   users?: boolean | BusinessCountOutputTypeCountUsersArgs
   business?: boolean | BusinessCountOutputTypeCountBusinessArgs
   categories?: boolean | BusinessCountOutputTypeCountCategoriesArgs
+  brands?: boolean | BusinessCountOutputTypeCountBrandsArgs
   products?: boolean | BusinessCountOutputTypeCountProductsArgs
   stockMovement?: boolean | BusinessCountOutputTypeCountStockMovementArgs
   sales?: boolean | BusinessCountOutputTypeCountSalesArgs
@@ -2194,6 +2575,7 @@ export type BusinessCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   assets?: boolean | BusinessCountOutputTypeCountAssetsArgs
   expenses?: boolean | BusinessCountOutputTypeCountExpensesArgs
   expenseCategories?: boolean | BusinessCountOutputTypeCountExpenseCategoriesArgs
+  alerts?: boolean | BusinessCountOutputTypeCountAlertsArgs
 }
 
 /**
@@ -2232,6 +2614,13 @@ export type BusinessCountOutputTypeCountBusinessArgs<ExtArgs extends runtime.Typ
  */
 export type BusinessCountOutputTypeCountCategoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.CategoryWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountBrandsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BrandWhereInput
 }
 
 /**
@@ -2304,6 +2693,13 @@ export type BusinessCountOutputTypeCountExpenseCategoriesArgs<ExtArgs extends ru
   where?: Prisma.ExpenseCategoryWhereInput
 }
 
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountAlertsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AlertWhereInput
+}
+
 
 export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2316,6 +2712,7 @@ export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   users?: boolean | Prisma.Business$usersArgs<ExtArgs>
   business?: boolean | Prisma.Business$businessArgs<ExtArgs>
   categories?: boolean | Prisma.Business$categoriesArgs<ExtArgs>
+  brands?: boolean | Prisma.Business$brandsArgs<ExtArgs>
   products?: boolean | Prisma.Business$productsArgs<ExtArgs>
   stockMovement?: boolean | Prisma.Business$stockMovementArgs<ExtArgs>
   sales?: boolean | Prisma.Business$salesArgs<ExtArgs>
@@ -2326,6 +2723,7 @@ export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   assets?: boolean | Prisma.Business$assetsArgs<ExtArgs>
   expenses?: boolean | Prisma.Business$expensesArgs<ExtArgs>
   expenseCategories?: boolean | Prisma.Business$expenseCategoriesArgs<ExtArgs>
+  alerts?: boolean | Prisma.Business$alertsArgs<ExtArgs>
   _count?: boolean | Prisma.BusinessCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["business"]>
 
@@ -2362,6 +2760,7 @@ export type BusinessInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   users?: boolean | Prisma.Business$usersArgs<ExtArgs>
   business?: boolean | Prisma.Business$businessArgs<ExtArgs>
   categories?: boolean | Prisma.Business$categoriesArgs<ExtArgs>
+  brands?: boolean | Prisma.Business$brandsArgs<ExtArgs>
   products?: boolean | Prisma.Business$productsArgs<ExtArgs>
   stockMovement?: boolean | Prisma.Business$stockMovementArgs<ExtArgs>
   sales?: boolean | Prisma.Business$salesArgs<ExtArgs>
@@ -2372,6 +2771,7 @@ export type BusinessInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   assets?: boolean | Prisma.Business$assetsArgs<ExtArgs>
   expenses?: boolean | Prisma.Business$expensesArgs<ExtArgs>
   expenseCategories?: boolean | Prisma.Business$expenseCategoriesArgs<ExtArgs>
+  alerts?: boolean | Prisma.Business$alertsArgs<ExtArgs>
   _count?: boolean | Prisma.BusinessCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BusinessIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2384,6 +2784,7 @@ export type $BusinessPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     users: Prisma.$UserPayload<ExtArgs>[]
     business: Prisma.$BusinessSubscriptionPayload<ExtArgs>[]
     categories: Prisma.$CategoryPayload<ExtArgs>[]
+    brands: Prisma.$BrandPayload<ExtArgs>[]
     products: Prisma.$ProductPayload<ExtArgs>[]
     stockMovement: Prisma.$StockMovementPayload<ExtArgs>[]
     sales: Prisma.$SalePayload<ExtArgs>[]
@@ -2394,6 +2795,7 @@ export type $BusinessPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     assets: Prisma.$AssetPayload<ExtArgs>[]
     expenses: Prisma.$ExpensePayload<ExtArgs>[]
     expenseCategories: Prisma.$ExpenseCategoryPayload<ExtArgs>[]
+    alerts: Prisma.$AlertPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2800,6 +3202,7 @@ export interface Prisma__BusinessClient<T, Null = never, ExtArgs extends runtime
   users<T extends Prisma.Business$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   business<T extends Prisma.Business$businessArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$businessArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BusinessSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   categories<T extends Prisma.Business$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  brands<T extends Prisma.Business$brandsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$brandsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BrandPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   products<T extends Prisma.Business$productsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$productsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   stockMovement<T extends Prisma.Business$stockMovementArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$stockMovementArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sales<T extends Prisma.Business$salesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$salesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2810,6 +3213,7 @@ export interface Prisma__BusinessClient<T, Null = never, ExtArgs extends runtime
   assets<T extends Prisma.Business$assetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$assetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   expenses<T extends Prisma.Business$expensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$expensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   expenseCategories<T extends Prisma.Business$expenseCategoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$expenseCategoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExpenseCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  alerts<T extends Prisma.Business$alertsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$alertsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AlertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3329,6 +3733,30 @@ export type Business$categoriesArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
+ * Business.brands
+ */
+export type Business$brandsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Brand
+   */
+  select?: Prisma.BrandSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Brand
+   */
+  omit?: Prisma.BrandOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BrandInclude<ExtArgs> | null
+  where?: Prisma.BrandWhereInput
+  orderBy?: Prisma.BrandOrderByWithRelationInput | Prisma.BrandOrderByWithRelationInput[]
+  cursor?: Prisma.BrandWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BrandScalarFieldEnum | Prisma.BrandScalarFieldEnum[]
+}
+
+/**
  * Business.products
  */
 export type Business$productsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3566,6 +3994,30 @@ export type Business$expenseCategoriesArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.ExpenseCategoryScalarFieldEnum | Prisma.ExpenseCategoryScalarFieldEnum[]
+}
+
+/**
+ * Business.alerts
+ */
+export type Business$alertsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Alert
+   */
+  select?: Prisma.AlertSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Alert
+   */
+  omit?: Prisma.AlertOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AlertInclude<ExtArgs> | null
+  where?: Prisma.AlertWhereInput
+  orderBy?: Prisma.AlertOrderByWithRelationInput | Prisma.AlertOrderByWithRelationInput[]
+  cursor?: Prisma.AlertWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AlertScalarFieldEnum | Prisma.AlertScalarFieldEnum[]
 }
 
 /**

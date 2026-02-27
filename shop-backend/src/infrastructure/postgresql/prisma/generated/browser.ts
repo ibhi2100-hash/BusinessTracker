@@ -137,3 +137,8 @@ export type SalaryAccrual = Prisma.SalaryAccrualModel
  * 
  */
 export type ExpenseCategory = Prisma.ExpenseCategoryModel
+/**
+ * Model Alert
+ * 
+ */
+export type Alert = Prisma.AlertModel

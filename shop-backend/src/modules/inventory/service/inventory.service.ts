@@ -51,41 +51,48 @@ export class InventoryService {
         snapshots: SaleProductSnapshot[],
         tx: Prisma.TransactionClient
     ) {
+        const updatedProducts = [];
+
         for (const item of snapshots) {
 
-    const product = await this.inventoryRepo.findActiveProduct(
-        item.productId,
-        businessId,
-        branchId,
-        tx
-        );
+        const product = await this.inventoryRepo.findActiveProduct(
+            item.productId,
+            businessId,
+            branchId,
+            tx
+            );
 
-        if (!product) {
-        throw new Error(`Product not found`);
+            if (!product) {
+            throw new Error(`Product not found`);
+            }
+
+            if (product.quantity < item.quantity) {
+            throw new Error(`Insufficient stock`);
+            }
+
+    const updated = await this.inventoryRepo.decrementStock(
+            product.id,
+            item.quantity,
+            tx
+            );
+
+        updatedProducts.push(updated);
+
+        // record movement using snapshot pricing
+        await this.inventoryRepo.recordStockOut(
+            businessId,
+            branchId,
+            item.productId,
+            item.quantity,
+            new Prisma.Decimal(item.sellingPrice),
+            new Prisma.Decimal(item.costPrice),
+            tx
+        );
+        updatedProducts.push(updated);
         }
 
-        if (product.quantity < item.quantity) {
-        throw new Error(`Insufficient stock`);
-        }
-
-        await this.inventoryRepo.decrementStock(
-        product.id,
-        item.quantity,
-        tx
-        );
-
-      // record movement using snapshot pricing
-      await this.inventoryRepo.recordStockOut(
-        businessId,
-        branchId,
-        item.productId,
-        item.quantity,
-        new Prisma.Decimal(item.sellingPrice),
-        new Prisma.Decimal(item.costPrice),
-        tx
-      );
+        return updatedProducts;
     }
-  }
     async reverseStock(
         params:{
             productId: string,

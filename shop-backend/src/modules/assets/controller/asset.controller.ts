@@ -12,8 +12,13 @@ async createAsset(req: Request, res: Response){
     if(!businessId){
         return res.status(401).json({message: "Invalid BusinessId or not registered"})
     }
+    const branchId = req.user?.branchId;
 
-    const asset = await assetService.createAsset(businessId, req.body);
+    if(!branchId) {
+        return res.status(400).json({ message: "BranchId does not exist"})
+    }
+
+    const asset = await assetService.createAsset(businessId, branchId, req.body);
 
     res.status(201).json(asset)
 
@@ -50,6 +55,11 @@ async createAsset(req: Request, res: Response){
             if(!businessId){
                 return res.status(401).json({message: "Invalid BusinessId or not registered"})
             }
+            const branchId = req.user?.branchId;
+
+            if(!branchId) {
+                return res.status(400).json({ message: " BranchId does not exists"});
+            }
 
             const { assetId } = req.params;
 
@@ -57,7 +67,7 @@ async createAsset(req: Request, res: Response){
                 return res.status(400).json({ message: "Invalid assetId" });
             }
 
-            const result = await assetService.disposeAsset(assetId, businessId, req.body)
+            const result = await assetService.disposeAsset(assetId, businessId, branchId, req.body)
             
             return res.status(200).json({message: "Asset Disposed",result});
         } catch (error) {

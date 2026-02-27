@@ -15,10 +15,10 @@ export default function ProductModal({ isOpen, onClose, onSave, product }: Props
   const {
     categories,
     brands,
-    selectedCategory,
-    selectedBrand,
-    setSelectedCategory,
-    setSelectedBrand,
+    selectedCategoryId,
+    selectedBrandId,
+    setSelectedCategoryId,
+    setSelectedBrandId,
     setBrands
   } = useInventoryStore();
 
@@ -31,29 +31,24 @@ export default function ProductModal({ isOpen, onClose, onSave, product }: Props
   useEffect(() => {
     if (product) {
       setForm(product);
-      if (product.brand) setSelectedBrand(product.brand);
+      if (product.brand) setSelectedBrandId(product.brand.id);
       const cat = categories.find(c => c.id === product.brand?.categoryId);
-      if (cat) setSelectedCategory(cat);
+      if (cat) setSelectedCategoryId(cat.id);
       setNewCategoryName(null);
       setNewBrandName(null);
     } else {
       setForm({});
-      setSelectedCategory(undefined);
-      setSelectedBrand(undefined);
+      setSelectedCategoryId(undefined);
+      setSelectedBrandId(undefined);
       setNewCategoryName(null);
       setNewBrandName(null);
       setCategoryImage(null);
     }
   }, [product, categories]);
 
-  // Fetch brands when category changes
   useEffect(() => {
-    if (!selectedCategory) return setBrands([]);
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/business/brands?categoryId=${selectedCategory.id}`, { credentials: "include" })
-      .then(res => res.json())
-      .then(data => setBrands(data))
-      .catch(console.error);
-  }, [selectedCategory]);
+  setSelectedBrandId(undefined);
+}, [selectedCategoryId]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -76,14 +71,14 @@ export default function ProductModal({ isOpen, onClose, onSave, product }: Props
       return alert("Name, selling price, and quantity are required");
     }
 
-    const categoryPayload = selectedCategory?.id
-      ? { categoryId: selectedCategory.id }
+    const categoryPayload = selectedCategoryId
+      ? { categoryId: selectedCategoryId }
       : newCategoryName
       ? { categoryName: newCategoryName, imageUrl: categoryImage || undefined }
       : null;
 
-    const brandPayload = selectedBrand?.id
-      ? { brandId: selectedBrand.id }
+    const brandPayload = selectedBrandId
+      ? { brandId: selectedBrandId }
       : newBrandName
       ? { brandName: newBrandName }
       : null;
@@ -144,14 +139,14 @@ export default function ProductModal({ isOpen, onClose, onSave, product }: Props
 
           {/* Category Dropdown */}
           <select
-            value={selectedCategory?.id || (newCategoryName ? "new" : "")}
+            value={selectedCategoryId || (newCategoryName ? "new" : "")}
             onChange={(e) => {
               if (e.target.value === "new") {
-                setSelectedCategory(undefined);
+                setSelectedCategoryId(undefined);
                 setNewCategoryName("");
               } else {
                 const cat = categories.find(c => c.id === e.target.value);
-                setSelectedCategory(cat);
+                setSelectedCategoryId(cat.id);
                 setNewCategoryName(null);
               }
             }}
@@ -172,14 +167,14 @@ export default function ProductModal({ isOpen, onClose, onSave, product }: Props
 
           {/* Brand Dropdown */}
           <select
-            value={selectedBrand?.id || (newBrandName ? "new" : "")}
+            value={selectedBrandId || (newBrandName ? "new" : "")}
             onChange={(e) => {
               if (e.target.value === "new") {
-                setSelectedBrand(undefined);
+                setSelectedBrandId(undefined);
                 setNewBrandName("");
               } else {
                 const brand = brands.find(b => b.id === e.target.value);
-                setSelectedBrand(brand);
+                setSelectedBrandId(brand.id);
                 setNewBrandName(null);
               }
             }}

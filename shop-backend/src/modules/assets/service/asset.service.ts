@@ -9,7 +9,7 @@ export class AssetService {
     /* ==========================
        CREATE ASSET
     ========================== */
-    async createAsset(businessId: string, dto: CreateAssetDto) {
+    async createAsset(businessId: string, branchId: string,  dto: CreateAssetDto) {
 
         if (dto.purchaseCost <= 0) {
             throw new Error("Purchase cost must be greater than zero");
@@ -47,6 +47,7 @@ export class AssetService {
         await prisma.cashFlow.create({
             data: {
                 businessId,
+                branchId,
                 type: "OUTFLOW",
                 amount: totalCost,
                 source: "ASSET_PURCHASE",
@@ -70,6 +71,7 @@ export class AssetService {
     async disposeAsset(
         assetId: string,
         businessId: string,
+        branchId: string,
         dto: DisposeAssetDto
     ) {
         const asset = await this.assetRepo.findById(assetId, businessId);
@@ -91,6 +93,7 @@ export class AssetService {
             await prisma.cashFlow.create({
                 data: {
                     businessId,
+                    branchId,
                     type: "INFLOW",
                     amount: dto.disposalAmount,
                     source: "ASSET_DISPOSAL",

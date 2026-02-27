@@ -9,14 +9,16 @@ import { inventoryRepository } from '../modules/inventory/repository/inventory.r
 import { ProductRepository } from '../modules/products/repository/product.repository.js';
 import { ProductService } from '../modules/products/service/product.service.js';
 import { join } from 'node:path';
+import { AlertRepository } from '../modules/alerts/repository/alerts.repository.js';
 
 const router = express.Router();
 
 // Instances 
 const cashflowRepo = new CashflowRepository();
 const inventoryRep = new inventoryRepository();
+const alertRepo = new AlertRepository();
 const productRepo = new ProductRepository();
-const productService = new ProductService(productRepo,cashflowRepo, inventoryRep );
+const productService = new ProductService(productRepo,cashflowRepo, inventoryRep, alertRepo );
 const productController = new ProductController(productService)
 
 /*========================================================
