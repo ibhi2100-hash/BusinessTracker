@@ -26,6 +26,13 @@ export class AlertController {
   async markAsRead(req: Request, res: Response) {
     try {
       const alertId = req.params.id;
+       if (!alertId) {
+          return res.status(400).json({ message: "Alert id is required" });
+        }
+
+        if (Array.isArray(alertId)) {
+          return res.status(400).json({ message: "Alert cannot be an array" });
+        }
       await this.alertService.markAsRead(alertId);
       res.json({ success: true });
     } catch (err: any) {
@@ -36,6 +43,13 @@ export class AlertController {
   async resolveAlert(req: Request, res: Response) {
     try {
       const alertId = req.params.id;
+      if (!alertId) {
+          return res.status(400).json({ message: "Alert id is required" });
+        }
+
+        if (Array.isArray(alertId)) {
+          return res.status(400).json({ message: "Alert cannot be an array" });
+        }
       await this.alertService.resolve(alertId);
       res.json({ success: true });
     } catch (err: any) {

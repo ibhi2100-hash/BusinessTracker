@@ -1,5 +1,5 @@
 import { AlertRepository } from "../repository/alerts.repository.js";
-import { AlertType, AlertSeverity } from "../entity/alert.entity.js";
+import { AlertType, AlertSeverity } from "../../../infrastructure/postgresql/prisma/generated/enums.js";
 
 export class AlertService {
   constructor(private repo: AlertRepository) {}
@@ -9,7 +9,7 @@ export class AlertService {
    */
   async createAlert(data: {
     businessId: string;
-    branchId?: string;
+    branchId: string;
     type: AlertType;
     severity: AlertSeverity;
     title: string;
@@ -29,8 +29,8 @@ export class AlertService {
     const alert = await this.repo.create(data);
 
     // 🔔 Optional real-time broadcast via socket.io
-    if (global.io && data.branchId) {
-      global.io.to(data.branchId).emit("alert:new", alert);
+    if ((global as any).io && data.branchId) {
+      (global as any).io.to(data.branchId).emit("alert:new", alert);
     }
 
     return alert;
@@ -43,8 +43,8 @@ export class AlertService {
     const alert = await this.repo.resolve(id);
 
     // 🔔 Notify clients in real-time that the alert is resolved
-    if (global.io && alert.branchId) {
-      global.io.to(alert.branchId).emit("alert:resolved", alert.id);
+    if ((global as any).io && alert.branchId) {
+      (global as any).io.to(alert.branchId).emit("alert:resolved", alert.id);
     }
 
     return alert;
@@ -57,12 +57,18 @@ export class AlertService {
     const resolvedAlerts = await this.repo.resolveByType(branchId, type, metadataId);
 
     // Broadcast resolution for each alert
-    if (global.io) {
+    if ((global as any).io) {
       resolvedAlerts.forEach((alert) => {
-        if (alert.branchId) global.io.to(alert.branchId).emit("alert:resolved", alert.id);
+        if (alert.branchId) (global as any).io.to(alert.branchId).emit("alert:resolved", alert.id);
       });
     }
 
     return resolvedAlerts;
+  }
+  getBranchAlerts = async (businessId: string, branchId: string)=> {
+
+  }
+  markAsRead = async (alertId: String)=> {
+
   }
 }

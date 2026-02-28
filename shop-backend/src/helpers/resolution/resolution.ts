@@ -1,13 +1,21 @@
-import { AlertType } from "../../infrastructure/postgresql/prisma/generated/enums.js";
 import { prisma } from "../../infrastructure/postgresql/prismaClient.js";
+import { AlertType } from "../../infrastructure/postgresql/prisma/generated/enums.js";
+
 async function resolveAlert(type: AlertType, branchId: string, refId?: string) {
+  const where: any = {
+    type,
+    branchId,
+    isResolved: false,
+    ...(refId !== undefined && {
+      metadata: {
+        path: ["productId"],
+        equals: refId,
+      },
+    }),
+  };
+
   await prisma.alert.updateMany({
-    where: {
-      type,
-      branchId,
-      isResolved: false,
-      metadata: { path: ["productId"], equals: refId }
-    },
+    where,
     data: {
       isResolved: true,
       resolvedAt: new Date(),

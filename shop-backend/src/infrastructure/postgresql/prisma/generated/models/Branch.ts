@@ -30,6 +30,7 @@ export type BranchMinAggregateOutputType = {
   name: string | null
   address: string | null
   phone: string | null
+  isActive: boolean | null
   isDefault: boolean | null
   createdAt: Date | null
 }
@@ -40,6 +41,7 @@ export type BranchMaxAggregateOutputType = {
   name: string | null
   address: string | null
   phone: string | null
+  isActive: boolean | null
   isDefault: boolean | null
   createdAt: Date | null
 }
@@ -50,6 +52,7 @@ export type BranchCountAggregateOutputType = {
   name: number
   address: number
   phone: number
+  isActive: number
   isDefault: number
   createdAt: number
   _all: number
@@ -62,6 +65,7 @@ export type BranchMinAggregateInputType = {
   name?: true
   address?: true
   phone?: true
+  isActive?: true
   isDefault?: true
   createdAt?: true
 }
@@ -72,6 +76,7 @@ export type BranchMaxAggregateInputType = {
   name?: true
   address?: true
   phone?: true
+  isActive?: true
   isDefault?: true
   createdAt?: true
 }
@@ -82,6 +87,7 @@ export type BranchCountAggregateInputType = {
   name?: true
   address?: true
   phone?: true
+  isActive?: true
   isDefault?: true
   createdAt?: true
   _all?: true
@@ -165,6 +171,7 @@ export type BranchGroupByOutputType = {
   name: string
   address: string | null
   phone: string | null
+  isActive: boolean
   isDefault: boolean
   createdAt: Date
   _count: BranchCountAggregateOutputType | null
@@ -196,6 +203,7 @@ export type BranchWhereInput = {
   name?: Prisma.StringFilter<"Branch"> | string
   address?: Prisma.StringNullableFilter<"Branch"> | string | null
   phone?: Prisma.StringNullableFilter<"Branch"> | string | null
+  isActive?: Prisma.BoolFilter<"Branch"> | boolean
   isDefault?: Prisma.BoolFilter<"Branch"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Branch"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
@@ -218,6 +226,7 @@ export type BranchOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   isDefault?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   business?: Prisma.BusinessOrderByWithRelationInput
@@ -243,6 +252,7 @@ export type BranchWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"Branch"> | string
   address?: Prisma.StringNullableFilter<"Branch"> | string | null
   phone?: Prisma.StringNullableFilter<"Branch"> | string | null
+  isActive?: Prisma.BoolFilter<"Branch"> | boolean
   isDefault?: Prisma.BoolFilter<"Branch"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Branch"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
@@ -265,6 +275,7 @@ export type BranchOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   isDefault?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.BranchCountOrderByAggregateInput
@@ -281,6 +292,7 @@ export type BranchScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Branch"> | string
   address?: Prisma.StringNullableWithAggregatesFilter<"Branch"> | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"Branch"> | string | null
+  isActive?: Prisma.BoolWithAggregatesFilter<"Branch"> | boolean
   isDefault?: Prisma.BoolWithAggregatesFilter<"Branch"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Branch"> | Date | string
 }
@@ -290,6 +302,7 @@ export type BranchCreateInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutBranchInput
@@ -312,6 +325,7 @@ export type BranchUncheckedCreateInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
@@ -332,6 +346,7 @@ export type BranchUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutBranchNestedInput
@@ -354,6 +369,7 @@ export type BranchUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
@@ -375,6 +391,7 @@ export type BranchCreateManyInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
 }
@@ -384,6 +401,7 @@ export type BranchUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -394,6 +412,7 @@ export type BranchUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -414,6 +433,7 @@ export type BranchCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   isDefault?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -424,6 +444,7 @@ export type BranchMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   isDefault?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -434,6 +455,7 @@ export type BranchMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   address?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   isDefault?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -661,6 +683,7 @@ export type BranchCreateWithoutBusinessInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutBranchInput
@@ -681,6 +704,7 @@ export type BranchUncheckedCreateWithoutBusinessInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
@@ -731,6 +755,7 @@ export type BranchScalarWhereInput = {
   name?: Prisma.StringFilter<"Branch"> | string
   address?: Prisma.StringNullableFilter<"Branch"> | string | null
   phone?: Prisma.StringNullableFilter<"Branch"> | string | null
+  isActive?: Prisma.BoolFilter<"Branch"> | boolean
   isDefault?: Prisma.BoolFilter<"Branch"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Branch"> | Date | string
 }
@@ -740,6 +765,7 @@ export type BranchCreateWithoutUsersInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutBranchInput
@@ -761,6 +787,7 @@ export type BranchUncheckedCreateWithoutUsersInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBranchInput
@@ -796,6 +823,7 @@ export type BranchUpdateWithoutUsersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutBranchNestedInput
@@ -817,6 +845,7 @@ export type BranchUncheckedUpdateWithoutUsersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   products?: Prisma.ProductUncheckedUpdateManyWithoutBranchNestedInput
@@ -836,6 +865,7 @@ export type BranchCreateWithoutCategoryInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutBranchInput
@@ -857,6 +887,7 @@ export type BranchUncheckedCreateWithoutCategoryInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
@@ -892,6 +923,7 @@ export type BranchUpdateWithoutCategoryInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutBranchNestedInput
@@ -913,6 +945,7 @@ export type BranchUncheckedUpdateWithoutCategoryInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
@@ -932,6 +965,7 @@ export type BranchCreateWithoutBrandInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutBranchInput
@@ -953,6 +987,7 @@ export type BranchUncheckedCreateWithoutBrandInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
@@ -988,6 +1023,7 @@ export type BranchUpdateWithoutBrandInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutBranchNestedInput
@@ -1009,6 +1045,7 @@ export type BranchUncheckedUpdateWithoutBrandInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
@@ -1028,6 +1065,7 @@ export type BranchCreateWithoutProductsInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutBranchInput
@@ -1049,6 +1087,7 @@ export type BranchUncheckedCreateWithoutProductsInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
@@ -1084,6 +1123,7 @@ export type BranchUpdateWithoutProductsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutBranchNestedInput
@@ -1105,6 +1145,7 @@ export type BranchUncheckedUpdateWithoutProductsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
@@ -1124,6 +1165,7 @@ export type BranchCreateWithoutStockMovementInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutBranchInput
@@ -1145,6 +1187,7 @@ export type BranchUncheckedCreateWithoutStockMovementInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
@@ -1180,6 +1223,7 @@ export type BranchUpdateWithoutStockMovementInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutBranchNestedInput
@@ -1201,6 +1245,7 @@ export type BranchUncheckedUpdateWithoutStockMovementInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
@@ -1220,6 +1265,7 @@ export type BranchCreateWithoutSalesInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutBranchInput
@@ -1241,6 +1287,7 @@ export type BranchUncheckedCreateWithoutSalesInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
@@ -1276,6 +1323,7 @@ export type BranchUpdateWithoutSalesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutBranchNestedInput
@@ -1297,6 +1345,7 @@ export type BranchUncheckedUpdateWithoutSalesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
@@ -1316,6 +1365,7 @@ export type BranchCreateWithoutCashflowsInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutBranchInput
@@ -1337,6 +1387,7 @@ export type BranchUncheckedCreateWithoutCashflowsInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
@@ -1372,6 +1423,7 @@ export type BranchUpdateWithoutCashflowsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutBranchNestedInput
@@ -1393,6 +1445,7 @@ export type BranchUncheckedUpdateWithoutCashflowsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
@@ -1412,6 +1465,7 @@ export type BranchCreateWithoutLiabilitiesInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutBranchInput
@@ -1433,6 +1487,7 @@ export type BranchUncheckedCreateWithoutLiabilitiesInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
@@ -1468,6 +1523,7 @@ export type BranchUpdateWithoutLiabilitiesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutBranchNestedInput
@@ -1489,6 +1545,7 @@ export type BranchUncheckedUpdateWithoutLiabilitiesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
@@ -1508,6 +1565,7 @@ export type BranchCreateWithoutAssetsInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutBranchInput
@@ -1529,6 +1587,7 @@ export type BranchUncheckedCreateWithoutAssetsInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
@@ -1564,6 +1623,7 @@ export type BranchUpdateWithoutAssetsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutBranchNestedInput
@@ -1585,6 +1645,7 @@ export type BranchUncheckedUpdateWithoutAssetsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
@@ -1604,6 +1665,7 @@ export type BranchCreateWithoutExpensesInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutBranchInput
@@ -1625,6 +1687,7 @@ export type BranchUncheckedCreateWithoutExpensesInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
@@ -1660,6 +1723,7 @@ export type BranchUpdateWithoutExpensesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutBranchNestedInput
@@ -1681,6 +1745,7 @@ export type BranchUncheckedUpdateWithoutExpensesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
@@ -1700,6 +1765,7 @@ export type BranchCreateWithoutAlertsInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutBranchInput
@@ -1721,6 +1787,7 @@ export type BranchUncheckedCreateWithoutAlertsInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
@@ -1756,6 +1823,7 @@ export type BranchUpdateWithoutAlertsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutBranchNestedInput
@@ -1777,6 +1845,7 @@ export type BranchUncheckedUpdateWithoutAlertsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
@@ -1796,6 +1865,7 @@ export type BranchCreateManyBusinessInput = {
   name: string
   address?: string | null
   phone?: string | null
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: Date | string
 }
@@ -1805,6 +1875,7 @@ export type BranchUpdateWithoutBusinessInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutBranchNestedInput
@@ -1825,6 +1896,7 @@ export type BranchUncheckedUpdateWithoutBusinessInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
@@ -1845,6 +1917,7 @@ export type BranchUncheckedUpdateManyWithoutBusinessInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1976,6 +2049,7 @@ export type BranchSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name?: boolean
   address?: boolean
   phone?: boolean
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
@@ -1999,6 +2073,7 @@ export type BranchSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   name?: boolean
   address?: boolean
   phone?: boolean
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
@@ -2010,6 +2085,7 @@ export type BranchSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   name?: boolean
   address?: boolean
   phone?: boolean
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
@@ -2021,11 +2097,12 @@ export type BranchSelectScalar = {
   name?: boolean
   address?: boolean
   phone?: boolean
+  isActive?: boolean
   isDefault?: boolean
   createdAt?: boolean
 }
 
-export type BranchOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "name" | "address" | "phone" | "isDefault" | "createdAt", ExtArgs["result"]["branch"]>
+export type BranchOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "name" | "address" | "phone" | "isActive" | "isDefault" | "createdAt", ExtArgs["result"]["branch"]>
 export type BranchInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   users?: boolean | Prisma.Branch$usersArgs<ExtArgs>
@@ -2070,6 +2147,7 @@ export type $BranchPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     name: string
     address: string | null
     phone: string | null
+    isActive: boolean
     isDefault: boolean
     createdAt: Date
   }, ExtArgs["result"]["branch"]>
@@ -2512,6 +2590,7 @@ export interface BranchFieldRefs {
   readonly name: Prisma.FieldRef<"Branch", 'String'>
   readonly address: Prisma.FieldRef<"Branch", 'String'>
   readonly phone: Prisma.FieldRef<"Branch", 'String'>
+  readonly isActive: Prisma.FieldRef<"Branch", 'Boolean'>
   readonly isDefault: Prisma.FieldRef<"Branch", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Branch", 'DateTime'>
 }

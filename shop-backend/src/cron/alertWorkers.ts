@@ -1,13 +1,17 @@
 import cron from 'node-cron';
-import { AlertGenerator } from '../modules/alerts/service/alertGenerator.js';
+import { AlertGenerator } from '../modules/alerts/repository/alertGenerator.js';
 import { prisma } from '../infrastructure/postgresql/prismaClient.js';
+import { AlertRepository } from '../modules/alerts/repository/alerts.repository.js';
+import { AlertService } from '../modules/alerts/service/alerts.service.js';
 
+const alertRepo = new AlertRepository();
+const alertService = new AlertService(alertRepo)
 // Run every 5 minutes
 cron.schedule('*/5 * * * *', async () => {
   try {
     console.log('Running low-stock and negative cash alerts...');
 
-    const generator = new AlertGenerator();
+    const generator = new AlertGenerator(alertService);
 
     // Fetch all active branches
     const branches = await prisma.branch.findMany({

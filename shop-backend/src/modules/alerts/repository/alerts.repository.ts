@@ -1,16 +1,39 @@
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
-import { AlertType, Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
+import { AlertType, Prisma, AlertSeverity } from "../../../infrastructure/postgresql/prisma/generated/client.js";
 
 export class AlertRepository {
   /**
    * Create new alert
    */
-  async create(data: Prisma.AlertCreateInput) {
-    return prisma.alert.create({
-      data,
-    });
-  }
+async create(data: {
+  businessId: string;
+  branchId: string;
+  type: AlertType;
+  severity: AlertSeverity;
+  title: string;
+  message: string;
+  metadata?: Record<string, any>;
+}) {
+  return prisma.alert.create({
+    data: {
+      type: data.type,
+      severity: data.severity,
+      title: data.title,
+      message: data.message,
 
+      business: {
+        connect: { id: data.businessId },
+      },
+      branch: {
+        connect: { id: data.branchId },
+      },
+
+      ...(data.metadata !== undefined && {
+        metadata: data.metadata,
+      }),
+    },
+  });
+}
   /**
    * Prevent duplicate unresolved alerts
    */
@@ -98,9 +121,18 @@ export class AlertRepository {
   async resolveByType(
     branchId: string,
     type: AlertType,
-    referenceId?: string
+    referenceId?: string,
+   
   ) {
-    return prisma.alert.updateMany({
+     const alerts = await prisma.alert.findMany({
+      where: {
+        branchId,
+        type,
+        isResolved: false,
+      },
+      select: { id: true, branchId: true },
+    });
+    await prisma.alert.updateMany({
       where: {
         branchId,
         type,
@@ -117,6 +149,7 @@ export class AlertRepository {
         resolvedAt: new Date(),
       },
     });
+    return alerts
   }
 
   /**

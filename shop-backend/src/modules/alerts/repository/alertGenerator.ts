@@ -22,33 +22,31 @@ export class AlertGenerator {
       });
     }
   }
-}
-
+  
   async generateNegativeCashAlert(branchId: string, businessId: string) {
     const cash = await prisma.cashFlow.aggregate({
       where: { branchId },
       _sum: { amount: true },
     });
 
-    if ((cash._sum.amount ?? 0) < 0) {
+    if (Number((cash._sum.amount ?? 0)) < 0) {
       await prisma.alert.create({
         data: {
           branchId,
           businessId,
+          title: "Negative Cash",
           type: "SYSTEM",
           severity: "CRITICAL",
           message: "Branch cash balance is negative",
         },
       });
     }
-  }
-
-  async generateOverdueLiabilityAlerts(branchId: string, businessId: string) {
+}
+ async generateOverdueLiabilityAlerts(branchId: string, businessId: string) {
     const overdue = await prisma.liability.findMany({
       where: {
         branchId,
         dueDate: { lt: new Date() },
-        settled: false,
       },
     });
 
@@ -57,11 +55,12 @@ export class AlertGenerator {
         data: {
           branchId,
           businessId,
+          title: "Liability Alert",
           type: "LIABILITY_DUE",
           severity: "WARNING",
           message: `Liability overdue: ₦${liability.principalAmount}`,
         },
       });
     }
-  }
+}
 }
