@@ -51,6 +51,7 @@ export type LiabilityMinAggregateOutputType = {
   lender: string | null
   outstandingAmount: runtime.Decimal | null
   description: string | null
+  isOpening: boolean | null
   status: $Enums.LiabilityStatus | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -69,6 +70,7 @@ export type LiabilityMaxAggregateOutputType = {
   lender: string | null
   outstandingAmount: runtime.Decimal | null
   description: string | null
+  isOpening: boolean | null
   status: $Enums.LiabilityStatus | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -87,6 +89,7 @@ export type LiabilityCountAggregateOutputType = {
   lender: number
   outstandingAmount: number
   description: number
+  isOpening: number
   status: number
   createdAt: number
   updatedAt: number
@@ -119,6 +122,7 @@ export type LiabilityMinAggregateInputType = {
   lender?: true
   outstandingAmount?: true
   description?: true
+  isOpening?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -137,6 +141,7 @@ export type LiabilityMaxAggregateInputType = {
   lender?: true
   outstandingAmount?: true
   description?: true
+  isOpening?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -155,6 +160,7 @@ export type LiabilityCountAggregateInputType = {
   lender?: true
   outstandingAmount?: true
   description?: true
+  isOpening?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -260,6 +266,7 @@ export type LiabilityGroupByOutputType = {
   lender: string | null
   outstandingAmount: runtime.Decimal
   description: string | null
+  isOpening: boolean
   status: $Enums.LiabilityStatus
   createdAt: Date
   updatedAt: Date
@@ -301,6 +308,7 @@ export type LiabilityWhereInput = {
   lender?: Prisma.StringNullableFilter<"Liability"> | string | null
   outstandingAmount?: Prisma.DecimalFilter<"Liability"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.StringNullableFilter<"Liability"> | string | null
+  isOpening?: Prisma.BoolFilter<"Liability"> | boolean
   status?: Prisma.EnumLiabilityStatusFilter<"Liability"> | $Enums.LiabilityStatus
   createdAt?: Prisma.DateTimeFilter<"Liability"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Liability"> | Date | string
@@ -322,6 +330,7 @@ export type LiabilityOrderByWithRelationInput = {
   lender?: Prisma.SortOrderInput | Prisma.SortOrder
   outstandingAmount?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  isOpening?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -346,6 +355,7 @@ export type LiabilityWhereUniqueInput = Prisma.AtLeast<{
   lender?: Prisma.StringNullableFilter<"Liability"> | string | null
   outstandingAmount?: Prisma.DecimalFilter<"Liability"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.StringNullableFilter<"Liability"> | string | null
+  isOpening?: Prisma.BoolFilter<"Liability"> | boolean
   status?: Prisma.EnumLiabilityStatusFilter<"Liability"> | $Enums.LiabilityStatus
   createdAt?: Prisma.DateTimeFilter<"Liability"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Liability"> | Date | string
@@ -367,6 +377,7 @@ export type LiabilityOrderByWithAggregationInput = {
   lender?: Prisma.SortOrderInput | Prisma.SortOrder
   outstandingAmount?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  isOpening?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -393,6 +404,7 @@ export type LiabilityScalarWhereWithAggregatesInput = {
   lender?: Prisma.StringNullableWithAggregatesFilter<"Liability"> | string | null
   outstandingAmount?: Prisma.DecimalWithAggregatesFilter<"Liability"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Liability"> | string | null
+  isOpening?: Prisma.BoolWithAggregatesFilter<"Liability"> | boolean
   status?: Prisma.EnumLiabilityStatusWithAggregatesFilter<"Liability"> | $Enums.LiabilityStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Liability"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Liability"> | Date | string
@@ -409,6 +421,7 @@ export type LiabilityCreateInput = {
   lender?: string | null
   outstandingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
+  isOpening?: boolean
   status: $Enums.LiabilityStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -430,6 +443,7 @@ export type LiabilityUncheckedCreateInput = {
   lender?: string | null
   outstandingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
+  isOpening?: boolean
   status: $Enums.LiabilityStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -447,6 +461,7 @@ export type LiabilityUpdateInput = {
   lender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outstandingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumLiabilityStatusFieldUpdateOperationsInput | $Enums.LiabilityStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -468,6 +483,7 @@ export type LiabilityUncheckedUpdateInput = {
   lender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outstandingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumLiabilityStatusFieldUpdateOperationsInput | $Enums.LiabilityStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -487,6 +503,7 @@ export type LiabilityCreateManyInput = {
   lender?: string | null
   outstandingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
+  isOpening?: boolean
   status: $Enums.LiabilityStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -503,6 +520,7 @@ export type LiabilityUpdateManyMutationInput = {
   lender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outstandingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumLiabilityStatusFieldUpdateOperationsInput | $Enums.LiabilityStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -521,6 +539,7 @@ export type LiabilityUncheckedUpdateManyInput = {
   lender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outstandingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumLiabilityStatusFieldUpdateOperationsInput | $Enums.LiabilityStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -549,6 +568,7 @@ export type LiabilityCountOrderByAggregateInput = {
   lender?: Prisma.SortOrder
   outstandingAmount?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  isOpening?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -573,6 +593,7 @@ export type LiabilityMaxOrderByAggregateInput = {
   lender?: Prisma.SortOrder
   outstandingAmount?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  isOpening?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -591,6 +612,7 @@ export type LiabilityMinOrderByAggregateInput = {
   lender?: Prisma.SortOrder
   outstandingAmount?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  isOpening?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -740,6 +762,7 @@ export type LiabilityCreateWithoutBusinessInput = {
   lender?: string | null
   outstandingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
+  isOpening?: boolean
   status: $Enums.LiabilityStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -759,6 +782,7 @@ export type LiabilityUncheckedCreateWithoutBusinessInput = {
   lender?: string | null
   outstandingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
+  isOpening?: boolean
   status: $Enums.LiabilityStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -807,6 +831,7 @@ export type LiabilityScalarWhereInput = {
   lender?: Prisma.StringNullableFilter<"Liability"> | string | null
   outstandingAmount?: Prisma.DecimalFilter<"Liability"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.StringNullableFilter<"Liability"> | string | null
+  isOpening?: Prisma.BoolFilter<"Liability"> | boolean
   status?: Prisma.EnumLiabilityStatusFilter<"Liability"> | $Enums.LiabilityStatus
   createdAt?: Prisma.DateTimeFilter<"Liability"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Liability"> | Date | string
@@ -823,6 +848,7 @@ export type LiabilityCreateWithoutBranchInput = {
   lender?: string | null
   outstandingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
+  isOpening?: boolean
   status: $Enums.LiabilityStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -842,6 +868,7 @@ export type LiabilityUncheckedCreateWithoutBranchInput = {
   lender?: string | null
   outstandingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
+  isOpening?: boolean
   status: $Enums.LiabilityStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -885,6 +912,7 @@ export type LiabilityCreateWithoutLiabilityInput = {
   lender?: string | null
   outstandingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
+  isOpening?: boolean
   status: $Enums.LiabilityStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -905,6 +933,7 @@ export type LiabilityUncheckedCreateWithoutLiabilityInput = {
   lender?: string | null
   outstandingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
+  isOpening?: boolean
   status: $Enums.LiabilityStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -937,6 +966,7 @@ export type LiabilityUpdateWithoutLiabilityInput = {
   lender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outstandingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumLiabilityStatusFieldUpdateOperationsInput | $Enums.LiabilityStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -957,6 +987,7 @@ export type LiabilityUncheckedUpdateWithoutLiabilityInput = {
   lender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outstandingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumLiabilityStatusFieldUpdateOperationsInput | $Enums.LiabilityStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -974,6 +1005,7 @@ export type LiabilityCreateManyBusinessInput = {
   lender?: string | null
   outstandingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
+  isOpening?: boolean
   status: $Enums.LiabilityStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -990,6 +1022,7 @@ export type LiabilityUpdateWithoutBusinessInput = {
   lender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outstandingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumLiabilityStatusFieldUpdateOperationsInput | $Enums.LiabilityStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1009,6 +1042,7 @@ export type LiabilityUncheckedUpdateWithoutBusinessInput = {
   lender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outstandingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumLiabilityStatusFieldUpdateOperationsInput | $Enums.LiabilityStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1027,6 +1061,7 @@ export type LiabilityUncheckedUpdateManyWithoutBusinessInput = {
   lender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outstandingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumLiabilityStatusFieldUpdateOperationsInput | $Enums.LiabilityStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1044,6 +1079,7 @@ export type LiabilityCreateManyBranchInput = {
   lender?: string | null
   outstandingAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
+  isOpening?: boolean
   status: $Enums.LiabilityStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1060,6 +1096,7 @@ export type LiabilityUpdateWithoutBranchInput = {
   lender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outstandingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumLiabilityStatusFieldUpdateOperationsInput | $Enums.LiabilityStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1079,6 +1116,7 @@ export type LiabilityUncheckedUpdateWithoutBranchInput = {
   lender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outstandingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumLiabilityStatusFieldUpdateOperationsInput | $Enums.LiabilityStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1097,6 +1135,7 @@ export type LiabilityUncheckedUpdateManyWithoutBranchInput = {
   lender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outstandingAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumLiabilityStatusFieldUpdateOperationsInput | $Enums.LiabilityStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1146,6 +1185,7 @@ export type LiabilitySelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   lender?: boolean
   outstandingAmount?: boolean
   description?: boolean
+  isOpening?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1168,6 +1208,7 @@ export type LiabilitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   lender?: boolean
   outstandingAmount?: boolean
   description?: boolean
+  isOpening?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1188,6 +1229,7 @@ export type LiabilitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   lender?: boolean
   outstandingAmount?: boolean
   description?: boolean
+  isOpening?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1208,12 +1250,13 @@ export type LiabilitySelectScalar = {
   lender?: boolean
   outstandingAmount?: boolean
   description?: boolean
+  isOpening?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type LiabilityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "title" | "type" | "principalAmount" | "interestRate" | "startDate" | "dueDate" | "lender" | "outstandingAmount" | "description" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["liability"]>
+export type LiabilityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "title" | "type" | "principalAmount" | "interestRate" | "startDate" | "dueDate" | "lender" | "outstandingAmount" | "description" | "isOpening" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["liability"]>
 export type LiabilityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.Liability$branchArgs<ExtArgs>
@@ -1249,6 +1292,7 @@ export type $LiabilityPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     lender: string | null
     outstandingAmount: runtime.Decimal
     description: string | null
+    isOpening: boolean
     status: $Enums.LiabilityStatus
     createdAt: Date
     updatedAt: Date
@@ -1690,6 +1734,7 @@ export interface LiabilityFieldRefs {
   readonly lender: Prisma.FieldRef<"Liability", 'String'>
   readonly outstandingAmount: Prisma.FieldRef<"Liability", 'Decimal'>
   readonly description: Prisma.FieldRef<"Liability", 'String'>
+  readonly isOpening: Prisma.FieldRef<"Liability", 'Boolean'>
   readonly status: Prisma.FieldRef<"Liability", 'LiabilityStatus'>
   readonly createdAt: Prisma.FieldRef<"Liability", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Liability", 'DateTime'>

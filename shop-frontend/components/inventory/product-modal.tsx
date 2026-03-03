@@ -4,6 +4,7 @@
 import { useState, useEffect } from "react";
 import { Product, useInventoryStore } from "../../store/inventoryStore";
 
+
 interface Props {
   isOpen: boolean;
   onClose: () => void;
@@ -26,6 +27,8 @@ export default function ProductModal({ isOpen, onClose, onSave, product }: Props
   const [newCategoryName, setNewCategoryName] = useState<string | null>(null);
   const [newBrandName, setNewBrandName] = useState<string | null>(null);
   const [categoryImage, setCategoryImage] = useState<string | null>(null);
+ 
+
 
   // Load product for editing
   useEffect(() => {

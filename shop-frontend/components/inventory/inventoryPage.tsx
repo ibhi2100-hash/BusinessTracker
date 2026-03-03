@@ -7,12 +7,19 @@ import BrandDropdown from "../../components/inventory/brandDropdown";
 import ProductCard from "../../components/inventory/productCard";
 import ProductModal from "../../components/inventory/product-modal";
 import { useSalesStore } from "../../store/SalesStore";
+import { useBusinessStatus } from "@/hooks/useBusinessStatus";
 // Fetch Services
 import { fetchCategories, fetchBrands, fetchInventoryProducts } from "@/services/inventory.service";
 
-import { toast } from "react-hot-toast"; 
+import { toast } from "sonner"; 
 
-export default function InventoryPage({ context }: { context: "sell" | "admin" }) {
+
+interface InventoryPageProps {
+  context: "sell" | "admin";
+  mode: "OPENING" | "LIVE";
+}
+
+export default function InventoryPage({ context, mode}: InventoryPageProps) {
   const {
     categories,
     brands,
@@ -31,6 +38,9 @@ export default function InventoryPage({ context }: { context: "sell" | "admin" }
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<StoreProduct | undefined>();
+
+  const { data: business} = useBusinessStatus();
+  const isOnboarding = business?.isOnboarding;
 
   // Fetch categories
   useEffect(() => {
@@ -57,16 +67,20 @@ export default function InventoryPage({ context }: { context: "sell" | "admin" }
       ? `${process.env.NEXT_PUBLIC_API_URL}/products/${editingProduct.id}`
       : `${process.env.NEXT_PUBLIC_API_URL}/products/create`;
 
-    
+    const payloadWithMode = {
+      ...product,
+      stockMode: mode === "OPENING" ? "OPENING" : "PURCHASE",
+    };
     setModalOpen(false);
     setEditingProduct(undefined);
+
 
     try {
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify(product),
+        body: JSON.stringify(payloadWithMode),
       });
       const saved = await res.json();
 
@@ -110,8 +124,15 @@ const handleSell = async (productId: string, quantity: number) => {
   const updateProduct = useInventoryStore.getState().updateProduct;
   const addSale = useSalesStore.getState().addSale;
   const products = useInventoryStore.getState().products;
-
+  if (mode === "OPENING") {
+      toast.error("You cannot sell before activating business.");
+      return;
+    }
+  if(isOnboarding) {
+      toast.error("Business not activated yet")
+    }
   try {
+    
     const product = products.find((p) => p.id === productId);
     if (!product) throw new Error("Product not found");
 
@@ -135,6 +156,7 @@ const handleSell = async (productId: string, quantity: number) => {
     }
 
     const sale = await response.json();
+    toast.success("✅ Successfully Sold Item")
 
     // Update product quantity in inventory store
     updateProduct({
@@ -151,11 +173,17 @@ const handleSell = async (productId: string, quantity: number) => {
     console.error(error);
   }
 };
-  return (
+  return (<>
+    
     <div className="p-4 sm:p-6 md:p-8">
         <h1 className="text-[clamp(1.5rem,5vw,2rem)] font-bold mb-4 text-gray-800">
           {context === "sell" ? "Sell Products" : "Inventory"}
         </h1>
+        {mode === "OPENING" && (
+          <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded text-sm">
+            Opening Mode: Inventory changes will not affect cashflow.
+          </div>
+        )}
 
         {/* Category grid */}
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-4">
@@ -184,7 +212,13 @@ const handleSell = async (productId: string, quantity: number) => {
       {/* Product grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
         {products.map((p) => (
-          <ProductCard key={p.id} product={p} context={context} onSell={handleSell} onEdit={handleEdit} onDelete={handleDelete} />
+          <ProductCard 
+            key={p.id} 
+            product={p} 
+            context={isOnboarding ? "admin" : context} 
+            onSell={!isOnboarding ? handleSell : undefined} 
+            onEdit={handleEdit} 
+            onDelete={handleDelete} />
         ))}
       </div>
 
@@ -196,5 +230,6 @@ const handleSell = async (productId: string, quantity: number) => {
         product={editingProduct}
       />
     </div>
+    </>
   );
 }

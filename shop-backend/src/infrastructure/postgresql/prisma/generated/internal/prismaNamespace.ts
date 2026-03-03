@@ -2322,8 +2322,11 @@ export const BusinessScalarFieldEnum = {
   name: 'name',
   address: 'address',
   onboardingStep: 'onboardingStep',
+  isOnboarding: 'isOnboarding',
   onboardingCompleted: 'onboardingCompleted',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  activatedAt: 'activatedAt',
+  status: 'status'
 } as const
 
 export type BusinessScalarFieldEnum = (typeof BusinessScalarFieldEnum)[keyof typeof BusinessScalarFieldEnum]
@@ -2428,6 +2431,7 @@ export const ProductScalarFieldEnum = {
   brandId: 'brandId',
   name: 'name',
   type: 'type',
+  stockMode: 'stockMode',
   model: 'model',
   costPrice: 'costPrice',
   sellingPrice: 'sellingPrice',
@@ -2456,6 +2460,7 @@ export const StockMovementScalarFieldEnum = {
   remainingQty: 'remainingQty',
   costPrice: 'costPrice',
   sellingPrice: 'sellingPrice',
+  isOpening: 'isOpening',
   date: 'date',
   createdAt: 'createdAt'
 } as const
@@ -2510,9 +2515,11 @@ export const CashFlowScalarFieldEnum = {
   branchId: 'branchId',
   type: 'type',
   amount: 'amount',
+  direction: 'direction',
   balanceAfter: 'balanceAfter',
   source: 'source',
   description: 'description',
+  isOpening: 'isOpening',
   createdAt: 'createdAt'
 } as const
 
@@ -2532,6 +2539,7 @@ export const LiabilityScalarFieldEnum = {
   lender: 'lender',
   outstandingAmount: 'outstandingAmount',
   description: 'description',
+  isOpening: 'isOpening',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -2555,12 +2563,13 @@ export const AssetScalarFieldEnum = {
   businessId: 'businessId',
   branchId: 'branchId',
   name: 'name',
-  category: 'category',
   purchaseCost: 'purchaseCost',
   purchaseDate: 'purchaseDate',
+  assetType: 'assetType',
   totalCost: 'totalCost',
   currentValue: 'currentValue',
   quantity: 'quantity',
+  isOpeninig: 'isOpeninig',
   condition: 'condition',
   supplier: 'supplier',
   usefulLifeMonths: 'usefulLifeMonths',
@@ -2784,6 +2793,20 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
+ * Reference to a field of type 'BusinessStatus'
+ */
+export type EnumBusinessStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BusinessStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'BusinessStatus[]'
+ */
+export type ListEnumBusinessStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BusinessStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Role'
  */
 export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role'>
@@ -2822,6 +2845,20 @@ export type EnumProductTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pris
  * Reference to a field of type 'ProductType[]'
  */
 export type ListEnumProductTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ProductStockMode'
+ */
+export type EnumProductStockModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductStockMode'>
+    
+
+
+/**
+ * Reference to a field of type 'ProductStockMode[]'
+ */
+export type ListEnumProductStockModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductStockMode[]'>
     
 
 
@@ -2882,6 +2919,20 @@ export type ListEnumCashFlowTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
 
 
 /**
+ * Reference to a field of type 'CashFlowDirection'
+ */
+export type EnumCashFlowDirectionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CashFlowDirection'>
+    
+
+
+/**
+ * Reference to a field of type 'CashFlowDirection[]'
+ */
+export type ListEnumCashFlowDirectionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CashFlowDirection[]'>
+    
+
+
+/**
  * Reference to a field of type 'LiabilityType'
  */
 export type EnumLiabilityTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LiabilityType'>
@@ -2920,6 +2971,20 @@ export type EnumLiabilityStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$
  * Reference to a field of type 'LiabilityStatus[]'
  */
 export type ListEnumLiabilityStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LiabilityStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AssetType'
+ */
+export type EnumAssetTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AssetType'>
+    
+
+
+/**
+ * Reference to a field of type 'AssetType[]'
+ */
+export type ListEnumAssetTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AssetType[]'>
     
 
 

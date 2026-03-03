@@ -42,9 +42,11 @@ export type CashFlowMinAggregateOutputType = {
   branchId: string | null
   type: $Enums.CashFlowType | null
   amount: runtime.Decimal | null
+  direction: $Enums.CashFlowDirection | null
   balanceAfter: runtime.Decimal | null
   source: string | null
   description: string | null
+  isOpening: boolean | null
   createdAt: Date | null
 }
 
@@ -54,9 +56,11 @@ export type CashFlowMaxAggregateOutputType = {
   branchId: string | null
   type: $Enums.CashFlowType | null
   amount: runtime.Decimal | null
+  direction: $Enums.CashFlowDirection | null
   balanceAfter: runtime.Decimal | null
   source: string | null
   description: string | null
+  isOpening: boolean | null
   createdAt: Date | null
 }
 
@@ -66,9 +70,11 @@ export type CashFlowCountAggregateOutputType = {
   branchId: number
   type: number
   amount: number
+  direction: number
   balanceAfter: number
   source: number
   description: number
+  isOpening: number
   createdAt: number
   _all: number
 }
@@ -90,9 +96,11 @@ export type CashFlowMinAggregateInputType = {
   branchId?: true
   type?: true
   amount?: true
+  direction?: true
   balanceAfter?: true
   source?: true
   description?: true
+  isOpening?: true
   createdAt?: true
 }
 
@@ -102,9 +110,11 @@ export type CashFlowMaxAggregateInputType = {
   branchId?: true
   type?: true
   amount?: true
+  direction?: true
   balanceAfter?: true
   source?: true
   description?: true
+  isOpening?: true
   createdAt?: true
 }
 
@@ -114,9 +124,11 @@ export type CashFlowCountAggregateInputType = {
   branchId?: true
   type?: true
   amount?: true
+  direction?: true
   balanceAfter?: true
   source?: true
   description?: true
+  isOpening?: true
   createdAt?: true
   _all?: true
 }
@@ -213,9 +225,11 @@ export type CashFlowGroupByOutputType = {
   branchId: string
   type: $Enums.CashFlowType
   amount: runtime.Decimal
+  direction: $Enums.CashFlowDirection
   balanceAfter: runtime.Decimal | null
   source: string | null
   description: string | null
+  isOpening: boolean
   createdAt: Date
   _count: CashFlowCountAggregateOutputType | null
   _avg: CashFlowAvgAggregateOutputType | null
@@ -248,9 +262,11 @@ export type CashFlowWhereInput = {
   branchId?: Prisma.StringFilter<"CashFlow"> | string
   type?: Prisma.EnumCashFlowTypeFilter<"CashFlow"> | $Enums.CashFlowType
   amount?: Prisma.DecimalFilter<"CashFlow"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  direction?: Prisma.EnumCashFlowDirectionFilter<"CashFlow"> | $Enums.CashFlowDirection
   balanceAfter?: Prisma.DecimalNullableFilter<"CashFlow"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   source?: Prisma.StringNullableFilter<"CashFlow"> | string | null
   description?: Prisma.StringNullableFilter<"CashFlow"> | string | null
+  isOpening?: Prisma.BoolFilter<"CashFlow"> | boolean
   createdAt?: Prisma.DateTimeFilter<"CashFlow"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
   branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
@@ -262,9 +278,11 @@ export type CashFlowOrderByWithRelationInput = {
   branchId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  direction?: Prisma.SortOrder
   balanceAfter?: Prisma.SortOrderInput | Prisma.SortOrder
   source?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  isOpening?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   business?: Prisma.BusinessOrderByWithRelationInput
   branch?: Prisma.BranchOrderByWithRelationInput
@@ -279,9 +297,11 @@ export type CashFlowWhereUniqueInput = Prisma.AtLeast<{
   branchId?: Prisma.StringFilter<"CashFlow"> | string
   type?: Prisma.EnumCashFlowTypeFilter<"CashFlow"> | $Enums.CashFlowType
   amount?: Prisma.DecimalFilter<"CashFlow"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  direction?: Prisma.EnumCashFlowDirectionFilter<"CashFlow"> | $Enums.CashFlowDirection
   balanceAfter?: Prisma.DecimalNullableFilter<"CashFlow"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   source?: Prisma.StringNullableFilter<"CashFlow"> | string | null
   description?: Prisma.StringNullableFilter<"CashFlow"> | string | null
+  isOpening?: Prisma.BoolFilter<"CashFlow"> | boolean
   createdAt?: Prisma.DateTimeFilter<"CashFlow"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
   branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
@@ -293,9 +313,11 @@ export type CashFlowOrderByWithAggregationInput = {
   branchId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  direction?: Prisma.SortOrder
   balanceAfter?: Prisma.SortOrderInput | Prisma.SortOrder
   source?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  isOpening?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.CashFlowCountOrderByAggregateInput
   _avg?: Prisma.CashFlowAvgOrderByAggregateInput
@@ -313,9 +335,11 @@ export type CashFlowScalarWhereWithAggregatesInput = {
   branchId?: Prisma.StringWithAggregatesFilter<"CashFlow"> | string
   type?: Prisma.EnumCashFlowTypeWithAggregatesFilter<"CashFlow"> | $Enums.CashFlowType
   amount?: Prisma.DecimalWithAggregatesFilter<"CashFlow"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  direction?: Prisma.EnumCashFlowDirectionWithAggregatesFilter<"CashFlow"> | $Enums.CashFlowDirection
   balanceAfter?: Prisma.DecimalNullableWithAggregatesFilter<"CashFlow"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   source?: Prisma.StringNullableWithAggregatesFilter<"CashFlow"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"CashFlow"> | string | null
+  isOpening?: Prisma.BoolWithAggregatesFilter<"CashFlow"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CashFlow"> | Date | string
 }
 
@@ -323,9 +347,11 @@ export type CashFlowCreateInput = {
   id?: string
   type: $Enums.CashFlowType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  direction: $Enums.CashFlowDirection
   balanceAfter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   source?: string | null
   description?: string | null
+  isOpening?: boolean
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutCashFlowsInput
   branch: Prisma.BranchCreateNestedOneWithoutCashflowsInput
@@ -337,9 +363,11 @@ export type CashFlowUncheckedCreateInput = {
   branchId: string
   type: $Enums.CashFlowType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  direction: $Enums.CashFlowDirection
   balanceAfter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   source?: string | null
   description?: string | null
+  isOpening?: boolean
   createdAt?: Date | string
 }
 
@@ -347,9 +375,11 @@ export type CashFlowUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCashFlowTypeFieldUpdateOperationsInput | $Enums.CashFlowType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  direction?: Prisma.EnumCashFlowDirectionFieldUpdateOperationsInput | $Enums.CashFlowDirection
   balanceAfter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutCashFlowsNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutCashflowsNestedInput
@@ -361,9 +391,11 @@ export type CashFlowUncheckedUpdateInput = {
   branchId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCashFlowTypeFieldUpdateOperationsInput | $Enums.CashFlowType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  direction?: Prisma.EnumCashFlowDirectionFieldUpdateOperationsInput | $Enums.CashFlowDirection
   balanceAfter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -373,9 +405,11 @@ export type CashFlowCreateManyInput = {
   branchId: string
   type: $Enums.CashFlowType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  direction: $Enums.CashFlowDirection
   balanceAfter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   source?: string | null
   description?: string | null
+  isOpening?: boolean
   createdAt?: Date | string
 }
 
@@ -383,9 +417,11 @@ export type CashFlowUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCashFlowTypeFieldUpdateOperationsInput | $Enums.CashFlowType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  direction?: Prisma.EnumCashFlowDirectionFieldUpdateOperationsInput | $Enums.CashFlowDirection
   balanceAfter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -395,9 +431,11 @@ export type CashFlowUncheckedUpdateManyInput = {
   branchId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCashFlowTypeFieldUpdateOperationsInput | $Enums.CashFlowType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  direction?: Prisma.EnumCashFlowDirectionFieldUpdateOperationsInput | $Enums.CashFlowDirection
   balanceAfter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -417,9 +455,11 @@ export type CashFlowCountOrderByAggregateInput = {
   branchId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  direction?: Prisma.SortOrder
   balanceAfter?: Prisma.SortOrder
   source?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  isOpening?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -434,9 +474,11 @@ export type CashFlowMaxOrderByAggregateInput = {
   branchId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  direction?: Prisma.SortOrder
   balanceAfter?: Prisma.SortOrder
   source?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  isOpening?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -446,9 +488,11 @@ export type CashFlowMinOrderByAggregateInput = {
   branchId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   amount?: Prisma.SortOrder
+  direction?: Prisma.SortOrder
   balanceAfter?: Prisma.SortOrder
   source?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  isOpening?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -545,13 +589,19 @@ export type EnumCashFlowTypeFieldUpdateOperationsInput = {
   set?: $Enums.CashFlowType
 }
 
+export type EnumCashFlowDirectionFieldUpdateOperationsInput = {
+  set?: $Enums.CashFlowDirection
+}
+
 export type CashFlowCreateWithoutBusinessInput = {
   id?: string
   type: $Enums.CashFlowType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  direction: $Enums.CashFlowDirection
   balanceAfter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   source?: string | null
   description?: string | null
+  isOpening?: boolean
   createdAt?: Date | string
   branch: Prisma.BranchCreateNestedOneWithoutCashflowsInput
 }
@@ -561,9 +611,11 @@ export type CashFlowUncheckedCreateWithoutBusinessInput = {
   branchId: string
   type: $Enums.CashFlowType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  direction: $Enums.CashFlowDirection
   balanceAfter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   source?: string | null
   description?: string | null
+  isOpening?: boolean
   createdAt?: Date | string
 }
 
@@ -602,9 +654,11 @@ export type CashFlowScalarWhereInput = {
   branchId?: Prisma.StringFilter<"CashFlow"> | string
   type?: Prisma.EnumCashFlowTypeFilter<"CashFlow"> | $Enums.CashFlowType
   amount?: Prisma.DecimalFilter<"CashFlow"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  direction?: Prisma.EnumCashFlowDirectionFilter<"CashFlow"> | $Enums.CashFlowDirection
   balanceAfter?: Prisma.DecimalNullableFilter<"CashFlow"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   source?: Prisma.StringNullableFilter<"CashFlow"> | string | null
   description?: Prisma.StringNullableFilter<"CashFlow"> | string | null
+  isOpening?: Prisma.BoolFilter<"CashFlow"> | boolean
   createdAt?: Prisma.DateTimeFilter<"CashFlow"> | Date | string
 }
 
@@ -612,9 +666,11 @@ export type CashFlowCreateWithoutBranchInput = {
   id?: string
   type: $Enums.CashFlowType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  direction: $Enums.CashFlowDirection
   balanceAfter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   source?: string | null
   description?: string | null
+  isOpening?: boolean
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutCashFlowsInput
 }
@@ -624,9 +680,11 @@ export type CashFlowUncheckedCreateWithoutBranchInput = {
   businessId: string
   type: $Enums.CashFlowType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  direction: $Enums.CashFlowDirection
   balanceAfter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   source?: string | null
   description?: string | null
+  isOpening?: boolean
   createdAt?: Date | string
 }
 
@@ -661,9 +719,11 @@ export type CashFlowCreateManyBusinessInput = {
   branchId: string
   type: $Enums.CashFlowType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  direction: $Enums.CashFlowDirection
   balanceAfter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   source?: string | null
   description?: string | null
+  isOpening?: boolean
   createdAt?: Date | string
 }
 
@@ -671,9 +731,11 @@ export type CashFlowUpdateWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCashFlowTypeFieldUpdateOperationsInput | $Enums.CashFlowType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  direction?: Prisma.EnumCashFlowDirectionFieldUpdateOperationsInput | $Enums.CashFlowDirection
   balanceAfter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   branch?: Prisma.BranchUpdateOneRequiredWithoutCashflowsNestedInput
 }
@@ -683,9 +745,11 @@ export type CashFlowUncheckedUpdateWithoutBusinessInput = {
   branchId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCashFlowTypeFieldUpdateOperationsInput | $Enums.CashFlowType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  direction?: Prisma.EnumCashFlowDirectionFieldUpdateOperationsInput | $Enums.CashFlowDirection
   balanceAfter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -694,9 +758,11 @@ export type CashFlowUncheckedUpdateManyWithoutBusinessInput = {
   branchId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCashFlowTypeFieldUpdateOperationsInput | $Enums.CashFlowType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  direction?: Prisma.EnumCashFlowDirectionFieldUpdateOperationsInput | $Enums.CashFlowDirection
   balanceAfter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -705,9 +771,11 @@ export type CashFlowCreateManyBranchInput = {
   businessId: string
   type: $Enums.CashFlowType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  direction: $Enums.CashFlowDirection
   balanceAfter?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   source?: string | null
   description?: string | null
+  isOpening?: boolean
   createdAt?: Date | string
 }
 
@@ -715,9 +783,11 @@ export type CashFlowUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCashFlowTypeFieldUpdateOperationsInput | $Enums.CashFlowType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  direction?: Prisma.EnumCashFlowDirectionFieldUpdateOperationsInput | $Enums.CashFlowDirection
   balanceAfter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutCashFlowsNestedInput
 }
@@ -727,9 +797,11 @@ export type CashFlowUncheckedUpdateWithoutBranchInput = {
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCashFlowTypeFieldUpdateOperationsInput | $Enums.CashFlowType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  direction?: Prisma.EnumCashFlowDirectionFieldUpdateOperationsInput | $Enums.CashFlowDirection
   balanceAfter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -738,9 +810,11 @@ export type CashFlowUncheckedUpdateManyWithoutBranchInput = {
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCashFlowTypeFieldUpdateOperationsInput | $Enums.CashFlowType
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  direction?: Prisma.EnumCashFlowDirectionFieldUpdateOperationsInput | $Enums.CashFlowDirection
   balanceAfter?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -752,9 +826,11 @@ export type CashFlowSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   branchId?: boolean
   type?: boolean
   amount?: boolean
+  direction?: boolean
   balanceAfter?: boolean
   source?: boolean
   description?: boolean
+  isOpening?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
@@ -766,9 +842,11 @@ export type CashFlowSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   branchId?: boolean
   type?: boolean
   amount?: boolean
+  direction?: boolean
   balanceAfter?: boolean
   source?: boolean
   description?: boolean
+  isOpening?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
@@ -780,9 +858,11 @@ export type CashFlowSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   branchId?: boolean
   type?: boolean
   amount?: boolean
+  direction?: boolean
   balanceAfter?: boolean
   source?: boolean
   description?: boolean
+  isOpening?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
@@ -794,13 +874,15 @@ export type CashFlowSelectScalar = {
   branchId?: boolean
   type?: boolean
   amount?: boolean
+  direction?: boolean
   balanceAfter?: boolean
   source?: boolean
   description?: boolean
+  isOpening?: boolean
   createdAt?: boolean
 }
 
-export type CashFlowOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "type" | "amount" | "balanceAfter" | "source" | "description" | "createdAt", ExtArgs["result"]["cashFlow"]>
+export type CashFlowOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "type" | "amount" | "direction" | "balanceAfter" | "source" | "description" | "isOpening" | "createdAt", ExtArgs["result"]["cashFlow"]>
 export type CashFlowInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
@@ -826,9 +908,11 @@ export type $CashFlowPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     branchId: string
     type: $Enums.CashFlowType
     amount: runtime.Decimal
+    direction: $Enums.CashFlowDirection
     balanceAfter: runtime.Decimal | null
     source: string | null
     description: string | null
+    isOpening: boolean
     createdAt: Date
   }, ExtArgs["result"]["cashFlow"]>
   composites: {}
@@ -1260,9 +1344,11 @@ export interface CashFlowFieldRefs {
   readonly branchId: Prisma.FieldRef<"CashFlow", 'String'>
   readonly type: Prisma.FieldRef<"CashFlow", 'CashFlowType'>
   readonly amount: Prisma.FieldRef<"CashFlow", 'Decimal'>
+  readonly direction: Prisma.FieldRef<"CashFlow", 'CashFlowDirection'>
   readonly balanceAfter: Prisma.FieldRef<"CashFlow", 'Decimal'>
   readonly source: Prisma.FieldRef<"CashFlow", 'String'>
   readonly description: Prisma.FieldRef<"CashFlow", 'String'>
+  readonly isOpening: Prisma.FieldRef<"CashFlow", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"CashFlow", 'DateTime'>
 }
     

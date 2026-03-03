@@ -16,6 +16,10 @@ enum ProductType {
   SERVICE
   OTHER
 }
+enum ProductStockMode {
+  OPENING
+  LIVE
+}
 
 enum StockMovementType {
   OPENING
@@ -33,8 +37,17 @@ enum PaymentMethod {
 
 enum CashFlowType {
 OPENING
-INFLOW
-OUTFLOW
+SALE_INCOME
+PURCHASE_EXPENSE
+ASSET_PURCHASE
+ASSET_DISPOSAL
+LIABILITY_PAYMENT
+EXPENSE
+}
+
+enum CashFlowDirection {
+  IN
+  OUT
 }
 enum LiabilityType {
   LOAN
@@ -90,6 +103,16 @@ enum AlertSeverity {
   WARNING
   CRITICAL
 }
+enum AssetType {
+  OPENING
+  PURCHASE
+  SALE
+}
+enum BusinessStatus {
+  ONBOARDING
+  ACTIVE
+  SUSPENDED
+}
 
 ///**** MODELS****///
 
@@ -99,8 +122,11 @@ model Business {
   name        String
   address     String?
   onboardingStep  Int   @default(1)
+  isOnboarding  Boolean   @default(true)
   onboardingCompleted   Boolean   @default(false)
   createdAt   DateTime  @default(now())
+  activatedAt DateTime?
+  status      BusinessStatus    @default(ONBOARDING)
 
   branch     Branch[]
   users      User[]
@@ -243,6 +269,7 @@ model Product {
   brandId     String
   name        String
   type        ProductType
+  stockMode   ProductStockMode  @default(OPENING)
   model       String?
   costPrice   Decimal
   sellingPrice Decimal
@@ -281,6 +308,7 @@ model StockMovement {
   remainingQty  Int           @default(0)
   costPrice   Decimal?
   sellingPrice Decimal?
+  isOpening   Boolean             @default(true)
   date        DateTime          @default(now())
   createdAt   DateTime          @default(now())
 
@@ -351,9 +379,11 @@ model CashFlow {
   branchId    String
   type        CashFlowType
   amount      Decimal
+  direction   CashFlowDirection
   balanceAfter  Decimal?
   source      String?
   description String?
+  isOpening   Boolean @default(false)
   createdAt   DateTime      @default(now())
 
   business    Business      @relation(fields: [businessId], references: [id])
@@ -376,6 +406,7 @@ model Liability {
   lender       String?
   outstandingAmount   Decimal
   description  String?
+  isOpening    Boolean  @default(true)
   status       LiabilityStatus
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
@@ -395,14 +426,15 @@ model LiabilityPayment {
 model Asset {
   id               String    @id @default(uuid())
   businessId       String
-  branchId         String?
+  branchId         String
   name             String
-  category         String
   purchaseCost     Float
   purchaseDate     DateTime?
+  assetType        AssetType
   totalCost        Decimal?
   currentValue     Decimal?
   quantity         Int
+  isOpeninig       Boolean    @default(true)
   condition        String?
   supplier         String?
   usefulLifeMonths Int

@@ -425,10 +425,6 @@ export type BusinessSubscriptionUncheckedUpdateManyWithoutSubscriptionNestedInpu
   deleteMany?: Prisma.BusinessSubscriptionScalarWhereInput | Prisma.BusinessSubscriptionScalarWhereInput[]
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type BusinessSubscriptionCreateWithoutBusinessInput = {
   id?: string
   startedAt?: Date | string

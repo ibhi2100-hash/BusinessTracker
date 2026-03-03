@@ -34,6 +34,11 @@ router.get('/brands', requireBranch, businessController.getBrands);
 
 router.post('/switch-branch', requireBranch, businessController.switchBranch)
 
+router.get('/status', requireBranch, businessController.getBusinessStatus)
+
+router.get('/setup-status', requireBranch, businessController.getSetupStatus)
+
+
 
 
 

@@ -136,4 +136,27 @@ export class BusinessController {
       res.status(500).json({ message: error instanceof Error ? error.message : String(error)});
     }
   }
+getBusinessStatus = async (req: Request, res: Response)=> {
+const businessId = req.user?.businessId
+      if (!businessId) {
+        return res.status(400).json({
+          message: "Business context missing",
+        });
+      }
+
+      const businessStatus = await this.businessService.getBusinessStatus(businessId)
+      return res.json(businessStatus)
+}
+getSetupStatus = async (req: Request, res: Response)=> {
+const businessId = req.user?.businessId
+      if (!businessId) {
+        return res.status(400).json({
+          message: "Business context missing",
+        });
+      }
+
+      const businessSetupStatus = await this.businessService.getBusinessSetupStatus(businessId)
+      return res.json(businessSetupStatus)
+}
+
 }

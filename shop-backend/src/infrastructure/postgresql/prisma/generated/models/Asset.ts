@@ -53,12 +53,13 @@ export type AssetMinAggregateOutputType = {
   businessId: string | null
   branchId: string | null
   name: string | null
-  category: string | null
   purchaseCost: number | null
   purchaseDate: Date | null
+  assetType: $Enums.AssetType | null
   totalCost: runtime.Decimal | null
   currentValue: runtime.Decimal | null
   quantity: number | null
+  isOpeninig: boolean | null
   condition: string | null
   supplier: string | null
   usefulLifeMonths: number | null
@@ -75,12 +76,13 @@ export type AssetMaxAggregateOutputType = {
   businessId: string | null
   branchId: string | null
   name: string | null
-  category: string | null
   purchaseCost: number | null
   purchaseDate: Date | null
+  assetType: $Enums.AssetType | null
   totalCost: runtime.Decimal | null
   currentValue: runtime.Decimal | null
   quantity: number | null
+  isOpeninig: boolean | null
   condition: string | null
   supplier: string | null
   usefulLifeMonths: number | null
@@ -97,12 +99,13 @@ export type AssetCountAggregateOutputType = {
   businessId: number
   branchId: number
   name: number
-  category: number
   purchaseCost: number
   purchaseDate: number
+  assetType: number
   totalCost: number
   currentValue: number
   quantity: number
+  isOpeninig: number
   condition: number
   supplier: number
   usefulLifeMonths: number
@@ -143,12 +146,13 @@ export type AssetMinAggregateInputType = {
   businessId?: true
   branchId?: true
   name?: true
-  category?: true
   purchaseCost?: true
   purchaseDate?: true
+  assetType?: true
   totalCost?: true
   currentValue?: true
   quantity?: true
+  isOpeninig?: true
   condition?: true
   supplier?: true
   usefulLifeMonths?: true
@@ -165,12 +169,13 @@ export type AssetMaxAggregateInputType = {
   businessId?: true
   branchId?: true
   name?: true
-  category?: true
   purchaseCost?: true
   purchaseDate?: true
+  assetType?: true
   totalCost?: true
   currentValue?: true
   quantity?: true
+  isOpeninig?: true
   condition?: true
   supplier?: true
   usefulLifeMonths?: true
@@ -187,12 +192,13 @@ export type AssetCountAggregateInputType = {
   businessId?: true
   branchId?: true
   name?: true
-  category?: true
   purchaseCost?: true
   purchaseDate?: true
+  assetType?: true
   totalCost?: true
   currentValue?: true
   quantity?: true
+  isOpeninig?: true
   condition?: true
   supplier?: true
   usefulLifeMonths?: true
@@ -294,14 +300,15 @@ export type AssetGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type AssetGroupByOutputType = {
   id: string
   businessId: string
-  branchId: string | null
+  branchId: string
   name: string
-  category: string
   purchaseCost: number
   purchaseDate: Date | null
+  assetType: $Enums.AssetType
   totalCost: runtime.Decimal | null
   currentValue: runtime.Decimal | null
   quantity: number
+  isOpeninig: boolean
   condition: string | null
   supplier: string | null
   usefulLifeMonths: number
@@ -339,14 +346,15 @@ export type AssetWhereInput = {
   NOT?: Prisma.AssetWhereInput | Prisma.AssetWhereInput[]
   id?: Prisma.StringFilter<"Asset"> | string
   businessId?: Prisma.StringFilter<"Asset"> | string
-  branchId?: Prisma.StringNullableFilter<"Asset"> | string | null
+  branchId?: Prisma.StringFilter<"Asset"> | string
   name?: Prisma.StringFilter<"Asset"> | string
-  category?: Prisma.StringFilter<"Asset"> | string
   purchaseCost?: Prisma.FloatFilter<"Asset"> | number
   purchaseDate?: Prisma.DateTimeNullableFilter<"Asset"> | Date | string | null
+  assetType?: Prisma.EnumAssetTypeFilter<"Asset"> | $Enums.AssetType
   totalCost?: Prisma.DecimalNullableFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentValue?: Prisma.DecimalNullableFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFilter<"Asset"> | number
+  isOpeninig?: Prisma.BoolFilter<"Asset"> | boolean
   condition?: Prisma.StringNullableFilter<"Asset"> | string | null
   supplier?: Prisma.StringNullableFilter<"Asset"> | string | null
   usefulLifeMonths?: Prisma.IntFilter<"Asset"> | number
@@ -363,14 +371,15 @@ export type AssetWhereInput = {
 export type AssetOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
-  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchId?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  category?: Prisma.SortOrder
   purchaseCost?: Prisma.SortOrder
   purchaseDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  assetType?: Prisma.SortOrder
   totalCost?: Prisma.SortOrderInput | Prisma.SortOrder
   currentValue?: Prisma.SortOrderInput | Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  isOpeninig?: Prisma.SortOrder
   condition?: Prisma.SortOrderInput | Prisma.SortOrder
   supplier?: Prisma.SortOrderInput | Prisma.SortOrder
   usefulLifeMonths?: Prisma.SortOrder
@@ -390,14 +399,15 @@ export type AssetWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.AssetWhereInput[]
   NOT?: Prisma.AssetWhereInput | Prisma.AssetWhereInput[]
   businessId?: Prisma.StringFilter<"Asset"> | string
-  branchId?: Prisma.StringNullableFilter<"Asset"> | string | null
+  branchId?: Prisma.StringFilter<"Asset"> | string
   name?: Prisma.StringFilter<"Asset"> | string
-  category?: Prisma.StringFilter<"Asset"> | string
   purchaseCost?: Prisma.FloatFilter<"Asset"> | number
   purchaseDate?: Prisma.DateTimeNullableFilter<"Asset"> | Date | string | null
+  assetType?: Prisma.EnumAssetTypeFilter<"Asset"> | $Enums.AssetType
   totalCost?: Prisma.DecimalNullableFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentValue?: Prisma.DecimalNullableFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFilter<"Asset"> | number
+  isOpeninig?: Prisma.BoolFilter<"Asset"> | boolean
   condition?: Prisma.StringNullableFilter<"Asset"> | string | null
   supplier?: Prisma.StringNullableFilter<"Asset"> | string | null
   usefulLifeMonths?: Prisma.IntFilter<"Asset"> | number
@@ -414,14 +424,15 @@ export type AssetWhereUniqueInput = Prisma.AtLeast<{
 export type AssetOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
-  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchId?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  category?: Prisma.SortOrder
   purchaseCost?: Prisma.SortOrder
   purchaseDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  assetType?: Prisma.SortOrder
   totalCost?: Prisma.SortOrderInput | Prisma.SortOrder
   currentValue?: Prisma.SortOrderInput | Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  isOpeninig?: Prisma.SortOrder
   condition?: Prisma.SortOrderInput | Prisma.SortOrder
   supplier?: Prisma.SortOrderInput | Prisma.SortOrder
   usefulLifeMonths?: Prisma.SortOrder
@@ -444,14 +455,15 @@ export type AssetScalarWhereWithAggregatesInput = {
   NOT?: Prisma.AssetScalarWhereWithAggregatesInput | Prisma.AssetScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Asset"> | string
   businessId?: Prisma.StringWithAggregatesFilter<"Asset"> | string
-  branchId?: Prisma.StringNullableWithAggregatesFilter<"Asset"> | string | null
+  branchId?: Prisma.StringWithAggregatesFilter<"Asset"> | string
   name?: Prisma.StringWithAggregatesFilter<"Asset"> | string
-  category?: Prisma.StringWithAggregatesFilter<"Asset"> | string
   purchaseCost?: Prisma.FloatWithAggregatesFilter<"Asset"> | number
   purchaseDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Asset"> | Date | string | null
+  assetType?: Prisma.EnumAssetTypeWithAggregatesFilter<"Asset"> | $Enums.AssetType
   totalCost?: Prisma.DecimalNullableWithAggregatesFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentValue?: Prisma.DecimalNullableWithAggregatesFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntWithAggregatesFilter<"Asset"> | number
+  isOpeninig?: Prisma.BoolWithAggregatesFilter<"Asset"> | boolean
   condition?: Prisma.StringNullableWithAggregatesFilter<"Asset"> | string | null
   supplier?: Prisma.StringNullableWithAggregatesFilter<"Asset"> | string | null
   usefulLifeMonths?: Prisma.IntWithAggregatesFilter<"Asset"> | number
@@ -466,12 +478,13 @@ export type AssetScalarWhereWithAggregatesInput = {
 export type AssetCreateInput = {
   id?: string
   name: string
-  category: string
   purchaseCost: number
   purchaseDate?: Date | string | null
+  assetType: $Enums.AssetType
   totalCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity: number
+  isOpeninig?: boolean
   condition?: string | null
   supplier?: string | null
   usefulLifeMonths: number
@@ -488,14 +501,15 @@ export type AssetCreateInput = {
 export type AssetUncheckedCreateInput = {
   id?: string
   businessId: string
-  branchId?: string | null
+  branchId: string
   name: string
-  category: string
   purchaseCost: number
   purchaseDate?: Date | string | null
+  assetType: $Enums.AssetType
   totalCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity: number
+  isOpeninig?: boolean
   condition?: string | null
   supplier?: string | null
   usefulLifeMonths: number
@@ -510,12 +524,13 @@ export type AssetUncheckedCreateInput = {
 export type AssetUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
   purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
   purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assetType?: Prisma.EnumAssetTypeFieldUpdateOperationsInput | $Enums.AssetType
   totalCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  isOpeninig?: Prisma.BoolFieldUpdateOperationsInput | boolean
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   usefulLifeMonths?: Prisma.IntFieldUpdateOperationsInput | number
@@ -532,14 +547,15 @@ export type AssetUpdateInput = {
 export type AssetUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
   purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
   purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assetType?: Prisma.EnumAssetTypeFieldUpdateOperationsInput | $Enums.AssetType
   totalCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  isOpeninig?: Prisma.BoolFieldUpdateOperationsInput | boolean
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   usefulLifeMonths?: Prisma.IntFieldUpdateOperationsInput | number
@@ -554,14 +570,15 @@ export type AssetUncheckedUpdateInput = {
 export type AssetCreateManyInput = {
   id?: string
   businessId: string
-  branchId?: string | null
+  branchId: string
   name: string
-  category: string
   purchaseCost: number
   purchaseDate?: Date | string | null
+  assetType: $Enums.AssetType
   totalCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity: number
+  isOpeninig?: boolean
   condition?: string | null
   supplier?: string | null
   usefulLifeMonths: number
@@ -576,12 +593,13 @@ export type AssetCreateManyInput = {
 export type AssetUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
   purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
   purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assetType?: Prisma.EnumAssetTypeFieldUpdateOperationsInput | $Enums.AssetType
   totalCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  isOpeninig?: Prisma.BoolFieldUpdateOperationsInput | boolean
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   usefulLifeMonths?: Prisma.IntFieldUpdateOperationsInput | number
@@ -596,14 +614,15 @@ export type AssetUpdateManyMutationInput = {
 export type AssetUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
   purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
   purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assetType?: Prisma.EnumAssetTypeFieldUpdateOperationsInput | $Enums.AssetType
   totalCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  isOpeninig?: Prisma.BoolFieldUpdateOperationsInput | boolean
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   usefulLifeMonths?: Prisma.IntFieldUpdateOperationsInput | number
@@ -630,12 +649,13 @@ export type AssetCountOrderByAggregateInput = {
   businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  category?: Prisma.SortOrder
   purchaseCost?: Prisma.SortOrder
   purchaseDate?: Prisma.SortOrder
+  assetType?: Prisma.SortOrder
   totalCost?: Prisma.SortOrder
   currentValue?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  isOpeninig?: Prisma.SortOrder
   condition?: Prisma.SortOrder
   supplier?: Prisma.SortOrder
   usefulLifeMonths?: Prisma.SortOrder
@@ -663,12 +683,13 @@ export type AssetMaxOrderByAggregateInput = {
   businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  category?: Prisma.SortOrder
   purchaseCost?: Prisma.SortOrder
   purchaseDate?: Prisma.SortOrder
+  assetType?: Prisma.SortOrder
   totalCost?: Prisma.SortOrder
   currentValue?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  isOpeninig?: Prisma.SortOrder
   condition?: Prisma.SortOrder
   supplier?: Prisma.SortOrder
   usefulLifeMonths?: Prisma.SortOrder
@@ -685,12 +706,13 @@ export type AssetMinOrderByAggregateInput = {
   businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  category?: Prisma.SortOrder
   purchaseCost?: Prisma.SortOrder
   purchaseDate?: Prisma.SortOrder
+  assetType?: Prisma.SortOrder
   totalCost?: Prisma.SortOrder
   currentValue?: Prisma.SortOrder
   quantity?: Prisma.SortOrder
+  isOpeninig?: Prisma.SortOrder
   condition?: Prisma.SortOrder
   supplier?: Prisma.SortOrder
   usefulLifeMonths?: Prisma.SortOrder
@@ -797,15 +819,20 @@ export type AssetUncheckedUpdateManyWithoutBranchNestedInput = {
   deleteMany?: Prisma.AssetScalarWhereInput | Prisma.AssetScalarWhereInput[]
 }
 
+export type EnumAssetTypeFieldUpdateOperationsInput = {
+  set?: $Enums.AssetType
+}
+
 export type AssetCreateWithoutBusinessInput = {
   id?: string
   name: string
-  category: string
   purchaseCost: number
   purchaseDate?: Date | string | null
+  assetType: $Enums.AssetType
   totalCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity: number
+  isOpeninig?: boolean
   condition?: string | null
   supplier?: string | null
   usefulLifeMonths: number
@@ -820,14 +847,15 @@ export type AssetCreateWithoutBusinessInput = {
 
 export type AssetUncheckedCreateWithoutBusinessInput = {
   id?: string
-  branchId?: string | null
+  branchId: string
   name: string
-  category: string
   purchaseCost: number
   purchaseDate?: Date | string | null
+  assetType: $Enums.AssetType
   totalCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity: number
+  isOpeninig?: boolean
   condition?: string | null
   supplier?: string | null
   usefulLifeMonths: number
@@ -871,14 +899,15 @@ export type AssetScalarWhereInput = {
   NOT?: Prisma.AssetScalarWhereInput | Prisma.AssetScalarWhereInput[]
   id?: Prisma.StringFilter<"Asset"> | string
   businessId?: Prisma.StringFilter<"Asset"> | string
-  branchId?: Prisma.StringNullableFilter<"Asset"> | string | null
+  branchId?: Prisma.StringFilter<"Asset"> | string
   name?: Prisma.StringFilter<"Asset"> | string
-  category?: Prisma.StringFilter<"Asset"> | string
   purchaseCost?: Prisma.FloatFilter<"Asset"> | number
   purchaseDate?: Prisma.DateTimeNullableFilter<"Asset"> | Date | string | null
+  assetType?: Prisma.EnumAssetTypeFilter<"Asset"> | $Enums.AssetType
   totalCost?: Prisma.DecimalNullableFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentValue?: Prisma.DecimalNullableFilter<"Asset"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFilter<"Asset"> | number
+  isOpeninig?: Prisma.BoolFilter<"Asset"> | boolean
   condition?: Prisma.StringNullableFilter<"Asset"> | string | null
   supplier?: Prisma.StringNullableFilter<"Asset"> | string | null
   usefulLifeMonths?: Prisma.IntFilter<"Asset"> | number
@@ -893,12 +922,13 @@ export type AssetScalarWhereInput = {
 export type AssetCreateWithoutBranchInput = {
   id?: string
   name: string
-  category: string
   purchaseCost: number
   purchaseDate?: Date | string | null
+  assetType: $Enums.AssetType
   totalCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity: number
+  isOpeninig?: boolean
   condition?: string | null
   supplier?: string | null
   usefulLifeMonths: number
@@ -915,12 +945,13 @@ export type AssetUncheckedCreateWithoutBranchInput = {
   id?: string
   businessId: string
   name: string
-  category: string
   purchaseCost: number
   purchaseDate?: Date | string | null
+  assetType: $Enums.AssetType
   totalCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity: number
+  isOpeninig?: boolean
   condition?: string | null
   supplier?: string | null
   usefulLifeMonths: number
@@ -960,14 +991,15 @@ export type AssetUpdateManyWithWhereWithoutBranchInput = {
 
 export type AssetCreateManyBusinessInput = {
   id?: string
-  branchId?: string | null
+  branchId: string
   name: string
-  category: string
   purchaseCost: number
   purchaseDate?: Date | string | null
+  assetType: $Enums.AssetType
   totalCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity: number
+  isOpeninig?: boolean
   condition?: string | null
   supplier?: string | null
   usefulLifeMonths: number
@@ -982,12 +1014,13 @@ export type AssetCreateManyBusinessInput = {
 export type AssetUpdateWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
   purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
   purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assetType?: Prisma.EnumAssetTypeFieldUpdateOperationsInput | $Enums.AssetType
   totalCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  isOpeninig?: Prisma.BoolFieldUpdateOperationsInput | boolean
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   usefulLifeMonths?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1002,14 +1035,15 @@ export type AssetUpdateWithoutBusinessInput = {
 
 export type AssetUncheckedUpdateWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
   purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
   purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assetType?: Prisma.EnumAssetTypeFieldUpdateOperationsInput | $Enums.AssetType
   totalCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  isOpeninig?: Prisma.BoolFieldUpdateOperationsInput | boolean
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   usefulLifeMonths?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1023,14 +1057,15 @@ export type AssetUncheckedUpdateWithoutBusinessInput = {
 
 export type AssetUncheckedUpdateManyWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
   purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
   purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assetType?: Prisma.EnumAssetTypeFieldUpdateOperationsInput | $Enums.AssetType
   totalCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  isOpeninig?: Prisma.BoolFieldUpdateOperationsInput | boolean
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   usefulLifeMonths?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1046,12 +1081,13 @@ export type AssetCreateManyBranchInput = {
   id?: string
   businessId: string
   name: string
-  category: string
   purchaseCost: number
   purchaseDate?: Date | string | null
+  assetType: $Enums.AssetType
   totalCost?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentValue?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity: number
+  isOpeninig?: boolean
   condition?: string | null
   supplier?: string | null
   usefulLifeMonths: number
@@ -1066,12 +1102,13 @@ export type AssetCreateManyBranchInput = {
 export type AssetUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
   purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
   purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assetType?: Prisma.EnumAssetTypeFieldUpdateOperationsInput | $Enums.AssetType
   totalCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  isOpeninig?: Prisma.BoolFieldUpdateOperationsInput | boolean
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   usefulLifeMonths?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1088,12 +1125,13 @@ export type AssetUncheckedUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
   purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
   purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assetType?: Prisma.EnumAssetTypeFieldUpdateOperationsInput | $Enums.AssetType
   totalCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  isOpeninig?: Prisma.BoolFieldUpdateOperationsInput | boolean
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   usefulLifeMonths?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1109,12 +1147,13 @@ export type AssetUncheckedUpdateManyWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
   purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
   purchaseDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assetType?: Prisma.EnumAssetTypeFieldUpdateOperationsInput | $Enums.AssetType
   totalCost?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currentValue?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  isOpeninig?: Prisma.BoolFieldUpdateOperationsInput | boolean
   condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   usefulLifeMonths?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1133,12 +1172,13 @@ export type AssetSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   businessId?: boolean
   branchId?: boolean
   name?: boolean
-  category?: boolean
   purchaseCost?: boolean
   purchaseDate?: boolean
+  assetType?: boolean
   totalCost?: boolean
   currentValue?: boolean
   quantity?: boolean
+  isOpeninig?: boolean
   condition?: boolean
   supplier?: boolean
   usefulLifeMonths?: boolean
@@ -1157,12 +1197,13 @@ export type AssetSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   businessId?: boolean
   branchId?: boolean
   name?: boolean
-  category?: boolean
   purchaseCost?: boolean
   purchaseDate?: boolean
+  assetType?: boolean
   totalCost?: boolean
   currentValue?: boolean
   quantity?: boolean
+  isOpeninig?: boolean
   condition?: boolean
   supplier?: boolean
   usefulLifeMonths?: boolean
@@ -1181,12 +1222,13 @@ export type AssetSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   businessId?: boolean
   branchId?: boolean
   name?: boolean
-  category?: boolean
   purchaseCost?: boolean
   purchaseDate?: boolean
+  assetType?: boolean
   totalCost?: boolean
   currentValue?: boolean
   quantity?: boolean
+  isOpeninig?: boolean
   condition?: boolean
   supplier?: boolean
   usefulLifeMonths?: boolean
@@ -1205,12 +1247,13 @@ export type AssetSelectScalar = {
   businessId?: boolean
   branchId?: boolean
   name?: boolean
-  category?: boolean
   purchaseCost?: boolean
   purchaseDate?: boolean
+  assetType?: boolean
   totalCost?: boolean
   currentValue?: boolean
   quantity?: boolean
+  isOpeninig?: boolean
   condition?: boolean
   supplier?: boolean
   usefulLifeMonths?: boolean
@@ -1222,7 +1265,7 @@ export type AssetSelectScalar = {
   updatedAt?: boolean
 }
 
-export type AssetOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "name" | "category" | "purchaseCost" | "purchaseDate" | "totalCost" | "currentValue" | "quantity" | "condition" | "supplier" | "usefulLifeMonths" | "salvageValue" | "accumulatedDepreciation" | "disposedAt" | "disposalAmount" | "createdAt" | "updatedAt", ExtArgs["result"]["asset"]>
+export type AssetOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "name" | "purchaseCost" | "purchaseDate" | "assetType" | "totalCost" | "currentValue" | "quantity" | "isOpeninig" | "condition" | "supplier" | "usefulLifeMonths" | "salvageValue" | "accumulatedDepreciation" | "disposedAt" | "disposalAmount" | "createdAt" | "updatedAt", ExtArgs["result"]["asset"]>
 export type AssetInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.Asset$branchArgs<ExtArgs>
@@ -1245,14 +1288,15 @@ export type $AssetPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     businessId: string
-    branchId: string | null
+    branchId: string
     name: string
-    category: string
     purchaseCost: number
     purchaseDate: Date | null
+    assetType: $Enums.AssetType
     totalCost: runtime.Decimal | null
     currentValue: runtime.Decimal | null
     quantity: number
+    isOpeninig: boolean
     condition: string | null
     supplier: string | null
     usefulLifeMonths: number
@@ -1691,12 +1735,13 @@ export interface AssetFieldRefs {
   readonly businessId: Prisma.FieldRef<"Asset", 'String'>
   readonly branchId: Prisma.FieldRef<"Asset", 'String'>
   readonly name: Prisma.FieldRef<"Asset", 'String'>
-  readonly category: Prisma.FieldRef<"Asset", 'String'>
   readonly purchaseCost: Prisma.FieldRef<"Asset", 'Float'>
   readonly purchaseDate: Prisma.FieldRef<"Asset", 'DateTime'>
+  readonly assetType: Prisma.FieldRef<"Asset", 'AssetType'>
   readonly totalCost: Prisma.FieldRef<"Asset", 'Decimal'>
   readonly currentValue: Prisma.FieldRef<"Asset", 'Decimal'>
   readonly quantity: Prisma.FieldRef<"Asset", 'Int'>
+  readonly isOpeninig: Prisma.FieldRef<"Asset", 'Boolean'>
   readonly condition: Prisma.FieldRef<"Asset", 'String'>
   readonly supplier: Prisma.FieldRef<"Asset", 'String'>
   readonly usefulLifeMonths: Prisma.FieldRef<"Asset", 'Int'>

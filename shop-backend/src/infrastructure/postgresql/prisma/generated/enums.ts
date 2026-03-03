@@ -19,6 +19,14 @@ export const ProductType = {
 export type ProductType = (typeof ProductType)[keyof typeof ProductType]
 
 
+export const ProductStockMode = {
+  OPENING: 'OPENING',
+  LIVE: 'LIVE'
+} as const
+
+export type ProductStockMode = (typeof ProductStockMode)[keyof typeof ProductStockMode]
+
+
 export const StockMovementType = {
   OPENING: 'OPENING',
   PURCHASE: 'PURCHASE',
@@ -41,11 +49,23 @@ export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
 
 export const CashFlowType = {
   OPENING: 'OPENING',
-  INFLOW: 'INFLOW',
-  OUTFLOW: 'OUTFLOW'
+  SALE_INCOME: 'SALE_INCOME',
+  PURCHASE_EXPENSE: 'PURCHASE_EXPENSE',
+  ASSET_PURCHASE: 'ASSET_PURCHASE',
+  ASSET_DISPOSAL: 'ASSET_DISPOSAL',
+  LIABILITY_PAYMENT: 'LIABILITY_PAYMENT',
+  EXPENSE: 'EXPENSE'
 } as const
 
 export type CashFlowType = (typeof CashFlowType)[keyof typeof CashFlowType]
+
+
+export const CashFlowDirection = {
+  IN: 'IN',
+  OUT: 'OUT'
+} as const
+
+export type CashFlowDirection = (typeof CashFlowDirection)[keyof typeof CashFlowDirection]
 
 
 export const LiabilityType = {
@@ -127,3 +147,21 @@ export const AlertSeverity = {
 } as const
 
 export type AlertSeverity = (typeof AlertSeverity)[keyof typeof AlertSeverity]
+
+
+export const AssetType = {
+  OPENING: 'OPENING',
+  PURCHASE: 'PURCHASE',
+  SALE: 'SALE'
+} as const
+
+export type AssetType = (typeof AssetType)[keyof typeof AssetType]
+
+
+export const BusinessStatus = {
+  ONBOARDING: 'ONBOARDING',
+  ACTIVE: 'ACTIVE',
+  SUSPENDED: 'SUSPENDED'
+} as const
+
+export type BusinessStatus = (typeof BusinessStatus)[keyof typeof BusinessStatus]

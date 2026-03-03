@@ -2,16 +2,40 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { QueryClient } from "@tanstack/react-query";
 import { loginSchema, LoginInput } from "@/lib/validations/auth.schema";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useBusinessStore } from "@/store/businessStore";
+import { useBusinessStatus } from "@/hooks/useBusinessStatus";
+import { useEffect } from "react";
 import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
   const login = useAuthStore((state)=> state.setLogin)
+  const businessFromStore = useBusinessStore((state) => state.business);
+  const setBusiness = useBusinessStore((state) => state.setBusiness);
   const [serverError, setServerError] = useState<string | null>(null);
+
+  // Fetch business status
+    const { data, isLoading: statusLoading } = useBusinessStatus();
+  
+    // Update store when data arrives
+    useEffect(() => {
+      if (data && !businessFromStore) {
+        setBusiness(data);
+      }
+    }, [data, businessFromStore, setBusiness]);
+  
+    // Redirect if already onboarding
+    useEffect(() => {
+      if (businessFromStore?.isOnboarding) {
+        router.push("/onboard");
+      }
+    }, [businessFromStore, router]);
+  
 
   const {
     register,
@@ -50,10 +74,13 @@ export default function LoginPage() {
         result.activeBranch
       );
       
-
       if (!result.user.onboardingCompleted) {
         router.push("/onboarding/step1-business");
-      } else {
+
+      }else if(businessFromStore?.isOnboarding) {
+        router.push("/onboard");
+      }
+      else {
         router.push("/dashboard");
       }
 

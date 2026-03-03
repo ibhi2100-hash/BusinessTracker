@@ -22,7 +22,7 @@ export class CashflowRepository{
         end.setHours(23, 59, 59, 999);
 
         const flows = await prisma.cashFlow.groupBy({
-            by: ["type"],
+            by: ["direction"],
             where: {
                 businessId,
                 createdAt: {
@@ -39,8 +39,8 @@ export class CashflowRepository{
         let outflow = 0;
 
         for (const row of flows) {
-            if(row.type === "INFLOW") inflow = Number(row._sum.amount ?? 0);
-            if(row.type === "OUTFLOW") outflow = Number(row._sum.amount ?? 0)
+            if(row.direction === "IN") inflow = Number(row._sum.amount ?? 0);
+            if(row.direction === "OUT") outflow = Number(row._sum.amount ?? 0)
         }
         return {
             date: start.toISOString().slice(0, 10),
@@ -50,17 +50,26 @@ export class CashflowRepository{
         }
     };
 
-    async createCashFlow(data: {
-        businessId: string;
-        branchId?: string;
-        type: CashFlowType;
-        amount: number;
-        source: string;
-        description?: string;
-        }, tx: Prisma.TransactionClient) {
-        return tx.cashFlow.create({ data });
-}
 
+    async create(
+        data: Prisma.CashFlowCreateInput,
+        tx: Prisma.TransactionClient
+    ) {
+        return tx.cashFlow.create({ data });
+    }
+
+    async getOPeningCashflowInject(businessId: string, branchId: string) {
+        return prisma.cashFlow.findMany({
+            where: {
+                businessId,
+                branchId,
+                type: "OPENING",
+            }
+        })
+    }
+    async getCashflowInject(business: string, branchId: string) {
+        
+    }
 
     
 }

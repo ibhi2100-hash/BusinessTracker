@@ -1,99 +1,107 @@
 "use client";
 
+import { useState } from "react";
 import { useFinancialStore } from "@/store/financialDataStore";
-import {
-  ShoppingCart,
-  CreditCard,
-  Package,
-  DollarSign,
-  TrendingUp,
-} from "lucide-react";
-import { Skeleton } from "@/components/ui/skeloton";
+import { BusinessActivationPanel } from "@/components/dashboard/BusinessActivationalPanel";
+import { ShoppingCart, CreditCard, Package, DollarSign, TrendingUp, Rocket } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { CardContent } from "@/components/ui/cardContent";
 
 export function FinancialCarousel() {
-  // Pull all relevant data from store
-const dashboardSummary = useFinancialStore((state)=> state.dashboardSummary)
-console.log("Dashboard Summary:", dashboardSummary)
-const cashAtHand = useFinancialStore((state)=> state.reports.cashAtHand)
+  const dashboardSummary = useFinancialStore((state) => state.dashboardSummary);
+  const cashAtHand = useFinancialStore((state) => state.reports.cashAtHand);
+  const businessStatus = useFinancialStore((state) => state.businessStatus); // or useBusinessStatus hook
+  const [expandedCard, setExpandedCard] = useState<string | null>(null);
 
-
-  // Skeleton loader if data is not yet populated
-  const isLoading =
-    dashboardSummary === undefined 
+  const isLoading = !dashboardSummary;
 
   if (isLoading) {
     return (
       <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory py-4 px-2 scrollbar-hide">
         {Array.from({ length: 5 }).map((_, i) => (
-          <div
-            key={i}
-            className="min-w-[260px] snap-start bg-gray-100 animate-pulse p-5 rounded-3xl shadow-lg flex flex-col gap-3"
-          >
-            <div className="flex items-center justify-between">
-              <Skeleton className="h-4 w-24 rounded" />
-              <Skeleton className="h-6 w-6 rounded-full" />
-            </div>
-            <Skeleton className="h-8 w-32 rounded" />
-            <Skeleton className="h-4 w-20 rounded" />
-          </div>
+          <Card className="min-w-[260px] snap-start animate-pulse h-32" />
         ))}
       </div>
     );
   }
 
-  // Define card data dynamically
   const cards = [
+    businessStatus?.isOpening && {
+      id: "activateBusiness",
+      title: "Start Business Today",
+      value: "🚀 Activate",
+      subtitle: "Activate to begin real transactions",
+      icon: <Rocket className="w-6 h-6 text-primary" />,
+      onClick: () => {
+        // Optionally trigger a modal or panel
+        // Could also scroll to BusinessActivationPanel
+        document.getElementById("businessActivation")?.scrollIntoView({ behavior: "smooth" });
+      },
+      gradient: "from-indigo-100 to-indigo-50",
+      extra: "Complete setup and start all transactions."
+    },
     {
+      id: "todaySales",
       title: "Today's Sales",
       value: `₦${dashboardSummary.todaySales?.toLocaleString()}`,
-      change: "vs yesterday",
+      subtitle: "vs yesterday",
       icon: <ShoppingCart className="w-6 h-6 text-blue-600" />,
-      color: "from-blue-100 to-blue-50",
+      extra: "Detailed info about sales can go here."
     },
     {
+      id: "cashAtHand",
       title: "Cash at Hand",
       value: `₦${cashAtHand?.toLocaleString()}`,
-      change: "Updated just now",
+      subtitle: "Updated just now",
       icon: <CreditCard className="w-6 h-6 text-green-600" />,
-      color: "from-green-100 to-green-50",
+      extra: "Shows all available cash including inflows and outflows."
     },
     {
+      id: "inventoryValue",
       title: "Inventory Value",
       value: `₦${dashboardSummary.inventoryValue?.toLocaleString()}`,
-      change: "Across all products",
+      subtitle: "Across all products",
       icon: <Package className="w-6 h-6 text-yellow-600" />,
-      color: "from-yellow-100 to-yellow-50",
+      extra: "Represents the total stock value for the business."
     },
     {
+      id: "liabilities",
       title: "Outstanding Liabilities",
       value: `₦${dashboardSummary.outstandingLiabilities?.toLocaleString()}`,
-      change: "Active liabilities",
+      subtitle: "Active liabilities",
       icon: <DollarSign className="w-6 h-6 text-red-600" />,
-      color: "from-red-100 to-red-50",
+      extra: "All loans or obligations to suppliers and partners."
     },
     {
+      id: "netProfit",
       title: "Net Profit",
       value: `₦${dashboardSummary.netProfit?.toLocaleString()}`,
-      change: "For the selected period",
+      subtitle: "For the selected period",
       icon: <TrendingUp className="w-6 h-6 text-purple-600" />,
-      color: "from-purple-100 to-purple-50",
-    },
-  ];
+      extra: "Calculated as total sales minus total expenses."
+    }
+  ].filter(Boolean); // remove false if businessStatus?.isOpening is false
 
   return (
     <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory py-4 px-2 scrollbar-hide">
-      {cards.map((card, i) => (
-        <div
-          key={i}
-          className={`min-w-[260px] snap-start bg-gradient-to-br ${card.color} p-5 rounded-3xl shadow-lg transform transition-transform duration-300 hover:scale-105 flex flex-col gap-3`}
+      {cards.map((card: any) => (
+        <Card
+          key={card.id}
+          className={`min-w-[260px] snap-start p-5 rounded-3xl shadow-lg transform transition-transform duration-300 hover:scale-105 ${
+            card.gradient ? `bg-gradient-to-br ${card.gradient}` : "bg-white border border-gray-100"
+          }`}
+          onClick={card.onClick}
         >
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-gray-600 font-semibold">{card.title}</p>
-            <div className="p-2 bg-white/30 rounded-full">{card.icon}</div>
-          </div>
-          <h2 className="text-3xl font-bold text-gray-800">{card.value}</h2>
-          <p className="text-sm text-gray-500">{card.change}</p>
-        </div>
+          <CardContent
+            title={card.title}
+            value={card.value}
+            subtitle={card.subtitle}
+            icon={card.icon}
+          />
+          {expandedCard === card.id && card.extra && (
+            <div className="mt-3 text-sm text-gray-500">{card.extra}</div>
+          )}
+        </Card>
       ))}
     </div>
   );

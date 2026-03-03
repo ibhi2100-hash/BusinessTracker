@@ -50,6 +50,7 @@ export type StockMovementMinAggregateOutputType = {
   remainingQty: number | null
   costPrice: runtime.Decimal | null
   sellingPrice: runtime.Decimal | null
+  isOpening: boolean | null
   date: Date | null
   createdAt: Date | null
 }
@@ -64,6 +65,7 @@ export type StockMovementMaxAggregateOutputType = {
   remainingQty: number | null
   costPrice: runtime.Decimal | null
   sellingPrice: runtime.Decimal | null
+  isOpening: boolean | null
   date: Date | null
   createdAt: Date | null
 }
@@ -78,6 +80,7 @@ export type StockMovementCountAggregateOutputType = {
   remainingQty: number
   costPrice: number
   sellingPrice: number
+  isOpening: number
   date: number
   createdAt: number
   _all: number
@@ -108,6 +111,7 @@ export type StockMovementMinAggregateInputType = {
   remainingQty?: true
   costPrice?: true
   sellingPrice?: true
+  isOpening?: true
   date?: true
   createdAt?: true
 }
@@ -122,6 +126,7 @@ export type StockMovementMaxAggregateInputType = {
   remainingQty?: true
   costPrice?: true
   sellingPrice?: true
+  isOpening?: true
   date?: true
   createdAt?: true
 }
@@ -136,6 +141,7 @@ export type StockMovementCountAggregateInputType = {
   remainingQty?: true
   costPrice?: true
   sellingPrice?: true
+  isOpening?: true
   date?: true
   createdAt?: true
   _all?: true
@@ -237,6 +243,7 @@ export type StockMovementGroupByOutputType = {
   remainingQty: number
   costPrice: runtime.Decimal | null
   sellingPrice: runtime.Decimal | null
+  isOpening: boolean
   date: Date
   createdAt: Date
   _count: StockMovementCountAggregateOutputType | null
@@ -274,6 +281,7 @@ export type StockMovementWhereInput = {
   remainingQty?: Prisma.IntFilter<"StockMovement"> | number
   costPrice?: Prisma.DecimalNullableFilter<"StockMovement"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: Prisma.DecimalNullableFilter<"StockMovement"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: Prisma.BoolFilter<"StockMovement"> | boolean
   date?: Prisma.DateTimeFilter<"StockMovement"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"StockMovement"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
@@ -291,6 +299,7 @@ export type StockMovementOrderByWithRelationInput = {
   remainingQty?: Prisma.SortOrder
   costPrice?: Prisma.SortOrderInput | Prisma.SortOrder
   sellingPrice?: Prisma.SortOrderInput | Prisma.SortOrder
+  isOpening?: Prisma.SortOrder
   date?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   business?: Prisma.BusinessOrderByWithRelationInput
@@ -311,6 +320,7 @@ export type StockMovementWhereUniqueInput = Prisma.AtLeast<{
   remainingQty?: Prisma.IntFilter<"StockMovement"> | number
   costPrice?: Prisma.DecimalNullableFilter<"StockMovement"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: Prisma.DecimalNullableFilter<"StockMovement"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: Prisma.BoolFilter<"StockMovement"> | boolean
   date?: Prisma.DateTimeFilter<"StockMovement"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"StockMovement"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
@@ -328,6 +338,7 @@ export type StockMovementOrderByWithAggregationInput = {
   remainingQty?: Prisma.SortOrder
   costPrice?: Prisma.SortOrderInput | Prisma.SortOrder
   sellingPrice?: Prisma.SortOrderInput | Prisma.SortOrder
+  isOpening?: Prisma.SortOrder
   date?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.StockMovementCountOrderByAggregateInput
@@ -350,6 +361,7 @@ export type StockMovementScalarWhereWithAggregatesInput = {
   remainingQty?: Prisma.IntWithAggregatesFilter<"StockMovement"> | number
   costPrice?: Prisma.DecimalNullableWithAggregatesFilter<"StockMovement"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: Prisma.DecimalNullableWithAggregatesFilter<"StockMovement"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: Prisma.BoolWithAggregatesFilter<"StockMovement"> | boolean
   date?: Prisma.DateTimeWithAggregatesFilter<"StockMovement"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"StockMovement"> | Date | string
 }
@@ -361,6 +373,7 @@ export type StockMovementCreateInput = {
   remainingQty?: number
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: boolean
   date?: Date | string
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutStockMovementInput
@@ -378,6 +391,7 @@ export type StockMovementUncheckedCreateInput = {
   remainingQty?: number
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: boolean
   date?: Date | string
   createdAt?: Date | string
 }
@@ -389,6 +403,7 @@ export type StockMovementUpdateInput = {
   remainingQty?: Prisma.IntFieldUpdateOperationsInput | number
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutStockMovementNestedInput
@@ -406,6 +421,7 @@ export type StockMovementUncheckedUpdateInput = {
   remainingQty?: Prisma.IntFieldUpdateOperationsInput | number
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -420,6 +436,7 @@ export type StockMovementCreateManyInput = {
   remainingQty?: number
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: boolean
   date?: Date | string
   createdAt?: Date | string
 }
@@ -431,6 +448,7 @@ export type StockMovementUpdateManyMutationInput = {
   remainingQty?: Prisma.IntFieldUpdateOperationsInput | number
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -445,6 +463,7 @@ export type StockMovementUncheckedUpdateManyInput = {
   remainingQty?: Prisma.IntFieldUpdateOperationsInput | number
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -469,6 +488,7 @@ export type StockMovementCountOrderByAggregateInput = {
   remainingQty?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
   sellingPrice?: Prisma.SortOrder
+  isOpening?: Prisma.SortOrder
   date?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -490,6 +510,7 @@ export type StockMovementMaxOrderByAggregateInput = {
   remainingQty?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
   sellingPrice?: Prisma.SortOrder
+  isOpening?: Prisma.SortOrder
   date?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -504,6 +525,7 @@ export type StockMovementMinOrderByAggregateInput = {
   remainingQty?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
   sellingPrice?: Prisma.SortOrder
+  isOpening?: Prisma.SortOrder
   date?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -660,6 +682,7 @@ export type StockMovementCreateWithoutBusinessInput = {
   remainingQty?: number
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: boolean
   date?: Date | string
   createdAt?: Date | string
   branch: Prisma.BranchCreateNestedOneWithoutStockMovementInput
@@ -675,6 +698,7 @@ export type StockMovementUncheckedCreateWithoutBusinessInput = {
   remainingQty?: number
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: boolean
   date?: Date | string
   createdAt?: Date | string
 }
@@ -718,6 +742,7 @@ export type StockMovementScalarWhereInput = {
   remainingQty?: Prisma.IntFilter<"StockMovement"> | number
   costPrice?: Prisma.DecimalNullableFilter<"StockMovement"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: Prisma.DecimalNullableFilter<"StockMovement"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: Prisma.BoolFilter<"StockMovement"> | boolean
   date?: Prisma.DateTimeFilter<"StockMovement"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"StockMovement"> | Date | string
 }
@@ -729,6 +754,7 @@ export type StockMovementCreateWithoutBranchInput = {
   remainingQty?: number
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: boolean
   date?: Date | string
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutStockMovementInput
@@ -744,6 +770,7 @@ export type StockMovementUncheckedCreateWithoutBranchInput = {
   remainingQty?: number
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: boolean
   date?: Date | string
   createdAt?: Date | string
 }
@@ -781,6 +808,7 @@ export type StockMovementCreateWithoutProductInput = {
   remainingQty?: number
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: boolean
   date?: Date | string
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutStockMovementInput
@@ -796,6 +824,7 @@ export type StockMovementUncheckedCreateWithoutProductInput = {
   remainingQty?: number
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: boolean
   date?: Date | string
   createdAt?: Date | string
 }
@@ -835,6 +864,7 @@ export type StockMovementCreateManyBusinessInput = {
   remainingQty?: number
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: boolean
   date?: Date | string
   createdAt?: Date | string
 }
@@ -846,6 +876,7 @@ export type StockMovementUpdateWithoutBusinessInput = {
   remainingQty?: Prisma.IntFieldUpdateOperationsInput | number
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   branch?: Prisma.BranchUpdateOneRequiredWithoutStockMovementNestedInput
@@ -861,6 +892,7 @@ export type StockMovementUncheckedUpdateWithoutBusinessInput = {
   remainingQty?: Prisma.IntFieldUpdateOperationsInput | number
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -874,6 +906,7 @@ export type StockMovementUncheckedUpdateManyWithoutBusinessInput = {
   remainingQty?: Prisma.IntFieldUpdateOperationsInput | number
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -887,6 +920,7 @@ export type StockMovementCreateManyBranchInput = {
   remainingQty?: number
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: boolean
   date?: Date | string
   createdAt?: Date | string
 }
@@ -898,6 +932,7 @@ export type StockMovementUpdateWithoutBranchInput = {
   remainingQty?: Prisma.IntFieldUpdateOperationsInput | number
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutStockMovementNestedInput
@@ -913,6 +948,7 @@ export type StockMovementUncheckedUpdateWithoutBranchInput = {
   remainingQty?: Prisma.IntFieldUpdateOperationsInput | number
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -926,6 +962,7 @@ export type StockMovementUncheckedUpdateManyWithoutBranchInput = {
   remainingQty?: Prisma.IntFieldUpdateOperationsInput | number
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -939,6 +976,7 @@ export type StockMovementCreateManyProductInput = {
   remainingQty?: number
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: boolean
   date?: Date | string
   createdAt?: Date | string
 }
@@ -950,6 +988,7 @@ export type StockMovementUpdateWithoutProductInput = {
   remainingQty?: Prisma.IntFieldUpdateOperationsInput | number
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutStockMovementNestedInput
@@ -965,6 +1004,7 @@ export type StockMovementUncheckedUpdateWithoutProductInput = {
   remainingQty?: Prisma.IntFieldUpdateOperationsInput | number
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -978,6 +1018,7 @@ export type StockMovementUncheckedUpdateManyWithoutProductInput = {
   remainingQty?: Prisma.IntFieldUpdateOperationsInput | number
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   sellingPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -994,6 +1035,7 @@ export type StockMovementSelect<ExtArgs extends runtime.Types.Extensions.Interna
   remainingQty?: boolean
   costPrice?: boolean
   sellingPrice?: boolean
+  isOpening?: boolean
   date?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
@@ -1011,6 +1053,7 @@ export type StockMovementSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   remainingQty?: boolean
   costPrice?: boolean
   sellingPrice?: boolean
+  isOpening?: boolean
   date?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
@@ -1028,6 +1071,7 @@ export type StockMovementSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   remainingQty?: boolean
   costPrice?: boolean
   sellingPrice?: boolean
+  isOpening?: boolean
   date?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
@@ -1045,11 +1089,12 @@ export type StockMovementSelectScalar = {
   remainingQty?: boolean
   costPrice?: boolean
   sellingPrice?: boolean
+  isOpening?: boolean
   date?: boolean
   createdAt?: boolean
 }
 
-export type StockMovementOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "productId" | "type" | "quantity" | "remainingQty" | "costPrice" | "sellingPrice" | "date" | "createdAt", ExtArgs["result"]["stockMovement"]>
+export type StockMovementOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "productId" | "type" | "quantity" | "remainingQty" | "costPrice" | "sellingPrice" | "isOpening" | "date" | "createdAt", ExtArgs["result"]["stockMovement"]>
 export type StockMovementInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
@@ -1083,6 +1128,7 @@ export type $StockMovementPayload<ExtArgs extends runtime.Types.Extensions.Inter
     remainingQty: number
     costPrice: runtime.Decimal | null
     sellingPrice: runtime.Decimal | null
+    isOpening: boolean
     date: Date
     createdAt: Date
   }, ExtArgs["result"]["stockMovement"]>
@@ -1520,6 +1566,7 @@ export interface StockMovementFieldRefs {
   readonly remainingQty: Prisma.FieldRef<"StockMovement", 'Int'>
   readonly costPrice: Prisma.FieldRef<"StockMovement", 'Decimal'>
   readonly sellingPrice: Prisma.FieldRef<"StockMovement", 'Decimal'>
+  readonly isOpening: Prisma.FieldRef<"StockMovement", 'Boolean'>
   readonly date: Prisma.FieldRef<"StockMovement", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"StockMovement", 'DateTime'>
 }

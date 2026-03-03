@@ -99,8 +99,11 @@ export const BusinessScalarFieldEnum = {
   name: 'name',
   address: 'address',
   onboardingStep: 'onboardingStep',
+  isOnboarding: 'isOnboarding',
   onboardingCompleted: 'onboardingCompleted',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  activatedAt: 'activatedAt',
+  status: 'status'
 } as const
 
 export type BusinessScalarFieldEnum = (typeof BusinessScalarFieldEnum)[keyof typeof BusinessScalarFieldEnum]
@@ -205,6 +208,7 @@ export const ProductScalarFieldEnum = {
   brandId: 'brandId',
   name: 'name',
   type: 'type',
+  stockMode: 'stockMode',
   model: 'model',
   costPrice: 'costPrice',
   sellingPrice: 'sellingPrice',
@@ -233,6 +237,7 @@ export const StockMovementScalarFieldEnum = {
   remainingQty: 'remainingQty',
   costPrice: 'costPrice',
   sellingPrice: 'sellingPrice',
+  isOpening: 'isOpening',
   date: 'date',
   createdAt: 'createdAt'
 } as const
@@ -287,9 +292,11 @@ export const CashFlowScalarFieldEnum = {
   branchId: 'branchId',
   type: 'type',
   amount: 'amount',
+  direction: 'direction',
   balanceAfter: 'balanceAfter',
   source: 'source',
   description: 'description',
+  isOpening: 'isOpening',
   createdAt: 'createdAt'
 } as const
 
@@ -309,6 +316,7 @@ export const LiabilityScalarFieldEnum = {
   lender: 'lender',
   outstandingAmount: 'outstandingAmount',
   description: 'description',
+  isOpening: 'isOpening',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -332,12 +340,13 @@ export const AssetScalarFieldEnum = {
   businessId: 'businessId',
   branchId: 'branchId',
   name: 'name',
-  category: 'category',
   purchaseCost: 'purchaseCost',
   purchaseDate: 'purchaseDate',
+  assetType: 'assetType',
   totalCost: 'totalCost',
   currentValue: 'currentValue',
   quantity: 'quantity',
+  isOpeninig: 'isOpeninig',
   condition: 'condition',
   supplier: 'supplier',
   usefulLifeMonths: 'usefulLifeMonths',

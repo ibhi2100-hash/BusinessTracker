@@ -39,8 +39,11 @@ export type BusinessMinAggregateOutputType = {
   name: string | null
   address: string | null
   onboardingStep: number | null
+  isOnboarding: boolean | null
   onboardingCompleted: boolean | null
   createdAt: Date | null
+  activatedAt: Date | null
+  status: $Enums.BusinessStatus | null
 }
 
 export type BusinessMaxAggregateOutputType = {
@@ -48,8 +51,11 @@ export type BusinessMaxAggregateOutputType = {
   name: string | null
   address: string | null
   onboardingStep: number | null
+  isOnboarding: boolean | null
   onboardingCompleted: boolean | null
   createdAt: Date | null
+  activatedAt: Date | null
+  status: $Enums.BusinessStatus | null
 }
 
 export type BusinessCountAggregateOutputType = {
@@ -57,8 +63,11 @@ export type BusinessCountAggregateOutputType = {
   name: number
   address: number
   onboardingStep: number
+  isOnboarding: number
   onboardingCompleted: number
   createdAt: number
+  activatedAt: number
+  status: number
   _all: number
 }
 
@@ -76,8 +85,11 @@ export type BusinessMinAggregateInputType = {
   name?: true
   address?: true
   onboardingStep?: true
+  isOnboarding?: true
   onboardingCompleted?: true
   createdAt?: true
+  activatedAt?: true
+  status?: true
 }
 
 export type BusinessMaxAggregateInputType = {
@@ -85,8 +97,11 @@ export type BusinessMaxAggregateInputType = {
   name?: true
   address?: true
   onboardingStep?: true
+  isOnboarding?: true
   onboardingCompleted?: true
   createdAt?: true
+  activatedAt?: true
+  status?: true
 }
 
 export type BusinessCountAggregateInputType = {
@@ -94,8 +109,11 @@ export type BusinessCountAggregateInputType = {
   name?: true
   address?: true
   onboardingStep?: true
+  isOnboarding?: true
   onboardingCompleted?: true
   createdAt?: true
+  activatedAt?: true
+  status?: true
   _all?: true
 }
 
@@ -190,8 +208,11 @@ export type BusinessGroupByOutputType = {
   name: string
   address: string | null
   onboardingStep: number
+  isOnboarding: boolean
   onboardingCompleted: boolean
   createdAt: Date
+  activatedAt: Date | null
+  status: $Enums.BusinessStatus
   _count: BusinessCountAggregateOutputType | null
   _avg: BusinessAvgAggregateOutputType | null
   _sum: BusinessSumAggregateOutputType | null
@@ -222,8 +243,11 @@ export type BusinessWhereInput = {
   name?: Prisma.StringFilter<"Business"> | string
   address?: Prisma.StringNullableFilter<"Business"> | string | null
   onboardingStep?: Prisma.IntFilter<"Business"> | number
+  isOnboarding?: Prisma.BoolFilter<"Business"> | boolean
   onboardingCompleted?: Prisma.BoolFilter<"Business"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Business"> | Date | string
+  activatedAt?: Prisma.DateTimeNullableFilter<"Business"> | Date | string | null
+  status?: Prisma.EnumBusinessStatusFilter<"Business"> | $Enums.BusinessStatus
   branch?: Prisma.BranchListRelationFilter
   users?: Prisma.UserListRelationFilter
   business?: Prisma.BusinessSubscriptionListRelationFilter
@@ -247,8 +271,11 @@ export type BusinessOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
   onboardingStep?: Prisma.SortOrder
+  isOnboarding?: Prisma.SortOrder
   onboardingCompleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  activatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   branch?: Prisma.BranchOrderByRelationAggregateInput
   users?: Prisma.UserOrderByRelationAggregateInput
   business?: Prisma.BusinessSubscriptionOrderByRelationAggregateInput
@@ -275,8 +302,11 @@ export type BusinessWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"Business"> | string
   address?: Prisma.StringNullableFilter<"Business"> | string | null
   onboardingStep?: Prisma.IntFilter<"Business"> | number
+  isOnboarding?: Prisma.BoolFilter<"Business"> | boolean
   onboardingCompleted?: Prisma.BoolFilter<"Business"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Business"> | Date | string
+  activatedAt?: Prisma.DateTimeNullableFilter<"Business"> | Date | string | null
+  status?: Prisma.EnumBusinessStatusFilter<"Business"> | $Enums.BusinessStatus
   branch?: Prisma.BranchListRelationFilter
   users?: Prisma.UserListRelationFilter
   business?: Prisma.BusinessSubscriptionListRelationFilter
@@ -300,8 +330,11 @@ export type BusinessOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
   onboardingStep?: Prisma.SortOrder
+  isOnboarding?: Prisma.SortOrder
   onboardingCompleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  activatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   _count?: Prisma.BusinessCountOrderByAggregateInput
   _avg?: Prisma.BusinessAvgOrderByAggregateInput
   _max?: Prisma.BusinessMaxOrderByAggregateInput
@@ -317,8 +350,11 @@ export type BusinessScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Business"> | string
   address?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
   onboardingStep?: Prisma.IntWithAggregatesFilter<"Business"> | number
+  isOnboarding?: Prisma.BoolWithAggregatesFilter<"Business"> | boolean
   onboardingCompleted?: Prisma.BoolWithAggregatesFilter<"Business"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Business"> | Date | string
+  activatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Business"> | Date | string | null
+  status?: Prisma.EnumBusinessStatusWithAggregatesFilter<"Business"> | $Enums.BusinessStatus
 }
 
 export type BusinessCreateInput = {
@@ -326,8 +362,11 @@ export type BusinessCreateInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
@@ -351,8 +390,11 @@ export type BusinessUncheckedCreateInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
@@ -376,8 +418,11 @@ export type BusinessUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
@@ -401,8 +446,11 @@ export type BusinessUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
@@ -426,8 +474,11 @@ export type BusinessCreateManyInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
 }
 
 export type BusinessUpdateManyMutationInput = {
@@ -435,8 +486,11 @@ export type BusinessUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
 }
 
 export type BusinessUncheckedUpdateManyInput = {
@@ -444,8 +498,11 @@ export type BusinessUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
 }
 
 export type BusinessCountOrderByAggregateInput = {
@@ -453,8 +510,11 @@ export type BusinessCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   address?: Prisma.SortOrder
   onboardingStep?: Prisma.SortOrder
+  isOnboarding?: Prisma.SortOrder
   onboardingCompleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  activatedAt?: Prisma.SortOrder
+  status?: Prisma.SortOrder
 }
 
 export type BusinessAvgOrderByAggregateInput = {
@@ -466,8 +526,11 @@ export type BusinessMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   address?: Prisma.SortOrder
   onboardingStep?: Prisma.SortOrder
+  isOnboarding?: Prisma.SortOrder
   onboardingCompleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  activatedAt?: Prisma.SortOrder
+  status?: Prisma.SortOrder
 }
 
 export type BusinessMinOrderByAggregateInput = {
@@ -475,8 +538,11 @@ export type BusinessMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   address?: Prisma.SortOrder
   onboardingStep?: Prisma.SortOrder
+  isOnboarding?: Prisma.SortOrder
   onboardingCompleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  activatedAt?: Prisma.SortOrder
+  status?: Prisma.SortOrder
 }
 
 export type BusinessSumOrderByAggregateInput = {
@@ -515,6 +581,14 @@ export type BoolFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
+export type EnumBusinessStatusFieldUpdateOperationsInput = {
+  set?: $Enums.BusinessStatus
 }
 
 export type BusinessCreateNestedOneWithoutBranchInput = {
@@ -748,8 +822,11 @@ export type BusinessCreateWithoutBranchInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
@@ -772,8 +849,11 @@ export type BusinessUncheckedCreateWithoutBranchInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -812,8 +892,11 @@ export type BusinessUpdateWithoutBranchInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
@@ -836,8 +919,11 @@ export type BusinessUncheckedUpdateWithoutBranchInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -860,8 +946,11 @@ export type BusinessCreateWithoutUsersInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
@@ -884,8 +973,11 @@ export type BusinessUncheckedCreateWithoutUsersInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -924,8 +1016,11 @@ export type BusinessUpdateWithoutUsersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
@@ -948,8 +1043,11 @@ export type BusinessUncheckedUpdateWithoutUsersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -972,8 +1070,11 @@ export type BusinessCreateWithoutBusinessInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
@@ -996,8 +1097,11 @@ export type BusinessUncheckedCreateWithoutBusinessInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -1036,8 +1140,11 @@ export type BusinessUpdateWithoutBusinessInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
@@ -1060,8 +1167,11 @@ export type BusinessUncheckedUpdateWithoutBusinessInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1084,8 +1194,11 @@ export type BusinessCreateWithoutCategoriesInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
@@ -1108,8 +1221,11 @@ export type BusinessUncheckedCreateWithoutCategoriesInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
@@ -1148,8 +1264,11 @@ export type BusinessUpdateWithoutCategoriesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
@@ -1172,8 +1291,11 @@ export type BusinessUncheckedUpdateWithoutCategoriesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1196,8 +1318,11 @@ export type BusinessCreateWithoutBrandsInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
@@ -1220,8 +1345,11 @@ export type BusinessUncheckedCreateWithoutBrandsInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
@@ -1260,8 +1388,11 @@ export type BusinessUpdateWithoutBrandsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
@@ -1284,8 +1415,11 @@ export type BusinessUncheckedUpdateWithoutBrandsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1308,8 +1442,11 @@ export type BusinessCreateWithoutProductsInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
@@ -1332,8 +1469,11 @@ export type BusinessUncheckedCreateWithoutProductsInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
@@ -1372,8 +1512,11 @@ export type BusinessUpdateWithoutProductsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
@@ -1396,8 +1539,11 @@ export type BusinessUncheckedUpdateWithoutProductsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1420,8 +1566,11 @@ export type BusinessCreateWithoutStockMovementInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
@@ -1444,8 +1593,11 @@ export type BusinessUncheckedCreateWithoutStockMovementInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
@@ -1484,8 +1636,11 @@ export type BusinessUpdateWithoutStockMovementInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
@@ -1508,8 +1663,11 @@ export type BusinessUncheckedUpdateWithoutStockMovementInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1532,8 +1690,11 @@ export type BusinessCreateWithoutSalesInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
@@ -1556,8 +1717,11 @@ export type BusinessUncheckedCreateWithoutSalesInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
@@ -1596,8 +1760,11 @@ export type BusinessUpdateWithoutSalesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
@@ -1620,8 +1787,11 @@ export type BusinessUncheckedUpdateWithoutSalesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1644,8 +1814,11 @@ export type BusinessCreateWithoutCashFlowsInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
@@ -1668,8 +1841,11 @@ export type BusinessUncheckedCreateWithoutCashFlowsInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
@@ -1708,8 +1884,11 @@ export type BusinessUpdateWithoutCashFlowsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
@@ -1732,8 +1911,11 @@ export type BusinessUncheckedUpdateWithoutCashFlowsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1756,8 +1938,11 @@ export type BusinessCreateWithoutLiabilitiesInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
@@ -1780,8 +1965,11 @@ export type BusinessUncheckedCreateWithoutLiabilitiesInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
@@ -1820,8 +2008,11 @@ export type BusinessUpdateWithoutLiabilitiesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
@@ -1844,8 +2035,11 @@ export type BusinessUncheckedUpdateWithoutLiabilitiesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1868,8 +2062,11 @@ export type BusinessCreateWithoutAssetsInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
@@ -1892,8 +2089,11 @@ export type BusinessUncheckedCreateWithoutAssetsInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
@@ -1932,8 +2132,11 @@ export type BusinessUpdateWithoutAssetsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
@@ -1956,8 +2159,11 @@ export type BusinessUncheckedUpdateWithoutAssetsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1980,8 +2186,11 @@ export type BusinessCreateWithoutExpensesInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
@@ -2004,8 +2213,11 @@ export type BusinessUncheckedCreateWithoutExpensesInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
@@ -2044,8 +2256,11 @@ export type BusinessUpdateWithoutExpensesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
@@ -2068,8 +2283,11 @@ export type BusinessUncheckedUpdateWithoutExpensesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2092,8 +2310,11 @@ export type BusinessCreateWithoutLoanInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
@@ -2116,8 +2337,11 @@ export type BusinessUncheckedCreateWithoutLoanInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
@@ -2156,8 +2380,11 @@ export type BusinessUpdateWithoutLoanInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
@@ -2180,8 +2407,11 @@ export type BusinessUncheckedUpdateWithoutLoanInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2204,8 +2434,11 @@ export type BusinessCreateWithoutEmployeesInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
@@ -2228,8 +2461,11 @@ export type BusinessUncheckedCreateWithoutEmployeesInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
@@ -2268,8 +2504,11 @@ export type BusinessUpdateWithoutEmployeesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
@@ -2292,8 +2531,11 @@ export type BusinessUncheckedUpdateWithoutEmployeesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2316,8 +2558,11 @@ export type BusinessCreateWithoutExpenseCategoriesInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
@@ -2340,8 +2585,11 @@ export type BusinessUncheckedCreateWithoutExpenseCategoriesInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
@@ -2380,8 +2628,11 @@ export type BusinessUpdateWithoutExpenseCategoriesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
@@ -2404,8 +2655,11 @@ export type BusinessUncheckedUpdateWithoutExpenseCategoriesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2428,8 +2682,11 @@ export type BusinessCreateWithoutAlertsInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
@@ -2452,8 +2709,11 @@ export type BusinessUncheckedCreateWithoutAlertsInput = {
   name: string
   address?: string | null
   onboardingStep?: number
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
@@ -2492,8 +2752,11 @@ export type BusinessUpdateWithoutAlertsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
@@ -2516,8 +2779,11 @@ export type BusinessUncheckedUpdateWithoutAlertsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2706,8 +2972,11 @@ export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   name?: boolean
   address?: boolean
   onboardingStep?: boolean
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: boolean
+  activatedAt?: boolean
+  status?: boolean
   branch?: boolean | Prisma.Business$branchArgs<ExtArgs>
   users?: boolean | Prisma.Business$usersArgs<ExtArgs>
   business?: boolean | Prisma.Business$businessArgs<ExtArgs>
@@ -2732,8 +3001,11 @@ export type BusinessSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   name?: boolean
   address?: boolean
   onboardingStep?: boolean
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: boolean
+  activatedAt?: boolean
+  status?: boolean
 }, ExtArgs["result"]["business"]>
 
 export type BusinessSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -2741,8 +3013,11 @@ export type BusinessSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   name?: boolean
   address?: boolean
   onboardingStep?: boolean
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: boolean
+  activatedAt?: boolean
+  status?: boolean
 }, ExtArgs["result"]["business"]>
 
 export type BusinessSelectScalar = {
@@ -2750,11 +3025,14 @@ export type BusinessSelectScalar = {
   name?: boolean
   address?: boolean
   onboardingStep?: boolean
+  isOnboarding?: boolean
   onboardingCompleted?: boolean
   createdAt?: boolean
+  activatedAt?: boolean
+  status?: boolean
 }
 
-export type BusinessOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "address" | "onboardingStep" | "onboardingCompleted" | "createdAt", ExtArgs["result"]["business"]>
+export type BusinessOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "address" | "onboardingStep" | "isOnboarding" | "onboardingCompleted" | "createdAt" | "activatedAt" | "status", ExtArgs["result"]["business"]>
 export type BusinessInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   branch?: boolean | Prisma.Business$branchArgs<ExtArgs>
   users?: boolean | Prisma.Business$usersArgs<ExtArgs>
@@ -2802,8 +3080,11 @@ export type $BusinessPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     name: string
     address: string | null
     onboardingStep: number
+    isOnboarding: boolean
     onboardingCompleted: boolean
     createdAt: Date
+    activatedAt: Date | null
+    status: $Enums.BusinessStatus
   }, ExtArgs["result"]["business"]>
   composites: {}
 }
@@ -3247,8 +3528,11 @@ export interface BusinessFieldRefs {
   readonly name: Prisma.FieldRef<"Business", 'String'>
   readonly address: Prisma.FieldRef<"Business", 'String'>
   readonly onboardingStep: Prisma.FieldRef<"Business", 'Int'>
+  readonly isOnboarding: Prisma.FieldRef<"Business", 'Boolean'>
   readonly onboardingCompleted: Prisma.FieldRef<"Business", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Business", 'DateTime'>
+  readonly activatedAt: Prisma.FieldRef<"Business", 'DateTime'>
+  readonly status: Prisma.FieldRef<"Business", 'BusinessStatus'>
 }
     
 

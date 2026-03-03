@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "CashFlowType" ADD VALUE 'ASSET_DISPOSAL';

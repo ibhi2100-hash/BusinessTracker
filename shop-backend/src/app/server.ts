@@ -15,6 +15,7 @@ import reportRoutes from '../routes/report.route.js';
 import onboardingRoute from '../routes/onboarding.route.js';
 import businessBranchesRoute from '../routes/business.route.js';
 import alertRoute from '../routes/alerts.route.js';
+import cashFlowRoute from '../routes/cashflow.route.js';
 
 dotenv.config();
 
@@ -80,6 +81,7 @@ app.use('/api/asset', assetRoutes);
 app.use('/api/liability', liabilityRoutes);
 app.use('/api/report', reportRoutes);
 app.use('/api/alerts', alertRoute);
+app.use('/api/cashflow', cashFlowRoute)
 
 // --------------------
 // Start server
