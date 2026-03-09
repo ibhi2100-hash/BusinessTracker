@@ -8,6 +8,9 @@ import { BusinessRepository } from "../modules/business/repository/business.repo
 import { BusinessService } from "../modules/business/service/business.service.js";
 import { BusinessController } from "../modules/business/controller/business.controller.js";
 import { requireBranch } from "../middlwares/requireBranch.middleware.js";
+import { subscriptionResolver } from "../middlwares/subscriptionResolver.js";   
+import { subscriptionStatusGuard } from "../middlwares/subscriptionStatusGuard.js";
+import { branchLimitGuard } from "../middlwares/branchLimitGuard.js";
 
 
 const router = Router();
@@ -22,7 +25,12 @@ router.use(authMiddleware, isAdminMiddleware)
 
 router.get('/branches', branchController.getBusinessBranch);
 
-router.post('/create', branchController.createBranch);
+router.post('/create',
+            subscriptionResolver, 
+            subscriptionStatusGuard, 
+            branchLimitGuard, 
+            branchController.createBranch);
+            
 
 router.get('/brandName', businessController.getBusinessData )
 
@@ -37,6 +45,8 @@ router.post('/switch-branch', requireBranch, businessController.switchBranch)
 router.get('/status', requireBranch, businessController.getBusinessStatus)
 
 router.get('/setup-status', requireBranch, businessController.getSetupStatus)
+
+router.post('/activate', requireBranch, businessController.activateBusiness)
 
 
 

@@ -12,13 +12,14 @@ if (!JWT_SECRET) {
  */
 export function signTokenWithExpiry(
   userId: string,
+  email: string,
   role: string,
   businessId?: string,
   branchId?: string
 ): { token: string; expiresIn: number } {
   const expiresIn = 7 * 24 * 60 * 60; // 7 days in seconds
   const token = jwt.sign(
-    { userId, role, businessId, branchId },
+    { userId, email, role, businessId, branchId },
     JWT_SECRET,
     { expiresIn }
   );

@@ -158,5 +158,16 @@ const businessId = req.user?.businessId
       const businessSetupStatus = await this.businessService.getBusinessSetupStatus(businessId)
       return res.json(businessSetupStatus)
 }
+activateBusiness = async (req: Request, res: Response)=> {
+const businessId = req.user?.businessId
+      if (!businessId) {
+        return res.status(400).json({
+          message: "Business context missing",
+        });
+      }
+
+      const businessActivation = await this.businessService.activateBusiness(businessId)
+      return res.json(businessActivation)
+}
 
 }

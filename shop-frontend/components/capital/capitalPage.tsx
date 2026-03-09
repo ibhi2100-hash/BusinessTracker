@@ -2,25 +2,37 @@
 
 import React, { useState } from "react";
 import { useCashflows } from "@/hooks/useCashflow";
-import { ArrowUp, ArrowDown, DollarSign, RefreshCw } from "lucide-react";
+import { ArrowUp, ArrowDown, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CashFlowType } from "@/services/cashflowService";
 
 interface CashflowTableProps {
   mode: "OPENING" | "LIVE";
-  onCompleted: ()=> void;
+  onCompleted?: () => void;
 }
-const CashflowTable = ({ mode, onCompleted}: CashflowTableProps) => {
+
+const resolveCashflowMeta = (
+  mode: "OPENING" | "LIVE",
+): { type: CashFlowType; direction: "IN" | "OUT"; description: string } => {
+  if (mode === "OPENING") {
+    return { type: "OPENING", direction: "IN", description: "Initial branch cash balance" };
+  }
+  if (mode === "LIVE") {
+    return { type: "OWNER_CAPITAL", direction: "IN", description: "Owner capital injection" };
+  }
+  throw new Error("Invalid action");
+};
+
+const CashflowTable = ({ mode, onCompleted }: CashflowTableProps) => {
   const { cashflows, loading, injectCash, withdrawCash, refetch } = useCashflows();
   const [rawAmount, setRawAmount] = useState<string>("");
   const [formattedAmount, setFormattedAmount] = useState<string>("");
 
-  // Format number with commas (₦ for display)
   const formatNumber = (value: string | number) => {
     if (!value) return "";
     const num = typeof value === "string" ? Number(value.replace(/,/g, "")) : value;
     return num.toLocaleString("en-NG");
   };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/,/g, "");
     if (/^\d*$/.test(value)) {
@@ -32,27 +44,36 @@ const CashflowTable = ({ mode, onCompleted}: CashflowTableProps) => {
   const handleInject = async () => {
     const amount = Number(rawAmount);
     if (amount <= 0) return;
-    const source = 
-      mode === "OPENING"
-        ? "Opening capital"
-        : "Owner top-up"
-    await injectCash(amount, source);
+
+    const meta = resolveCashflowMeta(mode);
+
+    await injectCash({ amount, type: meta.type, description: meta.description });
     setRawAmount("");
     setFormattedAmount("");
-
-     if (mode === "OPENING" && onCompleted) {
-    // Notify parent / refetch onboarding status
-        onCompleted(); // optional callback prop
-  }
+    if (mode === "OPENING" && onCompleted) onCompleted();
   };
 
   const handleWithdraw = async () => {
-    if(mode === "OPENING") return;
+    if (mode === "OPENING") return;
+
     const amount = Number(rawAmount);
+
     if (amount <= 0) return;
-    await withdrawCash(amount, "Owner withdrawal");
+
+    const meta = resolveCashflowMeta(mode);
+
+    await withdrawCash({ amount, type: meta.type, description: meta.description });
+
     setRawAmount("");
     setFormattedAmount("");
+  };
+
+  const formatSource = (source?: string | null) => {
+    if (!source) return "";
+    return source
+      .split("_")
+      .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
   };
 
   return (
@@ -62,6 +83,7 @@ const CashflowTable = ({ mode, onCompleted}: CashflowTableProps) => {
           Opening Mode: Cash added here will be recorded as initial capital.
         </div>
       )}
+
       {/* Input Panel */}
       <div className="bg-white rounded-xl shadow p-4 flex flex-col gap-3">
         <div className="flex items-center gap-2">
@@ -77,35 +99,31 @@ const CashflowTable = ({ mode, onCompleted}: CashflowTableProps) => {
           />
         </div>
 
-       <div className="flex gap-2 flex-wrap">
-        <Button
+        <div className="flex gap-2 flex-wrap">
+          <Button
             onClick={handleInject}
             variant="success"
             className="flex-1 gap-2"
             disabled={!rawAmount || Number(rawAmount) <= 0}
-        >
+          >
             <ArrowUp className="w-5 h-5" />
             Inject
-        </Button>
+          </Button>
 
-        <Button
+          <Button
             onClick={handleWithdraw}
             variant="danger"
-            disabled={mode === "OPENING"}
             className="flex-1 gap-2"
-        >
+            disabled={mode === "OPENING" || !rawAmount || Number(rawAmount) <= 0}
+          >
             <ArrowDown className="w-5 h-5" />
             Withdraw
-        </Button>
+          </Button>
 
-        <Button
-            onClick={()=>refetch()}
-            variant="secondary"
-            className="gap-1"
-        >
+          <Button onClick={() => refetch()} variant="secondary" className="gap-1">
             <RefreshCw className="w-4 h-4" />
             Refresh
-        </Button>
+          </Button>
         </div>
       </div>
 
@@ -124,6 +142,7 @@ const CashflowTable = ({ mode, onCompleted}: CashflowTableProps) => {
                   <th className="py-2 px-2">Type</th>
                   <th className="py-2 px-2">Amount</th>
                   <th className="py-2 px-2">Source</th>
+                  <th className="py-2 px-2">Balance After</th>
                   <th className="py-2 px-2">Status</th>
                   <th className="py-2 px-2">Date</th>
                 </tr>
@@ -132,23 +151,20 @@ const CashflowTable = ({ mode, onCompleted}: CashflowTableProps) => {
                 {cashflows
                   .slice()
                   .reverse()
-                  .slice(0, 5) // show last 5 transactions
-                  .map((c) => (
+                  .slice(0, 5)
+                  .map(c => (
                     <tr key={c.id} className="border-b hover:bg-gray-50">
                       <td className="py-2 px-2 flex items-center gap-1">
-                        {c.type === "INFLOW" ? (
+                        {c.direction === "IN" ? (
                           <ArrowUp className="w-4 h-4 text-green-500" />
                         ) : (
                           <ArrowDown className="w-4 h-4 text-red-500" />
                         )}
                         {c.type}
                       </td>
-                      <td className="py-2 px-2">
-                        ₦{Number(c.amount).toLocaleString("en-NG")}
-                      </td>
-                      <td className="py-2 px-2 capitalize">
-                        {c.source.replace("_", " ")}
-                      </td>
+                      <td className="py-2 px-2">₦{formatNumber(c.amount)}</td>
+                      <td className="py-2 px-2 capitalize">{formatSource(c.source)}</td>
+                      <td className="py-2 px-2">₦{formatNumber(c.balanceAfter)}</td>
                       <td className="py-2 px-2">
                         {c.isOpening ? (
                           <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full text-xs">

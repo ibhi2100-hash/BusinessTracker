@@ -57,6 +57,8 @@ export const ModelName = {
   passwordResetToken: 'passwordResetToken',
   SubscriptionPlan: 'SubscriptionPlan',
   BusinessSubscription: 'BusinessSubscription',
+  LedgerAccount: 'LedgerAccount',
+  LedgerEntry: 'LedgerEntry',
   Category: 'Category',
   Brand: 'Brand',
   Product: 'Product',
@@ -155,8 +157,12 @@ export const SubscriptionPlanScalarFieldEnum = {
   id: 'id',
   name: 'name',
   price: 'price',
+  billingCycle: 'billingCycle',
   maxUsers: 'maxUsers',
   maxBranch: 'maxBranch',
+  maxProduct: 'maxProduct',
+  maxStaff: 'maxStaff',
+  features: 'features',
   createdAt: 'createdAt'
 } as const
 
@@ -168,11 +174,35 @@ export const BusinessSubscriptionScalarFieldEnum = {
   businessId: 'businessId',
   subscriptionId: 'subscriptionId',
   startedAt: 'startedAt',
+  expiresAt: 'expiresAt',
   trialEndDate: 'trialEndDate',
   status: 'status'
 } as const
 
 export type BusinessSubscriptionScalarFieldEnum = (typeof BusinessSubscriptionScalarFieldEnum)[keyof typeof BusinessSubscriptionScalarFieldEnum]
+
+
+export const LedgerAccountScalarFieldEnum = {
+  id: 'id',
+  businessId: 'businessId',
+  name: 'name',
+  type: 'type'
+} as const
+
+export type LedgerAccountScalarFieldEnum = (typeof LedgerAccountScalarFieldEnum)[keyof typeof LedgerAccountScalarFieldEnum]
+
+
+export const LedgerEntryScalarFieldEnum = {
+  id: 'id',
+  accountId: 'accountId',
+  businessId: 'businessId',
+  amount: 'amount',
+  type: 'type',
+  referenceId: 'referenceId',
+  createdAt: 'createdAt'
+} as const
+
+export type LedgerEntryScalarFieldEnum = (typeof LedgerEntryScalarFieldEnum)[keyof typeof LedgerEntryScalarFieldEnum]
 
 
 export const CategoryScalarFieldEnum = {
@@ -297,6 +327,7 @@ export const CashFlowScalarFieldEnum = {
   source: 'source',
   description: 'description',
   isOpening: 'isOpening',
+  isLocked: 'isLocked',
   createdAt: 'createdAt'
 } as const
 
@@ -479,6 +510,13 @@ export const SortOrder = {
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const NullableJsonNullValueInput = {

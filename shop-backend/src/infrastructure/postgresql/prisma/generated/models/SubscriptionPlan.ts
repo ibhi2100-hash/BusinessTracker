@@ -30,20 +30,27 @@ export type SubscriptionPlanAvgAggregateOutputType = {
   price: runtime.Decimal | null
   maxUsers: number | null
   maxBranch: number | null
+  maxProduct: number | null
+  maxStaff: number | null
 }
 
 export type SubscriptionPlanSumAggregateOutputType = {
   price: runtime.Decimal | null
   maxUsers: number | null
   maxBranch: number | null
+  maxProduct: number | null
+  maxStaff: number | null
 }
 
 export type SubscriptionPlanMinAggregateOutputType = {
   id: string | null
   name: string | null
   price: runtime.Decimal | null
+  billingCycle: string | null
   maxUsers: number | null
   maxBranch: number | null
+  maxProduct: number | null
+  maxStaff: number | null
   createdAt: Date | null
 }
 
@@ -51,8 +58,11 @@ export type SubscriptionPlanMaxAggregateOutputType = {
   id: string | null
   name: string | null
   price: runtime.Decimal | null
+  billingCycle: string | null
   maxUsers: number | null
   maxBranch: number | null
+  maxProduct: number | null
+  maxStaff: number | null
   createdAt: Date | null
 }
 
@@ -60,8 +70,12 @@ export type SubscriptionPlanCountAggregateOutputType = {
   id: number
   name: number
   price: number
+  billingCycle: number
   maxUsers: number
   maxBranch: number
+  maxProduct: number
+  maxStaff: number
+  features: number
   createdAt: number
   _all: number
 }
@@ -71,20 +85,27 @@ export type SubscriptionPlanAvgAggregateInputType = {
   price?: true
   maxUsers?: true
   maxBranch?: true
+  maxProduct?: true
+  maxStaff?: true
 }
 
 export type SubscriptionPlanSumAggregateInputType = {
   price?: true
   maxUsers?: true
   maxBranch?: true
+  maxProduct?: true
+  maxStaff?: true
 }
 
 export type SubscriptionPlanMinAggregateInputType = {
   id?: true
   name?: true
   price?: true
+  billingCycle?: true
   maxUsers?: true
   maxBranch?: true
+  maxProduct?: true
+  maxStaff?: true
   createdAt?: true
 }
 
@@ -92,8 +113,11 @@ export type SubscriptionPlanMaxAggregateInputType = {
   id?: true
   name?: true
   price?: true
+  billingCycle?: true
   maxUsers?: true
   maxBranch?: true
+  maxProduct?: true
+  maxStaff?: true
   createdAt?: true
 }
 
@@ -101,8 +125,12 @@ export type SubscriptionPlanCountAggregateInputType = {
   id?: true
   name?: true
   price?: true
+  billingCycle?: true
   maxUsers?: true
   maxBranch?: true
+  maxProduct?: true
+  maxStaff?: true
+  features?: true
   createdAt?: true
   _all?: true
 }
@@ -197,8 +225,12 @@ export type SubscriptionPlanGroupByOutputType = {
   id: string
   name: string
   price: runtime.Decimal
+  billingCycle: string
   maxUsers: number
   maxBranch: number
+  maxProduct: number
+  maxStaff: number
+  features: runtime.JsonValue
   createdAt: Date
   _count: SubscriptionPlanCountAggregateOutputType | null
   _avg: SubscriptionPlanAvgAggregateOutputType | null
@@ -229,20 +261,28 @@ export type SubscriptionPlanWhereInput = {
   id?: Prisma.StringFilter<"SubscriptionPlan"> | string
   name?: Prisma.StringFilter<"SubscriptionPlan"> | string
   price?: Prisma.DecimalFilter<"SubscriptionPlan"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  billingCycle?: Prisma.StringFilter<"SubscriptionPlan"> | string
   maxUsers?: Prisma.IntFilter<"SubscriptionPlan"> | number
   maxBranch?: Prisma.IntFilter<"SubscriptionPlan"> | number
+  maxProduct?: Prisma.IntFilter<"SubscriptionPlan"> | number
+  maxStaff?: Prisma.IntFilter<"SubscriptionPlan"> | number
+  features?: Prisma.JsonFilter<"SubscriptionPlan">
   createdAt?: Prisma.DateTimeFilter<"SubscriptionPlan"> | Date | string
-  business?: Prisma.BusinessSubscriptionListRelationFilter
+  subscription?: Prisma.BusinessSubscriptionListRelationFilter
 }
 
 export type SubscriptionPlanOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  billingCycle?: Prisma.SortOrder
   maxUsers?: Prisma.SortOrder
   maxBranch?: Prisma.SortOrder
+  maxProduct?: Prisma.SortOrder
+  maxStaff?: Prisma.SortOrder
+  features?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  business?: Prisma.BusinessSubscriptionOrderByRelationAggregateInput
+  subscription?: Prisma.BusinessSubscriptionOrderByRelationAggregateInput
 }
 
 export type SubscriptionPlanWhereUniqueInput = Prisma.AtLeast<{
@@ -252,18 +292,26 @@ export type SubscriptionPlanWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.SubscriptionPlanWhereInput | Prisma.SubscriptionPlanWhereInput[]
   name?: Prisma.StringFilter<"SubscriptionPlan"> | string
   price?: Prisma.DecimalFilter<"SubscriptionPlan"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  billingCycle?: Prisma.StringFilter<"SubscriptionPlan"> | string
   maxUsers?: Prisma.IntFilter<"SubscriptionPlan"> | number
   maxBranch?: Prisma.IntFilter<"SubscriptionPlan"> | number
+  maxProduct?: Prisma.IntFilter<"SubscriptionPlan"> | number
+  maxStaff?: Prisma.IntFilter<"SubscriptionPlan"> | number
+  features?: Prisma.JsonFilter<"SubscriptionPlan">
   createdAt?: Prisma.DateTimeFilter<"SubscriptionPlan"> | Date | string
-  business?: Prisma.BusinessSubscriptionListRelationFilter
+  subscription?: Prisma.BusinessSubscriptionListRelationFilter
 }, "id">
 
 export type SubscriptionPlanOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  billingCycle?: Prisma.SortOrder
   maxUsers?: Prisma.SortOrder
   maxBranch?: Prisma.SortOrder
+  maxProduct?: Prisma.SortOrder
+  maxStaff?: Prisma.SortOrder
+  features?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.SubscriptionPlanCountOrderByAggregateInput
   _avg?: Prisma.SubscriptionPlanAvgOrderByAggregateInput
@@ -279,8 +327,12 @@ export type SubscriptionPlanScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"SubscriptionPlan"> | string
   name?: Prisma.StringWithAggregatesFilter<"SubscriptionPlan"> | string
   price?: Prisma.DecimalWithAggregatesFilter<"SubscriptionPlan"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  billingCycle?: Prisma.StringWithAggregatesFilter<"SubscriptionPlan"> | string
   maxUsers?: Prisma.IntWithAggregatesFilter<"SubscriptionPlan"> | number
   maxBranch?: Prisma.IntWithAggregatesFilter<"SubscriptionPlan"> | number
+  maxProduct?: Prisma.IntWithAggregatesFilter<"SubscriptionPlan"> | number
+  maxStaff?: Prisma.IntWithAggregatesFilter<"SubscriptionPlan"> | number
+  features?: Prisma.JsonWithAggregatesFilter<"SubscriptionPlan">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SubscriptionPlan"> | Date | string
 }
 
@@ -288,48 +340,68 @@ export type SubscriptionPlanCreateInput = {
   id?: string
   name: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  billingCycle: string
   maxUsers: number
   maxBranch: number
+  maxProduct: number
+  maxStaff: number
+  features: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
-  business?: Prisma.BusinessSubscriptionCreateNestedManyWithoutSubscriptionInput
+  subscription?: Prisma.BusinessSubscriptionCreateNestedManyWithoutSubscriptionInput
 }
 
 export type SubscriptionPlanUncheckedCreateInput = {
   id?: string
   name: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  billingCycle: string
   maxUsers: number
   maxBranch: number
+  maxProduct: number
+  maxStaff: number
+  features: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
-  business?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutSubscriptionInput
+  subscription?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutSubscriptionInput
 }
 
 export type SubscriptionPlanUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  billingCycle?: Prisma.StringFieldUpdateOperationsInput | string
   maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
   maxBranch?: Prisma.IntFieldUpdateOperationsInput | number
+  maxProduct?: Prisma.IntFieldUpdateOperationsInput | number
+  maxStaff?: Prisma.IntFieldUpdateOperationsInput | number
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  business?: Prisma.BusinessSubscriptionUpdateManyWithoutSubscriptionNestedInput
+  subscription?: Prisma.BusinessSubscriptionUpdateManyWithoutSubscriptionNestedInput
 }
 
 export type SubscriptionPlanUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  billingCycle?: Prisma.StringFieldUpdateOperationsInput | string
   maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
   maxBranch?: Prisma.IntFieldUpdateOperationsInput | number
+  maxProduct?: Prisma.IntFieldUpdateOperationsInput | number
+  maxStaff?: Prisma.IntFieldUpdateOperationsInput | number
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  business?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutSubscriptionNestedInput
+  subscription?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutSubscriptionNestedInput
 }
 
 export type SubscriptionPlanCreateManyInput = {
   id?: string
   name: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  billingCycle: string
   maxUsers: number
   maxBranch: number
+  maxProduct: number
+  maxStaff: number
+  features: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
@@ -337,8 +409,12 @@ export type SubscriptionPlanUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  billingCycle?: Prisma.StringFieldUpdateOperationsInput | string
   maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
   maxBranch?: Prisma.IntFieldUpdateOperationsInput | number
+  maxProduct?: Prisma.IntFieldUpdateOperationsInput | number
+  maxStaff?: Prisma.IntFieldUpdateOperationsInput | number
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -346,8 +422,12 @@ export type SubscriptionPlanUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  billingCycle?: Prisma.StringFieldUpdateOperationsInput | string
   maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
   maxBranch?: Prisma.IntFieldUpdateOperationsInput | number
+  maxProduct?: Prisma.IntFieldUpdateOperationsInput | number
+  maxStaff?: Prisma.IntFieldUpdateOperationsInput | number
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -355,8 +435,12 @@ export type SubscriptionPlanCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  billingCycle?: Prisma.SortOrder
   maxUsers?: Prisma.SortOrder
   maxBranch?: Prisma.SortOrder
+  maxProduct?: Prisma.SortOrder
+  maxStaff?: Prisma.SortOrder
+  features?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -364,14 +448,19 @@ export type SubscriptionPlanAvgOrderByAggregateInput = {
   price?: Prisma.SortOrder
   maxUsers?: Prisma.SortOrder
   maxBranch?: Prisma.SortOrder
+  maxProduct?: Prisma.SortOrder
+  maxStaff?: Prisma.SortOrder
 }
 
 export type SubscriptionPlanMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  billingCycle?: Prisma.SortOrder
   maxUsers?: Prisma.SortOrder
   maxBranch?: Prisma.SortOrder
+  maxProduct?: Prisma.SortOrder
+  maxStaff?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -379,8 +468,11 @@ export type SubscriptionPlanMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   price?: Prisma.SortOrder
+  billingCycle?: Prisma.SortOrder
   maxUsers?: Prisma.SortOrder
   maxBranch?: Prisma.SortOrder
+  maxProduct?: Prisma.SortOrder
+  maxStaff?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -388,6 +480,8 @@ export type SubscriptionPlanSumOrderByAggregateInput = {
   price?: Prisma.SortOrder
   maxUsers?: Prisma.SortOrder
   maxBranch?: Prisma.SortOrder
+  maxProduct?: Prisma.SortOrder
+  maxStaff?: Prisma.SortOrder
 }
 
 export type SubscriptionPlanScalarRelationFilter = {
@@ -403,69 +497,85 @@ export type DecimalFieldUpdateOperationsInput = {
   divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
-export type SubscriptionPlanCreateNestedOneWithoutBusinessInput = {
-  create?: Prisma.XOR<Prisma.SubscriptionPlanCreateWithoutBusinessInput, Prisma.SubscriptionPlanUncheckedCreateWithoutBusinessInput>
-  connectOrCreate?: Prisma.SubscriptionPlanCreateOrConnectWithoutBusinessInput
+export type SubscriptionPlanCreateNestedOneWithoutSubscriptionInput = {
+  create?: Prisma.XOR<Prisma.SubscriptionPlanCreateWithoutSubscriptionInput, Prisma.SubscriptionPlanUncheckedCreateWithoutSubscriptionInput>
+  connectOrCreate?: Prisma.SubscriptionPlanCreateOrConnectWithoutSubscriptionInput
   connect?: Prisma.SubscriptionPlanWhereUniqueInput
 }
 
-export type SubscriptionPlanUpdateOneRequiredWithoutBusinessNestedInput = {
-  create?: Prisma.XOR<Prisma.SubscriptionPlanCreateWithoutBusinessInput, Prisma.SubscriptionPlanUncheckedCreateWithoutBusinessInput>
-  connectOrCreate?: Prisma.SubscriptionPlanCreateOrConnectWithoutBusinessInput
-  upsert?: Prisma.SubscriptionPlanUpsertWithoutBusinessInput
+export type SubscriptionPlanUpdateOneRequiredWithoutSubscriptionNestedInput = {
+  create?: Prisma.XOR<Prisma.SubscriptionPlanCreateWithoutSubscriptionInput, Prisma.SubscriptionPlanUncheckedCreateWithoutSubscriptionInput>
+  connectOrCreate?: Prisma.SubscriptionPlanCreateOrConnectWithoutSubscriptionInput
+  upsert?: Prisma.SubscriptionPlanUpsertWithoutSubscriptionInput
   connect?: Prisma.SubscriptionPlanWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.SubscriptionPlanUpdateToOneWithWhereWithoutBusinessInput, Prisma.SubscriptionPlanUpdateWithoutBusinessInput>, Prisma.SubscriptionPlanUncheckedUpdateWithoutBusinessInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SubscriptionPlanUpdateToOneWithWhereWithoutSubscriptionInput, Prisma.SubscriptionPlanUpdateWithoutSubscriptionInput>, Prisma.SubscriptionPlanUncheckedUpdateWithoutSubscriptionInput>
 }
 
-export type SubscriptionPlanCreateWithoutBusinessInput = {
+export type SubscriptionPlanCreateWithoutSubscriptionInput = {
   id?: string
   name: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  billingCycle: string
   maxUsers: number
   maxBranch: number
+  maxProduct: number
+  maxStaff: number
+  features: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
-export type SubscriptionPlanUncheckedCreateWithoutBusinessInput = {
+export type SubscriptionPlanUncheckedCreateWithoutSubscriptionInput = {
   id?: string
   name: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  billingCycle: string
   maxUsers: number
   maxBranch: number
+  maxProduct: number
+  maxStaff: number
+  features: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
-export type SubscriptionPlanCreateOrConnectWithoutBusinessInput = {
+export type SubscriptionPlanCreateOrConnectWithoutSubscriptionInput = {
   where: Prisma.SubscriptionPlanWhereUniqueInput
-  create: Prisma.XOR<Prisma.SubscriptionPlanCreateWithoutBusinessInput, Prisma.SubscriptionPlanUncheckedCreateWithoutBusinessInput>
+  create: Prisma.XOR<Prisma.SubscriptionPlanCreateWithoutSubscriptionInput, Prisma.SubscriptionPlanUncheckedCreateWithoutSubscriptionInput>
 }
 
-export type SubscriptionPlanUpsertWithoutBusinessInput = {
-  update: Prisma.XOR<Prisma.SubscriptionPlanUpdateWithoutBusinessInput, Prisma.SubscriptionPlanUncheckedUpdateWithoutBusinessInput>
-  create: Prisma.XOR<Prisma.SubscriptionPlanCreateWithoutBusinessInput, Prisma.SubscriptionPlanUncheckedCreateWithoutBusinessInput>
+export type SubscriptionPlanUpsertWithoutSubscriptionInput = {
+  update: Prisma.XOR<Prisma.SubscriptionPlanUpdateWithoutSubscriptionInput, Prisma.SubscriptionPlanUncheckedUpdateWithoutSubscriptionInput>
+  create: Prisma.XOR<Prisma.SubscriptionPlanCreateWithoutSubscriptionInput, Prisma.SubscriptionPlanUncheckedCreateWithoutSubscriptionInput>
   where?: Prisma.SubscriptionPlanWhereInput
 }
 
-export type SubscriptionPlanUpdateToOneWithWhereWithoutBusinessInput = {
+export type SubscriptionPlanUpdateToOneWithWhereWithoutSubscriptionInput = {
   where?: Prisma.SubscriptionPlanWhereInput
-  data: Prisma.XOR<Prisma.SubscriptionPlanUpdateWithoutBusinessInput, Prisma.SubscriptionPlanUncheckedUpdateWithoutBusinessInput>
+  data: Prisma.XOR<Prisma.SubscriptionPlanUpdateWithoutSubscriptionInput, Prisma.SubscriptionPlanUncheckedUpdateWithoutSubscriptionInput>
 }
 
-export type SubscriptionPlanUpdateWithoutBusinessInput = {
+export type SubscriptionPlanUpdateWithoutSubscriptionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  billingCycle?: Prisma.StringFieldUpdateOperationsInput | string
   maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
   maxBranch?: Prisma.IntFieldUpdateOperationsInput | number
+  maxProduct?: Prisma.IntFieldUpdateOperationsInput | number
+  maxStaff?: Prisma.IntFieldUpdateOperationsInput | number
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type SubscriptionPlanUncheckedUpdateWithoutBusinessInput = {
+export type SubscriptionPlanUncheckedUpdateWithoutSubscriptionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  billingCycle?: Prisma.StringFieldUpdateOperationsInput | string
   maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
   maxBranch?: Prisma.IntFieldUpdateOperationsInput | number
+  maxProduct?: Prisma.IntFieldUpdateOperationsInput | number
+  maxStaff?: Prisma.IntFieldUpdateOperationsInput | number
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -475,11 +585,11 @@ export type SubscriptionPlanUncheckedUpdateWithoutBusinessInput = {
  */
 
 export type SubscriptionPlanCountOutputType = {
-  business: number
+  subscription: number
 }
 
 export type SubscriptionPlanCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  business?: boolean | SubscriptionPlanCountOutputTypeCountBusinessArgs
+  subscription?: boolean | SubscriptionPlanCountOutputTypeCountSubscriptionArgs
 }
 
 /**
@@ -495,7 +605,7 @@ export type SubscriptionPlanCountOutputTypeDefaultArgs<ExtArgs extends runtime.T
 /**
  * SubscriptionPlanCountOutputType without action
  */
-export type SubscriptionPlanCountOutputTypeCountBusinessArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type SubscriptionPlanCountOutputTypeCountSubscriptionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.BusinessSubscriptionWhereInput
 }
 
@@ -504,10 +614,14 @@ export type SubscriptionPlanSelect<ExtArgs extends runtime.Types.Extensions.Inte
   id?: boolean
   name?: boolean
   price?: boolean
+  billingCycle?: boolean
   maxUsers?: boolean
   maxBranch?: boolean
+  maxProduct?: boolean
+  maxStaff?: boolean
+  features?: boolean
   createdAt?: boolean
-  business?: boolean | Prisma.SubscriptionPlan$businessArgs<ExtArgs>
+  subscription?: boolean | Prisma.SubscriptionPlan$subscriptionArgs<ExtArgs>
   _count?: boolean | Prisma.SubscriptionPlanCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subscriptionPlan"]>
 
@@ -515,8 +629,12 @@ export type SubscriptionPlanSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   id?: boolean
   name?: boolean
   price?: boolean
+  billingCycle?: boolean
   maxUsers?: boolean
   maxBranch?: boolean
+  maxProduct?: boolean
+  maxStaff?: boolean
+  features?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["subscriptionPlan"]>
 
@@ -524,8 +642,12 @@ export type SubscriptionPlanSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   id?: boolean
   name?: boolean
   price?: boolean
+  billingCycle?: boolean
   maxUsers?: boolean
   maxBranch?: boolean
+  maxProduct?: boolean
+  maxStaff?: boolean
+  features?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["subscriptionPlan"]>
 
@@ -533,14 +655,18 @@ export type SubscriptionPlanSelectScalar = {
   id?: boolean
   name?: boolean
   price?: boolean
+  billingCycle?: boolean
   maxUsers?: boolean
   maxBranch?: boolean
+  maxProduct?: boolean
+  maxStaff?: boolean
+  features?: boolean
   createdAt?: boolean
 }
 
-export type SubscriptionPlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "price" | "maxUsers" | "maxBranch" | "createdAt", ExtArgs["result"]["subscriptionPlan"]>
+export type SubscriptionPlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "price" | "billingCycle" | "maxUsers" | "maxBranch" | "maxProduct" | "maxStaff" | "features" | "createdAt", ExtArgs["result"]["subscriptionPlan"]>
 export type SubscriptionPlanInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  business?: boolean | Prisma.SubscriptionPlan$businessArgs<ExtArgs>
+  subscription?: boolean | Prisma.SubscriptionPlan$subscriptionArgs<ExtArgs>
   _count?: boolean | Prisma.SubscriptionPlanCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SubscriptionPlanIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -549,14 +675,18 @@ export type SubscriptionPlanIncludeUpdateManyAndReturn<ExtArgs extends runtime.T
 export type $SubscriptionPlanPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "SubscriptionPlan"
   objects: {
-    business: Prisma.$BusinessSubscriptionPayload<ExtArgs>[]
+    subscription: Prisma.$BusinessSubscriptionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
     price: runtime.Decimal
+    billingCycle: string
     maxUsers: number
     maxBranch: number
+    maxProduct: number
+    maxStaff: number
+    features: runtime.JsonValue
     createdAt: Date
   }, ExtArgs["result"]["subscriptionPlan"]>
   composites: {}
@@ -952,7 +1082,7 @@ readonly fields: SubscriptionPlanFieldRefs;
  */
 export interface Prisma__SubscriptionPlanClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  business<T extends Prisma.SubscriptionPlan$businessArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubscriptionPlan$businessArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BusinessSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  subscription<T extends Prisma.SubscriptionPlan$subscriptionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubscriptionPlan$subscriptionArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BusinessSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -985,8 +1115,12 @@ export interface SubscriptionPlanFieldRefs {
   readonly id: Prisma.FieldRef<"SubscriptionPlan", 'String'>
   readonly name: Prisma.FieldRef<"SubscriptionPlan", 'String'>
   readonly price: Prisma.FieldRef<"SubscriptionPlan", 'Decimal'>
+  readonly billingCycle: Prisma.FieldRef<"SubscriptionPlan", 'String'>
   readonly maxUsers: Prisma.FieldRef<"SubscriptionPlan", 'Int'>
   readonly maxBranch: Prisma.FieldRef<"SubscriptionPlan", 'Int'>
+  readonly maxProduct: Prisma.FieldRef<"SubscriptionPlan", 'Int'>
+  readonly maxStaff: Prisma.FieldRef<"SubscriptionPlan", 'Int'>
+  readonly features: Prisma.FieldRef<"SubscriptionPlan", 'Json'>
   readonly createdAt: Prisma.FieldRef<"SubscriptionPlan", 'DateTime'>
 }
     
@@ -1376,9 +1510,9 @@ export type SubscriptionPlanDeleteManyArgs<ExtArgs extends runtime.Types.Extensi
 }
 
 /**
- * SubscriptionPlan.business
+ * SubscriptionPlan.subscription
  */
-export type SubscriptionPlan$businessArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type SubscriptionPlan$subscriptionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the BusinessSubscription
    */

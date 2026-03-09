@@ -28,6 +28,7 @@ async registerUser(
     
     const { token, expiresIn } = signTokenWithExpiry(
       user.id,
+      user.email,
       user.role,
     );
 
@@ -64,6 +65,7 @@ async registerUser(
     if(!user.businessId  || !user.onboardingCompleted){
       const { token, expiresIn } = signTokenWithExpiry(
         user.id,
+        user.email,
         user.role,
       )
       return {
@@ -82,6 +84,7 @@ async registerUser(
 
     const { token, expiresIn } = signTokenWithExpiry(
       user.id,
+      user.email,
       user.role,
       user.businessId,
       activeBranch?.id

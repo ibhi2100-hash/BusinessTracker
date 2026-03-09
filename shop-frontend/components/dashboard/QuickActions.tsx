@@ -20,24 +20,24 @@ export const QuickActions = () => {
 
   const branchActions = [
     {
-      label: "New Sale",
-      icon: PlusCircle,
-      action: () => router.push("/sales/new"),
-    },
-    {
-      label: "Add Expense",
-      icon: DollarSign,
-      action: () => router.push("/expenses/new"),
-    },
-    {
       label: "Add Asset",
-      icon: Package,
+      icon: PlusCircle,
       action: () => router.push("/assets/new"),
     },
     {
+      label: "Disposed Asset",
+      icon: DollarSign,
+      action: () => router.push("/assets/disposed"),
+    },
+    {
       label: "Add Liability",
-      icon: CreditCard,
+      icon: Package,
       action: () => router.push("/liabilities/new"),
+    },
+    {
+      label: "Liability Repayment",
+      icon: CreditCard,
+      action: () => router.push("/liabilities/repayment"),
     },
   ];
 

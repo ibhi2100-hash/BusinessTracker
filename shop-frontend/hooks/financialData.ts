@@ -62,6 +62,7 @@ useEffect(() => {
   });
 
 }, [query.data]);
+console.log("DashBoardData:", query.data)
 
   return query;
 }

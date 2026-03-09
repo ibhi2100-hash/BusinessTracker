@@ -17,7 +17,7 @@ export const StepFooter = ({ onNext,  disabled , isLastStep }: StepFooterProps) 
 
   // Default: show Next button
   return (
-    <div className="mt-4 flex justify-end">
+    <div className="mt-4 p-6 flex justify-end">
       <Button onClick={onNext} disabled={disabled} className="w-32">
         Next
       </Button>

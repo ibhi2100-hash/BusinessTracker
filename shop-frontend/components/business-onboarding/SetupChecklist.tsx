@@ -10,33 +10,27 @@ import { da } from "zod/v4/locales";
 
 export const SetupChecklist = () => {
   const router = useRouter();
-  const {
-    hasOpeningCash,
-    hasInventory,
-    hasAssets,
-    hasLiabilities,
-  } = useBusinessSetupStore();
 const { data } = useOnboardingStatus(); 
   const items = [
-    {
-      label: "Add Opening Cash",
-      done: data?.steps.openingCash,
-      route: "/onboarding-opening-cash",
-    },
     {
       label: "Upload Inventory",
       done: data?.steps.inventory,
       route: "/onboarding-inventory",
     },
     {
+      label: "Add Opening Cash",
+      done: data?.steps.openingCash,
+      route: "/onboarding-opening-cash",
+    },
+    {
       label: "Add Assets",
       done: data?.steps.assets,
-      route: "/onboasrding/assets",
+      route: "/onboarding-assets",
     },
     {
       label: "Add Liabilities",
       done: data?.steps.liabilities,
-      route: "/onboarding/liabilities",
+      route: "/onboarding-liabilities",
     },
   ];
 

@@ -2,7 +2,6 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { QueryClient } from "@tanstack/react-query";
 import { loginSchema, LoginInput } from "@/lib/validations/auth.schema";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

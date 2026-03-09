@@ -164,8 +164,6 @@ const handleSell = async (productId: string, quantity: number) => {
       quantity: product.quantity - quantity,
     });
 
-    toast.success("Sale completed!");
-
     // Add sale to sales store
     addSale(sale);
 
@@ -195,7 +193,7 @@ const handleSell = async (productId: string, quantity: number) => {
           ))}
         </div>
 
-
+    <div className="flex space-x-3">
       {/* Brand dropdown */}
       {selectedCategoryId && <BrandDropdown />}
 
@@ -208,6 +206,8 @@ const handleSell = async (productId: string, quantity: number) => {
           Add Product
         </button>
       )}
+
+    </div>
 
       {/* Product grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">

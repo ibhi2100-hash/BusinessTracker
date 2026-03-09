@@ -6,6 +6,7 @@ const JWT_SECRET = process.env.JWT_SECRET as string;
 
 interface JwtPayload {
   userId: string;
+  email: string;
   businessId: string;
   branchId: string;
   role: string;
@@ -25,14 +26,16 @@ export function authMiddleware(
 
     const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
 
+
     if (!decoded.userId ) {
       return res.status(401).json({ message: "Invalid token" });
     }
 
     const authUser: AuthUser = {
       id: decoded.userId,
+      email: decoded.email,
       businessId: decoded.businessId,
-      role: decoded.role,
+      role: decoded.role as "ADMIN" | "STAFF",
       branchId: decoded.branchId
     };
 

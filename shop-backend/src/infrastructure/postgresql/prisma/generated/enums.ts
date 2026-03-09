@@ -49,12 +49,15 @@ export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
 
 export const CashFlowType = {
   OPENING: 'OPENING',
+  OWNER_CAPITAL: 'OWNER_CAPITAL',
+  OWNER_WITHDRAWAL: 'OWNER_WITHDRAWAL',
   SALE_INCOME: 'SALE_INCOME',
   PURCHASE_EXPENSE: 'PURCHASE_EXPENSE',
   ASSET_PURCHASE: 'ASSET_PURCHASE',
   ASSET_DISPOSAL: 'ASSET_DISPOSAL',
   LIABILITY_PAYMENT: 'LIABILITY_PAYMENT',
-  EXPENSE: 'EXPENSE'
+  EXPENSE: 'EXPENSE',
+  REFUND: 'REFUND'
 } as const
 
 export type CashFlowType = (typeof CashFlowType)[keyof typeof CashFlowType]

@@ -18,7 +18,7 @@ export class ReportRepository{
 
     async getCashflow(businessId: string, branchId: string, start: Date, end: Date){
         const result = await prisma.cashFlow.groupBy({
-            by: ["type"],
+            by: ["direction"],
             where: {
                 businessId,
                 branchId,
@@ -29,8 +29,8 @@ export class ReportRepository{
 
         return result.reduce(
             (acc, row) => {
-                if(row.type === "INFLOW") acc.inflow += Number(row._sum.amount)
-                if(row.type === "OUTFLOW") acc.outflow += Number(row._sum.amount);
+                if(row.direction === "IN") acc.inflow += Number(row._sum.amount)
+                if(row.direction === "OUT") acc.outflow += Number(row._sum.amount);
                 return acc;
             },
             { inflow: 0, outflow: 0}
@@ -59,13 +59,16 @@ export class ReportRepository{
             where: {
                 businessId,
                 branchId,
-                status: "ACTIVE"
+                status: "ACTIVE",
             },
             _sum: {
                 outstandingAmount: true,
             }
         });
+     
+
         return Number(result._sum.outstandingAmount ?? 0);
+        
     }
     async getCOGS(businessId: string, branchId: string, start: Date, end: Date) {
         const items = await prisma.saleItem.findMany({

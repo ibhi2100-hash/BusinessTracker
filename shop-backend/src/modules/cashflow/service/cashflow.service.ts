@@ -1,10 +1,32 @@
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
 import { CashflowRepository } from "../repository/cashflow.repository.js";
-import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
+import { CashFlowType, Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
 
 export class CashflowService {
 constructor (private cashflowRepo: CashflowRepository){}
 
+private async getBranchBalance(
+  businessId: string,
+  branchId: string,
+  tx: Prisma.TransactionClient
+) {
+  const result = await tx.cashFlow.groupBy({
+    by: ["direction"],
+    where: { businessId, branchId },
+    _sum: { amount: true }
+  });
+
+  let inflow = 0;
+  let outflow = 0;
+
+  for (const row of result) {
+    const value = Number(row._sum.amount ?? 0);
+    if (row.direction === "IN") inflow = value;
+    if (row.direction === "OUT") outflow = value;
+  }
+
+  return inflow - outflow;
+}
     /**
      * Opening cash is allowed once per branch.
      */
@@ -123,6 +145,72 @@ constructor (private cashflowRepo: CashflowRepository){}
     }
 
     async getCashflowInject (businessId: string, branchId: string) {
-        return await this.cashflowRepo.getOPeningCashflowInject(businessId, branchId);
+        return await this.cashflowRepo.findOpeningByBranch(businessId, branchId);
+    }
+    async getCashflowRecord (businessId: string, branchId: string){
+        return await this.cashflowRepo.getAllCashflowRecord(businessId, branchId)
+    }
+    async injectCash(
+    businessId: string,
+    branchId: string,
+    amount: number,
+    type: CashFlowType,
+    description?: string
+    ) {
+
+    if (amount <= 0) throw new Error("Amount must be greater than zero");
+
+    return prisma.$transaction(async (tx) => {
+
+        const balance = await this.getBranchBalance(businessId, branchId, tx);
+        const newBalance = balance + amount;
+
+        const typeStatus = type === "OPENING"
+
+        return this.cashflowRepo.create({
+        business: { connect: { id: businessId } },
+        branch: { connect: { id: branchId } },
+        type,
+        direction: "IN",
+        amount,
+        balanceAfter: newBalance,
+        description: description ?? null, // ✅ FIXED
+        isOpening: typeStatus ? true : false
+        }, tx);
+
+    });
+    }
+    async withdrawCash(
+    businessId: string,
+    branchId: string,
+    amount: number,
+    type: CashFlowType,
+    description?: string
+    ) {
+
+    if (amount <= 0) throw new Error("Amount must be greater than zero");
+
+    return prisma.$transaction(async (tx) => {
+
+        const balance = await this.getBranchBalance(businessId, branchId, tx);
+
+        if (balance < amount) {
+        throw new Error("Insufficient branch balance");
+        }
+
+        const newBalance = balance - amount;
+
+        return this.cashflowRepo.create({
+        business: { connect: { id: businessId } },
+        branch: { connect: { id: branchId } },
+        type,
+        direction: "OUT", // 🔒 enforce direction
+        amount,
+        balanceAfter: newBalance,
+        description: description ?? null, // ✅ FIXED
+        isOpening: false
+        }, tx);
+
+    });
     }
 }

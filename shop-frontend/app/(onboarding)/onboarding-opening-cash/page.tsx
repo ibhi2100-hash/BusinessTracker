@@ -11,7 +11,7 @@ export default function OpeningCashPage() {
   const router = useRouter();
   const { data, refetch } = useOnboardingStatus();
 
-  const handleNext = () => router.push("/onboarding-inventory");
+  const handleNext = () => router.push("/onboard");
 
   return (
     <div className="space-y-6">

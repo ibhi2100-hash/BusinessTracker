@@ -12,7 +12,7 @@ export const SetupProgressTracker = () => {
   const isComplete = percentage === 100;
 
   return (
-    <Card className="space-y-4 relative overflow-hidden">
+    <Card className="space-y-4 relative p-6 overflow-hidden">
       <div>
         <h2 className="text-sm font-medium">Setup Progress</h2>
         <p className="text-xs text-gray-500">

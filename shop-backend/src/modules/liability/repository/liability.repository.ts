@@ -1,17 +1,39 @@
-import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
+import { LiabilityStatus, LiabilityType, Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
+import { LiabilityCreateInput } from "../dto/liabilityCreate.dto.js";
 
 export class LiabilityRepository {
     
-    async create(businessId: string, data: any) {
-        return await prisma.liability.create({
-            data: {
-                businessId,
-                ...data,
-            },
-        });
-
-    }
+async create(
+  businessId: string,
+  branchId: string,
+  data: {
+    title: string;
+    type: LiabilityType;
+    principalAmount: number;
+    interestRate: number | null;
+    startDate: Date;
+    dueDate: Date | null;
+    outstandingAmount: number;
+    status: LiabilityStatus
+  },
+  tx: Prisma.TransactionClient
+) {
+  return tx.liability.create({
+    data: {
+      businessId,
+      branchId,
+      title: data.title,
+      type: data.type,
+      principalAmount: data.principalAmount,
+      interestRate: data.interestRate,
+      startDate: data.startDate,
+      dueDate: data.dueDate,
+      outstandingAmount: data.outstandingAmount,
+      status: data.status,
+    },
+  });
+}
 
     async findById(id: string, businessId: string){
         return await prisma.liability.findFirst({

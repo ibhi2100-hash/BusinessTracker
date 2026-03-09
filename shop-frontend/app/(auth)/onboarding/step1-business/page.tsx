@@ -8,10 +8,28 @@ import { useBranchStore } from "@/store/useBranchStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useBusinessStatus } from "@/hooks/useBusinessStatus";
 import { useBusinessStore } from "@/store/businessStore";
+import { useSubscription } from "@/hooks/subscriptionHooks/useSubscription";
+import { saveSubscription } from "@/lib/subscriptionHelpers";
+import { useSubscriptionStore } from "@/store/useSubscriptionStore";
+import { useInitializeSubscription } from "@/hooks/subscriptionHooks/useInitializehydrateSubscription";
+
 
 export default function Step2Business() {
   const router = useRouter();
+  const { data } = useSubscription();
+  const setSubscription = useSubscriptionStore((state) => state.setSubscription);
+  useInitializeSubscription();
+  useSubscription()
 
+  useEffect(() => {
+    if(!data) return;
+    if (data) {
+      setSubscription(data);
+      saveSubscription(data);
+    }
+  }, [data]);
+
+   
   // Form state
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -20,23 +38,7 @@ export default function Step2Business() {
 
   // Stores
   const setLogin = useAuthStore((state) => state.setLogin);
-  const businessFromStore = useBusinessStore((state) => state.business);
   const setBusiness = useBusinessStore((state) => state.setBusiness);
-
-  // Fetch business status
-  const { data, isLoading: statusLoading } = useBusinessStatus();
-
-  // Update store when data arrives
-  useEffect(() => {
-    if (data && !businessFromStore) {
-      setBusiness(data);
-    }
-  }, [data, businessFromStore, setBusiness]);
-
-  // Redirect if already onboarding
-  useEffect(() => {
-    
-  }, [businessFromStore, router]);
 
   // Submit handler
   const handleNext = async () => {
@@ -80,6 +82,7 @@ export default function Step2Business() {
         );
 
       }
+   
     
       router.push("/onboard");
       

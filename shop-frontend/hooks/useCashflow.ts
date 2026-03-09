@@ -1,48 +1,46 @@
 "use client";
 
-import { useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useCashflowStore } from "@/store/cashflowStore";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { CashflowService } from "@/services/cashflowService";
-import type { Cashflow } from "@/services/cashflowService";
+import type { Cashflow, CashFlowType } from "@/services/cashflowService";
+
+interface CashflowPayload {
+  amount: number;
+  type: CashFlowType;
+  description?: string;
+}
 
 export function useCashflows(autoFetch = true) {
-    const store = useCashflowStore();
+  const queryClient = useQueryClient();
 
-    // Fetch all cashflows from the backend
-    const query = useQuery<Cashflow[], Error>({
-        queryKey: ["cashflows"],
-        queryFn: () => CashflowService.getAllCashflows(),
-        staleTime: 1000 * 60 * 5, // cache for 5 minutes
-        enabled: autoFetch, // only fetch automatically if autoFetch is true
-    });
+  // Fetch all cashflows
+  const query = useQuery<Cashflow[], Error>({
+    queryKey: ["cashflows"],
+    queryFn: CashflowService.getAllCashflows,
+    staleTime: 1000 * 60 * 5,
+    enabled: autoFetch,
+  });
 
-    // Push data into Zustand store
-    useEffect(() => {
-        if (!query.data) return;
-        store.setCashflows(query.data);
-    }, [query.data]);
+  // Inject cash mutation
+  const injectMutation = useMutation({
+    mutationFn: (payload: CashflowPayload) =>
+      CashflowService.injectCash(payload.amount, payload.type, payload.description),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["cashflows"] }),
+  });
 
-    // Inject cash action
-    const injectCash = async (amount: number, description?: string) => {
-        const newCash = await CashflowService.injectCash(amount, description);
-        store.addCashflow(newCash);
-        return newCash;
-    };
+  // Withdraw cash mutation
+  const withdrawMutation = useMutation({
+    mutationFn: (payload: CashflowPayload) =>
+      CashflowService.withdrawCash(payload.amount, payload.type, payload.description),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["cashflows"] }),
+  });
 
-    // Withdraw cash action
-    const withdrawCash = async (amount: number, description?: string) => {
-        const newCash = await CashflowService.withdrawCash(amount, description);
-        store.addCashflow(newCash);
-        return newCash;
-    };
-
-    return {
-        cashflows: store.cashflows,
-        loading: query.isLoading,
-        error: query.error,
-        injectCash,
-        withdrawCash,
-        refetch: query.refetch,
-    };
+  return {
+    cashflows: Array.isArray(query.data) ? query.data : [], // ✅ always array
+    loading: query.isLoading,
+    error: query.error,
+    injectCash: injectMutation.mutateAsync,
+    withdrawCash: withdrawMutation.mutateAsync,
+    refetch: query.refetch,
+  };
 }

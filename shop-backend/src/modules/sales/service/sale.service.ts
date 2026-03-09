@@ -115,7 +115,6 @@ async createSale(dto: any, businessId: string, branchId: string) {
       businessId,
       branchId,
       amount: totalAmount,
-      type: "INFLOW",
       source: "SALE",
       description: `Sale ID: ${sale.id}`
     }, tx);

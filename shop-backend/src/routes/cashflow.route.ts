@@ -7,21 +7,24 @@ import { CashflowService } from "../modules/cashflow/service/cashflow.service.js
 
 const router = Router();
 const repo = new CashflowRepository();
-const service = new CashflowService(repo)
+const service = new CashflowService(repo);
 const controller = new CashflowController(service);
 
-router.use(authMiddleware, isAdminMiddleware)
+router.use(authMiddleware, isAdminMiddleware);
 
-//Get injected capital record
-router.get("/", controller.getCashflowRecord)
+// Branch opening cash
+router.post("/opening", controller.addOpeningCash.bind(controller));
 
-// Owner Cash Injection
-router.post("/inject", controller.addOpeningCash.bind(controller));
+// Owner cash top-up
+router.post("/inject", controller.injectCash.bind(controller));
 
-// Owner Cash Withdrawal
+// Owner cash withdrawal
 router.post("/withdraw", controller.withdrawCash.bind(controller));
 
-//get Daily summary 
-router.get("/dailySummary", controller.getDailySummary.bind(controller))
+// Get all cashflow records for the branch
+router.get("/", controller.getCashflowRecord.bind(controller));
+
+// Get daily summary
+router.get("/dailySummary", controller.getDailySummary.bind(controller));
 
 export default router;

@@ -1,12 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { on } from "events";
+
 
 export const useActivateBusiness = () => {
     const queryClient = useQueryClient();
     
   return useMutation({
     mutationFn: async () => {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URl}/business/activate`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/business/activate`, {
         method: "POST",
         credentials: "include",
       });

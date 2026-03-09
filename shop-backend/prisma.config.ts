@@ -10,8 +10,12 @@ if (!process.env.DATABASE_URL) {
 
 export default defineConfig({
   schema: "src/infrastructure/postgresql/prisma/schema.prisma",
+
   datasource: {
     url: process.env.DATABASE_URL,
   },
-});
 
+  migrations: {
+    seed: "tsx src/infrastructure/postgresql/prisma/seed.ts",
+  },
+});

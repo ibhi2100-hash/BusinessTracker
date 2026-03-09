@@ -6,6 +6,7 @@ import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
 import { CashflowRepository } from "../../cashflow/repository/cashflow.repository.js";
 import { inventoryRepository } from "../../inventory/repository/inventory.repository.js";
 import { AlertRepository } from "../../alerts/repository/alerts.repository.js";
+import { connect } from "node:http2";
 
 export class ProductService {
     constructor(
@@ -38,10 +39,11 @@ export class ProductService {
                 }, tx)
 
                  if (stockMode === "PURCHASE") {
-                    await this.cashflowRepo.createCashFlow({
-                    businessId,
-                    branchId: branchId!,
-                    type: "OUTFLOW",
+                    await this.cashflowRepo.create({
+                    business: { connect: { id: businessId}},
+                    branch: { connect: { id: branchId}},
+                    type: "PURCHASE_EXPENSE",
+                    direction: "OUT",
                     amount: (dto.costPrice ?? 0) * dto.quantity,
                     source: "Inventory Purchase",
                     description: `Purchased stock: ${product.name}`

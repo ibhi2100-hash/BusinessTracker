@@ -9,7 +9,7 @@ export default function InventoryStep() {
   const handleNext = () => location.href = "/onboarding-assets"; // next step
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-6 m-auto">
       <SetupProgressTracker />
       <InventoryPage context="admin" mode="OPENING" />
       <StepFooter onNext={handleNext} />

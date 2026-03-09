@@ -48,6 +48,16 @@ export type SubscriptionPlan = Prisma.SubscriptionPlanModel
  */
 export type BusinessSubscription = Prisma.BusinessSubscriptionModel
 /**
+ * Model LedgerAccount
+ * 
+ */
+export type LedgerAccount = Prisma.LedgerAccountModel
+/**
+ * Model LedgerEntry
+ * 
+ */
+export type LedgerEntry = Prisma.LedgerEntryModel
+/**
  * Model Category
  * 
  */

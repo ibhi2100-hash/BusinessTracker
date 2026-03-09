@@ -7,7 +7,7 @@ import AddAssetPage from "@/components/assets/assetsPage";
 
 
 export default function AssetsPage() {
-  const handleNext = () => location.href = "/onboarding-assets"; // next step
+  const handleNext = () => location.href = "/onboarding-liabilities"; // next step
 
   return (
     <div className="space-y-6">

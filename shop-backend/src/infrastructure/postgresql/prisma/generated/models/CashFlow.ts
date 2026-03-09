@@ -47,6 +47,7 @@ export type CashFlowMinAggregateOutputType = {
   source: string | null
   description: string | null
   isOpening: boolean | null
+  isLocked: boolean | null
   createdAt: Date | null
 }
 
@@ -61,6 +62,7 @@ export type CashFlowMaxAggregateOutputType = {
   source: string | null
   description: string | null
   isOpening: boolean | null
+  isLocked: boolean | null
   createdAt: Date | null
 }
 
@@ -75,6 +77,7 @@ export type CashFlowCountAggregateOutputType = {
   source: number
   description: number
   isOpening: number
+  isLocked: number
   createdAt: number
   _all: number
 }
@@ -101,6 +104,7 @@ export type CashFlowMinAggregateInputType = {
   source?: true
   description?: true
   isOpening?: true
+  isLocked?: true
   createdAt?: true
 }
 
@@ -115,6 +119,7 @@ export type CashFlowMaxAggregateInputType = {
   source?: true
   description?: true
   isOpening?: true
+  isLocked?: true
   createdAt?: true
 }
 
@@ -129,6 +134,7 @@ export type CashFlowCountAggregateInputType = {
   source?: true
   description?: true
   isOpening?: true
+  isLocked?: true
   createdAt?: true
   _all?: true
 }
@@ -230,6 +236,7 @@ export type CashFlowGroupByOutputType = {
   source: string | null
   description: string | null
   isOpening: boolean
+  isLocked: boolean
   createdAt: Date
   _count: CashFlowCountAggregateOutputType | null
   _avg: CashFlowAvgAggregateOutputType | null
@@ -267,6 +274,7 @@ export type CashFlowWhereInput = {
   source?: Prisma.StringNullableFilter<"CashFlow"> | string | null
   description?: Prisma.StringNullableFilter<"CashFlow"> | string | null
   isOpening?: Prisma.BoolFilter<"CashFlow"> | boolean
+  isLocked?: Prisma.BoolFilter<"CashFlow"> | boolean
   createdAt?: Prisma.DateTimeFilter<"CashFlow"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
   branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
@@ -283,6 +291,7 @@ export type CashFlowOrderByWithRelationInput = {
   source?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   isOpening?: Prisma.SortOrder
+  isLocked?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   business?: Prisma.BusinessOrderByWithRelationInput
   branch?: Prisma.BranchOrderByWithRelationInput
@@ -302,6 +311,7 @@ export type CashFlowWhereUniqueInput = Prisma.AtLeast<{
   source?: Prisma.StringNullableFilter<"CashFlow"> | string | null
   description?: Prisma.StringNullableFilter<"CashFlow"> | string | null
   isOpening?: Prisma.BoolFilter<"CashFlow"> | boolean
+  isLocked?: Prisma.BoolFilter<"CashFlow"> | boolean
   createdAt?: Prisma.DateTimeFilter<"CashFlow"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
   branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
@@ -318,6 +328,7 @@ export type CashFlowOrderByWithAggregationInput = {
   source?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   isOpening?: Prisma.SortOrder
+  isLocked?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.CashFlowCountOrderByAggregateInput
   _avg?: Prisma.CashFlowAvgOrderByAggregateInput
@@ -340,6 +351,7 @@ export type CashFlowScalarWhereWithAggregatesInput = {
   source?: Prisma.StringNullableWithAggregatesFilter<"CashFlow"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"CashFlow"> | string | null
   isOpening?: Prisma.BoolWithAggregatesFilter<"CashFlow"> | boolean
+  isLocked?: Prisma.BoolWithAggregatesFilter<"CashFlow"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CashFlow"> | Date | string
 }
 
@@ -352,6 +364,7 @@ export type CashFlowCreateInput = {
   source?: string | null
   description?: string | null
   isOpening?: boolean
+  isLocked?: boolean
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutCashFlowsInput
   branch: Prisma.BranchCreateNestedOneWithoutCashflowsInput
@@ -368,6 +381,7 @@ export type CashFlowUncheckedCreateInput = {
   source?: string | null
   description?: string | null
   isOpening?: boolean
+  isLocked?: boolean
   createdAt?: Date | string
 }
 
@@ -380,6 +394,7 @@ export type CashFlowUpdateInput = {
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutCashFlowsNestedInput
   branch?: Prisma.BranchUpdateOneRequiredWithoutCashflowsNestedInput
@@ -396,6 +411,7 @@ export type CashFlowUncheckedUpdateInput = {
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -410,6 +426,7 @@ export type CashFlowCreateManyInput = {
   source?: string | null
   description?: string | null
   isOpening?: boolean
+  isLocked?: boolean
   createdAt?: Date | string
 }
 
@@ -422,6 +439,7 @@ export type CashFlowUpdateManyMutationInput = {
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -436,6 +454,7 @@ export type CashFlowUncheckedUpdateManyInput = {
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -460,6 +479,7 @@ export type CashFlowCountOrderByAggregateInput = {
   source?: Prisma.SortOrder
   description?: Prisma.SortOrder
   isOpening?: Prisma.SortOrder
+  isLocked?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -479,6 +499,7 @@ export type CashFlowMaxOrderByAggregateInput = {
   source?: Prisma.SortOrder
   description?: Prisma.SortOrder
   isOpening?: Prisma.SortOrder
+  isLocked?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -493,6 +514,7 @@ export type CashFlowMinOrderByAggregateInput = {
   source?: Prisma.SortOrder
   description?: Prisma.SortOrder
   isOpening?: Prisma.SortOrder
+  isLocked?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -602,6 +624,7 @@ export type CashFlowCreateWithoutBusinessInput = {
   source?: string | null
   description?: string | null
   isOpening?: boolean
+  isLocked?: boolean
   createdAt?: Date | string
   branch: Prisma.BranchCreateNestedOneWithoutCashflowsInput
 }
@@ -616,6 +639,7 @@ export type CashFlowUncheckedCreateWithoutBusinessInput = {
   source?: string | null
   description?: string | null
   isOpening?: boolean
+  isLocked?: boolean
   createdAt?: Date | string
 }
 
@@ -659,6 +683,7 @@ export type CashFlowScalarWhereInput = {
   source?: Prisma.StringNullableFilter<"CashFlow"> | string | null
   description?: Prisma.StringNullableFilter<"CashFlow"> | string | null
   isOpening?: Prisma.BoolFilter<"CashFlow"> | boolean
+  isLocked?: Prisma.BoolFilter<"CashFlow"> | boolean
   createdAt?: Prisma.DateTimeFilter<"CashFlow"> | Date | string
 }
 
@@ -671,6 +696,7 @@ export type CashFlowCreateWithoutBranchInput = {
   source?: string | null
   description?: string | null
   isOpening?: boolean
+  isLocked?: boolean
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutCashFlowsInput
 }
@@ -685,6 +711,7 @@ export type CashFlowUncheckedCreateWithoutBranchInput = {
   source?: string | null
   description?: string | null
   isOpening?: boolean
+  isLocked?: boolean
   createdAt?: Date | string
 }
 
@@ -724,6 +751,7 @@ export type CashFlowCreateManyBusinessInput = {
   source?: string | null
   description?: string | null
   isOpening?: boolean
+  isLocked?: boolean
   createdAt?: Date | string
 }
 
@@ -736,6 +764,7 @@ export type CashFlowUpdateWithoutBusinessInput = {
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   branch?: Prisma.BranchUpdateOneRequiredWithoutCashflowsNestedInput
 }
@@ -750,6 +779,7 @@ export type CashFlowUncheckedUpdateWithoutBusinessInput = {
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -763,6 +793,7 @@ export type CashFlowUncheckedUpdateManyWithoutBusinessInput = {
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -776,6 +807,7 @@ export type CashFlowCreateManyBranchInput = {
   source?: string | null
   description?: string | null
   isOpening?: boolean
+  isLocked?: boolean
   createdAt?: Date | string
 }
 
@@ -788,6 +820,7 @@ export type CashFlowUpdateWithoutBranchInput = {
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutCashFlowsNestedInput
 }
@@ -802,6 +835,7 @@ export type CashFlowUncheckedUpdateWithoutBranchInput = {
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -815,6 +849,7 @@ export type CashFlowUncheckedUpdateManyWithoutBranchInput = {
   source?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOpening?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -831,6 +866,7 @@ export type CashFlowSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   source?: boolean
   description?: boolean
   isOpening?: boolean
+  isLocked?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
@@ -847,6 +883,7 @@ export type CashFlowSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   source?: boolean
   description?: boolean
   isOpening?: boolean
+  isLocked?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
@@ -863,6 +900,7 @@ export type CashFlowSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   source?: boolean
   description?: boolean
   isOpening?: boolean
+  isLocked?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
@@ -879,10 +917,11 @@ export type CashFlowSelectScalar = {
   source?: boolean
   description?: boolean
   isOpening?: boolean
+  isLocked?: boolean
   createdAt?: boolean
 }
 
-export type CashFlowOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "type" | "amount" | "direction" | "balanceAfter" | "source" | "description" | "isOpening" | "createdAt", ExtArgs["result"]["cashFlow"]>
+export type CashFlowOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "type" | "amount" | "direction" | "balanceAfter" | "source" | "description" | "isOpening" | "isLocked" | "createdAt", ExtArgs["result"]["cashFlow"]>
 export type CashFlowInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
@@ -913,6 +952,7 @@ export type $CashFlowPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     source: string | null
     description: string | null
     isOpening: boolean
+    isLocked: boolean
     createdAt: Date
   }, ExtArgs["result"]["cashFlow"]>
   composites: {}
@@ -1349,6 +1389,7 @@ export interface CashFlowFieldRefs {
   readonly source: Prisma.FieldRef<"CashFlow", 'String'>
   readonly description: Prisma.FieldRef<"CashFlow", 'String'>
   readonly isOpening: Prisma.FieldRef<"CashFlow", 'Boolean'>
+  readonly isLocked: Prisma.FieldRef<"CashFlow", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"CashFlow", 'DateTime'>
 }
     

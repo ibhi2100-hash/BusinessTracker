@@ -8,6 +8,7 @@ export class AuthController {
 
   async register(req: Request, res: Response): Promise<Response> {
     try {
+      console.log("Register DTO:", req.body);
       const result = await this.authService.registerUser(req.body);
 
       if (!result) {

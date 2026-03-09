@@ -37,12 +37,15 @@ enum PaymentMethod {
 
 enum CashFlowType {
 OPENING
+OWNER_CAPITAL
+OWNER_WITHDRAWAL
 SALE_INCOME
 PURCHASE_EXPENSE
 ASSET_PURCHASE
 ASSET_DISPOSAL
 LIABILITY_PAYMENT
 EXPENSE
+REFUND
 }
 
 enum CashFlowDirection {
@@ -130,7 +133,7 @@ model Business {
 
   branch     Branch[]
   users      User[]
-  business   BusinessSubscription[]
+  subscriptions   BusinessSubscription[]
   categories Category[]
   brands      Brand[]
   products   Product[]
@@ -138,6 +141,8 @@ model Business {
   sales      Sale[]
   cashFlows  CashFlow[] 
   liabilities Liability[]
+  ledger      LedgerAccount[]
+  ledgerEntry LedgerEntry[]
   loan        Loan[] 
   employees    Employee[]
   assets      Asset[]
@@ -209,23 +214,53 @@ model SubscriptionPlan {
   id    String  @id   @default(uuid())
   name  String
   price   Decimal
+  billingCycle  String
+
   maxUsers    Int
   maxBranch   Int
+  maxProduct  Int
+  maxStaff    Int
+  
+  features    Json
   createdAt   DateTime    @default(now())
 
-  business    BusinessSubscription[]
+  subscription    BusinessSubscription[]
 }
 
 model BusinessSubscription {
   id              String    @id     @default(uuid())
-  businessId      String    
+  businessId      String  @unique   
   subscriptionId  String
   startedAt       DateTime        @default(now())
+  expiresAt       DateTime
   trialEndDate    DateTime?
   status          String          @default("ACTIVE")
 
   business        Business @relation(fields: [businessId], references: [id])
   subscription    SubscriptionPlan @relation(fields: [subscriptionId], references: [id])
+}
+model LedgerAccount {
+  id          String   @id @default(uuid())
+  businessId  String
+  name        String
+  type        String
+
+  entries     LedgerEntry[]
+
+  business    Business @relation(fields: [businessId], references: [id])
+}
+
+model LedgerEntry {
+  id          String   @id @default(uuid())
+  accountId   String
+  businessId  String
+  amount      Decimal
+  type        String
+  referenceId String?
+  createdAt   DateTime @default(now())
+
+  account     LedgerAccount @relation(fields: [accountId], references: [id])
+  business    Business @relation(fields: [businessId], references: [id])
 }
 
 model Category {
@@ -383,7 +418,8 @@ model CashFlow {
   balanceAfter  Decimal?
   source      String?
   description String?
-  isOpening   Boolean @default(false)
+  isOpening   Boolean      @default(false)
+  isLocked    Boolean      @default(false)
   createdAt   DateTime      @default(now())
 
   business    Business      @relation(fields: [businessId], references: [id])

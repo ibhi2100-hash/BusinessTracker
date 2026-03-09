@@ -4,20 +4,25 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useOnboardingStatus } from "@/hooks/useSetUpStatus";
 import { useActivateBusiness } from "@/hooks/useActivateBusiness";
+import { useBusinessStore } from "@/store/businessStore";
 import { useRouter } from "next/navigation";
 
 export const ActivateBusinessButton = () => {
   const { data } = useOnboardingStatus()
+  const businessFromStore = useBusinessStore((state) => state.business);
   const canActivate = data?.canActivate ?? false;
   const { mutate: activate, isPending } = useActivateBusiness();
   const router = useRouter();
 
+
   const handleActivate = () => {
     if (!canActivate ) return;
-
+    if(!businessFromStore.isOnboarding && businessFromStore.status === "ACTIVE") {
+      router.push("/dashboard")
+    }
     activate(undefined, {
       onSuccess: () => {
-        router.push("/dashboard");
+        router.push("/subscription");
       },
     });
   };

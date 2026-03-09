@@ -4,7 +4,9 @@ import { create } from "zustand";
 export interface Business {
   id: string;
   name: string;
+  onboardingStep:  number;
   isOnboarding: boolean;
+  status: "ONBOARDING" | "ACTIVE" | "SUSPENDED"
   createdAt: string;
   updatedAt: string;
 }

@@ -68,7 +68,6 @@ export class SaleRepository {
     businessId: string;
     branchId: string;
     amount: number;
-    type: CashFlowType;
     source: string;
     description?: string
   },
@@ -79,9 +78,11 @@ export class SaleRepository {
       businessId: params.businessId,
       branchId: params.branchId,
       amount: params.amount,
-      type: params.type,
+      type: "SALE_INCOME",
+      direction: "IN",
       source: params.source,
       description: params.description ?? null,
+      isOpening: false,
     }
   })
 };
@@ -99,10 +100,12 @@ async createRefundCashflow(
     data: {
       businessId: params.businessId,
       branchId: params.branchId,
-      type: "OUTFLOW",
+      type: "REFUND",
+      direction: "OUT",
       amount: params.amount,
       source: "SALE_REFUND",
-      description: `Refund for sale ${params.saleId} `
+      description: `Refund for sale ${params.saleId} `,
+      isOpening: false,
     }
     })
 }
