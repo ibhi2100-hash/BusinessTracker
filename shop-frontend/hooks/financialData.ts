@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useFinancialStore } from "@/store/financialDataStore";
 import { fetchDashboardData } from "../services/dashboard.service";
+import { dbPromise } from "@/offline/db/indexDB";
+import { TABLES } from "@/offline/db/schema";
 
 // Define the type for your dashboard data (adjust fields as needed)
 interface DashboardData {
@@ -25,6 +27,7 @@ interface DashboardPeriod {
 
 export function useDashboardFinancialData(startDate: string, endDate: string) {
   const store = useFinancialStore();
+  const db = dbPromise;
 
   const query = useQuery<DashboardData, Error>({
     queryKey: ["dashboardData", startDate, endDate],
@@ -51,6 +54,8 @@ useEffect(() => {
 
   store.setDashboardSummary(dashboardSummary);
 
+  async()=> (await db).add(TABLES.SNAPSHOT, dashboardSummary)
+
   store.setReports({
     cashAtHand,
     profitLoss,
@@ -62,7 +67,6 @@ useEffect(() => {
   });
 
 }, [query.data]);
-console.log("DashBoardData:", query.data)
 
   return query;
 }

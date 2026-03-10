@@ -1,11 +1,17 @@
 import { useMutation } from "@tanstack/react-query";
-import { saveSaleOffline } from "@/services/saleService";
+import { dispatchEvent } from "@/offline/events/eventDispatcher";
+import { EventTypes } from "@/offline/events/eventTypes";
 
 export function useCreateSale(){
     return useMutation({
-        mutationFn: async (sale)=> {
+        mutationFn: async (sale: { amount: number; costPrice: number })=> {
             if(!navigator.onLine) {
-                await saveSaleOffline(sale)
+                await dispatchEvent(
+                    EventTypes.SALE_ADDED, {
+                        amount: sale.amount,
+                        cost: sale.costPrice
+                    }
+                )
                 return
             }
              await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sale/create`, {
