@@ -63,7 +63,7 @@ export class OnboardingService {
       });
 
       // 5️⃣ Issue new JWT
-      const { token , expiresIn} = signTokenWithExpiry(user.id, user.role, business.id, firstBranch.id )
+      const { token , expiresIn} = signTokenWithExpiry(user.id, user.email, user.role, business.id, firstBranch.id )
 
       
 

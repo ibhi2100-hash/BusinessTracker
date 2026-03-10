@@ -7,11 +7,14 @@ import BrandDropdown from "../../components/inventory/brandDropdown";
 import ProductCard from "../../components/inventory/productCard";
 import ProductModal from "../../components/inventory/product-modal";
 import { useSalesStore } from "../../store/SalesStore";
-import { useBusinessStatus } from "@/hooks/useBusinessStatus";
+import { dispatchEvent } from "@/offline/events/eventDispatcher";
+import { EventTypes } from "@/offline/events/eventTypes";
 // Fetch Services
 import { fetchCategories, fetchBrands, fetchInventoryProducts } from "@/services/inventory.service";
 
 import { toast } from "sonner"; 
+import { useBusinessStore } from "@/store/businessStore";
+
 
 
 interface InventoryPageProps {
@@ -39,7 +42,8 @@ export default function InventoryPage({ context, mode}: InventoryPageProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<StoreProduct | undefined>();
 
-  const { data: business} = useBusinessStatus();
+  const business = useBusinessStore(s=> s.business);
+
   const isOnboarding = business?.isOnboarding;
 
   // Fetch categories
@@ -166,6 +170,14 @@ const handleSell = async (productId: string, quantity: number) => {
 
     // Add sale to sales store
     addSale(sale);
+
+    // Dispatch inventory change event
+    await dispatchEvent(EventTypes.SALE_ADDED, {
+      productId,
+      quantity,
+      amount: totalAmount,
+      cost: product.costPrice * quantity
+    })
 
   } catch (error: any) {
     console.error(error);

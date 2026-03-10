@@ -5,27 +5,24 @@ import { useRouter } from "next/navigation";
 import { useBusinessStatus } from "@/hooks/useBusinessStatus";
 import { useBusinessStore } from "@/store/businessStore";
 import { useBranchStore } from "@/store/useBranchStore";
-import { useDashboardFinancialData } from "@/hooks/financialData";
+import { useDashboardFinancialData } from "@/hooks/dashboard/useDashboardfinancialData";
 
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { FinancialCarousel } from "@/components/dashboard/FinancialCarousel";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import { BranchPerformance } from "@/components/dashboard/BranchPerformance";
 import { AlertsSection } from "@/components/dashboard/AlertsSection";
+import { useInitializeDashboard } from "@/hooks/dashboard/initializeddashboard";
+import { useBusinessContext } from "@/hooks/businessHooks/useBusinessContext";
+import { useHydrateBusinessData } from "@/hooks/businessHooks/useBusinessHydrate";
 
 const DashboardPage = () => {
+  useBusinessContext()
+  useHydrateBusinessData()
   const businessFromStore = useBusinessStore((state) => state.business);
-  const setBusiness = useBusinessStore((state) => state.setBusiness);
-  const { data, isLoading } = useBusinessStatus();
   const router = useRouter();
   const { activeBranchId } = useBranchStore();
-
-  // Always call hooks first
-  useEffect(() => {
-    if (data && !businessFromStore) {
-      setBusiness(data);
-    }
-  }, [data, businessFromStore, setBusiness]);
+  useInitializeDashboard();
 
   useEffect(() => {
     if (businessFromStore?.isOnboarding) {
@@ -43,7 +40,6 @@ const DashboardPage = () => {
   useDashboardFinancialData(startDate, endDate);
 
   // Early returns for UI
-  if (isLoading && !businessFromStore) return <div>Loading...</div>;
   if (!businessFromStore) return <div>No business found. Please register.</div>;
   if (!activeBranchId) return <div>Loading dashboard...</div>;
 

@@ -3,9 +3,15 @@ import { DB_NAME } from "./schema";
 import { DB_VERSION } from "./schema";
 import { TABLES } from "./schema";
 
-export const dbPromise = openDB(DB_NAME, DB_VERSION, {
-    upgrade(db) {
-        
+let dbPromise: any = null;
+
+export const getDb = async () => {
+    if (typeof window === "undefined") return null;
+
+    if (!dbPromise) {
+        dbPromise = openDB(DB_NAME, DB_VERSION, {
+            upgrade(db) {
+                
 
         /*
             EVENTS TABLE
@@ -81,5 +87,44 @@ export const dbPromise = openDB(DB_NAME, DB_VERSION, {
         db.createObjectStore(TABLES.SYNC_META, {
             keyPath: "id"
         })
+
+        /*
+            Business Data Store
+        */
+       const BusinessDataStore = db.createObjectStore(TABLES.BUSINESSDATA , {
+        keyPath: "id"
+       })
+
+         /*
+            ProductStore
+        */
+       const inventoryProducts = db.createObjectStore(TABLES.INVENTORYSTORE, {
+        keyPath: "id"
+       })
+
+       /*
+            ProductStore
+        */
+       const productStore = db.createObjectStore(TABLES.PRODUCT, {
+        keyPath: "id"
+       })
+
+       /*
+            CategoryStore
+        */
+       const categoryStore = db.createObjectStore(TABLES.CATEGORIES, {
+        keyPath: "id"
+       })
+
+       /*
+            BrandStore
+        */
+       const brandStore = db.createObjectStore(TABLES.BRANDS, {
+        keyPath: "id"
+       })
     }
-})
+        })
+    }
+
+    return dbPromise;
+}

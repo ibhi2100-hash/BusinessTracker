@@ -151,6 +151,13 @@ export class ReportService {
       period.startDate,
       period.endDate
     );
+   const flow = await this.reportRepo.getCashflow(
+      businessId,
+      branchId,
+      new Date(0),
+      new Date()
+    );
+    const cashAtHand = flow.inflow - flow.outflow 
 
     const cogs = await this.reportRepo.getCOGS(
       businessId,
@@ -177,6 +184,7 @@ export class ReportService {
     return {
       todaySales,
       netProfit,
+      cashAtHand,
       inventoryValue,
       outstandingLiabilities: liabilities,
     };

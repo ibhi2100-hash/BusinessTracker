@@ -2,6 +2,7 @@ import { create } from "zustand";
 
 interface DashboardSummary {
   todaySales: number;
+  cashAtHand: number;
   netProfit: number;
   inventoryValue: number;
   outstandingLiabilities: number;
@@ -29,6 +30,7 @@ interface FinancialState {
 export const useFinancialStore = create<FinancialState>((set) => ({
   dashboardSummary: {
     todaySales: 0,
+    cashAtHand: 0,
     netProfit: 0,
     inventoryValue: 0,
     outstandingLiabilities: 0,

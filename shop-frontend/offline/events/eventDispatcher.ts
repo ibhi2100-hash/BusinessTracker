@@ -1,30 +1,34 @@
-import { dbPromise } from "../db/indexDB";
+import { dashboardReducer } from "./eventReducer";
+import { getDb } from "@/offline/db/indexDB";
+import { TABLES } from "@/offline/db/schema";
 import { createEvent } from "./eventFactory";
 import { generateLedgerEntries } from "../ledger/ledgerGenerator";
-import { useDashboardStore } from "@/store/DashboardStore";
-import { TABLES } from "../db/schema";
+import { useFinancialStore } from "@/store/financialDataStore"
+import { addDashboardSnapshot } from "@/offline/db/helpers";
+import { useBusinessStore } from "@/store/businessStore";
 
-export const dispatchEvent = async (type: string, payload: any )=> {
-    const db = await dbPromise;
+export const dispatchEvent = async (type: string, payload: any) => {
+  const db = await getDb()
 
-    const event = createEvent(type, payload);
+  const event = createEvent(type, payload)
+  // Save event
+  await db.add(TABLES.EVENTS, event)
 
-    const ledgerEntries = generateLedgerEntries(event) as any[];
+  // Generate ledger
+  const ledgerEntries = generateLedgerEntries(event)
 
-    // save event
-    await db.add(TABLES.EVENTS, event);
+  const tx = db.transaction(TABLES.LEDGER_ENTRIES, "readwrite")
 
-    // save ledger entries
-    const tx = db.transaction(TABLES.LEDGER_ENTRIES, "readwrite");
+  for (const entry of ledgerEntries) {
+    tx.store.add(entry)
+  }
 
-    for ( const entry of ledgerEntries ) {
-        tx.store.add(entry)
-    }
+  await tx.done
 
-    await tx.done
+  // Update UI via reducer
+  const store = useFinancialStore.getState()
 
-    //update UI instantly
-    useDashboardStore
-        .getState()
-        .applyLedgerEntries(ledgerEntries as any)
+  const newState = dashboardReducer(store.dashboardSummary, event)
+
+  store.setDashboardSummary(newState)
 }

@@ -10,7 +10,6 @@ export class BusinessRepository{
     findBusiness(businessId: string) {
     return prisma.business.findUnique({
       where: { id: businessId }, 
-      select: { id: true, name: true },
     });
   }
 

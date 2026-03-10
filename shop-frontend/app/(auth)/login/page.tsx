@@ -10,6 +10,8 @@ import { useBusinessStore } from "@/store/businessStore";
 import { useBusinessStatus } from "@/hooks/useBusinessStatus";
 import { useEffect } from "react";
 import Link from "next/link";
+import { useHydrateBusinessData } from "@/hooks/businessHooks/useBusinessHydrate";
+import { useBusinessContext } from "@/hooks/businessHooks/useBusinessContext";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -73,6 +75,7 @@ export default function LoginPage() {
         result.activeBranch
       );
       
+      
       if (!result.user.onboardingCompleted) {
         router.push("/onboarding/step1-business");
 
@@ -87,6 +90,8 @@ export default function LoginPage() {
       setServerError(error.message);
     }
   };
+  useBusinessContext()
+  useHydrateBusinessData()
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">

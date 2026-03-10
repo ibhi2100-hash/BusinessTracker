@@ -51,7 +51,7 @@ export function FinancialCarousel() {
     {
       id: "cashAtHand",
       title: "Cash at Hand",
-      value: `₦${cashAtHand?.toLocaleString()}`,
+      value: `₦${dashboardSummary.cashAtHand?.toLocaleString()}`,
       subtitle: "Updated just now",
       icon: <CreditCard className="w-6 h-6 text-green-600" />,
       extra: "Shows all available cash including inflows and outflows."

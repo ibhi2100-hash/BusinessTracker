@@ -1,3 +1,5 @@
+import { addBrands, addCategories, addInventoryProducts, addProducts } from "@/offline/db/helpers";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function fetchProducts(branchId: string) {
@@ -8,6 +10,7 @@ export async function fetchProducts(branchId: string) {
   if (!res.ok) throw new Error("Failed to fetch products");
 
 const data = res.json();
+addProducts(data)
 
 return data
 }
@@ -19,6 +22,7 @@ export const fetchCategories = async (setCategories: any) => {
     credentials: "include",
   });
   const data = await res.json();
+  addCategories(Array.isArray(data) ? data: data.categories || [])
   setCategories(Array.isArray(data) ? data : data.categories || []);
 };
 
@@ -31,18 +35,19 @@ export const fetchBrands = async (categoryId: string | undefined, setBrands: any
     { credentials: "include" }
   );
   const data = await res.json();
-  setBrands(Array.isArray(data) ? data : data.brands || []);
+  addBrands(Array.isArray(data) ? data: data.brands || []);
 };
 
 
 
-export const fetchInventoryProducts = async (brandId: string, setProducts: any) => {
+export const fetchInventoryProducts = async (brandId: string) => {
   const res = await fetch(
     `${API_URL}/products/brands?brandId=${brandId}`,
     { credentials: "include" }
   );
   const data = await res.json();
-  console.log("Products Data: ", data);
+ await addInventoryProducts(Array.isArray(data) ? data: data.products || [])
 
-  setProducts(Array.isArray(data) ? data : data.products || []);
+ return Array.isArray(data) ? data : data.products || [];
+
 };

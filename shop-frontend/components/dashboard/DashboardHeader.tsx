@@ -1,16 +1,18 @@
 "use client";
 
 import { Bell, Plus } from "lucide-react";
-import { useBusinessContext } from "@/hooks/useBusinessContext";
+import { useBusinessContext } from "@/hooks/businessHooks/useBusinessContext";
 import { useBranchStore } from "@/store/useBranchStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useRouter } from "next/navigation";
 import { switchBranch } from "@/services/branch.service";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { useHydrateBusinessData } from "@/hooks/businessHooks/useBusinessHydrate";
 
 export const DashboardHeader = () => {
-  const query = useBusinessContext(); // hydrates Zustand
+  const { isLoading } = useBusinessContext()
+  useHydrateBusinessData();
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -22,12 +24,13 @@ export const DashboardHeader = () => {
     role,
   } = useBranchStore();
 
+
   
 
   const [isSwitching, setIsSwitching] = useState(false);
 
   // Skeleton while context loads
-  if (query.isLoading) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-between animate-pulse">
         <div className="space-y-2">

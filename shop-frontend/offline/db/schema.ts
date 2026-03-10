@@ -10,5 +10,10 @@ export const TABLES = {
     ASSETS: "assets",
     LIABILITIES: "liabilities",
     LEDGER_ENTRIES: "ledger_entries",
-    SYNC_META: "sync_meta"
+    SYNC_META: "sync_meta",
+    BUSINESSDATA: "business-data",
+    INVENTORYSTORE: "inventory-store",
+    PRODUCT: "product-store",
+    CATEGORIES: "categories",
+    BRANDS: "brands"
 }

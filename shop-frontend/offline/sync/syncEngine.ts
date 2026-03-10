@@ -1,15 +1,15 @@
-import { dbPromise } from "../db/indexDB"
+import { getDb } from "../db/indexDB"
+import { syncEvents } from "@/services/syncService"
+import { TABLES } from "../db/schema"
+import { addDashboardSnapshot, getPendingEvents } from "../db/helpers"
 
-export async function syncEvents() {
-    const db = dbPromise
-    const events = await db
-        .where("synced")
-        .equals(false)
-        .toArray()
+export async function syncEvent() {
+    const db = getDb()
+    const events = getPendingEvents()
 
-    if(!events.length) return
+    if(!events) return
 
-    const snapshot = await eventService.sync(events)
+    const snapshot = await syncEvents(events)
 
-    db.snapshot.put(snapshot)
+    await addDashboardSnapshot(snapshot)
 }

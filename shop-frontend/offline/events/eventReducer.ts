@@ -1,4 +1,3 @@
-import { stat } from "fs"
 
 export function dashboardReducer(state: any , event: any) {
     switch (event.type){
@@ -6,7 +5,7 @@ export function dashboardReducer(state: any , event: any) {
             return {
                 ...state,
                 cashAtHand: state.cashAtHand + event.payload.amount,
-                todaySales: state.cashAtHand + event.payload.amount,
+                todaySales: state.todaySales + event.payload.amount,
                 inventoryValue: state.inventoryValue - event.payload.cost,
                 profit: state.profit + (event.payload.amount - event.payload.cost)
             }

@@ -1,5 +1,5 @@
-import { syncEvents } from "./syncEngine"
+import { syncEvent } from "./syncEngine"
 
 window.addEventListener("online", ()=> {
-    syncEvents()
+    syncEvent()
 })

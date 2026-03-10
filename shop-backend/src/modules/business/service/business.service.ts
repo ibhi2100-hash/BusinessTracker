@@ -8,7 +8,7 @@ export class BusinessService {
         return await this.repo.getBusinessData(businessId)
     }
 
-      async getBusinessContext(user: any) {
+  getBusinessContext = async (user: any)=> {
     const business = await this.repo.findBusiness(user.businessId);
     if(!business){
       throw new Error("Business not found")
@@ -20,13 +20,10 @@ export class BusinessService {
         id: user.id,
         role: user.role,
       },
-
-      business: {
-        id: business.id,
-        name: business.name,
-      },
+      business,
 
       branches,
+
 
       permissions: this.buildPermissions(user.role),
     };
