@@ -17,6 +17,7 @@ import businessBranchesRoute from '../routes/business.route.js';
 import alertRoute from '../routes/alerts.route.js';
 import cashFlowRoute from '../routes/cashflow.route.js';
 import subscriptionRoute from '../routes/subscription.route.js';
+import syncRoute from '../routes/sync.route.js'
 
 dotenv.config();
 
@@ -84,6 +85,7 @@ app.use('/api/report', reportRoutes);
 app.use('/api/alerts', alertRoute);
 app.use('/api/cashflow', cashFlowRoute)
 app.use('/api/subscription', subscriptionRoute)
+app.use('/api/sync-', syncRoute)
 
 // --------------------
 // Start server

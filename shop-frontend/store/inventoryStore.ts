@@ -50,6 +50,12 @@ interface InventoryStore {
   updateProduct: (product: Product) => void;
   removeProduct: (productId: string) => void;
 
+  hydrate: (data: {
+    categories?: Category[];
+    brands?: Brand[];
+    products?: Product[];
+  }) => void;
+
   resetInventory: () => void;
 }
 
@@ -62,16 +68,18 @@ export const useInventoryStore = create<InventoryStore>((set) => ({
   selectedBrandId: null,
 
   setCategories: (categories) => set({ categories }),
+
   setBrands: (brands) => set({ brands }),
+
   setProducts: (products) => set({ products }),
 
   setSelectedCategoryId: (id) =>
-    set({
+    set((state) => ({
       selectedCategoryId: id,
       selectedBrandId: null,
-      brands: [],
-      products: [],
-    }),
+      brands: [],     // clear brand list when category changes
+      products: [],   // clear products when category changes
+    })),
 
   setSelectedBrandId: (id) =>
     set({
@@ -94,6 +102,13 @@ export const useInventoryStore = create<InventoryStore>((set) => ({
   removeProduct: (productId) =>
     set((state) => ({
       products: state.products.filter((p) => p.id !== productId),
+    })),
+
+  hydrate: (data) =>
+    set((state) => ({
+      categories: data.categories ?? state.categories,
+      brands: data.brands ?? state.brands,
+      products: data.products ?? state.products,
     })),
 
   resetInventory: () =>

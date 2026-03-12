@@ -10,32 +10,29 @@ export async function fetchProducts(branchId: string) {
   if (!res.ok) throw new Error("Failed to fetch products");
 
 const data = res.json();
-addProducts(data)
-
 return data
 }
 
 ;
 
-export const fetchCategories = async (setCategories: any) => {
+export const fetchCategories = async () => {
   const res = await fetch(`${API_URL}/business/categories`, {
     credentials: "include",
   });
   const data = await res.json();
-  addCategories(Array.isArray(data) ? data: data.categories || [])
-  setCategories(Array.isArray(data) ? data : data.categories || []);
+
+  return Array.isArray(data) ? data : data.categories || [];
 };
 
-
-
-export const fetchBrands = async (categoryId: string | undefined, setBrands: any) => {
+export const fetchBrands = async (categoryId: string | undefined) => {
   if(!categoryId) return;
   const res = await fetch(
     `${API_URL}/business/brands?categoryId=${categoryId}`,
     { credentials: "include" }
   );
   const data = await res.json();
-  addBrands(Array.isArray(data) ? data: data.brands || []);
+
+  return Array.isArray(data) ? data : data.brands || [];
 };
 
 
@@ -46,7 +43,6 @@ export const fetchInventoryProducts = async (brandId: string) => {
     { credentials: "include" }
   );
   const data = await res.json();
- await addInventoryProducts(Array.isArray(data) ? data: data.products || [])
 
  return Array.isArray(data) ? data : data.products || [];
 

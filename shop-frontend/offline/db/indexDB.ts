@@ -109,12 +109,16 @@ export const getDb = async () => {
         keyPath: "id"
        })
 
+       productStore.createIndex("by_brandId", "brandId");
+       productStore.createIndex("by_categoryId", "categoryId")
+
        /*
             CategoryStore
         */
        const categoryStore = db.createObjectStore(TABLES.CATEGORIES, {
         keyPath: "id"
-       })
+       });
+       categoryStore.createIndex("by_name", "name")
 
        /*
             BrandStore
@@ -122,6 +126,7 @@ export const getDb = async () => {
        const brandStore = db.createObjectStore(TABLES.BRANDS, {
         keyPath: "id"
        })
+       brandStore.createIndex("by_categoryId", "categoryId")
     }
         })
     }

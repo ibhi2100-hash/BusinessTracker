@@ -1,6 +1,6 @@
 import { useInventoryStore } from "@/store/inventoryStore";
 import { useQuery } from "@tanstack/react-query";
-import { fetchInventoryProducts } from "@/services/inventory.service";
+import { fetchInventoryProducts } from "@/services/inventory/inventory.service";
 import { useEffect } from "react";
 export const useProducts = (brandId: string) => {
 

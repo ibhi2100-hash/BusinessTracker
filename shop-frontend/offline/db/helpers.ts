@@ -1,4 +1,3 @@
-import { create } from "domain";
 import { getDb } from "./indexDB";
 import { TABLES } from "./schema";
 
@@ -79,7 +78,11 @@ export const addProducts = async (products: any[]) => {
   const tx = db.transaction(TABLES.PRODUCT, "readwrite");
 
   for (const product of products) {
-    await tx.store.put(product);
+    await tx.store.put({
+        id: product.id ?? crypto.randomUUID(),
+        ...product,
+        timestamp: product.timestamp ?? Date.now()
+    });
   }
 
   await tx.done;
@@ -87,11 +90,18 @@ export const addProducts = async (products: any[]) => {
 export const getProducts = async ()=> {
     const db = await getDb();
 
-    const ProductData = await db.getAll(TABLES.PRODUCT, {
-        
-    })
+    const ProductData = await db.getAll(TABLES.PRODUCT)
 
     return ProductData
+}
+export const getProductsByBrand = async (brandId: string)=>{
+    const db = await getDb();
+
+    return db.getAllFromIndex(
+        TABLES.PRODUCT,
+        "by_brandId",
+        brandId
+    )
 }
 
 
@@ -99,8 +109,16 @@ export const addCategories = async (data: any[])=> {
     const db = await getDb();
     const tx = db.transaction(TABLES.CATEGORIES, "readwrite");
 
+    const store = tx.objectStore(TABLES.CATEGORIES);
+
+
+
     for (const category of data) {
-        await tx.store.put(category);
+        await tx.store.put({
+            id: category.id ?? crypto.randomUUID(),
+            ...category,
+            timestamp: Date.now()
+        });
     }
 
     await tx.done;
@@ -108,27 +126,31 @@ export const addCategories = async (data: any[])=> {
 
 export const getCategories = async ()=> {
     const db = await getDb();
-
-    const categories = await db.getAll(TABLES.CATEGORIES)
-
-    return categories
+    return db.getAll(TABLES.CATEGORIES)
 }
 
 
 export const addBrands = async (data: any[])=> {
     const db = await getDb();
-   const tx = db.trasaction(TABLES.BRANDS, "readwrite");
+    const tx = db.transaction(TABLES.BRANDS, "readwrite");
+    const store = tx.objectStore(TABLES.BRANDS);
 
    for( const brand of data ){
-    await tx.store.put(brand)
+    await tx.store.put({
+        id: brand.id ?? crypto.randomUUID(),
+        ...brand,
+        timestamp: Date.now()
+    })
    }
    await tx.done;
 }
 
-export const getBrands = async ()=> {
+export const getBrandsByCategory  = async (categoryId: string)=> {
     const db = await getDb();
 
-    const brands = await db.getAll(TABLES.BRANDS)
-
-    return brands
+    return db.getAllFromIndex(
+        TABLES.BRANDS,
+        "by_categoryId",
+        categoryId
+    )
 }

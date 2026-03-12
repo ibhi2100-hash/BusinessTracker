@@ -1,4 +1,3 @@
-// components/ProductCard.tsx
 import { Product } from "../../store/inventoryStore";
 import { useState } from "react";
 import { ShoppingCart, Edit2, Trash2, Tag, Package } from "lucide-react";
@@ -12,10 +11,25 @@ interface Props {
 }
 
 export default function ProductCard({ product, context, onSell, onEdit, onDelete }: Props) {
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState<string>("1"); // use string to allow empty
 
-  const decrement = () => setQuantity((q) => Math.max(1, q - 1));
-  const increment = () => setQuantity((q) => Math.min(product.quantity, q + 1));
+  const decrement = () => {
+    setQuantity((q) => {
+      const val = Number(q) || 0;
+      return String(Math.max(1, val - 1));
+    });
+  };
+
+  const increment = () => {
+    setQuantity((q) => {
+      const val = Number(q) || 0;
+      return String(Math.min(product.quantity, val + 1));
+    });
+  };
+
+  // Determine if Sell button should be disabled
+  const isSellDisabled =
+    product.quantity <= 0 || !quantity || Number(quantity) <= 0 || Number(quantity) > product.quantity;
 
   return (
     <div className="bg-white shadow-lg hover:shadow-2xl transition-shadow duration-300 rounded-xl overflow-hidden transform hover:scale-[1.02] w-full max-w-[350px] mx-auto sm:max-w-[300px] md:max-w-[280px]">
@@ -48,7 +62,7 @@ export default function ProductCard({ product, context, onSell, onEdit, onDelete
             <Package className="w-4 h-4 text-gray-500" /> {product.brand?.name ?? "No Brand"}
           </span>
           <span className="flex items-center gap-1 text-[clamp(0.75rem,3vw,1rem)] font-semibold text-green-700">
-            <Tag className="w-4 h-4 text-green-700 text-3xl" /> ₦{product.sellingPrice.toLocaleString()}
+            <Tag className="w-4 h-4 text-green-700" /> ₦{product.sellingPrice.toLocaleString()}
           </span>
         </div>
 
@@ -73,15 +87,11 @@ export default function ProductCard({ product, context, onSell, onEdit, onDelete
                 min={1}
                 max={product.quantity}
                 value={quantity}
-                onChange={(e)=> {
-                  const value = Number(e.target.value);
-                  if(isNaN(value)) return
-
-                  // Clamp between 1 and stock
-                  const safeValue = Math.max(1, Math.min(product.quantity, value))
-                  setQuantity(safeValue)
+                placeholder="Qty"
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (/^\d*$/.test(val)) setQuantity(val); // allow empty
                 }}
-                
                 className="text-center flex-1 px-2 py-1 focus:outline-none"
               />
               <button
@@ -92,9 +102,11 @@ export default function ProductCard({ product, context, onSell, onEdit, onDelete
               </button>
             </div>
             <button
-              className="flex items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded shadow transition w-full sm:w-auto"
-              disabled={product.quantity <= 0}
-              onClick={() => onSell(product.id, quantity)}
+              className={`flex items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded shadow transition w-full sm:w-auto ${
+                isSellDisabled ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              disabled={isSellDisabled}
+              onClick={() => onSell(product.id, Number(quantity))}
             >
               <ShoppingCart className="w-4 h-4" /> Sell
             </button>

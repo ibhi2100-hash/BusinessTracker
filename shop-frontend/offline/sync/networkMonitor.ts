@@ -1,5 +1,5 @@
 import { syncEvent } from "./syncEngine"
 
 window.addEventListener("online", ()=> {
-    syncEvent()
+    setInterval(syncEvent, 20000)
 })

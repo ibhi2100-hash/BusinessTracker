@@ -175,5 +175,8 @@ export const generateLedgerEntries = (event: any)=> {
                     timestamp: event.timestamp
                 },
             ]  
+
+        default:
+            return []
     }
 }

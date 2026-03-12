@@ -6,6 +6,7 @@ import { generateLedgerEntries } from "../ledger/ledgerGenerator";
 import { useFinancialStore } from "@/store/financialDataStore"
 import { addDashboardSnapshot } from "@/offline/db/helpers";
 import { useBusinessStore } from "@/store/businessStore";
+import { syncEvent } from "../sync/syncEngine";
 
 export const dispatchEvent = async (type: string, payload: any) => {
   const db = await getDb()
@@ -13,6 +14,8 @@ export const dispatchEvent = async (type: string, payload: any) => {
   const event = createEvent(type, payload)
   // Save event
   await db.add(TABLES.EVENTS, event)
+
+  syncEvent().catch(()=>{    console.warn("Sync failed, event will be retried later", event)})
 
   // Generate ledger
   const ledgerEntries = generateLedgerEntries(event)
