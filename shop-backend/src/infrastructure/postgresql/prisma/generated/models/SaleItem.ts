@@ -304,7 +304,7 @@ export type SaleItemScalarWhereWithAggregatesInput = {
 }
 
 export type SaleItemCreateInput = {
-  id?: string
+  id: string
   quantity: number
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -314,7 +314,7 @@ export type SaleItemCreateInput = {
 }
 
 export type SaleItemUncheckedCreateInput = {
-  id?: string
+  id: string
   saleId: string
   productId: string
   quantity: number
@@ -344,7 +344,7 @@ export type SaleItemUncheckedUpdateInput = {
 }
 
 export type SaleItemCreateManyInput = {
-  id?: string
+  id: string
   saleId: string
   productId: string
   quantity: number
@@ -510,7 +510,7 @@ export type SaleItemUncheckedUpdateManyWithoutSaleNestedInput = {
 }
 
 export type SaleItemCreateWithoutProductInput = {
-  id?: string
+  id: string
   quantity: number
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -519,7 +519,7 @@ export type SaleItemCreateWithoutProductInput = {
 }
 
 export type SaleItemUncheckedCreateWithoutProductInput = {
-  id?: string
+  id: string
   saleId: string
   quantity: number
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -567,7 +567,7 @@ export type SaleItemScalarWhereInput = {
 }
 
 export type SaleItemCreateWithoutSaleInput = {
-  id?: string
+  id: string
   quantity: number
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -576,7 +576,7 @@ export type SaleItemCreateWithoutSaleInput = {
 }
 
 export type SaleItemUncheckedCreateWithoutSaleInput = {
-  id?: string
+  id: string
   productId: string
   quantity: number
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -611,7 +611,7 @@ export type SaleItemUpdateManyWithWhereWithoutSaleInput = {
 }
 
 export type SaleItemCreateManyProductInput = {
-  id?: string
+  id: string
   saleId: string
   quantity: number
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -647,7 +647,7 @@ export type SaleItemUncheckedUpdateManyWithoutProductInput = {
 }
 
 export type SaleItemCreateManySaleInput = {
-  id?: string
+  id: string
   productId: string
   quantity: number
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null

@@ -253,14 +253,14 @@ export type LiabilityPaymentScalarWhereWithAggregatesInput = {
 }
 
 export type LiabilityPaymentCreateInput = {
-  id?: string
+  id: string
   amount?: number | null
   paymentDate?: Date | string | null
   liabilities: Prisma.LiabilityCreateNestedOneWithoutLiabilityInput
 }
 
 export type LiabilityPaymentUncheckedCreateInput = {
-  id?: string
+  id: string
   liabilityId: string
   amount?: number | null
   paymentDate?: Date | string | null
@@ -281,7 +281,7 @@ export type LiabilityPaymentUncheckedUpdateInput = {
 }
 
 export type LiabilityPaymentCreateManyInput = {
-  id?: string
+  id: string
   liabilityId: string
   amount?: number | null
   paymentDate?: Date | string | null
@@ -382,13 +382,13 @@ export type LiabilityPaymentUncheckedUpdateManyWithoutLiabilitiesNestedInput = {
 }
 
 export type LiabilityPaymentCreateWithoutLiabilitiesInput = {
-  id?: string
+  id: string
   amount?: number | null
   paymentDate?: Date | string | null
 }
 
 export type LiabilityPaymentUncheckedCreateWithoutLiabilitiesInput = {
-  id?: string
+  id: string
   amount?: number | null
   paymentDate?: Date | string | null
 }
@@ -430,7 +430,7 @@ export type LiabilityPaymentScalarWhereInput = {
 }
 
 export type LiabilityPaymentCreateManyLiabilitiesInput = {
-  id?: string
+  id: string
   amount?: number | null
   paymentDate?: Date | string | null
 }

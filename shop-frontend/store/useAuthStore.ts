@@ -1,32 +1,13 @@
-import { hydrate } from "@tanstack/react-query";
-import { Vault } from "lucide-react";
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
-
-interface Branch {
-  id: string;
-  name: string;
-}
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: "ADMIN" | "USER" | string;
-  businessId?: string;
-  branchId?: string;
-  onboardingCompleted?: boolean
-}
+import { User, Branch, Role } from "@/types/types";
 
 interface AuthState {
   user: User | null;
   accessToken: string | null;
   tokenExpiry: number | null;
   isAuthenticated: boolean;
-
   branches: Branch[];
   activeBranch: Branch | null;
-
   hydrated: boolean;
 
   setLogin: (
@@ -37,20 +18,45 @@ interface AuthState {
     activeBranch?: Branch
   ) => void;
 
-  setHydrated: (value: boolean)=> void
-
+  setHydrated: (value: boolean) => void;
   setUser: (user: User) => void;
   setAccessToken: (token: string, expiryInSeconds?: number) => void;
   setBranches: (branches: Branch[]) => void;
   setActiveBranch: (branch: Branch) => void;
-
   logout: () => void;
   checkTokenValid: () => boolean;
 }
 
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set, get) => ({
+export const useAuthStore = create<AuthState>((set, get) => ({
+  user: null,
+  accessToken: null,
+  tokenExpiry: null,
+  isAuthenticated: false,
+  branches: [],
+  activeBranch: null,
+  hydrated: false,
+
+  setLogin: (user, token, expiresIn, branches, activeBranch) => {
+    const expiry = expiresIn ? Date.now() + expiresIn * 1000 : null;
+    set({
+      user,
+      accessToken: token,
+      tokenExpiry: expiry,
+      branches: branches ?? [],
+      activeBranch: activeBranch ?? null,
+      isAuthenticated: true,
+    });
+  },
+
+  setUser: (user) => set({ user, isAuthenticated: true }),
+  setAccessToken: (token, expiryInSeconds) => {
+    const expiry = expiryInSeconds ? Date.now() + expiryInSeconds * 1000 : null;
+    set({ accessToken: token, tokenExpiry: expiry, isAuthenticated: true });
+  },
+  setBranches: (branches) => set({ branches }),
+  setActiveBranch: (branch) => set({ activeBranch: branch }),
+  logout: () =>
+    set({
       user: null,
       accessToken: null,
       tokenExpiry: null,
@@ -58,57 +64,12 @@ export const useAuthStore = create<AuthState>()(
       branches: [],
       activeBranch: null,
       hydrated: false,
-
-      // ✅ Unified login method
-      setLogin: (user, token, expiresIn, branches, activeBranch) =>
-        set({
-          user,
-          accessToken: token,
-          tokenExpiry: expiresIn ? Date.now() + expiresIn * 1000 : null,
-          branches: branches || [],
-          activeBranch: activeBranch || null,
-          isAuthenticated: true,
-        }),
-
-      setUser: (user: User) => set({ user, isAuthenticated: true }),
-
-      setAccessToken: (token: string, expiryInSeconds?: number) => {
-        const expiry = expiryInSeconds
-          ? Date.now() + expiryInSeconds * 1000
-          : null;
-        set({ accessToken: token, tokenExpiry: expiry, isAuthenticated: true });
-      },
-
-      setBranches: (branches: Branch[]) => set({ branches }),
-      setActiveBranch: (branch: Branch) => set({ activeBranch: branch }),
-
-      logout: () =>
-        set({
-          user: null,
-          accessToken: null,
-          tokenExpiry: null,
-          isAuthenticated: false,
-          branches: [],
-          activeBranch: null,
-        }),
-
-      checkTokenValid: () => {
-        const { accessToken, tokenExpiry } = get();
-        if (!accessToken) return false;
-        if (!tokenExpiry) return true;
-        return Date.now() < tokenExpiry;
-      },
-
-      setHydrated: (value: boolean) => set({ hydrated: value}),
     }),
-    {
-      name: "auth-storage",
-      storage: createJSONStorage(() => localStorage),
-      onRehydrateStorage: () => (state, error) => {
-        if (!error && state) {
-          state.setHydrated(true); // mark store as hydrated
-        }
-      },
-    }
-  )
-);
+  checkTokenValid: () => {
+    const { accessToken, tokenExpiry } = get();
+    if (!accessToken) return false;
+    if (!tokenExpiry) return true;
+    return Date.now() < tokenExpiry;
+  },
+  setHydrated: (value) => set({ hydrated: value }),
+}));

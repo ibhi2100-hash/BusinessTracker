@@ -2,13 +2,14 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
-import { useOnboardingStatus } from "@/hooks/useSetUpStatus";
 import clsx from "clsx";
+import { useBusinessStatusStore } from '@/store/useBusinessStatusStore'
 
 export const SetupProgressTracker = () => {
-  const { data } = useOnboardingStatus();
 
-  const percentage = data?.percentage ?? 0;
+  const storePercentage = useBusinessStatusStore(s => s.percentage);
+
+  const percentage = storePercentage ?? 0;
   const isComplete = percentage === 100;
 
   return (

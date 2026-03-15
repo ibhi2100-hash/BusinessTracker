@@ -220,7 +220,7 @@ export type LedgerAccountScalarWhereWithAggregatesInput = {
 }
 
 export type LedgerAccountCreateInput = {
-  id?: string
+  id: string
   name: string
   type: string
   entries?: Prisma.LedgerEntryCreateNestedManyWithoutAccountInput
@@ -228,7 +228,7 @@ export type LedgerAccountCreateInput = {
 }
 
 export type LedgerAccountUncheckedCreateInput = {
-  id?: string
+  id: string
   businessId: string
   name: string
   type: string
@@ -252,7 +252,7 @@ export type LedgerAccountUncheckedUpdateInput = {
 }
 
 export type LedgerAccountCreateManyInput = {
-  id?: string
+  id: string
   businessId: string
   name: string
   type: string
@@ -364,14 +364,14 @@ export type LedgerAccountUpdateOneRequiredWithoutEntriesNestedInput = {
 }
 
 export type LedgerAccountCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   name: string
   type: string
   entries?: Prisma.LedgerEntryCreateNestedManyWithoutAccountInput
 }
 
 export type LedgerAccountUncheckedCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   name: string
   type: string
   entries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutAccountInput
@@ -414,14 +414,14 @@ export type LedgerAccountScalarWhereInput = {
 }
 
 export type LedgerAccountCreateWithoutEntriesInput = {
-  id?: string
+  id: string
   name: string
   type: string
   business: Prisma.BusinessCreateNestedOneWithoutLedgerInput
 }
 
 export type LedgerAccountUncheckedCreateWithoutEntriesInput = {
-  id?: string
+  id: string
   businessId: string
   name: string
   type: string
@@ -458,7 +458,7 @@ export type LedgerAccountUncheckedUpdateWithoutEntriesInput = {
 }
 
 export type LedgerAccountCreateManyBusinessInput = {
-  id?: string
+  id: string
   name: string
   type: string
 }

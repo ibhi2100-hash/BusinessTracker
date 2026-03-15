@@ -367,7 +367,7 @@ export type StockMovementScalarWhereWithAggregatesInput = {
 }
 
 export type StockMovementCreateInput = {
-  id?: string
+  id: string
   type: $Enums.StockMovementType
   quantity: number
   remainingQty?: number
@@ -382,7 +382,7 @@ export type StockMovementCreateInput = {
 }
 
 export type StockMovementUncheckedCreateInput = {
-  id?: string
+  id: string
   businessId: string
   branchId: string
   productId: string
@@ -427,7 +427,7 @@ export type StockMovementUncheckedUpdateInput = {
 }
 
 export type StockMovementCreateManyInput = {
-  id?: string
+  id: string
   businessId: string
   branchId: string
   productId: string
@@ -676,7 +676,7 @@ export type NullableDecimalFieldUpdateOperationsInput = {
 }
 
 export type StockMovementCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   type: $Enums.StockMovementType
   quantity: number
   remainingQty?: number
@@ -690,7 +690,7 @@ export type StockMovementCreateWithoutBusinessInput = {
 }
 
 export type StockMovementUncheckedCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   branchId: string
   productId: string
   type: $Enums.StockMovementType
@@ -748,7 +748,7 @@ export type StockMovementScalarWhereInput = {
 }
 
 export type StockMovementCreateWithoutBranchInput = {
-  id?: string
+  id: string
   type: $Enums.StockMovementType
   quantity: number
   remainingQty?: number
@@ -762,7 +762,7 @@ export type StockMovementCreateWithoutBranchInput = {
 }
 
 export type StockMovementUncheckedCreateWithoutBranchInput = {
-  id?: string
+  id: string
   businessId: string
   productId: string
   type: $Enums.StockMovementType
@@ -802,7 +802,7 @@ export type StockMovementUpdateManyWithWhereWithoutBranchInput = {
 }
 
 export type StockMovementCreateWithoutProductInput = {
-  id?: string
+  id: string
   type: $Enums.StockMovementType
   quantity: number
   remainingQty?: number
@@ -816,7 +816,7 @@ export type StockMovementCreateWithoutProductInput = {
 }
 
 export type StockMovementUncheckedCreateWithoutProductInput = {
-  id?: string
+  id: string
   businessId: string
   branchId: string
   type: $Enums.StockMovementType
@@ -856,7 +856,7 @@ export type StockMovementUpdateManyWithWhereWithoutProductInput = {
 }
 
 export type StockMovementCreateManyBusinessInput = {
-  id?: string
+  id: string
   branchId: string
   productId: string
   type: $Enums.StockMovementType
@@ -912,7 +912,7 @@ export type StockMovementUncheckedUpdateManyWithoutBusinessInput = {
 }
 
 export type StockMovementCreateManyBranchInput = {
-  id?: string
+  id: string
   businessId: string
   productId: string
   type: $Enums.StockMovementType
@@ -968,7 +968,7 @@ export type StockMovementUncheckedUpdateManyWithoutBranchInput = {
 }
 
 export type StockMovementCreateManyProductInput = {
-  id?: string
+  id: string
   businessId: string
   branchId: string
   type: $Enums.StockMovementType

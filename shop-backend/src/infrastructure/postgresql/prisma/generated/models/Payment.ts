@@ -277,7 +277,7 @@ export type PaymentScalarWhereWithAggregatesInput = {
 }
 
 export type PaymentCreateInput = {
-  id?: string
+  id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   method: $Enums.PaymentMethod
   date?: Date | string
@@ -286,7 +286,7 @@ export type PaymentCreateInput = {
 }
 
 export type PaymentUncheckedCreateInput = {
-  id?: string
+  id: string
   saleId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   method: $Enums.PaymentMethod
@@ -313,7 +313,7 @@ export type PaymentUncheckedUpdateInput = {
 }
 
 export type PaymentCreateManyInput = {
-  id?: string
+  id: string
   saleId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   method: $Enums.PaymentMethod
@@ -430,7 +430,7 @@ export type EnumPaymentMethodFieldUpdateOperationsInput = {
 }
 
 export type PaymentCreateWithoutSaleInput = {
-  id?: string
+  id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   method: $Enums.PaymentMethod
   date?: Date | string
@@ -438,7 +438,7 @@ export type PaymentCreateWithoutSaleInput = {
 }
 
 export type PaymentUncheckedCreateWithoutSaleInput = {
-  id?: string
+  id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   method: $Enums.PaymentMethod
   date?: Date | string
@@ -484,7 +484,7 @@ export type PaymentScalarWhereInput = {
 }
 
 export type PaymentCreateManySaleInput = {
-  id?: string
+  id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   method: $Enums.PaymentMethod
   date?: Date | string

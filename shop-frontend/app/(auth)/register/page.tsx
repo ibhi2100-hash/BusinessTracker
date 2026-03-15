@@ -6,6 +6,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, RegisterInput } from "@/lib/validations/auth.schema";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { saveUser } from "@/offline/user/userRepository";
+import { saveSession } from "@/offline/session/sessionRepository";
+import { hydrateStores } from "@/offline/hydration/hydrationStore";
+
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -19,38 +23,46 @@ export default function RegisterPage() {
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = async (data: RegisterInput) => {
-    setServerError(null);
+ const onSubmit = async (data: RegisterInput) => {
+  setServerError(null);
 
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          
-          body: JSON.stringify({
-            name: data.name,
-            email: data.email,
-            password: data.password,
-          }),
-        }
-      );
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      }),
+    });
 
-      const result = await res.json();
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.message || "Registration failed");
 
-      if (!res.ok) {
-        throw new Error(result.message || "Registration failed");
-      }
+    // Persist to IndexedDB
+    await saveUser(result.user);
+    await saveSession({
+      userId: result.user.id,
+      accessToken: result.accessToken,
+      expiresIn: result.expiresIn,
+    });
 
-      // Redirect to onboarding step 1
-      router.push("/onboarding/step1-business");
+    // Hydrate stores immediately
+     // Unified hydration
+    hydrateStores({
+      user: result.user,
+      accessToken: result.accessToken,
+      expiresIn: result.expiresIn,
+    });
 
-    } catch (error: any) {
-      setServerError(error.message);
-    }
-  };
+    router.push("/onboarding/step1-business");
+
+  } catch (error: any) {
+    setServerError(error.message);
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">

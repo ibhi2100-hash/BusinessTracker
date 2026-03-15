@@ -4,39 +4,20 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginInput } from "@/lib/validations/auth.schema";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useAutoLogin } from "@/hooks/useAutoLogin";
 import { useAuthStore } from "@/store/useAuthStore";
-import { useBusinessStore } from "@/store/businessStore";
-import { useBusinessStatus } from "@/hooks/useBusinessStatus";
-import { useEffect } from "react";
 import Link from "next/link";
-import { useHydrateBusinessData } from "@/hooks/businessHooks/useBusinessHydrate";
-import { useBusinessContext } from "@/hooks/businessHooks/useBusinessContext";
+import { hydrateStores } from "@/offline/hydration/hydrationStore";
+import { saveUser } from "@/offline/user/userRepository";
+import { saveSession } from "@/offline/session/sessionRepository";
+
+
 
 export default function LoginPage() {
   const router = useRouter();
   const login = useAuthStore((state)=> state.setLogin)
-  const businessFromStore = useBusinessStore((state) => state.business);
-  const setBusiness = useBusinessStore((state) => state.setBusiness);
-  const [serverError, setServerError] = useState<string | null>(null);
+  const checkingSession = useAutoLogin();
 
-  // Fetch business status
-    const { data, isLoading: statusLoading } = useBusinessStatus();
-  
-    // Update store when data arrives
-    useEffect(() => {
-      if (data && !businessFromStore) {
-        setBusiness(data);
-      }
-    }, [data, businessFromStore, setBusiness]);
-  
-    // Redirect if already onboarding
-    useEffect(() => {
-      if (businessFromStore?.isOnboarding) {
-        router.push("/onboard");
-      }
-    }, [businessFromStore, router]);
-  
 
   const {
     register,
@@ -47,7 +28,6 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data: LoginInput) => {
-    setServerError(null);
 
     try {
       const res = await fetch(
@@ -66,42 +46,43 @@ export default function LoginPage() {
       if (!res.ok) {
         throw new Error(result.message || "Login failed");
       }
+      // persist offline
+      await saveUser(result.user);
+      await saveSession(result.session);
 
-      login(
-        result.user,
-        result.accessToken,
-        result.expiresIn,
-        result.branches,
-        result.activeBranch
-      );
-      
+      // hydrate all stores
+      hydrateStores({
+        user: result.user,
+        accessToken: result.session.accessToken,
+        expiresIn: result.session.expiresIn,
+      })
+
       
       if (!result.user.onboardingCompleted) {
         router.push("/onboarding/step1-business");
 
-      }else if(businessFromStore?.isOnboarding) {
-        router.push("/onboard");
       }
       else {
         router.push("/dashboard");
       }
 
     } catch (error: any) {
-      setServerError(error.message);
+ console.log(error)
     }
   };
-  useBusinessContext()
-  useHydrateBusinessData()
+
+  if (checkingSession) {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      Checking session...
+    </div>
+  );
+}
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-md">
         <h1 className="text-2xl font-bold mb-6">Welcome Back</h1>
-
-        {serverError && (
-          <div className="mb-4 text-sm text-red-600">{serverError}</div>
-        )}
-
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
           <div>

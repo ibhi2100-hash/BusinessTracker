@@ -2,34 +2,36 @@
 
 import { CheckCircle2, Circle } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { useBusinessSetupStore } from "@/store/useBusinessSetupStore";
 import { useRouter } from "next/navigation";
-import { useOnboardingStatus } from "@/hooks/useSetUpStatus";
-import { da } from "zod/v4/locales";
+import { useBusinessSetupStore } from "@/store/useBusinessSetupStore";
+import { useBusinessStatusStore } from "@/store/useBusinessStatusStore";
 
 
 export const SetupChecklist = () => {
   const router = useRouter();
-const { data } = useOnboardingStatus(); 
+
+  const hydrated = useBusinessStatusStore(s => s.isHydrated);  
+  const steps = useBusinessStatusStore(s => s.steps);
+  
   const items = [
     {
       label: "Upload Inventory",
-      done: data?.steps.inventory,
+      done: steps?.inventory,
       route: "/onboarding-inventory",
     },
     {
       label: "Add Opening Cash",
-      done: data?.steps.openingCash,
+      done: steps?.openingCash,
       route: "/onboarding-opening-cash",
     },
     {
       label: "Add Assets",
-      done: data?.steps.assets,
+      done: steps?.assets,
       route: "/onboarding-assets",
     },
     {
       label: "Add Liabilities",
-      done: data?.steps.liabilities,
+      done: steps?.liabilities,
       route: "/onboarding-liabilities",
     },
   ];

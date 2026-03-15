@@ -256,7 +256,7 @@ export type BusinessSubscriptionScalarWhereWithAggregatesInput = {
 }
 
 export type BusinessSubscriptionCreateInput = {
-  id?: string
+  id: string
   startedAt?: Date | string
   expiresAt: Date | string
   trialEndDate?: Date | string | null
@@ -266,7 +266,7 @@ export type BusinessSubscriptionCreateInput = {
 }
 
 export type BusinessSubscriptionUncheckedCreateInput = {
-  id?: string
+  id: string
   businessId: string
   subscriptionId: string
   startedAt?: Date | string
@@ -296,7 +296,7 @@ export type BusinessSubscriptionUncheckedUpdateInput = {
 }
 
 export type BusinessSubscriptionCreateManyInput = {
-  id?: string
+  id: string
   businessId: string
   subscriptionId: string
   startedAt?: Date | string
@@ -448,7 +448,7 @@ export type BusinessSubscriptionUncheckedUpdateManyWithoutSubscriptionNestedInpu
 }
 
 export type BusinessSubscriptionCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   startedAt?: Date | string
   expiresAt: Date | string
   trialEndDate?: Date | string | null
@@ -457,7 +457,7 @@ export type BusinessSubscriptionCreateWithoutBusinessInput = {
 }
 
 export type BusinessSubscriptionUncheckedCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   subscriptionId: string
   startedAt?: Date | string
   expiresAt: Date | string
@@ -505,7 +505,7 @@ export type BusinessSubscriptionScalarWhereInput = {
 }
 
 export type BusinessSubscriptionCreateWithoutSubscriptionInput = {
-  id?: string
+  id: string
   startedAt?: Date | string
   expiresAt: Date | string
   trialEndDate?: Date | string | null
@@ -514,7 +514,7 @@ export type BusinessSubscriptionCreateWithoutSubscriptionInput = {
 }
 
 export type BusinessSubscriptionUncheckedCreateWithoutSubscriptionInput = {
-  id?: string
+  id: string
   businessId: string
   startedAt?: Date | string
   expiresAt: Date | string
@@ -549,7 +549,7 @@ export type BusinessSubscriptionUpdateManyWithWhereWithoutSubscriptionInput = {
 }
 
 export type BusinessSubscriptionCreateManyBusinessInput = {
-  id?: string
+  id: string
   subscriptionId: string
   startedAt?: Date | string
   expiresAt: Date | string
@@ -585,7 +585,7 @@ export type BusinessSubscriptionUncheckedUpdateManyWithoutBusinessInput = {
 }
 
 export type BusinessSubscriptionCreateManySubscriptionInput = {
-  id?: string
+  id: string
   businessId: string
   startedAt?: Date | string
   expiresAt: Date | string

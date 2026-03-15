@@ -221,7 +221,7 @@ export type ExpenseCategoryScalarWhereWithAggregatesInput = {
 }
 
 export type ExpenseCategoryCreateInput = {
-  id?: string
+  id: string
   name: string
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutExpenseCategoriesInput
@@ -229,7 +229,7 @@ export type ExpenseCategoryCreateInput = {
 }
 
 export type ExpenseCategoryUncheckedCreateInput = {
-  id?: string
+  id: string
   businessId: string
   name: string
   createdAt?: Date | string
@@ -253,7 +253,7 @@ export type ExpenseCategoryUncheckedUpdateInput = {
 }
 
 export type ExpenseCategoryCreateManyInput = {
-  id?: string
+  id: string
   businessId: string
   name: string
   createdAt?: Date | string
@@ -372,14 +372,14 @@ export type ExpenseCategoryUpdateOneWithoutExpensesNestedInput = {
 }
 
 export type ExpenseCategoryCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   name: string
   createdAt?: Date | string
   expenses?: Prisma.ExpenseCreateNestedManyWithoutCategoryInput
 }
 
 export type ExpenseCategoryUncheckedCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   name: string
   createdAt?: Date | string
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutCategoryInput
@@ -422,14 +422,14 @@ export type ExpenseCategoryScalarWhereInput = {
 }
 
 export type ExpenseCategoryCreateWithoutExpensesInput = {
-  id?: string
+  id: string
   name: string
   createdAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutExpenseCategoriesInput
 }
 
 export type ExpenseCategoryUncheckedCreateWithoutExpensesInput = {
-  id?: string
+  id: string
   businessId: string
   name: string
   createdAt?: Date | string
@@ -466,7 +466,7 @@ export type ExpenseCategoryUncheckedUpdateWithoutExpensesInput = {
 }
 
 export type ExpenseCategoryCreateManyBusinessInput = {
-  id?: string
+  id: string
   name: string
   createdAt?: Date | string
 }

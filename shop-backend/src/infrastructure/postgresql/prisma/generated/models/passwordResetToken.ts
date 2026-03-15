@@ -241,7 +241,7 @@ export type passwordResetTokenScalarWhereWithAggregatesInput = {
 }
 
 export type passwordResetTokenCreateInput = {
-  id?: string
+  id: string
   token: string
   expiresAt: Date | string
   used?: boolean
@@ -250,7 +250,7 @@ export type passwordResetTokenCreateInput = {
 }
 
 export type passwordResetTokenUncheckedCreateInput = {
-  id?: string
+  id: string
   userId: string
   token: string
   expiresAt: Date | string
@@ -277,7 +277,7 @@ export type passwordResetTokenUncheckedUpdateInput = {
 }
 
 export type passwordResetTokenCreateManyInput = {
-  id?: string
+  id: string
   userId: string
   token: string
   expiresAt: Date | string
@@ -382,7 +382,7 @@ export type passwordResetTokenUncheckedUpdateManyWithoutUserNestedInput = {
 }
 
 export type passwordResetTokenCreateWithoutUserInput = {
-  id?: string
+  id: string
   token: string
   expiresAt: Date | string
   used?: boolean
@@ -390,7 +390,7 @@ export type passwordResetTokenCreateWithoutUserInput = {
 }
 
 export type passwordResetTokenUncheckedCreateWithoutUserInput = {
-  id?: string
+  id: string
   token: string
   expiresAt: Date | string
   used?: boolean
@@ -436,7 +436,7 @@ export type passwordResetTokenScalarWhereInput = {
 }
 
 export type passwordResetTokenCreateManyUserInput = {
-  id?: string
+  id: string
   token: string
   expiresAt: Date | string
   used?: boolean

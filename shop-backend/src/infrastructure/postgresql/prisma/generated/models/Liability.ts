@@ -411,7 +411,7 @@ export type LiabilityScalarWhereWithAggregatesInput = {
 }
 
 export type LiabilityCreateInput = {
-  id?: string
+  id: string
   title: string
   type: $Enums.LiabilityType
   principalAmount: number
@@ -431,7 +431,7 @@ export type LiabilityCreateInput = {
 }
 
 export type LiabilityUncheckedCreateInput = {
-  id?: string
+  id: string
   businessId: string
   branchId?: string | null
   title: string
@@ -491,7 +491,7 @@ export type LiabilityUncheckedUpdateInput = {
 }
 
 export type LiabilityCreateManyInput = {
-  id?: string
+  id: string
   businessId: string
   branchId?: string | null
   title: string
@@ -752,7 +752,7 @@ export type LiabilityUpdateOneRequiredWithoutLiabilityNestedInput = {
 }
 
 export type LiabilityCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   title: string
   type: $Enums.LiabilityType
   principalAmount: number
@@ -771,7 +771,7 @@ export type LiabilityCreateWithoutBusinessInput = {
 }
 
 export type LiabilityUncheckedCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   branchId?: string | null
   title: string
   type: $Enums.LiabilityType
@@ -838,7 +838,7 @@ export type LiabilityScalarWhereInput = {
 }
 
 export type LiabilityCreateWithoutBranchInput = {
-  id?: string
+  id: string
   title: string
   type: $Enums.LiabilityType
   principalAmount: number
@@ -857,7 +857,7 @@ export type LiabilityCreateWithoutBranchInput = {
 }
 
 export type LiabilityUncheckedCreateWithoutBranchInput = {
-  id?: string
+  id: string
   businessId: string
   title: string
   type: $Enums.LiabilityType
@@ -902,7 +902,7 @@ export type LiabilityUpdateManyWithWhereWithoutBranchInput = {
 }
 
 export type LiabilityCreateWithoutLiabilityInput = {
-  id?: string
+  id: string
   title: string
   type: $Enums.LiabilityType
   principalAmount: number
@@ -921,7 +921,7 @@ export type LiabilityCreateWithoutLiabilityInput = {
 }
 
 export type LiabilityUncheckedCreateWithoutLiabilityInput = {
-  id?: string
+  id: string
   businessId: string
   branchId?: string | null
   title: string
@@ -994,7 +994,7 @@ export type LiabilityUncheckedUpdateWithoutLiabilityInput = {
 }
 
 export type LiabilityCreateManyBusinessInput = {
-  id?: string
+  id: string
   branchId?: string | null
   title: string
   type: $Enums.LiabilityType
@@ -1068,7 +1068,7 @@ export type LiabilityUncheckedUpdateManyWithoutBusinessInput = {
 }
 
 export type LiabilityCreateManyBranchInput = {
-  id?: string
+  id: string
   businessId: string
   title: string
   type: $Enums.LiabilityType

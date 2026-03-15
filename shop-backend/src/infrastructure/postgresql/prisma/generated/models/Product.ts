@@ -484,7 +484,7 @@ export type ProductScalarWhereWithAggregatesInput = {
 }
 
 export type ProductCreateInput = {
-  id?: string
+  id: string
   name: string
   type: $Enums.ProductType
   stockMode?: $Enums.ProductStockMode
@@ -510,7 +510,7 @@ export type ProductCreateInput = {
 }
 
 export type ProductUncheckedCreateInput = {
-  id?: string
+  id: string
   businessId: string
   branchId: string
   categoryId: string
@@ -588,7 +588,7 @@ export type ProductUncheckedUpdateInput = {
 }
 
 export type ProductCreateManyInput = {
-  id?: string
+  id: string
   businessId: string
   branchId: string
   categoryId: string
@@ -969,7 +969,7 @@ export type ProductUpdateOneRequiredWithoutSaleItemNestedInput = {
 }
 
 export type ProductCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   name: string
   type: $Enums.ProductType
   stockMode?: $Enums.ProductStockMode
@@ -994,7 +994,7 @@ export type ProductCreateWithoutBusinessInput = {
 }
 
 export type ProductUncheckedCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   branchId: string
   categoryId: string
   brandId: string
@@ -1072,7 +1072,7 @@ export type ProductScalarWhereInput = {
 }
 
 export type ProductCreateWithoutBranchInput = {
-  id?: string
+  id: string
   name: string
   type: $Enums.ProductType
   stockMode?: $Enums.ProductStockMode
@@ -1097,7 +1097,7 @@ export type ProductCreateWithoutBranchInput = {
 }
 
 export type ProductUncheckedCreateWithoutBranchInput = {
-  id?: string
+  id: string
   businessId: string
   categoryId: string
   brandId: string
@@ -1148,7 +1148,7 @@ export type ProductUpdateManyWithWhereWithoutBranchInput = {
 }
 
 export type ProductCreateWithoutCategoryInput = {
-  id?: string
+  id: string
   name: string
   type: $Enums.ProductType
   stockMode?: $Enums.ProductStockMode
@@ -1173,7 +1173,7 @@ export type ProductCreateWithoutCategoryInput = {
 }
 
 export type ProductUncheckedCreateWithoutCategoryInput = {
-  id?: string
+  id: string
   businessId: string
   branchId: string
   brandId: string
@@ -1224,7 +1224,7 @@ export type ProductUpdateManyWithWhereWithoutCategoryInput = {
 }
 
 export type ProductCreateWithoutBrandInput = {
-  id?: string
+  id: string
   name: string
   type: $Enums.ProductType
   stockMode?: $Enums.ProductStockMode
@@ -1249,7 +1249,7 @@ export type ProductCreateWithoutBrandInput = {
 }
 
 export type ProductUncheckedCreateWithoutBrandInput = {
-  id?: string
+  id: string
   businessId: string
   branchId: string
   categoryId: string
@@ -1300,7 +1300,7 @@ export type ProductUpdateManyWithWhereWithoutBrandInput = {
 }
 
 export type ProductCreateWithoutStockMovesInput = {
-  id?: string
+  id: string
   name: string
   type: $Enums.ProductType
   stockMode?: $Enums.ProductStockMode
@@ -1325,7 +1325,7 @@ export type ProductCreateWithoutStockMovesInput = {
 }
 
 export type ProductUncheckedCreateWithoutStockMovesInput = {
-  id?: string
+  id: string
   businessId: string
   branchId: string
   categoryId: string
@@ -1416,7 +1416,7 @@ export type ProductUncheckedUpdateWithoutStockMovesInput = {
 }
 
 export type ProductCreateWithoutSaleItemInput = {
-  id?: string
+  id: string
   name: string
   type: $Enums.ProductType
   stockMode?: $Enums.ProductStockMode
@@ -1441,7 +1441,7 @@ export type ProductCreateWithoutSaleItemInput = {
 }
 
 export type ProductUncheckedCreateWithoutSaleItemInput = {
-  id?: string
+  id: string
   businessId: string
   branchId: string
   categoryId: string
@@ -1532,7 +1532,7 @@ export type ProductUncheckedUpdateWithoutSaleItemInput = {
 }
 
 export type ProductCreateManyBusinessInput = {
-  id?: string
+  id: string
   branchId: string
   categoryId: string
   brandId: string
@@ -1628,7 +1628,7 @@ export type ProductUncheckedUpdateManyWithoutBusinessInput = {
 }
 
 export type ProductCreateManyBranchInput = {
-  id?: string
+  id: string
   businessId: string
   categoryId: string
   brandId: string
@@ -1724,7 +1724,7 @@ export type ProductUncheckedUpdateManyWithoutBranchInput = {
 }
 
 export type ProductCreateManyCategoryInput = {
-  id?: string
+  id: string
   businessId: string
   branchId: string
   brandId: string
@@ -1820,7 +1820,7 @@ export type ProductUncheckedUpdateManyWithoutCategoryInput = {
 }
 
 export type ProductCreateManyBrandInput = {
-  id?: string
+  id: string
   businessId: string
   branchId: string
   categoryId: string

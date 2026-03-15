@@ -1,14 +1,23 @@
-import { getCategories, addProducts, addCategories, addBrands, getBrandsByCategory, getProductsByBrand } from "@/offline/db/helpers";
 import { useInventoryStore } from "@/store/inventoryStore";
 import { dispatchEvent } from "@/offline/events/eventDispatcher";
-import { EventTypes } from "@/offline/events/eventTypes";
+import { inventoryHelper } from "@/offline/inventory/inventoryHelper";
 import { getDb } from "@/offline/db/indexDB";
+import { createEvent } from "@/offline/events/eventFactory";
+import { InventoryEventType } from "@/offline/events/eventGroups/inventoryEvents";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useBusinessStore } from "@/store/businessStore";
+import { useBranchStore } from "@/store/useBranchStore";
+import { generateLedgerEntries } from "@/offline/ledger/ledgerGenerator";
+import { createEntity } from "@/offline/entities/entityFactory";
+import { getByIndex } from "@/offline/db/helpers";
+import { TABLES } from "@/offline/db/schema";
 
 
 export const inventoryController = {
+ 
     
     async loadCategories(){
-        const cachedCategories = await getCategories();
+        const cachedCategories = await inventoryHelper.getCategories();;
 
         if(cachedCategories.length){
             useInventoryStore.getState().setCategories(cachedCategories)
@@ -16,12 +25,13 @@ export const inventoryController = {
     },
 
     async loadBrands(categoryId: string){
-       const brands = await getBrandsByCategory(categoryId)
+       const brands = await inventoryHelper.getBrandsByCategory(categoryId)
        useInventoryStore.getState().setBrands(brands)
     },
 
     async loadProducts(brandId: string){
-        const products = await getProductsByBrand(brandId)
+        const products = await inventoryHelper.getProductsByBrand(brandId)
+        console.log("products From indexDb: ", products)
 
         useInventoryStore.getState().setProducts(products)
     },
@@ -29,83 +39,91 @@ export const inventoryController = {
 async addOrUpdateProduct(productInput: any) {
 
   const db = await getDb()
+  const userId = useAuthStore.getState().user.id;
+  const businessId = useBusinessStore.getState().business.id;
+  const branchId = useBranchStore.getState().activeBranchId;
 
   const normalizedCategory =
     productInput.categoryName.trim().toLowerCase()
 
   // CATEGORY
-  let category = await db.getFromIndex(
-    "categories",
+  const categories = await getByIndex(
+    TABLES.CATEGORIES,
     "by_name",
     normalizedCategory
   )
+  let category = categories[0]
 
   if (!category) {
 
-    category = {
-      id: crypto.randomUUID(),
+    category = await inventoryHelper.addCategory({
       name: normalizedCategory,
-      timestamp: Date.now()
-    }
-
-    await addCategories([category])
+      businessId,
+    })
   }
 
   // BRAND
-  const brands = await getBrandsByCategory(category.id)
+ const brands = await inventoryHelper.getBrandsByCategory(category.id)
 
-  let brand = brands.find(
-    (b:any) =>
-      b.name === productInput.brandName
-  )
+const normalizedBrand = productInput.brandName.trim().toLowerCase()
 
-  if (!brand) {
+let brand = brands.find(
+  (b: any) => b.name.trim().toLowerCase() === normalizedBrand
+)
 
-    brand = {
-      id: crypto.randomUUID(),
-      name: productInput.brandName,
-      categoryId: category.id,
-      timestamp: Date.now()
-    }
-
-    await addBrands([brand])
-  }
+if (!brand) {
+  brand = await inventoryHelper.addBrands({
+    name: normalizedBrand,
+    categoryId: category.id,
+    businessId
+  })
+}
 
   // PRODUCT
-  const product = {
-    id: productInput.id ?? crypto.randomUUID(),
-    name: productInput.name,
-    brandId: brand.id,
-    categoryId: category.id,
-    costPrice: productInput.costPrice,
-    sellingPrice: productInput.sellingPrice,
-    quantity: productInput.quantity,
-    stockMode: productInput.stockMode,
-    type: productInput.type,
-    imageUrl: productInput.imageUrl,
-    timestamp: Date.now()
-  }
+ const product = createEntity({
+  name: productInput.name,
+  imageUrl: productInput.imageUrl ?? "",
+  description: productInput.description,
+  sellingPrice: productInput.sellingPrice,
+  costPrice: productInput.costPrice,
+  quantity: productInput.quantity,
+  type: productInput.type,
+  stockMode: productInput.stockMode,
+  model: productInput.model,
+  imei: productInput.imei,
+  condition: productInput.condition,
+  categoryId: category.id,
+  brandId: brand.id,
+  brandName: brand.name,
+  categoryName: category.name,
+
+  businessId,
+  branchId
+})
 
   const inventoryStore = useInventoryStore.getState()
 
-  inventoryStore.addProduct(product)
 const existing = inventoryStore.products.find(
   (p) => p.id === product.id
 )
 
+
 if (existing) {
+  const event = await createEvent(InventoryEventType.PRODUCT_UPDATED, userId, businessId, branchId, product, "pending");
+   await dispatchEvent(event);
+  await generateLedgerEntries(event)
   inventoryStore.updateProduct(product)
 } else {
-  inventoryStore.addProduct(product)
-}
-  await dispatchEvent(
-    productInput.id
-      ? EventTypes.PRODUCT_UPDATED
-      : EventTypes.PRODUCT_CREATED,
-    product
-  )
 
-  await addProducts([product])
+  inventoryStore.addProduct(product)
+  const event = await createEvent(InventoryEventType.PRODUCT_CREATED, userId, businessId, branchId, product, "pending");
+  await dispatchEvent(event);
+  await generateLedgerEntries(event)
+}
+
+  
+
+  await inventoryHelper.addProducts(product)
 }
 
 }

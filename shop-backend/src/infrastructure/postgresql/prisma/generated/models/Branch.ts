@@ -298,7 +298,7 @@ export type BranchScalarWhereWithAggregatesInput = {
 }
 
 export type BranchCreateInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   phone?: string | null
@@ -320,7 +320,7 @@ export type BranchCreateInput = {
 }
 
 export type BranchUncheckedCreateInput = {
-  id?: string
+  id: string
   businessId: string
   name: string
   address?: string | null
@@ -386,7 +386,7 @@ export type BranchUncheckedUpdateInput = {
 }
 
 export type BranchCreateManyInput = {
-  id?: string
+  id: string
   businessId: string
   name: string
   address?: string | null
@@ -679,7 +679,7 @@ export type BranchUpdateOneWithoutAlertsNestedInput = {
 }
 
 export type BranchCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   phone?: string | null
@@ -700,7 +700,7 @@ export type BranchCreateWithoutBusinessInput = {
 }
 
 export type BranchUncheckedCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   phone?: string | null
@@ -761,7 +761,7 @@ export type BranchScalarWhereInput = {
 }
 
 export type BranchCreateWithoutUsersInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   phone?: string | null
@@ -782,7 +782,7 @@ export type BranchCreateWithoutUsersInput = {
 }
 
 export type BranchUncheckedCreateWithoutUsersInput = {
-  id?: string
+  id: string
   businessId: string
   name: string
   address?: string | null
@@ -861,7 +861,7 @@ export type BranchUncheckedUpdateWithoutUsersInput = {
 }
 
 export type BranchCreateWithoutCategoryInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   phone?: string | null
@@ -882,7 +882,7 @@ export type BranchCreateWithoutCategoryInput = {
 }
 
 export type BranchUncheckedCreateWithoutCategoryInput = {
-  id?: string
+  id: string
   businessId: string
   name: string
   address?: string | null
@@ -961,7 +961,7 @@ export type BranchUncheckedUpdateWithoutCategoryInput = {
 }
 
 export type BranchCreateWithoutBrandInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   phone?: string | null
@@ -982,7 +982,7 @@ export type BranchCreateWithoutBrandInput = {
 }
 
 export type BranchUncheckedCreateWithoutBrandInput = {
-  id?: string
+  id: string
   businessId: string
   name: string
   address?: string | null
@@ -1061,7 +1061,7 @@ export type BranchUncheckedUpdateWithoutBrandInput = {
 }
 
 export type BranchCreateWithoutProductsInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   phone?: string | null
@@ -1082,7 +1082,7 @@ export type BranchCreateWithoutProductsInput = {
 }
 
 export type BranchUncheckedCreateWithoutProductsInput = {
-  id?: string
+  id: string
   businessId: string
   name: string
   address?: string | null
@@ -1161,7 +1161,7 @@ export type BranchUncheckedUpdateWithoutProductsInput = {
 }
 
 export type BranchCreateWithoutStockMovementInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   phone?: string | null
@@ -1182,7 +1182,7 @@ export type BranchCreateWithoutStockMovementInput = {
 }
 
 export type BranchUncheckedCreateWithoutStockMovementInput = {
-  id?: string
+  id: string
   businessId: string
   name: string
   address?: string | null
@@ -1261,7 +1261,7 @@ export type BranchUncheckedUpdateWithoutStockMovementInput = {
 }
 
 export type BranchCreateWithoutSalesInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   phone?: string | null
@@ -1282,7 +1282,7 @@ export type BranchCreateWithoutSalesInput = {
 }
 
 export type BranchUncheckedCreateWithoutSalesInput = {
-  id?: string
+  id: string
   businessId: string
   name: string
   address?: string | null
@@ -1361,7 +1361,7 @@ export type BranchUncheckedUpdateWithoutSalesInput = {
 }
 
 export type BranchCreateWithoutCashflowsInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   phone?: string | null
@@ -1382,7 +1382,7 @@ export type BranchCreateWithoutCashflowsInput = {
 }
 
 export type BranchUncheckedCreateWithoutCashflowsInput = {
-  id?: string
+  id: string
   businessId: string
   name: string
   address?: string | null
@@ -1461,7 +1461,7 @@ export type BranchUncheckedUpdateWithoutCashflowsInput = {
 }
 
 export type BranchCreateWithoutLiabilitiesInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   phone?: string | null
@@ -1482,7 +1482,7 @@ export type BranchCreateWithoutLiabilitiesInput = {
 }
 
 export type BranchUncheckedCreateWithoutLiabilitiesInput = {
-  id?: string
+  id: string
   businessId: string
   name: string
   address?: string | null
@@ -1561,7 +1561,7 @@ export type BranchUncheckedUpdateWithoutLiabilitiesInput = {
 }
 
 export type BranchCreateWithoutAssetsInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   phone?: string | null
@@ -1582,7 +1582,7 @@ export type BranchCreateWithoutAssetsInput = {
 }
 
 export type BranchUncheckedCreateWithoutAssetsInput = {
-  id?: string
+  id: string
   businessId: string
   name: string
   address?: string | null
@@ -1661,7 +1661,7 @@ export type BranchUncheckedUpdateWithoutAssetsInput = {
 }
 
 export type BranchCreateWithoutExpensesInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   phone?: string | null
@@ -1682,7 +1682,7 @@ export type BranchCreateWithoutExpensesInput = {
 }
 
 export type BranchUncheckedCreateWithoutExpensesInput = {
-  id?: string
+  id: string
   businessId: string
   name: string
   address?: string | null
@@ -1761,7 +1761,7 @@ export type BranchUncheckedUpdateWithoutExpensesInput = {
 }
 
 export type BranchCreateWithoutAlertsInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   phone?: string | null
@@ -1782,7 +1782,7 @@ export type BranchCreateWithoutAlertsInput = {
 }
 
 export type BranchUncheckedCreateWithoutAlertsInput = {
-  id?: string
+  id: string
   businessId: string
   name: string
   address?: string | null
@@ -1861,7 +1861,7 @@ export type BranchUncheckedUpdateWithoutAlertsInput = {
 }
 
 export type BranchCreateManyBusinessInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   phone?: string | null

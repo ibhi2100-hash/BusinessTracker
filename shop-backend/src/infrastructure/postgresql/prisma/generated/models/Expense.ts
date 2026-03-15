@@ -367,7 +367,7 @@ export type ExpenseScalarWhereWithAggregatesInput = {
 }
 
 export type ExpenseCreateInput = {
-  id?: string
+  id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   paymentMethod?: $Enums.PaymentMethod
   reference?: string | null
@@ -383,7 +383,7 @@ export type ExpenseCreateInput = {
 }
 
 export type ExpenseUncheckedCreateInput = {
-  id?: string
+  id: string
   businessId: string
   branchId?: string | null
   categoryId?: string | null
@@ -431,7 +431,7 @@ export type ExpenseUncheckedUpdateInput = {
 }
 
 export type ExpenseCreateManyInput = {
-  id?: string
+  id: string
   businessId: string
   branchId?: string | null
   categoryId?: string | null
@@ -672,7 +672,7 @@ export type ExpenseUncheckedUpdateManyWithoutCategoryNestedInput = {
 }
 
 export type ExpenseCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   paymentMethod?: $Enums.PaymentMethod
   reference?: string | null
@@ -687,7 +687,7 @@ export type ExpenseCreateWithoutBusinessInput = {
 }
 
 export type ExpenseUncheckedCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   branchId?: string | null
   categoryId?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -747,7 +747,7 @@ export type ExpenseScalarWhereInput = {
 }
 
 export type ExpenseCreateWithoutBranchInput = {
-  id?: string
+  id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   paymentMethod?: $Enums.PaymentMethod
   reference?: string | null
@@ -762,7 +762,7 @@ export type ExpenseCreateWithoutBranchInput = {
 }
 
 export type ExpenseUncheckedCreateWithoutBranchInput = {
-  id?: string
+  id: string
   businessId: string
   categoryId?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -803,7 +803,7 @@ export type ExpenseUpdateManyWithWhereWithoutBranchInput = {
 }
 
 export type ExpenseCreateWithoutCategoryInput = {
-  id?: string
+  id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   paymentMethod?: $Enums.PaymentMethod
   reference?: string | null
@@ -818,7 +818,7 @@ export type ExpenseCreateWithoutCategoryInput = {
 }
 
 export type ExpenseUncheckedCreateWithoutCategoryInput = {
-  id?: string
+  id: string
   businessId: string
   branchId?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -859,7 +859,7 @@ export type ExpenseUpdateManyWithWhereWithoutCategoryInput = {
 }
 
 export type ExpenseCreateManyBusinessInput = {
-  id?: string
+  id: string
   branchId?: string | null
   categoryId?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -919,7 +919,7 @@ export type ExpenseUncheckedUpdateManyWithoutBusinessInput = {
 }
 
 export type ExpenseCreateManyBranchInput = {
-  id?: string
+  id: string
   businessId: string
   categoryId?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -979,7 +979,7 @@ export type ExpenseUncheckedUpdateManyWithoutBranchInput = {
 }
 
 export type ExpenseCreateManyCategoryInput = {
-  id?: string
+  id: string
   businessId: string
   branchId?: string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string

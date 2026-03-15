@@ -1,16 +1,6 @@
 // store/useBusinessStore.ts
 import { create } from "zustand";
-
-export interface Business {
-  id: string;
-  name: string;
-  onboardingStep:  number;
-  isOnboarding: boolean;
-  status: "ONBOARDING" | "ACTIVE" | "SUSPENDED"
-  createdAt: string;
-  updatedAt: string;
-}
-
+import { Business } from "@/types/types";
 interface BusinessState {
   business: Business | null;
   setBusiness: (business: Business | null) => void;

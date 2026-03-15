@@ -253,14 +253,14 @@ export type LoanRepaymentScalarWhereWithAggregatesInput = {
 }
 
 export type LoanRepaymentCreateInput = {
-  id?: string
+  id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Date | string
   loan: Prisma.LoanCreateNestedOneWithoutRepaymentsInput
 }
 
 export type LoanRepaymentUncheckedCreateInput = {
-  id?: string
+  id: string
   loanId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Date | string
@@ -281,7 +281,7 @@ export type LoanRepaymentUncheckedUpdateInput = {
 }
 
 export type LoanRepaymentCreateManyInput = {
-  id?: string
+  id: string
   loanId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Date | string
@@ -382,13 +382,13 @@ export type LoanRepaymentUncheckedUpdateManyWithoutLoanNestedInput = {
 }
 
 export type LoanRepaymentCreateWithoutLoanInput = {
-  id?: string
+  id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Date | string
 }
 
 export type LoanRepaymentUncheckedCreateWithoutLoanInput = {
-  id?: string
+  id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Date | string
 }
@@ -430,7 +430,7 @@ export type LoanRepaymentScalarWhereInput = {
 }
 
 export type LoanRepaymentCreateManyLoanInput = {
-  id?: string
+  id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   date?: Date | string
 }

@@ -304,7 +304,7 @@ export type EmployeeScalarWhereWithAggregatesInput = {
 }
 
 export type EmployeeCreateInput = {
-  id?: string
+  id: string
   name: string
   position: string
   salary: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -316,7 +316,7 @@ export type EmployeeCreateInput = {
 }
 
 export type EmployeeUncheckedCreateInput = {
-  id?: string
+  id: string
   businessId: string
   name: string
   position: string
@@ -352,7 +352,7 @@ export type EmployeeUncheckedUpdateInput = {
 }
 
 export type EmployeeCreateManyInput = {
-  id?: string
+  id: string
   businessId: string
   name: string
   position: string
@@ -496,7 +496,7 @@ export type EmployeeUpdateOneRequiredWithoutSalaryAccrualsNestedInput = {
 }
 
 export type EmployeeCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   name: string
   position: string
   salary: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -507,7 +507,7 @@ export type EmployeeCreateWithoutBusinessInput = {
 }
 
 export type EmployeeUncheckedCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   name: string
   position: string
   salary: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -558,7 +558,7 @@ export type EmployeeScalarWhereInput = {
 }
 
 export type EmployeeCreateWithoutSalaryAccrualsInput = {
-  id?: string
+  id: string
   name: string
   position: string
   salary: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -569,7 +569,7 @@ export type EmployeeCreateWithoutSalaryAccrualsInput = {
 }
 
 export type EmployeeUncheckedCreateWithoutSalaryAccrualsInput = {
-  id?: string
+  id: string
   businessId: string
   name: string
   position: string
@@ -618,7 +618,7 @@ export type EmployeeUncheckedUpdateWithoutSalaryAccrualsInput = {
 }
 
 export type EmployeeCreateManyBusinessInput = {
-  id?: string
+  id: string
   name: string
   position: string
   salary: runtime.Decimal | runtime.DecimalJsLike | number | string

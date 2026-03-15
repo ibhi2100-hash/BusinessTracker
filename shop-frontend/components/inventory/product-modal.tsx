@@ -1,14 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Product, useInventoryStore } from "../../store/inventoryStore";
-import { addBrands, addCategories } from "@/offline/db/helpers";
+import { useInventoryStore } from "../../store/inventoryStore";
+import { inventoryHelper } from "@/offline/inventory/inventoryHelper";
+import { InventoryItem } from "@/types/types";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
   onSave: (product: any) => void;
-  product?: Product;
+  product?: InventoryItem;
 }
 
 export default function ProductModal({ isOpen, onClose, onSave, product }: Props) {
@@ -21,7 +22,7 @@ export default function ProductModal({ isOpen, onClose, onSave, product }: Props
     setSelectedBrandId,
   } = useInventoryStore();
 
-  const [form, setForm] = useState<Partial<Product>>({});
+  const [form, setForm] = useState<Partial<InventoryItem>>({});
   const [newCategoryName, setNewCategoryName] = useState<string | null>(null);
   const [newBrandName, setNewBrandName] = useState<string | null>(null);
   const [categoryImage, setCategoryImage] = useState<string | null>(null);
@@ -30,8 +31,8 @@ export default function ProductModal({ isOpen, onClose, onSave, product }: Props
   useEffect(() => {
     if (product) {
       setForm(product);
-      if (product.brand) setSelectedBrandId(product.brand.id);
-      const cat = categories.find((c) => c.id === product.brand?.categoryId);
+      if (product.brandId) setSelectedBrandId(product.brandId);
+      const cat = categories.find((c) => c.id === product.categoryId);
       if (cat) setSelectedCategoryId(cat.id);
       setNewCategoryName(null);
       setNewBrandName(null);
@@ -100,7 +101,7 @@ export default function ProductModal({ isOpen, onClose, onSave, product }: Props
     };
 
     if (newCategoryName) {
-      await addCategories([{
+      await inventoryHelper.addCategory([{
         name: newCategoryName,
         imageUrl: categoryImage || undefined,
         timestamp: Date.now()
@@ -108,7 +109,7 @@ export default function ProductModal({ isOpen, onClose, onSave, product }: Props
     }
 
     if (newBrandName) {
-      await addBrands([{
+      await inventoryHelper.addBrands([{
         name: newBrandName,
         categoryId: selectedCategoryId || undefined,
         timestamp: Date.now()

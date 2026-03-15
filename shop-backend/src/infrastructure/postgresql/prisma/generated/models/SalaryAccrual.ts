@@ -285,7 +285,7 @@ export type SalaryAccrualScalarWhereWithAggregatesInput = {
 }
 
 export type SalaryAccrualCreateInput = {
-  id?: string
+  id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   month: number
   year: number
@@ -294,7 +294,7 @@ export type SalaryAccrualCreateInput = {
 }
 
 export type SalaryAccrualUncheckedCreateInput = {
-  id?: string
+  id: string
   employeeId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   month: number
@@ -321,7 +321,7 @@ export type SalaryAccrualUncheckedUpdateInput = {
 }
 
 export type SalaryAccrualCreateManyInput = {
-  id?: string
+  id: string
   employeeId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   month: number
@@ -438,7 +438,7 @@ export type SalaryAccrualUncheckedUpdateManyWithoutEmployeeNestedInput = {
 }
 
 export type SalaryAccrualCreateWithoutEmployeeInput = {
-  id?: string
+  id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   month: number
   year: number
@@ -446,7 +446,7 @@ export type SalaryAccrualCreateWithoutEmployeeInput = {
 }
 
 export type SalaryAccrualUncheckedCreateWithoutEmployeeInput = {
-  id?: string
+  id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   month: number
   year: number
@@ -492,7 +492,7 @@ export type SalaryAccrualScalarWhereInput = {
 }
 
 export type SalaryAccrualCreateManyEmployeeInput = {
-  id?: string
+  id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   month: number
   year: number

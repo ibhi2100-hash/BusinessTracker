@@ -5,9 +5,13 @@ import { ProductDto } from "../dto/product.dto.js";
 export class ProductRepository {
 
 async getOrCreateCategory(
-  name: string,
+  
   businessId: string,
   branchId: string,
+  payload: {
+    id: string,
+    categoryName: string,
+  },
   db: Prisma.TransactionClient
 ) {
   return db.category.upsert({
@@ -19,7 +23,7 @@ async getOrCreateCategory(
       }
     },
     update: {}, // do nothing if exists
-    create: { name, businessId, branchId }
+    create: { id: payload.id, name, businessId, branchId }
   });
 }
 
@@ -28,6 +32,7 @@ async getOrCreateBrand(
   businessId: string,
   branchId: string,
   categoryId: string,
+  payload: any,
   db: Prisma.TransactionClient
 ) {
   return db.brand.upsert({
@@ -40,6 +45,7 @@ async getOrCreateBrand(
     },
     update: {}, // do nothing if exists
     create: {
+      id: payload.id,
       name,
       businessId,
       branchId,
@@ -49,7 +55,7 @@ async getOrCreateBrand(
 }
 
   async createProduct(
-  data: any,
+  payload: any,
   businessId: string,
   branchId: string,
   tx?: Prisma.TransactionClient
@@ -57,16 +63,18 @@ async getOrCreateBrand(
   const db = tx ?? prisma;
 
   // --- Category ---
-  const category = data.categoryName
-    ? await this.getOrCreateCategory(data.categoryName, businessId, branchId, db)
-    : await this.findCategoryById(data.categoryId!, businessId);
+    const category = payload.category
+
+  category
+    ? await this.getOrCreateCategory( businessId, branchId, payload, db)
+    : await this.findCategoryById(category?.id, businessId);
 
   if (!category) throw new Error("Category not found");
   const categoryId = category.id;
 
   // --- Brand ---
   let brandId: string;
-  if (data.brandName) {
+  if (payload.brand) {
     const brand = await this.getOrCreateBrand(
       data.brandName,
       businessId,

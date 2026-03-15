@@ -121,7 +121,7 @@ enum BusinessStatus {
 
 
 model Business {
-  id          String    @id @default(uuid())
+  id          String    @id 
   name        String
   address     String?
   onboardingStep  Int   @default(1)
@@ -152,7 +152,7 @@ model Business {
 
 }
 model Branch {
-  id      String    @id     @default(uuid())
+  id      String    @id    
   businessId    String  
   name          String
   address       String?   
@@ -176,7 +176,7 @@ model Branch {
 }
 
 model User {
-  id          String    @id @default(uuid())
+  id          String    @id   @default(uuid())
   name        String
   email       String    @unique
   password    String
@@ -197,7 +197,7 @@ model User {
 
 
 model passwordResetToken {
-  id          String    @id @default(uuid())
+  id          String    @id 
   userId      String
   token       String    @unique
   expiresAt   DateTime
@@ -211,7 +211,7 @@ model passwordResetToken {
 }
 
 model SubscriptionPlan {
-  id    String  @id   @default(uuid())
+  id    String  @id   
   name  String
   price   Decimal
   billingCycle  String
@@ -228,7 +228,7 @@ model SubscriptionPlan {
 }
 
 model BusinessSubscription {
-  id              String    @id     @default(uuid())
+  id              String    @id     
   businessId      String  @unique   
   subscriptionId  String
   startedAt       DateTime        @default(now())
@@ -240,7 +240,7 @@ model BusinessSubscription {
   subscription    SubscriptionPlan @relation(fields: [subscriptionId], references: [id])
 }
 model LedgerAccount {
-  id          String   @id @default(uuid())
+  id          String   @id
   businessId  String
   name        String
   type        String
@@ -251,7 +251,7 @@ model LedgerAccount {
 }
 
 model LedgerEntry {
-  id          String   @id @default(uuid())
+  id          String   @id 
   accountId   String
   businessId  String
   amount      Decimal
@@ -264,7 +264,7 @@ model LedgerEntry {
 }
 
 model Category {
-  id          String    @id @default(uuid())
+  id          String    @id 
   name        String
   businessId  String
   branchId    String
@@ -280,7 +280,7 @@ model Category {
 }
 
 model Brand {
-  id          String    @id @default(uuid())
+  id          String    @id 
   name        String
   businessId  String
   categoryId  String
@@ -297,7 +297,7 @@ model Brand {
 }
 
 model Product {
-  id          String    @id @default(uuid())
+  id          String    @id 
   businessId  String
   branchId    String
   categoryId String
@@ -334,7 +334,7 @@ model Product {
   @@index([type])
 }
 model StockMovement {
-  id          String           @id @default(uuid())
+  id          String           @id 
   businessId  String
   branchId    String
   productId   String
@@ -357,7 +357,7 @@ model StockMovement {
 
 
 model Sale {
-  id            String        @id @default(uuid())
+  id            String        @id 
   businessId    String
   branchId      String?
   discount      Decimal?
@@ -379,7 +379,7 @@ model Sale {
 }
 
 model SaleItem {
-  id          String    @id @default(uuid())
+  id          String    @id 
   saleId      String
   productId   String
   quantity    Int
@@ -395,7 +395,7 @@ model SaleItem {
 }
 
 model Payment {
-  id          String        @id @default(uuid())
+  id          String        @id 
   saleId      String
   amount      Decimal
   method      PaymentMethod
@@ -409,7 +409,7 @@ model Payment {
 }
 
 model CashFlow {
-  id          String        @id @default(uuid())
+  id          String        @id 
   businessId  String
   branchId    String
   type        CashFlowType
@@ -430,7 +430,7 @@ model CashFlow {
 }
 
 model Liability {
-  id           String        @id @default(uuid())
+  id           String        @id 
   businessId   String
   branchId     String?
   title        String
@@ -452,7 +452,7 @@ model Liability {
   liability    LiabilityPayment[]
 }
 model LiabilityPayment {
-  id           String     @id   @default(uuid())
+  id           String     @id  
   liabilityId  String
   liabilities  Liability        @relation(fields: [liabilityId], references: [id])
   amount       Float?
@@ -460,7 +460,7 @@ model LiabilityPayment {
 }
 
 model Asset {
-  id               String    @id @default(uuid())
+  id               String    @id 
   businessId       String
   branchId         String
   name             String
@@ -486,7 +486,7 @@ model Asset {
 
 
 model Expense {
-  id            String        @id @default(uuid())
+  id            String        @id 
   businessId    String
   branchId      String?
   categoryId    String?
@@ -508,7 +508,7 @@ model Expense {
 }
 
 model CapitalExpenditure {
-  id            String   @id @default(uuid())
+  id            String   @id
   type          String
   amount        Decimal
   referenceType String
@@ -520,7 +520,7 @@ model CapitalExpenditure {
 }
 
 model Loan {
-  id          String                 @id @default(uuid())
+  id          String                 @id 
   businessId  String
   principal   Decimal?
   amount      Decimal
@@ -535,7 +535,7 @@ model Loan {
 }
 
 model LoanRepayment {
-  id          String                 @id @default(uuid())
+  id          String                 @id 
   loanId      String
   amount      Decimal
   date        DateTime               @default(now())
@@ -544,7 +544,7 @@ model LoanRepayment {
 }
 
 model Employee {
-  id          String    @id @default(uuid())
+  id          String    @id 
   businessId String
   name        String
   position    String
@@ -558,7 +558,7 @@ model Employee {
 }
 
 model SalaryAccrual {
-  id          String    @id @default(uuid())
+  id          String    @id 
   employeeId  String
   amount      Decimal
   month       Int
@@ -569,7 +569,7 @@ model SalaryAccrual {
 }
 
 model  ExpenseCategory {
-  id          String    @id @default(uuid())
+  id          String    @id 
   businessId  String
   name        String 
   createdAt   DateTime  @default(now())
@@ -581,9 +581,9 @@ model  ExpenseCategory {
 }
 
 model Alert {
-  id            String   @id @default(uuid())
+  id            String   @id 
   businessId    String
-  branchId      String?   // null = global alert
+  branchId      String   // null = global alert
   type          AlertType
   severity      AlertSeverity
   title         String

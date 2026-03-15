@@ -476,7 +476,7 @@ export type AssetScalarWhereWithAggregatesInput = {
 }
 
 export type AssetCreateInput = {
-  id?: string
+  id: string
   name: string
   purchaseCost: number
   purchaseDate?: Date | string | null
@@ -499,7 +499,7 @@ export type AssetCreateInput = {
 }
 
 export type AssetUncheckedCreateInput = {
-  id?: string
+  id: string
   businessId: string
   branchId: string
   name: string
@@ -568,7 +568,7 @@ export type AssetUncheckedUpdateInput = {
 }
 
 export type AssetCreateManyInput = {
-  id?: string
+  id: string
   businessId: string
   branchId: string
   name: string
@@ -824,7 +824,7 @@ export type EnumAssetTypeFieldUpdateOperationsInput = {
 }
 
 export type AssetCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   name: string
   purchaseCost: number
   purchaseDate?: Date | string | null
@@ -846,7 +846,7 @@ export type AssetCreateWithoutBusinessInput = {
 }
 
 export type AssetUncheckedCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   branchId: string
   name: string
   purchaseCost: number
@@ -920,7 +920,7 @@ export type AssetScalarWhereInput = {
 }
 
 export type AssetCreateWithoutBranchInput = {
-  id?: string
+  id: string
   name: string
   purchaseCost: number
   purchaseDate?: Date | string | null
@@ -942,7 +942,7 @@ export type AssetCreateWithoutBranchInput = {
 }
 
 export type AssetUncheckedCreateWithoutBranchInput = {
-  id?: string
+  id: string
   businessId: string
   name: string
   purchaseCost: number
@@ -990,7 +990,7 @@ export type AssetUpdateManyWithWhereWithoutBranchInput = {
 }
 
 export type AssetCreateManyBusinessInput = {
-  id?: string
+  id: string
   branchId: string
   name: string
   purchaseCost: number
@@ -1078,7 +1078,7 @@ export type AssetUncheckedUpdateManyWithoutBusinessInput = {
 }
 
 export type AssetCreateManyBranchInput = {
-  id?: string
+  id: string
   businessId: string
   name: string
   purchaseCost: number

@@ -1,19 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useInventoryStore, Product as StoreProduct } from "@/store/inventoryStore";
+import { useInventoryStore } from "@/store/inventoryStore";
 import BrandDropdown from "./brandDropdown";
 import ProductCard from "./productCard";
 import ProductModal from "./product-modal";
+import { InventoryItem } from "@/types/types";
 import CategoryCard from "./categoryCard";
 
 import { useBusinessStore } from "@/store/businessStore";
 import { inventoryController } from "@/services/inventory/inventory.controller";
 import { useSalesStore } from "@/store/SalesStore";
 import { toast } from "sonner";
-import { dispatchEvent } from "@/offline/events/eventDispatcher";
-import { EventTypes } from "@/offline/events/eventTypes";
-import { getCategories } from "@/offline/db/helpers";
+import { createSales } from "@/offline/sales/createSales";
 
 interface InventoryPageProps {
   context: "sell" | "admin";
@@ -29,26 +28,25 @@ export default function InventoryPage({ context, mode }: InventoryPageProps) {
 
   const {
     categories,
-    brands,
     products,
     selectedCategoryId,
     selectedBrandId,
     setSelectedCategoryId,
-    setSelectedBrandId,
   } = useInventoryStore();
-
   const [modalOpen, setModalOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<StoreProduct | undefined>();
+  const [editingProduct, setEditingProduct] = useState<InventoryItem | undefined>();
 
   const business = useBusinessStore(s => s.business);
   const isOnboarding = business?.isOnboarding;
 
   // Load brands for selected category
   useEffect(() => {
-    if (selectedCategoryId) {
-       const brand = inventoryController.loadBrands(selectedCategoryId);
-      useInventoryStore.getState().setProducts([])
-    }
+    if (!selectedCategoryId)return;
+    const store = useInventoryStore.getState();
+
+    store.setSelectedBrandId(null);
+    store.setProducts([])
+    inventoryController.loadBrands(selectedCategoryId)
   }, [selectedCategoryId]);
 
   // Load products for selected brand
@@ -58,7 +56,7 @@ export default function InventoryPage({ context, mode }: InventoryPageProps) {
     }
   }, [selectedBrandId]);
 
-  const handleEdit = (product: StoreProduct) => {
+  const handleEdit = (product: InventoryItem) => {
     setEditingProduct(product);
     setModalOpen(true);
   };
@@ -84,8 +82,6 @@ export default function InventoryPage({ context, mode }: InventoryPageProps) {
       // Create the sale payload
 
       const salePayload = {
-        id: crypto.randomUUID(),
-        businessId: business?.id || "",
         productId: product.id,
         quantity,
         amount: product.sellingPrice * quantity,
@@ -104,10 +100,7 @@ export default function InventoryPage({ context, mode }: InventoryPageProps) {
         timestamp: Date.now(),
       };
 
-      //save sale in offline events system
-      await dispatchEvent(EventTypes.SALE_ADDED, salePayload);
-      //Optionally add to sales store for immediate Ui update
-      saleStore.addSale(salePayload);
+      await createSales(salePayload)
 
       toast.success("Sale recorded successfully(offline-safe)");
 

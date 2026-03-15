@@ -1,4 +1,4 @@
-import { Category } from "../../store/inventoryStore";
+import { Category } from "@/types/types";
 
 interface Props {
   category: Category;

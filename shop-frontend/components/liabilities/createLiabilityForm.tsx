@@ -6,6 +6,7 @@ import { createLiabilitySchema, CreateLiabilityInput } from "@/schemas/liabiliti
 import { useCreateLiability } from "@/hooks/liabilitiesHooks/useCreateLiability";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { createLiability } from "@/offline/finance/liabilities/createLiability.service";
 
 interface Props {
   mode?: "OPENING" | "LIVE";
@@ -34,12 +35,7 @@ export const CreateLiabilityForm = ({ mode, onComplete }: Props) => {
         startDate: data.startDate ? new Date(data.startDate).toISOString() : undefined,
         dueDate: data.dueDate ? new Date(data.dueDate).toISOString() : undefined
     }
-    mutate(payload, {
-      onSuccess: () => {
-        reset();
-        onComplete?.();
-      },
-    });
+    createLiability(payload)
   };
 
   return (

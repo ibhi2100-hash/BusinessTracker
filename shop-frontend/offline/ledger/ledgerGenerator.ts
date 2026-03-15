@@ -1,182 +1,292 @@
 import { Accounts } from "./accounts";
-import { EventTypes } from "../events/eventTypes";
+import { financeEventType } from "../events/eventGroups/financeEvent";
+import { InventoryEventType } from "../events/eventGroups/inventoryEvents";
+import { salesEventType } from "../events/eventGroups/salesEvent";
+import { createEntity } from "../entities/entityFactory";
 
-export const generateLedgerEntries = (event: any)=> {
-    const { payload } = event
+export const generateLedgerEntries = (event: any) => {
+const { payload } = event;
 
-    switch(event.type) {
-        case EventTypes.SALE_ADDED:
-            return [
-                {
-                    id: crypto.randomUUID(),
-                    eventId: event.id,
-                    account: Accounts.CASH,
-                    amount: payload.amount,
-                    timestamp: event.timestamp
-                },
+switch (event.type) {
 
-                {
-                    id: crypto.randomUUID(),
-                    eventId: event.id,
-                    account: Accounts.REVENUE,
-                    amount: payload.amount,
-                    timestamp: event.timestamp
-                },
+/**
+ * SALE EVENT
+ * Dr Cash
+ * Cr Revenue
+ *
+ * Dr COGS
+ * Cr Inventory
+ */
+case salesEventType.SALE_ADDED:
+  return [
 
-                {
-                    id: crypto.randomUUID(),
-                    eventId: event.id,
-                    account: Accounts.COGS,
-                    amount: payload.cost,
-                    timestamp: event.timestamp
-                },
+    createEntity({
+      eventId: event.id,
+      branchId: event.branchId,
+      account: Accounts.CASH,
+      amount: payload.amount
+    }),
 
-                {
-                    id: crypto.randomUUID(),
-                    eventId: event.id,
-                    account: Accounts.INVENTORY,
-                    amount: -payload.cost,
-                    timestamp: event.timestamp
-                },
+    createEntity({
+      eventId: event.id,
+      branchId: event.branchId,
+      account: Accounts.REVENUE,
+      amount: payload.amount
+    }),
 
-                {
-                    id: crypto.randomUUID(),
-                    eventId: event.id,
-                    account: Accounts.EXPENSES,
-                    amount: payload.amount,
-                    timestamp: event.timestamp
-                },
+    createEntity({
+      eventId: event.id,
+      branchId: event.branchId,
+      account: Accounts.COGS,
+      amount: payload.cost
+    }),
 
-                {
-                    id: crypto.randomUUID(),
-                    eventId: event.id,
-                    account: Accounts.LIABILITIES,
-                    amount: payload.amount,
-                    timestamp: event.timestamp
-                },
+    createEntity({
+      eventId: event.id,
+      branchId: event.branchId,
+      account: Accounts.INVENTORY,
+      amount: -payload.cost
+    })
 
-                {
-                    id: crypto.randomUUID(),
-                    eventId: event.id,
-                    account: Accounts.ASSETS,
-                    amount: payload.amount,
-                    timestamp: event.timestamp
-                },
-            ]
+  ];
 
-        case EventTypes.INVENTORY_ADDED:
-            return [
-                {
-                    id: crypto.randomUUID(),
-                    eventId: event.id,
-                    account: Accounts.INVENTORY,
-                    amount: payload.value,
-                    timestamp: event.timestamp
-                },
 
-                {
-                    id: crypto.randomUUID(),
-                    eventId: event.id,
-                    account: Accounts.CASH,
-                    amount: -payload.value,
-                    timestamp: event.timestamp
-                },
-            ]
-        case EventTypes.ASSET_ADDED:
-            return [
-                {
-                    id: crypto.randomUUID(),
-                    eventId: event.id,
-                    account: Accounts.ASSETS,
-                    amount: payload.cost,
-                    timestamp: event.timestamp
-                },
+/**
+ * PRODUCT CREATED (Inventory Purchase)
+ *
+ * Dr Inventory
+ * Cr Cash
+ */
+case InventoryEventType.PRODUCT_CREATED:
+  return [
 
-                {
-                    id: crypto.randomUUID(),
-                    eventId: event.id,
-                    account: Accounts.CASH,
-                    amount: -payload.cost,
-                    timestamp: event.timestamp
-                },
-            ]
-            
-        case EventTypes.ASSET_DISPOSED:
-            return [
-                {
-                    id: crypto.randomUUID(),
-                    eventId: event.id,
-                    account: Accounts.COGS,
-                    amount: -payload.value,
-                    timestamp: event.timestamp
-                },
+    createEntity({
+      eventId: event.id,
+      branchId: event.branchId,
+      account: Accounts.INVENTORY,
+      amount: payload.value
+    }),
 
-                {
-                    id: crypto.randomUUID(),
-                    eventId: event.id,
-                    account: Accounts.CASH,
-                    amount: payload.value,
-                    timestamp: event.timestamp
-                },
-            ]
+    createEntity({
+      eventId: event.id,
+      branchId: event.branchId,
+      account: Accounts.CASH,
+      amount: -payload.value
+    })
 
-        case EventTypes.LIABILITY_ADDED:
-            return [
-                    {
-                    id: crypto.randomUUID(),
-                    eventId: event.id,
-                    account: Accounts.LIABILITIES,
-                    amount: payload.amount,
-                    timestamp: event.timestamp
-                },
+  ];
 
-                {
-                    id: crypto.randomUUID(),
-                    eventId: event.id,
-                    account: Accounts.CASH,
-                    amount: payload.amount,
-                    timestamp: event.timestamp
-                },
-            ]
 
-        case EventTypes.LIABILITY_REPAYMENT:
-            return [
-                    {
-                    id: crypto.randomUUID(),
-                    eventId: event.id,
-                    account: Accounts.LIABILITIES,
-                    amount: -payload.amount,
-                    timestamp: event.timestamp
-                },
+/**
+ * ASSET PURCHASE
+ *
+ * Dr Assets
+ * Cr Cash
+ */
+case financeEventType.ASSET_ADDED:
+  return [
 
-                {
-                    id: crypto.randomUUID(),
-                    eventId: event.id,
-                    account: Accounts.CASH,
-                    amount: -payload.amount,
-                    timestamp: event.timestamp
-                },
-            ]  
-        case EventTypes.EXPENSES_ADDED:
-            return [
-                {
-                    id: crypto.randomUUID(),
-                    eventId: event.id,
-                    account: Accounts.EXPENSES,
-                    amount: payload.amount,
-                    timestamp: event.timestamp
-                },
+    createEntity({
+      eventId: event.id,
+      branchId: event.branchId,
+      account: Accounts.ASSETS,
+      amount: payload.cost
+    }),
 
-                {
-                    id: crypto.randomUUID(),
-                    eventId: event.id,
-                    account: Accounts.CASH,
-                    amount: -payload.amount,
-                    timestamp: event.timestamp
-                },
-            ]  
+    createEntity({
+      eventId: event.id,
+      branchId: event.branchId,
+      account: Accounts.CASH,
+      amount: -payload.cost
+    })
 
-        default:
-            return []
-    }
+  ];
+
+
+/**
+ * ASSET DISPOSAL
+ *
+ * Dr Cash
+ * Cr Asset
+ */
+case financeEventType.ASSET_DISPOSED:
+  return [
+
+    createEntity({
+      eventId: event.id,
+      branchId: event.branchId,
+      account: Accounts.CASH,
+      amount: payload.value
+    }),
+
+    createEntity({
+      eventId: event.id,
+      branchId: event.branchId,
+      account: Accounts.ASSETS,
+      amount: -payload.value
+    })
+
+  ];
+
+
+/**
+ * LIABILITY TAKEN
+ *
+ * Dr Cash
+ * Cr Liability
+ */
+case financeEventType.LIABILITY_ADDED:
+  return [
+
+    createEntity({
+      eventId: event.id,
+      branchId: event.branchId,
+      account: Accounts.CASH,
+      amount: payload.amount
+    }),
+
+    createEntity({
+      eventId: event.id,
+      branchId: event.branchId,
+      account: Accounts.LIABILITIES,
+      amount: payload.amount
+    })
+
+  ];
+
+
+/**
+ * LIABILITY REPAYMENT
+ *
+ * Dr Liability
+ * Cr Cash
+ */
+case financeEventType.LIABILITY_REPAYMENT:
+  return [
+
+    createEntity({
+      eventId: event.id,
+      branchId: event.branchId,
+      account: Accounts.LIABILITIES,
+      amount: -payload.amount
+    }),
+
+    createEntity({
+      eventId: event.id,
+      branchId: event.branchId,
+      account: Accounts.CASH,
+      amount: -payload.amount
+    })
+
+  ];
+
+
+/**
+ * BUSINESS EXPENSE
+ *
+ * Dr Expense
+ * Cr Cash
+ */
+case financeEventType.EXPENSES_ADDED:
+  return [
+
+    createEntity({
+      eventId: event.id,
+      branchId: event.branchId,
+      account: Accounts.EXPENSES,
+      amount: payload.amount
+    }),
+
+    createEntity({
+      eventId: event.id,
+      branchId: event.branchId,
+      account: Accounts.CASH,
+      amount: -payload.amount
+    })
+
+  ];
+case financeEventType.CAPITAL_INJECTION:
+    return [
+
+    createEntity({
+        eventId: event.id,
+        branchId: event.branchId,
+        account: Accounts.CASH,
+        amount: payload.amount
+    }),
+
+    createEntity({
+        eventId: event.id,
+        branchId: event.branchId,
+        account: Accounts.OWNER_CAPITAL,
+        amount: payload.amount
+    })
+
+    ];
+    case financeEventType.CAPITAL_DRAWINGS:
+return [
+
+createEntity({
+  eventId: event.id,
+  branchId: event.branchId,
+  account: Accounts.OWNER_DRAWINGS,
+  amount: payload.amount
+}),
+
+createEntity({
+  eventId: event.id,
+  branchId: event.branchId,
+  account: Accounts.CASH,
+  amount: -payload.amount
+})
+
+
+];
+
+case financeEventType.BRANCH_TRANSFER_OUT:
+return [
+    
+createEntity({
+  eventId: event.id,
+  branchId: event.branchId,
+  account: Accounts.CASH,
+  amount: -payload.amount
+}),
+
+createEntity({
+  eventId: event.id,
+  branchId: event.branchId,
+  account: Accounts.INTER_BRANCH,
+  amount: payload.amount
+})
+
+
+];
+
+case financeEventType.BRANCH_TRANSFER_IN:
+return [
+
+createEntity({
+  eventId: event.id,
+  branchId: payload.toBranchId,
+  account: Accounts.CASH,
+  amount: payload.amount
+}),
+
+createEntity({
+  eventId: event.id,
+  branchId: payload.toBranchId,
+  account: Accounts.INTER_BRANCH,
+  amount: -payload.amount
+})
+
+];
+
+
+
+
+default:
+  return [];
+
 }
+};

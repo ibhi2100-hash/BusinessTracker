@@ -2,6 +2,7 @@
 export function dashboardReducer(state: any , event: any) {
     switch (event.type){
         case "SALE_ADDED":
+            
             return {
                 ...state,
                 cashAtHand: state.cashAtHand + event.payload.amount,

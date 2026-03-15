@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { addBusinessData } from "@/offline/db/helpers";
+
 
 // Define the types for context
 interface BusinessContext {
@@ -29,6 +29,5 @@ export const useBusinessContext = () => {
     staleTime: 1000 * 60 * 5, // cache 5 minutes
   });
   
-  addBusinessData(query.data)
   return query;
 };

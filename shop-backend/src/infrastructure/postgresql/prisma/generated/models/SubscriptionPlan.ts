@@ -337,7 +337,7 @@ export type SubscriptionPlanScalarWhereWithAggregatesInput = {
 }
 
 export type SubscriptionPlanCreateInput = {
-  id?: string
+  id: string
   name: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   billingCycle: string
@@ -351,7 +351,7 @@ export type SubscriptionPlanCreateInput = {
 }
 
 export type SubscriptionPlanUncheckedCreateInput = {
-  id?: string
+  id: string
   name: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   billingCycle: string
@@ -393,7 +393,7 @@ export type SubscriptionPlanUncheckedUpdateInput = {
 }
 
 export type SubscriptionPlanCreateManyInput = {
-  id?: string
+  id: string
   name: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   billingCycle: string
@@ -512,7 +512,7 @@ export type SubscriptionPlanUpdateOneRequiredWithoutSubscriptionNestedInput = {
 }
 
 export type SubscriptionPlanCreateWithoutSubscriptionInput = {
-  id?: string
+  id: string
   name: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   billingCycle: string
@@ -525,7 +525,7 @@ export type SubscriptionPlanCreateWithoutSubscriptionInput = {
 }
 
 export type SubscriptionPlanUncheckedCreateWithoutSubscriptionInput = {
-  id?: string
+  id: string
   name: string
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   billingCycle: string

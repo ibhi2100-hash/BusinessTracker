@@ -324,7 +324,7 @@ export type LoanScalarWhereWithAggregatesInput = {
 }
 
 export type LoanCreateInput = {
-  id?: string
+  id: string
   principal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   interestRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -337,7 +337,7 @@ export type LoanCreateInput = {
 }
 
 export type LoanUncheckedCreateInput = {
-  id?: string
+  id: string
   businessId: string
   principal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -376,7 +376,7 @@ export type LoanUncheckedUpdateInput = {
 }
 
 export type LoanCreateManyInput = {
-  id?: string
+  id: string
   businessId: string
   principal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -530,7 +530,7 @@ export type LoanUpdateOneRequiredWithoutRepaymentsNestedInput = {
 }
 
 export type LoanCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   principal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   interestRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -542,7 +542,7 @@ export type LoanCreateWithoutBusinessInput = {
 }
 
 export type LoanUncheckedCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   principal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   interestRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -595,7 +595,7 @@ export type LoanScalarWhereInput = {
 }
 
 export type LoanCreateWithoutRepaymentsInput = {
-  id?: string
+  id: string
   principal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   interestRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -607,7 +607,7 @@ export type LoanCreateWithoutRepaymentsInput = {
 }
 
 export type LoanUncheckedCreateWithoutRepaymentsInput = {
-  id?: string
+  id: string
   businessId: string
   principal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -659,7 +659,7 @@ export type LoanUncheckedUpdateWithoutRepaymentsInput = {
 }
 
 export type LoanCreateManyBusinessInput = {
-  id?: string
+  id: string
   principal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   interestRate?: runtime.Decimal | runtime.DecimalJsLike | number | string

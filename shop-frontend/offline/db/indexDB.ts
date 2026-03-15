@@ -14,13 +14,42 @@ export const getDb = async () => {
                 
 
         /*
+            SESSION TABLE
+        */
+       const sessionStore = db.createObjectStore(TABLES.SESSION, {
+        keyPath: "id"
+       })
+       /*
+            USER TABLE
+        */
+       const userStore = db.createObjectStore(TABLES.USER, {
+        keyPath: "id"
+       })
+
+       /* 
+            BUSINESS TABLE
+        */
+
+        const businessStore = db.createObjectStore(TABLES.BUSINESS, {
+            keyPath: "id"
+        })
+
+        /* 
+            BRANCHES
+        */
+        const branchesStore = db.createObjectStore(TABLES.BRANCHES, {
+            keyPath: "id"
+            
+        })
+        branchesStore.createIndex("businessId", "businessId")
+        /*
             EVENTS TABLE
             Stores all offline actions
         */
        const eventStore = db.createObjectStore(TABLES.EVENTS, {
         keyPath: "id"
        })
-
+       eventStore.createIndex("status", "status")
        eventStore.createIndex("by_synced", "synced")
        eventStore.createIndex("by_type", "type")
        eventStore.createIndex("by_timestamp", "timestamp")
@@ -38,6 +67,7 @@ export const getDb = async () => {
        ledgerStore.createIndex("by_account", "account")
        ledgerStore.createIndex("by_event", "eventId")
        ledgerStore.createIndex("by_timestamp", "timestamp")
+       ledgerStore.createIndex("by_branch", "branchId")
 
 
        /*
@@ -48,6 +78,7 @@ export const getDb = async () => {
        })
 
        inventoryStore.createIndex("by_product", "productId")
+       inventoryStore.createIndex("by_branch", "branchId")
 
        /*
             SALES TABLE
@@ -56,14 +87,19 @@ export const getDb = async () => {
         keyPath: "id"
        })
 
-       saleStore.createIndex("by_date", "date")
+        saleStore.createIndex("by_date", "date")
+        saleStore.createIndex("by_business", "businessId")
+        saleStore.createIndex("by_branch", "branchId")
+        saleStore.createIndex("by_product", "productId")
 
        /*
             ASSETS TABLE
         */
         const assetsStore = db.createObjectStore(TABLES.ASSETS, {
-            keyPath: "id"
+            keyPath: "id" 
         })
+        assetsStore.createIndex("by_business", "businessId")
+        assetsStore.createIndex("by_branch", "branchId")
 
         /*
             LIABILITY TABLE
@@ -71,6 +107,17 @@ export const getDb = async () => {
         const liabilityStore = db.createObjectStore(TABLES.LIABILITIES, {
             keyPath: "id"
         })
+        liabilityStore.createIndex("by_business", "businessId")
+        liabilityStore.createIndex("by_branch", "branchId")
+
+        /*
+            EXPENSE TABLE
+        */
+        const expenseStore = db.createObjectStore(TABLES.EXPENSES, {
+            keyPath: "id"
+        })
+        expenseStore.createIndex("by_business", "businessId")
+        expenseStore.createIndex("by_branch", "branchId")
 
         /*
             SNAPSHOT TABLE
@@ -102,15 +149,19 @@ export const getDb = async () => {
         keyPath: "id"
        })
 
+
        /*
             ProductStore
         */
-       const productStore = db.createObjectStore(TABLES.PRODUCT, {
+       const productStore = db.createObjectStore(TABLES.PRODUCTS, {
         keyPath: "id"
        })
 
        productStore.createIndex("by_brandId", "brandId");
        productStore.createIndex("by_categoryId", "categoryId")
+       productStore.createIndex("by_businessId", "businessId")
+       productStore.createIndex("by_branchId", "branchId")
+
 
        /*
             CategoryStore
@@ -119,6 +170,7 @@ export const getDb = async () => {
         keyPath: "id"
        });
        categoryStore.createIndex("by_name", "name")
+       categoryStore.createIndex("by_businessId", "businessId")
 
        /*
             BrandStore
@@ -127,6 +179,17 @@ export const getDb = async () => {
         keyPath: "id"
        })
        brandStore.createIndex("by_categoryId", "categoryId")
+       brandStore.createIndex("by_businessId", "businessId")
+    },
+    blocked(){
+        console.warn("DB upgrade blocked. Close other tabs with the app open.")
+    },
+
+    blocking(){
+        console.warn("A new version of the app is available. Please refresh the page.") 
+    },
+    terminated(){
+        console.warn("Database connection terminated unexpectedly.")
     }
         })
     }

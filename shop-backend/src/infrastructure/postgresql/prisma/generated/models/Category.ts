@@ -251,7 +251,7 @@ export type CategoryScalarWhereWithAggregatesInput = {
 }
 
 export type CategoryCreateInput = {
-  id?: string
+  id: string
   name: string
   imageUrl?: string | null
   createdAt?: Date | string
@@ -262,7 +262,7 @@ export type CategoryCreateInput = {
 }
 
 export type CategoryUncheckedCreateInput = {
-  id?: string
+  id: string
   name: string
   businessId: string
   branchId: string
@@ -295,7 +295,7 @@ export type CategoryUncheckedUpdateInput = {
 }
 
 export type CategoryCreateManyInput = {
-  id?: string
+  id: string
   name: string
   businessId: string
   branchId: string
@@ -480,7 +480,7 @@ export type CategoryUpdateOneRequiredWithoutProductNestedInput = {
 }
 
 export type CategoryCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   name: string
   imageUrl?: string | null
   createdAt?: Date | string
@@ -490,7 +490,7 @@ export type CategoryCreateWithoutBusinessInput = {
 }
 
 export type CategoryUncheckedCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   name: string
   branchId: string
   imageUrl?: string | null
@@ -538,7 +538,7 @@ export type CategoryScalarWhereInput = {
 }
 
 export type CategoryCreateWithoutBranchInput = {
-  id?: string
+  id: string
   name: string
   imageUrl?: string | null
   createdAt?: Date | string
@@ -548,7 +548,7 @@ export type CategoryCreateWithoutBranchInput = {
 }
 
 export type CategoryUncheckedCreateWithoutBranchInput = {
-  id?: string
+  id: string
   name: string
   businessId: string
   imageUrl?: string | null
@@ -584,7 +584,7 @@ export type CategoryUpdateManyWithWhereWithoutBranchInput = {
 }
 
 export type CategoryCreateWithoutBrandsInput = {
-  id?: string
+  id: string
   name: string
   imageUrl?: string | null
   createdAt?: Date | string
@@ -594,7 +594,7 @@ export type CategoryCreateWithoutBrandsInput = {
 }
 
 export type CategoryUncheckedCreateWithoutBrandsInput = {
-  id?: string
+  id: string
   name: string
   businessId: string
   branchId: string
@@ -640,7 +640,7 @@ export type CategoryUncheckedUpdateWithoutBrandsInput = {
 }
 
 export type CategoryCreateWithoutProductInput = {
-  id?: string
+  id: string
   name: string
   imageUrl?: string | null
   createdAt?: Date | string
@@ -650,7 +650,7 @@ export type CategoryCreateWithoutProductInput = {
 }
 
 export type CategoryUncheckedCreateWithoutProductInput = {
-  id?: string
+  id: string
   name: string
   businessId: string
   branchId: string
@@ -696,7 +696,7 @@ export type CategoryUncheckedUpdateWithoutProductInput = {
 }
 
 export type CategoryCreateManyBusinessInput = {
-  id?: string
+  id: string
   name: string
   branchId: string
   imageUrl?: string | null
@@ -732,7 +732,7 @@ export type CategoryUncheckedUpdateManyWithoutBusinessInput = {
 }
 
 export type CategoryCreateManyBranchInput = {
-  id?: string
+  id: string
   name: string
   businessId: string
   imageUrl?: string | null

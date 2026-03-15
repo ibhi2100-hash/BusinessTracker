@@ -298,7 +298,7 @@ export type CapitalExpenditureScalarWhereWithAggregatesInput = {
 }
 
 export type CapitalExpenditureCreateInput = {
-  id?: string
+  id: string
   type: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   referenceType: string
@@ -309,7 +309,7 @@ export type CapitalExpenditureCreateInput = {
 }
 
 export type CapitalExpenditureUncheckedCreateInput = {
-  id?: string
+  id: string
   type: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   referenceType: string
@@ -342,7 +342,7 @@ export type CapitalExpenditureUncheckedUpdateInput = {
 }
 
 export type CapitalExpenditureCreateManyInput = {
-  id?: string
+  id: string
   type: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   referenceType: string

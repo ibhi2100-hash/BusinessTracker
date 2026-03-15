@@ -356,7 +356,7 @@ export type CashFlowScalarWhereWithAggregatesInput = {
 }
 
 export type CashFlowCreateInput = {
-  id?: string
+  id: string
   type: $Enums.CashFlowType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   direction: $Enums.CashFlowDirection
@@ -371,7 +371,7 @@ export type CashFlowCreateInput = {
 }
 
 export type CashFlowUncheckedCreateInput = {
-  id?: string
+  id: string
   businessId: string
   branchId: string
   type: $Enums.CashFlowType
@@ -416,7 +416,7 @@ export type CashFlowUncheckedUpdateInput = {
 }
 
 export type CashFlowCreateManyInput = {
-  id?: string
+  id: string
   businessId: string
   branchId: string
   type: $Enums.CashFlowType
@@ -616,7 +616,7 @@ export type EnumCashFlowDirectionFieldUpdateOperationsInput = {
 }
 
 export type CashFlowCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   type: $Enums.CashFlowType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   direction: $Enums.CashFlowDirection
@@ -630,7 +630,7 @@ export type CashFlowCreateWithoutBusinessInput = {
 }
 
 export type CashFlowUncheckedCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   branchId: string
   type: $Enums.CashFlowType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -688,7 +688,7 @@ export type CashFlowScalarWhereInput = {
 }
 
 export type CashFlowCreateWithoutBranchInput = {
-  id?: string
+  id: string
   type: $Enums.CashFlowType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   direction: $Enums.CashFlowDirection
@@ -702,7 +702,7 @@ export type CashFlowCreateWithoutBranchInput = {
 }
 
 export type CashFlowUncheckedCreateWithoutBranchInput = {
-  id?: string
+  id: string
   businessId: string
   type: $Enums.CashFlowType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -742,7 +742,7 @@ export type CashFlowUpdateManyWithWhereWithoutBranchInput = {
 }
 
 export type CashFlowCreateManyBusinessInput = {
-  id?: string
+  id: string
   branchId: string
   type: $Enums.CashFlowType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -798,7 +798,7 @@ export type CashFlowUncheckedUpdateManyWithoutBusinessInput = {
 }
 
 export type CashFlowCreateManyBranchInput = {
-  id?: string
+  id: string
   businessId: string
   type: $Enums.CashFlowType
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string

@@ -4,7 +4,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
-import { useBusinessStatus } from "@/hooks/useBusinessStatus";
+import { useBusinessStore } from "@/store/businessStore";
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -23,10 +23,11 @@ export function AuthGuard({
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const user = useAuthStore((state) => state.user);
 
-  const { data: business, isLoading: businessLoading } = useBusinessStatus();
+  const business = useBusinessStore.getState().business
+  
 
   useEffect(() => {
-    if (!hydrated || businessLoading) return;
+    if (!hydrated) return;
 
     // Not logged in
     if (!isAuthenticated) {
@@ -52,7 +53,6 @@ export function AuthGuard({
     router,
     adminOnly,
     business,
-    businessLoading,
     blockIfOnboarding,
   ]);
 
@@ -60,7 +60,6 @@ export function AuthGuard({
   if (
     !hydrated ||
     !isAuthenticated ||
-    businessLoading ||
     (adminOnly && user?.role !== "ADMIN") ||
     (blockIfOnboarding && business?.isOnboarding)
   ) {

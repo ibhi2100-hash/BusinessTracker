@@ -364,7 +364,7 @@ export type BusinessScalarWhereWithAggregatesInput = {
 }
 
 export type BusinessCreateInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -394,7 +394,7 @@ export type BusinessCreateInput = {
 }
 
 export type BusinessUncheckedCreateInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -484,7 +484,7 @@ export type BusinessUncheckedUpdateInput = {
 }
 
 export type BusinessCreateManyInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -860,7 +860,7 @@ export type BusinessUpdateOneRequiredWithoutAlertsNestedInput = {
 }
 
 export type BusinessCreateWithoutBranchInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -889,7 +889,7 @@ export type BusinessCreateWithoutBranchInput = {
 }
 
 export type BusinessUncheckedCreateWithoutBranchInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -992,7 +992,7 @@ export type BusinessUncheckedUpdateWithoutBranchInput = {
 }
 
 export type BusinessCreateWithoutUsersInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -1021,7 +1021,7 @@ export type BusinessCreateWithoutUsersInput = {
 }
 
 export type BusinessUncheckedCreateWithoutUsersInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -1124,7 +1124,7 @@ export type BusinessUncheckedUpdateWithoutUsersInput = {
 }
 
 export type BusinessCreateWithoutSubscriptionsInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -1153,7 +1153,7 @@ export type BusinessCreateWithoutSubscriptionsInput = {
 }
 
 export type BusinessUncheckedCreateWithoutSubscriptionsInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -1256,7 +1256,7 @@ export type BusinessUncheckedUpdateWithoutSubscriptionsInput = {
 }
 
 export type BusinessCreateWithoutLedgerInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -1285,7 +1285,7 @@ export type BusinessCreateWithoutLedgerInput = {
 }
 
 export type BusinessUncheckedCreateWithoutLedgerInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -1388,7 +1388,7 @@ export type BusinessUncheckedUpdateWithoutLedgerInput = {
 }
 
 export type BusinessCreateWithoutLedgerEntryInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -1417,7 +1417,7 @@ export type BusinessCreateWithoutLedgerEntryInput = {
 }
 
 export type BusinessUncheckedCreateWithoutLedgerEntryInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -1520,7 +1520,7 @@ export type BusinessUncheckedUpdateWithoutLedgerEntryInput = {
 }
 
 export type BusinessCreateWithoutCategoriesInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -1549,7 +1549,7 @@ export type BusinessCreateWithoutCategoriesInput = {
 }
 
 export type BusinessUncheckedCreateWithoutCategoriesInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -1652,7 +1652,7 @@ export type BusinessUncheckedUpdateWithoutCategoriesInput = {
 }
 
 export type BusinessCreateWithoutBrandsInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -1681,7 +1681,7 @@ export type BusinessCreateWithoutBrandsInput = {
 }
 
 export type BusinessUncheckedCreateWithoutBrandsInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -1784,7 +1784,7 @@ export type BusinessUncheckedUpdateWithoutBrandsInput = {
 }
 
 export type BusinessCreateWithoutProductsInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -1813,7 +1813,7 @@ export type BusinessCreateWithoutProductsInput = {
 }
 
 export type BusinessUncheckedCreateWithoutProductsInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -1916,7 +1916,7 @@ export type BusinessUncheckedUpdateWithoutProductsInput = {
 }
 
 export type BusinessCreateWithoutStockMovementInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -1945,7 +1945,7 @@ export type BusinessCreateWithoutStockMovementInput = {
 }
 
 export type BusinessUncheckedCreateWithoutStockMovementInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -2048,7 +2048,7 @@ export type BusinessUncheckedUpdateWithoutStockMovementInput = {
 }
 
 export type BusinessCreateWithoutSalesInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -2077,7 +2077,7 @@ export type BusinessCreateWithoutSalesInput = {
 }
 
 export type BusinessUncheckedCreateWithoutSalesInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -2180,7 +2180,7 @@ export type BusinessUncheckedUpdateWithoutSalesInput = {
 }
 
 export type BusinessCreateWithoutCashFlowsInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -2209,7 +2209,7 @@ export type BusinessCreateWithoutCashFlowsInput = {
 }
 
 export type BusinessUncheckedCreateWithoutCashFlowsInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -2312,7 +2312,7 @@ export type BusinessUncheckedUpdateWithoutCashFlowsInput = {
 }
 
 export type BusinessCreateWithoutLiabilitiesInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -2341,7 +2341,7 @@ export type BusinessCreateWithoutLiabilitiesInput = {
 }
 
 export type BusinessUncheckedCreateWithoutLiabilitiesInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -2444,7 +2444,7 @@ export type BusinessUncheckedUpdateWithoutLiabilitiesInput = {
 }
 
 export type BusinessCreateWithoutAssetsInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -2473,7 +2473,7 @@ export type BusinessCreateWithoutAssetsInput = {
 }
 
 export type BusinessUncheckedCreateWithoutAssetsInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -2576,7 +2576,7 @@ export type BusinessUncheckedUpdateWithoutAssetsInput = {
 }
 
 export type BusinessCreateWithoutExpensesInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -2605,7 +2605,7 @@ export type BusinessCreateWithoutExpensesInput = {
 }
 
 export type BusinessUncheckedCreateWithoutExpensesInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -2708,7 +2708,7 @@ export type BusinessUncheckedUpdateWithoutExpensesInput = {
 }
 
 export type BusinessCreateWithoutLoanInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -2737,7 +2737,7 @@ export type BusinessCreateWithoutLoanInput = {
 }
 
 export type BusinessUncheckedCreateWithoutLoanInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -2840,7 +2840,7 @@ export type BusinessUncheckedUpdateWithoutLoanInput = {
 }
 
 export type BusinessCreateWithoutEmployeesInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -2869,7 +2869,7 @@ export type BusinessCreateWithoutEmployeesInput = {
 }
 
 export type BusinessUncheckedCreateWithoutEmployeesInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -2972,7 +2972,7 @@ export type BusinessUncheckedUpdateWithoutEmployeesInput = {
 }
 
 export type BusinessCreateWithoutExpenseCategoriesInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -3001,7 +3001,7 @@ export type BusinessCreateWithoutExpenseCategoriesInput = {
 }
 
 export type BusinessUncheckedCreateWithoutExpenseCategoriesInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -3104,7 +3104,7 @@ export type BusinessUncheckedUpdateWithoutExpenseCategoriesInput = {
 }
 
 export type BusinessCreateWithoutAlertsInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number
@@ -3133,7 +3133,7 @@ export type BusinessCreateWithoutAlertsInput = {
 }
 
 export type BusinessUncheckedCreateWithoutAlertsInput = {
-  id?: string
+  id: string
   name: string
   address?: string | null
   onboardingStep?: number

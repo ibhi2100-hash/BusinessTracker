@@ -3,14 +3,13 @@ import { CreateBusinessDto } from "../dto/businessReg.dto.js";
 import { signTokenWithExpiry } from "../../../helpers/jwtHelper/jwthelper.js";
 import { OpeningBalanceDto } from "../dto/openingBalance.dto.js";
 import { PrismaClient } from "@prisma/client/extension";
-import { sourceMapsEnabled } from "node:process";
 import { AuthService } from "../../auth/service/auth.service.js";
 
 export class OnboardingService {
   constructor(private authService: AuthService){}
   
 
-  async createBusiness(userId: string, dto: CreateBusinessDto) {
+  async createBusiness(userId: string, dto: any) {
     return prisma.$transaction(async (tx) => {
 
       // 1️⃣ Fetch user
@@ -29,6 +28,7 @@ export class OnboardingService {
       // 2️⃣ Create Business
       const business = await tx.business.create({
         data: {
+          id: dto.id,
           name: dto.name,
           address: dto?.address ?? null,
           onboardingStep: 2
@@ -49,7 +49,8 @@ export class OnboardingService {
       // 4️⃣ Create Default Branch
       const firstBranch = await tx.branch.create({
         data: {
-          name: "Main Branch",
+          id: dto.branch.id,
+          name: dto.branch.name ,
           businessId: business.id
         },
         include: {

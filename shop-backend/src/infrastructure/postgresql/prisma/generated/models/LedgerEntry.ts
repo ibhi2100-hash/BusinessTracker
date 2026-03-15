@@ -292,7 +292,7 @@ export type LedgerEntryScalarWhereWithAggregatesInput = {
 }
 
 export type LedgerEntryCreateInput = {
-  id?: string
+  id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   type: string
   referenceId?: string | null
@@ -302,7 +302,7 @@ export type LedgerEntryCreateInput = {
 }
 
 export type LedgerEntryUncheckedCreateInput = {
-  id?: string
+  id: string
   accountId: string
   businessId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -332,7 +332,7 @@ export type LedgerEntryUncheckedUpdateInput = {
 }
 
 export type LedgerEntryCreateManyInput = {
-  id?: string
+  id: string
   accountId: string
   businessId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -492,7 +492,7 @@ export type LedgerEntryUncheckedUpdateManyWithoutAccountNestedInput = {
 }
 
 export type LedgerEntryCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   type: string
   referenceId?: string | null
@@ -501,7 +501,7 @@ export type LedgerEntryCreateWithoutBusinessInput = {
 }
 
 export type LedgerEntryUncheckedCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   accountId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   type: string
@@ -549,7 +549,7 @@ export type LedgerEntryScalarWhereInput = {
 }
 
 export type LedgerEntryCreateWithoutAccountInput = {
-  id?: string
+  id: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   type: string
   referenceId?: string | null
@@ -558,7 +558,7 @@ export type LedgerEntryCreateWithoutAccountInput = {
 }
 
 export type LedgerEntryUncheckedCreateWithoutAccountInput = {
-  id?: string
+  id: string
   businessId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   type: string
@@ -593,7 +593,7 @@ export type LedgerEntryUpdateManyWithWhereWithoutAccountInput = {
 }
 
 export type LedgerEntryCreateManyBusinessInput = {
-  id?: string
+  id: string
   accountId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   type: string
@@ -629,7 +629,7 @@ export type LedgerEntryUncheckedUpdateManyWithoutBusinessInput = {
 }
 
 export type LedgerEntryCreateManyAccountInput = {
-  id?: string
+  id: string
   businessId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   type: string

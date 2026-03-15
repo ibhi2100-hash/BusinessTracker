@@ -1,20 +1,20 @@
 import { getDb } from "../db/indexDB"
 import { syncEvents } from "@/services/syncService"
 import { TABLES } from "../db/schema"
-import { addDashboardSnapshot, getPendingEvents } from "../db/helpers"
+import { getByIndex } from "../db/helpers"
 
 export async function syncEvent() {
     const db = await getDb()
-    const events = await getPendingEvents()
+    const synced = false;
+    const events = await getByIndex(TABLES.EVENTS, "by_synced", synced )
 
     if(!events.length) return
 
     const response = await syncEvents(events)
-    console.log("Sync Events Response", response)
 
     const { results, snapshot } = response;
 
-    await addDashboardSnapshot(snapshot)
+    await db.put(TABLES.SNAPSHOT, snapshot)
 
     for ( const r of results) {
         if(r.status === "success") {

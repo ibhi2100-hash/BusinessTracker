@@ -1,156 +1,35 @@
 import { getDb } from "./indexDB";
-import { TABLES } from "./schema";
 
-
-
-export const addEvent= async(event: any)=> {
-    const db = await getDb();
-    return await db.add(TABLES.EVENTS, event)
-}
-
-export const getPendingEvents = async()=> {
-    const db = await getDb();
-    return await db.getAllFromIndex(TABLES.EVENTS, "by_synced", 0)
-}
-
-export const addLedgerEntry = async (entry: any)=> {
-    const db = await getDb();
-     await db.add(TABLES.LEDGER_ENTRIES, entry)
-}
-export const getDashboardSnapshots = async()=> {
-    const db = await getDb();
-    const snapshot = await db.getAll(TABLES.SNAPSHOT)
-
-    return snapshot
-}
-
-export const addDashboardSnapshot = async (snapshot: any) => {
-  const db = await getDb()
-
-  const id = `dashboard-${new Date().toDateString()}`
-
-  await db.put(TABLES.SNAPSHOT, {
-    id,
-    ...snapshot,
-    createdAt: Date.now()
-  })
-
-}
-
-export const addBusinessData = async (businessData: any)=> {
-    const db = await getDb();
-
-    await db.put(TABLES.BUSINESSDATA, {
-        id: crypto.randomUUID(),
-        ...businessData,
-        createdAt: Date.now()
-    })
-}
-
-export const getBusinessData = async ()=> {
-    const db = await getDb();
-
-    const businessData = await db.getAll(TABLES.BUSINESSDATA)
-
-    return businessData
-}
-export const addInventoryProducts  = async (data: any)=> {
-    const db = await getDb();
-    const tx = db.transaction(TABLES.INVENTORY, "readwrite");
-
-    for (const product of data) {
-        await tx.store.put(product);
-    }
-    await tx.done;
-}
-export const getInventoryProducts = async ()=> {
-    const db = await getDb();
-
-    const ProductData = await db.getAll(TABLES.INVENTORYSTORE, {
-        
-    })
-
-    return ProductData
-}
-
-export const addProducts = async (products: any[]) => {
-  const db = await getDb();
-  const tx = db.transaction(TABLES.PRODUCT, "readwrite");
-
-  for (const product of products) {
-    await tx.store.put({
-        id: product.id ?? crypto.randomUUID(),
-        ...product,
-        timestamp: product.timestamp ?? Date.now()
-    });
+export async function addRecord(storeName: string, data: any) {
+  if(!data?.id) {
+    throw new Error(`${storeName} record is missing ID`);
   }
+  if(typeof data === "function"){
+    throw new Error("Cannot store funtion in indexDB")
+  }
+  const db = await getDb();
+  if (!db) return;
 
-  await tx.done;
-};
-export const getProducts = async ()=> {
-    const db = await getDb();
-
-    const ProductData = await db.getAll(TABLES.PRODUCT)
-
-    return ProductData
-}
-export const getProductsByBrand = async (brandId: string)=>{
-    const db = await getDb();
-
-    return db.getAllFromIndex(
-        TABLES.PRODUCT,
-        "by_brandId",
-        brandId
-    )
+  return db.put(storeName, data);
 }
 
+export async function getRecord(storeName: string, id: string) {
+  const db = await getDb();
+  if (!db) return null;
 
-export const addCategories = async (data: any[])=> {
-    const db = await getDb();
-    const tx = db.transaction(TABLES.CATEGORIES, "readwrite");
-
-    const store = tx.objectStore(TABLES.CATEGORIES);
-
-
-
-    for (const category of data) {
-        await tx.store.put({
-            id: category.id ?? crypto.randomUUID(),
-            ...category,
-            timestamp: Date.now()
-        });
-    }
-
-    await tx.done;
+  return db.get(storeName, id);
 }
 
-export const getCategories = async ()=> {
-    const db = await getDb();
-    return db.getAll(TABLES.CATEGORIES)
+export async function getAll(storeName: string) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return db.getAll(storeName);
 }
 
+export async function getByIndex(storeName: string, index: string, value: any) {
+  const db = await getDb();
+  if (!db) return [];
 
-export const addBrands = async (data: any[])=> {
-    const db = await getDb();
-    const tx = db.transaction(TABLES.BRANDS, "readwrite");
-    const store = tx.objectStore(TABLES.BRANDS);
-
-   for( const brand of data ){
-    await tx.store.put({
-        id: brand.id ?? crypto.randomUUID(),
-        ...brand,
-        timestamp: Date.now()
-    })
-   }
-   await tx.done;
-}
-
-export const getBrandsByCategory  = async (categoryId: string)=> {
-    const db = await getDb();
-
-    return db.getAllFromIndex(
-        TABLES.BRANDS,
-        "by_categoryId",
-        categoryId
-    )
+  return db.getAllFromIndex(storeName, index, value);
 }

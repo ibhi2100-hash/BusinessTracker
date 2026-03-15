@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useFinancialStore } from "@/store/financialDataStore";
 import { fetchDashboardData } from "../../services/dashboard.service";
-import { addDashboardSnapshot, getDashboardSnapshots } from "@/offline/db/helpers";
 import { getDb } from "@/offline/db/indexDB";
 import { TABLES } from "@/offline/db/schema";
 
@@ -74,34 +73,8 @@ export function useDashboardFinancialData(startDate: string, endDate: string) {
       });
     }
 
-    // Save snapshot to IndexedDB
-    const saveSnapshot = async () => {
-      const db = await getDb();
-      const eventCount = await db.count(TABLES.EVENTS);
-      if (eventCount % 50 === 0) {
-        await addDashboardSnapshot(dashboardSummary);
-      }
-    };
-
-    saveSnapshot();
+  
   }, [query.data, dashboardSummaryInStore, store]);
-
-  // Hydrate from last cached snapshot if query fails
-  useEffect(() => {
-    const hydrate = async () => {
-      const cached = await getDashboardSnapshots();
-      if (cached?.length) {
-        const lastSnapshot = cached[cached.length - 1];
-        if (
-          JSON.stringify(dashboardSummaryInStore) !==
-          JSON.stringify(lastSnapshot)
-        ) {
-          store.setDashboardSummary(lastSnapshot);
-        }
-      }
-    };
-    hydrate();
-  }, [dashboardSummaryInStore, store]);
 
   return query;
 }

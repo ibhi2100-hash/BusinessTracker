@@ -1,59 +1,29 @@
 import { create } from "zustand";
-
-export interface Category {
-  id: string;
-  name: string;
-  imageUrl?: string;
-}
-
-export interface Brand {
-  id: string;
-  name: string;
-  categoryId: string;
-}
-
-export interface Product {
-  id: string;
-  name: string;
-  imageUrl: string;
-  description?: string;
-  sellingPrice: number;
-  costPrice?: number;
-  quantity: number;
-  type?: string;
-  stockMode?: "OPENING" | "PURCHASE";
-  model?: string;
-  imei?: string;
-  condition?: string;
-  brand: Brand;
-  categoryId?: string;
-  categoryName?: string;
-  brandName?: string;
-}
+import { Category, Brand, InventoryItem } from "@/types/types";
 
 interface InventoryStore {
   categories: Category[];
   brands: Brand[];
-  products: Product[];
+  products: InventoryItem[];
 
   selectedCategoryId: string | null;
   selectedBrandId: string | null;
 
   setCategories: (categories: Category[]) => void;
   setBrands: (brands: Brand[]) => void;
-  setProducts: (products: Product[]) => void;
+  setProducts: (products: InventoryItem[]) => void;
 
   setSelectedCategoryId: (id: string | null) => void;
   setSelectedBrandId: (id: string | null) => void;
 
-  addProduct: (product: Product) => void;
-  updateProduct: (product: Product) => void;
+  addProduct: (product: InventoryItem) => void;
+  updateProduct: (product: InventoryItem) => void;
   removeProduct: (productId: string) => void;
 
   hydrate: (data: {
     categories?: Category[];
     brands?: Brand[];
-    products?: Product[];
+    products?: InventoryItem[];
   }) => void;
 
   resetInventory: () => void;

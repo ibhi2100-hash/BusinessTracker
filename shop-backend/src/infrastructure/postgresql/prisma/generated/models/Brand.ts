@@ -263,7 +263,7 @@ export type BrandScalarWhereWithAggregatesInput = {
 }
 
 export type BrandCreateInput = {
-  id?: string
+  id: string
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -274,7 +274,7 @@ export type BrandCreateInput = {
 }
 
 export type BrandUncheckedCreateInput = {
-  id?: string
+  id: string
   name: string
   businessId: string
   categoryId: string
@@ -307,7 +307,7 @@ export type BrandUncheckedUpdateInput = {
 }
 
 export type BrandCreateManyInput = {
-  id?: string
+  id: string
   name: string
   businessId: string
   categoryId: string
@@ -525,7 +525,7 @@ export type BrandUpdateOneRequiredWithoutProductsNestedInput = {
 }
 
 export type BrandCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -535,7 +535,7 @@ export type BrandCreateWithoutBusinessInput = {
 }
 
 export type BrandUncheckedCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   name: string
   categoryId: string
   branchId: string
@@ -584,7 +584,7 @@ export type BrandScalarWhereInput = {
 }
 
 export type BrandCreateWithoutBranchInput = {
-  id?: string
+  id: string
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -594,7 +594,7 @@ export type BrandCreateWithoutBranchInput = {
 }
 
 export type BrandUncheckedCreateWithoutBranchInput = {
-  id?: string
+  id: string
   name: string
   businessId: string
   categoryId: string
@@ -630,7 +630,7 @@ export type BrandUpdateManyWithWhereWithoutBranchInput = {
 }
 
 export type BrandCreateWithoutCategoryInput = {
-  id?: string
+  id: string
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -640,7 +640,7 @@ export type BrandCreateWithoutCategoryInput = {
 }
 
 export type BrandUncheckedCreateWithoutCategoryInput = {
-  id?: string
+  id: string
   name: string
   businessId: string
   branchId: string
@@ -676,7 +676,7 @@ export type BrandUpdateManyWithWhereWithoutCategoryInput = {
 }
 
 export type BrandCreateWithoutProductsInput = {
-  id?: string
+  id: string
   name: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -686,7 +686,7 @@ export type BrandCreateWithoutProductsInput = {
 }
 
 export type BrandUncheckedCreateWithoutProductsInput = {
-  id?: string
+  id: string
   name: string
   businessId: string
   categoryId: string
@@ -732,7 +732,7 @@ export type BrandUncheckedUpdateWithoutProductsInput = {
 }
 
 export type BrandCreateManyBusinessInput = {
-  id?: string
+  id: string
   name: string
   categoryId: string
   branchId: string
@@ -770,7 +770,7 @@ export type BrandUncheckedUpdateManyWithoutBusinessInput = {
 }
 
 export type BrandCreateManyBranchInput = {
-  id?: string
+  id: string
   name: string
   businessId: string
   categoryId: string
@@ -808,7 +808,7 @@ export type BrandUncheckedUpdateManyWithoutBranchInput = {
 }
 
 export type BrandCreateManyCategoryInput = {
-  id?: string
+  id: string
   name: string
   businessId: string
   branchId: string

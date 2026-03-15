@@ -3,17 +3,21 @@
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { toast } from "sonner";
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+
 import {
   createAssetSchema,
   CreateAssetInput,
 } from "@/schemas/asset.schema";
+
 import { useDepreciationPreview } from "@/hooks/liveDepreciation";
 import { formatCurrency } from "@/lib/format";
+
+import { createAssets } from "@/offline/finance/asset/createAsset";
 
 interface AssetsProps {
   mode: "OPENING" | "LIVE";
@@ -25,7 +29,7 @@ export default function AddAssetPage({
   onCompleted,
 }: AssetsProps) {
   const router = useRouter();
-  const queryClient = useQueryClient();
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -44,7 +48,7 @@ export default function AddAssetPage({
   const watchValues = watch();
 
   /**
-   * Depreciation Preview (safe number coercion)
+   * Depreciation Preview
    */
   const preview = useDepreciationPreview(
     Number(watchValues.purchaseCost ?? 0),
@@ -54,76 +58,20 @@ export default function AddAssetPage({
   );
 
   /**
-   * Mutation
+   * Submit handler (Offline IndexedDB)
    */
-  const mutation = useMutation({
-    mutationFn: async (data: CreateAssetInput) => {
+  const onSubmit = async (data: CreateAssetInput) => {
+    try {
+      setLoading(true);
+
       const payload: CreateAssetInput = {
         ...data,
         assetType: mode === "OPENING" ? "OPENING" : "PURCHASE",
       };
 
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/asset`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        }
-      );
+      await createAssets(payload);
 
-      const responseData = await res.json().catch(() => null);
-
-      if (!res.ok) {
-        throw new Error(
-          responseData?.message || "Failed to create asset"
-        );
-      }
-
-      return responseData;
-    },
-
-    /**
-     * Optimistic Update
-     */
-    onMutate: async (newAsset) => {
-      await queryClient.cancelQueries({ queryKey: ["assets"] });
-
-      const previousAssets =
-        queryClient.getQueryData<CreateAssetInput[]>(["assets"]);
-
-      queryClient.setQueryData<CreateAssetInput[]>(
-        ["assets"],
-        (old = []) => [
-          ...old,
-          {
-            ...newAsset,
-            id: crypto.randomUUID(), // safer temp ID
-          } as any,
-        ]
-      );
-
-      return { previousAssets };
-    },
-
-    onError: (error: Error, _variables, context) => {
-      if (context?.previousAssets) {
-        queryClient.setQueryData(
-          ["assets"],
-          context.previousAssets
-        );
-      }
-
-      toast.error(error.message);
-    },
-
-    onSuccess: async () => {
       toast.success("Asset created successfully");
-
-      await queryClient.invalidateQueries({
-        queryKey: ["assets"],
-      });
 
       if (mode === "OPENING") {
         reset({
@@ -137,19 +85,20 @@ export default function AddAssetPage({
       } else {
         router.push("/assets");
       }
-    },
-  });
 
-  /**
-   * Explicit submit handler (better type safety)
-   */
-  const onSubmit = (data: CreateAssetInput) => {
-    mutation.mutate(data);
+      reset();
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error?.message || "Failed to create asset");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="max-w-3xl mx-auto py-10">
       <Card className="p-8 space-y-6">
+
         <h1 className="text-2xl font-semibold">
           Add New Asset
         </h1>
@@ -158,6 +107,8 @@ export default function AddAssetPage({
           onSubmit={handleSubmit(onSubmit)}
           className="space-y-4"
         >
+
+          {/* Asset Name */}
           <input
             {...register("name")}
             placeholder="Asset name"
@@ -169,36 +120,50 @@ export default function AddAssetPage({
             </p>
           )}
 
+          {/* Cost + Quantity */}
           <div className="grid grid-cols-2 gap-4">
+
             <input
               type="number"
-              {...register("purchaseCost", { valueAsNumber: true })}
+              {...register("purchaseCost", {
+                valueAsNumber: true,
+              })}
               placeholder="Purchase Cost"
               className="border rounded-xl px-3 h-10"
             />
 
             <input
               type="number"
-              {...register("quantity", { valueAsNumber: true })}
+              {...register("quantity", {
+                valueAsNumber: true,
+              })}
               placeholder="Quantity"
               className="border rounded-xl px-3 h-10"
             />
+
           </div>
 
+          {/* Useful Life + Salvage */}
           <div className="grid grid-cols-2 gap-4">
+
             <input
               type="number"
-              {...register("usefulLifeMonths", { valueAsNumber: true })}
+              {...register("usefulLifeMonths", {
+                valueAsNumber: true,
+              })}
               placeholder="Useful Life (Months)"
               className="border rounded-xl px-3 h-10"
             />
 
             <input
               type="number"
-              {...register("salvageValue", { valueAsNumber: true })}
+              {...register("salvageValue", {
+                valueAsNumber: true,
+              })}
               placeholder="Salvage Value"
               className="border rounded-xl px-3 h-10"
             />
+
           </div>
 
           {/* Depreciation Preview */}
@@ -208,30 +173,36 @@ export default function AddAssetPage({
               gradient="from-indigo-500 to-purple-600"
             >
               <div className="text-white space-y-2">
+
                 <p>
                   Total Cost:{" "}
                   {formatCurrency(preview.totalCost)}
                 </p>
+
                 <p>
                   Monthly Depreciation:{" "}
                   {formatCurrency(
                     preview.monthlyDepreciation
                   )}
                 </p>
+
               </div>
             </Card>
           )}
 
+          {/* Submit */}
           <Button
             type="submit"
             fullWidth
-            disabled={mutation.isPending}
+            disabled={loading}
           >
-            {mutation.isPending
+            {loading
               ? "Creating..."
               : "Create Asset"}
           </Button>
+
         </form>
+
       </Card>
     </div>
   );

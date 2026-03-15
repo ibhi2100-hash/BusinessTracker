@@ -342,7 +342,7 @@ export type SaleScalarWhereWithAggregatesInput = {
 }
 
 export type SaleCreateInput = {
-  id?: string
+  id: string
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
@@ -357,7 +357,7 @@ export type SaleCreateInput = {
 }
 
 export type SaleUncheckedCreateInput = {
-  id?: string
+  id: string
   businessId: string
   branchId?: string | null
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -402,7 +402,7 @@ export type SaleUncheckedUpdateInput = {
 }
 
 export type SaleCreateManyInput = {
-  id?: string
+  id: string
   businessId: string
   branchId?: string | null
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -621,7 +621,7 @@ export type SaleUpdateOneRequiredWithoutPaymentsNestedInput = {
 }
 
 export type SaleCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
@@ -635,7 +635,7 @@ export type SaleCreateWithoutBusinessInput = {
 }
 
 export type SaleUncheckedCreateWithoutBusinessInput = {
-  id?: string
+  id: string
   branchId?: string | null
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -691,7 +691,7 @@ export type SaleScalarWhereInput = {
 }
 
 export type SaleCreateWithoutBranchInput = {
-  id?: string
+  id: string
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
@@ -705,7 +705,7 @@ export type SaleCreateWithoutBranchInput = {
 }
 
 export type SaleUncheckedCreateWithoutBranchInput = {
-  id?: string
+  id: string
   businessId: string
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -745,7 +745,7 @@ export type SaleUpdateManyWithWhereWithoutBranchInput = {
 }
 
 export type SaleCreateWithoutItemsInput = {
-  id?: string
+  id: string
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
@@ -759,7 +759,7 @@ export type SaleCreateWithoutItemsInput = {
 }
 
 export type SaleUncheckedCreateWithoutItemsInput = {
-  id?: string
+  id: string
   businessId: string
   branchId?: string | null
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -817,7 +817,7 @@ export type SaleUncheckedUpdateWithoutItemsInput = {
 }
 
 export type SaleCreateWithoutPaymentsInput = {
-  id?: string
+  id: string
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
@@ -831,7 +831,7 @@ export type SaleCreateWithoutPaymentsInput = {
 }
 
 export type SaleUncheckedCreateWithoutPaymentsInput = {
-  id?: string
+  id: string
   businessId: string
   branchId?: string | null
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -889,7 +889,7 @@ export type SaleUncheckedUpdateWithoutPaymentsInput = {
 }
 
 export type SaleCreateManyBusinessInput = {
-  id?: string
+  id: string
   branchId?: string | null
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -941,7 +941,7 @@ export type SaleUncheckedUpdateManyWithoutBusinessInput = {
 }
 
 export type SaleCreateManyBranchInput = {
-  id?: string
+  id: string
   businessId: string
   discount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   totalAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
