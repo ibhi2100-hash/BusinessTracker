@@ -1,8 +1,11 @@
-import type { Metadata } from "next"
+"use client"
+
 import "./globals.css"
 
 import { Toaster } from "sonner"
 import { Providers } from "./providers"
+import { runSync } from "@/offline/sync/networkMonitor"
+import { startInterval } from "@/offline/sync/networkMonitor"
 
 
 export default function RootLayout({
@@ -10,6 +13,10 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  if (navigator.onLine) {
+    runSync()
+    startInterval()
+}
   return (
     <html lang="en">
       <body>

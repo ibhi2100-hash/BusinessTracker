@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { appBootstrap } from "../offline/bootstrap/appBootstrap";
 
 export function useAppBootstrap() {
   const router = useRouter();
+  const [ready, setReady ] = useState(false)
 
   useEffect(() => {
     async function init() {
@@ -17,13 +18,15 @@ export function useAppBootstrap() {
       }
 
       if (result === "NO_BUSINESS") {
-        router.replace("/onboarding");
+        router.replace("/onboard");
         return;
       }
 
-      // READY → stay on dashboard
+      setReady(true)
     }
 
     init();
   }, [router]);
+
+  return ready
 }

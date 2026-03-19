@@ -37,93 +37,133 @@ export const inventoryController = {
     },
 
 async addOrUpdateProduct(productInput: any) {
+  const db = await getDb();
 
-  const db = await getDb()
   const userId = useAuthStore.getState().user.id;
   const businessId = useBusinessStore.getState().business.id;
   const branchId = useBranchStore.getState().activeBranchId;
 
-  const normalizedCategory =
-    productInput.categoryName.trim().toLowerCase()
-
-  // CATEGORY
-  const categories = await getByIndex(
-    TABLES.CATEGORIES,
-    "by_name",
-    normalizedCategory
-  )
-  let category = categories[0]
-
-  if (!category) {
-
-    category = await inventoryHelper.addCategory({
-      name: normalizedCategory,
-      businessId,
-    })
+  if (!branchId) {
+    throw new Error("Active branch is required");
   }
 
-  // BRAND
- const brands = await inventoryHelper.getBrandsByCategory(category.id)
+  // -----------------------------
+  // ✅ VALIDATION (fail fast)
+  // -----------------------------
+  if (!productInput.name) throw new Error("Product name is required");
+  if (!productInput.categoryId || !productInput.categoryName) {
+    throw new Error("Category is required");
+  }
+  if (!productInput.brandId || !productInput.brandName) {
+    throw new Error("Brand is required");
+  }
 
-const normalizedBrand = productInput.brandName.trim().toLowerCase()
+  // -----------------------------
+  // ✅ CATEGORY (ID FIRST)
+  // -----------------------------
+  let category = await db.get(TABLES.CATEGORIES, productInput.categoryId);
 
-let brand = brands.find(
-  (b: any) => b.name.trim().toLowerCase() === normalizedBrand
-)
+  if (!category) {
+    category = await inventoryHelper.addCategory({
+      id: productInput.categoryId, // 🔥 preserve client-generated ID
+      name: productInput.categoryName.trim().toLowerCase(),
+      businessId,
+      branchId,
+      timestamp: Date.now()
+    });
+  }
 
-if (!brand) {
-  brand = await inventoryHelper.addBrands({
-    name: normalizedBrand,
+  // -----------------------------
+  // ✅ BRAND (ID FIRST)
+  // -----------------------------
+  let brand = await db.get(TABLES.BRANDS, productInput.brandId);
+
+  if (!brand) {
+    brand = await inventoryHelper.addBrands({
+      id: productInput.brandId, // 🔥 preserve ID
+      name: productInput.brandName.trim().toLowerCase(),
+      categoryId: category.id,
+      businessId,
+      branchId,
+      timestamp: Date.now()
+    });
+  }
+
+  // -----------------------------
+  // ✅ PRODUCT ENTITY
+  // -----------------------------
+  const product = createEntity({
+    id: productInput.id, // ensure stable ID across sync
+    name: productInput.name,
+    imageUrl: productInput.imageUrl ?? "",
+    description: productInput.description,
+
+    sellingPrice: productInput.sellingPrice,
+    costPrice: productInput.costPrice,
+    quantity: productInput.quantity,
+
+    type: productInput.type,
+    stockMode: productInput.stockMode ?? "OPENING",
+
+    model: productInput.model,
+    imei: productInput.imei,
+    condition: productInput.condition,
+
     categoryId: category.id,
-    businessId
-  })
-}
+    categoryName: category.name,
 
-  // PRODUCT
- const product = createEntity({
-  name: productInput.name,
-  imageUrl: productInput.imageUrl ?? "",
-  description: productInput.description,
-  sellingPrice: productInput.sellingPrice,
-  costPrice: productInput.costPrice,
-  quantity: productInput.quantity,
-  type: productInput.type,
-  stockMode: productInput.stockMode,
-  model: productInput.model,
-  imei: productInput.imei,
-  condition: productInput.condition,
-  categoryId: category.id,
-  brandId: brand.id,
-  brandName: brand.name,
-  categoryName: category.name,
+    brandId: brand.id,
+    brandName: brand.name,
 
-  businessId,
-  branchId
-})
+    businessId,
+    branchId
+  });
 
-  const inventoryStore = useInventoryStore.getState()
+  // -----------------------------
+  // ✅ STORE CHECK (NO DUPLICATE)
+  // -----------------------------
+  const inventoryStore = useInventoryStore.getState();
 
-const existing = inventoryStore.products.find(
-  (p) => p.id === product.id
-)
+  const existing = inventoryStore.products.find(
+    (p) => p.id === product.id
+  );
 
+  // -----------------------------
+  // ✅ EVENT CREATION
+  // -----------------------------
+  const eventType = existing
+    ? InventoryEventType.PRODUCT_UPDATED
+    : InventoryEventType.PRODUCT_CREATED;
 
-if (existing) {
-  const event = await createEvent(InventoryEventType.PRODUCT_UPDATED, userId, businessId, branchId, product, "pending");
-   await dispatchEvent(event);
-  await generateLedgerEntries(event)
-  inventoryStore.updateProduct(product)
-} else {
+  const event = await createEvent(
+    eventType,
+    userId,
+    businessId,
+    branchId,
+    product,
+    "pending"
+  );
 
-  inventoryStore.addProduct(product)
-  const event = await createEvent(InventoryEventType.PRODUCT_CREATED, userId, businessId, branchId, product, "pending");
+  // -----------------------------
+  // ✅ LOCAL STATE UPDATE
+  // -----------------------------
+  if (existing) {
+    inventoryStore.updateProduct(product);
+  } else {
+    inventoryStore.addProduct(product);
+  }
+
+  // -----------------------------
+  // ✅ DISPATCH + SIDE EFFECTS
+  // -----------------------------
   await dispatchEvent(event);
-  await generateLedgerEntries(event)
+  await generateLedgerEntries(event);
+
+  // -----------------------------
+  // ✅ PERSIST TO INDEXED DB
+  // -----------------------------
+  await inventoryHelper.addProducts(product);
+
+  return product;
 }
-
-  
-
-  await inventoryHelper.addProducts(product)
-}
-
 }

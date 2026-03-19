@@ -8,8 +8,9 @@ import { useBusinessStatusStore } from '@/store/useBusinessStatusStore'
 export const SetupProgressTracker = () => {
 
   const storePercentage = useBusinessStatusStore(s => s.percentage);
+  console.log("IDIOT STORe that give me percentage", storePercentage)
 
-  const percentage = storePercentage ?? 0;
+  const percentage = storePercentage;
   const isComplete = percentage === 100;
 
   return (

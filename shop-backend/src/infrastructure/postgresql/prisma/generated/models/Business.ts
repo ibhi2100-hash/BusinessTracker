@@ -250,6 +250,7 @@ export type BusinessWhereInput = {
   status?: Prisma.EnumBusinessStatusFilter<"Business"> | $Enums.BusinessStatus
   branch?: Prisma.BranchListRelationFilter
   users?: Prisma.UserListRelationFilter
+  synced?: Prisma.ProcessedSyncEventListRelationFilter
   subscriptions?: Prisma.BusinessSubscriptionListRelationFilter
   categories?: Prisma.CategoryListRelationFilter
   brands?: Prisma.BrandListRelationFilter
@@ -280,6 +281,7 @@ export type BusinessOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   branch?: Prisma.BranchOrderByRelationAggregateInput
   users?: Prisma.UserOrderByRelationAggregateInput
+  synced?: Prisma.ProcessedSyncEventOrderByRelationAggregateInput
   subscriptions?: Prisma.BusinessSubscriptionOrderByRelationAggregateInput
   categories?: Prisma.CategoryOrderByRelationAggregateInput
   brands?: Prisma.BrandOrderByRelationAggregateInput
@@ -313,6 +315,7 @@ export type BusinessWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumBusinessStatusFilter<"Business"> | $Enums.BusinessStatus
   branch?: Prisma.BranchListRelationFilter
   users?: Prisma.UserListRelationFilter
+  synced?: Prisma.ProcessedSyncEventListRelationFilter
   subscriptions?: Prisma.BusinessSubscriptionListRelationFilter
   categories?: Prisma.CategoryListRelationFilter
   brands?: Prisma.BrandListRelationFilter
@@ -375,6 +378,7 @@ export type BusinessCreateInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
@@ -405,6 +409,7 @@ export type BusinessUncheckedCreateInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
@@ -435,6 +440,7 @@ export type BusinessUpdateInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
@@ -465,6 +471,7 @@ export type BusinessUncheckedUpdateInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
@@ -647,6 +654,20 @@ export type BusinessUpdateOneRequiredWithoutSubscriptionsNestedInput = {
   upsert?: Prisma.BusinessUpsertWithoutSubscriptionsInput
   connect?: Prisma.BusinessWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutSubscriptionsInput, Prisma.BusinessUpdateWithoutSubscriptionsInput>, Prisma.BusinessUncheckedUpdateWithoutSubscriptionsInput>
+}
+
+export type BusinessCreateNestedOneWithoutSyncedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutSyncedInput, Prisma.BusinessUncheckedCreateWithoutSyncedInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutSyncedInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutSyncedNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutSyncedInput, Prisma.BusinessUncheckedCreateWithoutSyncedInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutSyncedInput
+  upsert?: Prisma.BusinessUpsertWithoutSyncedInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutSyncedInput, Prisma.BusinessUpdateWithoutSyncedInput>, Prisma.BusinessUncheckedUpdateWithoutSyncedInput>
 }
 
 export type BusinessCreateNestedOneWithoutLedgerInput = {
@@ -870,6 +891,7 @@ export type BusinessCreateWithoutBranchInput = {
   activatedAt?: Date | string | null
   status?: $Enums.BusinessStatus
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
@@ -899,6 +921,7 @@ export type BusinessUncheckedCreateWithoutBranchInput = {
   activatedAt?: Date | string | null
   status?: $Enums.BusinessStatus
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
@@ -944,6 +967,7 @@ export type BusinessUpdateWithoutBranchInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
@@ -973,6 +997,7 @@ export type BusinessUncheckedUpdateWithoutBranchInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1002,6 +1027,7 @@ export type BusinessCreateWithoutUsersInput = {
   activatedAt?: Date | string | null
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
@@ -1031,6 +1057,7 @@ export type BusinessUncheckedCreateWithoutUsersInput = {
   activatedAt?: Date | string | null
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
@@ -1076,6 +1103,7 @@ export type BusinessUpdateWithoutUsersInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
@@ -1105,6 +1133,7 @@ export type BusinessUncheckedUpdateWithoutUsersInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1135,6 +1164,7 @@ export type BusinessCreateWithoutSubscriptionsInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
@@ -1164,6 +1194,7 @@ export type BusinessUncheckedCreateWithoutSubscriptionsInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
@@ -1209,6 +1240,7 @@ export type BusinessUpdateWithoutSubscriptionsInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
@@ -1238,6 +1270,143 @@ export type BusinessUncheckedUpdateWithoutSubscriptionsInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
+  sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
+  cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
+  liabilities?: Prisma.LiabilityUncheckedUpdateManyWithoutBusinessNestedInput
+  ledger?: Prisma.LedgerAccountUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntry?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  loan?: Prisma.LoanUncheckedUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+  assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutSyncedInput = {
+  id: string
+  name: string
+  address?: string | null
+  onboardingStep?: number
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
+  branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
+  sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
+  cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
+  liabilities?: Prisma.LiabilityCreateNestedManyWithoutBusinessInput
+  ledger?: Prisma.LedgerAccountCreateNestedManyWithoutBusinessInput
+  ledgerEntry?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  loan?: Prisma.LoanCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
+  assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutSyncedInput = {
+  id: string
+  name: string
+  address?: string | null
+  onboardingStep?: number
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  createdAt?: Date | string
+  activatedAt?: Date | string | null
+  status?: $Enums.BusinessStatus
+  branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
+  brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
+  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
+  cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
+  liabilities?: Prisma.LiabilityUncheckedCreateNestedManyWithoutBusinessInput
+  ledger?: Prisma.LedgerAccountUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntry?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  loan?: Prisma.LoanUncheckedCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutSyncedInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutSyncedInput, Prisma.BusinessUncheckedCreateWithoutSyncedInput>
+}
+
+export type BusinessUpsertWithoutSyncedInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutSyncedInput, Prisma.BusinessUncheckedUpdateWithoutSyncedInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutSyncedInput, Prisma.BusinessUncheckedCreateWithoutSyncedInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutSyncedInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutSyncedInput, Prisma.BusinessUncheckedUpdateWithoutSyncedInput>
+}
+
+export type BusinessUpdateWithoutSyncedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
+  brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
+  sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
+  cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
+  liabilities?: Prisma.LiabilityUpdateManyWithoutBusinessNestedInput
+  ledger?: Prisma.LedgerAccountUpdateManyWithoutBusinessNestedInput
+  ledgerEntry?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  loan?: Prisma.LoanUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
+  assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutSyncedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1267,6 +1436,7 @@ export type BusinessCreateWithoutLedgerInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
@@ -1296,6 +1466,7 @@ export type BusinessUncheckedCreateWithoutLedgerInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
@@ -1341,6 +1512,7 @@ export type BusinessUpdateWithoutLedgerInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
@@ -1370,6 +1542,7 @@ export type BusinessUncheckedUpdateWithoutLedgerInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1399,6 +1572,7 @@ export type BusinessCreateWithoutLedgerEntryInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
@@ -1428,6 +1602,7 @@ export type BusinessUncheckedCreateWithoutLedgerEntryInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
@@ -1473,6 +1648,7 @@ export type BusinessUpdateWithoutLedgerEntryInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
@@ -1502,6 +1678,7 @@ export type BusinessUncheckedUpdateWithoutLedgerEntryInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1531,6 +1708,7 @@ export type BusinessCreateWithoutCategoriesInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
@@ -1560,6 +1738,7 @@ export type BusinessUncheckedCreateWithoutCategoriesInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
@@ -1605,6 +1784,7 @@ export type BusinessUpdateWithoutCategoriesInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
@@ -1634,6 +1814,7 @@ export type BusinessUncheckedUpdateWithoutCategoriesInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1663,6 +1844,7 @@ export type BusinessCreateWithoutBrandsInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
@@ -1692,6 +1874,7 @@ export type BusinessUncheckedCreateWithoutBrandsInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
@@ -1737,6 +1920,7 @@ export type BusinessUpdateWithoutBrandsInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
@@ -1766,6 +1950,7 @@ export type BusinessUncheckedUpdateWithoutBrandsInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1795,6 +1980,7 @@ export type BusinessCreateWithoutProductsInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
@@ -1824,6 +2010,7 @@ export type BusinessUncheckedCreateWithoutProductsInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
@@ -1869,6 +2056,7 @@ export type BusinessUpdateWithoutProductsInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
@@ -1898,6 +2086,7 @@ export type BusinessUncheckedUpdateWithoutProductsInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1927,6 +2116,7 @@ export type BusinessCreateWithoutStockMovementInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
@@ -1956,6 +2146,7 @@ export type BusinessUncheckedCreateWithoutStockMovementInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
@@ -2001,6 +2192,7 @@ export type BusinessUpdateWithoutStockMovementInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
@@ -2030,6 +2222,7 @@ export type BusinessUncheckedUpdateWithoutStockMovementInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2059,6 +2252,7 @@ export type BusinessCreateWithoutSalesInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
@@ -2088,6 +2282,7 @@ export type BusinessUncheckedCreateWithoutSalesInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
@@ -2133,6 +2328,7 @@ export type BusinessUpdateWithoutSalesInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
@@ -2162,6 +2358,7 @@ export type BusinessUncheckedUpdateWithoutSalesInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2191,6 +2388,7 @@ export type BusinessCreateWithoutCashFlowsInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
@@ -2220,6 +2418,7 @@ export type BusinessUncheckedCreateWithoutCashFlowsInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
@@ -2265,6 +2464,7 @@ export type BusinessUpdateWithoutCashFlowsInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
@@ -2294,6 +2494,7 @@ export type BusinessUncheckedUpdateWithoutCashFlowsInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2323,6 +2524,7 @@ export type BusinessCreateWithoutLiabilitiesInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
@@ -2352,6 +2554,7 @@ export type BusinessUncheckedCreateWithoutLiabilitiesInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
@@ -2397,6 +2600,7 @@ export type BusinessUpdateWithoutLiabilitiesInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
@@ -2426,6 +2630,7 @@ export type BusinessUncheckedUpdateWithoutLiabilitiesInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2455,6 +2660,7 @@ export type BusinessCreateWithoutAssetsInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
@@ -2484,6 +2690,7 @@ export type BusinessUncheckedCreateWithoutAssetsInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
@@ -2529,6 +2736,7 @@ export type BusinessUpdateWithoutAssetsInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
@@ -2558,6 +2766,7 @@ export type BusinessUncheckedUpdateWithoutAssetsInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2587,6 +2796,7 @@ export type BusinessCreateWithoutExpensesInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
@@ -2616,6 +2826,7 @@ export type BusinessUncheckedCreateWithoutExpensesInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
@@ -2661,6 +2872,7 @@ export type BusinessUpdateWithoutExpensesInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
@@ -2690,6 +2902,7 @@ export type BusinessUncheckedUpdateWithoutExpensesInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2719,6 +2932,7 @@ export type BusinessCreateWithoutLoanInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
@@ -2748,6 +2962,7 @@ export type BusinessUncheckedCreateWithoutLoanInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
@@ -2793,6 +3008,7 @@ export type BusinessUpdateWithoutLoanInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
@@ -2822,6 +3038,7 @@ export type BusinessUncheckedUpdateWithoutLoanInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2851,6 +3068,7 @@ export type BusinessCreateWithoutEmployeesInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
@@ -2880,6 +3098,7 @@ export type BusinessUncheckedCreateWithoutEmployeesInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
@@ -2925,6 +3144,7 @@ export type BusinessUpdateWithoutEmployeesInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
@@ -2954,6 +3174,7 @@ export type BusinessUncheckedUpdateWithoutEmployeesInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2983,6 +3204,7 @@ export type BusinessCreateWithoutExpenseCategoriesInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
@@ -3012,6 +3234,7 @@ export type BusinessUncheckedCreateWithoutExpenseCategoriesInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
@@ -3057,6 +3280,7 @@ export type BusinessUpdateWithoutExpenseCategoriesInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
@@ -3086,6 +3310,7 @@ export type BusinessUncheckedUpdateWithoutExpenseCategoriesInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
@@ -3115,6 +3340,7 @@ export type BusinessCreateWithoutAlertsInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
@@ -3144,6 +3370,7 @@ export type BusinessUncheckedCreateWithoutAlertsInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
@@ -3189,6 +3416,7 @@ export type BusinessUpdateWithoutAlertsInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
@@ -3218,6 +3446,7 @@ export type BusinessUncheckedUpdateWithoutAlertsInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
@@ -3243,6 +3472,7 @@ export type BusinessUncheckedUpdateWithoutAlertsInput = {
 export type BusinessCountOutputType = {
   branch: number
   users: number
+  synced: number
   subscriptions: number
   categories: number
   brands: number
@@ -3264,6 +3494,7 @@ export type BusinessCountOutputType = {
 export type BusinessCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   branch?: boolean | BusinessCountOutputTypeCountBranchArgs
   users?: boolean | BusinessCountOutputTypeCountUsersArgs
+  synced?: boolean | BusinessCountOutputTypeCountSyncedArgs
   subscriptions?: boolean | BusinessCountOutputTypeCountSubscriptionsArgs
   categories?: boolean | BusinessCountOutputTypeCountCategoriesArgs
   brands?: boolean | BusinessCountOutputTypeCountBrandsArgs
@@ -3304,6 +3535,13 @@ export type BusinessCountOutputTypeCountBranchArgs<ExtArgs extends runtime.Types
  */
 export type BusinessCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.UserWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountSyncedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProcessedSyncEventWhereInput
 }
 
 /**
@@ -3431,6 +3669,7 @@ export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   status?: boolean
   branch?: boolean | Prisma.Business$branchArgs<ExtArgs>
   users?: boolean | Prisma.Business$usersArgs<ExtArgs>
+  synced?: boolean | Prisma.Business$syncedArgs<ExtArgs>
   subscriptions?: boolean | Prisma.Business$subscriptionsArgs<ExtArgs>
   categories?: boolean | Prisma.Business$categoriesArgs<ExtArgs>
   brands?: boolean | Prisma.Business$brandsArgs<ExtArgs>
@@ -3490,6 +3729,7 @@ export type BusinessOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type BusinessInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   branch?: boolean | Prisma.Business$branchArgs<ExtArgs>
   users?: boolean | Prisma.Business$usersArgs<ExtArgs>
+  synced?: boolean | Prisma.Business$syncedArgs<ExtArgs>
   subscriptions?: boolean | Prisma.Business$subscriptionsArgs<ExtArgs>
   categories?: boolean | Prisma.Business$categoriesArgs<ExtArgs>
   brands?: boolean | Prisma.Business$brandsArgs<ExtArgs>
@@ -3516,6 +3756,7 @@ export type $BusinessPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   objects: {
     branch: Prisma.$BranchPayload<ExtArgs>[]
     users: Prisma.$UserPayload<ExtArgs>[]
+    synced: Prisma.$ProcessedSyncEventPayload<ExtArgs>[]
     subscriptions: Prisma.$BusinessSubscriptionPayload<ExtArgs>[]
     categories: Prisma.$CategoryPayload<ExtArgs>[]
     brands: Prisma.$BrandPayload<ExtArgs>[]
@@ -3939,6 +4180,7 @@ export interface Prisma__BusinessClient<T, Null = never, ExtArgs extends runtime
   readonly [Symbol.toStringTag]: "PrismaPromise"
   branch<T extends Prisma.Business$branchArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$branchArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   users<T extends Prisma.Business$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  synced<T extends Prisma.Business$syncedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$syncedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProcessedSyncEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   subscriptions<T extends Prisma.Business$subscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BusinessSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   categories<T extends Prisma.Business$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   brands<T extends Prisma.Business$brandsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$brandsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BrandPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -4426,6 +4668,30 @@ export type Business$usersArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
+}
+
+/**
+ * Business.synced
+ */
+export type Business$syncedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProcessedSyncEvent
+   */
+  select?: Prisma.ProcessedSyncEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProcessedSyncEvent
+   */
+  omit?: Prisma.ProcessedSyncEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProcessedSyncEventInclude<ExtArgs> | null
+  where?: Prisma.ProcessedSyncEventWhereInput
+  orderBy?: Prisma.ProcessedSyncEventOrderByWithRelationInput | Prisma.ProcessedSyncEventOrderByWithRelationInput[]
+  cursor?: Prisma.ProcessedSyncEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProcessedSyncEventScalarFieldEnum | Prisma.ProcessedSyncEventScalarFieldEnum[]
 }
 
 /**

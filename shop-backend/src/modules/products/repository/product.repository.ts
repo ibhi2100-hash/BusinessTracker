@@ -5,131 +5,57 @@ import { ProductDto } from "../dto/product.dto.js";
 export class ProductRepository {
 
 async getOrCreateCategory(
-  
   businessId: string,
   branchId: string,
-  payload: {
-    id: string,
-    categoryName: string,
-  },
+  payload: { id: string; categoryName: string },
   db: Prisma.TransactionClient
 ) {
+  const name = payload.categoryName.trim().toLowerCase();
+
   return db.category.upsert({
     where: {
-      name_businessId_branchId: { // must match @@unique
+      name_businessId_branchId: {
         name,
         businessId,
         branchId
       }
     },
-    update: {}, // do nothing if exists
-    create: { id: payload.id, name, businessId, branchId }
+    update: {},
+    create: {
+      id: payload.id, // 🔥 preserve client ID
+      name,
+      businessId,
+      branchId
+    }
   });
 }
-
 async getOrCreateBrand(
   name: string,
   businessId: string,
   branchId: string,
   categoryId: string,
-  payload: any,
+  payload: { id: string },
   db: Prisma.TransactionClient
 ) {
+  const normalized = name.trim().toLowerCase();
+
   return db.brand.upsert({
     where: {
-      name_categoryId_branchId: { // must match @@unique
-        name,
+      name_categoryId_branchId: {
+        name: normalized,
         categoryId,
         branchId
       }
     },
-    update: {}, // do nothing if exists
+    update: {},
     create: {
       id: payload.id,
-      name,
+      name: normalized,
       businessId,
       branchId,
       categoryId
     }
   });
-}
-
-  async createProduct(
-  payload: any,
-  businessId: string,
-  branchId: string,
-  tx?: Prisma.TransactionClient
-) {
-  const db = tx ?? prisma;
-
-  // --- Category ---
-    const category = payload.category
-
-  category
-    ? await this.getOrCreateCategory( businessId, branchId, payload, db)
-    : await this.findCategoryById(category?.id, businessId);
-
-  if (!category) throw new Error("Category not found");
-  const categoryId = category.id;
-
-  // --- Brand ---
-  let brandId: string;
-  if (payload.brand) {
-    const brand = await this.getOrCreateBrand(
-      data.brandName,
-      businessId,
-      branchId,
-      categoryId,
-      db
-    );
-    brandId = brand.id;
-  } else if (data.brandId) {
-    const brand = await db.brand.findFirst({
-      where: { id: data.brandId, businessId, categoryId, branchId }
-    });
-    if (!brand) throw new Error("Brand not found for this branch and category");
-    brandId = brand.id;
-  } else {
-    throw new Error("Brand is required");
-  }
-
-  // --- Create Product ---
-  const product = await db.product.create({
-    data: {
-      name: data.name,
-      type: data.type,
-      model: data.model || null,
-      costPrice: data.costPrice ?? null,
-      sellingPrice: data.sellingPrice ?? null,
-      quantity: data.quantity ?? 0,
-      imei: data.imei || null,
-      condition: data.condition || null,
-      businessId,
-      branchId,
-      categoryId,
-      brandId
-    },
-    select: {
-      id: true,
-      name: true,
-      type: true,
-      model: true,
-      costPrice: true,
-      sellingPrice: true,
-      quantity: true,
-      imei: true,
-      createdAt: true,
-      updatedAt: true,
-      businessId: true,
-      branchId: true,
-      brandId: true,
-      brand: true,
-      categoryId: true
-    }
-  });
-
-  console.log("Products", product);
-  return product;
 }
 
 
@@ -208,121 +134,136 @@ async updateProductPartial(
   businessId: string,
   branchId: string
 ) {
+  const db = prisma;
 
-  // 1️⃣ Fetch existing product first
-  const existingProduct = await prisma.product.findFirst({
-    where: { id: productId, businessId },
-    include: { category: true }
+  // -----------------------------
+  // 1️⃣ FETCH EXISTING PRODUCT
+  // -----------------------------
+  const existingProduct = await db.product.findFirst({
+    where: { id: productId, businessId, branchId },
   });
 
   if (!existingProduct) {
     throw new Error("Product not found");
   }
 
-  // 2️⃣ Resolve category
+  // -----------------------------
+  // 2️⃣ RESOLVE CATEGORY (ID-FIRST)
+  // -----------------------------
   let categoryId = existingProduct.categoryId;
 
-if (dto.categoryName) {
-  const category =
-    await prisma.category.findFirst({
-      where: { 
-        name: dto.categoryName, 
+  if (dto.categoryId) {
+    // try find by ID first
+    let category = await db.category.findFirst({
+      where: {
+        id: dto.categoryId,
         businessId,
-        branchId: existingProduct.branchId
-      }
-    }) ??
-    await prisma.category.create({
-      data: { 
-        name: dto.categoryName,
-        businessId,
-        branchId: existingProduct.branchId
-      }
+        branchId,
+      },
     });
 
-  categoryId = category.id;
-}
-  else if (dto.categoryId) {
-    const category = await prisma.category.findFirst({
-      where: { id: dto.categoryId, businessId }
-    });
+    // fallback → upsert using name if provided
+    if (!category && dto.categoryName) {
+      category = await db.category.upsert({
+        where: {
+          name_businessId_branchId: {
+            name: dto.categoryName.trim().toLowerCase(),
+            businessId,
+            branchId,
+          },
+        },
+        update: {},
+        create: {
+          id: dto.categoryId, // 🔥 preserve client ID
+          name: dto.categoryName.trim().toLowerCase(),
+          businessId,
+          branchId,
+        },
+      });
+    }
 
-    if (!category) throw new Error("Category not found");
+    if (!category) {
+      throw new Error("Category not found");
+    }
+
     categoryId = category.id;
   }
 
-  // 3️⃣ Resolve brand safely
+  // -----------------------------
+  // 3️⃣ RESOLVE BRAND (ID-FIRST)
+  // -----------------------------
   let brandId = existingProduct.brandId;
 
-  if (dto.brandName) {
-
-    const brand =
-      await prisma.brand.findFirst({
-        where: { 
-          name: dto.brandName,
-          businessId,
-          categoryId,
-          branchId
-        }
-      }) ??
-      await prisma.brand.create({
-        data: { 
-          name: dto.brandName,
-          businessId,
-          categoryId,
-          branchId,
-        }
-      });
-
-    brandId = brand.id;
-  }
-  else if (dto.brandId) {
-
-    const brand = await prisma.brand.findFirst({
-      where: { 
+  if (dto.brandId) {
+    let brand = await db.brand.findFirst({
+      where: {
         id: dto.brandId,
         businessId,
-        categoryId
-      }
+        branchId,
+      },
     });
 
+    // fallback → upsert
+    if (!brand && dto.brandName) {
+      brand = await db.brand.upsert({
+        where: {
+          name_categoryId_branchId: {
+            name: dto.brandName.trim().toLowerCase(),
+            categoryId,
+            branchId,
+          },
+        },
+        update: {},
+        create: {
+          id: dto.brandId, // 🔥 preserve ID
+          name: dto.brandName.trim().toLowerCase(),
+          businessId,
+          branchId,
+          categoryId,
+        },
+      });
+    }
+
     if (!brand) {
-      throw new Error("Brand not found in this category");
+      throw new Error("Brand not found");
     }
 
     brandId = brand.id;
   }
 
-  // 4️⃣ Build update object
+  // -----------------------------
+  // 4️⃣ BUILD UPDATE PAYLOAD
+  // -----------------------------
   const data: any = {};
 
   if (dto.name !== undefined) data.name = dto.name;
   if (dto.type !== undefined) data.type = dto.type;
   if (dto.model !== undefined) data.model = dto.model;
+
   if (dto.costPrice !== undefined) data.costPrice = Number(dto.costPrice);
   if (dto.sellingPrice !== undefined) data.sellingPrice = Number(dto.sellingPrice);
   if (dto.quantity !== undefined) data.quantity = Number(dto.quantity);
+
   if (dto.imei !== undefined) data.imei = dto.imei;
   if (dto.condition !== undefined) data.condition = dto.condition;
   if (dto.isActive !== undefined) data.isActive = dto.isActive;
 
-  // Always reconnect resolved relations
+  // always reconnect relations
   data.category = { connect: { id: categoryId } };
-  if (brandId) {
-    data.brand = { connect: { id: brandId } };
-  }
+  data.brand = { connect: { id: brandId } };
 
-  if (branchId) {
-    data.branch = { connect: { id: branchId } };
-  }
-
-  // 5️⃣ Safe update with ownership enforcement
-  return prisma.product.update({
-    where: { 
+  // -----------------------------
+  // 5️⃣ UPDATE PRODUCT
+  // -----------------------------
+  const updatedProduct = await db.product.update({
+    where: {
       id: productId,
-      businessId
+      businessId,
     },
     data,
   });
+
+  return updatedProduct;
 }
 /*
     async listProducts(businessId:string, filter?:ProductFilter):Promise<Product>{

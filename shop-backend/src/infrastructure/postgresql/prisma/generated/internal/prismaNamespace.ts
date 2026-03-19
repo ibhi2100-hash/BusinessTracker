@@ -390,6 +390,7 @@ export const ModelName = {
   passwordResetToken: 'passwordResetToken',
   SubscriptionPlan: 'SubscriptionPlan',
   BusinessSubscription: 'BusinessSubscription',
+  ProcessedSyncEvent: 'ProcessedSyncEvent',
   LedgerAccount: 'LedgerAccount',
   LedgerEntry: 'LedgerEntry',
   Category: 'Category',
@@ -426,7 +427,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "business" | "branch" | "user" | "passwordResetToken" | "subscriptionPlan" | "businessSubscription" | "ledgerAccount" | "ledgerEntry" | "category" | "brand" | "product" | "stockMovement" | "sale" | "saleItem" | "payment" | "cashFlow" | "liability" | "liabilityPayment" | "asset" | "expense" | "capitalExpenditure" | "loan" | "loanRepayment" | "employee" | "salaryAccrual" | "expenseCategory" | "alert"
+    modelProps: "business" | "branch" | "user" | "passwordResetToken" | "subscriptionPlan" | "businessSubscription" | "processedSyncEvent" | "ledgerAccount" | "ledgerEntry" | "category" | "brand" | "product" | "stockMovement" | "sale" | "saleItem" | "payment" | "cashFlow" | "liability" | "liabilityPayment" | "asset" | "expense" | "capitalExpenditure" | "loan" | "loanRepayment" | "employee" | "salaryAccrual" | "expenseCategory" | "alert"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -871,6 +872,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.BusinessSubscriptionCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.BusinessSubscriptionCountAggregateOutputType> | number
+        }
+      }
+    }
+    ProcessedSyncEvent: {
+      payload: Prisma.$ProcessedSyncEventPayload<ExtArgs>
+      fields: Prisma.ProcessedSyncEventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProcessedSyncEventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProcessedSyncEventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProcessedSyncEventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProcessedSyncEventPayload>
+        }
+        findFirst: {
+          args: Prisma.ProcessedSyncEventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProcessedSyncEventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProcessedSyncEventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProcessedSyncEventPayload>
+        }
+        findMany: {
+          args: Prisma.ProcessedSyncEventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProcessedSyncEventPayload>[]
+        }
+        create: {
+          args: Prisma.ProcessedSyncEventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProcessedSyncEventPayload>
+        }
+        createMany: {
+          args: Prisma.ProcessedSyncEventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProcessedSyncEventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProcessedSyncEventPayload>[]
+        }
+        delete: {
+          args: Prisma.ProcessedSyncEventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProcessedSyncEventPayload>
+        }
+        update: {
+          args: Prisma.ProcessedSyncEventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProcessedSyncEventPayload>
+        }
+        deleteMany: {
+          args: Prisma.ProcessedSyncEventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProcessedSyncEventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProcessedSyncEventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProcessedSyncEventPayload>[]
+        }
+        upsert: {
+          args: Prisma.ProcessedSyncEventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProcessedSyncEventPayload>
+        }
+        aggregate: {
+          args: Prisma.ProcessedSyncEventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProcessedSyncEvent>
+        }
+        groupBy: {
+          args: Prisma.ProcessedSyncEventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProcessedSyncEventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProcessedSyncEventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProcessedSyncEventCountAggregateOutputType> | number
         }
       }
     }
@@ -2553,6 +2628,23 @@ export const BusinessSubscriptionScalarFieldEnum = {
 export type BusinessSubscriptionScalarFieldEnum = (typeof BusinessSubscriptionScalarFieldEnum)[keyof typeof BusinessSubscriptionScalarFieldEnum]
 
 
+export const ProcessedSyncEventScalarFieldEnum = {
+  id: 'id',
+  eventType: 'eventType',
+  businessId: 'businessId',
+  branchId: 'branchId',
+  userId: 'userId',
+  version: 'version',
+  status: 'status',
+  processedAt: 'processedAt',
+  error: 'error',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProcessedSyncEventScalarFieldEnum = (typeof ProcessedSyncEventScalarFieldEnum)[keyof typeof ProcessedSyncEventScalarFieldEnum]
+
+
 export const LedgerAccountScalarFieldEnum = {
   id: 'id',
   businessId: 'businessId',
@@ -3035,6 +3127,20 @@ export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
 
 
 /**
+ * Reference to a field of type 'SyncEventStatus'
+ */
+export type EnumSyncEventStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SyncEventStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'SyncEventStatus[]'
+ */
+export type ListEnumSyncEventStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SyncEventStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'ProductType'
  */
 export type EnumProductTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductType'>
@@ -3330,6 +3436,7 @@ export type GlobalOmitConfig = {
   passwordResetToken?: Prisma.passwordResetTokenOmit
   subscriptionPlan?: Prisma.SubscriptionPlanOmit
   businessSubscription?: Prisma.BusinessSubscriptionOmit
+  processedSyncEvent?: Prisma.ProcessedSyncEventOmit
   ledgerAccount?: Prisma.LedgerAccountOmit
   ledgerEntry?: Prisma.LedgerEntryOmit
   category?: Prisma.CategoryOmit

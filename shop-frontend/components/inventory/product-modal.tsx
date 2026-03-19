@@ -71,53 +71,38 @@ export default function ProductModal({ isOpen, onClose, onSave, product }: Props
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!form.name || !form.sellingPrice || !form.quantity) {
-      return alert("Name, selling price, and quantity are required");
-    }
+  if (!form.name || !form.sellingPrice || !form.quantity) {
+    return alert("Name, selling price, and quantity are required");
+  }
 
-    const categoryPayload = selectedCategoryId
-      ? { categoryId: selectedCategoryId }
-      : newCategoryName
-      ? { categoryName: newCategoryName, imageUrl: categoryImage || undefined }
-      : null;
+  if (!selectedCategoryId && !newCategoryName) {
+    return alert("Category is required");
+  }
 
-    const brandPayload = selectedBrandId
-      ? { brandId: selectedBrandId }
-      : newBrandName
-      ? { brandName: newBrandName }
-      : null;
+  if (!selectedBrandId && !newBrandName) {
+    return alert("Brand is required");
+  }
 
-    if (!categoryPayload || !brandPayload) {
-      return alert("Category and brand are required");
-    }
+  const payload = {
+    ...form,
+    stockMode: form.stockMode || "OPENING",
 
-    const payload = {
-      ...form,
-      stockMode: form.stockMode || "OPENING",
-      ...categoryPayload,
-      ...brandPayload,
-    };
+    // 🔥 ALWAYS send BOTH id + name
+    categoryId: selectedCategoryId || crypto.randomUUID(),
+    categoryName: selectedCategoryId
+      ? categories.find(c => c.id === selectedCategoryId)?.name
+      : newCategoryName,
 
-    if (newCategoryName) {
-      await inventoryHelper.addCategory([{
-        name: newCategoryName,
-        imageUrl: categoryImage || undefined,
-        timestamp: Date.now()
-      }])
-    }
-
-    if (newBrandName) {
-      await inventoryHelper.addBrands([{
-        name: newBrandName,
-        categoryId: selectedCategoryId || undefined,
-        timestamp: Date.now()
-      }])
-    }
-
-    onSave(payload);
+    brandId: selectedBrandId || crypto.randomUUID(),
+    brandName: selectedBrandId
+      ? brands.find(b => b.id === selectedBrandId)?.name
+      : newBrandName,
   };
+
+  onSave(payload);
+};
 
   if (!isOpen) return null;
 

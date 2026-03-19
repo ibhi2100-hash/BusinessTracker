@@ -4,6 +4,8 @@ import { InventoryService } from "../../inventory/service/inventory.service.js";
 import { SaleProductSnapshot } from "../dto/saleproductsnap.js";
 import { AlertService } from "../../alerts/service/alerts.service.js";
 import { LOW_STOCK_THRESHOLD } from "../../../config/inventory.config.js";
+import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
+import { PrismaClient } from "@prisma/client/extension";
 
 
 
@@ -20,9 +22,7 @@ export class SaleService {
   
   
 
-async createSale(dto: any, businessId: string, branchId: string) {
-  return prisma.$transaction(async (tx) => {
-
+async createSale(dto: any, businessId: string, branchId: string, tx: PrismaClient) {
     let totalAmount = 0;
     const snapshots: SaleProductSnapshot[] = [];
 
@@ -121,7 +121,6 @@ async createSale(dto: any, businessId: string, branchId: string) {
     
 
     return sale;
-  });
 }
 
   async refundSale(saleid: string, businessId: string, branchId: string ){

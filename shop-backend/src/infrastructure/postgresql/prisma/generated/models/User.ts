@@ -225,6 +225,7 @@ export type UserWhereInput = {
   business?: Prisma.XOR<Prisma.BusinessNullableScalarRelationFilter, Prisma.BusinessWhereInput> | null
   branch?: Prisma.XOR<Prisma.BranchNullableScalarRelationFilter, Prisma.BranchWhereInput> | null
   passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
+  synced?: Prisma.ProcessedSyncEventListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -241,6 +242,7 @@ export type UserOrderByWithRelationInput = {
   business?: Prisma.BusinessOrderByWithRelationInput
   branch?: Prisma.BranchOrderByWithRelationInput
   passwordResetTokens?: Prisma.passwordResetTokenOrderByRelationAggregateInput
+  synced?: Prisma.ProcessedSyncEventOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -260,6 +262,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   business?: Prisma.XOR<Prisma.BusinessNullableScalarRelationFilter, Prisma.BusinessWhereInput> | null
   branch?: Prisma.XOR<Prisma.BranchNullableScalarRelationFilter, Prisma.BranchWhereInput> | null
   passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
+  synced?: Prisma.ProcessedSyncEventListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -306,6 +309,7 @@ export type UserCreateInput = {
   business?: Prisma.BusinessCreateNestedOneWithoutUsersInput
   branch?: Prisma.BranchCreateNestedOneWithoutUsersInput
   passwordResetTokens?: Prisma.passwordResetTokenCreateNestedManyWithoutUserInput
+  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -320,6 +324,7 @@ export type UserUncheckedCreateInput = {
   businessId?: string | null
   createdAt?: Date | string
   passwordResetTokens?: Prisma.passwordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -334,6 +339,7 @@ export type UserUpdateInput = {
   business?: Prisma.BusinessUpdateOneWithoutUsersNestedInput
   branch?: Prisma.BranchUpdateOneWithoutUsersNestedInput
   passwordResetTokens?: Prisma.passwordResetTokenUpdateManyWithoutUserNestedInput
+  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -348,6 +354,7 @@ export type UserUncheckedUpdateInput = {
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordResetTokens?: Prisma.passwordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -543,6 +550,20 @@ export type UserUpdateOneRequiredWithoutPasswordResetTokensNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPasswordResetTokensInput, Prisma.UserUpdateWithoutPasswordResetTokensInput>, Prisma.UserUncheckedUpdateWithoutPasswordResetTokensInput>
 }
 
+export type UserCreateNestedOneWithoutSyncedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSyncedInput, Prisma.UserUncheckedCreateWithoutSyncedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSyncedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSyncedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSyncedInput, Prisma.UserUncheckedCreateWithoutSyncedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSyncedInput
+  upsert?: Prisma.UserUpsertWithoutSyncedInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSyncedInput, Prisma.UserUpdateWithoutSyncedInput>, Prisma.UserUncheckedUpdateWithoutSyncedInput>
+}
+
 export type UserCreateWithoutBusinessInput = {
   id?: string
   name: string
@@ -554,6 +575,7 @@ export type UserCreateWithoutBusinessInput = {
   createdAt?: Date | string
   branch?: Prisma.BranchCreateNestedOneWithoutUsersInput
   passwordResetTokens?: Prisma.passwordResetTokenCreateNestedManyWithoutUserInput
+  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBusinessInput = {
@@ -567,6 +589,7 @@ export type UserUncheckedCreateWithoutBusinessInput = {
   branchId?: string | null
   createdAt?: Date | string
   passwordResetTokens?: Prisma.passwordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBusinessInput = {
@@ -622,6 +645,7 @@ export type UserCreateWithoutBranchInput = {
   createdAt?: Date | string
   business?: Prisma.BusinessCreateNestedOneWithoutUsersInput
   passwordResetTokens?: Prisma.passwordResetTokenCreateNestedManyWithoutUserInput
+  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBranchInput = {
@@ -635,6 +659,7 @@ export type UserUncheckedCreateWithoutBranchInput = {
   businessId?: string | null
   createdAt?: Date | string
   passwordResetTokens?: Prisma.passwordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBranchInput = {
@@ -674,6 +699,7 @@ export type UserCreateWithoutPasswordResetTokensInput = {
   createdAt?: Date | string
   business?: Prisma.BusinessCreateNestedOneWithoutUsersInput
   branch?: Prisma.BranchCreateNestedOneWithoutUsersInput
+  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
@@ -687,6 +713,7 @@ export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
   branchId?: string | null
   businessId?: string | null
   createdAt?: Date | string
+  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPasswordResetTokensInput = {
@@ -716,6 +743,7 @@ export type UserUpdateWithoutPasswordResetTokensInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneWithoutUsersNestedInput
   branch?: Prisma.BranchUpdateOneWithoutUsersNestedInput
+  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
@@ -729,6 +757,79 @@ export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutSyncedInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  isActive?: boolean
+  onboardingCompleted?: boolean
+  role?: $Enums.Role
+  createdAt?: Date | string
+  business?: Prisma.BusinessCreateNestedOneWithoutUsersInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUsersInput
+  passwordResetTokens?: Prisma.passwordResetTokenCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSyncedInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  isActive?: boolean
+  onboardingCompleted?: boolean
+  role?: $Enums.Role
+  branchId?: string | null
+  businessId?: string | null
+  createdAt?: Date | string
+  passwordResetTokens?: Prisma.passwordResetTokenUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutSyncedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSyncedInput, Prisma.UserUncheckedCreateWithoutSyncedInput>
+}
+
+export type UserUpsertWithoutSyncedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSyncedInput, Prisma.UserUncheckedUpdateWithoutSyncedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSyncedInput, Prisma.UserUncheckedCreateWithoutSyncedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSyncedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSyncedInput, Prisma.UserUncheckedUpdateWithoutSyncedInput>
+}
+
+export type UserUpdateWithoutSyncedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  business?: Prisma.BusinessUpdateOneWithoutUsersNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUsersNestedInput
+  passwordResetTokens?: Prisma.passwordResetTokenUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSyncedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passwordResetTokens?: Prisma.passwordResetTokenUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyBusinessInput = {
@@ -754,6 +855,7 @@ export type UserUpdateWithoutBusinessInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   branch?: Prisma.BranchUpdateOneWithoutUsersNestedInput
   passwordResetTokens?: Prisma.passwordResetTokenUpdateManyWithoutUserNestedInput
+  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBusinessInput = {
@@ -767,6 +869,7 @@ export type UserUncheckedUpdateWithoutBusinessInput = {
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordResetTokens?: Prisma.passwordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutBusinessInput = {
@@ -804,6 +907,7 @@ export type UserUpdateWithoutBranchInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneWithoutUsersNestedInput
   passwordResetTokens?: Prisma.passwordResetTokenUpdateManyWithoutUserNestedInput
+  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBranchInput = {
@@ -817,6 +921,7 @@ export type UserUncheckedUpdateWithoutBranchInput = {
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordResetTokens?: Prisma.passwordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutBranchInput = {
@@ -838,10 +943,12 @@ export type UserUncheckedUpdateManyWithoutBranchInput = {
 
 export type UserCountOutputType = {
   passwordResetTokens: number
+  synced: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   passwordResetTokens?: boolean | UserCountOutputTypeCountPasswordResetTokensArgs
+  synced?: boolean | UserCountOutputTypeCountSyncedArgs
 }
 
 /**
@@ -861,6 +968,13 @@ export type UserCountOutputTypeCountPasswordResetTokensArgs<ExtArgs extends runt
   where?: Prisma.passwordResetTokenWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSyncedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProcessedSyncEventWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -876,6 +990,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   business?: boolean | Prisma.User$businessArgs<ExtArgs>
   branch?: boolean | Prisma.User$branchArgs<ExtArgs>
   passwordResetTokens?: boolean | Prisma.User$passwordResetTokensArgs<ExtArgs>
+  synced?: boolean | Prisma.User$syncedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -927,6 +1042,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   business?: boolean | Prisma.User$businessArgs<ExtArgs>
   branch?: boolean | Prisma.User$branchArgs<ExtArgs>
   passwordResetTokens?: boolean | Prisma.User$passwordResetTokensArgs<ExtArgs>
+  synced?: boolean | Prisma.User$syncedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -944,6 +1060,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     business: Prisma.$BusinessPayload<ExtArgs> | null
     branch: Prisma.$BranchPayload<ExtArgs> | null
     passwordResetTokens: Prisma.$passwordResetTokenPayload<ExtArgs>[]
+    synced: Prisma.$ProcessedSyncEventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1353,6 +1470,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   business<T extends Prisma.User$businessArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$businessArgs<ExtArgs>>): Prisma.Prisma__BusinessClient<runtime.Types.Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   branch<T extends Prisma.User$branchArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$branchArgs<ExtArgs>>): Prisma.Prisma__BranchClient<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   passwordResetTokens<T extends Prisma.User$passwordResetTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$passwordResetTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$passwordResetTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  synced<T extends Prisma.User$syncedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$syncedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProcessedSyncEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1847,6 +1965,30 @@ export type User$passwordResetTokensArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.PasswordResetTokenScalarFieldEnum | Prisma.PasswordResetTokenScalarFieldEnum[]
+}
+
+/**
+ * User.synced
+ */
+export type User$syncedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProcessedSyncEvent
+   */
+  select?: Prisma.ProcessedSyncEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProcessedSyncEvent
+   */
+  omit?: Prisma.ProcessedSyncEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProcessedSyncEventInclude<ExtArgs> | null
+  where?: Prisma.ProcessedSyncEventWhereInput
+  orderBy?: Prisma.ProcessedSyncEventOrderByWithRelationInput | Prisma.ProcessedSyncEventOrderByWithRelationInput[]
+  cursor?: Prisma.ProcessedSyncEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProcessedSyncEventScalarFieldEnum | Prisma.ProcessedSyncEventScalarFieldEnum[]
 }
 
 /**

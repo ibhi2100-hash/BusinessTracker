@@ -116,6 +116,10 @@ enum BusinessStatus {
   ACTIVE
   SUSPENDED
 }
+enum SyncEventStatus {
+  PROCESSED
+  FAILED
+}
 
 ///**** MODELS****///
 
@@ -133,15 +137,15 @@ model Business {
 
   branch     Branch[]
   users      User[]
+  synced     ProcessedSyncEvent[]
   subscriptions   BusinessSubscription[]
+  cashflow    CashFlow[]
   categories Category[]
   brands      Brand[]
   products   Product[]
   stockMovement     StockMovement[]
   sales      Sale[]
-  cashFlows  CashFlow[] 
   liabilities Liability[]
-  ledger      LedgerAccount[]
   ledgerEntry LedgerEntry[]
   loan        Loan[] 
   employees    Employee[]
@@ -163,12 +167,16 @@ model Branch {
   business      Business      @relation(fields: [businessId], references: [id])
 
   users         User[]
+  synce         ProcessedSyncEvent[]
   products      Product[]
   category      Category[]
+  ledgerEntry   LedgerEntry[]
+  cashflow      CashFlow[]
+  branchSnapshot    BranchSnapshot[]
+  inventorySnapshot InventorySnapshot[]
   brand         Brand[]
   sales         Sale[]
   stockMovement StockMovement[]
-  cashflows     CashFlow[]
   assets        Asset[]
   liabilities   Liability[]
   expenses      Expense[]
@@ -180,9 +188,10 @@ model User {
   name        String
   email       String    @unique
   password    String
+  role        Role      @default(STAFF)
+
   isActive    Boolean   @default(true)
   onboardingCompleted   Boolean     @default(false)
-  role        Role      @default(STAFF)
   branchId    String?
   businessId  String?
   createdAt   DateTime  @default(now())
@@ -190,6 +199,7 @@ model User {
   business    Business? @relation(fields: [businessId], references: [id])
   branch      Branch?    @relation(fields: [branchId], references: [id])
   passwordResetTokens passwordResetToken[]
+  synced      ProcessedSyncEvent[]
 
 
   @@index([businessId])
@@ -239,28 +249,86 @@ model BusinessSubscription {
   business        Business @relation(fields: [businessId], references: [id])
   subscription    SubscriptionPlan @relation(fields: [subscriptionId], references: [id])
 }
-model LedgerAccount {
+model ProcessedSyncEvent {
   id          String   @id
+  eventType   String
   businessId  String
-  name        String
-  type        String
-
-  entries     LedgerEntry[]
-
+  branchId    String
+  userId      String
+  version     Int
+  status      SyncEventStatus
+  processedAt DateTime @default(now())
+  error       String?
   business    Business @relation(fields: [businessId], references: [id])
+  branches    Branch  @relation(fields: [branchId], references: [id])
+  user        User    @relation(fields: [userId], references: [id])
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([businessId])
+  @@index([branchId])
 }
+
+model Event {
+  id         String   @id
+  businessId String
+  branchId   String
+  type       String
+  payload    Json
+
+  createdAt  DateTime
+  syncedAt   DateTime @default(now())
+
+  // for ordering
+  deviceId   String?
+  sequence   Int?
+
+  LedgerEntries LedgerEntry[]
+
+  @@index([businessId, branchId])
+}
+
 
 model LedgerEntry {
   id          String   @id 
-  accountId   String
   businessId  String
+  branchId    String
+  eventId     String
+
+  account     String
   amount      Decimal
-  type        String
+  
   referenceId String?
   createdAt   DateTime @default(now())
 
-  account     LedgerAccount @relation(fields: [accountId], references: [id])
+  events      Event @relation(fields: [eventId], references: [id])
   business    Business @relation(fields: [businessId], references: [id])
+  branch      Branch  @relation(fields: [branchId], references: [id])
+}
+
+model BranchSnapshot {
+  id    String    @id   @default(uuid())
+  branchId  String
+  lastEventId   String?
+  cashBalance   Decimal
+  updatedAt     DateTime    @updatedAt
+
+  branch      Branch @relation(fields: [branchId], references: [id])
+}
+
+model InventorySnapshot {
+  id      String  @id   @default(uuid())
+  productId   String
+  branchId    String
+  quantity    Int
+
+  updatedAt   DateTime    @updatedAt
+
+  branch   Branch @relation(fields: [branchId], references: [id])
+  product  Product  @relation(fields: [productId], references: [id])
+
+  @@unique([productId, branchId])
 }
 
 model Category {
@@ -302,15 +370,18 @@ model Product {
   branchId    String
   categoryId String
   brandId     String
+
   name        String
   type        ProductType
   stockMode   ProductStockMode  @default(OPENING)
+
   model       String?
   costPrice   Decimal
   sellingPrice Decimal
   quantity    Int       @default(0)
   imageUrl    String?
   sku         String?
+
   reorderLevel  Int?
   isDeleted    Boolean    @default(false)
 
@@ -329,6 +400,7 @@ model Product {
 
   stockMoves StockMovement[]  
   saleItem   SaleItem[]
+  inventorySnapshot InventorySnapshot[]
 
   @@index([businessId])
   @@index([type])
@@ -394,6 +466,22 @@ model SaleItem {
   @@index([productId])
 }
 
+model CashFlow {
+  id         String   @id @default(uuid())
+  businessId String
+  branchId   String
+
+  amount     Decimal
+  direction  CashFlowDirection
+  type       CashFlowType
+
+  business   Business @relation(fields: [businessId], references: [id])
+  branch     Branch   @relation(fields: [branchId], references: [id])
+
+  createdAt  DateTime @default(now())
+
+  @@index([businessId, branchId])
+}
 model Payment {
   id          String        @id 
   saleId      String
@@ -406,27 +494,6 @@ model Payment {
 
   @@index([saleId])
   @@index([date])
-}
-
-model CashFlow {
-  id          String        @id 
-  businessId  String
-  branchId    String
-  type        CashFlowType
-  amount      Decimal
-  direction   CashFlowDirection
-  balanceAfter  Decimal?
-  source      String?
-  description String?
-  isOpening   Boolean      @default(false)
-  isLocked    Boolean      @default(false)
-  createdAt   DateTime      @default(now())
-
-  business    Business      @relation(fields: [businessId], references: [id])
-  branch      Branch       @relation(fields: [branchId], references: [id])
-
-  @@index([businessId])
-  @@index([createdAt])
 }
 
 model Liability {

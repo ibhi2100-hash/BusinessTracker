@@ -29,7 +29,6 @@ export const  inventoryHelper = {
 
     async getProductsByBrand(brandId: string){
         const products = await getByIndex(TABLES.PRODUCTS, "by_brandId", brandId)
-        console.log("This is the bastard product from the indexDb", products)
         return products
     },
     async addCategory(categoryData: any){

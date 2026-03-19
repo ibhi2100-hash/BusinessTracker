@@ -7,7 +7,11 @@ export default function AppLayout({
 }: {
   children: React.ReactNode;
 }) {
-  useAppBootstrap();
+     const ready = useAppBootstrap()
+
+   if(!ready) {
+    return <div>Loading...</div>
+   }
 
   return <>{children}</>;
 }

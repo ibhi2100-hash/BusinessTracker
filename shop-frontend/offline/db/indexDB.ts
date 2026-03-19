@@ -156,11 +156,10 @@ export const getDb = async () => {
        const productStore = db.createObjectStore(TABLES.PRODUCTS, {
         keyPath: "id"
        })
-
-       productStore.createIndex("by_brandId", "brandId");
+       productStore.createIndex("by_brandId", "brandId")
        productStore.createIndex("by_categoryId", "categoryId")
-       productStore.createIndex("by_businessId", "businessId")
-       productStore.createIndex("by_branchId", "branchId")
+       productStore.createIndex("by_business", "businessId")
+       productStore.createIndex("by_branch", "branchId")
 
 
        /*

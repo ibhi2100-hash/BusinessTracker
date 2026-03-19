@@ -57,6 +57,7 @@ export const ModelName = {
   passwordResetToken: 'passwordResetToken',
   SubscriptionPlan: 'SubscriptionPlan',
   BusinessSubscription: 'BusinessSubscription',
+  ProcessedSyncEvent: 'ProcessedSyncEvent',
   LedgerAccount: 'LedgerAccount',
   LedgerEntry: 'LedgerEntry',
   Category: 'Category',
@@ -180,6 +181,23 @@ export const BusinessSubscriptionScalarFieldEnum = {
 } as const
 
 export type BusinessSubscriptionScalarFieldEnum = (typeof BusinessSubscriptionScalarFieldEnum)[keyof typeof BusinessSubscriptionScalarFieldEnum]
+
+
+export const ProcessedSyncEventScalarFieldEnum = {
+  id: 'id',
+  eventType: 'eventType',
+  businessId: 'businessId',
+  branchId: 'branchId',
+  userId: 'userId',
+  version: 'version',
+  status: 'status',
+  processedAt: 'processedAt',
+  error: 'error',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProcessedSyncEventScalarFieldEnum = (typeof ProcessedSyncEventScalarFieldEnum)[keyof typeof ProcessedSyncEventScalarFieldEnum]
 
 
 export const LedgerAccountScalarFieldEnum = {

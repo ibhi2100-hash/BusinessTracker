@@ -17,6 +17,8 @@ import { OfflineSyncController } from "../modules/offlineSync/controller/offline
 import { authMiddleware } from "../middlwares/auth.middleware.js";
 import { requireBusiness } from "../middlwares/helpers.middlewares.js";
 import { requireBranch } from "../middlwares/requireBranch.middleware.js";
+import { SyncRepository } from "../modules/offlineSync/repository/syncRepository.js";
+import { OnboardingService } from "../modules/onboarding/service/onboarding.service.js";
 
 const saleRepo = new SaleRepository();
 const inventoryRepo = new inventoryRepository();
@@ -31,13 +33,12 @@ const assetRepo = new AssetRepository();
 const assetService = new AssetService();
 const liabilityRepo = new LiabilityRepository();
 const liabilityService = new LiabilityService(liabilityRepo, cashflowRepo)
-
-const offlineSyncService = new OfflineSyncService(saleService, productService, assetService, liabilityService);
+const syncedRepo = new SyncRepository();
+const onboardingService =  new OnboardingService()
+const offlineSyncService = new OfflineSyncService(syncedRepo, saleService, productService, assetService, liabilityService, onboardingService );
 const offlineSyncController = new OfflineSyncController(offlineSyncService);
 
 const router = Router();
-
-router.use(authMiddleware, requireBusiness, requireBranch)
 
 router.post('/', offlineSyncController.sync.bind(offlineSyncController))
 

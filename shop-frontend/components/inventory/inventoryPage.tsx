@@ -40,14 +40,15 @@ export default function InventoryPage({ context, mode }: InventoryPageProps) {
   const isOnboarding = business?.isOnboarding;
 
   // Load brands for selected category
-  useEffect(() => {
-    if (!selectedCategoryId)return;
-    const store = useInventoryStore.getState();
+ useEffect(() => {
+  if (!selectedCategoryId) return;
 
-    store.setSelectedBrandId(null);
-    store.setProducts([])
-    inventoryController.loadBrands(selectedCategoryId)
-  }, [selectedCategoryId]);
+  const store = useInventoryStore.getState();
+
+  store.setSelectedBrandId(null);
+
+  inventoryController.loadBrands(selectedCategoryId);
+}, [selectedCategoryId]);
 
   // Load products for selected brand
   useEffect(() => {

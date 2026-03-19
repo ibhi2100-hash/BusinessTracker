@@ -48,6 +48,11 @@ export type SubscriptionPlan = Prisma.SubscriptionPlanModel
  */
 export type BusinessSubscription = Prisma.BusinessSubscriptionModel
 /**
+ * Model ProcessedSyncEvent
+ * 
+ */
+export type ProcessedSyncEvent = Prisma.ProcessedSyncEventModel
+/**
  * Model LedgerAccount
  * 
  */

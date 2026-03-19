@@ -10,11 +10,5 @@ export async function loadBusiness() {
     if(!business) return;
     useBusinessStore.getState().setBusiness(business);
 
-    const branches = await getAll(TABLES.BRANCHES);
-
-    if(!branches) return ;
-
-    useBranchStore.getState().setBranches(branches)
-
     return business
 }

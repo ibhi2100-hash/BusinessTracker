@@ -2,12 +2,14 @@ import { loadSession } from "../session/sessionLoader"
 import { loadBusiness } from "../business/businessLoader"
 import { inventoryLoader } from "../inventory/loadInventory";
 import { loadUser } from "../user/loadUser";
+import { loadBranches } from "../business/loadbranches";
 
 let bootstrapped = false;
 
 export type BootstrapResult =
   | "NO_SESSION"
   | "NO_BUSINESS"
+  | "NO_BRANCHES"
   | "READY";
 
 export async function appBootstrap(): Promise<BootstrapResult> {
@@ -31,10 +33,14 @@ export async function appBootstrap(): Promise<BootstrapResult> {
     return "NO_BUSINESS";
   }
 
+  const branches = await loadBranches(business.id);
+
+  if(!branches) {
+    return "NO_BRANCHES"
+  }
+
   // 3️⃣ Domain hydration
   await inventoryLoader();
-
-
 
   return "READY";
 }

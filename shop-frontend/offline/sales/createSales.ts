@@ -8,30 +8,30 @@ import { generateLedgerEntries } from "../ledger/ledgerGenerator";
 import { TABLES } from "../db/schema";
 import { salesEventType } from "../events/eventGroups/salesEvent";
 import { useSalesStore } from "@/store/SalesStore";
+import { createEntity } from "../entities/entityFactory";
 
 export async function createSales(salesData: any) {
-    const business = useBusinessStore(s=> s.business);
+    const business = useBusinessStore.getState().business;
     const businessId = business.id;
-    const activeBranchId = useBranchStore(s=> s.activeBranchId);
-    const userId = useAuthStore(s=> s.user.id)
+    const branchId = useBranchStore.getState().activeBranchId;
+    const userId = useAuthStore.getState().user.id
 
-    const sales = {
-        id: crypto.randomUUID(),
+    const sales = createEntity({
         ...salesData,
         businessId,
-        activeBranchId,
-        updatedAt: Date.now()
-    }
+        branchId
+    })
   
  await addRecord(TABLES.SALES, sales);
 
- const  event = await createEvent(salesEventType.SALE_ADDED, userId , businessId, activeBranchId, sales, "pending")
+ const  event = await createEvent(salesEventType.SALE_ADDED, userId , businessId, branchId, sales, "pending")
 
   // 2️⃣ Dispatch event
   await dispatchEvent(event)
 
   // add ledger entries
-  await generateLedgerEntries(event)
+  const ledger = await generateLedgerEntries(event)
+  console.log("The Ledger Entries")
 
   // Hydrate financeStore
   useSalesStore.getState().addSale(sales)

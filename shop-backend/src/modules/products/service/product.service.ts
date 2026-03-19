@@ -7,6 +7,7 @@ import { CashflowRepository } from "../../cashflow/repository/cashflow.repositor
 import { inventoryRepository } from "../../inventory/repository/inventory.repository.js";
 import { AlertRepository } from "../../alerts/repository/alerts.repository.js";
 import { connect } from "node:http2";
+import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
 
 export class ProductService {
     constructor(
@@ -17,44 +18,90 @@ export class ProductService {
 
     ){}
 
-    async createProduct(dto: any , businessId: string, branchId: string) {
-      
-            return prisma.$transaction(async (tx) => {
+    async createProduct(
+  payload: any,
+  businessId: string,
+  branchId: string,
+  tx?: Prisma.TransactionClient
+) {
+  const db = tx ?? prisma;
 
-            const product = await this.repo.createProduct(dto, businessId, branchId, tx);
+  // --- CATEGORY (always resolve safely) ---
+  let category;
 
-            // determine stock mode
-            const stockMode = dto.stockMode ?? "PURCHASE";
+  if (payload.categoryName) {
+    category = await this.repo.getOrCreateCategory(
+      businessId,
+      branchId,
+      {
+        id: payload.categoryId, // must come from client
+        categoryName: payload.categoryName
+      },
+      db
+    );
+  } else if (payload.categoryId) {
+    category = await db.category.findFirst({
+      where: {
+        id: payload.categoryId,
+        businessId,
+        branchId
+      }
+    });
+  }
 
-            if (dto.quantity && dto.quantity > 0) {
+  if (!category) {
+    throw new Error("Category not found"); // now this is REAL error
+  }
 
-                await this.inventoryRepo.createStockMovement({
-                    productId: product.id,
-                    businessId,
-                    branchId,
-                    type: stockMode,
-                    quantity: dto.quantity,
-                    costPrice: dto.costPrice,
-                    sellingPrice: dto.sellingPrice
-                }, tx)
+  // --- BRAND (same pattern) ---
+  let brand;
 
-                 if (stockMode === "PURCHASE") {
-                    await this.cashflowRepo.create({
-                    business: { connect: { id: businessId}},
-                    branch: { connect: { id: branchId}},
-                    type: "PURCHASE_EXPENSE",
-                    direction: "OUT",
-                    amount: (dto.costPrice ?? 0) * dto.quantity,
-                    source: "Inventory Purchase",
-                    description: `Purchased stock: ${product.name}`
-                    }, tx);
-                }
-            }
+  if (payload.brandName) {
+    brand = await this.repo.getOrCreateBrand(
+      payload.brandName,
+      businessId,
+      branchId,
+      category.id,
+      { id: payload.brandId }, // client must send this
+      db
+    );
+  } else if (payload.brandId) {
+    brand = await db.brand.findFirst({
+      where: {
+        id: payload.brandId,
+        categoryId: category.id,
+        businessId,
+        branchId
+      }
+    });
+  }
 
-            return product;
-            });
-        }
-            
+  if (!brand) {
+    throw new Error("Brand not found");
+  }
+
+  // --- PRODUCT ---
+  const product = await db.product.create({
+    data: {
+      id: payload.id, // 🔥 CRITICAL: use client-generated ID
+      name: payload.name,
+      type: payload.type,
+      model: payload.model || null,
+      costPrice: payload.costPrice ?? null,
+      sellingPrice: payload.sellingPrice ?? null,
+      quantity: payload.quantity ?? 0,
+      imei: payload.imei || null,
+      condition: payload.condition || null,
+
+      businessId,
+      branchId,
+      categoryId: category.id,
+      brandId: brand.id
+    }
+  });
+
+  return product;
+}
 
     async getProductsByBusinessId(businessId: string) {
         return this.repo.getProductsByBusinessId(businessId);
@@ -117,27 +164,16 @@ export class ProductService {
         return { id: categories.id, name: categories.name };
     }
 
-    async createManyOpeningProducts(products: any, businessId: string, branchId: string) {
-        return Promise.all(
-            products.map((p: any) =>
-            this.createProduct(
-                { ...p, stockMode: "OPENING" },
-                businessId,
-                branchId
 
-            )
-            )
-        );
-}
 
-getProductForBrand = async (businessId: string, branchId: string, brandId: string) => {
-    if(!brandId) throw new Error("Brand ID does not exist");
-    const products = await this.repo.getBrandProducts(businessId, branchId, brandId)
+    getProductForBrand = async (businessId: string, branchId: string, brandId: string) => {
+        if(!brandId) throw new Error("Brand ID does not exist");
+        const products = await this.repo.getBrandProducts(businessId, branchId, brandId)
 
-    return products
-}
-
-    
+        return products
+    }
 
 }
+
+
 

@@ -4,8 +4,9 @@ import { loadUser } from "@/offline/user/loadUser";
 import { loadSession } from "@/offline/session/sessionLoader";
 import { loadBusiness } from "@/offline/business/businessLoader";
 import { hydrateStores } from "@/offline/hydration/hydrationStore";
-import { appBootstrap } from "@/offline/bootstrap/appBootstrap";
+import { loadBranches } from "@/offline/business/loadbranches";
 import { useBusinessStore } from "@/store/businessStore";
+import { id } from "zod/v4/locales";
 
 
 export function useAutoLogin() {
@@ -22,13 +23,18 @@ export function useAutoLogin() {
         setChecking(false);
         return;
       }
+      // Load Branches for this business
+      const branches = await loadBranches(business.id);
+      const activeBranchId = branches[0]?.id;
 
       if (session && user) {
         hydrateStores({
           user,
           accessToken: session.accessToken,
           expiresIn: session.expiresIn,
-          business: business
+          business,
+          branches,
+          activeBranchId
 
         });
 

@@ -2,13 +2,15 @@
 import { useAuthStore } from "@/store/useAuthStore";
 import { useBusinessStore } from "@/store/businessStore";
 import { useBranchStore } from "@/store/useBranchStore";
-import { User, Business } from "@/types/types";
+import { User, Business, Branch } from "@/types/types";
 
 interface HydrationPayload {
   user: User;
   accessToken: string;
   expiresIn?: number;
   business?: Business;
+  branches?: Branch[];
+  activeBranchId?: string;
 }
 
 export function hydrateStores({
@@ -16,11 +18,20 @@ export function hydrateStores({
   accessToken,
   expiresIn,
   business,
+  branches,
+  activeBranchId
 }: HydrationPayload) {
   // Auth store
   useAuthStore.getState().setLogin(user, accessToken, expiresIn);
-  
-  useBusinessStore.getState().setBusiness(business)
+  // BusinessStore
+  useBusinessStore.getState().setBusiness(business);
+  useBranchStore.getState().setBranches(branches || [])
+
+  //If ActiveBranchId is provided, use it. otherwise, default to first branch main branch;
+  const defaultBranchId = activeBranchId  || (branches && branches[0]?.id);
+  if(defaultBranchId) {
+    useBranchStore.getState().setActiveBranch(defaultBranchId);
+  }
 
   // Mark hydrated
   useAuthStore.getState().setHydrated(true);

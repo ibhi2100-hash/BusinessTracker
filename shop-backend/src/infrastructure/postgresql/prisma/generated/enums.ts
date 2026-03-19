@@ -168,3 +168,11 @@ export const BusinessStatus = {
 } as const
 
 export type BusinessStatus = (typeof BusinessStatus)[keyof typeof BusinessStatus]
+
+
+export const SyncEventStatus = {
+  PROCESSED: 'PROCESSED',
+  FAILED: 'FAILED'
+} as const
+
+export type SyncEventStatus = (typeof SyncEventStatus)[keyof typeof SyncEventStatus]
