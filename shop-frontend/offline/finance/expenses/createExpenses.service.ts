@@ -7,7 +7,7 @@ import { useBranchStore } from "@/store/useBranchStore";
 import { financeEventType } from "@/offline/events/eventGroups/financeEvent";
 import { useAuthStore } from "@/store/useAuthStore";
 import { FinanceStore } from "@/store/useFinanceStore";
-import { generateLedgerEntries } from "@/offline/ledger/ledgerGenerator";
+import { generateLedgerEntries } from "../../../../shared/ledgerGenerator";
 import { createEntity } from "@/offline/entities/entityFactory";
 
 

@@ -391,8 +391,10 @@ export const ModelName = {
   SubscriptionPlan: 'SubscriptionPlan',
   BusinessSubscription: 'BusinessSubscription',
   ProcessedSyncEvent: 'ProcessedSyncEvent',
-  LedgerAccount: 'LedgerAccount',
+  Event: 'Event',
   LedgerEntry: 'LedgerEntry',
+  AccountSnapshot: 'AccountSnapshot',
+  InventorySnapshot: 'InventorySnapshot',
   Category: 'Category',
   Brand: 'Brand',
   Product: 'Product',
@@ -400,7 +402,6 @@ export const ModelName = {
   Sale: 'Sale',
   SaleItem: 'SaleItem',
   Payment: 'Payment',
-  CashFlow: 'CashFlow',
   Liability: 'Liability',
   LiabilityPayment: 'LiabilityPayment',
   Asset: 'Asset',
@@ -427,7 +428,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "business" | "branch" | "user" | "passwordResetToken" | "subscriptionPlan" | "businessSubscription" | "processedSyncEvent" | "ledgerAccount" | "ledgerEntry" | "category" | "brand" | "product" | "stockMovement" | "sale" | "saleItem" | "payment" | "cashFlow" | "liability" | "liabilityPayment" | "asset" | "expense" | "capitalExpenditure" | "loan" | "loanRepayment" | "employee" | "salaryAccrual" | "expenseCategory" | "alert"
+    modelProps: "business" | "branch" | "user" | "passwordResetToken" | "subscriptionPlan" | "businessSubscription" | "processedSyncEvent" | "event" | "ledgerEntry" | "accountSnapshot" | "inventorySnapshot" | "category" | "brand" | "product" | "stockMovement" | "sale" | "saleItem" | "payment" | "liability" | "liabilityPayment" | "asset" | "expense" | "capitalExpenditure" | "loan" | "loanRepayment" | "employee" | "salaryAccrual" | "expenseCategory" | "alert"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -949,77 +950,77 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    LedgerAccount: {
-      payload: Prisma.$LedgerAccountPayload<ExtArgs>
-      fields: Prisma.LedgerAccountFieldRefs
+    Event: {
+      payload: Prisma.$EventPayload<ExtArgs>
+      fields: Prisma.EventFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.LedgerAccountFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LedgerAccountPayload> | null
+          args: Prisma.EventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.LedgerAccountFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LedgerAccountPayload>
+          args: Prisma.EventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>
         }
         findFirst: {
-          args: Prisma.LedgerAccountFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LedgerAccountPayload> | null
+          args: Prisma.EventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.LedgerAccountFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LedgerAccountPayload>
+          args: Prisma.EventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>
         }
         findMany: {
-          args: Prisma.LedgerAccountFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LedgerAccountPayload>[]
+          args: Prisma.EventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>[]
         }
         create: {
-          args: Prisma.LedgerAccountCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LedgerAccountPayload>
+          args: Prisma.EventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>
         }
         createMany: {
-          args: Prisma.LedgerAccountCreateManyArgs<ExtArgs>
+          args: Prisma.EventCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.LedgerAccountCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LedgerAccountPayload>[]
+          args: Prisma.EventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>[]
         }
         delete: {
-          args: Prisma.LedgerAccountDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LedgerAccountPayload>
+          args: Prisma.EventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>
         }
         update: {
-          args: Prisma.LedgerAccountUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LedgerAccountPayload>
+          args: Prisma.EventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>
         }
         deleteMany: {
-          args: Prisma.LedgerAccountDeleteManyArgs<ExtArgs>
+          args: Prisma.EventDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.LedgerAccountUpdateManyArgs<ExtArgs>
+          args: Prisma.EventUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.LedgerAccountUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LedgerAccountPayload>[]
+          args: Prisma.EventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>[]
         }
         upsert: {
-          args: Prisma.LedgerAccountUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$LedgerAccountPayload>
+          args: Prisma.EventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPayload>
         }
         aggregate: {
-          args: Prisma.LedgerAccountAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateLedgerAccount>
+          args: Prisma.EventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEvent>
         }
         groupBy: {
-          args: Prisma.LedgerAccountGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.LedgerAccountGroupByOutputType>[]
+          args: Prisma.EventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EventGroupByOutputType>[]
         }
         count: {
-          args: Prisma.LedgerAccountCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.LedgerAccountCountAggregateOutputType> | number
+          args: Prisma.EventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EventCountAggregateOutputType> | number
         }
       }
     }
@@ -1094,6 +1095,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.LedgerEntryCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.LedgerEntryCountAggregateOutputType> | number
+        }
+      }
+    }
+    AccountSnapshot: {
+      payload: Prisma.$AccountSnapshotPayload<ExtArgs>
+      fields: Prisma.AccountSnapshotFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AccountSnapshotFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountSnapshotPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AccountSnapshotFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountSnapshotPayload>
+        }
+        findFirst: {
+          args: Prisma.AccountSnapshotFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountSnapshotPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AccountSnapshotFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountSnapshotPayload>
+        }
+        findMany: {
+          args: Prisma.AccountSnapshotFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountSnapshotPayload>[]
+        }
+        create: {
+          args: Prisma.AccountSnapshotCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountSnapshotPayload>
+        }
+        createMany: {
+          args: Prisma.AccountSnapshotCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AccountSnapshotCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountSnapshotPayload>[]
+        }
+        delete: {
+          args: Prisma.AccountSnapshotDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountSnapshotPayload>
+        }
+        update: {
+          args: Prisma.AccountSnapshotUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountSnapshotPayload>
+        }
+        deleteMany: {
+          args: Prisma.AccountSnapshotDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AccountSnapshotUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AccountSnapshotUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountSnapshotPayload>[]
+        }
+        upsert: {
+          args: Prisma.AccountSnapshotUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AccountSnapshotPayload>
+        }
+        aggregate: {
+          args: Prisma.AccountSnapshotAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAccountSnapshot>
+        }
+        groupBy: {
+          args: Prisma.AccountSnapshotGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AccountSnapshotGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AccountSnapshotCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AccountSnapshotCountAggregateOutputType> | number
+        }
+      }
+    }
+    InventorySnapshot: {
+      payload: Prisma.$InventorySnapshotPayload<ExtArgs>
+      fields: Prisma.InventorySnapshotFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InventorySnapshotFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InventorySnapshotPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InventorySnapshotFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InventorySnapshotPayload>
+        }
+        findFirst: {
+          args: Prisma.InventorySnapshotFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InventorySnapshotPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InventorySnapshotFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InventorySnapshotPayload>
+        }
+        findMany: {
+          args: Prisma.InventorySnapshotFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InventorySnapshotPayload>[]
+        }
+        create: {
+          args: Prisma.InventorySnapshotCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InventorySnapshotPayload>
+        }
+        createMany: {
+          args: Prisma.InventorySnapshotCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InventorySnapshotCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InventorySnapshotPayload>[]
+        }
+        delete: {
+          args: Prisma.InventorySnapshotDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InventorySnapshotPayload>
+        }
+        update: {
+          args: Prisma.InventorySnapshotUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InventorySnapshotPayload>
+        }
+        deleteMany: {
+          args: Prisma.InventorySnapshotDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InventorySnapshotUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InventorySnapshotUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InventorySnapshotPayload>[]
+        }
+        upsert: {
+          args: Prisma.InventorySnapshotUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InventorySnapshotPayload>
+        }
+        aggregate: {
+          args: Prisma.InventorySnapshotAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInventorySnapshot>
+        }
+        groupBy: {
+          args: Prisma.InventorySnapshotGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InventorySnapshotGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InventorySnapshotCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InventorySnapshotCountAggregateOutputType> | number
         }
       }
     }
@@ -1612,80 +1761,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.PaymentCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.PaymentCountAggregateOutputType> | number
-        }
-      }
-    }
-    CashFlow: {
-      payload: Prisma.$CashFlowPayload<ExtArgs>
-      fields: Prisma.CashFlowFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.CashFlowFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CashFlowPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.CashFlowFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CashFlowPayload>
-        }
-        findFirst: {
-          args: Prisma.CashFlowFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CashFlowPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.CashFlowFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CashFlowPayload>
-        }
-        findMany: {
-          args: Prisma.CashFlowFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CashFlowPayload>[]
-        }
-        create: {
-          args: Prisma.CashFlowCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CashFlowPayload>
-        }
-        createMany: {
-          args: Prisma.CashFlowCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.CashFlowCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CashFlowPayload>[]
-        }
-        delete: {
-          args: Prisma.CashFlowDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CashFlowPayload>
-        }
-        update: {
-          args: Prisma.CashFlowUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CashFlowPayload>
-        }
-        deleteMany: {
-          args: Prisma.CashFlowDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.CashFlowUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.CashFlowUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CashFlowPayload>[]
-        }
-        upsert: {
-          args: Prisma.CashFlowUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$CashFlowPayload>
-        }
-        aggregate: {
-          args: Prisma.CashFlowAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateCashFlow>
-        }
-        groupBy: {
-          args: Prisma.CashFlowGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.CashFlowGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.CashFlowCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.CashFlowCountAggregateOutputType> | number
         }
       }
     }
@@ -2576,9 +2651,9 @@ export const UserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   password: 'password',
+  role: 'role',
   isActive: 'isActive',
   onboardingCompleted: 'onboardingCompleted',
-  role: 'role',
   branchId: 'branchId',
   businessId: 'businessId',
   createdAt: 'createdAt'
@@ -2645,27 +2720,58 @@ export const ProcessedSyncEventScalarFieldEnum = {
 export type ProcessedSyncEventScalarFieldEnum = (typeof ProcessedSyncEventScalarFieldEnum)[keyof typeof ProcessedSyncEventScalarFieldEnum]
 
 
-export const LedgerAccountScalarFieldEnum = {
+export const EventScalarFieldEnum = {
   id: 'id',
   businessId: 'businessId',
-  name: 'name',
-  type: 'type'
+  branchId: 'branchId',
+  userId: 'userId',
+  type: 'type',
+  payload: 'payload',
+  ledgerVersion: 'ledgerVersion',
+  createdAt: 'createdAt',
+  syncedAt: 'syncedAt',
+  deviceId: 'deviceId',
+  sequence: 'sequence'
 } as const
 
-export type LedgerAccountScalarFieldEnum = (typeof LedgerAccountScalarFieldEnum)[keyof typeof LedgerAccountScalarFieldEnum]
+export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
 
 
 export const LedgerEntryScalarFieldEnum = {
   id: 'id',
-  accountId: 'accountId',
   businessId: 'businessId',
+  branchId: 'branchId',
+  eventId: 'eventId',
+  account: 'account',
   amount: 'amount',
-  type: 'type',
-  referenceId: 'referenceId',
+  index: 'index',
   createdAt: 'createdAt'
 } as const
 
 export type LedgerEntryScalarFieldEnum = (typeof LedgerEntryScalarFieldEnum)[keyof typeof LedgerEntryScalarFieldEnum]
+
+
+export const AccountSnapshotScalarFieldEnum = {
+  id: 'id',
+  branchId: 'branchId',
+  account: 'account',
+  balance: 'balance',
+  lastEventId: 'lastEventId',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AccountSnapshotScalarFieldEnum = (typeof AccountSnapshotScalarFieldEnum)[keyof typeof AccountSnapshotScalarFieldEnum]
+
+
+export const InventorySnapshotScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  branchId: 'branchId',
+  quantity: 'quantity',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InventorySnapshotScalarFieldEnum = (typeof InventorySnapshotScalarFieldEnum)[keyof typeof InventorySnapshotScalarFieldEnum]
 
 
 export const CategoryScalarFieldEnum = {
@@ -2777,24 +2883,6 @@ export const PaymentScalarFieldEnum = {
 } as const
 
 export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
-
-
-export const CashFlowScalarFieldEnum = {
-  id: 'id',
-  businessId: 'businessId',
-  branchId: 'branchId',
-  type: 'type',
-  amount: 'amount',
-  direction: 'direction',
-  balanceAfter: 'balanceAfter',
-  source: 'source',
-  description: 'description',
-  isOpening: 'isOpening',
-  isLocked: 'isLocked',
-  createdAt: 'createdAt'
-} as const
-
-export type CashFlowScalarFieldEnum = (typeof CashFlowScalarFieldEnum)[keyof typeof CashFlowScalarFieldEnum]
 
 
 export const LiabilityScalarFieldEnum = {
@@ -3141,6 +3229,20 @@ export type ListEnumSyncEventStatusFieldRefInput<$PrismaModel> = FieldRefInputTy
 
 
 /**
+ * Reference to a field of type 'Account'
+ */
+export type EnumAccountFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Account'>
+    
+
+
+/**
+ * Reference to a field of type 'Account[]'
+ */
+export type ListEnumAccountFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Account[]'>
+    
+
+
+/**
  * Reference to a field of type 'ProductType'
  */
 export type EnumProductTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductType'>
@@ -3207,34 +3309,6 @@ export type EnumPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
  * Reference to a field of type 'PaymentMethod[]'
  */
 export type ListEnumPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentMethod[]'>
-    
-
-
-/**
- * Reference to a field of type 'CashFlowType'
- */
-export type EnumCashFlowTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CashFlowType'>
-    
-
-
-/**
- * Reference to a field of type 'CashFlowType[]'
- */
-export type ListEnumCashFlowTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CashFlowType[]'>
-    
-
-
-/**
- * Reference to a field of type 'CashFlowDirection'
- */
-export type EnumCashFlowDirectionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CashFlowDirection'>
-    
-
-
-/**
- * Reference to a field of type 'CashFlowDirection[]'
- */
-export type ListEnumCashFlowDirectionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CashFlowDirection[]'>
     
 
 
@@ -3437,8 +3511,10 @@ export type GlobalOmitConfig = {
   subscriptionPlan?: Prisma.SubscriptionPlanOmit
   businessSubscription?: Prisma.BusinessSubscriptionOmit
   processedSyncEvent?: Prisma.ProcessedSyncEventOmit
-  ledgerAccount?: Prisma.LedgerAccountOmit
+  event?: Prisma.EventOmit
   ledgerEntry?: Prisma.LedgerEntryOmit
+  accountSnapshot?: Prisma.AccountSnapshotOmit
+  inventorySnapshot?: Prisma.InventorySnapshotOmit
   category?: Prisma.CategoryOmit
   brand?: Prisma.BrandOmit
   product?: Prisma.ProductOmit
@@ -3446,7 +3522,6 @@ export type GlobalOmitConfig = {
   sale?: Prisma.SaleOmit
   saleItem?: Prisma.SaleItemOmit
   payment?: Prisma.PaymentOmit
-  cashFlow?: Prisma.CashFlowOmit
   liability?: Prisma.LiabilityOmit
   liabilityPayment?: Prisma.LiabilityPaymentOmit
   asset?: Prisma.AssetOmit

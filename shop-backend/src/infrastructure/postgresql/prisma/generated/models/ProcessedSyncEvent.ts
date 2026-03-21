@@ -218,9 +218,9 @@ export type ProcessedSyncEventGroupByArgs<ExtArgs extends runtime.Types.Extensio
 export type ProcessedSyncEventGroupByOutputType = {
   id: string
   eventType: string
-  businessId: string
-  branchId: string
-  userId: string
+  businessId: string | null
+  branchId: string | null
+  userId: string | null
   version: number
   status: $Enums.SyncEventStatus
   processedAt: Date
@@ -255,35 +255,29 @@ export type ProcessedSyncEventWhereInput = {
   NOT?: Prisma.ProcessedSyncEventWhereInput | Prisma.ProcessedSyncEventWhereInput[]
   id?: Prisma.StringFilter<"ProcessedSyncEvent"> | string
   eventType?: Prisma.StringFilter<"ProcessedSyncEvent"> | string
-  businessId?: Prisma.StringFilter<"ProcessedSyncEvent"> | string
-  branchId?: Prisma.StringFilter<"ProcessedSyncEvent"> | string
-  userId?: Prisma.StringFilter<"ProcessedSyncEvent"> | string
+  businessId?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
+  branchId?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
+  userId?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
   version?: Prisma.IntFilter<"ProcessedSyncEvent"> | number
   status?: Prisma.EnumSyncEventStatusFilter<"ProcessedSyncEvent"> | $Enums.SyncEventStatus
   processedAt?: Prisma.DateTimeFilter<"ProcessedSyncEvent"> | Date | string
   error?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ProcessedSyncEvent"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProcessedSyncEvent"> | Date | string
-  business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
-  branches?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type ProcessedSyncEventOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   eventType?: Prisma.SortOrder
-  businessId?: Prisma.SortOrder
-  branchId?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  businessId?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
   version?: Prisma.SortOrder
   status?: Prisma.SortOrder
   processedAt?: Prisma.SortOrder
   error?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  business?: Prisma.BusinessOrderByWithRelationInput
-  branches?: Prisma.BranchOrderByWithRelationInput
-  user?: Prisma.UserOrderByWithRelationInput
 }
 
 export type ProcessedSyncEventWhereUniqueInput = Prisma.AtLeast<{
@@ -292,26 +286,23 @@ export type ProcessedSyncEventWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.ProcessedSyncEventWhereInput[]
   NOT?: Prisma.ProcessedSyncEventWhereInput | Prisma.ProcessedSyncEventWhereInput[]
   eventType?: Prisma.StringFilter<"ProcessedSyncEvent"> | string
-  businessId?: Prisma.StringFilter<"ProcessedSyncEvent"> | string
-  branchId?: Prisma.StringFilter<"ProcessedSyncEvent"> | string
-  userId?: Prisma.StringFilter<"ProcessedSyncEvent"> | string
+  businessId?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
+  branchId?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
+  userId?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
   version?: Prisma.IntFilter<"ProcessedSyncEvent"> | number
   status?: Prisma.EnumSyncEventStatusFilter<"ProcessedSyncEvent"> | $Enums.SyncEventStatus
   processedAt?: Prisma.DateTimeFilter<"ProcessedSyncEvent"> | Date | string
   error?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ProcessedSyncEvent"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProcessedSyncEvent"> | Date | string
-  business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
-  branches?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
 
 export type ProcessedSyncEventOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   eventType?: Prisma.SortOrder
-  businessId?: Prisma.SortOrder
-  branchId?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  businessId?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
   version?: Prisma.SortOrder
   status?: Prisma.SortOrder
   processedAt?: Prisma.SortOrder
@@ -331,9 +322,9 @@ export type ProcessedSyncEventScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ProcessedSyncEventScalarWhereWithAggregatesInput | Prisma.ProcessedSyncEventScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"ProcessedSyncEvent"> | string
   eventType?: Prisma.StringWithAggregatesFilter<"ProcessedSyncEvent"> | string
-  businessId?: Prisma.StringWithAggregatesFilter<"ProcessedSyncEvent"> | string
-  branchId?: Prisma.StringWithAggregatesFilter<"ProcessedSyncEvent"> | string
-  userId?: Prisma.StringWithAggregatesFilter<"ProcessedSyncEvent"> | string
+  businessId?: Prisma.StringNullableWithAggregatesFilter<"ProcessedSyncEvent"> | string | null
+  branchId?: Prisma.StringNullableWithAggregatesFilter<"ProcessedSyncEvent"> | string | null
+  userId?: Prisma.StringNullableWithAggregatesFilter<"ProcessedSyncEvent"> | string | null
   version?: Prisma.IntWithAggregatesFilter<"ProcessedSyncEvent"> | number
   status?: Prisma.EnumSyncEventStatusWithAggregatesFilter<"ProcessedSyncEvent"> | $Enums.SyncEventStatus
   processedAt?: Prisma.DateTimeWithAggregatesFilter<"ProcessedSyncEvent"> | Date | string
@@ -345,23 +336,23 @@ export type ProcessedSyncEventScalarWhereWithAggregatesInput = {
 export type ProcessedSyncEventCreateInput = {
   id: string
   eventType: string
+  businessId?: string | null
+  branchId?: string | null
+  userId?: string | null
   version: number
   status: $Enums.SyncEventStatus
   processedAt?: Date | string
   error?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  business: Prisma.BusinessCreateNestedOneWithoutSyncedInput
-  branches: Prisma.BranchCreateNestedOneWithoutSynceInput
-  user: Prisma.UserCreateNestedOneWithoutSyncedInput
 }
 
 export type ProcessedSyncEventUncheckedCreateInput = {
   id: string
   eventType: string
-  businessId: string
-  branchId: string
-  userId: string
+  businessId?: string | null
+  branchId?: string | null
+  userId?: string | null
   version: number
   status: $Enums.SyncEventStatus
   processedAt?: Date | string
@@ -373,23 +364,23 @@ export type ProcessedSyncEventUncheckedCreateInput = {
 export type ProcessedSyncEventUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   eventType?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
   processedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  business?: Prisma.BusinessUpdateOneRequiredWithoutSyncedNestedInput
-  branches?: Prisma.BranchUpdateOneRequiredWithoutSynceNestedInput
-  user?: Prisma.UserUpdateOneRequiredWithoutSyncedNestedInput
 }
 
 export type ProcessedSyncEventUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   eventType?: Prisma.StringFieldUpdateOperationsInput | string
-  businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
   processedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -401,9 +392,9 @@ export type ProcessedSyncEventUncheckedUpdateInput = {
 export type ProcessedSyncEventCreateManyInput = {
   id: string
   eventType: string
-  businessId: string
-  branchId: string
-  userId: string
+  businessId?: string | null
+  branchId?: string | null
+  userId?: string | null
   version: number
   status: $Enums.SyncEventStatus
   processedAt?: Date | string
@@ -415,6 +406,9 @@ export type ProcessedSyncEventCreateManyInput = {
 export type ProcessedSyncEventUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   eventType?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
   processedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -426,25 +420,15 @@ export type ProcessedSyncEventUpdateManyMutationInput = {
 export type ProcessedSyncEventUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   eventType?: Prisma.StringFieldUpdateOperationsInput | string
-  businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
   processedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type ProcessedSyncEventListRelationFilter = {
-  every?: Prisma.ProcessedSyncEventWhereInput
-  some?: Prisma.ProcessedSyncEventWhereInput
-  none?: Prisma.ProcessedSyncEventWhereInput
-}
-
-export type ProcessedSyncEventOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
 }
 
 export type ProcessedSyncEventCountOrderByAggregateInput = {
@@ -497,463 +481,8 @@ export type ProcessedSyncEventSumOrderByAggregateInput = {
   version?: Prisma.SortOrder
 }
 
-export type ProcessedSyncEventCreateNestedManyWithoutBusinessInput = {
-  create?: Prisma.XOR<Prisma.ProcessedSyncEventCreateWithoutBusinessInput, Prisma.ProcessedSyncEventUncheckedCreateWithoutBusinessInput> | Prisma.ProcessedSyncEventCreateWithoutBusinessInput[] | Prisma.ProcessedSyncEventUncheckedCreateWithoutBusinessInput[]
-  connectOrCreate?: Prisma.ProcessedSyncEventCreateOrConnectWithoutBusinessInput | Prisma.ProcessedSyncEventCreateOrConnectWithoutBusinessInput[]
-  createMany?: Prisma.ProcessedSyncEventCreateManyBusinessInputEnvelope
-  connect?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-}
-
-export type ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput = {
-  create?: Prisma.XOR<Prisma.ProcessedSyncEventCreateWithoutBusinessInput, Prisma.ProcessedSyncEventUncheckedCreateWithoutBusinessInput> | Prisma.ProcessedSyncEventCreateWithoutBusinessInput[] | Prisma.ProcessedSyncEventUncheckedCreateWithoutBusinessInput[]
-  connectOrCreate?: Prisma.ProcessedSyncEventCreateOrConnectWithoutBusinessInput | Prisma.ProcessedSyncEventCreateOrConnectWithoutBusinessInput[]
-  createMany?: Prisma.ProcessedSyncEventCreateManyBusinessInputEnvelope
-  connect?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-}
-
-export type ProcessedSyncEventUpdateManyWithoutBusinessNestedInput = {
-  create?: Prisma.XOR<Prisma.ProcessedSyncEventCreateWithoutBusinessInput, Prisma.ProcessedSyncEventUncheckedCreateWithoutBusinessInput> | Prisma.ProcessedSyncEventCreateWithoutBusinessInput[] | Prisma.ProcessedSyncEventUncheckedCreateWithoutBusinessInput[]
-  connectOrCreate?: Prisma.ProcessedSyncEventCreateOrConnectWithoutBusinessInput | Prisma.ProcessedSyncEventCreateOrConnectWithoutBusinessInput[]
-  upsert?: Prisma.ProcessedSyncEventUpsertWithWhereUniqueWithoutBusinessInput | Prisma.ProcessedSyncEventUpsertWithWhereUniqueWithoutBusinessInput[]
-  createMany?: Prisma.ProcessedSyncEventCreateManyBusinessInputEnvelope
-  set?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-  disconnect?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-  delete?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-  connect?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-  update?: Prisma.ProcessedSyncEventUpdateWithWhereUniqueWithoutBusinessInput | Prisma.ProcessedSyncEventUpdateWithWhereUniqueWithoutBusinessInput[]
-  updateMany?: Prisma.ProcessedSyncEventUpdateManyWithWhereWithoutBusinessInput | Prisma.ProcessedSyncEventUpdateManyWithWhereWithoutBusinessInput[]
-  deleteMany?: Prisma.ProcessedSyncEventScalarWhereInput | Prisma.ProcessedSyncEventScalarWhereInput[]
-}
-
-export type ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput = {
-  create?: Prisma.XOR<Prisma.ProcessedSyncEventCreateWithoutBusinessInput, Prisma.ProcessedSyncEventUncheckedCreateWithoutBusinessInput> | Prisma.ProcessedSyncEventCreateWithoutBusinessInput[] | Prisma.ProcessedSyncEventUncheckedCreateWithoutBusinessInput[]
-  connectOrCreate?: Prisma.ProcessedSyncEventCreateOrConnectWithoutBusinessInput | Prisma.ProcessedSyncEventCreateOrConnectWithoutBusinessInput[]
-  upsert?: Prisma.ProcessedSyncEventUpsertWithWhereUniqueWithoutBusinessInput | Prisma.ProcessedSyncEventUpsertWithWhereUniqueWithoutBusinessInput[]
-  createMany?: Prisma.ProcessedSyncEventCreateManyBusinessInputEnvelope
-  set?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-  disconnect?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-  delete?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-  connect?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-  update?: Prisma.ProcessedSyncEventUpdateWithWhereUniqueWithoutBusinessInput | Prisma.ProcessedSyncEventUpdateWithWhereUniqueWithoutBusinessInput[]
-  updateMany?: Prisma.ProcessedSyncEventUpdateManyWithWhereWithoutBusinessInput | Prisma.ProcessedSyncEventUpdateManyWithWhereWithoutBusinessInput[]
-  deleteMany?: Prisma.ProcessedSyncEventScalarWhereInput | Prisma.ProcessedSyncEventScalarWhereInput[]
-}
-
-export type ProcessedSyncEventCreateNestedManyWithoutBranchesInput = {
-  create?: Prisma.XOR<Prisma.ProcessedSyncEventCreateWithoutBranchesInput, Prisma.ProcessedSyncEventUncheckedCreateWithoutBranchesInput> | Prisma.ProcessedSyncEventCreateWithoutBranchesInput[] | Prisma.ProcessedSyncEventUncheckedCreateWithoutBranchesInput[]
-  connectOrCreate?: Prisma.ProcessedSyncEventCreateOrConnectWithoutBranchesInput | Prisma.ProcessedSyncEventCreateOrConnectWithoutBranchesInput[]
-  createMany?: Prisma.ProcessedSyncEventCreateManyBranchesInputEnvelope
-  connect?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-}
-
-export type ProcessedSyncEventUncheckedCreateNestedManyWithoutBranchesInput = {
-  create?: Prisma.XOR<Prisma.ProcessedSyncEventCreateWithoutBranchesInput, Prisma.ProcessedSyncEventUncheckedCreateWithoutBranchesInput> | Prisma.ProcessedSyncEventCreateWithoutBranchesInput[] | Prisma.ProcessedSyncEventUncheckedCreateWithoutBranchesInput[]
-  connectOrCreate?: Prisma.ProcessedSyncEventCreateOrConnectWithoutBranchesInput | Prisma.ProcessedSyncEventCreateOrConnectWithoutBranchesInput[]
-  createMany?: Prisma.ProcessedSyncEventCreateManyBranchesInputEnvelope
-  connect?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-}
-
-export type ProcessedSyncEventUpdateManyWithoutBranchesNestedInput = {
-  create?: Prisma.XOR<Prisma.ProcessedSyncEventCreateWithoutBranchesInput, Prisma.ProcessedSyncEventUncheckedCreateWithoutBranchesInput> | Prisma.ProcessedSyncEventCreateWithoutBranchesInput[] | Prisma.ProcessedSyncEventUncheckedCreateWithoutBranchesInput[]
-  connectOrCreate?: Prisma.ProcessedSyncEventCreateOrConnectWithoutBranchesInput | Prisma.ProcessedSyncEventCreateOrConnectWithoutBranchesInput[]
-  upsert?: Prisma.ProcessedSyncEventUpsertWithWhereUniqueWithoutBranchesInput | Prisma.ProcessedSyncEventUpsertWithWhereUniqueWithoutBranchesInput[]
-  createMany?: Prisma.ProcessedSyncEventCreateManyBranchesInputEnvelope
-  set?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-  disconnect?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-  delete?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-  connect?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-  update?: Prisma.ProcessedSyncEventUpdateWithWhereUniqueWithoutBranchesInput | Prisma.ProcessedSyncEventUpdateWithWhereUniqueWithoutBranchesInput[]
-  updateMany?: Prisma.ProcessedSyncEventUpdateManyWithWhereWithoutBranchesInput | Prisma.ProcessedSyncEventUpdateManyWithWhereWithoutBranchesInput[]
-  deleteMany?: Prisma.ProcessedSyncEventScalarWhereInput | Prisma.ProcessedSyncEventScalarWhereInput[]
-}
-
-export type ProcessedSyncEventUncheckedUpdateManyWithoutBranchesNestedInput = {
-  create?: Prisma.XOR<Prisma.ProcessedSyncEventCreateWithoutBranchesInput, Prisma.ProcessedSyncEventUncheckedCreateWithoutBranchesInput> | Prisma.ProcessedSyncEventCreateWithoutBranchesInput[] | Prisma.ProcessedSyncEventUncheckedCreateWithoutBranchesInput[]
-  connectOrCreate?: Prisma.ProcessedSyncEventCreateOrConnectWithoutBranchesInput | Prisma.ProcessedSyncEventCreateOrConnectWithoutBranchesInput[]
-  upsert?: Prisma.ProcessedSyncEventUpsertWithWhereUniqueWithoutBranchesInput | Prisma.ProcessedSyncEventUpsertWithWhereUniqueWithoutBranchesInput[]
-  createMany?: Prisma.ProcessedSyncEventCreateManyBranchesInputEnvelope
-  set?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-  disconnect?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-  delete?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-  connect?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-  update?: Prisma.ProcessedSyncEventUpdateWithWhereUniqueWithoutBranchesInput | Prisma.ProcessedSyncEventUpdateWithWhereUniqueWithoutBranchesInput[]
-  updateMany?: Prisma.ProcessedSyncEventUpdateManyWithWhereWithoutBranchesInput | Prisma.ProcessedSyncEventUpdateManyWithWhereWithoutBranchesInput[]
-  deleteMany?: Prisma.ProcessedSyncEventScalarWhereInput | Prisma.ProcessedSyncEventScalarWhereInput[]
-}
-
-export type ProcessedSyncEventCreateNestedManyWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.ProcessedSyncEventCreateWithoutUserInput, Prisma.ProcessedSyncEventUncheckedCreateWithoutUserInput> | Prisma.ProcessedSyncEventCreateWithoutUserInput[] | Prisma.ProcessedSyncEventUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.ProcessedSyncEventCreateOrConnectWithoutUserInput | Prisma.ProcessedSyncEventCreateOrConnectWithoutUserInput[]
-  createMany?: Prisma.ProcessedSyncEventCreateManyUserInputEnvelope
-  connect?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-}
-
-export type ProcessedSyncEventUncheckedCreateNestedManyWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.ProcessedSyncEventCreateWithoutUserInput, Prisma.ProcessedSyncEventUncheckedCreateWithoutUserInput> | Prisma.ProcessedSyncEventCreateWithoutUserInput[] | Prisma.ProcessedSyncEventUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.ProcessedSyncEventCreateOrConnectWithoutUserInput | Prisma.ProcessedSyncEventCreateOrConnectWithoutUserInput[]
-  createMany?: Prisma.ProcessedSyncEventCreateManyUserInputEnvelope
-  connect?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-}
-
-export type ProcessedSyncEventUpdateManyWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.ProcessedSyncEventCreateWithoutUserInput, Prisma.ProcessedSyncEventUncheckedCreateWithoutUserInput> | Prisma.ProcessedSyncEventCreateWithoutUserInput[] | Prisma.ProcessedSyncEventUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.ProcessedSyncEventCreateOrConnectWithoutUserInput | Prisma.ProcessedSyncEventCreateOrConnectWithoutUserInput[]
-  upsert?: Prisma.ProcessedSyncEventUpsertWithWhereUniqueWithoutUserInput | Prisma.ProcessedSyncEventUpsertWithWhereUniqueWithoutUserInput[]
-  createMany?: Prisma.ProcessedSyncEventCreateManyUserInputEnvelope
-  set?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-  disconnect?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-  delete?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-  connect?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-  update?: Prisma.ProcessedSyncEventUpdateWithWhereUniqueWithoutUserInput | Prisma.ProcessedSyncEventUpdateWithWhereUniqueWithoutUserInput[]
-  updateMany?: Prisma.ProcessedSyncEventUpdateManyWithWhereWithoutUserInput | Prisma.ProcessedSyncEventUpdateManyWithWhereWithoutUserInput[]
-  deleteMany?: Prisma.ProcessedSyncEventScalarWhereInput | Prisma.ProcessedSyncEventScalarWhereInput[]
-}
-
-export type ProcessedSyncEventUncheckedUpdateManyWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.ProcessedSyncEventCreateWithoutUserInput, Prisma.ProcessedSyncEventUncheckedCreateWithoutUserInput> | Prisma.ProcessedSyncEventCreateWithoutUserInput[] | Prisma.ProcessedSyncEventUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.ProcessedSyncEventCreateOrConnectWithoutUserInput | Prisma.ProcessedSyncEventCreateOrConnectWithoutUserInput[]
-  upsert?: Prisma.ProcessedSyncEventUpsertWithWhereUniqueWithoutUserInput | Prisma.ProcessedSyncEventUpsertWithWhereUniqueWithoutUserInput[]
-  createMany?: Prisma.ProcessedSyncEventCreateManyUserInputEnvelope
-  set?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-  disconnect?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-  delete?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-  connect?: Prisma.ProcessedSyncEventWhereUniqueInput | Prisma.ProcessedSyncEventWhereUniqueInput[]
-  update?: Prisma.ProcessedSyncEventUpdateWithWhereUniqueWithoutUserInput | Prisma.ProcessedSyncEventUpdateWithWhereUniqueWithoutUserInput[]
-  updateMany?: Prisma.ProcessedSyncEventUpdateManyWithWhereWithoutUserInput | Prisma.ProcessedSyncEventUpdateManyWithWhereWithoutUserInput[]
-  deleteMany?: Prisma.ProcessedSyncEventScalarWhereInput | Prisma.ProcessedSyncEventScalarWhereInput[]
-}
-
 export type EnumSyncEventStatusFieldUpdateOperationsInput = {
   set?: $Enums.SyncEventStatus
-}
-
-export type ProcessedSyncEventCreateWithoutBusinessInput = {
-  id: string
-  eventType: string
-  version: number
-  status: $Enums.SyncEventStatus
-  processedAt?: Date | string
-  error?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  branches: Prisma.BranchCreateNestedOneWithoutSynceInput
-  user: Prisma.UserCreateNestedOneWithoutSyncedInput
-}
-
-export type ProcessedSyncEventUncheckedCreateWithoutBusinessInput = {
-  id: string
-  eventType: string
-  branchId: string
-  userId: string
-  version: number
-  status: $Enums.SyncEventStatus
-  processedAt?: Date | string
-  error?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type ProcessedSyncEventCreateOrConnectWithoutBusinessInput = {
-  where: Prisma.ProcessedSyncEventWhereUniqueInput
-  create: Prisma.XOR<Prisma.ProcessedSyncEventCreateWithoutBusinessInput, Prisma.ProcessedSyncEventUncheckedCreateWithoutBusinessInput>
-}
-
-export type ProcessedSyncEventCreateManyBusinessInputEnvelope = {
-  data: Prisma.ProcessedSyncEventCreateManyBusinessInput | Prisma.ProcessedSyncEventCreateManyBusinessInput[]
-  skipDuplicates?: boolean
-}
-
-export type ProcessedSyncEventUpsertWithWhereUniqueWithoutBusinessInput = {
-  where: Prisma.ProcessedSyncEventWhereUniqueInput
-  update: Prisma.XOR<Prisma.ProcessedSyncEventUpdateWithoutBusinessInput, Prisma.ProcessedSyncEventUncheckedUpdateWithoutBusinessInput>
-  create: Prisma.XOR<Prisma.ProcessedSyncEventCreateWithoutBusinessInput, Prisma.ProcessedSyncEventUncheckedCreateWithoutBusinessInput>
-}
-
-export type ProcessedSyncEventUpdateWithWhereUniqueWithoutBusinessInput = {
-  where: Prisma.ProcessedSyncEventWhereUniqueInput
-  data: Prisma.XOR<Prisma.ProcessedSyncEventUpdateWithoutBusinessInput, Prisma.ProcessedSyncEventUncheckedUpdateWithoutBusinessInput>
-}
-
-export type ProcessedSyncEventUpdateManyWithWhereWithoutBusinessInput = {
-  where: Prisma.ProcessedSyncEventScalarWhereInput
-  data: Prisma.XOR<Prisma.ProcessedSyncEventUpdateManyMutationInput, Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessInput>
-}
-
-export type ProcessedSyncEventScalarWhereInput = {
-  AND?: Prisma.ProcessedSyncEventScalarWhereInput | Prisma.ProcessedSyncEventScalarWhereInput[]
-  OR?: Prisma.ProcessedSyncEventScalarWhereInput[]
-  NOT?: Prisma.ProcessedSyncEventScalarWhereInput | Prisma.ProcessedSyncEventScalarWhereInput[]
-  id?: Prisma.StringFilter<"ProcessedSyncEvent"> | string
-  eventType?: Prisma.StringFilter<"ProcessedSyncEvent"> | string
-  businessId?: Prisma.StringFilter<"ProcessedSyncEvent"> | string
-  branchId?: Prisma.StringFilter<"ProcessedSyncEvent"> | string
-  userId?: Prisma.StringFilter<"ProcessedSyncEvent"> | string
-  version?: Prisma.IntFilter<"ProcessedSyncEvent"> | number
-  status?: Prisma.EnumSyncEventStatusFilter<"ProcessedSyncEvent"> | $Enums.SyncEventStatus
-  processedAt?: Prisma.DateTimeFilter<"ProcessedSyncEvent"> | Date | string
-  error?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"ProcessedSyncEvent"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"ProcessedSyncEvent"> | Date | string
-}
-
-export type ProcessedSyncEventCreateWithoutBranchesInput = {
-  id: string
-  eventType: string
-  version: number
-  status: $Enums.SyncEventStatus
-  processedAt?: Date | string
-  error?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  business: Prisma.BusinessCreateNestedOneWithoutSyncedInput
-  user: Prisma.UserCreateNestedOneWithoutSyncedInput
-}
-
-export type ProcessedSyncEventUncheckedCreateWithoutBranchesInput = {
-  id: string
-  eventType: string
-  businessId: string
-  userId: string
-  version: number
-  status: $Enums.SyncEventStatus
-  processedAt?: Date | string
-  error?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type ProcessedSyncEventCreateOrConnectWithoutBranchesInput = {
-  where: Prisma.ProcessedSyncEventWhereUniqueInput
-  create: Prisma.XOR<Prisma.ProcessedSyncEventCreateWithoutBranchesInput, Prisma.ProcessedSyncEventUncheckedCreateWithoutBranchesInput>
-}
-
-export type ProcessedSyncEventCreateManyBranchesInputEnvelope = {
-  data: Prisma.ProcessedSyncEventCreateManyBranchesInput | Prisma.ProcessedSyncEventCreateManyBranchesInput[]
-  skipDuplicates?: boolean
-}
-
-export type ProcessedSyncEventUpsertWithWhereUniqueWithoutBranchesInput = {
-  where: Prisma.ProcessedSyncEventWhereUniqueInput
-  update: Prisma.XOR<Prisma.ProcessedSyncEventUpdateWithoutBranchesInput, Prisma.ProcessedSyncEventUncheckedUpdateWithoutBranchesInput>
-  create: Prisma.XOR<Prisma.ProcessedSyncEventCreateWithoutBranchesInput, Prisma.ProcessedSyncEventUncheckedCreateWithoutBranchesInput>
-}
-
-export type ProcessedSyncEventUpdateWithWhereUniqueWithoutBranchesInput = {
-  where: Prisma.ProcessedSyncEventWhereUniqueInput
-  data: Prisma.XOR<Prisma.ProcessedSyncEventUpdateWithoutBranchesInput, Prisma.ProcessedSyncEventUncheckedUpdateWithoutBranchesInput>
-}
-
-export type ProcessedSyncEventUpdateManyWithWhereWithoutBranchesInput = {
-  where: Prisma.ProcessedSyncEventScalarWhereInput
-  data: Prisma.XOR<Prisma.ProcessedSyncEventUpdateManyMutationInput, Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBranchesInput>
-}
-
-export type ProcessedSyncEventCreateWithoutUserInput = {
-  id: string
-  eventType: string
-  version: number
-  status: $Enums.SyncEventStatus
-  processedAt?: Date | string
-  error?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  business: Prisma.BusinessCreateNestedOneWithoutSyncedInput
-  branches: Prisma.BranchCreateNestedOneWithoutSynceInput
-}
-
-export type ProcessedSyncEventUncheckedCreateWithoutUserInput = {
-  id: string
-  eventType: string
-  businessId: string
-  branchId: string
-  version: number
-  status: $Enums.SyncEventStatus
-  processedAt?: Date | string
-  error?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type ProcessedSyncEventCreateOrConnectWithoutUserInput = {
-  where: Prisma.ProcessedSyncEventWhereUniqueInput
-  create: Prisma.XOR<Prisma.ProcessedSyncEventCreateWithoutUserInput, Prisma.ProcessedSyncEventUncheckedCreateWithoutUserInput>
-}
-
-export type ProcessedSyncEventCreateManyUserInputEnvelope = {
-  data: Prisma.ProcessedSyncEventCreateManyUserInput | Prisma.ProcessedSyncEventCreateManyUserInput[]
-  skipDuplicates?: boolean
-}
-
-export type ProcessedSyncEventUpsertWithWhereUniqueWithoutUserInput = {
-  where: Prisma.ProcessedSyncEventWhereUniqueInput
-  update: Prisma.XOR<Prisma.ProcessedSyncEventUpdateWithoutUserInput, Prisma.ProcessedSyncEventUncheckedUpdateWithoutUserInput>
-  create: Prisma.XOR<Prisma.ProcessedSyncEventCreateWithoutUserInput, Prisma.ProcessedSyncEventUncheckedCreateWithoutUserInput>
-}
-
-export type ProcessedSyncEventUpdateWithWhereUniqueWithoutUserInput = {
-  where: Prisma.ProcessedSyncEventWhereUniqueInput
-  data: Prisma.XOR<Prisma.ProcessedSyncEventUpdateWithoutUserInput, Prisma.ProcessedSyncEventUncheckedUpdateWithoutUserInput>
-}
-
-export type ProcessedSyncEventUpdateManyWithWhereWithoutUserInput = {
-  where: Prisma.ProcessedSyncEventScalarWhereInput
-  data: Prisma.XOR<Prisma.ProcessedSyncEventUpdateManyMutationInput, Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutUserInput>
-}
-
-export type ProcessedSyncEventCreateManyBusinessInput = {
-  id: string
-  eventType: string
-  branchId: string
-  userId: string
-  version: number
-  status: $Enums.SyncEventStatus
-  processedAt?: Date | string
-  error?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type ProcessedSyncEventUpdateWithoutBusinessInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  eventType?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
-  processedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  branches?: Prisma.BranchUpdateOneRequiredWithoutSynceNestedInput
-  user?: Prisma.UserUpdateOneRequiredWithoutSyncedNestedInput
-}
-
-export type ProcessedSyncEventUncheckedUpdateWithoutBusinessInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  eventType?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
-  processedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type ProcessedSyncEventUncheckedUpdateManyWithoutBusinessInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  eventType?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
-  processedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type ProcessedSyncEventCreateManyBranchesInput = {
-  id: string
-  eventType: string
-  businessId: string
-  userId: string
-  version: number
-  status: $Enums.SyncEventStatus
-  processedAt?: Date | string
-  error?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type ProcessedSyncEventUpdateWithoutBranchesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  eventType?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
-  processedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  business?: Prisma.BusinessUpdateOneRequiredWithoutSyncedNestedInput
-  user?: Prisma.UserUpdateOneRequiredWithoutSyncedNestedInput
-}
-
-export type ProcessedSyncEventUncheckedUpdateWithoutBranchesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  eventType?: Prisma.StringFieldUpdateOperationsInput | string
-  businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
-  processedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type ProcessedSyncEventUncheckedUpdateManyWithoutBranchesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  eventType?: Prisma.StringFieldUpdateOperationsInput | string
-  businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
-  processedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type ProcessedSyncEventCreateManyUserInput = {
-  id: string
-  eventType: string
-  businessId: string
-  branchId: string
-  version: number
-  status: $Enums.SyncEventStatus
-  processedAt?: Date | string
-  error?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type ProcessedSyncEventUpdateWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  eventType?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
-  processedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  business?: Prisma.BusinessUpdateOneRequiredWithoutSyncedNestedInput
-  branches?: Prisma.BranchUpdateOneRequiredWithoutSynceNestedInput
-}
-
-export type ProcessedSyncEventUncheckedUpdateWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  eventType?: Prisma.StringFieldUpdateOperationsInput | string
-  businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
-  processedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type ProcessedSyncEventUncheckedUpdateManyWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  eventType?: Prisma.StringFieldUpdateOperationsInput | string
-  businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
-  processedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -970,9 +499,6 @@ export type ProcessedSyncEventSelect<ExtArgs extends runtime.Types.Extensions.In
   error?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
-  branches?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["processedSyncEvent"]>
 
 export type ProcessedSyncEventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -987,9 +513,6 @@ export type ProcessedSyncEventSelectCreateManyAndReturn<ExtArgs extends runtime.
   error?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
-  branches?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["processedSyncEvent"]>
 
 export type ProcessedSyncEventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1004,9 +527,6 @@ export type ProcessedSyncEventSelectUpdateManyAndReturn<ExtArgs extends runtime.
   error?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
-  branches?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["processedSyncEvent"]>
 
 export type ProcessedSyncEventSelectScalar = {
@@ -1024,35 +544,16 @@ export type ProcessedSyncEventSelectScalar = {
 }
 
 export type ProcessedSyncEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "eventType" | "businessId" | "branchId" | "userId" | "version" | "status" | "processedAt" | "error" | "createdAt" | "updatedAt", ExtArgs["result"]["processedSyncEvent"]>
-export type ProcessedSyncEventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
-  branches?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-}
-export type ProcessedSyncEventIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
-  branches?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-}
-export type ProcessedSyncEventIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
-  branches?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-}
 
 export type $ProcessedSyncEventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ProcessedSyncEvent"
-  objects: {
-    business: Prisma.$BusinessPayload<ExtArgs>
-    branches: Prisma.$BranchPayload<ExtArgs>
-    user: Prisma.$UserPayload<ExtArgs>
-  }
+  objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     eventType: string
-    businessId: string
-    branchId: string
-    userId: string
+    businessId: string | null
+    branchId: string | null
+    userId: string | null
     version: number
     status: $Enums.SyncEventStatus
     processedAt: Date
@@ -1453,9 +954,6 @@ readonly fields: ProcessedSyncEventFieldRefs;
  */
 export interface Prisma__ProcessedSyncEventClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  business<T extends Prisma.BusinessDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BusinessDefaultArgs<ExtArgs>>): Prisma.Prisma__BusinessClient<runtime.Types.Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  branches<T extends Prisma.BranchDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BranchDefaultArgs<ExtArgs>>): Prisma.Prisma__BranchClient<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1513,10 +1011,6 @@ export type ProcessedSyncEventFindUniqueArgs<ExtArgs extends runtime.Types.Exten
    */
   omit?: Prisma.ProcessedSyncEventOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProcessedSyncEventInclude<ExtArgs> | null
-  /**
    * Filter, which ProcessedSyncEvent to fetch.
    */
   where: Prisma.ProcessedSyncEventWhereUniqueInput
@@ -1535,10 +1029,6 @@ export type ProcessedSyncEventFindUniqueOrThrowArgs<ExtArgs extends runtime.Type
    */
   omit?: Prisma.ProcessedSyncEventOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProcessedSyncEventInclude<ExtArgs> | null
-  /**
    * Filter, which ProcessedSyncEvent to fetch.
    */
   where: Prisma.ProcessedSyncEventWhereUniqueInput
@@ -1556,10 +1046,6 @@ export type ProcessedSyncEventFindFirstArgs<ExtArgs extends runtime.Types.Extens
    * Omit specific fields from the ProcessedSyncEvent
    */
   omit?: Prisma.ProcessedSyncEventOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProcessedSyncEventInclude<ExtArgs> | null
   /**
    * Filter, which ProcessedSyncEvent to fetch.
    */
@@ -1609,10 +1095,6 @@ export type ProcessedSyncEventFindFirstOrThrowArgs<ExtArgs extends runtime.Types
    */
   omit?: Prisma.ProcessedSyncEventOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProcessedSyncEventInclude<ExtArgs> | null
-  /**
    * Filter, which ProcessedSyncEvent to fetch.
    */
   where?: Prisma.ProcessedSyncEventWhereInput
@@ -1661,10 +1143,6 @@ export type ProcessedSyncEventFindManyArgs<ExtArgs extends runtime.Types.Extensi
    */
   omit?: Prisma.ProcessedSyncEventOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProcessedSyncEventInclude<ExtArgs> | null
-  /**
    * Filter, which ProcessedSyncEvents to fetch.
    */
   where?: Prisma.ProcessedSyncEventWhereInput
@@ -1708,10 +1186,6 @@ export type ProcessedSyncEventCreateArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.ProcessedSyncEventOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProcessedSyncEventInclude<ExtArgs> | null
-  /**
    * The data needed to create a ProcessedSyncEvent.
    */
   data: Prisma.XOR<Prisma.ProcessedSyncEventCreateInput, Prisma.ProcessedSyncEventUncheckedCreateInput>
@@ -1745,10 +1219,6 @@ export type ProcessedSyncEventCreateManyAndReturnArgs<ExtArgs extends runtime.Ty
    */
   data: Prisma.ProcessedSyncEventCreateManyInput | Prisma.ProcessedSyncEventCreateManyInput[]
   skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProcessedSyncEventIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1763,10 +1233,6 @@ export type ProcessedSyncEventUpdateArgs<ExtArgs extends runtime.Types.Extension
    * Omit specific fields from the ProcessedSyncEvent
    */
   omit?: Prisma.ProcessedSyncEventOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProcessedSyncEventInclude<ExtArgs> | null
   /**
    * The data needed to update a ProcessedSyncEvent.
    */
@@ -1819,10 +1285,6 @@ export type ProcessedSyncEventUpdateManyAndReturnArgs<ExtArgs extends runtime.Ty
    * Limit how many ProcessedSyncEvents to update.
    */
   limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProcessedSyncEventIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1837,10 +1299,6 @@ export type ProcessedSyncEventUpsertArgs<ExtArgs extends runtime.Types.Extension
    * Omit specific fields from the ProcessedSyncEvent
    */
   omit?: Prisma.ProcessedSyncEventOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProcessedSyncEventInclude<ExtArgs> | null
   /**
    * The filter to search for the ProcessedSyncEvent to update in case it exists.
    */
@@ -1867,10 +1325,6 @@ export type ProcessedSyncEventDeleteArgs<ExtArgs extends runtime.Types.Extension
    * Omit specific fields from the ProcessedSyncEvent
    */
   omit?: Prisma.ProcessedSyncEventOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProcessedSyncEventInclude<ExtArgs> | null
   /**
    * Filter which ProcessedSyncEvent to delete.
    */
@@ -1903,8 +1357,4 @@ export type ProcessedSyncEventDefaultArgs<ExtArgs extends runtime.Types.Extensio
    * Omit specific fields from the ProcessedSyncEvent
    */
   omit?: Prisma.ProcessedSyncEventOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProcessedSyncEventInclude<ExtArgs> | null
 }

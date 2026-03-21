@@ -5,23 +5,14 @@ import { useCashflows } from "@/hooks/useCashflow";
 import { ArrowUp, ArrowDown, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CashFlowType } from "@/services/cashflowService";
+import { addCash } from "@/offline/finance/cash/addCash";
+import { hydrateSetupStore } from "@/offline/finance/hydrateSetupStore";
+import { toast } from "sonner";
 
 interface CashflowTableProps {
   mode: "OPENING" | "LIVE";
   onCompleted?: () => void;
 }
-
-const resolveCashflowMeta = (
-  mode: "OPENING" | "LIVE",
-): { type: CashFlowType; direction: "IN" | "OUT"; description: string } => {
-  if (mode === "OPENING") {
-    return { type: "OPENING", direction: "IN", description: "Initial branch cash balance" };
-  }
-  if (mode === "LIVE") {
-    return { type: "OWNER_CAPITAL", direction: "IN", description: "Owner capital injection" };
-  }
-  throw new Error("Invalid action");
-};
 
 const CashflowTable = ({ mode, onCompleted }: CashflowTableProps) => {
   const { cashflows, loading, injectCash, withdrawCash, refetch } = useCashflows();
@@ -44,13 +35,13 @@ const CashflowTable = ({ mode, onCompleted }: CashflowTableProps) => {
   const handleInject = async () => {
     const amount = Number(rawAmount);
     if (amount <= 0) return;
-
-    const meta = resolveCashflowMeta(mode);
-
-    await injectCash({ amount, type: meta.type, description: meta.description });
+    await addCash({amount});
+    
     setRawAmount("");
     setFormattedAmount("");
     if (mode === "OPENING" && onCompleted) onCompleted();
+    hydrateSetupStore()
+    toast.success("Cash Added Successfully✅")
   };
 
   const handleWithdraw = async () => {
@@ -59,10 +50,6 @@ const CashflowTable = ({ mode, onCompleted }: CashflowTableProps) => {
     const amount = Number(rawAmount);
 
     if (amount <= 0) return;
-
-    const meta = resolveCashflowMeta(mode);
-
-    await withdrawCash({ amount, type: meta.type, description: meta.description });
 
     setRawAmount("");
     setFormattedAmount("");

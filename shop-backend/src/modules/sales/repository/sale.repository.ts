@@ -1,37 +1,60 @@
-import { CashFlowType, PaymentMethod, Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
-import { SaleItemDto } from "../dto/saleItem.dto.js";
+import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
+
 export class SaleRepository {
-  async create(data: {
+  async create(
+  data: {
     businessId: string;
     branchId: string;
     totalAmount: number;
     items: {
-        productId: string;
-        quantity: number;
-        unitPrice: number;
-        costPrice: number;
-        totalPrice: number;
+      productId: string;
+      quantity: number;
+      unitPrice: number;
+      costPrice: number;
+      totalPrice: number;
     }[];
     payments: {
-        amount: number;
-        method: PaymentMethod;
+      amount: number;
+      method: any;
     }[];
+  },
+  tx: Prisma.TransactionClient
+) {
+  return tx.sale.create({
+    data: {
+      id: crypto.randomUUID(), // IMPORTANT (no default in schema)
 
-  }, tx: Prisma.TransactionClient) {
-    return tx.sale.create({
-      data: {
-        businessId: data.businessId,
-        branchId: data.branchId,
-        totalAmount: data.totalAmount,
-        items: { create: data.items },
-        payments: { create: data.payments },
+      businessId: data.businessId,
+      branchId: data.branchId,
+      totalAmount: new Prisma.Decimal(data.totalAmount),
+
+      items: {
+        create: data.items.map(item => ({
+          id: crypto.randomUUID(),
+
+          productId: item.productId,
+          quantity: item.quantity,
+          unitPrice: new Prisma.Decimal(item.unitPrice),
+          costPrice: new Prisma.Decimal(item.costPrice),
+          totalPrice: new Prisma.Decimal(item.totalPrice)
+        }))
       },
-      include: {
-        items: true,
-        payments: true,
+
+      payments: {
+        create: data.payments.map(p => ({
+          id: crypto.randomUUID(),
+
+          amount: new Prisma.Decimal(p.amount),
+          method: p.method
+        }))
       }
-    });
-  }
+    },
+    include: {
+      items: true,
+      payments: true
+    }
+  });
+}
   async findSellableProduct(
     productId: string,
     businessId: string,
@@ -47,9 +70,15 @@ export class SaleRepository {
       },
     });
   }
-  async findCompletedSale(id: string, businessId: string, branchId: string, tx: Prisma.TransactionClient) {
+
+  async findCompletedSale(
+    id: string,
+    businessId: string,
+    branchId: string,
+    tx: Prisma.TransactionClient
+  ) {
     return tx.sale.findFirst({
-      where: { id, businessId,branchId, status: "COMPLETED" },
+      where: { id, businessId, branchId, status: "COMPLETED" },
       include: { items: true },
     });
   }
@@ -63,52 +92,4 @@ export class SaleRepository {
       },
     });
   }
-  async createCashflow (
-  params: {
-    businessId: string;
-    branchId: string;
-    amount: number;
-    source: string;
-    description?: string
-  },
-  tx: Prisma.TransactionClient
-){
-  return tx.cashFlow.create({
-    data: {
-      businessId: params.businessId,
-      branchId: params.branchId,
-      amount: params.amount,
-      type: "SALE_INCOME",
-      direction: "IN",
-      source: params.source,
-      description: params.description ?? null,
-      isOpening: false,
-    }
-  })
-};
-
-async createRefundCashflow(
-  params: {
-    businessId: string;
-    branchId: string;
-    amount: number;
-    saleId: string
-  },
-  tx: Prisma.TransactionClient
-){
-  return tx.cashFlow.create({
-    data: {
-      businessId: params.businessId,
-      branchId: params.branchId,
-      type: "REFUND",
-      direction: "OUT",
-      amount: params.amount,
-      source: "SALE_REFUND",
-      description: `Refund for sale ${params.saleId} `,
-      isOpening: false,
-    }
-    })
 }
-}
-
-

@@ -1,13 +1,15 @@
 import { syncEvent } from "./syncEngine"
-window.addEventListener("offline", () => {
+if (typeof window !== "undefined") {
+  window.addEventListener("offline", () => {
     console.log("Went offline → stopping interval")
     stopInterval()
-})
-window.addEventListener("online", ()=> {
+  });
+
+  window.addEventListener("online", () => {
+    console.log("Back online → syncing")
     syncEvent()
-    runSync();
-    startInterval()
-})
+  });
+}
 let syncInProgress = false
 let intervalId: ReturnType<typeof setInterval> | null = null
 

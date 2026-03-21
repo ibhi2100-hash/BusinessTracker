@@ -13,6 +13,7 @@ import { inventoryController } from "@/services/inventory/inventory.controller";
 import { useSalesStore } from "@/store/SalesStore";
 import { toast } from "sonner";
 import { createSales } from "@/offline/sales/createSales";
+import { hydrateSetupStore } from "@/offline/finance/hydrateSetupStore";
 
 interface InventoryPageProps {
   context: "sell" | "admin";
@@ -178,6 +179,7 @@ export default function InventoryPage({ context, mode }: InventoryPageProps) {
           inventoryController.addOrUpdateProduct(payload).then(() => {
             toast.success(`Product ${editingProduct ? "updated" : "added"} successfully`);
             inventoryController.loadCategories();
+            hydrateSetupStore()
           }).catch(err => {
             toast.error(`Failed to ${editingProduct ? "update" : "add"} product. Please try again.`);
             console.error("Error saving product:", err);

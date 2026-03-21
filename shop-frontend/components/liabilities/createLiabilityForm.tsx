@@ -3,10 +3,12 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createLiabilitySchema, CreateLiabilityInput } from "@/schemas/liabilities.schema";
-import { useCreateLiability } from "@/hooks/liabilitiesHooks/useCreateLiability";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { createLiability } from "@/offline/finance/liabilities/createLiability.service";
+import { useState } from "react";
+import { hydrateSetupStore } from "@/offline/finance/hydrateSetupStore";
+import { toast } from "sonner";
 
 interface Props {
   mode?: "OPENING" | "LIVE";
@@ -14,7 +16,7 @@ interface Props {
 }
 
 export const CreateLiabilityForm = ({ mode, onComplete }: Props) => {
-  const { mutate, isPending } = useCreateLiability();
+  const [loading, setLoading] = useState(false)
 
   const {
     register,
@@ -30,12 +32,17 @@ export const CreateLiabilityForm = ({ mode, onComplete }: Props) => {
   });
 
   const onSubmit = (data: CreateLiabilityInput) => {
+    setLoading(true);
     const payload: CreateLiabilityInput = {
         ...data,
+        liabilityType: mode === "OPENING" ? "OPENING" : "LIVE",
         startDate: data.startDate ? new Date(data.startDate).toISOString() : undefined,
         dueDate: data.dueDate ? new Date(data.dueDate).toISOString() : undefined
     }
-    createLiability(payload)
+    createLiability(payload);
+    hydrateSetupStore()
+    setLoading(false)
+    toast.success("Liability Created Successifully")
   };
 
   return (
@@ -123,8 +130,8 @@ export const CreateLiabilityForm = ({ mode, onComplete }: Props) => {
           </div>
         </div>
 
-        <Button type="submit" disabled={isPending} fullWidth>
-          {isPending ? "Saving..." : "Create Liability"}
+        <Button type="submit" disabled={loading} fullWidth>
+          {loading ? "Saving..." : "Create Liability"}
         </Button>
       </form>
     </Card>

@@ -1,23 +1,28 @@
+import { closeDbConnection } from "../db/connection"
 import { getDb } from "../db/indexDB"
 import { syncEvents } from "@/services/syncService"
 import { TABLES } from "../db/schema"
 import { getByIndex } from "../db/helpers"
 
 export async function syncEvent() {
-    const db = await getDb()
-    const status = "pending";
-    const events = await getByIndex(TABLES.EVENTS, "status", status )
+  const db = await getDb()
+  try {
+    const status = "pending"
+    const events = await getByIndex(TABLES.EVENTS, "status", status)
 
-    if(!events.length) return
+    if (!events.length) return
 
     const response = await syncEvents(events)
-    const { results, snapshot } = response;
+    const { results } = response
 
-for (const r of results) {
-    console.log("single result from backend: ", r)
-    if (r.status === "duplicate" || r.status === "synced") {
-            await db.delete(TABLES.EVENTS, r.eventId)
-        
+    for (const r of results) {
+      console.log("single result from backend: ", r)
+      if (r.status === "duplicate" || r.status === "synced") {
+        await db.delete(TABLES.EVENTS, r.eventId)
+      }
     }
-}
+  } finally {
+    // Close the connection after sync completes
+    closeDbConnection()
+  }
 }

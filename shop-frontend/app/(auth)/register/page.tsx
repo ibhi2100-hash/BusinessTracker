@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, RegisterInput } from "@/lib/validations/auth.schema";
@@ -9,6 +9,9 @@ import Link from "next/link";
 import { saveUser } from "@/offline/user/userRepository";
 import { saveSession } from "@/offline/session/sessionRepository";
 import { hydrateStores } from "@/offline/hydration/hydrationStore";
+import { clearIndexedDB, closeDBConnection } from "@/utils/deleteUserIndexData";
+import { stopInterval } from "@/offline/sync/networkMonitor";
+
 
 
 export default function RegisterPage() {
@@ -22,6 +25,21 @@ export default function RegisterPage() {
   } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
   });
+  // Clear old IndexedDB data automatically on page load 
+  useEffect(()=> {
+    (async ()=> {
+      try {
+        stopInterval()
+        closeDBConnection();
+        await clearIndexedDB("business-app");
+        console.log("Old IndexedDB cleared");
+      } catch (err) {
+        console.error("Failed to clear IndexedDb", err)
+      }
+    }
+
+    )()
+  }, [])
 
  const onSubmit = async (data: RegisterInput) => {
   setServerError(null);

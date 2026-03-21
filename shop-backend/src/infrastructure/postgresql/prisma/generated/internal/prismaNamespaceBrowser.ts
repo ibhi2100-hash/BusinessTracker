@@ -58,8 +58,10 @@ export const ModelName = {
   SubscriptionPlan: 'SubscriptionPlan',
   BusinessSubscription: 'BusinessSubscription',
   ProcessedSyncEvent: 'ProcessedSyncEvent',
-  LedgerAccount: 'LedgerAccount',
+  Event: 'Event',
   LedgerEntry: 'LedgerEntry',
+  AccountSnapshot: 'AccountSnapshot',
+  InventorySnapshot: 'InventorySnapshot',
   Category: 'Category',
   Brand: 'Brand',
   Product: 'Product',
@@ -67,7 +69,6 @@ export const ModelName = {
   Sale: 'Sale',
   SaleItem: 'SaleItem',
   Payment: 'Payment',
-  CashFlow: 'CashFlow',
   Liability: 'Liability',
   LiabilityPayment: 'LiabilityPayment',
   Asset: 'Asset',
@@ -131,9 +132,9 @@ export const UserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   password: 'password',
+  role: 'role',
   isActive: 'isActive',
   onboardingCompleted: 'onboardingCompleted',
-  role: 'role',
   branchId: 'branchId',
   businessId: 'businessId',
   createdAt: 'createdAt'
@@ -200,27 +201,58 @@ export const ProcessedSyncEventScalarFieldEnum = {
 export type ProcessedSyncEventScalarFieldEnum = (typeof ProcessedSyncEventScalarFieldEnum)[keyof typeof ProcessedSyncEventScalarFieldEnum]
 
 
-export const LedgerAccountScalarFieldEnum = {
+export const EventScalarFieldEnum = {
   id: 'id',
   businessId: 'businessId',
-  name: 'name',
-  type: 'type'
+  branchId: 'branchId',
+  userId: 'userId',
+  type: 'type',
+  payload: 'payload',
+  ledgerVersion: 'ledgerVersion',
+  createdAt: 'createdAt',
+  syncedAt: 'syncedAt',
+  deviceId: 'deviceId',
+  sequence: 'sequence'
 } as const
 
-export type LedgerAccountScalarFieldEnum = (typeof LedgerAccountScalarFieldEnum)[keyof typeof LedgerAccountScalarFieldEnum]
+export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
 
 
 export const LedgerEntryScalarFieldEnum = {
   id: 'id',
-  accountId: 'accountId',
   businessId: 'businessId',
+  branchId: 'branchId',
+  eventId: 'eventId',
+  account: 'account',
   amount: 'amount',
-  type: 'type',
-  referenceId: 'referenceId',
+  index: 'index',
   createdAt: 'createdAt'
 } as const
 
 export type LedgerEntryScalarFieldEnum = (typeof LedgerEntryScalarFieldEnum)[keyof typeof LedgerEntryScalarFieldEnum]
+
+
+export const AccountSnapshotScalarFieldEnum = {
+  id: 'id',
+  branchId: 'branchId',
+  account: 'account',
+  balance: 'balance',
+  lastEventId: 'lastEventId',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AccountSnapshotScalarFieldEnum = (typeof AccountSnapshotScalarFieldEnum)[keyof typeof AccountSnapshotScalarFieldEnum]
+
+
+export const InventorySnapshotScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  branchId: 'branchId',
+  quantity: 'quantity',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InventorySnapshotScalarFieldEnum = (typeof InventorySnapshotScalarFieldEnum)[keyof typeof InventorySnapshotScalarFieldEnum]
 
 
 export const CategoryScalarFieldEnum = {
@@ -332,24 +364,6 @@ export const PaymentScalarFieldEnum = {
 } as const
 
 export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
-
-
-export const CashFlowScalarFieldEnum = {
-  id: 'id',
-  businessId: 'businessId',
-  branchId: 'branchId',
-  type: 'type',
-  amount: 'amount',
-  direction: 'direction',
-  balanceAfter: 'balanceAfter',
-  source: 'source',
-  description: 'description',
-  isOpening: 'isOpening',
-  isLocked: 'isLocked',
-  createdAt: 'createdAt'
-} as const
-
-export type CashFlowScalarFieldEnum = (typeof CashFlowScalarFieldEnum)[keyof typeof CashFlowScalarFieldEnum]
 
 
 export const LiabilityScalarFieldEnum = {

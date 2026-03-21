@@ -20,7 +20,7 @@ export class OfflineSyncController {
 
     try {
 
-      const results = await this.syncService.processEvents(events);
+      const results = await this.syncService.syncEvents(events);
 
       return res.status(200).json({
         success: true,

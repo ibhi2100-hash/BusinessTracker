@@ -1,8 +1,7 @@
 import { dashboardReducer } from "./eventReducer";
 import { getDb } from "@/offline/db/indexDB";
 import { TABLES } from "@/offline/db/schema";
-import { createEvent } from "./eventFactory";
-import { generateLedgerEntries } from "../ledger/ledgerGenerator";
+import { generateLedgerEntries } from "../../../shared/ledgerGenerator";
 import { useFinancialStore } from "@/store/financialDataStore"
 import { syncEvent } from "../sync/syncEngine";
 export const dispatchEvent = async (event: any) => {

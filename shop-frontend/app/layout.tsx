@@ -7,30 +7,23 @@ import { Providers } from "./providers"
 import { runSync } from "@/offline/sync/networkMonitor"
 import { startInterval } from "@/offline/sync/networkMonitor"
 
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // Do not auto-start sync on pages like /register or /login
+  const isAuthPage = typeof window !== "undefined" && location.pathname.startsWith("/register");
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  if (navigator.onLine) {
-    runSync()
-    startInterval()
-}
+  if (navigator.onLine && !isAuthPage) {
+    runSync();
+    startInterval();
+  }
+
   return (
     <html lang="en">
       <body>
-
         <Providers>
-
-          
-            {children}
-
+          {children}
           <Toaster richColors position="top-right" />
-
         </Providers>
-
       </body>
     </html>
-  )
+  );
 }

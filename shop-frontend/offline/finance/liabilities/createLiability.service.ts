@@ -7,7 +7,7 @@ import { useBranchStore } from "@/store/useBranchStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { financeEventType } from "@/offline/events/eventGroups/financeEvent";
 import { FinanceStore } from "@/store/useFinanceStore";
-import { generateLedgerEntries } from "@/offline/ledger/ledgerGenerator";
+import { generateLedgerEntries } from "../../../../shared/ledgerGenerator";
 import { createEntity } from "@/offline/entities/entityFactory";
 
 export async function createLiability(liabilityData: any) {
@@ -30,8 +30,6 @@ export async function createLiability(liabilityData: any) {
 
     // 2️⃣ Dispatch event
     await dispatchEvent(event)
-      // add ledger entries
-    await generateLedgerEntries(event)
 
     // 3️⃣ Update Zustand store
     

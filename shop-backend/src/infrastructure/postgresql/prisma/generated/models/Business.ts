@@ -250,17 +250,13 @@ export type BusinessWhereInput = {
   status?: Prisma.EnumBusinessStatusFilter<"Business"> | $Enums.BusinessStatus
   branch?: Prisma.BranchListRelationFilter
   users?: Prisma.UserListRelationFilter
-  synced?: Prisma.ProcessedSyncEventListRelationFilter
   subscriptions?: Prisma.BusinessSubscriptionListRelationFilter
   categories?: Prisma.CategoryListRelationFilter
   brands?: Prisma.BrandListRelationFilter
   products?: Prisma.ProductListRelationFilter
   stockMovement?: Prisma.StockMovementListRelationFilter
   sales?: Prisma.SaleListRelationFilter
-  cashFlows?: Prisma.CashFlowListRelationFilter
   liabilities?: Prisma.LiabilityListRelationFilter
-  ledger?: Prisma.LedgerAccountListRelationFilter
-  ledgerEntry?: Prisma.LedgerEntryListRelationFilter
   loan?: Prisma.LoanListRelationFilter
   employees?: Prisma.EmployeeListRelationFilter
   assets?: Prisma.AssetListRelationFilter
@@ -281,17 +277,13 @@ export type BusinessOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   branch?: Prisma.BranchOrderByRelationAggregateInput
   users?: Prisma.UserOrderByRelationAggregateInput
-  synced?: Prisma.ProcessedSyncEventOrderByRelationAggregateInput
   subscriptions?: Prisma.BusinessSubscriptionOrderByRelationAggregateInput
   categories?: Prisma.CategoryOrderByRelationAggregateInput
   brands?: Prisma.BrandOrderByRelationAggregateInput
   products?: Prisma.ProductOrderByRelationAggregateInput
   stockMovement?: Prisma.StockMovementOrderByRelationAggregateInput
   sales?: Prisma.SaleOrderByRelationAggregateInput
-  cashFlows?: Prisma.CashFlowOrderByRelationAggregateInput
   liabilities?: Prisma.LiabilityOrderByRelationAggregateInput
-  ledger?: Prisma.LedgerAccountOrderByRelationAggregateInput
-  ledgerEntry?: Prisma.LedgerEntryOrderByRelationAggregateInput
   loan?: Prisma.LoanOrderByRelationAggregateInput
   employees?: Prisma.EmployeeOrderByRelationAggregateInput
   assets?: Prisma.AssetOrderByRelationAggregateInput
@@ -315,17 +307,13 @@ export type BusinessWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumBusinessStatusFilter<"Business"> | $Enums.BusinessStatus
   branch?: Prisma.BranchListRelationFilter
   users?: Prisma.UserListRelationFilter
-  synced?: Prisma.ProcessedSyncEventListRelationFilter
   subscriptions?: Prisma.BusinessSubscriptionListRelationFilter
   categories?: Prisma.CategoryListRelationFilter
   brands?: Prisma.BrandListRelationFilter
   products?: Prisma.ProductListRelationFilter
   stockMovement?: Prisma.StockMovementListRelationFilter
   sales?: Prisma.SaleListRelationFilter
-  cashFlows?: Prisma.CashFlowListRelationFilter
   liabilities?: Prisma.LiabilityListRelationFilter
-  ledger?: Prisma.LedgerAccountListRelationFilter
-  ledgerEntry?: Prisma.LedgerEntryListRelationFilter
   loan?: Prisma.LoanListRelationFilter
   employees?: Prisma.EmployeeListRelationFilter
   assets?: Prisma.AssetListRelationFilter
@@ -378,17 +366,13 @@ export type BusinessCreateInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
@@ -409,17 +393,13 @@ export type BusinessUncheckedCreateInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityUncheckedCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountUncheckedCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanUncheckedCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
@@ -440,17 +420,13 @@ export type BusinessUpdateInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
@@ -471,17 +447,13 @@ export type BusinessUncheckedUpdateInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUncheckedUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUncheckedUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUncheckedUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
@@ -656,48 +628,6 @@ export type BusinessUpdateOneRequiredWithoutSubscriptionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutSubscriptionsInput, Prisma.BusinessUpdateWithoutSubscriptionsInput>, Prisma.BusinessUncheckedUpdateWithoutSubscriptionsInput>
 }
 
-export type BusinessCreateNestedOneWithoutSyncedInput = {
-  create?: Prisma.XOR<Prisma.BusinessCreateWithoutSyncedInput, Prisma.BusinessUncheckedCreateWithoutSyncedInput>
-  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutSyncedInput
-  connect?: Prisma.BusinessWhereUniqueInput
-}
-
-export type BusinessUpdateOneRequiredWithoutSyncedNestedInput = {
-  create?: Prisma.XOR<Prisma.BusinessCreateWithoutSyncedInput, Prisma.BusinessUncheckedCreateWithoutSyncedInput>
-  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutSyncedInput
-  upsert?: Prisma.BusinessUpsertWithoutSyncedInput
-  connect?: Prisma.BusinessWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutSyncedInput, Prisma.BusinessUpdateWithoutSyncedInput>, Prisma.BusinessUncheckedUpdateWithoutSyncedInput>
-}
-
-export type BusinessCreateNestedOneWithoutLedgerInput = {
-  create?: Prisma.XOR<Prisma.BusinessCreateWithoutLedgerInput, Prisma.BusinessUncheckedCreateWithoutLedgerInput>
-  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutLedgerInput
-  connect?: Prisma.BusinessWhereUniqueInput
-}
-
-export type BusinessUpdateOneRequiredWithoutLedgerNestedInput = {
-  create?: Prisma.XOR<Prisma.BusinessCreateWithoutLedgerInput, Prisma.BusinessUncheckedCreateWithoutLedgerInput>
-  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutLedgerInput
-  upsert?: Prisma.BusinessUpsertWithoutLedgerInput
-  connect?: Prisma.BusinessWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutLedgerInput, Prisma.BusinessUpdateWithoutLedgerInput>, Prisma.BusinessUncheckedUpdateWithoutLedgerInput>
-}
-
-export type BusinessCreateNestedOneWithoutLedgerEntryInput = {
-  create?: Prisma.XOR<Prisma.BusinessCreateWithoutLedgerEntryInput, Prisma.BusinessUncheckedCreateWithoutLedgerEntryInput>
-  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutLedgerEntryInput
-  connect?: Prisma.BusinessWhereUniqueInput
-}
-
-export type BusinessUpdateOneRequiredWithoutLedgerEntryNestedInput = {
-  create?: Prisma.XOR<Prisma.BusinessCreateWithoutLedgerEntryInput, Prisma.BusinessUncheckedCreateWithoutLedgerEntryInput>
-  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutLedgerEntryInput
-  upsert?: Prisma.BusinessUpsertWithoutLedgerEntryInput
-  connect?: Prisma.BusinessWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutLedgerEntryInput, Prisma.BusinessUpdateWithoutLedgerEntryInput>, Prisma.BusinessUncheckedUpdateWithoutLedgerEntryInput>
-}
-
 export type BusinessCreateNestedOneWithoutCategoriesInput = {
   create?: Prisma.XOR<Prisma.BusinessCreateWithoutCategoriesInput, Prisma.BusinessUncheckedCreateWithoutCategoriesInput>
   connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutCategoriesInput
@@ -766,20 +696,6 @@ export type BusinessUpdateOneRequiredWithoutSalesNestedInput = {
   upsert?: Prisma.BusinessUpsertWithoutSalesInput
   connect?: Prisma.BusinessWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutSalesInput, Prisma.BusinessUpdateWithoutSalesInput>, Prisma.BusinessUncheckedUpdateWithoutSalesInput>
-}
-
-export type BusinessCreateNestedOneWithoutCashFlowsInput = {
-  create?: Prisma.XOR<Prisma.BusinessCreateWithoutCashFlowsInput, Prisma.BusinessUncheckedCreateWithoutCashFlowsInput>
-  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutCashFlowsInput
-  connect?: Prisma.BusinessWhereUniqueInput
-}
-
-export type BusinessUpdateOneRequiredWithoutCashFlowsNestedInput = {
-  create?: Prisma.XOR<Prisma.BusinessCreateWithoutCashFlowsInput, Prisma.BusinessUncheckedCreateWithoutCashFlowsInput>
-  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutCashFlowsInput
-  upsert?: Prisma.BusinessUpsertWithoutCashFlowsInput
-  connect?: Prisma.BusinessWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutCashFlowsInput, Prisma.BusinessUpdateWithoutCashFlowsInput>, Prisma.BusinessUncheckedUpdateWithoutCashFlowsInput>
 }
 
 export type BusinessCreateNestedOneWithoutLiabilitiesInput = {
@@ -891,17 +807,13 @@ export type BusinessCreateWithoutBranchInput = {
   activatedAt?: Date | string | null
   status?: $Enums.BusinessStatus
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
@@ -921,17 +833,13 @@ export type BusinessUncheckedCreateWithoutBranchInput = {
   activatedAt?: Date | string | null
   status?: $Enums.BusinessStatus
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityUncheckedCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountUncheckedCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanUncheckedCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
@@ -967,17 +875,13 @@ export type BusinessUpdateWithoutBranchInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
@@ -997,17 +901,13 @@ export type BusinessUncheckedUpdateWithoutBranchInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUncheckedUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUncheckedUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUncheckedUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1027,17 +927,13 @@ export type BusinessCreateWithoutUsersInput = {
   activatedAt?: Date | string | null
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
@@ -1057,17 +953,13 @@ export type BusinessUncheckedCreateWithoutUsersInput = {
   activatedAt?: Date | string | null
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityUncheckedCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountUncheckedCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanUncheckedCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
@@ -1103,17 +995,13 @@ export type BusinessUpdateWithoutUsersInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
@@ -1133,17 +1021,13 @@ export type BusinessUncheckedUpdateWithoutUsersInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUncheckedUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUncheckedUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUncheckedUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1164,16 +1048,12 @@ export type BusinessCreateWithoutSubscriptionsInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
@@ -1194,16 +1074,12 @@ export type BusinessUncheckedCreateWithoutSubscriptionsInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityUncheckedCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountUncheckedCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanUncheckedCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
@@ -1240,16 +1116,12 @@ export type BusinessUpdateWithoutSubscriptionsInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
@@ -1270,424 +1142,12 @@ export type BusinessUncheckedUpdateWithoutSubscriptionsInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUncheckedUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUncheckedUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
-  loan?: Prisma.LoanUncheckedUpdateManyWithoutBusinessNestedInput
-  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
-  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutBusinessNestedInput
-  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
-}
-
-export type BusinessCreateWithoutSyncedInput = {
-  id: string
-  name: string
-  address?: string | null
-  onboardingStep?: number
-  isOnboarding?: boolean
-  onboardingCompleted?: boolean
-  createdAt?: Date | string
-  activatedAt?: Date | string | null
-  status?: $Enums.BusinessStatus
-  branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
-  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
-  brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
-  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
-  stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
-  sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
-  liabilities?: Prisma.LiabilityCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
-  loan?: Prisma.LoanCreateNestedManyWithoutBusinessInput
-  employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
-  assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
-  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
-  expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutBusinessInput
-  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
-}
-
-export type BusinessUncheckedCreateWithoutSyncedInput = {
-  id: string
-  name: string
-  address?: string | null
-  onboardingStep?: number
-  isOnboarding?: boolean
-  onboardingCompleted?: boolean
-  createdAt?: Date | string
-  activatedAt?: Date | string | null
-  status?: $Enums.BusinessStatus
-  branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
-  brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
-  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
-  stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
-  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
-  liabilities?: Prisma.LiabilityUncheckedCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountUncheckedCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
-  loan?: Prisma.LoanUncheckedCreateNestedManyWithoutBusinessInput
-  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
-  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutBusinessInput
-  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
-}
-
-export type BusinessCreateOrConnectWithoutSyncedInput = {
-  where: Prisma.BusinessWhereUniqueInput
-  create: Prisma.XOR<Prisma.BusinessCreateWithoutSyncedInput, Prisma.BusinessUncheckedCreateWithoutSyncedInput>
-}
-
-export type BusinessUpsertWithoutSyncedInput = {
-  update: Prisma.XOR<Prisma.BusinessUpdateWithoutSyncedInput, Prisma.BusinessUncheckedUpdateWithoutSyncedInput>
-  create: Prisma.XOR<Prisma.BusinessCreateWithoutSyncedInput, Prisma.BusinessUncheckedCreateWithoutSyncedInput>
-  where?: Prisma.BusinessWhereInput
-}
-
-export type BusinessUpdateToOneWithWhereWithoutSyncedInput = {
-  where?: Prisma.BusinessWhereInput
-  data: Prisma.XOR<Prisma.BusinessUpdateWithoutSyncedInput, Prisma.BusinessUncheckedUpdateWithoutSyncedInput>
-}
-
-export type BusinessUpdateWithoutSyncedInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
-  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
-  branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
-  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
-  brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
-  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
-  stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
-  sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
-  liabilities?: Prisma.LiabilityUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
-  loan?: Prisma.LoanUpdateManyWithoutBusinessNestedInput
-  employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
-  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutBusinessNestedInput
-  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
-}
-
-export type BusinessUncheckedUpdateWithoutSyncedInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
-  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
-  branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
-  brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
-  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
-  stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
-  sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
-  liabilities?: Prisma.LiabilityUncheckedUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUncheckedUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
-  loan?: Prisma.LoanUncheckedUpdateManyWithoutBusinessNestedInput
-  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
-  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutBusinessNestedInput
-  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
-}
-
-export type BusinessCreateWithoutLedgerInput = {
-  id: string
-  name: string
-  address?: string | null
-  onboardingStep?: number
-  isOnboarding?: boolean
-  onboardingCompleted?: boolean
-  createdAt?: Date | string
-  activatedAt?: Date | string | null
-  status?: $Enums.BusinessStatus
-  branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
-  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
-  brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
-  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
-  stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
-  sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
-  liabilities?: Prisma.LiabilityCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
-  loan?: Prisma.LoanCreateNestedManyWithoutBusinessInput
-  employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
-  assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
-  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
-  expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutBusinessInput
-  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
-}
-
-export type BusinessUncheckedCreateWithoutLedgerInput = {
-  id: string
-  name: string
-  address?: string | null
-  onboardingStep?: number
-  isOnboarding?: boolean
-  onboardingCompleted?: boolean
-  createdAt?: Date | string
-  activatedAt?: Date | string | null
-  status?: $Enums.BusinessStatus
-  branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
-  brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
-  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
-  stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
-  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
-  liabilities?: Prisma.LiabilityUncheckedCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
-  loan?: Prisma.LoanUncheckedCreateNestedManyWithoutBusinessInput
-  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
-  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutBusinessInput
-  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
-}
-
-export type BusinessCreateOrConnectWithoutLedgerInput = {
-  where: Prisma.BusinessWhereUniqueInput
-  create: Prisma.XOR<Prisma.BusinessCreateWithoutLedgerInput, Prisma.BusinessUncheckedCreateWithoutLedgerInput>
-}
-
-export type BusinessUpsertWithoutLedgerInput = {
-  update: Prisma.XOR<Prisma.BusinessUpdateWithoutLedgerInput, Prisma.BusinessUncheckedUpdateWithoutLedgerInput>
-  create: Prisma.XOR<Prisma.BusinessCreateWithoutLedgerInput, Prisma.BusinessUncheckedCreateWithoutLedgerInput>
-  where?: Prisma.BusinessWhereInput
-}
-
-export type BusinessUpdateToOneWithWhereWithoutLedgerInput = {
-  where?: Prisma.BusinessWhereInput
-  data: Prisma.XOR<Prisma.BusinessUpdateWithoutLedgerInput, Prisma.BusinessUncheckedUpdateWithoutLedgerInput>
-}
-
-export type BusinessUpdateWithoutLedgerInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
-  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
-  branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
-  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
-  brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
-  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
-  stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
-  sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
-  liabilities?: Prisma.LiabilityUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
-  loan?: Prisma.LoanUpdateManyWithoutBusinessNestedInput
-  employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
-  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutBusinessNestedInput
-  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
-}
-
-export type BusinessUncheckedUpdateWithoutLedgerInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
-  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
-  branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
-  brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
-  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
-  stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
-  sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
-  liabilities?: Prisma.LiabilityUncheckedUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
-  loan?: Prisma.LoanUncheckedUpdateManyWithoutBusinessNestedInput
-  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
-  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutBusinessNestedInput
-  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
-}
-
-export type BusinessCreateWithoutLedgerEntryInput = {
-  id: string
-  name: string
-  address?: string | null
-  onboardingStep?: number
-  isOnboarding?: boolean
-  onboardingCompleted?: boolean
-  createdAt?: Date | string
-  activatedAt?: Date | string | null
-  status?: $Enums.BusinessStatus
-  branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
-  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
-  brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
-  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
-  stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
-  sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
-  liabilities?: Prisma.LiabilityCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountCreateNestedManyWithoutBusinessInput
-  loan?: Prisma.LoanCreateNestedManyWithoutBusinessInput
-  employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
-  assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
-  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
-  expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutBusinessInput
-  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
-}
-
-export type BusinessUncheckedCreateWithoutLedgerEntryInput = {
-  id: string
-  name: string
-  address?: string | null
-  onboardingStep?: number
-  isOnboarding?: boolean
-  onboardingCompleted?: boolean
-  createdAt?: Date | string
-  activatedAt?: Date | string | null
-  status?: $Enums.BusinessStatus
-  branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
-  brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
-  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
-  stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
-  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
-  liabilities?: Prisma.LiabilityUncheckedCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountUncheckedCreateNestedManyWithoutBusinessInput
-  loan?: Prisma.LoanUncheckedCreateNestedManyWithoutBusinessInput
-  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
-  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutBusinessInput
-  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
-}
-
-export type BusinessCreateOrConnectWithoutLedgerEntryInput = {
-  where: Prisma.BusinessWhereUniqueInput
-  create: Prisma.XOR<Prisma.BusinessCreateWithoutLedgerEntryInput, Prisma.BusinessUncheckedCreateWithoutLedgerEntryInput>
-}
-
-export type BusinessUpsertWithoutLedgerEntryInput = {
-  update: Prisma.XOR<Prisma.BusinessUpdateWithoutLedgerEntryInput, Prisma.BusinessUncheckedUpdateWithoutLedgerEntryInput>
-  create: Prisma.XOR<Prisma.BusinessCreateWithoutLedgerEntryInput, Prisma.BusinessUncheckedCreateWithoutLedgerEntryInput>
-  where?: Prisma.BusinessWhereInput
-}
-
-export type BusinessUpdateToOneWithWhereWithoutLedgerEntryInput = {
-  where?: Prisma.BusinessWhereInput
-  data: Prisma.XOR<Prisma.BusinessUpdateWithoutLedgerEntryInput, Prisma.BusinessUncheckedUpdateWithoutLedgerEntryInput>
-}
-
-export type BusinessUpdateWithoutLedgerEntryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
-  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
-  branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
-  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
-  brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
-  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
-  stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
-  sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
-  liabilities?: Prisma.LiabilityUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUpdateManyWithoutBusinessNestedInput
-  loan?: Prisma.LoanUpdateManyWithoutBusinessNestedInput
-  employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
-  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutBusinessNestedInput
-  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
-}
-
-export type BusinessUncheckedUpdateWithoutLedgerEntryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
-  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
-  branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
-  brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
-  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
-  stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
-  sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
-  liabilities?: Prisma.LiabilityUncheckedUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUncheckedUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUncheckedUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1708,16 +1168,12 @@ export type BusinessCreateWithoutCategoriesInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
@@ -1738,16 +1194,12 @@ export type BusinessUncheckedCreateWithoutCategoriesInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityUncheckedCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountUncheckedCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanUncheckedCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
@@ -1784,16 +1236,12 @@ export type BusinessUpdateWithoutCategoriesInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
@@ -1814,16 +1262,12 @@ export type BusinessUncheckedUpdateWithoutCategoriesInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUncheckedUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUncheckedUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUncheckedUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1844,16 +1288,12 @@ export type BusinessCreateWithoutBrandsInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
@@ -1874,16 +1314,12 @@ export type BusinessUncheckedCreateWithoutBrandsInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityUncheckedCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountUncheckedCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanUncheckedCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
@@ -1920,16 +1356,12 @@ export type BusinessUpdateWithoutBrandsInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
@@ -1950,16 +1382,12 @@ export type BusinessUncheckedUpdateWithoutBrandsInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUncheckedUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUncheckedUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUncheckedUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1980,16 +1408,12 @@ export type BusinessCreateWithoutProductsInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
@@ -2010,16 +1434,12 @@ export type BusinessUncheckedCreateWithoutProductsInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityUncheckedCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountUncheckedCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanUncheckedCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
@@ -2056,16 +1476,12 @@ export type BusinessUpdateWithoutProductsInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
@@ -2086,16 +1502,12 @@ export type BusinessUncheckedUpdateWithoutProductsInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUncheckedUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUncheckedUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUncheckedUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2116,16 +1528,12 @@ export type BusinessCreateWithoutStockMovementInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
@@ -2146,16 +1554,12 @@ export type BusinessUncheckedCreateWithoutStockMovementInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityUncheckedCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountUncheckedCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanUncheckedCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
@@ -2192,16 +1596,12 @@ export type BusinessUpdateWithoutStockMovementInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
@@ -2222,16 +1622,12 @@ export type BusinessUncheckedUpdateWithoutStockMovementInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUncheckedUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUncheckedUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUncheckedUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2252,16 +1648,12 @@ export type BusinessCreateWithoutSalesInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
@@ -2282,16 +1674,12 @@ export type BusinessUncheckedCreateWithoutSalesInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityUncheckedCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountUncheckedCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanUncheckedCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
@@ -2328,16 +1716,12 @@ export type BusinessUpdateWithoutSalesInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
@@ -2358,152 +1742,12 @@ export type BusinessUncheckedUpdateWithoutSalesInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUncheckedUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUncheckedUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
-  loan?: Prisma.LoanUncheckedUpdateManyWithoutBusinessNestedInput
-  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
-  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedUpdateManyWithoutBusinessNestedInput
-  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
-}
-
-export type BusinessCreateWithoutCashFlowsInput = {
-  id: string
-  name: string
-  address?: string | null
-  onboardingStep?: number
-  isOnboarding?: boolean
-  onboardingCompleted?: boolean
-  createdAt?: Date | string
-  activatedAt?: Date | string | null
-  status?: $Enums.BusinessStatus
-  branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
-  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
-  brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
-  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
-  stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
-  sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
-  liabilities?: Prisma.LiabilityCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
-  loan?: Prisma.LoanCreateNestedManyWithoutBusinessInput
-  employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
-  assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
-  expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
-  expenseCategories?: Prisma.ExpenseCategoryCreateNestedManyWithoutBusinessInput
-  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
-}
-
-export type BusinessUncheckedCreateWithoutCashFlowsInput = {
-  id: string
-  name: string
-  address?: string | null
-  onboardingStep?: number
-  isOnboarding?: boolean
-  onboardingCompleted?: boolean
-  createdAt?: Date | string
-  activatedAt?: Date | string | null
-  status?: $Enums.BusinessStatus
-  branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
-  brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
-  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
-  stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
-  sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
-  liabilities?: Prisma.LiabilityUncheckedCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountUncheckedCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
-  loan?: Prisma.LoanUncheckedCreateNestedManyWithoutBusinessInput
-  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
-  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
-  expenseCategories?: Prisma.ExpenseCategoryUncheckedCreateNestedManyWithoutBusinessInput
-  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
-}
-
-export type BusinessCreateOrConnectWithoutCashFlowsInput = {
-  where: Prisma.BusinessWhereUniqueInput
-  create: Prisma.XOR<Prisma.BusinessCreateWithoutCashFlowsInput, Prisma.BusinessUncheckedCreateWithoutCashFlowsInput>
-}
-
-export type BusinessUpsertWithoutCashFlowsInput = {
-  update: Prisma.XOR<Prisma.BusinessUpdateWithoutCashFlowsInput, Prisma.BusinessUncheckedUpdateWithoutCashFlowsInput>
-  create: Prisma.XOR<Prisma.BusinessCreateWithoutCashFlowsInput, Prisma.BusinessUncheckedCreateWithoutCashFlowsInput>
-  where?: Prisma.BusinessWhereInput
-}
-
-export type BusinessUpdateToOneWithWhereWithoutCashFlowsInput = {
-  where?: Prisma.BusinessWhereInput
-  data: Prisma.XOR<Prisma.BusinessUpdateWithoutCashFlowsInput, Prisma.BusinessUncheckedUpdateWithoutCashFlowsInput>
-}
-
-export type BusinessUpdateWithoutCashFlowsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
-  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
-  branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
-  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
-  brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
-  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
-  stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
-  sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
-  liabilities?: Prisma.LiabilityUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
-  loan?: Prisma.LoanUpdateManyWithoutBusinessNestedInput
-  employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
-  expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
-  expenseCategories?: Prisma.ExpenseCategoryUpdateManyWithoutBusinessNestedInput
-  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
-}
-
-export type BusinessUncheckedUpdateWithoutCashFlowsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
-  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
-  branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
-  brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
-  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
-  stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
-  sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
-  liabilities?: Prisma.LiabilityUncheckedUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUncheckedUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUncheckedUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2524,16 +1768,12 @@ export type BusinessCreateWithoutLiabilitiesInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
@@ -2554,16 +1794,12 @@ export type BusinessUncheckedCreateWithoutLiabilitiesInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountUncheckedCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanUncheckedCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
@@ -2600,16 +1836,12 @@ export type BusinessUpdateWithoutLiabilitiesInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
@@ -2630,16 +1862,12 @@ export type BusinessUncheckedUpdateWithoutLiabilitiesInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUncheckedUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUncheckedUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2660,17 +1888,13 @@ export type BusinessCreateWithoutAssetsInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
@@ -2690,17 +1914,13 @@ export type BusinessUncheckedCreateWithoutAssetsInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityUncheckedCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountUncheckedCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanUncheckedCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
@@ -2736,17 +1956,13 @@ export type BusinessUpdateWithoutAssetsInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
@@ -2766,17 +1982,13 @@ export type BusinessUncheckedUpdateWithoutAssetsInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUncheckedUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUncheckedUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUncheckedUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2796,17 +2008,13 @@ export type BusinessCreateWithoutExpensesInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
@@ -2826,17 +2034,13 @@ export type BusinessUncheckedCreateWithoutExpensesInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityUncheckedCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountUncheckedCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanUncheckedCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
@@ -2872,17 +2076,13 @@ export type BusinessUpdateWithoutExpensesInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
@@ -2902,17 +2102,13 @@ export type BusinessUncheckedUpdateWithoutExpensesInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUncheckedUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUncheckedUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUncheckedUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2932,17 +2128,13 @@ export type BusinessCreateWithoutLoanInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
@@ -2962,17 +2154,13 @@ export type BusinessUncheckedCreateWithoutLoanInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityUncheckedCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountUncheckedCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
@@ -3008,17 +2196,13 @@ export type BusinessUpdateWithoutLoanInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
@@ -3038,17 +2222,13 @@ export type BusinessUncheckedUpdateWithoutLoanInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUncheckedUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUncheckedUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
@@ -3068,17 +2248,13 @@ export type BusinessCreateWithoutEmployeesInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
@@ -3098,17 +2274,13 @@ export type BusinessUncheckedCreateWithoutEmployeesInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityUncheckedCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountUncheckedCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanUncheckedCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
@@ -3144,17 +2316,13 @@ export type BusinessUpdateWithoutEmployeesInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
@@ -3174,17 +2342,13 @@ export type BusinessUncheckedUpdateWithoutEmployeesInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUncheckedUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUncheckedUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUncheckedUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
@@ -3204,17 +2368,13 @@ export type BusinessCreateWithoutExpenseCategoriesInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
@@ -3234,17 +2394,13 @@ export type BusinessUncheckedCreateWithoutExpenseCategoriesInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityUncheckedCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountUncheckedCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanUncheckedCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
@@ -3280,17 +2436,13 @@ export type BusinessUpdateWithoutExpenseCategoriesInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
@@ -3310,17 +2462,13 @@ export type BusinessUncheckedUpdateWithoutExpenseCategoriesInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUncheckedUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUncheckedUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUncheckedUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
@@ -3340,17 +2488,13 @@ export type BusinessCreateWithoutAlertsInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetCreateNestedManyWithoutBusinessInput
@@ -3370,17 +2514,13 @@ export type BusinessUncheckedCreateWithoutAlertsInput = {
   status?: $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
-  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutBusinessInput
   brands?: Prisma.BrandUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   stockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutBusinessInput
   sales?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
-  cashFlows?: Prisma.CashFlowUncheckedCreateNestedManyWithoutBusinessInput
   liabilities?: Prisma.LiabilityUncheckedCreateNestedManyWithoutBusinessInput
-  ledger?: Prisma.LedgerAccountUncheckedCreateNestedManyWithoutBusinessInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   loan?: Prisma.LoanUncheckedCreateNestedManyWithoutBusinessInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutBusinessInput
@@ -3416,17 +2556,13 @@ export type BusinessUpdateWithoutAlertsInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUpdateManyWithoutBusinessNestedInput
@@ -3446,17 +2582,13 @@ export type BusinessUncheckedUpdateWithoutAlertsInput = {
   status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branch?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
-  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutBusinessNestedInput
   brands?: Prisma.BrandUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   stockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutBusinessNestedInput
   sales?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
-  cashFlows?: Prisma.CashFlowUncheckedUpdateManyWithoutBusinessNestedInput
   liabilities?: Prisma.LiabilityUncheckedUpdateManyWithoutBusinessNestedInput
-  ledger?: Prisma.LedgerAccountUncheckedUpdateManyWithoutBusinessNestedInput
-  ledgerEntry?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   loan?: Prisma.LoanUncheckedUpdateManyWithoutBusinessNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutBusinessNestedInput
@@ -3472,17 +2604,13 @@ export type BusinessUncheckedUpdateWithoutAlertsInput = {
 export type BusinessCountOutputType = {
   branch: number
   users: number
-  synced: number
   subscriptions: number
   categories: number
   brands: number
   products: number
   stockMovement: number
   sales: number
-  cashFlows: number
   liabilities: number
-  ledger: number
-  ledgerEntry: number
   loan: number
   employees: number
   assets: number
@@ -3494,17 +2622,13 @@ export type BusinessCountOutputType = {
 export type BusinessCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   branch?: boolean | BusinessCountOutputTypeCountBranchArgs
   users?: boolean | BusinessCountOutputTypeCountUsersArgs
-  synced?: boolean | BusinessCountOutputTypeCountSyncedArgs
   subscriptions?: boolean | BusinessCountOutputTypeCountSubscriptionsArgs
   categories?: boolean | BusinessCountOutputTypeCountCategoriesArgs
   brands?: boolean | BusinessCountOutputTypeCountBrandsArgs
   products?: boolean | BusinessCountOutputTypeCountProductsArgs
   stockMovement?: boolean | BusinessCountOutputTypeCountStockMovementArgs
   sales?: boolean | BusinessCountOutputTypeCountSalesArgs
-  cashFlows?: boolean | BusinessCountOutputTypeCountCashFlowsArgs
   liabilities?: boolean | BusinessCountOutputTypeCountLiabilitiesArgs
-  ledger?: boolean | BusinessCountOutputTypeCountLedgerArgs
-  ledgerEntry?: boolean | BusinessCountOutputTypeCountLedgerEntryArgs
   loan?: boolean | BusinessCountOutputTypeCountLoanArgs
   employees?: boolean | BusinessCountOutputTypeCountEmployeesArgs
   assets?: boolean | BusinessCountOutputTypeCountAssetsArgs
@@ -3535,13 +2659,6 @@ export type BusinessCountOutputTypeCountBranchArgs<ExtArgs extends runtime.Types
  */
 export type BusinessCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.UserWhereInput
-}
-
-/**
- * BusinessCountOutputType without action
- */
-export type BusinessCountOutputTypeCountSyncedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ProcessedSyncEventWhereInput
 }
 
 /**
@@ -3589,29 +2706,8 @@ export type BusinessCountOutputTypeCountSalesArgs<ExtArgs extends runtime.Types.
 /**
  * BusinessCountOutputType without action
  */
-export type BusinessCountOutputTypeCountCashFlowsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.CashFlowWhereInput
-}
-
-/**
- * BusinessCountOutputType without action
- */
 export type BusinessCountOutputTypeCountLiabilitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.LiabilityWhereInput
-}
-
-/**
- * BusinessCountOutputType without action
- */
-export type BusinessCountOutputTypeCountLedgerArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.LedgerAccountWhereInput
-}
-
-/**
- * BusinessCountOutputType without action
- */
-export type BusinessCountOutputTypeCountLedgerEntryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.LedgerEntryWhereInput
 }
 
 /**
@@ -3669,17 +2765,13 @@ export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   status?: boolean
   branch?: boolean | Prisma.Business$branchArgs<ExtArgs>
   users?: boolean | Prisma.Business$usersArgs<ExtArgs>
-  synced?: boolean | Prisma.Business$syncedArgs<ExtArgs>
   subscriptions?: boolean | Prisma.Business$subscriptionsArgs<ExtArgs>
   categories?: boolean | Prisma.Business$categoriesArgs<ExtArgs>
   brands?: boolean | Prisma.Business$brandsArgs<ExtArgs>
   products?: boolean | Prisma.Business$productsArgs<ExtArgs>
   stockMovement?: boolean | Prisma.Business$stockMovementArgs<ExtArgs>
   sales?: boolean | Prisma.Business$salesArgs<ExtArgs>
-  cashFlows?: boolean | Prisma.Business$cashFlowsArgs<ExtArgs>
   liabilities?: boolean | Prisma.Business$liabilitiesArgs<ExtArgs>
-  ledger?: boolean | Prisma.Business$ledgerArgs<ExtArgs>
-  ledgerEntry?: boolean | Prisma.Business$ledgerEntryArgs<ExtArgs>
   loan?: boolean | Prisma.Business$loanArgs<ExtArgs>
   employees?: boolean | Prisma.Business$employeesArgs<ExtArgs>
   assets?: boolean | Prisma.Business$assetsArgs<ExtArgs>
@@ -3729,17 +2821,13 @@ export type BusinessOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type BusinessInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   branch?: boolean | Prisma.Business$branchArgs<ExtArgs>
   users?: boolean | Prisma.Business$usersArgs<ExtArgs>
-  synced?: boolean | Prisma.Business$syncedArgs<ExtArgs>
   subscriptions?: boolean | Prisma.Business$subscriptionsArgs<ExtArgs>
   categories?: boolean | Prisma.Business$categoriesArgs<ExtArgs>
   brands?: boolean | Prisma.Business$brandsArgs<ExtArgs>
   products?: boolean | Prisma.Business$productsArgs<ExtArgs>
   stockMovement?: boolean | Prisma.Business$stockMovementArgs<ExtArgs>
   sales?: boolean | Prisma.Business$salesArgs<ExtArgs>
-  cashFlows?: boolean | Prisma.Business$cashFlowsArgs<ExtArgs>
   liabilities?: boolean | Prisma.Business$liabilitiesArgs<ExtArgs>
-  ledger?: boolean | Prisma.Business$ledgerArgs<ExtArgs>
-  ledgerEntry?: boolean | Prisma.Business$ledgerEntryArgs<ExtArgs>
   loan?: boolean | Prisma.Business$loanArgs<ExtArgs>
   employees?: boolean | Prisma.Business$employeesArgs<ExtArgs>
   assets?: boolean | Prisma.Business$assetsArgs<ExtArgs>
@@ -3756,17 +2844,13 @@ export type $BusinessPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   objects: {
     branch: Prisma.$BranchPayload<ExtArgs>[]
     users: Prisma.$UserPayload<ExtArgs>[]
-    synced: Prisma.$ProcessedSyncEventPayload<ExtArgs>[]
     subscriptions: Prisma.$BusinessSubscriptionPayload<ExtArgs>[]
     categories: Prisma.$CategoryPayload<ExtArgs>[]
     brands: Prisma.$BrandPayload<ExtArgs>[]
     products: Prisma.$ProductPayload<ExtArgs>[]
     stockMovement: Prisma.$StockMovementPayload<ExtArgs>[]
     sales: Prisma.$SalePayload<ExtArgs>[]
-    cashFlows: Prisma.$CashFlowPayload<ExtArgs>[]
     liabilities: Prisma.$LiabilityPayload<ExtArgs>[]
-    ledger: Prisma.$LedgerAccountPayload<ExtArgs>[]
-    ledgerEntry: Prisma.$LedgerEntryPayload<ExtArgs>[]
     loan: Prisma.$LoanPayload<ExtArgs>[]
     employees: Prisma.$EmployeePayload<ExtArgs>[]
     assets: Prisma.$AssetPayload<ExtArgs>[]
@@ -4180,17 +3264,13 @@ export interface Prisma__BusinessClient<T, Null = never, ExtArgs extends runtime
   readonly [Symbol.toStringTag]: "PrismaPromise"
   branch<T extends Prisma.Business$branchArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$branchArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   users<T extends Prisma.Business$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  synced<T extends Prisma.Business$syncedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$syncedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProcessedSyncEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   subscriptions<T extends Prisma.Business$subscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BusinessSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   categories<T extends Prisma.Business$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   brands<T extends Prisma.Business$brandsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$brandsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BrandPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   products<T extends Prisma.Business$productsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$productsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   stockMovement<T extends Prisma.Business$stockMovementArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$stockMovementArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sales<T extends Prisma.Business$salesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$salesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  cashFlows<T extends Prisma.Business$cashFlowsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$cashFlowsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CashFlowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   liabilities<T extends Prisma.Business$liabilitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$liabilitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LiabilityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  ledger<T extends Prisma.Business$ledgerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$ledgerArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LedgerAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  ledgerEntry<T extends Prisma.Business$ledgerEntryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$ledgerEntryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LedgerEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   loan<T extends Prisma.Business$loanArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$loanArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LoanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   employees<T extends Prisma.Business$employeesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$employeesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   assets<T extends Prisma.Business$assetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$assetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -4671,30 +3751,6 @@ export type Business$usersArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * Business.synced
- */
-export type Business$syncedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ProcessedSyncEvent
-   */
-  select?: Prisma.ProcessedSyncEventSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ProcessedSyncEvent
-   */
-  omit?: Prisma.ProcessedSyncEventOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProcessedSyncEventInclude<ExtArgs> | null
-  where?: Prisma.ProcessedSyncEventWhereInput
-  orderBy?: Prisma.ProcessedSyncEventOrderByWithRelationInput | Prisma.ProcessedSyncEventOrderByWithRelationInput[]
-  cursor?: Prisma.ProcessedSyncEventWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ProcessedSyncEventScalarFieldEnum | Prisma.ProcessedSyncEventScalarFieldEnum[]
-}
-
-/**
  * Business.subscriptions
  */
 export type Business$subscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4839,30 +3895,6 @@ export type Business$salesArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * Business.cashFlows
- */
-export type Business$cashFlowsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the CashFlow
-   */
-  select?: Prisma.CashFlowSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the CashFlow
-   */
-  omit?: Prisma.CashFlowOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.CashFlowInclude<ExtArgs> | null
-  where?: Prisma.CashFlowWhereInput
-  orderBy?: Prisma.CashFlowOrderByWithRelationInput | Prisma.CashFlowOrderByWithRelationInput[]
-  cursor?: Prisma.CashFlowWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.CashFlowScalarFieldEnum | Prisma.CashFlowScalarFieldEnum[]
-}
-
-/**
  * Business.liabilities
  */
 export type Business$liabilitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4884,54 +3916,6 @@ export type Business$liabilitiesArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.LiabilityScalarFieldEnum | Prisma.LiabilityScalarFieldEnum[]
-}
-
-/**
- * Business.ledger
- */
-export type Business$ledgerArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the LedgerAccount
-   */
-  select?: Prisma.LedgerAccountSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the LedgerAccount
-   */
-  omit?: Prisma.LedgerAccountOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.LedgerAccountInclude<ExtArgs> | null
-  where?: Prisma.LedgerAccountWhereInput
-  orderBy?: Prisma.LedgerAccountOrderByWithRelationInput | Prisma.LedgerAccountOrderByWithRelationInput[]
-  cursor?: Prisma.LedgerAccountWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.LedgerAccountScalarFieldEnum | Prisma.LedgerAccountScalarFieldEnum[]
-}
-
-/**
- * Business.ledgerEntry
- */
-export type Business$ledgerEntryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the LedgerEntry
-   */
-  select?: Prisma.LedgerEntrySelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the LedgerEntry
-   */
-  omit?: Prisma.LedgerEntryOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.LedgerEntryInclude<ExtArgs> | null
-  where?: Prisma.LedgerEntryWhereInput
-  orderBy?: Prisma.LedgerEntryOrderByWithRelationInput | Prisma.LedgerEntryOrderByWithRelationInput[]
-  cursor?: Prisma.LedgerEntryWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.LedgerEntryScalarFieldEnum | Prisma.LedgerEntryScalarFieldEnum[]
 }
 
 /**

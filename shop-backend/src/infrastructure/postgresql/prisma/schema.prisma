@@ -92,6 +92,18 @@ enum LiabilityStatus {
   ACTIVE 
   SETTLED
 }
+enum Account {
+  CASH
+  INVENTORY
+  REVENUE
+  COGS
+  EXPENSES
+  FIXED_ASSETS
+  LIABILITIES
+  OWNER_CAPITAL
+  OWNER_DRAWINGS
+  INTER_BRANCH
+}
 
 enum AlertType {
   LOW_STOCK
@@ -137,16 +149,13 @@ model Business {
 
   branch     Branch[]
   users      User[]
-  synced     ProcessedSyncEvent[]
   subscriptions   BusinessSubscription[]
-  cashflow    CashFlow[]
   categories Category[]
   brands      Brand[]
   products   Product[]
   stockMovement     StockMovement[]
   sales      Sale[]
   liabilities Liability[]
-  ledgerEntry LedgerEntry[]
   loan        Loan[] 
   employees    Employee[]
   assets      Asset[]
@@ -167,12 +176,9 @@ model Branch {
   business      Business      @relation(fields: [businessId], references: [id])
 
   users         User[]
-  synce         ProcessedSyncEvent[]
   products      Product[]
   category      Category[]
-  ledgerEntry   LedgerEntry[]
-  cashflow      CashFlow[]
-  branchSnapshot    BranchSnapshot[]
+  accountSnapshot    AccountSnapshot[]
   inventorySnapshot InventorySnapshot[]
   brand         Brand[]
   sales         Sale[]
@@ -199,7 +205,7 @@ model User {
   business    Business? @relation(fields: [businessId], references: [id])
   branch      Branch?    @relation(fields: [branchId], references: [id])
   passwordResetTokens passwordResetToken[]
-  synced      ProcessedSyncEvent[]
+
 
 
   @@index([businessId])
@@ -252,17 +258,13 @@ model BusinessSubscription {
 model ProcessedSyncEvent {
   id          String   @id
   eventType   String
-  businessId  String
-  branchId    String
-  userId      String
+  businessId  String?
+  branchId    String?
+  userId      String?
   version     Int
   status      SyncEventStatus
   processedAt DateTime @default(now())
   error       String?
-  business    Business @relation(fields: [businessId], references: [id])
-  branches    Branch  @relation(fields: [branchId], references: [id])
-  user        User    @relation(fields: [userId], references: [id])
-
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -274,47 +276,55 @@ model Event {
   id         String   @id
   businessId String
   branchId   String
+  userId     String?
   type       String
   payload    Json
+
+  ledgerVersion Int   @default(1) // 👈 ADD THIS
 
   createdAt  DateTime
   syncedAt   DateTime @default(now())
 
-  // for ordering
   deviceId   String?
   sequence   Int?
 
-  LedgerEntries LedgerEntry[]
+  ledgerEntries LedgerEntry[]
 
   @@index([businessId, branchId])
 }
 
 
 model LedgerEntry {
-  id          String   @id 
+  id          String   @id // eventId-index
   businessId  String
   branchId    String
   eventId     String
 
-  account     String
+  account     Account
   amount      Decimal
-  
-  referenceId String?
-  createdAt   DateTime @default(now())
 
-  events      Event @relation(fields: [eventId], references: [id])
-  business    Business @relation(fields: [businessId], references: [id])
-  branch      Branch  @relation(fields: [branchId], references: [id])
+  index       Int       // 👈 ensures deterministic ordering
+  createdAt   DateTime  @default(now())
+
+  event       Event     @relation(fields: [eventId], references: [id])
+
+  @@unique([eventId, index]) // 👈 idempotency
+  @@index([businessId, branchId])
+  @@index([account])
 }
 
-model BranchSnapshot {
-  id    String    @id   @default(uuid())
-  branchId  String
-  lastEventId   String?
-  cashBalance   Decimal
-  updatedAt     DateTime    @updatedAt
+model AccountSnapshot {
+  id         String   @id @default(uuid())
+  branchId   String
+  account    String
+  balance    Decimal
 
-  branch      Branch @relation(fields: [branchId], references: [id])
+  lastEventId String?
+  updatedAt   DateTime @updatedAt
+
+  branch Branch @relation(fields: [branchId], references: [id])
+
+  @@unique([branchId, account])
 }
 
 model InventorySnapshot {
@@ -464,23 +474,6 @@ model SaleItem {
 
   @@index([saleId])
   @@index([productId])
-}
-
-model CashFlow {
-  id         String   @id @default(uuid())
-  businessId String
-  branchId   String
-
-  amount     Decimal
-  direction  CashFlowDirection
-  type       CashFlowType
-
-  business   Business @relation(fields: [businessId], references: [id])
-  branch     Branch   @relation(fields: [branchId], references: [id])
-
-  createdAt  DateTime @default(now())
-
-  @@index([businessId, branchId])
 }
 model Payment {
   id          String        @id 

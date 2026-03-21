@@ -29,9 +29,9 @@ export type UserMinAggregateOutputType = {
   name: string | null
   email: string | null
   password: string | null
+  role: $Enums.Role | null
   isActive: boolean | null
   onboardingCompleted: boolean | null
-  role: $Enums.Role | null
   branchId: string | null
   businessId: string | null
   createdAt: Date | null
@@ -42,9 +42,9 @@ export type UserMaxAggregateOutputType = {
   name: string | null
   email: string | null
   password: string | null
+  role: $Enums.Role | null
   isActive: boolean | null
   onboardingCompleted: boolean | null
-  role: $Enums.Role | null
   branchId: string | null
   businessId: string | null
   createdAt: Date | null
@@ -55,9 +55,9 @@ export type UserCountAggregateOutputType = {
   name: number
   email: number
   password: number
+  role: number
   isActive: number
   onboardingCompleted: number
-  role: number
   branchId: number
   businessId: number
   createdAt: number
@@ -70,9 +70,9 @@ export type UserMinAggregateInputType = {
   name?: true
   email?: true
   password?: true
+  role?: true
   isActive?: true
   onboardingCompleted?: true
-  role?: true
   branchId?: true
   businessId?: true
   createdAt?: true
@@ -83,9 +83,9 @@ export type UserMaxAggregateInputType = {
   name?: true
   email?: true
   password?: true
+  role?: true
   isActive?: true
   onboardingCompleted?: true
-  role?: true
   branchId?: true
   businessId?: true
   createdAt?: true
@@ -96,9 +96,9 @@ export type UserCountAggregateInputType = {
   name?: true
   email?: true
   password?: true
+  role?: true
   isActive?: true
   onboardingCompleted?: true
-  role?: true
   branchId?: true
   businessId?: true
   createdAt?: true
@@ -182,9 +182,9 @@ export type UserGroupByOutputType = {
   name: string
   email: string
   password: string
+  role: $Enums.Role
   isActive: boolean
   onboardingCompleted: boolean
-  role: $Enums.Role
   branchId: string | null
   businessId: string | null
   createdAt: Date
@@ -216,16 +216,15 @@ export type UserWhereInput = {
   name?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
+  role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   isActive?: Prisma.BoolFilter<"User"> | boolean
   onboardingCompleted?: Prisma.BoolFilter<"User"> | boolean
-  role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   branchId?: Prisma.StringNullableFilter<"User"> | string | null
   businessId?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessNullableScalarRelationFilter, Prisma.BusinessWhereInput> | null
   branch?: Prisma.XOR<Prisma.BranchNullableScalarRelationFilter, Prisma.BranchWhereInput> | null
   passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
-  synced?: Prisma.ProcessedSyncEventListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -233,16 +232,15 @@ export type UserOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   onboardingCompleted?: Prisma.SortOrder
-  role?: Prisma.SortOrder
   branchId?: Prisma.SortOrderInput | Prisma.SortOrder
   businessId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   business?: Prisma.BusinessOrderByWithRelationInput
   branch?: Prisma.BranchOrderByWithRelationInput
   passwordResetTokens?: Prisma.passwordResetTokenOrderByRelationAggregateInput
-  synced?: Prisma.ProcessedSyncEventOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -253,16 +251,15 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   name?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
+  role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   isActive?: Prisma.BoolFilter<"User"> | boolean
   onboardingCompleted?: Prisma.BoolFilter<"User"> | boolean
-  role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   branchId?: Prisma.StringNullableFilter<"User"> | string | null
   businessId?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessNullableScalarRelationFilter, Prisma.BusinessWhereInput> | null
   branch?: Prisma.XOR<Prisma.BranchNullableScalarRelationFilter, Prisma.BranchWhereInput> | null
   passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
-  synced?: Prisma.ProcessedSyncEventListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -270,9 +267,9 @@ export type UserOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   onboardingCompleted?: Prisma.SortOrder
-  role?: Prisma.SortOrder
   branchId?: Prisma.SortOrderInput | Prisma.SortOrder
   businessId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -289,9 +286,9 @@ export type UserScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   password?: Prisma.StringWithAggregatesFilter<"User"> | string
+  role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
   isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   onboardingCompleted?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
-  role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
   branchId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   businessId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -302,14 +299,13 @@ export type UserCreateInput = {
   name: string
   email: string
   password: string
+  role?: $Enums.Role
   isActive?: boolean
   onboardingCompleted?: boolean
-  role?: $Enums.Role
   createdAt?: Date | string
   business?: Prisma.BusinessCreateNestedOneWithoutUsersInput
   branch?: Prisma.BranchCreateNestedOneWithoutUsersInput
   passwordResetTokens?: Prisma.passwordResetTokenCreateNestedManyWithoutUserInput
-  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -317,14 +313,13 @@ export type UserUncheckedCreateInput = {
   name: string
   email: string
   password: string
+  role?: $Enums.Role
   isActive?: boolean
   onboardingCompleted?: boolean
-  role?: $Enums.Role
   branchId?: string | null
   businessId?: string | null
   createdAt?: Date | string
   passwordResetTokens?: Prisma.passwordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -332,14 +327,13 @@ export type UserUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneWithoutUsersNestedInput
   branch?: Prisma.BranchUpdateOneWithoutUsersNestedInput
   passwordResetTokens?: Prisma.passwordResetTokenUpdateManyWithoutUserNestedInput
-  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -347,14 +341,13 @@ export type UserUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordResetTokens?: Prisma.passwordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -362,9 +355,9 @@ export type UserCreateManyInput = {
   name: string
   email: string
   password: string
+  role?: $Enums.Role
   isActive?: boolean
   onboardingCompleted?: boolean
-  role?: $Enums.Role
   branchId?: string | null
   businessId?: string | null
   createdAt?: Date | string
@@ -375,9 +368,9 @@ export type UserUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -386,9 +379,9 @@ export type UserUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -409,9 +402,9 @@ export type UserCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   onboardingCompleted?: Prisma.SortOrder
-  role?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -422,9 +415,9 @@ export type UserMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   onboardingCompleted?: Prisma.SortOrder
-  role?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -435,9 +428,9 @@ export type UserMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  role?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   onboardingCompleted?: Prisma.SortOrder
-  role?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -550,32 +543,17 @@ export type UserUpdateOneRequiredWithoutPasswordResetTokensNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPasswordResetTokensInput, Prisma.UserUpdateWithoutPasswordResetTokensInput>, Prisma.UserUncheckedUpdateWithoutPasswordResetTokensInput>
 }
 
-export type UserCreateNestedOneWithoutSyncedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutSyncedInput, Prisma.UserUncheckedCreateWithoutSyncedInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSyncedInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutSyncedNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutSyncedInput, Prisma.UserUncheckedCreateWithoutSyncedInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSyncedInput
-  upsert?: Prisma.UserUpsertWithoutSyncedInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSyncedInput, Prisma.UserUpdateWithoutSyncedInput>, Prisma.UserUncheckedUpdateWithoutSyncedInput>
-}
-
 export type UserCreateWithoutBusinessInput = {
   id?: string
   name: string
   email: string
   password: string
+  role?: $Enums.Role
   isActive?: boolean
   onboardingCompleted?: boolean
-  role?: $Enums.Role
   createdAt?: Date | string
   branch?: Prisma.BranchCreateNestedOneWithoutUsersInput
   passwordResetTokens?: Prisma.passwordResetTokenCreateNestedManyWithoutUserInput
-  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBusinessInput = {
@@ -583,13 +561,12 @@ export type UserUncheckedCreateWithoutBusinessInput = {
   name: string
   email: string
   password: string
+  role?: $Enums.Role
   isActive?: boolean
   onboardingCompleted?: boolean
-  role?: $Enums.Role
   branchId?: string | null
   createdAt?: Date | string
   passwordResetTokens?: Prisma.passwordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBusinessInput = {
@@ -626,9 +603,9 @@ export type UserScalarWhereInput = {
   name?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
+  role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   isActive?: Prisma.BoolFilter<"User"> | boolean
   onboardingCompleted?: Prisma.BoolFilter<"User"> | boolean
-  role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   branchId?: Prisma.StringNullableFilter<"User"> | string | null
   businessId?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -639,13 +616,12 @@ export type UserCreateWithoutBranchInput = {
   name: string
   email: string
   password: string
+  role?: $Enums.Role
   isActive?: boolean
   onboardingCompleted?: boolean
-  role?: $Enums.Role
   createdAt?: Date | string
   business?: Prisma.BusinessCreateNestedOneWithoutUsersInput
   passwordResetTokens?: Prisma.passwordResetTokenCreateNestedManyWithoutUserInput
-  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBranchInput = {
@@ -653,13 +629,12 @@ export type UserUncheckedCreateWithoutBranchInput = {
   name: string
   email: string
   password: string
+  role?: $Enums.Role
   isActive?: boolean
   onboardingCompleted?: boolean
-  role?: $Enums.Role
   businessId?: string | null
   createdAt?: Date | string
   passwordResetTokens?: Prisma.passwordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBranchInput = {
@@ -693,13 +668,12 @@ export type UserCreateWithoutPasswordResetTokensInput = {
   name: string
   email: string
   password: string
+  role?: $Enums.Role
   isActive?: boolean
   onboardingCompleted?: boolean
-  role?: $Enums.Role
   createdAt?: Date | string
   business?: Prisma.BusinessCreateNestedOneWithoutUsersInput
   branch?: Prisma.BranchCreateNestedOneWithoutUsersInput
-  synced?: Prisma.ProcessedSyncEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
@@ -707,13 +681,12 @@ export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
   name: string
   email: string
   password: string
+  role?: $Enums.Role
   isActive?: boolean
   onboardingCompleted?: boolean
-  role?: $Enums.Role
   branchId?: string | null
   businessId?: string | null
   createdAt?: Date | string
-  synced?: Prisma.ProcessedSyncEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPasswordResetTokensInput = {
@@ -737,13 +710,12 @@ export type UserUpdateWithoutPasswordResetTokensInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneWithoutUsersNestedInput
   branch?: Prisma.BranchUpdateOneWithoutUsersNestedInput
-  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
@@ -751,85 +723,12 @@ export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserCreateWithoutSyncedInput = {
-  id?: string
-  name: string
-  email: string
-  password: string
-  isActive?: boolean
-  onboardingCompleted?: boolean
-  role?: $Enums.Role
-  createdAt?: Date | string
-  business?: Prisma.BusinessCreateNestedOneWithoutUsersInput
-  branch?: Prisma.BranchCreateNestedOneWithoutUsersInput
-  passwordResetTokens?: Prisma.passwordResetTokenCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutSyncedInput = {
-  id?: string
-  name: string
-  email: string
-  password: string
-  isActive?: boolean
-  onboardingCompleted?: boolean
-  role?: $Enums.Role
-  branchId?: string | null
-  businessId?: string | null
-  createdAt?: Date | string
-  passwordResetTokens?: Prisma.passwordResetTokenUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutSyncedInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutSyncedInput, Prisma.UserUncheckedCreateWithoutSyncedInput>
-}
-
-export type UserUpsertWithoutSyncedInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutSyncedInput, Prisma.UserUncheckedUpdateWithoutSyncedInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutSyncedInput, Prisma.UserUncheckedCreateWithoutSyncedInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutSyncedInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutSyncedInput, Prisma.UserUncheckedUpdateWithoutSyncedInput>
-}
-
-export type UserUpdateWithoutSyncedInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  business?: Prisma.BusinessUpdateOneWithoutUsersNestedInput
-  branch?: Prisma.BranchUpdateOneWithoutUsersNestedInput
-  passwordResetTokens?: Prisma.passwordResetTokenUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutSyncedInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  passwordResetTokens?: Prisma.passwordResetTokenUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyBusinessInput = {
@@ -837,9 +736,9 @@ export type UserCreateManyBusinessInput = {
   name: string
   email: string
   password: string
+  role?: $Enums.Role
   isActive?: boolean
   onboardingCompleted?: boolean
-  role?: $Enums.Role
   branchId?: string | null
   createdAt?: Date | string
 }
@@ -849,13 +748,12 @@ export type UserUpdateWithoutBusinessInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   branch?: Prisma.BranchUpdateOneWithoutUsersNestedInput
   passwordResetTokens?: Prisma.passwordResetTokenUpdateManyWithoutUserNestedInput
-  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBusinessInput = {
@@ -863,13 +761,12 @@ export type UserUncheckedUpdateWithoutBusinessInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordResetTokens?: Prisma.passwordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutBusinessInput = {
@@ -877,9 +774,9 @@ export type UserUncheckedUpdateManyWithoutBusinessInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -889,9 +786,9 @@ export type UserCreateManyBranchInput = {
   name: string
   email: string
   password: string
+  role?: $Enums.Role
   isActive?: boolean
   onboardingCompleted?: boolean
-  role?: $Enums.Role
   businessId?: string | null
   createdAt?: Date | string
 }
@@ -901,13 +798,12 @@ export type UserUpdateWithoutBranchInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneWithoutUsersNestedInput
   passwordResetTokens?: Prisma.passwordResetTokenUpdateManyWithoutUserNestedInput
-  synced?: Prisma.ProcessedSyncEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBranchInput = {
@@ -915,13 +811,12 @@ export type UserUncheckedUpdateWithoutBranchInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordResetTokens?: Prisma.passwordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  synced?: Prisma.ProcessedSyncEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutBranchInput = {
@@ -929,9 +824,9 @@ export type UserUncheckedUpdateManyWithoutBranchInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -943,12 +838,10 @@ export type UserUncheckedUpdateManyWithoutBranchInput = {
 
 export type UserCountOutputType = {
   passwordResetTokens: number
-  synced: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   passwordResetTokens?: boolean | UserCountOutputTypeCountPasswordResetTokensArgs
-  synced?: boolean | UserCountOutputTypeCountSyncedArgs
 }
 
 /**
@@ -968,29 +861,21 @@ export type UserCountOutputTypeCountPasswordResetTokensArgs<ExtArgs extends runt
   where?: Prisma.passwordResetTokenWhereInput
 }
 
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountSyncedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ProcessedSyncEventWhereInput
-}
-
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   email?: boolean
   password?: boolean
+  role?: boolean
   isActive?: boolean
   onboardingCompleted?: boolean
-  role?: boolean
   branchId?: boolean
   businessId?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.User$businessArgs<ExtArgs>
   branch?: boolean | Prisma.User$branchArgs<ExtArgs>
   passwordResetTokens?: boolean | Prisma.User$passwordResetTokensArgs<ExtArgs>
-  synced?: boolean | Prisma.User$syncedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -999,9 +884,9 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   email?: boolean
   password?: boolean
+  role?: boolean
   isActive?: boolean
   onboardingCompleted?: boolean
-  role?: boolean
   branchId?: boolean
   businessId?: boolean
   createdAt?: boolean
@@ -1014,9 +899,9 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   email?: boolean
   password?: boolean
+  role?: boolean
   isActive?: boolean
   onboardingCompleted?: boolean
-  role?: boolean
   branchId?: boolean
   businessId?: boolean
   createdAt?: boolean
@@ -1029,20 +914,19 @@ export type UserSelectScalar = {
   name?: boolean
   email?: boolean
   password?: boolean
+  role?: boolean
   isActive?: boolean
   onboardingCompleted?: boolean
-  role?: boolean
   branchId?: boolean
   businessId?: boolean
   createdAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "password" | "isActive" | "onboardingCompleted" | "role" | "branchId" | "businessId" | "createdAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "isActive" | "onboardingCompleted" | "branchId" | "businessId" | "createdAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.User$businessArgs<ExtArgs>
   branch?: boolean | Prisma.User$branchArgs<ExtArgs>
   passwordResetTokens?: boolean | Prisma.User$passwordResetTokensArgs<ExtArgs>
-  synced?: boolean | Prisma.User$syncedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1060,16 +944,15 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     business: Prisma.$BusinessPayload<ExtArgs> | null
     branch: Prisma.$BranchPayload<ExtArgs> | null
     passwordResetTokens: Prisma.$passwordResetTokenPayload<ExtArgs>[]
-    synced: Prisma.$ProcessedSyncEventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
     email: string
     password: string
+    role: $Enums.Role
     isActive: boolean
     onboardingCompleted: boolean
-    role: $Enums.Role
     branchId: string | null
     businessId: string | null
     createdAt: Date
@@ -1470,7 +1353,6 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   business<T extends Prisma.User$businessArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$businessArgs<ExtArgs>>): Prisma.Prisma__BusinessClient<runtime.Types.Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   branch<T extends Prisma.User$branchArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$branchArgs<ExtArgs>>): Prisma.Prisma__BranchClient<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   passwordResetTokens<T extends Prisma.User$passwordResetTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$passwordResetTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$passwordResetTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  synced<T extends Prisma.User$syncedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$syncedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProcessedSyncEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1504,9 +1386,9 @@ export interface UserFieldRefs {
   readonly name: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly password: Prisma.FieldRef<"User", 'String'>
+  readonly role: Prisma.FieldRef<"User", 'Role'>
   readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
   readonly onboardingCompleted: Prisma.FieldRef<"User", 'Boolean'>
-  readonly role: Prisma.FieldRef<"User", 'Role'>
   readonly branchId: Prisma.FieldRef<"User", 'String'>
   readonly businessId: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
@@ -1965,30 +1847,6 @@ export type User$passwordResetTokensArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.PasswordResetTokenScalarFieldEnum | Prisma.PasswordResetTokenScalarFieldEnum[]
-}
-
-/**
- * User.synced
- */
-export type User$syncedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ProcessedSyncEvent
-   */
-  select?: Prisma.ProcessedSyncEventSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ProcessedSyncEvent
-   */
-  omit?: Prisma.ProcessedSyncEventOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ProcessedSyncEventInclude<ExtArgs> | null
-  where?: Prisma.ProcessedSyncEventWhereInput
-  orderBy?: Prisma.ProcessedSyncEventOrderByWithRelationInput | Prisma.ProcessedSyncEventOrderByWithRelationInput[]
-  cursor?: Prisma.ProcessedSyncEventWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ProcessedSyncEventScalarFieldEnum | Prisma.ProcessedSyncEventScalarFieldEnum[]
 }
 
 /**

@@ -53,15 +53,25 @@ export type BusinessSubscription = Prisma.BusinessSubscriptionModel
  */
 export type ProcessedSyncEvent = Prisma.ProcessedSyncEventModel
 /**
- * Model LedgerAccount
+ * Model Event
  * 
  */
-export type LedgerAccount = Prisma.LedgerAccountModel
+export type Event = Prisma.EventModel
 /**
  * Model LedgerEntry
  * 
  */
 export type LedgerEntry = Prisma.LedgerEntryModel
+/**
+ * Model AccountSnapshot
+ * 
+ */
+export type AccountSnapshot = Prisma.AccountSnapshotModel
+/**
+ * Model InventorySnapshot
+ * 
+ */
+export type InventorySnapshot = Prisma.InventorySnapshotModel
 /**
  * Model Category
  * 
@@ -97,11 +107,6 @@ export type SaleItem = Prisma.SaleItemModel
  * 
  */
 export type Payment = Prisma.PaymentModel
-/**
- * Model CashFlow
- * 
- */
-export type CashFlow = Prisma.CashFlowModel
 /**
  * Model Liability
  * 

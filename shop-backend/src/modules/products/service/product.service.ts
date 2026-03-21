@@ -118,7 +118,8 @@ export class ProductService {
         return this.repo.updateProduct(productId, dto, businessId, branchId);
 
 1    }
-    async updateProductPartial(productId: string, dto:ProductDto, businessId:string, branchId: string ){
+    async updateProductPartial(productId: string, dto:ProductDto, businessId:string, branchId: string, tx: PrismaClient
+     ){
            const existingProduct = await this.repo.getProductById(productId);
         if (!existingProduct) {
             throw new Error("Product not found");
@@ -127,7 +128,7 @@ export class ProductService {
             throw new Error("Unauthorized to update this product");
         }
         
-        const updated =  this.repo.updateProductPartial(productId, dto, businessId, branchId)
+        const updated =  this.repo.updateProductPartial(productId, dto, businessId, branchId, tx)
 
         if((await updated).quantity > 3 ){
             await this.alertRepo.resolveByType(

@@ -132,6 +132,22 @@ export const LiabilityStatus = {
 export type LiabilityStatus = (typeof LiabilityStatus)[keyof typeof LiabilityStatus]
 
 
+export const Account = {
+  CASH: 'CASH',
+  INVENTORY: 'INVENTORY',
+  REVENUE: 'REVENUE',
+  COGS: 'COGS',
+  EXPENSES: 'EXPENSES',
+  FIXED_ASSETS: 'FIXED_ASSETS',
+  LIABILITIES: 'LIABILITIES',
+  OWNER_CAPITAL: 'OWNER_CAPITAL',
+  OWNER_DRAWINGS: 'OWNER_DRAWINGS',
+  INTER_BRANCH: 'INTER_BRANCH'
+} as const
+
+export type Account = (typeof Account)[keyof typeof Account]
+
+
 export const AlertType = {
   LOW_STOCK: 'LOW_STOCK',
   SUBSCRIPTION: 'SUBSCRIPTION',

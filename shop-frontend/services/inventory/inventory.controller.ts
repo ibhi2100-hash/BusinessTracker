@@ -7,7 +7,7 @@ import { InventoryEventType } from "@/offline/events/eventGroups/inventoryEvents
 import { useAuthStore } from "@/store/useAuthStore";
 import { useBusinessStore } from "@/store/businessStore";
 import { useBranchStore } from "@/store/useBranchStore";
-import { generateLedgerEntries } from "@/offline/ledger/ledgerGenerator";
+import { generateLedgerEntries } from "../../../shared/ledgerGenerator";
 import { createEntity } from "@/offline/entities/entityFactory";
 import { getByIndex } from "@/offline/db/helpers";
 import { TABLES } from "@/offline/db/schema";
@@ -93,7 +93,6 @@ async addOrUpdateProduct(productInput: any) {
   // ✅ PRODUCT ENTITY
   // -----------------------------
   const product = createEntity({
-    id: productInput.id, // ensure stable ID across sync
     name: productInput.name,
     imageUrl: productInput.imageUrl ?? "",
     description: productInput.description,
@@ -143,7 +142,6 @@ async addOrUpdateProduct(productInput: any) {
     product,
     "pending"
   );
-
   // -----------------------------
   // ✅ LOCAL STATE UPDATE
   // -----------------------------
@@ -156,9 +154,9 @@ async addOrUpdateProduct(productInput: any) {
   // -----------------------------
   // ✅ DISPATCH + SIDE EFFECTS
   // -----------------------------
+  console.log("EVENTS GOING TO DISPATCHER: ", event)
   await dispatchEvent(event);
-  await generateLedgerEntries(event);
-
+  console.log("EVENTS OUT OF DISPATCHER: ", event)
   // -----------------------------
   // ✅ PERSIST TO INDEXED DB
   // -----------------------------

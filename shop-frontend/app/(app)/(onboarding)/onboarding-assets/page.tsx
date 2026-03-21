@@ -19,7 +19,7 @@ export default function AssetsPage() {
       <AddAssetPage  mode="OPENING"/>
       <StepFooter 
         onNext={handleNext} 
-        disabled={!steps.openingCash}
+        disabled={!steps.assets}
       />
     </div>
   );

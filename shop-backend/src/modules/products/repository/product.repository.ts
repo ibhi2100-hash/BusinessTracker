@@ -1,3 +1,4 @@
+import { PrismaClient } from "@prisma/client/extension";
 import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
 import { ProductDto } from "../dto/product.dto.js";
@@ -132,14 +133,15 @@ async updateProductPartial(
   productId: string,
   dto: ProductDto,
   businessId: string,
-  branchId: string
+  branchId: string,
+  tx: Prisma.TransactionClient
 ) {
-  const db = prisma;
+  
 
   // -----------------------------
   // 1️⃣ FETCH EXISTING PRODUCT
   // -----------------------------
-  const existingProduct = await db.product.findFirst({
+  const existingProduct = await tx.product.findFirst({
     where: { id: productId, businessId, branchId },
   });
 
@@ -154,7 +156,7 @@ async updateProductPartial(
 
   if (dto.categoryId) {
     // try find by ID first
-    let category = await db.category.findFirst({
+    let category = await tx.category.findFirst({
       where: {
         id: dto.categoryId,
         businessId,
@@ -164,7 +166,7 @@ async updateProductPartial(
 
     // fallback → upsert using name if provided
     if (!category && dto.categoryName) {
-      category = await db.category.upsert({
+      category = await tx.category.upsert({
         where: {
           name_businessId_branchId: {
             name: dto.categoryName.trim().toLowerCase(),
@@ -195,7 +197,7 @@ async updateProductPartial(
   let brandId = existingProduct.brandId;
 
   if (dto.brandId) {
-    let brand = await db.brand.findFirst({
+    let brand = await tx.brand.findFirst({
       where: {
         id: dto.brandId,
         businessId,
@@ -205,7 +207,7 @@ async updateProductPartial(
 
     // fallback → upsert
     if (!brand && dto.brandName) {
-      brand = await db.brand.upsert({
+      brand = await tx.brand.upsert({
         where: {
           name_categoryId_branchId: {
             name: dto.brandName.trim().toLowerCase(),
@@ -255,7 +257,7 @@ async updateProductPartial(
   // -----------------------------
   // 5️⃣ UPDATE PRODUCT
   // -----------------------------
-  const updatedProduct = await db.product.update({
+  const updatedProduct = await tx.product.update({
     where: {
       id: productId,
       businessId,

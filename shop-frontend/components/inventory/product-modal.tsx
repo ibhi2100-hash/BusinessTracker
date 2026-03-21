@@ -84,22 +84,29 @@ export default function ProductModal({ isOpen, onClose, onSave, product }: Props
   if (!selectedBrandId && !newBrandName) {
     return alert("Brand is required");
   }
+  const sellingPrice = Number(form.sellingPrice);
+const costPrice = Number(form.costPrice);
+const quantity = Number(form.quantity);
 
-  const payload = {
-    ...form,
-    stockMode: form.stockMode || "OPENING",
+if (isNaN(sellingPrice) || isNaN(costPrice) || isNaN(quantity)) {
+  return alert("Selling price, cost price, and quantity must be valid numbers");
+}
 
-    // 🔥 ALWAYS send BOTH id + name
-    categoryId: selectedCategoryId || crypto.randomUUID(),
-    categoryName: selectedCategoryId
-      ? categories.find(c => c.id === selectedCategoryId)?.name
-      : newCategoryName,
-
-    brandId: selectedBrandId || crypto.randomUUID(),
-    brandName: selectedBrandId
-      ? brands.find(b => b.id === selectedBrandId)?.name
-      : newBrandName,
-  };
+const payload = {
+  ...form,
+  sellingPrice,
+  costPrice,
+  quantity,
+  stockMode: form.stockMode || "OPENING",
+  categoryId: selectedCategoryId || crypto.randomUUID(),
+  categoryName: selectedCategoryId
+    ? categories.find(c => c.id === selectedCategoryId)?.name
+    : newCategoryName || "Unknown Category",
+  brandId: selectedBrandId || crypto.randomUUID(),
+  brandName: selectedBrandId
+    ? brands.find(b => b.id === selectedBrandId)?.name
+    : newBrandName || "Unknown Brand",
+};
 
   onSave(payload);
 };

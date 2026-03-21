@@ -8,10 +8,10 @@ import { Events } from "../dto/event.js";
 import { SyncRepository } from "../repository/syncRepository.js";
 
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
-import { PrismaClient } from "@prisma/client/extension";
+import { Prisma, PrismaClient } from "../../../infrastructure/postgresql/prisma/generated/client.js";
+import { generateLedgerEntries } from "../../ledger/ledgerGenerator/ledgerGenerator.js";
 
 export class OfflineSyncService {
-
   constructor(
     private syncRepository: SyncRepository,
     private saleService: SaleService,
@@ -21,19 +21,53 @@ export class OfflineSyncService {
     private onboardingService: OnboardingService
   ) {}
 
-  async processEvents(events: Events[]) {
-
+  async syncEvents(events: Events[]) {
     const results: any[] = [];
+    events.sort((a, b) => {
+      if (a.type === "BUSINESS_CREATED") return -1;
+      if (b.type === "BUSINESS_CREATED") return 1;
+      return 0;
+    });
 
     for (const event of events) {
-
       try {
+        await prisma.$transaction(async (tx) => {
 
-        const result = await this.processEvent(event);
+          // 1️⃣ Idempotency (event-level)
+          const exists = await this.syncRepository.findExistingEvent(event.id, tx);
+          if (exists) {
+            results.push({ eventId: event.id, status: "duplicate" });
+            return;
+          }
 
-        results.push({
-          eventId: event.id,
-          status: result.status
+          // 2️⃣ Store raw event
+          await this.syncRepository.storeEvent(event, tx);
+
+          // 3️⃣ Execute domain logic
+          await this.executeEvent(event, tx);
+
+          // 4️⃣ Generate ledger (shared deterministic logic)
+          const entries = generateLedgerEntries(event);
+
+          // 5️⃣ Validate double-entry integrity
+          const total = entries.reduce((sum, e) => sum + e.amount, 0);
+          if (total !== 0) {
+            throw new Error(`Unbalanced ledger for event ${event.id}`);
+          }
+
+          // 6️⃣ Persist ledger (idempotent)
+          await this.syncRepository.createLedger(entries, event.businessId, tx);
+
+          // 7️⃣ Update account snapshots (ledger-driven)
+          await this.syncRepository.updateAccountSnapshots(
+            event.branchId,
+            tx
+          );
+
+          // 8️⃣ Mark processed
+          await this.syncRepository.markProcessed(event, tx);
+
+          results.push({ eventId: event.id, status: "synced" });
         });
 
       } catch (error) {
@@ -45,59 +79,16 @@ export class OfflineSyncService {
           status: "failed",
           error: String(error)
         });
-
       }
-
     }
 
     return results;
   }
 
-  async processEvent(event: Events) {
-
-    this.validateEvent(event);
-
-    const alreadyProcessed = await this.syncRepository.isProcessed(event.id);
-
-    if (alreadyProcessed) {
-      return { status: "duplicate" };
-    }
-
-    await prisma.$transaction(async (tx) => {
-
-      await this.executeEvent(event, tx);
-
-      await this.syncRepository.markProcessed({
-        id: event.id,
-        type: event.type,
-        businessId: event.businessId,
-        branchId: event.branchId,
-        userId: event.userId,
-        version: event.version
-      }, tx);
-
-    });
-
-    return { status: "synced" };
-  }
-
-  validateEvent(event: Events) {
-
-    if (!event.id) {
-      throw new Error("Event ID missing");
-    }
-
-    if (!event.type) {
-      throw new Error("Event type missing");
-    }
-
-  }
-
-  async executeEvent(
+  private async executeEvent(
     event: Events,
     tx: PrismaClient
   ) {
-
     switch (event.type) {
 
       case "SALE_ADDED":
@@ -119,7 +110,7 @@ export class OfflineSyncService {
       case "PRODUCT_UPDATED":
         return this.productService.updateProductPartial(
           event.payload.productId,
-          event.payload.data,
+          event.payload,
           event.businessId,
           event.branchId,
           tx
@@ -169,7 +160,5 @@ export class OfflineSyncService {
       default:
         throw new Error(`Unknown event type: ${event.type}`);
     }
-
   }
-
 }

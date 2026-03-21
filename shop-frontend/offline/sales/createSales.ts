@@ -4,7 +4,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { addRecord } from "../db/helpers";
 import { createEvent } from "../events/eventFactory";
 import { dispatchEvent } from "../events/eventDispatcher";
-import { generateLedgerEntries } from "../ledger/ledgerGenerator";
+import { generateLedgerEntries } from "../../../shared/ledgerGenerator";
 import { TABLES } from "../db/schema";
 import { salesEventType } from "../events/eventGroups/salesEvent";
 import { useSalesStore } from "@/store/SalesStore";
@@ -31,7 +31,6 @@ export async function createSales(salesData: any) {
 
   // add ledger entries
   const ledger = await generateLedgerEntries(event)
-  console.log("The Ledger Entries")
 
   // Hydrate financeStore
   useSalesStore.getState().addSale(sales)

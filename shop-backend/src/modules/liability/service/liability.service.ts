@@ -1,12 +1,11 @@
 import { LiabilityRepository } from "../repository/liability.repository.js";
-import { CreateLiabilityDto } from "../dto/create-liability.dto.js";
 import { RepayLiabilityDto } from "../dto/repay-liability.dto.js";
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
 import { CashflowRepository } from "../../cashflow/repository/cashflow.repository.js";
-import { CashFlowType, LiabilityType } from "../../../infrastructure/postgresql/prisma/generated/enums.js";
 import { LiabilityCreateInput } from "../dto/liabilityCreate.dto.js";
-import { connect } from "node:http2";
-import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
+
+import { PrismaClient } from "../../../infrastructure/postgresql/prisma/generated/client.js";
+
 
 export class LiabilityService {
     constructor(
@@ -19,10 +18,11 @@ export class LiabilityService {
    */
 
 
-createLiability(
+ async createLiability(
     businessId: string,
     branchId: string,
-    dto: LiabilityCreateInput
+    dto: LiabilityCreateInput,
+    tx: PrismaClient
   ) {
 
   if (dto.principalAmount <= 0) {
@@ -34,8 +34,7 @@ createLiability(
   const dueDate = dto.dueDate ? new Date(dto.dueDate) : null; // null is valid if no due date
 
   const outstandingAmount = dto.principalAmount; // initially equals principal
-
-return prisma.$transaction(async (tx: Prisma.TransactionClient) => {  
+ 
 
   const liability = await this.liabilityRepo.create(businessId, branchId, {
     title: dto.title,
@@ -59,8 +58,6 @@ return prisma.$transaction(async (tx: Prisma.TransactionClient) => {
 
 
   }, tx)
-
-  });
 }
 
   /**
@@ -70,9 +67,10 @@ return prisma.$transaction(async (tx: Prisma.TransactionClient) => {
     liabilityId: string,
     businessId: string,
     branchId: string,
-    dto: RepayLiabilityDto
+    dto: RepayLiabilityDto,
+    tx: PrismaClient,
   ) {
-    return prisma.$transaction(async (tx) => {
+    
       const liability = await this.liabilityRepo.findById(liabilityId, businessId);
       if (!liability) {
         throw new Error("Liability not found or already settled");
@@ -117,7 +115,6 @@ return prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       );
 
       return { newOutstanding };
-    });
   }
 
   /**
