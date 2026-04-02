@@ -6,6 +6,8 @@ import { BusinessEventTypes } from "../events/eventGroups/businessEvents";
 import { createEvent } from "../events/eventFactory";
 import { useBranchStore } from "@/store/useBranchStore";
 import { createEntity } from "../entities/entityFactory";
+import { hydrate } from "@tanstack/react-query";
+import { hydrateStores } from "../hydration/hydrationStore";
 
 export async function createBusiness(input: any, branchData: any) {
 
@@ -35,7 +37,7 @@ const branchId = branch.id;
         branches: [branch],
         role: "ADMIN",
         activeBranchId: branchId,
-  })
+  });
 
   return business
 }

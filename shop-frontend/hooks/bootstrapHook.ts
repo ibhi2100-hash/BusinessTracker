@@ -2,31 +2,44 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { appBootstrap } from "../offline/bootstrap/appBootstrap";
+import { useAuthStore } from "@/store/useAuthStore";
+import { hydrateStoresFromDB } from "@/offline/hydration/hydrateStoresFromDB";
+
 
 export function useAppBootstrap() {
   const router = useRouter();
-  const [ready, setReady ] = useState(false)
+  const hydrated = useAuthStore(s => s.hydrated)
+  const checkTokenValid = useAuthStore(s => s.checkTokenValid)
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
+    let mounted = true;
+
     async function init() {
-      const result = await appBootstrap();
+      // 1️⃣ Wait for Zustand persist hydration
+      if (!hydrated) return;
 
-      if (result === "NO_SESSION") {
+      // 2️⃣ Sync IndexedDB → Zustand
+      await hydrateStoresFromDB();
+
+      // 3️⃣ Auth check
+      const isValid = checkTokenValid();
+      console.log("This is the validity Check", isValid)
+
+      // 4️⃣ Route decision
+      if (!isValid) {
         router.replace("/login");
-        return;
       }
 
-      if (result === "NO_BUSINESS") {
-        router.replace("/onboard");
-        return;
-      }
-
-      setReady(true)
+      if (mounted) setReady(true);
     }
 
     init();
-  }, [router]);
 
-  return ready
+    return () => {
+      mounted = false;
+    };
+  }, [hydrated]);
+
+  return ready;
 }

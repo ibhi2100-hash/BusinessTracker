@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { StepHeader } from "../../../../components/onboarding/StepHeader";
 import { StepFooter } from "../../../../components/onboarding/StepFooter";
 import { createBusiness } from "@/offline/business/createBusiness";
+import { hydrateStores } from "@/offline/hydration/hydrationStore";
 
 
 export default function Step2Business() {

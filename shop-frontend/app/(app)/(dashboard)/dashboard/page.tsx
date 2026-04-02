@@ -12,15 +12,34 @@ import { QuickActions } from "@/components/dashboard/QuickActions";
 import { BranchPerformance } from "@/components/dashboard/BranchPerformance";
 import { AlertsSection } from "@/components/dashboard/AlertsSection";
 import { useInitializeDashboard } from "@/hooks/dashboard/initializeddashboard";
-import { useBusinessContext } from "@/hooks/businessHooks/useBusinessContext";
-import { useHydrateBusinessData } from "@/hooks/businessHooks/useBusinessHydrate";
+import { generateBranchFinancialSummary } from "@/offline/dashboard/branchFinancialSummary";
 
 const DashboardPage = () => {
-  useBusinessContext()
-  useHydrateBusinessData()
+    const activeBranchId  = useBranchStore(s => s.activeBranchId);
+
+    useEffect(()=> {
+      (async ()=> {
+        try {
+          const summary = await generateBranchFinancialSummary();
+  
+        } catch (err) {
+          console.error("Failed to clear IndexedDb", err)
+        }
+      }
+  
+      )()
+    }, [activeBranchId]);
+        useEffect(() => {
+          if (!activeBranchId) return;
+
+          // safe logic
+        }, [activeBranchId]);
+
+    
+
   const businessFromStore = useBusinessStore((state) => state.business);
   const router = useRouter();
-  const { activeBranchId } = useBranchStore();
+
   useInitializeDashboard();
 
   useEffect(() => {
@@ -35,13 +54,6 @@ const DashboardPage = () => {
   lastWeek.setDate(today.getDate() - 7);
   const startDate = lastWeek.toISOString().split("T")[0];
   const endDate = today.toISOString().split("T")[0];
-
-  useDashboardFinancialData(startDate, endDate);
-
-  // Early returns for UI
-  if (!businessFromStore) return <div>No business found. Please register.</div>;
-  if (!activeBranchId) return <div>Loading dashboard...</div>;
-
   return (
     <div className="space-y-6">
       <DashboardHeader />

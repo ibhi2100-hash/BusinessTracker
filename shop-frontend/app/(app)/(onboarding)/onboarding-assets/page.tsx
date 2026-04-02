@@ -8,6 +8,7 @@ import { hydrateSetupStore } from "@/offline/finance/hydrateSetupStore";
 
 
 export default function AssetsPage() {
+  hydrateSetupStore()
   const handleNext = () => {
     hydrateSetupStore()
     location.href = "/onboarding-liabilities"; }// next step

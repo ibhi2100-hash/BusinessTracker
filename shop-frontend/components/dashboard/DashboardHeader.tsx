@@ -8,11 +8,11 @@ import { useRouter } from "next/navigation";
 import { switchBranch } from "@/services/branch.service";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { useHydrateBusinessData } from "@/hooks/businessHooks/useBusinessHydrate";
+
 
 export const DashboardHeader = () => {
   const { isLoading } = useBusinessContext()
-  useHydrateBusinessData();
+  
   const router = useRouter();
   const queryClient = useQueryClient();
 

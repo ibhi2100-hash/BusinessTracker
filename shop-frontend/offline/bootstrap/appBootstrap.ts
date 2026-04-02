@@ -1,46 +1,25 @@
-import { loadSession } from "../session/sessionLoader"
-import { loadBusiness } from "../business/businessLoader"
-import { inventoryLoader } from "../inventory/loadInventory";
-import { loadUser } from "../user/loadUser";
-import { loadBranches } from "../business/loadbranches";
+import { getDb } from "../db/connection";
+import { TABLES } from "../db/schema";
+import { useInventoryStore } from "@/store/inventoryStore";
+import { useFinancialStore } from "@/store/financialDataStore";
 
-let bootstrapped = false;
 
-export type BootstrapResult =
-  | "NO_SESSION"
-  | "NO_BUSINESS"
-  | "NO_BRANCHES"
-  | "READY";
+ export async function appBootstrap() {
+  const db = await getDb();
 
-export async function appBootstrap(): Promise<BootstrapResult> {
-  if (bootstrapped) return "READY";
+  // Parallel loading
+  const [products, ledger] = await Promise.all([
+    db.getAll(TABLES.PRODUCTS),
+    db.getAll(TABLES.LEDGER_ENTRIES),
+  ]);
 
-  bootstrapped = true;
+  // If you rely purely on events:
+  // const projections = rebuildFromEvents(events)
 
-  // 1️⃣ Load session
-  const session = await loadSession();
+  // 3. Hydrate Zustand stores (atomic)
+  useInventoryStore.setState({ products });
+  useFinancialStore.setState({ ledger });
 
-  if (!session) {
-    return "NO_SESSION";
-  }
-  // Load User
-  const user = await loadUser();
-
-  // 2️⃣ Load business
-  const business = await loadBusiness();
-
-  if (!business) {
-    return "NO_BUSINESS";
-  }
-
-  const branches = await loadBranches(business.id);
-
-  if(!branches) {
-    return "NO_BRANCHES"
-  }
-
-  // 3️⃣ Domain hydration
-  await inventoryLoader();
-
-  return "READY";
+  // 4. Mark hydration complete
+  return true;
 }

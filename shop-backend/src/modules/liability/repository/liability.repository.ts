@@ -8,6 +8,7 @@ async create(
   businessId: string,
   branchId: string,
   data: {
+    id: string;
     title: string;
     type: LiabilityType;
     principalAmount: number;
@@ -21,16 +22,17 @@ async create(
 ) {
   return tx.liability.create({
     data: {
-      businessId,
-      branchId,
-      title: data.title,
-      type: data.type,
-      principalAmount: data.principalAmount,
-      interestRate: data.interestRate,
-      startDate: data.startDate,
-      dueDate: data.dueDate,
-      outstandingAmount: data.outstandingAmount,
-      status: data.status,
+        id: data.id,
+        businessId,
+        branchId,
+        title: data.title,
+        type: data.type,
+        principalAmount: data.principalAmount,
+        interestRate: data.interestRate,
+        startDate: data.startDate,
+        dueDate: data.dueDate,
+        outstandingAmount: data.outstandingAmount,
+        status: data.status,
     },
   });
 }

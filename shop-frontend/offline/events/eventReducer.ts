@@ -12,10 +12,12 @@ export function dashboardReducer(state: any , event: any) {
             }
 
         case "INVENTORY_ADDED":
+            const mode = event.payload.stockmode
+            const amount = event.payload.costPrice * event.payload.quantity
             return {
                 ...state,
-                inventoryValue: state.inventoryValue + event.payload.amount,
-                cashAtHand: state.cashAtHand - event.payload.amount
+                inventoryValue: state.inventoryValue + amount,
+                cashAtHand: mode === "OPENING" ? state.cashAtHand : state.cashAtHand - amount
             }
         case "ASSET_ADDED":
             return {

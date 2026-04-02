@@ -2,17 +2,23 @@
 
 import { useState, useEffect } from "react";
 import { useInventoryStore } from "../../store/inventoryStore";
-import { inventoryHelper } from "@/offline/inventory/inventoryHelper";
 import { InventoryItem } from "@/types/types";
 
 interface Props {
   isOpen: boolean;
+  mode: "create" | "edit";
   onClose: () => void;
-  onSave: (product: any) => void;
+  onSave: (product: any) => Promise<void> | void;
   product?: InventoryItem;
 }
 
-export default function ProductModal({ isOpen, onClose, onSave, product }: Props) {
+export default function ProductModal({
+  isOpen,
+  mode,
+  onClose,
+  onSave,
+  product,
+}: Props) {
   const {
     categories,
     brands,
@@ -26,90 +32,133 @@ export default function ProductModal({ isOpen, onClose, onSave, product }: Props
   const [newCategoryName, setNewCategoryName] = useState<string | null>(null);
   const [newBrandName, setNewBrandName] = useState<string | null>(null);
   const [categoryImage, setCategoryImage] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  // Load product for editing
+  // -----------------------------
+  // INIT ON OPEN
+  // -----------------------------
   useEffect(() => {
+    if (!isOpen) return;
+
     if (product) {
       setForm(product);
-      if (product.brandId) setSelectedBrandId(product.brandId);
-      const cat = categories.find((c) => c.id === product.categoryId);
-      if (cat) setSelectedCategoryId(cat.id);
-      setNewCategoryName(null);
-      setNewBrandName(null);
+
+    if(product.brandId )setSelectedBrandId(product.brandId);
+    if(product.categoryId) setSelectedCategoryId(product.categoryId );
+
     } else {
       setForm({});
       setSelectedCategoryId(undefined);
       setSelectedBrandId(undefined);
+    }
       setNewCategoryName(null);
       setNewBrandName(null);
       setCategoryImage(null);
-    }
-  }, [product, categories]);
+    
+  }, [ product]);
 
-  // Reset brand when category changes
+  // -----------------------------
+  // RESET BRAND ON CATEGORY CHANGE (create mode only)
+  // -----------------------------
   useEffect(() => {
-    setSelectedBrandId(undefined);
-  }, [selectedCategoryId]);
+    if (!product) {
+      setSelectedBrandId(undefined);
+    }
+  }, [selectedCategoryId, product, setSelectedBrandId]);
 
+  // -----------------------------
+  // INPUT HANDLER
+  // -----------------------------
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
   ) => {
     const { name, value } = e.target;
+
     setForm((prev) => ({
       ...prev,
-      [name]: ["sellingPrice", "costPrice", "quantity"].includes(name) ? Number(value) : value,
+      [name]: ["sellingPrice", "costPrice", "quantity"].includes(name)
+        ? value === ""
+          ? ""
+          : Number(value)
+        : value,
     }));
   };
 
-  const handleCategoryImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // -----------------------------
+  // IMAGE HANDLER
+  // -----------------------------
+  const handleCategoryImageChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => setCategoryImage(reader.result as string);
-      reader.readAsDataURL(file);
-    }
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => setCategoryImage(reader.result as string);
+    reader.readAsDataURL(file);
   };
 
+  // -----------------------------
+  // SUBMIT
+  // -----------------------------
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!form.name || !form.sellingPrice || !form.quantity) {
-    return alert("Name, selling price, and quantity are required");
-  }
+    setSubmitting(true);
 
-  if (!selectedCategoryId && !newCategoryName) {
-    return alert("Category is required");
-  }
+    try {
+      if (!form.name || form.sellingPrice === undefined || form.quantity === undefined) {
+        throw new Error("Name, selling price, and quantity are required");
+      }
 
-  if (!selectedBrandId && !newBrandName) {
-    return alert("Brand is required");
-  }
-  const sellingPrice = Number(form.sellingPrice);
-const costPrice = Number(form.costPrice);
-const quantity = Number(form.quantity);
+      if (!selectedCategoryId && !newCategoryName) {
+        throw new Error("Category is required");
+      }
 
-if (isNaN(sellingPrice) || isNaN(costPrice) || isNaN(quantity)) {
-  return alert("Selling price, cost price, and quantity must be valid numbers");
-}
+      if (!selectedBrandId && !newBrandName) {
+        throw new Error("Brand is required");
+      }
 
-const payload = {
-  ...form,
-  sellingPrice,
-  costPrice,
-  quantity,
-  stockMode: form.stockMode || "OPENING",
-  categoryId: selectedCategoryId || crypto.randomUUID(),
-  categoryName: selectedCategoryId
-    ? categories.find(c => c.id === selectedCategoryId)?.name
-    : newCategoryName || "Unknown Category",
-  brandId: selectedBrandId || crypto.randomUUID(),
-  brandName: selectedBrandId
-    ? brands.find(b => b.id === selectedBrandId)?.name
-    : newBrandName || "Unknown Brand",
-};
+      const sellingPrice = Number(form.sellingPrice);
+      const costPrice = Number(form.costPrice || 0);
+      const quantity = Number(form.quantity);
 
-  onSave(payload);
-};
+      if ([sellingPrice, costPrice, quantity].some((v) => isNaN(v))) {
+        throw new Error("Prices and quantity must be valid numbers");
+      }
+
+      const payload = {
+        name: form.name,
+        description: form.description,
+
+        sellingPrice,
+        costPrice,
+        quantity,
+
+        type: form.type,
+        stockMode: form.stockMode || "OPENING",
+
+        model: form.model,
+        imei: form.imei,
+        condition: form.condition,
+
+        categoryId: selectedCategoryId || null,
+        categoryName: newCategoryName || null,
+
+        brandId: selectedBrandId || null,
+        brandName: newBrandName || null,
+      };
+
+      await onSave(payload);
+    } catch (err: any) {
+      alert(err.message || "Failed to save product");
+      console.error(err);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -118,15 +167,16 @@ const payload = {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex justify-center items-center z-50">
       <div className="bg-white/90 backdrop-blur-md rounded-xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto shadow-2xl border border-white/20 flex flex-col gap-4">
-        <h2 className="text-2xl font-bold mb-2">{product ? "Edit Product" : "Add Product"}</h2>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+        <h2 className="text-2xl font-bold mb-2">
+          {product ? "Edit Product" : "Add Product"}
+        </h2>
 
-          {/* Product Type */}
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <select
             name="type"
             value={form.type || ""}
             onChange={handleChange}
-            className="border p-2 rounded-md w-full shadow-sm focus:ring-1 focus:ring-indigo-500"
+            className="border p-2 rounded-md w-full shadow-sm"
           >
             <option value="">Select Product Type</option>
             <option value="ACCESSORY">ACCESSORY</option>
@@ -135,23 +185,78 @@ const payload = {
             <option value="OTHER">OTHER</option>
           </select>
 
-          {/* Product Info */}
-          <input type="text" name="name" placeholder="Product Name" value={form.name || ""} onChange={handleChange} className="border p-2 rounded-md w-full shadow-sm" />
+          <input
+            name="name"
+            placeholder="Product Name"
+            value={form.name || ""}
+            onChange={handleChange}
+            className="border p-2 rounded-md"
+          />
+
           <div className="grid grid-cols-2 gap-2">
-            <input type="number" name="sellingPrice" placeholder="Selling Price" value={form.sellingPrice ?? ""} onChange={handleChange} className="border p-2 rounded-md shadow-sm" />
-            <input type="number" name="costPrice" placeholder="Cost Price" value={form.costPrice ?? ""} onChange={handleChange} className="border p-2 rounded-md shadow-sm" />
+            <input
+              type="number"
+              name="sellingPrice"
+              placeholder="Selling Price"
+              value={form.sellingPrice ?? ""}
+              onChange={handleChange}
+              className="border p-2 rounded-md"
+            />
+            <input
+              type="number"
+              name="costPrice"
+              placeholder="Cost Price"
+              value={form.costPrice ?? ""}
+              onChange={handleChange}
+              className="border p-2 rounded-md"
+            />
           </div>
-          <input type="number" name="quantity" placeholder="Quantity" value={form.quantity ?? ""} onChange={handleChange} className="border p-2 rounded-md shadow-sm" />
-          <input type="text" name="model" placeholder="Model" value={form.model || ""} onChange={handleChange} className="border p-2 rounded-md shadow-sm" />
+
+          <input
+            type="number"
+            name="quantity"
+            placeholder="Quantity"
+            value={form.quantity ?? ""}
+            onChange={handleChange}
+            className="border p-2 rounded-md"
+          />
+
+          <input
+            name="model"
+            placeholder="Model"
+            value={form.model || ""}
+            onChange={handleChange}
+            className="border p-2 rounded-md"
+          />
+
           {isPhone && (
             <>
-              <input type="text" name="imei" placeholder="IMEI" value={form.imei || ""} onChange={handleChange} className="border p-2 rounded-md shadow-sm" />
-              <input type="text" name="condition" placeholder="Condition" value={form.condition || ""} onChange={handleChange} className="border p-2 rounded-md shadow-sm" />
+              <input
+                name="imei"
+                placeholder="IMEI"
+                value={form.imei || ""}
+                onChange={handleChange}
+                className="border p-2 rounded-md"
+              />
+              <input
+                name="condition"
+                placeholder="Condition"
+                value={form.condition || ""}
+                onChange={handleChange}
+                className="border p-2 rounded-md"
+              />
             </>
           )}
-          <textarea name="description" placeholder="Description" value={form.description || ""} onChange={handleChange} className="border p-2 rounded-md shadow-sm" />
 
-          {/* Category */}
+          <textarea
+            name="description"
+            placeholder="Description"
+            value={form.description || ""}
+            onChange={handleChange}
+            className="border p-2 rounded-md"
+          />
+
+          {/* CATEGORY */}
           <select
             value={selectedCategoryId || (newCategoryName ? "new" : "")}
             onChange={(e) => {
@@ -159,27 +264,35 @@ const payload = {
                 setSelectedCategoryId(undefined);
                 setNewCategoryName("");
               } else {
-                const cat = categories.find((c) => c.id === e.target.value);
-                setSelectedCategoryId(cat?.id);
+                setSelectedCategoryId(e.target.value);
                 setNewCategoryName(null);
               }
             }}
-            className="border p-2 rounded-md w-full shadow-sm"
+            className="border p-2 rounded-md"
           >
             <option value="">Select Category</option>
-            {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
             <option value="new">+ Add New Category</option>
           </select>
 
           {newCategoryName !== null && (
             <>
-              <input type="text" placeholder="Enter new category name" value={newCategoryName} onChange={(e) => setNewCategoryName(e.target.value)} className="border p-2 rounded-md w-full shadow-sm" />
-              <input type="file" accept="image/*" onChange={handleCategoryImageChange} className="mb-1" />
-              {categoryImage && <img src={categoryImage} alt="Preview" className="w-20 h-20 object-cover rounded mb-2" />}
+              <input
+                value={newCategoryName}
+                onChange={(e) => setNewCategoryName(e.target.value)}
+                placeholder="New category"
+                className="border p-2 rounded-md"
+              />
+              <input type="file" onChange={handleCategoryImageChange} />
+              {categoryImage && <img src={categoryImage} className="w-20 h-20" />}
             </>
           )}
 
-          {/* Brand */}
+          {/* BRAND */}
           <select
             value={selectedBrandId || (newBrandName ? "new" : "")}
             onChange={(e) => {
@@ -187,28 +300,54 @@ const payload = {
                 setSelectedBrandId(undefined);
                 setNewBrandName("");
               } else {
-                const brand = brands.find((b) => b.id === e.target.value);
-                setSelectedBrandId(brand?.id);
+                setSelectedBrandId(e.target.value);
                 setNewBrandName(null);
               }
             }}
-            className="border p-2 rounded-md w-full shadow-sm"
+            className="border p-2 rounded-md"
           >
             <option value="">Select Brand</option>
-            {brands.map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}
+            {brands.map((b) => (
+              <option key={b.id} value={b.id}>
+                {b.name}
+              </option>
+            ))}
             <option value="new">+ Add New Brand</option>
           </select>
 
           {newBrandName !== null && (
-            <input type="text" placeholder="Enter new brand name" value={newBrandName} onChange={(e) => setNewBrandName(e.target.value)} className="border p-2 rounded-md w-full shadow-sm" />
+            <input
+              value={newBrandName}
+              onChange={(e) => setNewBrandName(e.target.value)}
+              placeholder="New brand"
+              className="border p-2 rounded-md"
+            />
           )}
 
           {/* Actions */}
           <div className="flex justify-end gap-2 mt-2">
-            <button type="button" onClick={onClose} className="px-4 py-2 border rounded-md hover:bg-gray-100 transition">Cancel</button>
-            <button type="submit" className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition">{product ? "Update" : "Add"}</button>
-          </div>
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 border rounded-md hover:bg-gray-100 transition"
+            >
+              Cancel
+            </button>
 
+            <button
+              type="submit"
+              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition"
+              disabled= {submitting}
+            >
+              {product
+                ? submitting
+                  ? "Updating"
+                  : "update"
+                : submitting
+                ? "Adding"
+                : "add"}
+            </button>
+          </div>
         </form>
       </div>
     </div>

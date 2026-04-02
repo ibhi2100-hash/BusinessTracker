@@ -12,6 +12,7 @@ import { useBusinessStatusStore } from "@/store/useBusinessStatusStore";
 
 export default function OpeningCashPage() {
   const router = useRouter();
+  hydrateSetupStore()
 
   const handleNext = () => {
     hydrateSetupStore()

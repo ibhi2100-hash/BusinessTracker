@@ -16,22 +16,23 @@ export const  inventoryHelper = {
         if(!business) return [];
        
 
-        const categories = await getByIndex(TABLES.CATEGORIES, "by_businessId", business.id);
+        const categories = await getByIndex(TABLES.CATEGORIES, "by_business", business.id);
 
         return categories
 
     },
     async getBrandsByCategory(categoryId: string){
-        const brands = await getByIndex(TABLES.BRANDS, "by_categoryId", categoryId)
+        const brands = await getByIndex(TABLES.BRANDS, "by_category", categoryId)
 
         return brands
     },
 
     async getProductsByBrand(brandId: string){
-        const products = await getByIndex(TABLES.PRODUCTS, "by_brandId", brandId)
+        const products = await getByIndex(TABLES.PRODUCTS, "by_brand", brandId)
         return products
     },
     async addCategory(categoryData: any){
+        
         const category =  createEntity(categoryData)
         await addRecord(TABLES.CATEGORIES, category)
 
@@ -44,7 +45,13 @@ export const  inventoryHelper = {
         return brand
     },
     async addProducts(product: any){
-        await addRecord(TABLES.PRODUCTS, product)
-        return product
+    try {
+        await addRecord(TABLES.PRODUCTS, product);
+        console.log("✅ IndexedDB write success:", product.id);
+    } catch (err) {
+        console.error("❌ IndexedDB write failed:", err, product);
+        throw err;
+    }
+    return product;
     }
 }

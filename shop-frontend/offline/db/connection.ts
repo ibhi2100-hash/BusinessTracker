@@ -1,10 +1,12 @@
+import { DB_NAME } from "./schema";
+
 let dbConnection: IDBDatabase | null = null;
 
 export async function getDb() {
   if (dbConnection) return dbConnection; // reuse existing connection
 
   return new Promise<IDBDatabase>((resolve, reject) => {
-    const request = indexedDB.open("shop-app-db", 1);
+    const request = indexedDB.open(DB_NAME, 1);
 
     request.onupgradeneeded = () => {
       const db = request.result;

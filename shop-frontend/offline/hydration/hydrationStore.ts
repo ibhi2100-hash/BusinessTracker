@@ -1,38 +1,54 @@
 // /offline/hydration/hydrateStores.ts
+
 import { useAuthStore } from "@/store/useAuthStore";
 import { useBusinessStore } from "@/store/businessStore";
 import { useBranchStore } from "@/store/useBranchStore";
 import { User, Business, Branch } from "@/types/types";
 
 interface HydrationPayload {
-  user: User;
-  accessToken: string;
-  expiresIn?: number;
+  user?: User;
+  accessToken?: string;
+  expiresAt?: number;
   business?: Business;
   branches?: Branch[];
   activeBranchId?: string;
 }
 
-export function hydrateStores({
-  user,
-  accessToken,
-  expiresIn,
-  business,
-  branches,
-  activeBranchId
-}: HydrationPayload) {
-  // Auth store
-  useAuthStore.getState().setLogin(user, accessToken, expiresIn);
-  // BusinessStore
-  useBusinessStore.getState().setBusiness(business);
-  useBranchStore.getState().setBranches(branches || [])
+export function hydrateStores(payload: HydrationPayload) {
+  const {
+    user,
+    accessToken,
+    expiresAt,
+    business,
+    branches,
+    activeBranchId,
+  } = payload;
 
-  //If ActiveBranchId is provided, use it. otherwise, default to first branch main branch;
-  const defaultBranchId = activeBranchId  || (branches && branches[0]?.id);
-  if(defaultBranchId) {
-    useBranchStore.getState().setActiveBranch(defaultBranchId);
+  const authStore = useAuthStore.getState();
+  const businessStore = useBusinessStore.getState();
+  const branchStore = useBranchStore.getState();
+
+  // 🔐 AUTH (only hydrate if valid data exists)
+  if (user && accessToken) {
+    authStore.setLogin(user, accessToken, expiresAt);
   }
 
-  // Mark hydrated
-  useAuthStore.getState().setHydrated(true);
+  // 🏢 BUSINESS
+  if (business) {
+    businessStore.setBusiness(business);
+  }
+
+  // 🌿 BRANCHES
+  if (branches && branches.length > 0) {
+    branchStore.setBranches(branches);
+
+    const resolvedBranchId =
+      activeBranchId ?? branches[0]?.id;
+
+    if (resolvedBranchId) {
+      branchStore.setActiveBranch(resolvedBranchId);
+    }
+  }
+return  
+  // ❌ DO NOT SET hydrated here
 }

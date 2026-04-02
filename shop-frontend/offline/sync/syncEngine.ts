@@ -8,7 +8,7 @@ export async function syncEvent() {
   const db = await getDb()
   try {
     const status = "pending"
-    const events = await getByIndex(TABLES.EVENTS, "status", status)
+    const events = await getByIndex(TABLES.EVENTS, "by_status", status)
 
     if (!events.length) return
 
@@ -16,7 +16,6 @@ export async function syncEvent() {
     const { results } = response
 
     for (const r of results) {
-      console.log("single result from backend: ", r)
       if (r.status === "duplicate" || r.status === "synced") {
         await db.delete(TABLES.EVENTS, r.eventId)
       }

@@ -10,7 +10,6 @@ export async function addCash(cashData: any) {
     const businessId = business.id;
     const branchId= useBranchStore.getState().activeBranchId;
     const userId = useAuthStore.getState().user.id;
-    console.log("USERID FROM STORE: ", userId)
    
  const  event = await createEvent(financeEventType.OPENING_CAPITAL, userId , businessId, branchId, cashData, "pending")
 

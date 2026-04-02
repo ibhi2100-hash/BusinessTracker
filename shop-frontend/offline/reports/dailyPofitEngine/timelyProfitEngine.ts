@@ -1,18 +1,18 @@
-import { Accounts } from "@/offline/ledger/accounts";
+import { Account } from "@/offline/ledger/accounts";
 import { getLedgerEntries } from "@/offline/ledger/ledgerQueryEngine";
 
 export function calculateDailyProfit(entries:any[]) {
 
   const revenue = entries
-    .filter(e => e.account === Accounts.REVENUE)
+    .filter(e => e.account === Account.REVENUE)
     .reduce((s,e)=> s + e.amount,0);
 
   const cogs = entries
-    .filter(e => e.account === Accounts.COGS)
+    .filter(e => e.account === Account.COGS)
     .reduce((s,e)=> s + e.amount,0);
 
   const expenses = entries
-    .filter(e => e.account === Accounts.EXPENSES)
+    .filter(e => e.account === Account.EXPENSES)
     .reduce((s,e)=> s + e.amount,0);
 
   return {
@@ -36,13 +36,13 @@ export async function generateMonthlyReport(branchId:string, year:number, month:
 export function calculateInventoryValue(entries:any[]) {
 
   return entries
-    .filter(e => e.account === Accounts.INVENTORY)
+    .filter(e => e.account === Account.INVENTORY)
     .reduce((s,e)=> s + e.amount,0);
 }
 
 export function calculateCash(entries:any[]) {
 
   return entries
-    .filter(e => e.account === Accounts.CASH)
+    .filter(e => e.account === Account.CASH)
     .reduce((s,e)=> s + e.amount,0);
 }

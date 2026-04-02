@@ -47,12 +47,15 @@ async registerUser(
     expiresIn: number;
     activeBranch: any;
     branches: any[];
+    business: any;
   }> {
     const user = await this.authRepo.findByEmail(dto.email!);
 
     if (!user) {
       throw new Error("User not found");
     }
+    
+    const business = await this.authRepo.findBusiness(user.id)
 
     const isPasswordValid = await bcrypt.compare(
       dto.password!,
@@ -73,7 +76,8 @@ async registerUser(
         token,
         expiresIn,
         activeBranch: null,
-        branches: []
+        branches: [],
+        business,
       }
     }
 
@@ -95,6 +99,7 @@ async registerUser(
       expiresIn,
       activeBranch,
       branches,
+      business
     };
   }
 }

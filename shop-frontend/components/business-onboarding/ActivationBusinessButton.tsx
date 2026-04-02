@@ -6,22 +6,29 @@ import { useBusinessStore } from "@/store/businessStore";
 import { useRouter } from "next/navigation";
 import { useBusinessStatusStore} from '@/store/useBusinessStatusStore';   
 import { useState } from "react";
+import { activateMyBusiness } from "@/offline/business/activateBusiness";
+import { toast } from "sonner";
 
 
 export const ActivateBusinessButton = () => {
   const [ loading, setLoading] = useState(false);
-  const [ error, setError] = useState("")
   const businessFromStore = useBusinessStore((state) => state.business);
-  const canActivate = useBusinessStatusStore.getState().canActivate ?? false;
+  const canActivate = useBusinessStatusStore.getState().canActivate;
   const router = useRouter()
 
 
   const handleActivate = () => {
     setLoading(true)
     if (!canActivate ) return;
+    activateMyBusiness()
+    toast.success("Business Activated✅")
+    setLoading(false)
+
     if(!businessFromStore.isOnboarding && businessFromStore.status === "ACTIVE") {
       router.push("/dashboard")
-    }
+    };
+    router.push('/dashboard')
+
 
    
   };

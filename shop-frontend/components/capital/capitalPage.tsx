@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
-import { useCashflows } from "@/hooks/useCashflow";
+import React, { useState, useEffect } from "react";
 import { ArrowUp, ArrowDown, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CashFlowType } from "@/services/cashflowService";
 import { addCash } from "@/offline/finance/cash/addCash";
 import { hydrateSetupStore } from "@/offline/finance/hydrateSetupStore";
 import { toast } from "sonner";
+import { getCashBalance } from "@/offline/finance/cash/loadCashBalance";
+import { useBranchStore } from "@/store/useBranchStore";
 
 interface CashflowTableProps {
   mode: "OPENING" | "LIVE";
@@ -15,7 +15,22 @@ interface CashflowTableProps {
 }
 
 const CashflowTable = ({ mode, onCompleted }: CashflowTableProps) => {
-  const { cashflows, loading, injectCash, withdrawCash, refetch } = useCashflows();
+  useEffect(()=> {
+     (async ()=> {
+       try {
+         const result = await getCashBalance(activeBranchId);
+         setEntries(result.entries)
+       } catch (err) {
+         console.error("Failed to clear IndexedDb", err)
+       }
+     }
+ 
+     )()
+   }, [])
+
+  const [ loading , setLoading ] = useState(false)
+  const [ entries, setEntries ] = useState([]);
+  const activeBranchId = useBranchStore(s=> s.activeBranchId);
   const [rawAmount, setRawAmount] = useState<string>("");
   const [formattedAmount, setFormattedAmount] = useState<string>("");
 
@@ -33,6 +48,7 @@ const CashflowTable = ({ mode, onCompleted }: CashflowTableProps) => {
   };
 
   const handleInject = async () => {
+    setLoading(true)
     const amount = Number(rawAmount);
     if (amount <= 0) return;
     await addCash({amount});
@@ -42,6 +58,7 @@ const CashflowTable = ({ mode, onCompleted }: CashflowTableProps) => {
     if (mode === "OPENING" && onCompleted) onCompleted();
     hydrateSetupStore()
     toast.success("Cash Added Successfully✅")
+    setLoading(false)
   };
 
   const handleWithdraw = async () => {
@@ -107,7 +124,7 @@ const CashflowTable = ({ mode, onCompleted }: CashflowTableProps) => {
             Withdraw
           </Button>
 
-          <Button onClick={() => refetch()} variant="secondary" className="gap-1">
+          <Button onClick={() => getCashBalance(activeBranchId)} variant="secondary" className="gap-1">
             <RefreshCw className="w-4 h-4" />
             Refresh
           </Button>
@@ -119,7 +136,7 @@ const CashflowTable = ({ mode, onCompleted }: CashflowTableProps) => {
         <h3 className="text-lg font-semibold mb-3">Recent Cashflow Activity</h3>
         {loading ? (
           <p>Loading...</p>
-        ) : cashflows.length === 0 ? (
+        ) : entries.length === 0 ? (
           <p className="text-gray-500">No activity yet.</p>
         ) : (
           <div className="overflow-x-auto">
@@ -135,7 +152,7 @@ const CashflowTable = ({ mode, onCompleted }: CashflowTableProps) => {
                 </tr>
               </thead>
               <tbody>
-                {cashflows
+                {entries
                   .slice()
                   .reverse()
                   .slice(0, 5)

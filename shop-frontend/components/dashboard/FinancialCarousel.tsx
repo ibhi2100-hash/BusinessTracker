@@ -1,16 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { useFinancialStore } from "@/store/financialDataStore";
-import { BusinessActivationPanel } from "@/components/dashboard/BusinessActivationalPanel";
+import { useFinancialStore } from "@/store/dashboardFinance";
 import { ShoppingCart, CreditCard, Package, DollarSign, TrendingUp, Rocket } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { CardContent } from "@/components/ui/cardContent";
 
 export function FinancialCarousel() {
-  const dashboardSummary = useFinancialStore((state) => state.dashboardSummary);
-  const cashAtHand = useFinancialStore((state) => state.reports.cashAtHand);
-  const businessStatus = useFinancialStore((state) => state.businessStatus); // or useBusinessStatus hook
+  const dashboardSummary = useFinancialStore(s => s.branchDashboardSummary);
+  console.log("THIS is the branch dashboard summary from indexed db: ", dashboardSummary);
+
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
 
   const isLoading = !dashboardSummary;
@@ -26,24 +25,10 @@ export function FinancialCarousel() {
   }
 
   const cards = [
-    businessStatus?.isOpening && {
-      id: "activateBusiness",
-      title: "Start Business Today",
-      value: "🚀 Activate",
-      subtitle: "Activate to begin real transactions",
-      icon: <Rocket className="w-6 h-6 text-primary" />,
-      onClick: () => {
-        // Optionally trigger a modal or panel
-        // Could also scroll to BusinessActivationPanel
-        document.getElementById("businessActivation")?.scrollIntoView({ behavior: "smooth" });
-      },
-      gradient: "from-indigo-100 to-indigo-50",
-      extra: "Complete setup and start all transactions."
-    },
-    {
+  {
       id: "todaySales",
       title: "Today's Sales",
-      value: `₦${dashboardSummary.todaySales?.toLocaleString()}`,
+      value: `₦${dashboardSummary.toLocaleString()}`,
       subtitle: "vs yesterday",
       icon: <ShoppingCart className="w-6 h-6 text-blue-600" />,
       extra: "Detailed info about sales can go here."
@@ -51,7 +36,7 @@ export function FinancialCarousel() {
     {
       id: "cashAtHand",
       title: "Cash at Hand",
-      value: `₦${dashboardSummary.cashAtHand?.toLocaleString()}`,
+      value: `₦${dashboardSummary.cash.toLocaleString()}`,
       subtitle: "Updated just now",
       icon: <CreditCard className="w-6 h-6 text-green-600" />,
       extra: "Shows all available cash including inflows and outflows."
@@ -67,7 +52,7 @@ export function FinancialCarousel() {
     {
       id: "liabilities",
       title: "Outstanding Liabilities",
-      value: `₦${dashboardSummary.outstandingLiabilities?.toLocaleString()}`,
+      value: `₦${dashboardSummary.toLocaleString()}`,
       subtitle: "Active liabilities",
       icon: <DollarSign className="w-6 h-6 text-red-600" />,
       extra: "All loans or obligations to suppliers and partners."
@@ -75,7 +60,7 @@ export function FinancialCarousel() {
     {
       id: "netProfit",
       title: "Net Profit",
-      value: `₦${dashboardSummary.netProfit?.toLocaleString()}`,
+      value: `₦${dashboardSummary.profit?.toLocaleString()}`,
       subtitle: "For the selected period",
       icon: <TrendingUp className="w-6 h-6 text-purple-600" />,
       extra: "Calculated as total sales minus total expenses."

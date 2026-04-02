@@ -7,22 +7,24 @@ import { useRouter } from "next/navigation";
 import { useAutoLogin } from "@/hooks/useAutoLogin";
 import { useAuthStore } from "@/store/useAuthStore";
 import Link from "next/link";
-import { hydrateStores } from "@/offline/hydration/hydrationStore";
 import { saveUser } from "@/offline/user/userRepository";
 import { saveSession } from "@/offline/session/sessionRepository";
+import { hydrateStores } from "@/offline/hydration/hydrationStore";
+import { useState } from "react";
 
 
 
 export default function LoginPage() {
+  const [ submit, setSubmit ] =useState(false)
   const router = useRouter();
   const login = useAuthStore((state)=> state.setLogin)
-  const checkingSession = useAutoLogin();
+  
 
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors},
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
   });
@@ -30,6 +32,7 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginInput) => {
 
     try {
+      setSubmit(true)
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
         {
@@ -46,18 +49,18 @@ export default function LoginPage() {
       if (!res.ok) {
         throw new Error(result.message || "Login failed");
       }
+      login(result.user, result.accessToken, result.expiresIn, result.branches, result.activeBranch.id )
       // persist offline
+            // 1️⃣ Persist to IndexedDB
       await saveUser(result.user);
-      await saveSession(result.session);
+      await saveSession({
+        userId: result.user.id,
+        accessToken: result.accessToken,
+        expiresIn: result.expiresIn,
+      });
+      // 2️⃣ Hydrate Zustand (from API payload)
 
-      // hydrate all stores
-      hydrateStores({
-        user: result.user,
-        accessToken: result.session.accessToken,
-        expiresIn: result.session.expiresIn,
-      })
-
-      
+       
       if (!result.user.onboardingCompleted) {
         router.push("/onboarding/step1-business");
 
@@ -65,12 +68,13 @@ export default function LoginPage() {
       else {
         router.push("/dashboard");
       }
+      setSubmit(false)
 
     } catch (error: any) {
  console.log(error)
     }
   };
-
+/*
   if (checkingSession) {
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -78,7 +82,7 @@ export default function LoginPage() {
     </div>
   );
 }
-
+*/
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-md">
@@ -115,10 +119,10 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={submit}
             className="w-full bg-blue-600 text-white py-2 rounded-xl font-semibold hover:bg-blue-700 transition"
           >
-            {isSubmitting ? "Logging in..." : "Log In"}
+            {submit ? "Logging in..." : "Log In"}
           </button>
         </form>
 

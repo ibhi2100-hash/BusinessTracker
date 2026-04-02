@@ -1,9 +1,9 @@
-import { Accounts } from "../../ledger/accounts";
+import { Account } from "../../ledger/accounts";
 
 export function generateCashflow(entries:any[]) {
 
   const cashEntries = entries.filter(
-    e => e.account === Accounts.CASH
+    e => e.account === Account.CASH
   )
 
   const inflow = cashEntries

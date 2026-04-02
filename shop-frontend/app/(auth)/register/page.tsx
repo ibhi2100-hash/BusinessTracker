@@ -1,18 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, RegisterInput } from "@/lib/validations/auth.schema";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+
 import { saveUser } from "@/offline/user/userRepository";
 import { saveSession } from "@/offline/session/sessionRepository";
 import { hydrateStores } from "@/offline/hydration/hydrationStore";
-import { clearIndexedDB, closeDBConnection } from "@/utils/deleteUserIndexData";
-import { stopInterval } from "@/offline/sync/networkMonitor";
-
-
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -25,62 +22,57 @@ export default function RegisterPage() {
   } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
   });
-  // Clear old IndexedDB data automatically on page load 
-  useEffect(()=> {
-    (async ()=> {
-      try {
-        stopInterval()
-        closeDBConnection();
-        await clearIndexedDB("business-app");
-        console.log("Old IndexedDB cleared");
-      } catch (err) {
-        console.error("Failed to clear IndexedDb", err)
+
+  const onSubmit = async (data: RegisterInput) => {
+    setServerError(null);
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            name: data.name,
+            email: data.email,
+            password: data.password,
+          }),
+        }
+      );
+
+      const result = await res.json();
+      if (!res.ok) {
+        throw new Error(result.message || "Registration failed");
+      }
+
+      // 1️⃣ Persist to IndexedDB
+      await saveUser(result.user);
+
+      await saveSession({
+        userId: result.user.id,
+        accessToken: result.accessToken,
+        expiresIn: result.expiresIn,
+      });
+
+      // 2️⃣ Hydrate Zustand (from API payload)
+      hydrateStores({
+        user: result.user,
+        accessToken: result.accessToken,
+        expiresAt: result.expiresIn,
+      });
+
+      // 3️⃣ Navigate AFTER state is ready
+      router.push("/businessOnboarding/step1-business");
+
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setServerError(error.message);
+      } else {
+        setServerError("Something went wrong");
       }
     }
-
-    )()
-  }, [])
-
- const onSubmit = async (data: RegisterInput) => {
-  setServerError(null);
-
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({
-        name: data.name,
-        email: data.email,
-        password: data.password,
-      }),
-    });
-
-    const result = await res.json();
-    if (!res.ok) throw new Error(result.message || "Registration failed");
-
-    // Persist to IndexedDB
-    await saveUser(result.user);
-    await saveSession({
-      userId: result.user.id,
-      accessToken: result.accessToken,
-      expiresIn: result.expiresIn,
-    });
-
-    // Hydrate stores immediately
-     // Unified hydration
-    hydrateStores({
-      user: result.user,
-      accessToken: result.accessToken,
-      expiresIn: result.expiresIn,
-    });
-
-    router.push("/onboarding/step1-business");
-
-  } catch (error: any) {
-    setServerError(error.message);
-  }
-};
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">

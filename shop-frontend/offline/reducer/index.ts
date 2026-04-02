@@ -1,6 +1,6 @@
 import { categoryHandlers } from "./categoryHandlers";
 import { productHandlers } from "./productHandlers";
-import { inventoryHandlers } from "./inventoryHandlers";
+import { inventoryHandlers } from "./inventoryReducer";
 import { salesHandlers } from "../events/reducers/salesHandlers";
 import { InventoryEventType } from "../events/eventGroups/inventoryEvents";
 import { salesEventType } from "../events/eventGroups/salesEvent";

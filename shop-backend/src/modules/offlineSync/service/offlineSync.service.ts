@@ -134,6 +134,7 @@ export class OfflineSyncService {
         );
 
       case "LIABILITY_ADDED":
+        console.log("THE LIABILITY ADDED: ", event)
         return this.liabilityService.createLiability(
           event.businessId,
           event.branchId,

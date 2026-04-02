@@ -20,7 +20,6 @@ export function AuthGuard({
   const router = useRouter();
 
   const hydrated = useAuthStore((state) => state.hydrated);
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const user = useAuthStore((state) => state.user);
 
   const business = useBusinessStore.getState().business
@@ -29,12 +28,7 @@ export function AuthGuard({
   useEffect(() => {
     if (!hydrated) return;
 
-    // Not logged in
-    if (!isAuthenticated) {
-      router.replace("/login");
-      return;
-    }
-
+    
     // Role check
     if (adminOnly && user?.role !== "ADMIN") {
       router.replace("/unauthorized");
@@ -48,7 +42,6 @@ export function AuthGuard({
     }
   }, [
     hydrated,
-    isAuthenticated,
     user,
     router,
     adminOnly,
@@ -59,7 +52,6 @@ export function AuthGuard({
   // Prevent flashing content while checking
   if (
     !hydrated ||
-    !isAuthenticated ||
     (adminOnly && user?.role !== "ADMIN") ||
     (blockIfOnboarding && business?.isOnboarding)
   ) {

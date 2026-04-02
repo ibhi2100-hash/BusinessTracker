@@ -12,9 +12,23 @@ import { createEntity } from "../entities/entityFactory";
 
 export async function createSales(salesData: any) {
     const business = useBusinessStore.getState().business;
-    const businessId = business.id;
     const branchId = useBranchStore.getState().activeBranchId;
-    const userId = useAuthStore.getState().user.id
+    const user = useAuthStore.getState().user
+     // 🔴 HARD GUARDS
+  if (!business) {
+    throw new Error("Business not initialized");
+  }
+
+  if (!branchId) {
+    throw new Error("Branch not selected");
+  }
+
+  if (!user) {
+    throw new Error("User not authenticated");
+  }
+
+  const businessId = business.id;
+  const userId = user.id;
 
     const sales = createEntity({
         ...salesData,

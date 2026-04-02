@@ -2621,6 +2621,7 @@ export const BusinessScalarFieldEnum = {
   id: 'id',
   name: 'name',
   address: 'address',
+  userId: 'userId',
   onboardingStep: 'onboardingStep',
   isOnboarding: 'isOnboarding',
   onboardingCompleted: 'onboardingCompleted',

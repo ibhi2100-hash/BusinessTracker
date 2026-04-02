@@ -2,18 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { useInventoryStore } from "@/store/inventoryStore";
+import ProductModal from "./product-modal";
+import CategoryCard from "./categoryCard";
 import BrandDropdown from "./brandDropdown";
 import ProductCard from "./productCard";
-import ProductModal from "./product-modal";
 import { InventoryItem } from "@/types/types";
-import CategoryCard from "./categoryCard";
-
 import { useBusinessStore } from "@/store/businessStore";
 import { inventoryController } from "@/services/inventory/inventory.controller";
-import { useSalesStore } from "@/store/SalesStore";
 import { toast } from "sonner";
 import { createSales } from "@/offline/sales/createSales";
 import { hydrateSetupStore } from "@/offline/finance/hydrateSetupStore";
+import { startInventoryWatcher, stopInventoryWatcher } from "@/offline/db/dbWatcher";
 
 interface InventoryPageProps {
   context: "sell" | "admin";
@@ -21,67 +20,99 @@ interface InventoryPageProps {
 }
 
 export default function InventoryPage({ context, mode }: InventoryPageProps) {
-  
-  // Load categories
-  useEffect(() => {
-    inventoryController.loadCategories();
-  }, []);
-
   const {
     categories,
     products,
     selectedCategoryId,
     selectedBrandId,
     setSelectedCategoryId,
+    setSelectedBrandId,
   } = useInventoryStore();
-  const [modalOpen, setModalOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<InventoryItem | undefined>();
+  console.log("Products from the store: ", products, "Categories from the store: ", categories)
+  const [modalState, setModalState] = useState<{
+    open: boolean;
+    mode: "create" | "edit";
+    data?: InventoryItem;
+  }>({
+    open: false,
+    mode: "create",
+  });
 
-  const business = useBusinessStore(s => s.business);
+  const business = useBusinessStore((s) => s.business);
   const isOnboarding = business?.isOnboarding;
 
-  // Load brands for selected category
- useEffect(() => {
-  if (!selectedCategoryId) return;
-
-  const store = useInventoryStore.getState();
-
-  store.setSelectedBrandId(null);
-
-  inventoryController.loadBrands(selectedCategoryId);
-}, [selectedCategoryId]);
-
-  // Load products for selected brand
+  // -----------------------------
+  // ✅ Start watcher (safe)
+  // -----------------------------
   useEffect(() => {
-    if (selectedBrandId) {
-      inventoryController.loadProducts(selectedBrandId);
-    }
+    let active = true;
+
+    if (active) startInventoryWatcher(1000);
+
+    return () => {
+      active = false;
+      stopInventoryWatcher();
+    };
+  }, []);
+
+  // -----------------------------
+  // ✅ Category → reset brand + load brands
+  // -----------------------------
+  useEffect(() => {
+    if (!selectedCategoryId) return;
+
+    setSelectedBrandId(null); // ✅ proper setter
+    inventoryController.loadBrands(selectedCategoryId);
+  }, [selectedCategoryId, setSelectedBrandId]);
+
+  // -----------------------------
+  // ✅ Brand → load products
+  // -----------------------------
+  useEffect(() => {
+    if (!selectedBrandId) return;
+
+    inventoryController.loadProducts(selectedBrandId);
   }, [selectedBrandId]);
 
+  // -----------------------------
+  // ✅ Edit handler
+  // -----------------------------
   const handleEdit = (product: InventoryItem) => {
-    setEditingProduct(product);
-    setModalOpen(true);
+    setModalState({
+      open: true,
+      mode: "edit",
+      data: product,
+    });
   };
 
+  // -----------------------------
+  // ✅ Add handler (clean reset)
+  // -----------------------------
+  const handleAdd = () => {
+    setModalState({
+      open: true,
+      mode: "create",
+      data: undefined,
+    });
+  };
+
+  // -----------------------------
+  // ✅ Sell handler (unchanged logic, safer)
+  // -----------------------------
   const handleSell = async (productId: string, quantity: number) => {
     const inventoryStore = useInventoryStore.getState();
-    const saleStore = useSalesStore.getState();
+    const product = inventoryStore.products.find((p) => p.id === productId);
 
-    const product = inventoryStore.products.find(p=> p.id === productId);
-    if(!product) return toast.error("Product not found in inventory");
-
-    if(quantity <= 0) return toast.error("Quantity must be at least 1");
-
-    if(quantity > product.quantity) return toast.error("Not enough stock available");
+    if (!product) return toast.error("Product not found");
+    if (quantity <= 0) return toast.error("Quantity must be at least 1");
+    if (quantity > product.quantity) return toast.error("Not enough stock");
 
     try {
-      //update inventory store optimistically
+      // Optimistic update
       inventoryStore.updateProduct({
         ...product,
-        quantity: product.quantity - quantity
+        quantity: product.quantity - quantity,
       });
-
-      // Create the sale payload
 
       const salePayload = {
         productId: product.id,
@@ -95,27 +126,24 @@ export default function InventoryPage({ context, mode }: InventoryPageProps) {
             quantity,
             unitPrice: product.sellingPrice,
             totalPrice: product.sellingPrice * quantity,
-          }
+          },
         ],
         payments: [],
         createdAt: new Date().toISOString(),
         timestamp: Date.now(),
       };
 
-      await createSales(salePayload)
+      await createSales(salePayload);
 
-      toast.success("Sale recorded successfully(offline-safe)");
-
-    }
-    catch(err){
+      toast.success("Sale recorded successfully (offline-safe)");
+    } catch (err) {
       toast.error("Failed to record sale. Please try again.");
-      console.error("Error recording sale:", err);
+      console.error(err);
     }
   };
 
   return (
     <div className="p-4 sm:p-6 md:p-8">
-
       <h1 className="text-[clamp(1.5rem,5vw,2rem)] font-bold mb-4 text-gray-800">
         {context === "sell" ? "Sell Products" : "Inventory"}
       </h1>
@@ -128,37 +156,36 @@ export default function InventoryPage({ context, mode }: InventoryPageProps) {
 
       {/* CATEGORY GRID */}
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-4">
-        {categories.map(cat => (
+        {categories.map((cat) => (
           <CategoryCard
             key={cat.id}
             category={cat}
-            onClick={() => setSelectedCategoryId(cat.id)}
+            onClick={() => {
+              setSelectedCategoryId(cat.id); // deterministic
+            }}
           />
         ))}
       </div>
 
-      {/* BRAND DROPDOWN + ADD PRODUCT */}
+      {/* BRAND + ADD */}
       <div className="flex flex-wrap items-center gap-3 mb-4">
-        {selectedCategoryId && (
-          <BrandDropdown />
-        )}
+        {selectedCategoryId && <BrandDropdown />}
 
         {context === "admin" && (
           <button
             className="px-4 py-2 bg-green-600 text-white rounded-md shadow hover:shadow-lg transition"
-            onClick={() => setModalOpen(true)}
+            onClick={handleAdd}
           >
             Add Product
           </button>
         )}
       </div>
 
-      {/* PRODUCT GRID */}
+      {/* PRODUCTS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {products.map((product, index ) => (
-
+        {products.map((product, idx) => (
           <ProductCard
-            key={product.id ?? `product-${index}`} // fallback key if id is missing
+            key={product.id ?? `product-${idx}`}
             product={product}
             context={isOnboarding ? "admin" : context}
             onEdit={handleEdit}
@@ -167,26 +194,43 @@ export default function InventoryPage({ context, mode }: InventoryPageProps) {
         ))}
       </div>
 
-      {/* PRODUCT MODAL */}
+      {/* MODAL */}
       <ProductModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        product={editingProduct}
-        onSave={(payload) => {
-          setModalOpen(false);
-          setEditingProduct(undefined);
-          // Call inventoryController.addOrUpdateProduct(payload)
-          inventoryController.addOrUpdateProduct(payload).then(() => {
-            toast.success(`Product ${editingProduct ? "updated" : "added"} successfully`);
+        isOpen={modalState.open}
+        mode={modalState.mode}
+        product={modalState.data}
+        onClose={() =>
+          setModalState({
+            open: false,
+            mode: "create",
+            data: undefined,
+          })
+        }
+        onSave={async (payload) => {
+          try {
+            console.log("Products Adding to the IndexedDb: ", payload)
+            await inventoryController.addOrUpdateProduct(payload);
+
+            toast.success(
+              modalState.mode === "edit"
+                ? "Product updated"
+                : "Product added"
+            );
+
             inventoryController.loadCategories();
-            hydrateSetupStore()
-          }).catch(err => {
-            toast.error(`Failed to ${editingProduct ? "update" : "add"} product. Please try again.`);
-            console.error("Error saving product:", err);
-          });
+            hydrateSetupStore();
+
+            setModalState({
+              open: false,
+              mode: "create",
+              data: undefined,
+            });
+          } catch (err) {
+            toast.error("Failed to save product");
+            console.error(err);
+          }
         }}
       />
-
     </div>
   );
 }

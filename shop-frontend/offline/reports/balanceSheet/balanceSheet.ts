@@ -1,4 +1,4 @@
-import { Accounts } from "../../ledger/accounts";
+import { Account } from "../../ledger/accounts";
 
 export function generateBalanceSheet(entries:any[]) {
 
@@ -7,15 +7,15 @@ export function generateBalanceSheet(entries:any[]) {
       .filter(e=> e.account === account)
       .reduce((s,e)=> s + e.amount,0)
 
-  const cash = sum(Accounts.CASH)
-  const inventory = sum(Accounts.INVENTORY)
-  const assets = sum(Accounts.ASSETS)
+  const cash = sum(Account.CASH)
+  const inventory = sum(Account.INVENTORY)
+  const assets = sum(Account.FIXED_ASSETS)
 
-  const liabilities = sum(Accounts.LIABILITIES)
+  const liabilities = sum(Account.LIABILITIES)
 
-  const revenue = sum(Accounts.REVENUE)
-  const cogs = sum(Accounts.COGS)
-  const expenses = sum(Accounts.EXPENSES)
+  const revenue = sum(Account.REVENUE)
+  const cogs = sum(Account.COGS)
+  const expenses = sum(Account.EXPENSES)
 
   const equity = revenue - cogs - expenses
 

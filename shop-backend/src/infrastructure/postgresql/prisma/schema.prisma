@@ -140,6 +140,7 @@ model Business {
   id          String    @id 
   name        String
   address     String?
+  userId      String?
   onboardingStep  Int   @default(1)
   isOnboarding  Boolean   @default(true)
   onboardingCompleted   Boolean   @default(false)
@@ -147,8 +148,8 @@ model Business {
   activatedAt DateTime?
   status      BusinessStatus    @default(ONBOARDING)
 
+  users       User[]
   branch     Branch[]
-  users      User[]
   subscriptions   BusinessSubscription[]
   categories Category[]
   brands      Brand[]
@@ -204,6 +205,7 @@ model User {
 
   business    Business? @relation(fields: [businessId], references: [id])
   branch      Branch?    @relation(fields: [branchId], references: [id])
+
   passwordResetTokens passwordResetToken[]
 
 

@@ -7,8 +7,9 @@ export async function getCashBalance(branchId: string) {
     "by_branch",
     branchId
   );
-
-  return entries
+  const balance = entries
     .filter((e: any) => e.account === "cash")
     .reduce((sum: number, e: any) => sum + e.amount, 0);
+
+  return { entries, balance}
 }

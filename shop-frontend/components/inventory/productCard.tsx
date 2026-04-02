@@ -1,16 +1,21 @@
-import { Product } from "../../store/inventoryStore";
+import { InventoryItem} from "@/types/types";
 import { useState } from "react";
 import { ShoppingCart, Edit2, Trash2, Tag, Package } from "lucide-react";
-
+import { useBusinessStore } from "@/store/businessStore";
+import { useBranchStore } from "@/store/useBranchStore";
 interface Props {
-  product: Product;
+  product: InventoryItem;
   context: "sell" | "admin";
   onSell?: (productId: string, quantity: number) => void;
-  onEdit?: (product: Product) => void;
+  onEdit?: (product: InventoryItem) => void;
   onDelete?: (productId: string) => void;
 }
 
 export default function ProductCard({ product, context, onSell, onEdit, onDelete }: Props) {
+  const business = useBusinessStore(s => s.business);
+const branchId = useBranchStore(s => s.activeBranchId);
+
+const disabled = !business || !branchId;
   const [quantity, setQuantity] = useState<string>("1"); // use string to allow empty
 
   const decrement = () => {
@@ -29,7 +34,7 @@ export default function ProductCard({ product, context, onSell, onEdit, onDelete
 
   // Determine if Sell button should be disabled
   const isSellDisabled =
-    product.quantity <= 0 || !quantity || Number(quantity) <= 0 || Number(quantity) > product.quantity;
+   disabled || product.quantity <= 0 || !quantity || Number(quantity) <= 0 || Number(quantity) > product.quantity;
 
   return (
     <div className="bg-white shadow-lg hover:shadow-2xl transition-shadow duration-300 rounded-xl overflow-hidden transform hover:scale-[1.02] w-full max-w-[350px] mx-auto sm:max-w-[300px] md:max-w-[280px]">
@@ -102,11 +107,17 @@ export default function ProductCard({ product, context, onSell, onEdit, onDelete
               </button>
             </div>
             <button
-              className={`flex items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded shadow transition w-full sm:w-auto ${
-                isSellDisabled ? "opacity-50 cursor-not-allowed" : ""
-              }`}
+              title={!business || !branchId ? "App still initializing..." : ""}
+              className={`flex items-center justify-center gap-1 px-4 py-2 rounded shadow transition w-full sm:w-auto ${
+                isSellDisabled
+                  ? "bg-blue-400 cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700"
+              } text-white font-semibold`}
               disabled={isSellDisabled}
-              onClick={() => onSell(product.id, Number(quantity))}
+              onClick={() => {
+                if (isSellDisabled) return;
+                onSell(product.id, Number(quantity));
+              }}
             >
               <ShoppingCart className="w-4 h-4" /> Sell
             </button>

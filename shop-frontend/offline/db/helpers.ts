@@ -33,3 +33,14 @@ export async function getByIndex(storeName: string, index: string, value: any) {
 
   return db.getAllFromIndex(storeName, index, value);
 }
+
+export async function deleteRecord(storeName: string, id: string) {
+  if (!id) {
+    throw new Error(`${storeName} delete failed: missing ID`);
+  }
+
+  const db = await getDb();
+  if (!db) return;
+
+  return db.delete(storeName, id);
+}

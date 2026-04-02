@@ -1,14 +1,21 @@
 import { TABLES } from "../db/schema";
-import { getAll, getRecord } from "../db/helpers";
+import { getAll } from "../db/helpers";
 import { useBusinessStore } from "@/store/businessStore";
-import { useBranchStore } from "@/store/useBranchStore";
 
 export async function loadBusiness() {
-    const businesses = await getAll(TABLES.BUSINESS);
-    const business = businesses[0] || null
+  const businesses = await getAll(TABLES.BUSINESS);
 
-    if(!business) return;
-    useBusinessStore.getState().setBusiness(business);
+  if (!businesses.length) return null;
 
-    return business
+  const business = businesses[0];
+
+  if (!business) return null;
+  const current = useBusinessStore.getState().business;
+
+if (current) {
+  return current; // ✅ don't override already hydrated state
+}
+  useBusinessStore.getState().setBusiness(business);
+
+  return business;
 }

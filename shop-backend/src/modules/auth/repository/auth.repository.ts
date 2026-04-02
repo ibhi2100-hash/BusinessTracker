@@ -6,6 +6,11 @@ export class AuthRepository {
   async findByEmail(email: string) {
     return prisma.user.findUnique({ where: { email } });
   }
+  async findBusiness(userId: string){
+    return prisma.business.findFirst({
+      where: { userId}
+    })
+  }
 
   async createUser(data: {
     name: string;

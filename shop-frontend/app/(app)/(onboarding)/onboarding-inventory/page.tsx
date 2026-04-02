@@ -8,6 +8,7 @@ import { useBusinessStatusStore } from "@/store/useBusinessStatusStore";
 import { hydrateSetupStore } from "@/offline/finance/hydrateSetupStore";
 
 export default function InventoryStep() {
+  hydrateSetupStore()
   const handleNext = () =>{
     hydrateSetupStore()
     location.href = "/onboarding-assets"; // next step

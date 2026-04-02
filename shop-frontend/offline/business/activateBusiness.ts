@@ -10,15 +10,19 @@ import { useAuthStore } from "@/store/useAuthStore";
 
 export async function activateMyBusiness() {
     const db = await getDb()
-    const business = useBusinessStore(s=> s.business);
-    const businessId = business.id;
-    const activeBranchId = useBranchStore(s=> s.activeBranchId);        
-    const userId = useAuthStore(s=> s.user.id)
+    const business = useBusinessStore.getState().business;
+    if(!business) return;
+    const businessId = useBusinessStore.getState().business.id;
+
+    const activeBranchId = useBranchStore.getState().activeBranchId        
+    const userId = useAuthStore.getState().user.id;
     const event = createEvent(BusinessEventTypes.BUSINESS_ACTIVATION, userId, businessId, activeBranchId, {}, "pending");
     
     dispatchEvent(event)
     await db.put(TABLES.BUSINESS, {
         ...business,
-        
+        isOnboarding: false,
+        onboardingCompleted: true,
+        status: "ACTIVE"
     })
 }

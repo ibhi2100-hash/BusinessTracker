@@ -1,6 +1,5 @@
 import { LiabilityRepository } from "../repository/liability.repository.js";
 import { RepayLiabilityDto } from "../dto/repay-liability.dto.js";
-import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
 import { CashflowRepository } from "../../cashflow/repository/cashflow.repository.js";
 import { LiabilityCreateInput } from "../dto/liabilityCreate.dto.js";
 
@@ -37,6 +36,7 @@ export class LiabilityService {
  
 
   const liability = await this.liabilityRepo.create(businessId, branchId, {
+    id: dto.id,
     title: dto.title,
     type: dto.type,
     principalAmount: dto.principalAmount,
@@ -47,17 +47,6 @@ export class LiabilityService {
     status: "ACTIVE",
   }, tx);
 
-  await this.cashflowRepo.create({
-    business: { connect: { id: businessId}},
-    branch: { connect: { id: branchId}},
-    type: "LIABILITY_PAYMENT",
-    amount: outstandingAmount,
-    direction: "IN",
-    isOpening: false,
-    description: "Liability adding to the cashflow"
-
-
-  }, tx)
 }
 
   /**

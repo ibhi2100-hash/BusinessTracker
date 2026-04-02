@@ -19,89 +19,89 @@ export class ProductService {
     ){}
 
     async createProduct(
-  payload: any,
-  businessId: string,
-  branchId: string,
-  tx?: Prisma.TransactionClient
-) {
-  const db = tx ?? prisma;
+      payload: any,
+      businessId: string,
+      branchId: string,
+      tx?: Prisma.TransactionClient
+    ) {
+      const db = tx ?? prisma;
 
-  // --- CATEGORY (always resolve safely) ---
-  let category;
+      // --- CATEGORY (always resolve safely) ---
+      let category;
 
-  if (payload.categoryName) {
-    category = await this.repo.getOrCreateCategory(
-      businessId,
-      branchId,
-      {
-        id: payload.categoryId, // must come from client
-        categoryName: payload.categoryName
-      },
-      db
-    );
-  } else if (payload.categoryId) {
-    category = await db.category.findFirst({
-      where: {
-        id: payload.categoryId,
-        businessId,
-        branchId
+      if (payload.categoryName) {
+        category = await this.repo.getOrCreateCategory(
+          businessId,
+          branchId,
+          {
+            id: payload.categoryId, // must come from client
+            categoryName: payload.categoryName
+          },
+          db
+        );
+      } else if (payload.categoryId) {
+        category = await db.category.findFirst({
+          where: {
+            id: payload.categoryId,
+            businessId,
+            branchId
+          }
+        });
       }
-    });
-  }
 
-  if (!category) {
-    throw new Error("Category not found"); // now this is REAL error
-  }
-
-  // --- BRAND (same pattern) ---
-  let brand;
-
-  if (payload.brandName) {
-    brand = await this.repo.getOrCreateBrand(
-      payload.brandName,
-      businessId,
-      branchId,
-      category.id,
-      { id: payload.brandId }, // client must send this
-      db
-    );
-  } else if (payload.brandId) {
-    brand = await db.brand.findFirst({
-      where: {
-        id: payload.brandId,
-        categoryId: category.id,
-        businessId,
-        branchId
+      if (!category) {
+        throw new Error("Category not found"); // now this is REAL error
       }
-    });
-  }
 
-  if (!brand) {
-    throw new Error("Brand not found");
-  }
+      // --- BRAND (same pattern) ---
+      let brand;
 
-  // --- PRODUCT ---
-  const product = await db.product.create({
-    data: {
-      id: payload.id, // 🔥 CRITICAL: use client-generated ID
-      name: payload.name,
-      type: payload.type,
-      model: payload.model || null,
-      costPrice: payload.costPrice ?? null,
-      sellingPrice: payload.sellingPrice ?? null,
-      quantity: payload.quantity ?? 0,
-      imei: payload.imei || null,
-      condition: payload.condition || null,
+      if (payload.brandName) {
+        brand = await this.repo.getOrCreateBrand(
+          payload.brandName,
+          businessId,
+          branchId,
+          category.id,
+          { id: payload.brandId }, // client must send this
+          db
+        );
+      } else if (payload.brandId) {
+        brand = await db.brand.findFirst({
+          where: {
+            id: payload.brandId,
+            categoryId: category.id,
+            businessId,
+            branchId
+          }
+        });
+      }
 
-      businessId,
-      branchId,
-      categoryId: category.id,
-      brandId: brand.id
+      if (!brand) {
+        throw new Error("Brand not found");
+      }
+
+      // --- PRODUCT ---
+      const product = await db.product.create({
+        data: {
+          id: payload.id, // 🔥 CRITICAL: use client-generated ID
+          name: payload.name,
+          type: payload.type,
+          model: payload.model || null,
+          costPrice: payload.costPrice ?? null,
+          sellingPrice: payload.sellingPrice ?? null,
+          quantity: payload.quantity ?? 0,
+          imei: payload.imei || null,
+          condition: payload.condition || null,
+
+          businessId,
+          branchId,
+          categoryId: category.id,
+          brandId: brand.id
+        }
+      });
+
+      return product;
     }
-  });
-
-  return product;
-}
 
     async getProductsByBusinessId(businessId: string) {
         return this.repo.getProductsByBusinessId(businessId);

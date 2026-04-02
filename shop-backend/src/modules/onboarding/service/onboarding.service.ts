@@ -27,6 +27,7 @@ export class OnboardingService {
       const business = await tx.business.create({
         data: {
           id: payload.business.id,
+          userId: user.id,
           name: payload.business.name,
           address: payload?.business.address ?? null,
           onboardingStep: 2

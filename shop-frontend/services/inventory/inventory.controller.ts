@@ -1,16 +1,13 @@
 import { useInventoryStore } from "@/store/inventoryStore";
 import { dispatchEvent } from "@/offline/events/eventDispatcher";
 import { inventoryHelper } from "@/offline/inventory/inventoryHelper";
-import { getDb } from "@/offline/db/indexDB";
 import { createEvent } from "@/offline/events/eventFactory";
 import { InventoryEventType } from "@/offline/events/eventGroups/inventoryEvents";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useBusinessStore } from "@/store/businessStore";
 import { useBranchStore } from "@/store/useBranchStore";
-import { generateLedgerEntries } from "../../../shared/ledgerGenerator";
 import { createEntity } from "@/offline/entities/entityFactory";
-import { getByIndex } from "@/offline/db/helpers";
-import { TABLES } from "@/offline/db/schema";
+
 
 
 export const inventoryController = {
@@ -31,136 +28,76 @@ export const inventoryController = {
 
     async loadProducts(brandId: string){
         const products = await inventoryHelper.getProductsByBrand(brandId)
-        console.log("products From indexDb: ", products)
 
         useInventoryStore.getState().setProducts(products)
     },
 
 async addOrUpdateProduct(productInput: any) {
-  const db = await getDb();
-
-  const userId = useAuthStore.getState().user.id;
-  const businessId = useBusinessStore.getState().business.id;
+  const user = useAuthStore.getState().user;
+  const business = useBusinessStore.getState().business;
   const branchId = useBranchStore.getState().activeBranchId;
 
-  if (!branchId) {
-    throw new Error("Active branch is required");
-  }
+  if (!user) throw new Error("User not authenticated");
+  if (!business) throw new Error("Business not loaded");
+  if (!branchId) throw new Error("Active branch required");
 
   // -----------------------------
-  // ✅ VALIDATION (fail fast)
+  // ✅ VALIDATION
   // -----------------------------
-  if (!productInput.name) throw new Error("Product name is required");
-  if (!productInput.categoryId || !productInput.categoryName) {
+  if (!productInput.categoryId && !productInput.categoryName) {
     throw new Error("Category is required");
   }
-  if (!productInput.brandId || !productInput.brandName) {
+
+  if (!productInput.brandId && !productInput.brandName) {
     throw new Error("Brand is required");
   }
 
   // -----------------------------
-  // ✅ CATEGORY (ID FIRST)
+  // ✅ RESOLVE CATEGORY + BRAND (NO DB WRITES HERE)
   // -----------------------------
-  let category = await db.get(TABLES.CATEGORIES, productInput.categoryId);
-
-  if (!category) {
-    category = await inventoryHelper.addCategory({
-      id: productInput.categoryId, // 🔥 preserve client-generated ID
-      name: productInput.categoryName.trim().toLowerCase(),
-      businessId,
-      branchId,
-      timestamp: Date.now()
-    });
-  }
+  const categoryId = productInput.categoryId ?? crypto.randomUUID();
+  const brandId = productInput.brandId ?? crypto.randomUUID();
 
   // -----------------------------
-  // ✅ BRAND (ID FIRST)
+  // ✅ DETERMINE UPDATE VS CREATE
   // -----------------------------
-  let brand = await db.get(TABLES.BRANDS, productInput.brandId);
+  const isUpdate = !!productInput.id;
 
-  if (!brand) {
-    brand = await inventoryHelper.addBrands({
-      id: productInput.brandId, // 🔥 preserve ID
-      name: productInput.brandName.trim().toLowerCase(),
-      categoryId: category.id,
-      businessId,
-      branchId,
-      timestamp: Date.now()
-    });
-  }
-
+  const product = isUpdate
+    ? updateEntity(productInput, {
+        categoryId,
+        brandId,
+      })
+    : createEntity({
+        ...productInput,
+        categoryId,
+        brandId,
+        businessId: business.id,
+        branchId,
+      });
+console.log(" this is the created Products: ", product)
   // -----------------------------
-  // ✅ PRODUCT ENTITY
+  // ✅ CREATE EVENT FIRST
   // -----------------------------
-  const product = createEntity({
-    name: productInput.name,
-    imageUrl: productInput.imageUrl ?? "",
-    description: productInput.description,
-
-    sellingPrice: productInput.sellingPrice,
-    costPrice: productInput.costPrice,
-    quantity: productInput.quantity,
-
-    type: productInput.type,
-    stockMode: productInput.stockMode ?? "OPENING",
-
-    model: productInput.model,
-    imei: productInput.imei,
-    condition: productInput.condition,
-
-    categoryId: category.id,
-    categoryName: category.name,
-
-    brandId: brand.id,
-    brandName: brand.name,
-
-    businessId,
-    branchId
-  });
-
-  // -----------------------------
-  // ✅ STORE CHECK (NO DUPLICATE)
-  // -----------------------------
-  const inventoryStore = useInventoryStore.getState();
-
-  const existing = inventoryStore.products.find(
-    (p) => p.id === product.id
-  );
-
-  // -----------------------------
-  // ✅ EVENT CREATION
-  // -----------------------------
-  const eventType = existing
+  const eventType = isUpdate
     ? InventoryEventType.PRODUCT_UPDATED
     : InventoryEventType.PRODUCT_CREATED;
 
   const event = await createEvent(
     eventType,
-    userId,
-    businessId,
+    user.id,
+    business.id,
     branchId,
     product,
     "pending"
   );
+ console.log("This is the event that is created After product is created:", event)
   // -----------------------------
-  // ✅ LOCAL STATE UPDATE
+  // ✅ DISPATCH (ONLY WRITE PATH)
   // -----------------------------
-  if (existing) {
-    inventoryStore.updateProduct(product);
-  } else {
-    inventoryStore.addProduct(product);
-  }
+  dispatchEvent(event);
+  console.log("Event was dispatch successfully: ", product)
 
-  // -----------------------------
-  // ✅ DISPATCH + SIDE EFFECTS
-  // -----------------------------
-  console.log("EVENTS GOING TO DISPATCHER: ", event)
-  await dispatchEvent(event);
-  console.log("EVENTS OUT OF DISPATCHER: ", event)
-  // -----------------------------
-  // ✅ PERSIST TO INDEXED DB
-  // -----------------------------
-  await inventoryHelper.addProducts(product);
 
   return product;
 }

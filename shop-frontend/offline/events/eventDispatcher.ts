@@ -1,40 +1,37 @@
-import { dashboardReducer } from "./eventReducer";
 import { getDb } from "@/offline/db/indexDB";
 import { TABLES } from "@/offline/db/schema";
-import { generateLedgerEntries } from "../../../shared/ledgerGenerator";
-import { useFinancialStore } from "@/store/financialDataStore"
+import { inventoryReducer } from "@/offline/reducer/inventoryReducer";
+import { financialReducer } from "@/offline/reducer/financeReducer";
 import { syncEvent } from "../sync/syncEngine";
+
 export const dispatchEvent = async (event: any) => {
-
-  const db = await getDb()
-
-  const ledgerEntries = generateLedgerEntries(event)
+  console.log("The event just hit the dispatcher: ", event)
+  const db = await getDb();
 
   const tx = db.transaction(
-    [TABLES.EVENTS, TABLES.LEDGER_ENTRIES],
+    [
+      TABLES.EVENTS,
+      TABLES.LEDGER_ENTRIES,
+      TABLES.INVENTORY,
+      TABLES.PRODUCTS,
+      TABLES.CATEGORIES,
+      TABLES.BRANDS
+    ],
     "readwrite"
-  )
+  );
+  
+  // 1. persist event
+  await tx.objectStore(TABLES.EVENTS).add(event);
+console.log("I just store Event in the indexedDb just check it out: ")
+  // 2. run reducers (ALL inside same tx)
+  inventoryReducer(tx, event);
+  financialReducer(tx, event);
 
-  await tx.objectStore(TABLES.EVENTS).add(event)
+  // 3. commit
+  await tx.done;
 
-  for (const entry of ledgerEntries) {
-    await tx.objectStore(TABLES.LEDGER_ENTRIES).add(entry)
-  }
-
-  await tx.done
-
-  // reducer update
-  const store = useFinancialStore.getState()
-
-  const newState = dashboardReducer(
-    store.dashboardSummary,
-    event
-  )
-
-  store.setDashboardSummary(newState)
-
-  // background sync
+  // 4. background sync (non-blocking)
   syncEvent().catch(() => {
-    console.warn("Sync failed, will retry later")
-  })
-}
+    console.warn("Sync failed, will retry later");
+  });
+};

@@ -1,6 +1,6 @@
 export const DB_NAME = "business-app";
 
-export const DB_VERSION = 1;
+export const DB_VERSION = 2;
 
 export const TABLES = {
     SNAPSHOT: "snapshot",
