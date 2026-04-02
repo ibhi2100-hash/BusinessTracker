@@ -102,4 +102,36 @@ async registerUser(
       business
     };
   }
+
+  async getCurrentUser(userId: string) {
+  const user = await this.authRepo.findById(userId);
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const business = await this.authRepo.findBusiness(user.id);
+
+  // onboarding case
+  if (!user.businessId || !user.onboardingCompleted) {
+    return {
+      user,
+      activeBranch: null,
+      branches: [],
+      business,
+    };
+  }
+
+  const branches = await this.authRepo.getBusinessBranches(user.businessId);
+
+  const activeBranch =
+    branches.find((b) => b.id === user.branchId) || branches[0];
+
+  return {
+    user,
+    activeBranch,
+    branches,
+    business,
+  };
+}
 }

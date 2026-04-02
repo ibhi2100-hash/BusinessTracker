@@ -1,13 +1,15 @@
 import { openDB } from "idb";
-import { DB_NAME, DB_VERSION, TABLES } from "./schema";
+import { getDbName, DB_VERSION, TABLES } from "./schema";
 
-let dbPromise: any = null;
+const dbCache: Record<string, any> = {};
 
-export const getDb = async () => {
+export const getDb = async (userId?: string) => {
   if (typeof window === "undefined") return null;
 
-  if (!dbPromise) {
-    dbPromise = openDB(DB_NAME, DB_VERSION, {
+  const dbName = getDbName(userId)
+
+  if (!dbCache[dbName]) {
+    dbCache[dbName] = openDB(dbName, DB_VERSION, {
       upgrade(db, oldVersion, tx) {
 
         // ---------------------------
@@ -223,5 +225,5 @@ export const getDb = async () => {
     });
   }
 
-  return dbPromise;
+  return dbCache[dbName];
 };

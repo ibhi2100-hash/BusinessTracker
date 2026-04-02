@@ -3,6 +3,10 @@ import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
 
 export class AuthRepository {
 
+  async findById(id: string) {
+  return prisma.user.findUnique({ where: { id } });
+}
+
   async findByEmail(email: string) {
     return prisma.user.findUnique({ where: { email } });
   }
@@ -95,4 +99,6 @@ export class AuthRepository {
 
     return defaultBranch;
   }
+
+  
 }

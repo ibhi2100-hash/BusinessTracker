@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import { AuthService } from "../service/auth.service.js";
 import { LoginDto } from "../dto/login.dto.js";
-import { access } from "node:fs";
+
 
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -96,4 +96,29 @@ export class AuthController {
       businessId: user.businessId,
     };
   }
+
+  async me(req: any, res: Response): Promise<Response> {
+  try {
+    const authUser = req.user;
+
+    if (!authUser) {
+      return res.status(401).json({ message: "User does not exist" });
+    }
+
+    const result = await this.authService.getCurrentUser(
+      authUser.id
+    );
+
+    return res.status(200).json({
+      user: this.safeUser(result.user),
+      activeBranch: result.activeBranch,
+      branches: result.branches,
+      business: result.business,
+    });
+  } catch (error: any) {
+    return res.status(401).json({
+      message: error.message || "Invalid session",
+    });
+  }
+}
 }

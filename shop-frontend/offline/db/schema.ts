@@ -1,4 +1,5 @@
-export const DB_NAME = "business-app";
+export const getDbName = (userId?: string) =>
+  userId ? `business-app-${userId}` : "business-app-guest";
 
 export const DB_VERSION = 2;
 

@@ -15,7 +15,7 @@ import { TABLES } from "@/offline/db/schema";
   switch (event.type) {
 
     case "PRODUCT_CREATED":
-      store.add(event.payload)
+      store.add(payload)
       categoryStore.add(categoryData);
       brandStore.add(brandData)
       break
