@@ -1,16 +1,15 @@
 import { BaseEvent } from "../events/eventFactory";
 import { TABLES } from "@/offline/db/schema";
-export function BusinessReducer(tx: IDBTransaction, event: BaseEvent) {
+export function LiabilityReducer(tx: IDBTransaction, event: BaseEvent) {
 
 
   switch (event.type) {
 
-    case "BUSINESS_CREATED":
-        tx.objectStore(TABLES.BUSINESS).add(event.payload.business);
-        tx.objectStore(TABLES.BRANCHES).add(event.payload.branch);
+    case "LIABILITY_ADDED":
+        tx.objectStore(TABLES.ASSETS).add(event.payload);
         break;
 
-    case "BUSINESS_ACTIVATION":
+    case "LIABILITY_REPAYMENT":
         const store = tx.objectStore(TABLES.BUSINESS);
         store.put(event.payload);
         break;
@@ -21,4 +20,3 @@ export function BusinessReducer(tx: IDBTransaction, event: BaseEvent) {
   }
   
 }
-  

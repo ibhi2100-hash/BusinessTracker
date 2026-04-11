@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { StepHeader } from "../../../../components/onboarding/StepHeader";
 import { StepFooter } from "../../../../components/onboarding/StepFooter";
-import { createBusiness } from "@/offline/business/createBusiness";
-import { hydrateStores } from "@/offline/hydration/hydrationStore";
+import { businessService } from "@/services/business/businessService";
+
 
 
 export default function Step2Business() {
@@ -30,7 +30,7 @@ export default function Step2Business() {
     setLoading(true);
     setError("");
     try {
-     createBusiness(businessData, branchData)
+     await businessService.createBusiness(businessData, branchData)
     
       router.push("/onboard");
       

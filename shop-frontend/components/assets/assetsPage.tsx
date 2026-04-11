@@ -17,8 +17,7 @@ import {
 import { useDepreciationPreview } from "@/hooks/liveDepreciation";
 import { formatCurrency } from "@/lib/format";
 
-import { createAssets } from "@/offline/finance/asset/createAsset";
-import { hydrate } from "@tanstack/react-query";
+import { assetController } from "@/services/assets/assetService";
 import { hydrateSetupStore } from "@/offline/finance/hydrateSetupStore";
 
 interface AssetsProps {
@@ -71,7 +70,7 @@ export default function AddAssetPage({
         assetType: mode === "OPENING" ? "OPENING" : "PURCHASE",
       };
 
-      await createAssets(payload);
+      await assetController.createAssets(payload);
 
       toast.success("Asset created successfully");
       hydrateSetupStore()

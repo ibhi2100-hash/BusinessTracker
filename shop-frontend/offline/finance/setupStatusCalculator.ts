@@ -22,7 +22,7 @@ export const setupStatusCalculation = async () => {
   const hasAssets = assets.length > 0;
 
   // --- Liabilities: check if any liabilities exist ---
-  const liabilities = await getByIndex(TABLES.LIABILITIES, "by_business_branch", branchId);
+  const liabilities = await getByIndex(TABLES.LIABILITIES, "by_business_branch", [businessId, branchId]);
   const hasLiabilities = liabilities.length > 0;
 
   // --- Steps ---

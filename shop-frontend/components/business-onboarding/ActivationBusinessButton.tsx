@@ -6,7 +6,7 @@ import { useBusinessStore } from "@/store/businessStore";
 import { useRouter } from "next/navigation";
 import { useBusinessStatusStore} from '@/store/useBusinessStatusStore';   
 import { useState } from "react";
-import { activateMyBusiness } from "@/offline/business/activateBusiness";
+import { businessService } from "@/services/business/businessService";
 import { toast } from "sonner";
 
 
@@ -17,10 +17,10 @@ export const ActivateBusinessButton = () => {
   const router = useRouter()
 
 
-  const handleActivate = () => {
+  const handleActivate = async () => {
     setLoading(true)
     if (!canActivate ) return;
-    activateMyBusiness()
+    await businessService.activateMyBusiness()
     toast.success("Business Activated✅")
     setLoading(false)
 

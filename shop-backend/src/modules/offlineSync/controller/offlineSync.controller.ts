@@ -8,7 +8,8 @@ export class OfflineSyncController {
 
   async sync(req: Request, res: Response) {
 
-    const { events } = req.body;
+    const  events  = req.body;
+    console.log("Events that hit the Backend and this is how it lookslike: ", events)
 
     if (!Array.isArray(events)) {
       return res.status(400).json({

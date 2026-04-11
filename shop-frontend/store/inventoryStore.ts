@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { Category, Brand, InventoryItem } from "@/types/types";
 
 interface InventoryStore {
-  // DATA (read मॉडल)
+  // DATA (read )
   categories: Category[];
   brands: Brand[];
   products: InventoryItem[];

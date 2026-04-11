@@ -36,6 +36,7 @@ async addOrUpdateProduct(productInput: any) {
   const user = useAuthStore.getState().user;
   const business = useBusinessStore.getState().business;
   const branchId = useBranchStore.getState().activeBranchId;
+  const productStore = useInventoryStore.getState();
 
   if (!user) throw new Error("User not authenticated");
   if (!business) throw new Error("Business not loaded");
@@ -75,7 +76,6 @@ async addOrUpdateProduct(productInput: any) {
         businessId: business.id,
         branchId,
       });
-console.log(" this is the created Products: ", product)
   // -----------------------------
   // ✅ CREATE EVENT FIRST
   // -----------------------------
@@ -91,13 +91,19 @@ console.log(" this is the created Products: ", product)
     product,
     "pending"
   );
- console.log("This is the event that is created After product is created:", event)
   // -----------------------------
   // ✅ DISPATCH (ONLY WRITE PATH)
   // -----------------------------
   dispatchEvent(event);
-  console.log("Event was dispatch successfully: ", product)
 
+  // -----------------------------
+  // ✅ OPTIMISTIC UI UPDATE
+  // -----------------------------
+   if (isUpdate) {
+    productStore.hydrate(product);
+  } else {
+    productStore.hydrate(product);
+  }
 
   return product;
 }

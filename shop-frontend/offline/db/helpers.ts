@@ -47,6 +47,7 @@ export async function addRecord<T extends { id: string }>(
 
   const db = await getUserDb();
 
+
   await db.put(storeName, data);
 
   return data;

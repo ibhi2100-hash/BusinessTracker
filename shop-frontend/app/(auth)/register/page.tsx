@@ -45,6 +45,13 @@ export default function RegisterPage() {
       if (!res.ok) {
         throw new Error(result.message || "Registration failed");
       }
+      
+      // 2️⃣ Hydrate Zustand (from API payload)
+      hydrateStores({
+        user: result.user,
+        accessToken: result.accessToken,
+        expiresAt: result.expiresIn,
+      });
 
       // 1️⃣ Persist to IndexedDB
       await saveUser(result.user);
@@ -55,12 +62,6 @@ export default function RegisterPage() {
         expiresIn: result.expiresIn,
       });
 
-      // 2️⃣ Hydrate Zustand (from API payload)
-      hydrateStores({
-        user: result.user,
-        accessToken: result.accessToken,
-        expiresAt: result.expiresIn,
-      });
 
       // 3️⃣ Navigate AFTER state is ready
       router.push("/businessOnboarding/step1-business");

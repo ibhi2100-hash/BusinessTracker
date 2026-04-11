@@ -10,7 +10,7 @@ export const getDb = async (userId?: string) => {
 
   if (!dbCache[dbName]) {
     dbCache[dbName] = openDB(dbName, DB_VERSION, {
-      upgrade(db, oldVersion, tx) {
+      upgrade(db, oldVersion, newVersion, tx) {
 
         // ---------------------------
         // HELPER
@@ -166,7 +166,7 @@ export const getDb = async (userId?: string) => {
           sessionStore.createIndex("by_user", "userId");
         }
 
-         // ---------------------------
+        // ---------------------------
         // BUSINESS
         // ---------------------------
         const businessStore = getStore(TABLES.BUSINESS);
@@ -174,13 +174,14 @@ export const getDb = async (userId?: string) => {
         if (!businessStore.indexNames.contains("by_user")) {
           businessStore.createIndex("by_user", "userId");
         }
-         // ---------------------------
-        // PRODUCTS
-        // ---------------------------
-        const brancheStore = getStore(TABLES.BRANCHES);
 
-        if (!brancheStore.indexNames.contains("by_business")) {
-          brancheStore.createIndex("by_business", "businessId");
+        // ---------------------------
+        // BRANCHES
+        // ---------------------------
+        const branchStore = getStore(TABLES.BRANCHES);
+
+        if (!branchStore.indexNames.contains("by_business")) {
+          branchStore.createIndex("by_business", "businessId");
         }
 
         // ---------------------------
@@ -206,6 +207,20 @@ export const getDb = async (userId?: string) => {
             ["businessId", "branchId"]
           );
         }
+
+        
+        // ---------------------------
+        // SNAPSHOT
+        // ---------------------------
+        const  snapshotStore = getStore(TABLES.SNAPSHOT);
+
+        if (!snapshotStore.indexNames.contains("by_business_branch")) {
+          snapshotStore.createIndex(
+            "by_business_branch",
+            ["businessId", "branchId"]
+          );
+        }
+
 
 
 

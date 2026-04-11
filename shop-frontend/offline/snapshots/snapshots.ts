@@ -1,10 +1,12 @@
 import { TABLES } from "../db/schema";
+import { getDb } from "../db/indexDB";
+
 
 
 async function createSnapshot(tx: IDBTransaction, event: any) {
   const snapshotStore = tx.objectStore(TABLES.SNAPSHOT);
 
-  const products = await tx.objectStore(TABLES.PRODUCTS).getAll();
+  const products = await tx.objectStore(TABLES.PRODUCTS).getAll;
   const inventory = await tx.objectStore(TABLES.INVENTORY).getAll();
 
   await snapshotStore.put({
