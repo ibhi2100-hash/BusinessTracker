@@ -3,8 +3,8 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useAuthStore } from "@/store/useAuthStore";
-import { useBusinessStore } from "@/store/businessStore";
+import { useAuthStore } from "@/src/store/useAuthStore";
+import { useBusinessStore } from "@/src/store/businessStore";
 
 interface AuthGuardProps {
   children: React.ReactNode;

@@ -4,18 +4,14 @@
 import { SetupProgressTracker} from "@/components/business-onboarding/SetupProgressTracker";
 import { SetupChecklist } from "@/components/business-onboarding/SetupChecklist";
 import { ActivateBusinessButton } from "@/components/business-onboarding/ActivationBusinessButton";
-import { useBusinessStore } from "@/store/businessStore";
-import { useEffect } from "react";
-import { useSubscriptionStore } from "@/store/useSubscriptionStore";
-import { useSubscription } from "@/hooks/subscriptionHooks/useSubscription";
-import { hydrateSetupStore } from "@/offline/finance/hydrateSetupStore";
+import { useBusinessStore } from "@/src/store/businessStore";
+import { useSubscriptionStore } from "@/src/store/useSubscriptionStore";
+
 
 
 
 
 const OnboardingPage = ()=> {
-  hydrateSetupStore();
-  
   const PlansData = useSubscriptionStore((s)=> s.subscription);
   const businessFromStore = useBusinessStore((state) => state.business);
 

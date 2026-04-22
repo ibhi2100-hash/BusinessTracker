@@ -5,11 +5,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginInput } from "@/lib/validations/auth.schema";
 import { useRouter } from "next/navigation";
 import { useAutoLogin } from "@/hooks/useAutoLogin";
-import { useAuthStore } from "@/store/useAuthStore";
-import { hydrateStores } from "@/offline/hydration/hydrationStore";
+import { useAuthStore } from "@/src/store/useAuthStore";
+import { hydrateStores } from "@/offline/features/hydration/actions/hydrationStore";
 import Link from "next/link";
-import { saveUser } from "@/offline/user/userRepository";
-import { saveSession } from "@/offline/session/sessionRepository";
+import { AuthService } from "@/src/services/authService";
 import { useState } from "react";
 
 
@@ -60,12 +59,7 @@ export default function LoginPage() {
       login(result.user, result.accessToken, result.expiresIn, result.branches, result.activeBranch.id )
       // persist offline
             // 1️⃣ Persist to IndexedDB
-      await saveUser(result.user);
-      await saveSession({
-        userId: result.user.id,
-        accessToken: result.accessToken,
-        expiresIn: result.expiresIn,
-      });
+      AuthService.saveUser(result.user);
       // 2️⃣ Hydrate Zustand (from API payload)
 
        

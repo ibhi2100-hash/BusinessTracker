@@ -6,10 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, RegisterInput } from "@/lib/validations/auth.schema";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-
-import { saveUser } from "@/offline/user/userRepository";
-import { saveSession } from "@/offline/session/sessionRepository";
-import { hydrateStores } from "@/offline/hydration/hydrationStore";
+import { hydrateStores } from "@/offline/features/hydration/actions/hydrationStore";
+import { AuthService } from "@/src/services/authService";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -53,18 +51,10 @@ export default function RegisterPage() {
         expiresAt: result.expiresIn,
       });
 
-      // 1️⃣ Persist to IndexedDB
-      await saveUser(result.user);
-
-      await saveSession({
-        userId: result.user.id,
-        accessToken: result.accessToken,
-        expiresIn: result.expiresIn,
-      });
-
+      await AuthService.saveUser(result.user)
 
       // 3️⃣ Navigate AFTER state is ready
-      router.push("/businessOnboarding/step1-business");
+      router.push("/step1-business");
 
     } catch (error: unknown) {
       if (error instanceof Error) {

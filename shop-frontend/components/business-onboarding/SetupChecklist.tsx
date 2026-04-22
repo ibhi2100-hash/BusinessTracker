@@ -3,15 +3,19 @@
 import { CheckCircle2, Circle } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
-import { useBusinessSetupStore } from "@/store/useBusinessSetupStore";
-import { useBusinessStatusStore } from "@/store/useBusinessStatusStore";
+
 
 
 export const SetupChecklist = () => {
   const router = useRouter();
 
-  const hydrated = useBusinessStatusStore(s => s.isHydrated);  
-  const steps = useBusinessStatusStore(s => s.steps);
+  const steps = {
+    inventory: 2000,
+    openingCash: 3000,
+    assets: 40000,
+    liabilities: 50000,
+
+  }
   
   const items = [
     {

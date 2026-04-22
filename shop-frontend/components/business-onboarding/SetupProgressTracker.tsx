@@ -3,11 +3,11 @@
 
 import { Card } from "@/components/ui/card";
 import clsx from "clsx";
-import { useBusinessStatusStore } from '@/store/useBusinessStatusStore'
+
 
 export const SetupProgressTracker = () => {
 
-  const storePercentage = useBusinessStatusStore(s => s.percentage);
+  const storePercentage = 100
   
 
   const percentage = storePercentage;

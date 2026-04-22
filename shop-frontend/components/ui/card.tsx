@@ -2,6 +2,9 @@ import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 interface CardProps {
+  title?: string;
+  value?: number;
+
   children: ReactNode;
   className?: string;
   variant?: "default" | "gradient";
@@ -9,6 +12,8 @@ interface CardProps {
 }
 
 export const Card = ({
+  title,
+  value,
   children,
   className,
   variant = "default",
@@ -25,6 +30,10 @@ export const Card = ({
         className
       )}
     >
+      {title && <h3 className="text-lg font-bold mb-2">{title}</h3>}
+      {value !== undefined && (
+        <p className="text-2xl font-bold">${value.toFixed(2)}</p>
+      )}
       {children}
     </div>
   );

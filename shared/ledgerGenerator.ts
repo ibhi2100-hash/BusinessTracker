@@ -1,7 +1,7 @@
-import { Account } from "../shop-frontend/offline/ledger/accounts";
-import { financeEventType } from "../shop-frontend/offline/events/eventGroups/financeEvent";
-import { InventoryEventType } from "../shop-frontend/offline/events/eventGroups/inventoryEvents";
-import { salesEventType } from "../shop-frontend/offline/events/eventGroups/salesEvent";
+import { Account } from "../shop-frontend/offline/features/ledger/accounts";
+import { financeEventType } from "../shop-frontend/offline/core/events/eventGroups/financeEvent";
+import { InventoryEventType } from "../shop-frontend/offline/core/events/eventGroups/inventoryEvents";
+import { salesEventType } from "../shop-frontend/offline/core/events/eventGroups/salesEvent";
 
 type LedgerEntryInput = {
   id: string;

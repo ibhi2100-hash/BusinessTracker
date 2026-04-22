@@ -1,27 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import { useInventoryStore } from "../../store/inventoryStore";
+import { Brand } from "@/types/types";
 
-export default function BrandDropdown() {
-  const brands = useInventoryStore((state) => state.brands);
-  const selectedBrandId = useInventoryStore((state) => state.selectedBrandId);
-  const setSelectedBrandId = useInventoryStore((state) => state.setSelectedBrandId);
-  const selectedCategoryId = useInventoryStore((state) => state.selectedCategoryId);
+interface BrandDropdownProps {
+  brands: Brand[];
+  selectedBrandId: string | null;
+  onSelect: (id: string) => void;
+}
 
+export default function BrandDropdown({
+  brands,
+  selectedBrandId,
+  onSelect,
+}: BrandDropdownProps) {
   const [open, setOpen] = useState(false);
 
-  // ✅ FILTER by category (CRITICAL)
-  const filteredBrands = brands.filter(
-    (b) => b.categoryId === selectedCategoryId
-  );
+  if (!brands.length) return null;
 
-  if (!selectedCategoryId) return null;
-  if (filteredBrands.length === 0) return null;
-
-  const selectedBrand = filteredBrands.find(
-    (b) => b.id === selectedBrandId
-  );
+  const selectedBrand = brands.find((b) => b.id === selectedBrandId);
 
   return (
     <div className="relative w-60 mb-4">
@@ -42,18 +39,23 @@ export default function BrandDropdown() {
           stroke="currentColor"
           viewBox="0 0 24 24"
         >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 9l-7 7-7-7"
+          />
         </svg>
       </button>
 
       {/* Dropdown */}
       {open && (
         <ul className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-          {filteredBrands.map((b) => (
+          {brands.map((b) => (
             <li
               key={b.id}
               onClick={() => {
-                setSelectedBrandId(b.id);
+                onSelect(b.id);
                 setOpen(false);
               }}
               className="cursor-pointer px-4 py-2 hover:bg-indigo-600 hover:text-white"

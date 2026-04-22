@@ -1,0 +1,219 @@
+import Dexie, { Table } from "dexie";
+import { getDbName, DB_VERSION, TABLES } from "./schema";
+
+// ---------------------------
+// DOMAIN TYPES
+// ---------------------------
+
+export interface Event {
+  id: string;
+  type: string;
+  status: "pending" | "processed" | "failed";
+  synced: boolean;
+  createdAt: number;
+  deviceId?: string;
+  businessId: string;
+  branchId: string;
+}
+
+export interface Inventory {
+  id: string;
+  productId: string;
+  branchId: string;
+  quantity: number;
+  updatedAt: number;
+}
+
+export interface Product {
+  id: string;
+  name: string;
+  price: number;
+  cost: number;
+  brandId?: string;
+  categoryId?: string;
+  businessId: string;
+  branchId: string;
+  createdAt: number;
+}
+
+export interface LedgerEntry {
+  id: string;
+  eventId: string;
+  businessId: string;
+  branchId: string;
+  account: string;
+  amount: number;
+  createdAt: number;
+}
+
+export interface Category {
+  id: string;
+  businessId: string;
+  name: string;
+}
+
+export interface Brand {
+  id: string;
+  businessId: string;
+  categoryId?: string;
+  name: string;
+}
+
+export interface User {
+  id: string;
+  email?: string;
+  name?: string;
+  createdAt: number;
+}
+
+export interface Session {
+  id: string;
+  userId: string;
+  createdAt: number;
+}
+
+export interface Business {
+  id: string;
+  name: string;
+  address: string;
+  userId: string;
+  createdAt: number;
+}
+
+export interface Branch {
+  id: string;
+  name: string;
+  businessId: string;
+}
+
+export interface Asset {
+  id: string;
+  businessId: string;
+  branchId: string;
+}
+
+export interface Liability {
+  id: string;
+  businessId: string;
+  branchId: string;
+}
+
+export interface Snapshot {
+  id: string;
+  businessId: string;
+  branchId: string;
+  createdAt: number;
+}
+
+// ---------------------------
+// DB CLASS
+// ---------------------------
+
+export class AppDB extends Dexie {
+  events!: Table<Event, string>;
+  inventory!: Table<Inventory, string>;
+  products!: Table<Product, string>;
+  ledgerEntries!: Table<LedgerEntry, string>;
+  categories!: Table<Category, string>;
+  brands!: Table<Brand, string>;
+  users!: Table<User, string>;
+  sessions!: Table<Session, string>;
+  businesses!: Table<Business, string>;
+  branches!: Table<Branch, string>;
+  assets!: Table<Asset, string>;
+  liabilities!: Table<Liability, string>;
+  snapshots!: Table<Snapshot, string>;
+
+  constructor(name: string) {
+    super(name);
+
+    this.version(DB_VERSION).stores({
+      events:
+        "id,status,synced,type,createdAt,businessId,branchId,[businessId+branchId],[businessId+createdAt],[status+synced],[type+createdAt]",
+
+      inventory:
+        "id,productId,branchId,updatedAt,[productId+branchId]",
+
+      products:
+        "id,name,brandId,categoryId,businessId,branchId,createdAt,[businessId+branchId]",
+
+      ledgerEntries:
+        "id,eventId,account,branchId,businessId,createdAt,[eventId],[businessId+branchId],[account+createdAt]",
+
+      categories:
+        "id,businessId,name,[name+businessId]",
+
+      brands:
+        "id,businessId,categoryId,[categoryId+businessId]",
+
+      users:
+        "id",
+
+      sessions:
+        "id,userId,createdAt",
+
+      businesses:
+        "id,userId,createdAt",
+
+      branches:
+        "id,businessId",
+
+      assets:
+        "id,businessId,branchId,[businessId+branchId]",
+
+      liabilities:
+        "id,businessId,branchId,[businessId+branchId]",
+
+      snapshots:
+        "id,businessId,branchId,createdAt,[businessId+branchId]",
+    });
+
+    this.on("blocked", () => {
+      console.warn("[DB] Upgrade blocked — close other tabs.");
+    });
+
+    this.on("versionchange", () => {
+      this.close();
+    });
+  }
+}
+
+// ---------------------------
+// DB CACHE
+// ---------------------------
+
+const dbCache: Record<string, AppDB> = {};
+
+// ---------------------------
+// FACTORY
+// ---------------------------
+
+export const getDb = (userId?: string): AppDB | null => {
+  if (typeof window === "undefined") return null;
+
+  const dbName = getDbName(userId);
+
+  if (!dbCache[dbName]) {
+    const db = new AppDB(dbName);
+
+    db.open().catch((err) => {
+      console.error("[DB] failed to open:", err);
+    });
+
+    dbCache[dbName] = db;
+  }
+
+  return dbCache[dbName];
+};
+
+// ---------------------------
+// TRANSACTION
+// ---------------------------
+
+export async function runTx<T>(
+  db: AppDB,
+  fn: () => Promise<T>,
+  ...tables: Table<any, any>[]
+): Promise<T> {
+  return (db.transaction as any)("rw", ...tables, fn);
+}

@@ -2,25 +2,23 @@
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { useBusinessStore } from "@/store/businessStore";
-import { useRouter } from "next/navigation";
-import { useBusinessStatusStore} from '@/store/useBusinessStatusStore';   
+import { useBusinessStore } from "@/src/store/businessStore";
+import { useRouter } from "next/navigation";  
 import { useState } from "react";
-import { businessService } from "@/services/business/businessService";
+import { BusinessService } from "@/src/services/businessService";
 import { toast } from "sonner";
 
 
 export const ActivateBusinessButton = () => {
   const [ loading, setLoading] = useState(false);
   const businessFromStore = useBusinessStore((state) => state.business);
-  const canActivate = useBusinessStatusStore.getState().canActivate;
   const router = useRouter()
+  const [canActivate, setCanActivate] = useState()
 
 
   const handleActivate = async () => {
     setLoading(true)
-    if (!canActivate ) return;
-    await businessService.activateMyBusiness()
+    await BusinessService.activateMyBusiness()
     toast.success("Business Activated✅")
     setLoading(false)
 
@@ -36,7 +34,7 @@ export const ActivateBusinessButton = () => {
   return (
     <Card className="space-y-4">
       <Button
-        disabled={!canActivate}
+        
         onClick={handleActivate}
         className="w-full rounded-xl"
       >

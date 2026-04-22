@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { loadUser } from "@/offline/user/loadUser";
 import { loadSession } from "@/offline/session/sessionLoader";
 import { loadBusiness } from "@/offline/business/businessLoader";
-import { hydrateStores } from "@/offline/hydration/hydrationStore";
+import { hydrateStores } from "@/offline/features/hydration/actions/hydrationStore";
 import { loadBranches } from "@/offline/business/loadbranches";
 import { useBusinessStore } from "@/store/businessStore";
 import { id } from "zod/v4/locales";

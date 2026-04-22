@@ -10,6 +10,8 @@ export type BranchRole = Role;
 export type ProductType = "ACCESSORY" | "PHONE" | "SERVICE" | "OTHER";
 export type ProductStockMode = "OPENING" | "LIVE";
 
+export type PaymentMethod = "CASH" | "TRANSFER" | "POS";
+
 export type CashFlowType =
   | "OPENING"
   | "OWNER_CAPITAL"
@@ -24,13 +26,59 @@ export type CashFlowType =
 
 export type CashFlowDirection = "IN" | "OUT";
 
-export type PaymentMethod = "CASH" | "TRANSFER" | "POS";
-
-export type SaleStatus = "COMPLETED" | "REFUNDED" | "VOIDED";
-
-export type ExpenseStatus = "APPROVED" | "PENDING" | "CANCELLED";
-
 export type SubscriptionStatus = "ACTIVE" | "EXPIRED" | "CANCELLED";
+
+// ===========================
+// ACCOUNT SYSTEM (🔥 NEW CORE)
+// ===========================
+export type AccountType =
+  | "CASH"
+  | "SALES"
+  | "COGS"
+  | "INVENTORY"
+  | "EXPENSE"
+  | "CAPITAL";
+
+// ===========================
+// SALE DOMAIN
+// ===========================
+export type SaleItem = {
+  productId: string;
+  quantity: number;
+  sellingPrice: number;
+  costPrice: number;
+};
+
+export type SalePayload = {
+  id?: string;
+  businessId: string;
+  branchId: string;
+  items: SaleItem[];
+  paymentMethod: PaymentMethod;
+};
+
+// ===========================
+// LEDGER CORE (FIXED)
+// ===========================
+export type LedgerTransaction = {
+  id: string;
+  businessId: string;
+  branchId: string;
+  description?: string;
+  reference?: string;
+  createdAt: number;
+};
+
+export type LedgerEntry = {
+  id: string;
+  transactionId: string;
+  accountId: AccountType;
+  debit: number;
+  credit: number;
+  businessId: string;
+  branchId: string;
+  createdAt: number;
+};
 
 // ---------------------------
 // USER

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useInventoryStore } from "@/store/inventoryStore";
 import ProductModal from "./product-modal";
 import CategoryCard from "./categoryCard";
@@ -11,8 +11,11 @@ import { useBusinessStore } from "@/store/businessStore";
 import { inventoryController } from "@/services/inventory/inventory.controller";
 import { toast } from "sonner";
 import { createSales } from "@/offline/sales/createSales";
-import { hydrateSetupStore } from "@/offline/finance/hydrateSetupStore";
-import { startInventoryWatcher, stopInventoryWatcher } from "@/offline/db/dbWatcher";
+import {
+  startInventorySubscriber,
+  stopInventorySubscriber,
+} from "@/offline/subscribers/inventorySubscriber";
+import { inventoryHelper } from "@/offline/inventory/newInventoryhelper";
 
 interface InventoryPageProps {
   context: "sell" | "admin";
@@ -22,13 +25,19 @@ interface InventoryPageProps {
 export default function InventoryPage({ context, mode }: InventoryPageProps) {
   const {
     categories,
+    brands,
     products,
     selectedCategoryId,
     selectedBrandId,
     setSelectedCategoryId,
     setSelectedBrandId,
   } = useInventoryStore();
-  console.log("Products from the store: ", products, "Categories from the store: ", categories)
+
+
+
+  const business = useBusinessStore((s) => s.business);
+  const isOnboarding = business?.isOnboarding;
+
   const [modalState, setModalState] = useState<{
     open: boolean;
     mode: "create" | "edit";
@@ -38,44 +47,29 @@ export default function InventoryPage({ context, mode }: InventoryPageProps) {
     mode: "create",
   });
 
-  const business = useBusinessStore((s) => s.business);
-  const isOnboarding = business?.isOnboarding;
-
   // -----------------------------
-  // ✅ Start watcher (safe)
+  // ✅ SUBSCRIBE (EVENT-DRIVEN)
   // -----------------------------
   useEffect(() => {
-    let active = true;
-
-    if (active) startInventoryWatcher(1000);
-
-    return () => {
-      active = false;
-      stopInventoryWatcher();
-    };
+    startInventorySubscriber();
+    return () => stopInventorySubscriber();
   }, []);
 
   // -----------------------------
-  // ✅ Category → reset brand + load brands
+  // ✅ DERIVED STATE (INSTANT)
   // -----------------------------
-  useEffect(() => {
-    if (!selectedCategoryId) return;
+  const filteredBrands = useMemo(() => {
+    if (!selectedCategoryId) return [];
+    return brands.filter((b) => b.categoryId === selectedCategoryId);
+  }, [brands, selectedCategoryId]);
 
-    setSelectedBrandId(null); // ✅ proper setter
-    inventoryController.loadBrands(selectedCategoryId);
-  }, [selectedCategoryId, setSelectedBrandId]);
-
-  // -----------------------------
-  // ✅ Brand → load products
-  // -----------------------------
-  useEffect(() => {
-    if (!selectedBrandId) return;
-
-    inventoryController.loadProducts(selectedBrandId);
-  }, [selectedBrandId]);
+  const filteredProducts = useMemo(() => {
+    if (!selectedBrandId) return [];
+    return products.filter((p) => p.brandId === selectedBrandId);
+  }, [products, selectedBrandId]);
 
   // -----------------------------
-  // ✅ Edit handler
+  // ✅ HANDLERS
   // -----------------------------
   const handleEdit = (product: InventoryItem) => {
     setModalState({
@@ -85,36 +79,31 @@ export default function InventoryPage({ context, mode }: InventoryPageProps) {
     });
   };
 
-  // -----------------------------
-  // ✅ Add handler (clean reset)
-  // -----------------------------
   const handleAdd = () => {
     setModalState({
       open: true,
       mode: "create",
-      data: undefined,
     });
   };
 
-  // -----------------------------
-  // ✅ Sell handler (unchanged logic, safer)
-  // -----------------------------
   const handleSell = async (productId: string, quantity: number) => {
-    const inventoryStore = useInventoryStore.getState();
-    const product = inventoryStore.products.find((p) => p.id === productId);
+    const store = useInventoryStore.getState();
+    const product = store.products.find((p) => p.id === productId);
 
     if (!product) return toast.error("Product not found");
     if (quantity <= 0) return toast.error("Quantity must be at least 1");
-    if (quantity > product.quantity) return toast.error("Not enough stock");
+    if (quantity > product.quantity)
+      return toast.error("Not enough stock");
 
     try {
-      // Optimistic update
-      inventoryStore.updateProduct({
+      // ✅ Optimistic update
+      store.updateProduct({
         ...product,
         quantity: product.quantity - quantity,
       });
 
-      const salePayload = {
+      // ✅ Fire-and-forget (DO NOT BLOCK UI)
+      createSales({
         productId: product.id,
         quantity,
         amount: product.sellingPrice * quantity,
@@ -131,17 +120,18 @@ export default function InventoryPage({ context, mode }: InventoryPageProps) {
         payments: [],
         createdAt: new Date().toISOString(),
         timestamp: Date.now(),
-      };
+      });
 
-      await createSales(salePayload);
-
-      toast.success("Sale recorded successfully (offline-safe)");
+      toast.success("Sale recorded");
     } catch (err) {
-      toast.error("Failed to record sale. Please try again.");
+      toast.error("Failed to record sale");
       console.error(err);
     }
   };
 
+  // -----------------------------
+  // ✅ RENDER
+  // -----------------------------
   return (
     <div className="p-4 sm:p-6 md:p-8">
       <h1 className="text-[clamp(1.5rem,5vw,2rem)] font-bold mb-4 text-gray-800">
@@ -160,16 +150,20 @@ export default function InventoryPage({ context, mode }: InventoryPageProps) {
           <CategoryCard
             key={cat.id}
             category={cat}
-            onClick={() => {
-              setSelectedCategoryId(cat.id); // deterministic
-            }}
+            onClick={() => setSelectedCategoryId(cat.id)}
           />
         ))}
       </div>
 
       {/* BRAND + ADD */}
       <div className="flex flex-wrap items-center gap-3 mb-4">
-        {selectedCategoryId && <BrandDropdown />}
+        {selectedCategoryId && (
+          <BrandDropdown 
+            brands={filteredBrands}
+            selectedBrandId={selectedBrandId}
+            onSelect={setSelectedBrandId}
+          />
+        )}
 
         {context === "admin" && (
           <button
@@ -183,9 +177,9 @@ export default function InventoryPage({ context, mode }: InventoryPageProps) {
 
       {/* PRODUCTS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {products.map((product, idx) => (
+        {filteredProducts.map((product) => (
           <ProductCard
-            key={product.id ?? `product-${idx}`}
+            key={product.id}
             product={product}
             context={isOnboarding ? "admin" : context}
             onEdit={handleEdit}
@@ -203,13 +197,12 @@ export default function InventoryPage({ context, mode }: InventoryPageProps) {
           setModalState({
             open: false,
             mode: "create",
-            data: undefined,
           })
         }
-        onSave={async (payload) => {
+        onSave={(payload) => {
           try {
-            console.log("Products Adding to the IndexedDb: ", payload)
-            await inventoryController.addOrUpdateProduct(payload);
+            // ✅ NON-BLOCKING
+            inventoryController.addOrUpdateProduct(payload);
 
             toast.success(
               modalState.mode === "edit"
@@ -217,13 +210,9 @@ export default function InventoryPage({ context, mode }: InventoryPageProps) {
                 : "Product added"
             );
 
-            inventoryController.loadCategories();
-            hydrateSetupStore();
-
             setModalState({
               open: false,
               mode: "create",
-              data: undefined,
             });
           } catch (err) {
             toast.error("Failed to save product");
