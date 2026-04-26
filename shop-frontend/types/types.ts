@@ -109,11 +109,11 @@ export interface Session {
 // ---------------------------
 export interface Business {
   id: string;
+  userId: string;
   name: string;
   address?: string;
   createdAt?: number;
   activatedAt?: number;
-  onboardingStep?: number;
   isOnboarding?: boolean;
   onboardingCompleted?: boolean;
   status?: "ONBOARDING" | "ACTIVE" | "SUSPENDED";
@@ -131,7 +131,6 @@ export interface Branch {
   isActive?: boolean;
   isDefault?: boolean;
   createdAt?: number;
-  token?: string;
 }
 
 export interface BranchData {
@@ -140,83 +139,33 @@ export interface BranchData {
   lastSynced?: number;
 }
 
-// ---------------------------
-// CATEGORY
-// ---------------------------
-export interface Category {
-  id: string;
-  businessId?: string;
-  branchId: string;
-  name: string;
-  imageUrl?: string;
-  createdAt?: number;
-}
-
-// ---------------------------
-// BRAND
-// ---------------------------
-export interface Brand {
-  id: string;
-  businessId?: string;
-  branchId: string;
-  categoryId: string;
-  name: string;
-  createdAt?: number;
-  updatedAt?: number;
-}
 
 // ---------------------------
 // INVENTORY / PRODUCT
 // ---------------------------
-export interface InventoryItem {
+export interface Product {
   id: string;
   businessId?: string;
   branchId: string;
-  categoryId: string;
-  brandId: string;
-
   name: string;
-  type: ProductType;
   stockMode: ProductStockMode;
-
-  model?: string;
-  sku?: string;
   imageUrl?: string;
   description?: string;
 
-  costPrice: number;
-  sellingPrice: number;
+  cost: number;
+  price: number;
   quantity: number;
 
   reorderLevel?: number;
-  imei?: string;
-  condition?: string;
 
-  isActive?: boolean;
+  isActive: boolean;
   isDeleted?: boolean;
 
   createdAt?: number;
   updatedAt?: number;
-}
 
-// ---------------------------
-// CASH FLOW
-// ---------------------------
-export interface CashFlow {
-  id: string;
-  businessId?: string;
-  branchId: string;
-  type: CashFlowType;
-  amount: number;
-  direction: CashFlowDirection;
-  balanceAfter?: number;
-  source?: string;
-  description?: string;
-  isOpening?: boolean;
-  isLocked?: boolean;
-  createdAt?: number;
+  deletedAt?: number;
 }
-
 // ---------------------------
 // SUBSCRIPTION / PLAN
 // ---------------------------
@@ -253,11 +202,7 @@ export interface HydrationPayload {
   business: Business;
   branches: Branch[];
   activeBranch?: Branch;
-
-  categories?: Category[];
-  brands?: Brand[];
-  inventory?: InventoryItem[];
-  cashFlows?: CashFlow[];
+  inventory?: Product[];
 
   subscription?: BusinessSubscription;
 }

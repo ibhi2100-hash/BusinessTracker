@@ -1,30 +1,6 @@
+version: "3.8"
+
 services:
-  api:
-    build:
-      context: .
-      args:
-        DATABASE_URL: postgresql://postgres:11223344@postgres:5432/shop
-
-    container_name: shop_api
-
-    ports:
-      - "2100:2100"
-
-    depends_on:
-      - postgres
-
-    env_file:
-      - .env   # ✅ correct placement
-
-    environment:
-      DATABASE_URL: postgresql://postgres:11223344@postgres:5432/shop
-      NODE_ENV: development
-
-    volumes:
-      - .:/app
-      - /app/node_modules
-    command: sh -c "npx prisma migrate deploy && node dist/server.js"
-
   postgres:
     image: postgres:15
     container_name: shop_postgres
@@ -37,6 +13,11 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres_data:

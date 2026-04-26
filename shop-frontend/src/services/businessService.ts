@@ -26,8 +26,17 @@ export const BusinessService = {
       {
         ...businessData,
         userId: user.id,
+        isOnboarding: true,
+        onboardingCompleted: false,
+        status: "ONBOARDING"
+        
       },
-      branchData
+      {
+        ...branchData,
+        isActive: true,
+        createdAt: Date.now(),
+        isDefault: true
+      }
     );
 
     return result;
@@ -44,4 +53,4 @@ export const BusinessService = {
 
     return repo.getBusinessData();
   },
-};
+}

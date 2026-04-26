@@ -4,24 +4,18 @@
 import { SetupProgressTracker } from "@/components/business-onboarding/SetupProgressTracker";
 import InventoryPage from "@/components/inventory/inventoryPage";
 import { StepFooter } from "@/components/business-onboarding/StepFooter";
-import { useBusinessStatusStore } from "@/store/useBusinessStatusStore";
-import { hydrateSetupStore } from "@/offline/finance/hydrateSetupStore";
+import { toast } from "sonner";
+
 
 export default function InventoryStep() {
-  hydrateSetupStore()
-  const handleNext = () =>{
-    hydrateSetupStore()
-    location.href = "/onboarding-assets"; // next step
-  }
-  const steps = useBusinessStatusStore( s=> s.steps)
 
   return (
     <div className="space-y-6 p-6 m-auto">
       <SetupProgressTracker />
       <InventoryPage context="admin" mode="OPENING" />
       <StepFooter 
-        onNext={handleNext}
-        disabled={!steps.inventory} 
+        onNext={() => toast.success("product clickedNext")}
+        disabled={false} 
       />
     </div>
   );

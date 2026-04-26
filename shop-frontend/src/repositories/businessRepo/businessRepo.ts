@@ -1,8 +1,9 @@
+import { Branch, Business } from "@/types/types";
 import { BaseRepo } from "../baseRepo/baseRepo";
 import { nanoid } from "nanoid";
 
 export class BusinessRepo extends BaseRepo {
-  async createBusiness(businessData: any, branchData: any) {
+  async createBusiness(businessData: Business, branchData: Branch) {
     const now = Date.now();
 
     return this.tx(
@@ -22,6 +23,9 @@ export class BusinessRepo extends BaseRepo {
           address: businessData.address ?? null,
           userId: businessData.userId,
           createdAt: now,
+          isOnboarding: businessData.isOnboarding,
+          onboardingCompleted: businessData.onboardingCompleted,
+          status: businessData.status
         });
 
         await this.db.branches.add({

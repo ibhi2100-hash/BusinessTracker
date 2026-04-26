@@ -1,5 +1,6 @@
 import Dexie, { Table } from "dexie";
 import { getDbName, DB_VERSION, TABLES } from "./schema";
+import { Business, Branch, Product } from "@/types/types";
 
 // ---------------------------
 // DOMAIN TYPES
@@ -8,6 +9,7 @@ import { getDbName, DB_VERSION, TABLES } from "./schema";
 export interface Event {
   id: string;
   type: string;
+  mode: "OPENING" | "LIVE"
   status: "pending" | "processed" | "failed";
   synced: boolean;
   createdAt: number;
@@ -22,18 +24,6 @@ export interface Inventory {
   branchId: string;
   quantity: number;
   updatedAt: number;
-}
-
-export interface Product {
-  id: string;
-  name: string;
-  price: number;
-  cost: number;
-  brandId?: string;
-  categoryId?: string;
-  businessId: string;
-  branchId: string;
-  createdAt: number;
 }
 
 export interface LedgerEntry {
@@ -72,19 +62,6 @@ export interface Session {
   createdAt: number;
 }
 
-export interface Business {
-  id: string;
-  name: string;
-  address: string;
-  userId: string;
-  createdAt: number;
-}
-
-export interface Branch {
-  id: string;
-  name: string;
-  businessId: string;
-}
 
 export interface Asset {
   id: string;
@@ -135,7 +112,7 @@ export class AppDB extends Dexie {
         "id,productId,branchId,updatedAt,[productId+branchId]",
 
       products:
-        "id,name,brandId,categoryId,businessId,branchId,createdAt,[businessId+branchId]",
+        "id,name,brandId,categoryId,businessId,branchId,createdAt,[businessId+branchId],[businessId+name]",
 
       ledgerEntries:
         "id,eventId,account,branchId,businessId,createdAt,[eventId],[businessId+branchId],[account+createdAt]",

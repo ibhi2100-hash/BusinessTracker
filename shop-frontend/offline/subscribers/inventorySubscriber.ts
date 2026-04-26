@@ -1,29 +1,61 @@
-import { eventBus } from "../core/eventBus/eventBus";
-import { useInventoryStore } from "@/store/inventoryStore";
-import { InventoryEventType } from "../core/events/eventGroups/inventoryEvents";
+// src/offline/subscribers/inventorySubscriber.ts
 
-let unsubscribe: (() => void) | null = null;
+import { liveQuery } from "dexie";
+import { getDb } from "@/src/db";
+import { useAuthStore } from "@/src/store/useAuthStore";
+import { useInventoryStore } from "@/src/store/inventoryStore";
+import { useBranchStore } from "@/src/store/useBranchStore";
 
-export const startInventorySubscriber = ()=> {
-    if(unsubscribe) return; // prevent duplicate
+let subscription: any;
 
-    unsubscribe = eventBus.subscribe((event)=> {
-        const store = useInventoryStore.getState();
+export function startInventorySubscriber() {
+  const userId = useAuthStore.getState().user?.id;
+  const branchId = useBranchStore.getState().activeBranchId;
 
-        switch(event.type) {
-            case InventoryEventType.PRODUCT_CREATED:
-                store.addProduct(event.payload);
-                break;
-            case InventoryEventType.PRODUCT_UPDATED:
-                store.updateProduct(event.payload);
-                break;
-        }
+  if (!userId || !branchId) return;
+
+  const db = getDb(userId);
+  if (!db) return;
+
+  subscription = liveQuery(async () => {
+    const inventory = await db.inventory
+      .where("branchId")
+      .equals(branchId)
+      .toArray();
+
+    const products = await db.products
+      .where("branchId")
+      .equals(branchId)
+      .toArray();
+
+    // 🔗 JOIN (critical)
+    return inventory.map((inv) => {
+      const product = products.find(p => p.id === inv.productId);
+
+      return {
+        id: inv.productId,
+        stockMode: product.stockMode,
+        name: product?.name ?? "Unknown",
+        price: product?.price ?? 0,
+        cost: product?.cost ?? 0,
+        quantity: inv.quantity,
+        businessId: product.businessId,
+        branchId: product.branchId,
+        isActive: true,
+      };
     });
-};
-
-export const stopInventorySubscriber = () => {
-    if(unsubscribe){
-        unsubscribe();
-        unsubscribe = null;
+  }).subscribe({
+    next: (data) => {
+      useInventoryStore.getState().setProducts(data);
+    },
+    error: (err) => {
+      console.error("[InventorySubscriber]", err);
     }
-};
+  });
+}
+
+export function stopInventorySubscriber() {
+  if (subscription) {
+    subscription.unsubscribe();
+  }
+}

@@ -17,9 +17,6 @@ import {
 import { useDepreciationPreview } from "@/hooks/liveDepreciation";
 import { formatCurrency } from "@/lib/format";
 
-import { assetController } from "@/services/assets/assetService";
-import { hydrateSetupStore } from "@/offline/finance/hydrateSetupStore";
-
 interface AssetsProps {
   mode: "OPENING" | "LIVE";
   onCompleted?: () => Promise<void> | void;
@@ -70,10 +67,7 @@ export default function AddAssetPage({
         assetType: mode === "OPENING" ? "OPENING" : "PURCHASE",
       };
 
-      await assetController.createAssets(payload);
-
       toast.success("Asset created successfully");
-      hydrateSetupStore()
 
       if (mode === "OPENING") {
         reset({
