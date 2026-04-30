@@ -1,17 +1,19 @@
-import { getDb } from "../core/db"
-import { TABLES } from "../core/db/schema"
-import { syncEvents } from "@/services/sync/syncEvents"
-import { BaseEvent } from "../core/events/eventFactory"
+import { getDb } from "@/src/db"
+
+import { syncService } from "../services/syncService"
+import { BaseEvent } from "@/offline/core/events/types"
+import { useAuthStore } from "../store/useAuthStore"
 
 export async function syncEvent() {
-  const db = await getDb()
+  const userId = useAuthStore.getState().user?.id
+  const db = await getDb(userId)
   try {
     const status = "pending"
-    const events: BaseEvent[] = await getByIndex(TABLES.EVENTS, "by_status", status)
+    const events: BaseEvent[] = await db.events.toArray();
 
     if (!events.length) return
 
-    const response = await syncEvents(events)
+    const response = await syncService.sync()
     const { results } = response
 
     for (const r of results) {

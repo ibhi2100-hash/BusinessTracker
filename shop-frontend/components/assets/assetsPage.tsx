@@ -16,6 +16,9 @@ import {
 
 import { useDepreciationPreview } from "@/hooks/liveDepreciation";
 import { formatCurrency } from "@/lib/format";
+import { eventService } from "@/src/services/eventService";
+import { OpeninigEventType } from "@/offline/core/events/eventGroups/openingEvents";
+import { financeEventType } from "@/offline/core/events/eventGroups/financeEvent";
 
 interface AssetsProps {
   mode: "OPENING" | "LIVE";
@@ -66,6 +69,11 @@ export default function AddAssetPage({
         ...data,
         assetType: mode === "OPENING" ? "OPENING" : "PURCHASE",
       };
+        eventService.create({
+          type: mode === "OPENING" ? OpeninigEventType.OPENING_ASSET : financeEventType.ASSET_ADDED,
+          payload: payload,
+          mode,
+        })
 
       toast.success("Asset created successfully");
 
@@ -79,7 +87,7 @@ export default function AddAssetPage({
           await onCompleted();
         }
       } else {
-        router.push("/assets");
+        router.replace("/assets");
       }
 
       reset();

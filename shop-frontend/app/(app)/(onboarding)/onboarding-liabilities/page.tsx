@@ -3,14 +3,17 @@
 import LiabilitiesPage from "@/components/liabilities/liabilitiesPage";
 import { StepFooter } from "@/components/business-onboarding/StepFooter";
 import { SetupProgressTracker } from "@/components/business-onboarding/SetupProgressTracker";
-import { useBusinessStatusStore } from "@/store/useBusinessStatusStore";
-import { hydrateSetupStore } from "@/offline/finance/hydrateSetupStore";
+import { useBusinessStatusStore } from "@/src/store/useBusinessStatusStore";
+import { useRouter } from "next/navigation";
+
 
 export default function OnboardingLiabilities() {
-  hydrateSetupStore()
+  const router = useRouter()
+  
   const handleNext = () => {
-    hydrateSetupStore();
-    location.href = "/onboarding-opening-cash"};
+    
+    router.replace("/onboarding-opening-cash")
+  };
   const steps = useBusinessStatusStore(s => s.steps)
 
   return (

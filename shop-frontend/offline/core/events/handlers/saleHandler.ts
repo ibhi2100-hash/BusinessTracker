@@ -1,0 +1,19 @@
+import { AppDB } from "@/src/db";
+import { BaseEvent } from "../types";
+export const handleSaleCompleted = async (db: AppDB, event: BaseEvent) => {
+  const { items } = event.payload;
+
+  for (const item of items) {
+    const existing = await db.inventory
+      .where("[productId+branchId]")
+      .equals([item.productId, event.branchId])
+      .first();
+
+    if (!existing) continue;
+
+    await db.inventory.update(existing.id, {
+      quantity: existing.quantity - item.quantity,
+      updatedAt: Date.now(),
+    });
+  }
+};

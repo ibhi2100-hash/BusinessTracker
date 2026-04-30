@@ -3,16 +3,15 @@
 import { SetupProgressTracker } from "@/components/business-onboarding/SetupProgressTracker";
 import { StepFooter } from "@/components/business-onboarding/StepFooter";
 import AddAssetPage from "@/components/assets/assetsPage";
-import { useBusinessStatusStore } from "@/store/useBusinessStatusStore";
-import { hydrateSetupStore } from "@/offline/finance/hydrateSetupStore";
+import { useRouter } from "next/navigation";
 
 
 export default function AssetsPage() {
-  hydrateSetupStore()
+  const router = useRouter()
   const handleNext = () => {
-    hydrateSetupStore()
-    location.href = "/onboarding-liabilities"; }// next step
-  const steps = useBusinessStatusStore(s => s.steps)
+    router.replace( "/onboarding-liabilities")// next step
+  }
+  const steps = {assets: 2000}
 
   return (
     <div className="space-y-6">

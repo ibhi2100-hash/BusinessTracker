@@ -5,16 +5,21 @@ import { SetupProgressTracker } from "@/components/business-onboarding/SetupProg
 import InventoryPage from "@/components/inventory/inventoryPage";
 import { StepFooter } from "@/components/business-onboarding/StepFooter";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 
 export default function InventoryStep() {
-
+  const router = useRouter()
+  
+  const handleNext = () => {
+   
+    router.replace("/onboarding-opening-cash")};
   return (
     <div className="space-y-6 p-6 m-auto">
       <SetupProgressTracker />
       <InventoryPage context="admin" mode="OPENING" />
       <StepFooter 
-        onNext={() => toast.success("product clickedNext")}
+        onNext={handleNext}
         disabled={false} 
       />
     </div>

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { BusinessService } from "@/src/services/businessService";
 import { useBusinessStore } from "@/src/store/businessStore";
 
 import {
@@ -12,6 +11,7 @@ import {
   Loader2,
   Sparkles,
 } from "lucide-react";
+import { eventService } from "@/src/services/eventService";
 
 export default function Step2Business() {
   const router = useRouter();
@@ -61,15 +61,20 @@ export default function Step2Business() {
     setError("");
 
     try {
-      await BusinessService.createBusiness(
-        {
-          name: form.name.trim(),
-          address: form.address?.trim() || null,
-        },
-        {
-          name: "Main Branch",
-        }
-      );
+      await eventService.create({
+        mode: "OPENING",
+        type:"BUSINESS_CREATED",
+        payload: {
+          business: {
+            name: form.name,
+            address: form.address
+          },
+          branch: {
+            name: "Main Branch",
+            phone: ""
+          }
+      }
+      })
 
       await waitForBusinessHydration();
 

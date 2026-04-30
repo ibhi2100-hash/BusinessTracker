@@ -3,11 +3,11 @@
 import React, { useState, useEffect } from "react";
 import { ArrowUp, ArrowDown, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { addCash } from "@/offline/finance/cash/addCash";
-import { hydrateSetupStore } from "@/offline/finance/hydrateSetupStore";
+import { useBranchStore } from "@/src/store/useBranchStore";
 import { toast } from "sonner";
-import { getCashBalance } from "@/offline/finance/cash/loadCashBalance";
-import { useBranchStore } from "@/store/useBranchStore";
+import { eventService } from "@/src/services/eventService";
+import { OpeninigEventType } from "@/offline/core/events/eventGroups/openingEvents";
+import { financeEventType } from "@/offline/core/events/eventGroups/financeEvent";
 
 interface CashflowTableProps {
   mode: "OPENING" | "LIVE";
@@ -15,18 +15,7 @@ interface CashflowTableProps {
 }
 
 const CashflowTable = ({ mode, onCompleted }: CashflowTableProps) => {
-  useEffect(()=> {
-     (async ()=> {
-       try {
-         const result = await getCashBalance(activeBranchId);
-         setEntries(result.entries)
-       } catch (err) {
-         console.error("Failed to clear IndexedDb", err)
-       }
-     }
- 
-     )()
-   }, [])
+  
 
   const [ loading , setLoading ] = useState(false)
   const [ entries, setEntries ] = useState([]);
@@ -51,12 +40,15 @@ const CashflowTable = ({ mode, onCompleted }: CashflowTableProps) => {
     setLoading(true)
     const amount = Number(rawAmount);
     if (amount <= 0) return;
-    await addCash({amount});
+    eventService.create({
+      type: mode === "OPENING" ? OpeninigEventType.OPENING_CASH_ADDED : financeEventType.CASH_ADDED,
+      payload : amount,
+      mode
+    })
     
     setRawAmount("");
     setFormattedAmount("");
     if (mode === "OPENING" && onCompleted) onCompleted();
-    hydrateSetupStore()
     toast.success("Cash Added Successfully✅")
     setLoading(false)
   };

@@ -1,6 +1,5 @@
 "use client";
 
-import { SetupProgressTracker } from "@/components/business-onboarding/SetupProgressTracker";
 import { CreateLiabilityForm } from "@/components/liabilities/createLiabilityForm";
 import { LiabilityList } from "@/components/liabilities/liabilityList";
 

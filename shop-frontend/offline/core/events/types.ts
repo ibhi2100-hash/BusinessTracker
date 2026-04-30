@@ -1,20 +1,26 @@
+import { EventType } from "./eventType";
 // eventTypes.ts
-export type EventStatus = "pending" | "synced" | "failed";
-
-export interface BaseEvent {
+export interface BaseEvent<T extends EventType = EventType, p = any> {
   id: string;
-  type: string;
-  payload: any;
+
+  type: T;
+  payload: p;
 
   businessId: string;
   branchId: string;
+
+  mode: "OPENING" | "LIVE";
+
+  // sync + ordering
+  createdAt: number;       // device time
+  logicalClock: number;    // monotonic per device
+  version: number;         // per branch stream
+
+  // origin
+  deviceId: string;
   userId: string;
 
-  status: EventStatus;
-
-  createdAt: number;
-  updatedAt: number;
-
-  version: number;
+  // sync state
+  status: "pending" | "synced" | "failed";
   synced: boolean;
 }

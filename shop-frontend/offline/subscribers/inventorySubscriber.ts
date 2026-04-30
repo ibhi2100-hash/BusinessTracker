@@ -1,5 +1,3 @@
-// src/offline/subscribers/inventorySubscriber.ts
-
 import { liveQuery } from "dexie";
 import { getDb } from "@/src/db";
 import { useAuthStore } from "@/src/store/useAuthStore";
@@ -18,44 +16,49 @@ export function startInventorySubscriber() {
   if (!db) return;
 
   subscription = liveQuery(async () => {
-    const inventory = await db.inventory
-      .where("branchId")
-      .equals(branchId)
-      .toArray();
+    const [inventory, products] = await Promise.all([
+      db.inventory.where("branchId").equals(branchId).toArray(),
+      db.products.where("branchId").equals(branchId).toArray(),
+    ]);
 
-    const products = await db.products
-      .where("branchId")
-      .equals(branchId)
-      .toArray();
+    // ⚡ build product lookup map (O(1))
+    const productMap = new Map(
+      products.map((p) => [p.id, p])
+    );
 
-    // 🔗 JOIN (critical)
-    return inventory.map((inv) => {
-      const product = products.find(p => p.id === inv.productId);
+    // ⚡ fast merge (single pass)
+    const result = inventory.map((inv) => {
+      const product = productMap.get(inv.productId);
 
       return {
         id: inv.productId,
-        stockMode: product.stockMode,
         name: product?.name ?? "Unknown",
         price: product?.price ?? 0,
         cost: product?.cost ?? 0,
+        stockMode: product?.stockMode,
         quantity: inv.quantity,
-        businessId: product.businessId,
-        branchId: product.branchId,
+        businessId: product?.businessId,
+        branchId: product?.branchId,
         isActive: true,
       };
     });
+
+    return result;
   }).subscribe({
     next: (data) => {
-      useInventoryStore.getState().setProducts(data);
+      // ⚡ prevent unnecessary re-renders
+      const store = useInventoryStore.getState();
+
+        for (const p of data) {
+        store.upsertProduct(p);
+        }
     },
     error: (err) => {
       console.error("[InventorySubscriber]", err);
-    }
+    },
   });
 }
 
 export function stopInventorySubscriber() {
-  if (subscription) {
-    subscription.unsubscribe();
-  }
+  subscription?.unsubscribe?.();
 }

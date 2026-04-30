@@ -1,4 +1,4 @@
-import { v7 as uuidv7 } from "uuid";
+import { nanoid } from "nanoid";
 
 export interface BaseEntity {
   id: string;
@@ -15,7 +15,7 @@ export function createEntity<T extends object>(
 
   return {
     ...data,
-    id: uuidv7(),
+    id: nanoid(),
     createdAt: now,
     updatedAt: now,
     version: 1,

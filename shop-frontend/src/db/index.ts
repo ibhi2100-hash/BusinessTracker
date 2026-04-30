@@ -1,22 +1,12 @@
 import Dexie, { Table } from "dexie";
 import { getDbName, DB_VERSION, TABLES } from "./schema";
+import { BaseEvent } from "@/offline/core/events/types";
 import { Business, Branch, Product } from "@/types/types";
 
 // ---------------------------
 // DOMAIN TYPES
 // ---------------------------
 
-export interface Event {
-  id: string;
-  type: string;
-  mode: "OPENING" | "LIVE"
-  status: "pending" | "processed" | "failed";
-  synced: boolean;
-  createdAt: number;
-  deviceId?: string;
-  businessId: string;
-  branchId: string;
-}
 
 export interface Inventory {
   id: string;
@@ -87,7 +77,7 @@ export interface Snapshot {
 // ---------------------------
 
 export class AppDB extends Dexie {
-  events!: Table<Event, string>;
+  events!: Table<BaseEvent, string>;
   inventory!: Table<Inventory, string>;
   products!: Table<Product, string>;
   ledgerEntries!: Table<LedgerEntry, string>;

@@ -77,7 +77,17 @@ export default function ProductSheet({
       cost: Number(form.costPrice || 0),
       quantity: Number(form.quantity),
     });
+
+    resetForm()
   };
+  const resetForm = () => {
+  setForm({
+    name: "",
+    costPrice: "",
+    sellingPrice: "",
+    quantity: "",
+  });
+};
 
   return (
     <div

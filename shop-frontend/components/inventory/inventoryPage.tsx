@@ -11,7 +11,7 @@ import {
   startInventorySubscriber,
   stopInventorySubscriber,
 } from "@/offline/subscribers/inventorySubscriber";
-import { InventoryService } from "@/src/services/inventoryService";
+
 import {
   Search,
   Plus,
@@ -19,6 +19,10 @@ import {
   LayoutGrid,
 } from "lucide-react";
 import { useCartStore } from "@/src/store/useCartStore";
+import { eventService } from "@/src/services/eventService";
+import { OpeninigEventType } from "@/offline/core/events/eventGroups/openingEvents";
+import { InventoryEventType } from "@/offline/core/events/eventGroups/inventoryEvents";
+import { salesEventType } from "@/offline/core/events/eventGroups/salesEvent";
 
 interface InventoryPageProps {
   context: "sell" | "admin";
@@ -29,8 +33,11 @@ export default function InventoryPage({
   context,
   mode,
 }: InventoryPageProps) {
-  const products = useInventoryStore((s) => s.products);
-  const inventoryService = new InventoryService();
+  const productsMap = useInventoryStore((s) => s.productsById);
+
+  const products = useMemo(() => {
+    return Object.values(productsMap);
+  }, [productsMap]);
 
   // -----------------------------
   // UI STATE
@@ -96,89 +103,116 @@ export default function InventoryPage({
     setSheetOpen(true);
   };
 
-  const handleDelete = async (productId: string) => {
-    try {
-      await inventoryService.deleteProduct(productId);
-      toast.success("Removed");
-    } catch {
-      toast.error("Delete failed");
-    }
-  };
+ const handleDelete = async (productId: string) => {
+  try {
+    await eventService.create({
+      type: mode === "OPENING" ? OpeninigEventType.OPENING_INVENTORY_DELETED : InventoryEventType.PRODUCT_DELETED,
+      mode,
+      payload: { productId },
+    });
 
-  const handleSell = async (
-    productId: string,
-    quantity: number
-  ) => {
-    const product = products.find((p) => p.id === productId);
-    if (!product) return;
+    toast.success("Removed");
+  } catch {
+    toast.error("Delete failed");
+  }
+};
+const handleCheckout = async () => {
+  const cart = useCartStore.getState().items;
+  if (!cart.length) return;
 
-    if (quantity > product.quantity) {
-      toast.error("Not enough stock");
-      return;
-    }
+  try {
+    setLoading(true);
 
-    toast.success(`+${quantity} ${product.name}`);
-
-    try {
-      await inventoryService.sell({ productId, quantity });
-    } catch {
-      toast.error("Sale failed");
-    }
-  };
-
-  const handleSubmit = async (data: {
-    name: string;
-    price: number;
-    cost: number;
-    quantity: number;
-  }) => {
-    try {
-      setLoading(true);
-
-      if (sheetMode === "create") {
-        await inventoryService.createProductWithStock({
-          mode,
-          ...data,
-        });
-        toast.success("Product added");
-      } else if (selectedProduct) {
-        await inventoryService.updateProduct(
-          selectedProduct.id,
-          data
-        );
-        toast.success("Updated");
-      }
-
-      setSheetOpen(false);
-    } catch {
-      toast.error("Operation failed");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCheckout = async () => {
-    const cart = useCartStore.getState().items;
-    if (!cart.length) return;
-
-    try {
-      setLoading(true);
-
-      for (const item of cart) {
-        await inventoryService.sell({
+    for (const item of cart) {
+      await eventService.create({
+        type: "SALE_ADDED",
+        mode: "LIVE",
+        payload: {
           productId: item.productId,
           quantity: item.quantity,
+          amount: item.price * item.quantity,
+          cost: item.cost * item.quantity,
+        },
+      });
+    }
+
+    toast.success("Sale completed");
+    useCartStore.getState().clear();
+  } catch {
+    toast.error("Checkout failed");
+  } finally {
+    setLoading(false);
+  }
+};
+const handleSell = async (productId: string, quantity: number) => {
+  const product = products.find(p => p.id === productId);
+  if (!product) return;
+
+  if (quantity > product.quantity) {
+    toast.error("Not enough stock");
+    return;
+  }
+
+  await eventService.create({
+    type: salesEventType.SALE_ADDED,
+    mode,
+    payload: {
+      productId,
+      quantity,
+      amount: product.price * quantity,
+      cost: product.cost * quantity,
+    },
+  });
+
+  toast.success("Sale recorded");
+};
+
+  const handleSubmit = async (data: {
+  name: string;
+  price: number;
+  cost: number;
+  quantity: number;
+}) => {
+  try {
+    setLoading(true);
+
+       if (sheetMode === "create") {
+        await eventService.create({
+          type: mode === "OPENING" ? OpeninigEventType.OPENING_INVENTORY_CREATED : InventoryEventType.PRODUCT_CREATED,
+          mode,
+          payload: {
+            name: data.name,
+            price: data.price,
+            costPrice: data.cost,
+            quantity: data.quantity,
+            stockMode: "PURCHASE",
+          },
         });
+
+        toast.success("Product created");
       }
 
-      toast.success("Sale completed");
-      useCartStore.getState().clear();
-    } catch {
-      toast.error("Checkout failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+      if (sheetMode === "edit" && selectedProduct) {
+        await eventService.create({
+          type: mode === "OPENING" ? OpeninigEventType.OPENING_INVENTORY_UPDATED : InventoryEventType.PRODUCT_UPDATED,
+          mode,
+          payload: {
+            productId: selectedProduct.id,
+            ...data,
+          },
+        });
+
+        toast.success("Product updated");
+      }
+
+    setSheetOpen(false);
+  } catch (e) {
+    console.error(e);
+    toast.error("Operation failed");
+  } finally {
+    setLoading(false);
+  }
+};
 
   // -----------------------------
   // UI

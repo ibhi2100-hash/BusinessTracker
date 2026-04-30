@@ -5,10 +5,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createLiabilitySchema, CreateLiabilityInput } from "@/schemas/liabilities.schema";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { createLiability } from "@/offline/finance/liabilities/createLiability.service";
 import { useState } from "react";
-import { hydrateSetupStore } from "@/offline/finance/hydrateSetupStore";
 import { toast } from "sonner";
+import { eventService } from "@/src/services/eventService";
+import { OpeninigEventType } from "@/offline/core/events/eventGroups/openingEvents";
+import { financeEventType } from "@/offline/core/events/eventGroups/financeEvent";
 
 interface Props {
   mode?: "OPENING" | "LIVE";
@@ -39,8 +40,14 @@ export const CreateLiabilityForm = ({ mode, onComplete }: Props) => {
         startDate: data.startDate ? new Date(data.startDate).toISOString() : undefined,
         dueDate: data.dueDate ? new Date(data.dueDate).toISOString() : undefined
     }
-    createLiability(payload);
-    hydrateSetupStore()
+
+      eventService.create({
+        type: mode === "OPENING" ?  OpeninigEventType.OPENING_LIABILITIES : financeEventType.LIABILITY_ADDED,
+        payload: payload,
+        mode,
+      })
+   
+    
     setLoading(false)
     toast.success("Liability Created Successifully")
   };

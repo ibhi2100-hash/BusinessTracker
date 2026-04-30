@@ -1,19 +1,22 @@
 import { createEntity } from "@/offline/core/entities/entityFactory";
-import { BaseEvent, EventStatus } from "./types";
+import { BaseEvent} from "./types";
 
 type CreateEventInput = {
   type: string;
   payload: any;
+  mode: "OPENING" |"LIVE"
   businessId: string;
   branchId: string;
   userId: string;
-  status?: EventStatus;
+  status?: "pending" | "synced" | "failed"
+  deviceId?: string;
 };
 
 export function createEvent(input: CreateEventInput): BaseEvent {
   const {
     type,
     payload,
+    mode,
     businessId,
     branchId,
     userId,
@@ -23,10 +26,12 @@ export function createEvent(input: CreateEventInput): BaseEvent {
   return createEntity({
     type,
     payload,
+    mode,
     businessId,
     branchId,
     userId,
     status,
-    deviceId: getDeviceId(),
+    logicalClock: 1233,
+    deviceId: "local-device",
   });
 }

@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, RegisterInput } from "@/lib/validations/auth.schema";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { hydrateStores } from "@/offline/features/hydration/actions/hydrationStore";
 import { AuthService } from "@/src/services/authService";
 
 export default function RegisterPage() {
@@ -44,12 +43,6 @@ export default function RegisterPage() {
         throw new Error(result.message || "Registration failed");
       }
       
-      // 2️⃣ Hydrate Zustand (from API payload)
-      hydrateStores({
-        user: result.user,
-        accessToken: result.accessToken,
-        expiresAt: result.expiresIn,
-      });
 
       await AuthService.saveUser(result.user)
 
