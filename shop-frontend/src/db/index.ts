@@ -13,7 +13,9 @@ export interface Inventory {
   productId: string;
   branchId: string;
   quantity: number;
-  updatedAt: number;
+  costPrice: number;
+  updatedAt?: number;
+  createdAt?: number;
 }
 
 export interface LedgerEntry {
@@ -96,7 +98,7 @@ export class AppDB extends Dexie {
 
     this.version(DB_VERSION).stores({
       events:
-        "id,status,synced,type,createdAt,businessId,branchId,[businessId+branchId],[businessId+createdAt],[status+synced],[type+createdAt]",
+        "id,status,synced,type,createdAt,businessId,branchId,[status+synced],[type+createdAt]",
 
       inventory:
         "id,productId,branchId,updatedAt,[productId+branchId]",

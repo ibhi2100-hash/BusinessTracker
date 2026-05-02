@@ -1,5 +1,5 @@
 import { AppDB } from "@/src/db";
-import { BaseEvent } from "../types";
+import { BaseEvent } from "../../types";
 export const handleSaleCompleted = async (db: AppDB, event: BaseEvent) => {
   const { items } = event.payload;
 

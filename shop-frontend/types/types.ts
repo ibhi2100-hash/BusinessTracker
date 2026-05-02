@@ -146,15 +146,13 @@ export interface BranchData {
 export interface Product {
   id: string;
   businessId?: string;
-  branchId: string;
+  branchId?: string;
   name: string;
-  stockMode: ProductStockMode;
   imageUrl?: string;
   description?: string;
 
   cost: number;
   price: number;
-  quantity: number;
 
   reorderLevel?: number;
 

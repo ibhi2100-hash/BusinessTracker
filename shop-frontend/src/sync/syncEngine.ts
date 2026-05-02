@@ -1,27 +1,20 @@
-import { getDb } from "@/src/db"
+import { getDb } from "@/src/db";
+import { syncService } from "../services/syncService";
+import { useAuthStore } from "../store/useAuthStore";
 
-import { syncService } from "../services/syncService"
-import { BaseEvent } from "@/offline/core/events/types"
-import { useAuthStore } from "../store/useAuthStore"
+export async function syncEngine() {
+  const userId = useAuthStore.getState().user?.id;
+  const db = getDb(userId);
 
-export async function syncEvent() {
-  const userId = useAuthStore.getState().user?.id
-  const db = await getDb(userId)
-  try {
-    const status = "pending"
-    const events: BaseEvent[] = await db.events.toArray();
+  if (!db) return;
 
-    if (!events.length) return
+  // ONLY pending events
+  const events = await db.events
+    .where("status")
+    .equals("pending")
+    .toArray();
 
-    const response = await syncService.sync()
-    const { results } = response
+  if (!events.length) return;
 
-    for (const r of results) {
-      if (r.status === "duplicate" || r.status === "synced") {
-  
-      }
-    }
-  } finally {
-    
-  }
+   await syncService.sync();
 }

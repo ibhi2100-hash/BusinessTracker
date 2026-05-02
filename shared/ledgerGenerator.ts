@@ -3,11 +3,13 @@ import { financeEventType } from "../shop-frontend/offline/core/events/eventGrou
 import { InventoryEventType } from "../shop-frontend/offline/core/events/eventGroups/inventoryEvents";
 import { salesEventType } from "../shop-frontend/offline/core/events/eventGroups/salesEvent";
 import { LedgerEntry } from "@/src/domain/ledger";
+import { OpeninigEventType } from "@/offline/core/events/eventGroups/openingEvents";
+import { BaseEvent } from "@/offline/core/events/types";
 
 type Direction = "DEBIT" | "CREDIT";
 
 function buildEntry(
-  event: any,
+  event: BaseEvent,
   index: number,
   account: Account,
   direction: Direction,
@@ -27,7 +29,7 @@ function buildEntry(
   };
 }
 
-export function generateLedgerEntries(event: any): LedgerEntry[] {
+export function generateLedgerEntries(event: BaseEvent): LedgerEntry[] {
   const { payload } = event;
 
   let entries: LedgerEntry[] = [];
@@ -54,22 +56,25 @@ export function generateLedgerEntries(event: any): LedgerEntry[] {
     /**
      * INVENTORY (Opening or Purchase)
      */
-    case InventoryEventType.PRODUCT_CREATED: {
+    case OpeninigEventType.OPENING_INVENTORY_CREATED: {
       const value = payload.costPrice * payload.quantity;
 
-      entries = [
-        buildEntry(event, 0, Account.INVENTORY, "DEBIT", value),
-      ];
-
-      if (payload.stockMode === "PURCHASE") {
-        entries.push(
-          buildEntry(event, 1, Account.CASH, "CREDIT", value)
-        );
+      if (event.mode === "OPENING") {
+        // ✅ Opening balance — no cash movement
+        entries = [
+          buildEntry(event, 0, Account.INVENTORY, "DEBIT", value),
+          buildEntry(event, 1, Account.OWNER_CAPITAL, "CREDIT", value),
+        ];
+      } else {
+        // ✅ Live purchase
+        entries = [
+          buildEntry(event, 0, Account.INVENTORY, "DEBIT", value),
+          buildEntry(event, 1, Account.CASH, "CREDIT", value),
+        ];
       }
 
       break;
     }
-
     /**
      * OPENING CAPITAL
      * Dr Cash

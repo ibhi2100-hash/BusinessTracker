@@ -11,15 +11,6 @@ export enum Account {
   FIXED_ASSETS = "FIXED_ASSETS",
   INTER_BRANCH = "INTER_BRANCH",
 }
-export type EntryType =
-  | "SALE"
-  | "PURCHASE"
-  | "EXPENSE"
-  | "LIABILITY"
-  | "REPAYMENT"
-  | "CAPITAL_IN"
-  | "CAPITAL_OUT"
-  | "ADJUSTMENT";
 
 export interface LedgerEntry {
   id: string;
@@ -30,7 +21,7 @@ export interface LedgerEntry {
   branchId: string;
 
   // classification (for reporting only)
-  type: EntryType;
+  type: string;
 
   // accounting core
   account: Account;

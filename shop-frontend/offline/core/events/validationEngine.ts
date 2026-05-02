@@ -9,13 +9,11 @@ export class EventValidationError extends Error {
 }
 
 export function validateEvent(event: BaseEvent) {
-  // 1. Basic structure validation
+  // 1. Base structure
   if (!event.id) throw new EventValidationError("Missing event.id");
   if (!event.type) throw new EventValidationError("Missing event.type");
-  if (!event.businessId) throw new EventValidationError("Missing businessId");
-  if (!event.branchId) throw new EventValidationError("Missing branchId");
 
-  // 2. Domain validator
+  // 2. Domain validator (THIS becomes authoritative)
   const validator = eventValidators[event.type];
 
   if (!validator) {

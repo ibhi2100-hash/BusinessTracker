@@ -23,6 +23,7 @@ import { eventService } from "@/src/services/eventService";
 import { OpeninigEventType } from "@/offline/core/events/eventGroups/openingEvents";
 import { InventoryEventType } from "@/offline/core/events/eventGroups/inventoryEvents";
 import { salesEventType } from "@/offline/core/events/eventGroups/salesEvent";
+import { nanoid } from "nanoid";
 
 interface InventoryPageProps {
   context: "sell" | "admin";
@@ -177,18 +178,13 @@ const handleSell = async (productId: string, quantity: number) => {
     setLoading(true);
 
        if (sheetMode === "create") {
-        await eventService.create({
-          type: mode === "OPENING" ? OpeninigEventType.OPENING_INVENTORY_CREATED : InventoryEventType.PRODUCT_CREATED,
-          mode,
-          payload: {
-            name: data.name,
-            price: data.price,
-            costPrice: data.cost,
-            quantity: data.quantity,
-            stockMode: "PURCHASE",
-          },
-        });
-
+        await eventService.createProductWithOpeningStock({
+          name: data.name,
+          price: data.price,
+          cost: data.cost,
+          quantity: data.quantity,
+          mode
+        })
         toast.success("Product created");
       }
 

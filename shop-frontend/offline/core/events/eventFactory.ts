@@ -5,8 +5,8 @@ type CreateEventInput = {
   type: string;
   payload: any;
   mode: "OPENING" |"LIVE"
-  businessId: string;
-  branchId: string;
+  businessId?: string;
+  branchId?: string;
   userId: string;
   status?: "pending" | "synced" | "failed"
   deviceId?: string;

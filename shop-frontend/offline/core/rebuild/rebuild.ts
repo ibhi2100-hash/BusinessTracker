@@ -1,6 +1,7 @@
 import { getDb } from "@/src/db";
 import { useAuthStore } from "@/src/store/useAuthStore";
 import { generateLedgerEntries } from "../../../../shared/ledgerGenerator";
+import { handlers } from "../events/handlers/eventHandler";
 
 async function rebuildProjections(branchId) {
   const userId = useAuthStore.getState().user.id
@@ -18,8 +19,9 @@ async function rebuildProjections(branchId) {
   for (const event of events) {
     const entries = generateLedgerEntries(event);
     await db.ledgerEntries.bulkAdd(entries);
-
-    for (const handler of handlers) {
+      const eventHandlers = handlers[event.type] || [];
+      
+    for (const handler of eventHandlers) {
       await handler(db, event);
     }
   }

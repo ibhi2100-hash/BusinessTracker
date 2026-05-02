@@ -12,6 +12,8 @@ import {
   Sparkles,
 } from "lucide-react";
 import { eventService } from "@/src/services/eventService";
+import { nanoid } from "nanoid";
+
 
 export default function Step2Business() {
   const router = useRouter();
@@ -66,21 +68,22 @@ export default function Step2Business() {
         type:"BUSINESS_CREATED",
         payload: {
           business: {
+            id: nanoid(),
             name: form.name,
             address: form.address
           },
           branch: {
+            id: nanoid(),
             name: "Main Branch",
             phone: ""
           }
       }
       })
 
-      await waitForBusinessHydration();
-
       router.replace("/onboard");
     } catch (err: any) {
       setError(err?.message ?? "Failed to create business");
+      throw new Error(err)
     } finally {
       setLoading(false);
     }

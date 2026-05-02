@@ -19,8 +19,7 @@ async registerUser(
     const hashedPassword = await bcrypt.hash(dto.password, 10);
 
     const userData = {
-      ...dto
-  ,
+      ...dto,
       password: hashedPassword,
     };
 

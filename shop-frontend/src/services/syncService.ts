@@ -1,27 +1,63 @@
 import { getDb } from "@/src/db/index";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export const syncService = {
   async sync() {
     const db = getDb();
     if (!db) return;
 
     const events = await db.events
-      .where("synced")
-      .equals(false)
+      .where("status")
+      .equals("pending") // safer than false in IndexedDB contexts
       .toArray();
 
-    for (const event of events) {
-      try {
-        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sync`, {
-          method: "POST",
-          credentials: "include",
-          body: JSON.stringify(event),
-        });
+    if (!events.length) return;
 
-        await db.events.update(event.id, { synced: true });
-      } catch {
-        // leave as unsynced
-      }
+    // optional: batch instead of per-event calls
+    const response = await fetch(`${API_URL}/sync`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ events }),
+    });
+
+    // IMPORTANT: check HTTP status explicitly
+    if (!response.ok) {
+      throw new Error(`Sync failed: ${response.status}`);
     }
-  }
+
+    const result = await response.json();
+
+    /**
+     * Expected shape:
+     * {
+     *   results: [
+     *     { id: string, status: "synced" | "failed" }
+     *   ]
+     * }
+     */
+
+    const updates = result.results || [];
+
+    await db.transaction("rw", db.events, async () => {
+      for (const r of updates) {
+        if (r.status === "synced") {
+          await db.events.update(r.id, {
+            synced: true,
+            status: "synced",
+          });
+        }
+
+        if (r.status === "failed") {
+          await db.events.update(r.id, {
+            synced: false,
+            status: "failed",
+          });
+        }
+      }
+    });
+  },
 };
