@@ -282,6 +282,7 @@ export type ProcessedSyncEventOrderByWithRelationInput = {
 
 export type ProcessedSyncEventWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  id_status?: Prisma.ProcessedSyncEventIdStatusCompoundUniqueInput
   AND?: Prisma.ProcessedSyncEventWhereInput | Prisma.ProcessedSyncEventWhereInput[]
   OR?: Prisma.ProcessedSyncEventWhereInput[]
   NOT?: Prisma.ProcessedSyncEventWhereInput | Prisma.ProcessedSyncEventWhereInput[]
@@ -295,7 +296,7 @@ export type ProcessedSyncEventWhereUniqueInput = Prisma.AtLeast<{
   error?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ProcessedSyncEvent"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProcessedSyncEvent"> | Date | string
-}, "id">
+}, "id" | "id_status">
 
 export type ProcessedSyncEventOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -429,6 +430,11 @@ export type ProcessedSyncEventUncheckedUpdateManyInput = {
   error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ProcessedSyncEventIdStatusCompoundUniqueInput = {
+  id: string
+  status: $Enums.SyncEventStatus
 }
 
 export type ProcessedSyncEventCountOrderByAggregateInput = {

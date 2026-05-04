@@ -27,5 +27,20 @@ export const InventoryHandler = {
         updatedAt: Date.now()
       });
     }
-  }
+  },
+  async update(db: AppDB, event: BaseEvent) {
+  const { productId, quantityDelta } = event.payload;
+
+  const existing = await db.inventory
+    .where("[productId+branchId]")
+    .equals([productId, event.branchId])
+    .first();
+
+  if (!existing) return;
+
+  await db.inventory.update(existing.id, {
+    quantity: existing.quantity + quantityDelta,
+    updatedAt: Date.now(),
+  });
+}
 }

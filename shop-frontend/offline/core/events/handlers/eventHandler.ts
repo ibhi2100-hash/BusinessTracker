@@ -1,10 +1,7 @@
 import { AppDB } from "@/src/db";
 import { BaseEvent } from "../types";
-import { InventoryEventType } from "../eventGroups/inventoryEvents";
-import { BusinessEventTypes } from "../eventGroups/businessEvents";
-import { Business } from "@/types/types";
-import { handleBusiness } from "./business/businessHandler";
-import { handleSaleCompleted } from "./sales/saleHandler";
+import { BusinessHandler} from "./business/businessHandler";
+import { handleSale } from "./sales/saleHandler";
 import { ProductHandler } from "./products/productCreatedHandler";
 import { InventoryHandler } from "./inventory/inventoryHandler";
 
@@ -13,9 +10,14 @@ type EventHandler = (db: AppDB, event: BaseEvent) => Promise<void>;
 
 
 export const handlers: Record<string, EventHandler[]> = {
-   "BUSINESS_CREATED" : [handleBusiness],
+   "BUSINESS_CREATED" : [BusinessHandler.create],
+   "BUSINESS_ACTIVATION": [BusinessHandler.activate],
    "PRODUCT_CREATED" : [ProductHandler.create],
+   "PRODUCT_UPDATED" : [ProductHandler.update],
+   "PRODUCT_DELETED" : [ProductHandler.delete],
    "OPENING_INVENTORY_CREATED": [InventoryHandler.openingInventory],
-    SALE_COMPLETED: [handleSaleCompleted],
+   "INVENTORY_ADDED" : [InventoryHandler.openingInventory],
+    "SALE_ADDED": [handleSale.singleSale],
+    "CHECKOUT_SALE": [handleSale.checkOut]
 
 };

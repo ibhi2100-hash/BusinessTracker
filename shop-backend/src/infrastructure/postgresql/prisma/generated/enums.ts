@@ -9,75 +9,12 @@
 * 🟢 You can import this file directly.
 */
 
-export const ProductType = {
-  ACCESSORY: 'ACCESSORY',
-  PHONE: 'PHONE',
-  SERVICE: 'SERVICE',
-  OTHER: 'OTHER'
-} as const
-
-export type ProductType = (typeof ProductType)[keyof typeof ProductType]
-
-
-export const ProductStockMode = {
+export const Mode = {
   OPENING: 'OPENING',
   LIVE: 'LIVE'
 } as const
 
-export type ProductStockMode = (typeof ProductStockMode)[keyof typeof ProductStockMode]
-
-
-export const StockMovementType = {
-  OPENING: 'OPENING',
-  PURCHASE: 'PURCHASE',
-  SALE: 'SALE',
-  RETURN: 'RETURN',
-  ADJUSTMENT: 'ADJUSTMENT'
-} as const
-
-export type StockMovementType = (typeof StockMovementType)[keyof typeof StockMovementType]
-
-
-export const PaymentMethod = {
-  CASH: 'CASH',
-  TRANSFER: 'TRANSFER',
-  POS: 'POS'
-} as const
-
-export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
-
-
-export const CashFlowType = {
-  OPENING: 'OPENING',
-  OWNER_CAPITAL: 'OWNER_CAPITAL',
-  OWNER_WITHDRAWAL: 'OWNER_WITHDRAWAL',
-  SALE_INCOME: 'SALE_INCOME',
-  PURCHASE_EXPENSE: 'PURCHASE_EXPENSE',
-  ASSET_PURCHASE: 'ASSET_PURCHASE',
-  ASSET_DISPOSAL: 'ASSET_DISPOSAL',
-  LIABILITY_PAYMENT: 'LIABILITY_PAYMENT',
-  EXPENSE: 'EXPENSE',
-  REFUND: 'REFUND'
-} as const
-
-export type CashFlowType = (typeof CashFlowType)[keyof typeof CashFlowType]
-
-
-export const CashFlowDirection = {
-  IN: 'IN',
-  OUT: 'OUT'
-} as const
-
-export type CashFlowDirection = (typeof CashFlowDirection)[keyof typeof CashFlowDirection]
-
-
-export const LiabilityType = {
-  LOAN: 'LOAN',
-  CREDIT: 'CREDIT',
-  SALARY_ADVANCE: 'SALARY_ADVANCE'
-} as const
-
-export type LiabilityType = (typeof LiabilityType)[keyof typeof LiabilityType]
+export type Mode = (typeof Mode)[keyof typeof Mode]
 
 
 export const Role = {
@@ -88,60 +25,17 @@ export const Role = {
 export type Role = (typeof Role)[keyof typeof Role]
 
 
-export const SaleStatus = {
-  COMPLETED: 'COMPLETED',
-  REFUNDED: 'REFUNDED',
-  VOIDED: 'VOIDED'
-} as const
-
-export type SaleStatus = (typeof SaleStatus)[keyof typeof SaleStatus]
-
-
-export const ExpenseStatus = {
-  APPROVED: 'APPROVED',
-  PENDING: 'PENDING',
-  CANCELLED: 'CANCELLED'
-} as const
-
-export type ExpenseStatus = (typeof ExpenseStatus)[keyof typeof ExpenseStatus]
-
-
-export const InventoryTransactionType = {
-  PURCHASE: 'PURCHASE',
-  SALE: 'SALE',
-  ADJUSTMENT: 'ADJUSTMENT',
-  RETURN: 'RETURN'
-} as const
-
-export type InventoryTransactionType = (typeof InventoryTransactionType)[keyof typeof InventoryTransactionType]
-
-
-export const CapitalTransactionType = {
-  INJECTION: 'INJECTION',
-  WITHDRAWAL: 'WITHDRAWAL'
-} as const
-
-export type CapitalTransactionType = (typeof CapitalTransactionType)[keyof typeof CapitalTransactionType]
-
-
-export const LiabilityStatus = {
-  ACTIVE: 'ACTIVE',
-  SETTLED: 'SETTLED'
-} as const
-
-export type LiabilityStatus = (typeof LiabilityStatus)[keyof typeof LiabilityStatus]
-
-
 export const Account = {
   CASH: 'CASH',
+  BANK: 'BANK',
   INVENTORY: 'INVENTORY',
-  REVENUE: 'REVENUE',
   COGS: 'COGS',
-  EXPENSES: 'EXPENSES',
-  FIXED_ASSETS: 'FIXED_ASSETS',
+  REVENUE: 'REVENUE',
+  EXPENSE: 'EXPENSE',
   LIABILITIES: 'LIABILITIES',
   OWNER_CAPITAL: 'OWNER_CAPITAL',
   OWNER_DRAWINGS: 'OWNER_DRAWINGS',
+  FIXED_ASSETS: 'FIXED_ASSETS',
   INTER_BRANCH: 'INTER_BRANCH'
 } as const
 
@@ -168,15 +62,6 @@ export const AlertSeverity = {
 export type AlertSeverity = (typeof AlertSeverity)[keyof typeof AlertSeverity]
 
 
-export const AssetType = {
-  OPENING: 'OPENING',
-  PURCHASE: 'PURCHASE',
-  SALE: 'SALE'
-} as const
-
-export type AssetType = (typeof AssetType)[keyof typeof AssetType]
-
-
 export const BusinessStatus = {
   ONBOARDING: 'ONBOARDING',
   ACTIVE: 'ACTIVE',
@@ -187,7 +72,8 @@ export type BusinessStatus = (typeof BusinessStatus)[keyof typeof BusinessStatus
 
 
 export const SyncEventStatus = {
-  PROCESSED: 'PROCESSED',
+  PENDING: 'PENDING',
+  SYNCED: 'SYNCED',
   FAILED: 'FAILED'
 } as const
 

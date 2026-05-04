@@ -6,6 +6,7 @@ import { useBranchStore } from "@/src/store/useBranchStore";
 import { nanoid } from "nanoid";
 import { InventoryEventType } from "@/offline/core/events/eventGroups/inventoryEvents";
 import { OpeninigEventType } from "@/offline/core/events/eventGroups/openingEvents";
+import { useInventoryStore } from "../store/inventoryStore";
 
 export const eventService = {
   async create(input: {
@@ -30,6 +31,7 @@ export const eventService = {
       businessId: businessId ?? null,
       branchId: branchId ?? null,
     });
+    console.log("Event Before Dispatched ", event)
 
     await dispatchEvent(event);
     return event;
@@ -39,7 +41,7 @@ export const eventService = {
   async createProductWithOpeningStock(data: {
     name: string;
     price: number;
-    cost: number;
+    costPrice: number;
     quantity: number;
     mode: "OPENING" | "LIVE";
   }) {
@@ -53,7 +55,7 @@ export const eventService = {
         id: productId,
         name: data.name,
         price: data.price,
-        cost: data.cost,
+        costPrice: data.costPrice,
       },
     });
 
@@ -65,11 +67,68 @@ export const eventService = {
         payload: {
           productId,
           quantity: data.quantity,
-          costPrice: data.cost, // normalized field
+          costPrice: data.costPrice, // normalized field
         },
       });
     }
 
     return productId;
   },
+
+ async updateProductSmart(input: ProductUpdateInput) {
+  const db = useInventoryStore.getState().productsById[input.productId];
+  if (!db) throw new Error("Product not found");
+
+  const events = [];
+
+  // -----------------------------
+  // 1. Detect PRODUCT changes
+  // -----------------------------
+  const productChanged =
+    input.name !== undefined ||
+    input.price !== undefined ||
+    input.costPrice !== undefined;
+
+  if (productChanged) {
+    events.push(
+      this.create({
+        type: InventoryEventType.PRODUCT_UPDATED,
+        mode: "LIVE",
+        payload: {
+          productId: input.productId,
+          name: input.name ?? db.name,
+          price: input.price ?? db.price,
+          cost: input.costPrice ?? db.costPrice,
+        },
+      })
+    );
+  }
+
+  // -----------------------------
+  // 2. Detect INVENTORY changes
+  // -----------------------------
+  const stockChanged = input.quantity !== undefined;
+
+  if (stockChanged) {
+    events.push(
+      this.create({
+        type: InventoryEventType.INVENTORY_UPDATED,
+        mode: "LIVE",
+        payload: {
+          productId: input.productId,
+          quantityDelta: input.quantity!, // delta-based model
+        },
+      })
+    );
+  }
+
+  // -----------------------------
+  // 3. Execute atomically (sequential dispatch)
+  // -----------------------------
+  for (const e of events) {
+    await e;
+  }
+
+  return true;
+} 
 };

@@ -4,21 +4,16 @@ import { useState } from "react";
 import { ShoppingCart, CreditCard, Package, DollarSign, TrendingUp, Rocket } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { CardContent } from "@/components/ui/cardContent";
+import { useDashboardStore } from "@/src/store/DashboardStore";
 
 
 export function FinancialCarousel() {
-  const dashboardSummary = {
-    todaySales: 2000,
-    cashAtHand: 3000,
-    inventoryValue: 4000,
-    outstandingLiabilities: 5000,
-    netProfit: 4000
-  }
-
+  
+  const summary = useDashboardStore((s) => s.summary);
 
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
 
-  const isLoading = !dashboardSummary;
+  const isLoading = !summary;
 
   if (isLoading) {
     return (
@@ -34,7 +29,7 @@ export function FinancialCarousel() {
   {
       id: "todaySales",
       title: "Today's Sales",
-      value: `₦${dashboardSummary.todaySales.toLocaleString()}`,
+      value: `₦${summary.todaySales.toLocaleString()}`,
       subtitle: "vs yesterday",
       icon: <ShoppingCart className="w-6 h-6 text-blue-600" />,
       extra: "Detailed info about sales can go here."
@@ -42,7 +37,7 @@ export function FinancialCarousel() {
     {
       id: "cashAtHand",
       title: "Cash at Hand",
-      value: `₦${dashboardSummary.cashAtHand.toLocaleString()}`,
+      value: `₦${summary.cashAtHand.toLocaleString()}`,
       subtitle: "Updated just now",
       icon: <CreditCard className="w-6 h-6 text-green-600" />,
       extra: "Shows all available cash including inflows and outflows."
@@ -50,7 +45,7 @@ export function FinancialCarousel() {
     {
       id: "inventoryValue",
       title: "Inventory Value",
-      value: `₦${dashboardSummary.inventoryValue?.toLocaleString()}`,
+      value: `₦${summary.inventoryValue?.toLocaleString()}`,
       subtitle: "Across all products",
       icon: <Package className="w-6 h-6 text-yellow-600" />,
       extra: "Represents the total stock value for the business."
@@ -58,7 +53,7 @@ export function FinancialCarousel() {
     {
       id: "liabilities",
       title: "Outstanding Liabilities",
-      value: `₦${dashboardSummary.outstandingLiabilities.toLocaleString()}`,
+      value: `₦${summary.outstandingLiabilities.toLocaleString()}`,
       subtitle: "Active liabilities",
       icon: <DollarSign className="w-6 h-6 text-red-600" />,
       extra: "All loans or obligations to suppliers and partners."
@@ -66,7 +61,7 @@ export function FinancialCarousel() {
     {
       id: "netProfit",
       title: "Net Profit",
-      value: `₦${dashboardSummary.netProfit?.toLocaleString()}`,
+      value: `₦${summary.netProfit?.toLocaleString()}`,
       subtitle: "For the selected period",
       icon: <TrendingUp className="w-6 h-6 text-purple-600" />,
       extra: "Calculated as total sales minus total expenses."

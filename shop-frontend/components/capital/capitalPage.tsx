@@ -41,8 +41,8 @@ const CashflowTable = ({ mode, onCompleted }: CashflowTableProps) => {
     const amount = Number(rawAmount);
     if (amount <= 0) return;
     eventService.create({
-      type: mode === "OPENING" ? OpeninigEventType.OPENING_CASH_ADDED : financeEventType.CASH_ADDED,
-      payload : amount,
+      type: mode === "OPENING" ? financeEventType.OPENING_CAPITAL: financeEventType.CASH_ADDED,
+      payload : { amount: amount},
       mode
     })
     

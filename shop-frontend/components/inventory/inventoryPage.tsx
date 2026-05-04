@@ -23,7 +23,6 @@ import { eventService } from "@/src/services/eventService";
 import { OpeninigEventType } from "@/offline/core/events/eventGroups/openingEvents";
 import { InventoryEventType } from "@/offline/core/events/eventGroups/inventoryEvents";
 import { salesEventType } from "@/offline/core/events/eventGroups/salesEvent";
-import { nanoid } from "nanoid";
 
 interface InventoryPageProps {
   context: "sell" | "admin";
@@ -88,6 +87,7 @@ export default function InventoryPage({
       return matchSearch && matchCategory;
     });
   }, [products, search, activeCategory]);
+  
 
   // -----------------------------
   // ACTIONS
@@ -132,7 +132,7 @@ const handleCheckout = async () => {
           productId: item.productId,
           quantity: item.quantity,
           amount: item.price * item.quantity,
-          cost: item.cost * item.quantity,
+          costPrice: item.costPrice * item.quantity,
         },
       });
     }
@@ -149,11 +149,6 @@ const handleSell = async (productId: string, quantity: number) => {
   const product = products.find(p => p.id === productId);
   if (!product) return;
 
-  if (quantity > product.quantity) {
-    toast.error("Not enough stock");
-    return;
-  }
-
   await eventService.create({
     type: salesEventType.SALE_ADDED,
     mode,
@@ -161,7 +156,7 @@ const handleSell = async (productId: string, quantity: number) => {
       productId,
       quantity,
       amount: product.price * quantity,
-      cost: product.cost * quantity,
+      costPrice: product.costPrice* quantity,
     },
   });
 
@@ -181,7 +176,7 @@ const handleSell = async (productId: string, quantity: number) => {
         await eventService.createProductWithOpeningStock({
           name: data.name,
           price: data.price,
-          cost: data.cost,
+          costPrice: data.cost,
           quantity: data.quantity,
           mode
         })

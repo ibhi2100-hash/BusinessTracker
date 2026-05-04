@@ -10,98 +10,27 @@ datasource db {
 
 /////**** ENUMS ****/////
 
-enum ProductType { 
-  ACCESSORY
-  PHONE
-  SERVICE
-  OTHER
-}
-enum ProductStockMode {
+enum Mode {
   OPENING
   LIVE
 }
 
-enum StockMovementType {
-  OPENING
-  PURCHASE
-  SALE
-  RETURN
-  ADJUSTMENT
-}
-
-enum PaymentMethod {
-  CASH
-  TRANSFER
-  POS
-}
-
-enum CashFlowType {
-OPENING
-OWNER_CAPITAL
-OWNER_WITHDRAWAL
-SALE_INCOME
-PURCHASE_EXPENSE
-ASSET_PURCHASE
-ASSET_DISPOSAL
-LIABILITY_PAYMENT
-EXPENSE
-REFUND
-}
-
-enum CashFlowDirection {
-  IN
-  OUT
-}
-enum LiabilityType {
-  LOAN
-  CREDIT
-  SALARY_ADVANCE
-  }
-
-  
 enum Role {
   ADMIN
   STAFF
 }
 
-
-enum SaleStatus {
-  COMPLETED
-  REFUNDED
-  VOIDED
-}
-
-enum ExpenseStatus {
-  APPROVED
-  PENDING
-  CANCELLED
-}
-
-enum InventoryTransactionType {
-  PURCHASE
-  SALE
-  ADJUSTMENT
-  RETURN
-}
-
-enum CapitalTransactionType {
-  INJECTION
-  WITHDRAWAL
-}
-enum LiabilityStatus {
-  ACTIVE 
-  SETTLED
-}
 enum Account {
   CASH
+  BANK
   INVENTORY
-  REVENUE
   COGS
-  EXPENSES
-  FIXED_ASSETS
+  REVENUE
+  EXPENSE
   LIABILITIES
   OWNER_CAPITAL
   OWNER_DRAWINGS
+  FIXED_ASSETS
   INTER_BRANCH
 }
 
@@ -118,18 +47,15 @@ enum AlertSeverity {
   WARNING
   CRITICAL
 }
-enum AssetType {
-  OPENING
-  PURCHASE
-  SALE
-}
+
 enum BusinessStatus {
   ONBOARDING
   ACTIVE
   SUSPENDED
 }
 enum SyncEventStatus {
-  PROCESSED
+  PENDING
+  SYNCED
   FAILED
 }
 
@@ -140,8 +66,6 @@ model Business {
   id          String    @id 
   name        String
   address     String?
-  userId      String?
-  onboardingStep  Int   @default(1)
   isOnboarding  Boolean   @default(true)
   onboardingCompleted   Boolean   @default(false)
   createdAt   DateTime  @default(now())
@@ -149,19 +73,8 @@ model Business {
   status      BusinessStatus    @default(ONBOARDING)
 
   users       User[]
-  branch     Branch[]
+  branches    Branch[]
   subscriptions   BusinessSubscription[]
-  categories Category[]
-  brands      Brand[]
-  products   Product[]
-  stockMovement     StockMovement[]
-  sales      Sale[]
-  liabilities Liability[]
-  loan        Loan[] 
-  employees    Employee[]
-  assets      Asset[]
-  expenses    Expense[]
-  expenseCategories ExpenseCategory[]
   alerts      Alert[]
 
 }
@@ -177,17 +90,8 @@ model Branch {
   business      Business      @relation(fields: [businessId], references: [id])
 
   users         User[]
-  products      Product[]
-  category      Category[]
-  accountSnapshot    AccountSnapshot[]
-  inventorySnapshot InventorySnapshot[]
-  brand         Brand[]
-  sales         Sale[]
-  stockMovement StockMovement[]
-  assets        Asset[]
-  liabilities   Liability[]
-  expenses      Expense[]
   alerts        Alert[]
+  snapshots     Snapshot[]
 }
 
 model User {
@@ -272,32 +176,41 @@ model ProcessedSyncEvent {
 
   @@index([businessId])
   @@index([branchId])
+  @@unique([id, status])
 }
 
 model Event {
   id         String   @id
-  businessId String
-  branchId   String
-  userId     String?
   type       String
   payload    Json
 
-  ledgerVersion Int   @default(1) // 👈 ADD THIS
+  businessId String?
+  branchId   String?
+  
+  mode       Mode
+  scope      String
 
   createdAt  DateTime
-  syncedAt   DateTime @default(now())
+  logicClock Int
+  version    Int      @default(1)
 
-  deviceId   String?
-  sequence   Int?
+  deviceId   String
+  userId     String?
+
+  status     SyncEventStatus
+  synced     Boolean 
 
   ledgerEntries LedgerEntry[]
 
-  @@index([businessId, branchId])
+  @@index([scope, businessId, branchId, version])
+  @@index([deviceId, logicClock])
+
+  @@unique([scope, businessId, branchId, version])
 }
 
 
 model LedgerEntry {
-  id          String   @id // eventId-index
+  id          String   @id @default(uuid())
   businessId  String
   branchId    String
   eventId     String
@@ -312,334 +225,20 @@ model LedgerEntry {
 
   @@unique([eventId, index]) // 👈 idempotency
   @@index([businessId, branchId])
-  @@index([account])
 }
 
-model AccountSnapshot {
+model Snapshot {
   id         String   @id @default(uuid())
   branchId   String
   account    String
   balance    Decimal
 
-  lastEventId String?
+  lastVersion Int
   updatedAt   DateTime @updatedAt
 
   branch Branch @relation(fields: [branchId], references: [id])
 
   @@unique([branchId, account])
-}
-
-model InventorySnapshot {
-  id      String  @id   @default(uuid())
-  productId   String
-  branchId    String
-  quantity    Int
-
-  updatedAt   DateTime    @updatedAt
-
-  branch   Branch @relation(fields: [branchId], references: [id])
-  product  Product  @relation(fields: [productId], references: [id])
-
-  @@unique([productId, branchId])
-}
-
-model Category {
-  id          String    @id 
-  name        String
-  businessId  String
-  branchId    String
-  imageUrl    String?
-  createdAt   DateTime  @default(now())
-  business    Business  @relation(fields: [businessId], references: [id])
-  branch      Branch    @relation(fields: [branchId], references: [id])
-
-  product     Product[]
-  brands      Brand[]
-
-  @@unique([name, businessId, branchId])
-}
-
-model Brand {
-  id          String    @id 
-  name        String
-  businessId  String
-  categoryId  String
-  branchId     String
-  business    Business  @relation(fields: [businessId], references: [id])
-  branch      Branch    @relation(fields: [branchId], references: [id])
-  category    Category  @relation(fields: [categoryId], references: [id])
-  products    Product[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([name, categoryId, branchId])
-}
-
-model Product {
-  id          String    @id 
-  businessId  String
-  branchId    String
-  categoryId String
-  brandId     String
-
-  name        String
-  type        ProductType
-  stockMode   ProductStockMode  @default(OPENING)
-
-  model       String?
-  costPrice   Decimal
-  sellingPrice Decimal
-  quantity    Int       @default(0)
-  imageUrl    String?
-  sku         String?
-
-  reorderLevel  Int?
-  isDeleted    Boolean    @default(false)
-
-  //Accessories only 
-  imei        String?   @unique
-  condition    String?
-  isActive    Boolean   @default(true)
-
-  createdAt   DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-
-  business    Business  @relation(fields: [businessId], references: [id])
-  branch      Branch    @relation(fields: [branchId], references: [id])
-  category   Category @relation(fields: [categoryId], references: [id])
-  brand       Brand    @relation(fields: [brandId], references: [id])
-
-  stockMoves StockMovement[]  
-  saleItem   SaleItem[]
-  inventorySnapshot InventorySnapshot[]
-
-  @@index([businessId])
-  @@index([type])
-}
-model StockMovement {
-  id          String           @id 
-  businessId  String
-  branchId    String
-  productId   String
-  type        StockMovementType
-  quantity    Int
-  remainingQty  Int           @default(0)
-  costPrice   Decimal?
-  sellingPrice Decimal?
-  isOpening   Boolean             @default(true)
-  date        DateTime          @default(now())
-  createdAt   DateTime          @default(now())
-
-  business    Business          @relation(fields: [businessId], references: [id])
-  branch      Branch            @relation(fields: [branchId], references: [id])
-  product     Product           @relation(fields: [productId], references: [id])
-
-  @@index([productId])
-  @@index([createdAt])
-}
-
-
-model Sale {
-  id            String        @id 
-  businessId    String
-  branchId      String?
-  discount      Decimal?
-  totalAmount   Decimal
-  createdAt     DateTime      @default(now())
-  status        SaleStatus    @default(COMPLETED)
-  refundedAt     DateTime?
-  refundReason   String?
-  taxAmount      Decimal?
-
-
-  business      Business      @relation(fields: [businessId], references: [id])
-  branch        Branch?        @relation(fields: [branchId], references: [id])
-  items         SaleItem[]
-  payments     Payment[]
-
-  @@index([businessId])
-  @@index([createdAt])
-}
-
-model SaleItem {
-  id          String    @id 
-  saleId      String
-  productId   String
-  quantity    Int
-  costPrice   Decimal?
-  unitPrice   Decimal
-  totalPrice  Decimal
-
-  sale        Sale      @relation(fields: [saleId], references: [id])
-  product     Product   @relation(fields: [productId], references: [id])
-
-  @@index([saleId])
-  @@index([productId])
-}
-model Payment {
-  id          String        @id 
-  saleId      String
-  amount      Decimal
-  method      PaymentMethod
-  date        DateTime      @default(now())
-  reference   String?
-
-  sale        Sale          @relation(fields: [saleId], references: [id])
-
-  @@index([saleId])
-  @@index([date])
-}
-
-model Liability {
-  id           String        @id 
-  businessId   String
-  branchId     String?
-  title        String
-  type         LiabilityType
-  principalAmount       Float
-  interestRate Float?         @default(0)
-  startDate    DateTime
-  dueDate      DateTime?
-  lender       String?
-  outstandingAmount   Decimal
-  description  String?
-  isOpening    Boolean  @default(true)
-  status       LiabilityStatus
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  business     Business     @relation(fields: [businessId], references: [id])
-  branch       Branch?       @relation(fields: [branchId], references: [id])
-
-  liability    LiabilityPayment[]
-}
-model LiabilityPayment {
-  id           String     @id  
-  liabilityId  String
-  liabilities  Liability        @relation(fields: [liabilityId], references: [id])
-  amount       Float?
-  paymentDate  DateTime?
-}
-
-model Asset {
-  id               String    @id 
-  businessId       String
-  branchId         String
-  name             String
-  purchaseCost     Float
-  purchaseDate     DateTime?
-  assetType        AssetType
-  totalCost        Decimal?
-  currentValue     Decimal?
-  quantity         Int
-  isOpeninig       Boolean    @default(true)
-  condition        String?
-  supplier         String?
-  usefulLifeMonths Int
-  salvageValue     Decimal?
-  accumulatedDepreciation   Float?
-  disposedAt       DateTime?
-  disposalAmount   Decimal?
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
-  business         Business  @relation(fields: [businessId], references: [id])
-  branch           Branch?   @relation(fields: [branchId], references: [id])
-}
-
-
-model Expense {
-  id            String        @id 
-  businessId    String
-  branchId      String?
-  categoryId    String?
-  amount        Decimal
-  paymentMethod PaymentMethod @default(CASH)
-  reference     String?
-  supplier      String?
-  status        ExpenseStatus @default(APPROVED)
-  description   String?
-  date          DateTime      @default(now())
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  business      Business      @relation(fields: [businessId], references: [id])
-  branch        Branch?        @relation(fields: [branchId], references: [id])
-  category      ExpenseCategory? @relation(fields: [categoryId], references: [id])
-
-  @@index([businessId])
-  @@index([categoryId])
-}
-
-model CapitalExpenditure {
-  id            String   @id
-  type          String
-  amount        Decimal
-  referenceType String
-  referenceId   String
-  description   String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-}
-
-model Loan {
-  id          String                 @id 
-  businessId  String
-  principal   Decimal?
-  amount      Decimal
-  interestRate Decimal                @default(0)
-  dueDate     DateTime?
-  lender      String?
-  description String?
-  createdById String?
-  
-  business    Business               @relation(fields: [businessId], references: [id])
-  repayments  LoanRepayment[]
-}
-
-model LoanRepayment {
-  id          String                 @id 
-  loanId      String
-  amount      Decimal
-  date        DateTime               @default(now())
-
-  loan        Loan                   @relation(fields: [loanId], references: [id])
-}
-
-model Employee {
-  id          String    @id 
-  businessId String
-  name        String
-  position    String
-  salary      Decimal
-  salaryType  String
-  hiredAt     DateTime  @default(now())
-  createdAt   DateTime  @default(now())
-
-  business    Business  @relation(fields: [businessId], references: [id])
-  salaryAccruals SalaryAccrual[]
-}
-
-model SalaryAccrual {
-  id          String    @id 
-  employeeId  String
-  amount      Decimal
-  month       Int
-  year        Int
-  createdAt   DateTime  @default(now())
-
-  employee    Employee  @relation(fields: [employeeId], references: [id])
-}
-
-model  ExpenseCategory {
-  id          String    @id 
-  businessId  String
-  name        String 
-  createdAt   DateTime  @default(now())
-  business    Business  @relation(fields: [businessId], references: [id])
-
-  expenses    Expense[]
-
-  @@unique([name, businessId])
 }
 
 model Alert {

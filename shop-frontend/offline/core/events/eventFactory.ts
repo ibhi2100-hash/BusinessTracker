@@ -1,5 +1,7 @@
 import { createEntity } from "@/offline/core/entities/entityFactory";
 import { BaseEvent} from "./types";
+import { getNextLogicClock } from "@/src/utils/logicClock";
+import { nanoid } from "nanoid";
 
 type CreateEventInput = {
   type: string;
@@ -24,6 +26,7 @@ export function createEvent(input: CreateEventInput): BaseEvent {
   } = input;
 
   return createEntity({
+    id: nanoid(),
     type,
     payload,
     mode,
@@ -31,7 +34,8 @@ export function createEvent(input: CreateEventInput): BaseEvent {
     branchId,
     userId,
     status,
-    logicalClock: 1233,
+    version: 0,
+    logicClock: getNextLogicClock(),
     deviceId: "local-device",
   });
 }

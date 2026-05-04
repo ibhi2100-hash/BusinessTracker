@@ -14,7 +14,7 @@ import { useBusinessStore } from "@/src/store/businessStore";
 import { useBranchStore } from "@/src/store/useBranchStore";
 
 interface Props {
-  product: Product;
+  product: any;
   context: "sell" | "admin";
   onSell?: (productId: string, quantity: number) => void;
   onEdit?: (product: Product) => void;

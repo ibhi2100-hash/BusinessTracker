@@ -1,4 +1,4 @@
-import { syncEvent } from "./syncEngine"
+import { syncEngine } from "./syncEngine"
 if (typeof window !== "undefined") {
   window.addEventListener("offline", () => {
     console.log("Went offline → stopping interval")
@@ -7,7 +7,7 @@ if (typeof window !== "undefined") {
 
   window.addEventListener("online", () => {
     console.log("Back online → syncing")
-    syncEvent()
+    syncEngine()
   });
 }
 let syncInProgress = false
@@ -23,7 +23,7 @@ export async function runSync() {
 
     try {
         console.log("Running sync...")
-        await syncEvent()
+        await syncEngine()
     } catch (err) {
         console.error("Sync error:", err)
     } finally {

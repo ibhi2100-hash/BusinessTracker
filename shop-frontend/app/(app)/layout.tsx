@@ -4,12 +4,17 @@ import { useEffect } from "react";
 import { startBusinessSubscriber, stopBusinessSubscriber } from "@/offline/subscribers/businessSubscriber";
 import { startInventorySubscriber, stopInventorySubscriber } from "@/offline/subscribers/inventorySubscriber";
 import { useAuthStore } from "@/src/store/useAuthStore";
+import { runSync } from "@/src/sync/networkMonitor";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const user = useAuthStore((s) => s.user);
 
   useEffect(() => {
+    (async()=> {
+      await runSync()
+    })()
     if (!user?.id) return;
+   
 
     // 🔥 START ALL CORE SUBSCRIBERS ONCE USER EXISTS
     startBusinessSubscriber();

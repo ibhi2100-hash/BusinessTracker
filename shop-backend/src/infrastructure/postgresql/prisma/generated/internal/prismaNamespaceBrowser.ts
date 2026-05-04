@@ -60,25 +60,7 @@ export const ModelName = {
   ProcessedSyncEvent: 'ProcessedSyncEvent',
   Event: 'Event',
   LedgerEntry: 'LedgerEntry',
-  AccountSnapshot: 'AccountSnapshot',
-  InventorySnapshot: 'InventorySnapshot',
-  Category: 'Category',
-  Brand: 'Brand',
-  Product: 'Product',
-  StockMovement: 'StockMovement',
-  Sale: 'Sale',
-  SaleItem: 'SaleItem',
-  Payment: 'Payment',
-  Liability: 'Liability',
-  LiabilityPayment: 'LiabilityPayment',
-  Asset: 'Asset',
-  Expense: 'Expense',
-  CapitalExpenditure: 'CapitalExpenditure',
-  Loan: 'Loan',
-  LoanRepayment: 'LoanRepayment',
-  Employee: 'Employee',
-  SalaryAccrual: 'SalaryAccrual',
-  ExpenseCategory: 'ExpenseCategory',
+  Snapshot: 'Snapshot',
   Alert: 'Alert'
 } as const
 
@@ -102,8 +84,6 @@ export const BusinessScalarFieldEnum = {
   id: 'id',
   name: 'name',
   address: 'address',
-  userId: 'userId',
-  onboardingStep: 'onboardingStep',
   isOnboarding: 'isOnboarding',
   onboardingCompleted: 'onboardingCompleted',
   createdAt: 'createdAt',
@@ -204,16 +184,19 @@ export type ProcessedSyncEventScalarFieldEnum = (typeof ProcessedSyncEventScalar
 
 export const EventScalarFieldEnum = {
   id: 'id',
-  businessId: 'businessId',
-  branchId: 'branchId',
-  userId: 'userId',
   type: 'type',
   payload: 'payload',
-  ledgerVersion: 'ledgerVersion',
+  businessId: 'businessId',
+  branchId: 'branchId',
+  mode: 'mode',
+  scope: 'scope',
   createdAt: 'createdAt',
-  syncedAt: 'syncedAt',
+  logicClock: 'logicClock',
+  version: 'version',
   deviceId: 'deviceId',
-  sequence: 'sequence'
+  userId: 'userId',
+  status: 'status',
+  synced: 'synced'
 } as const
 
 export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
@@ -233,290 +216,16 @@ export const LedgerEntryScalarFieldEnum = {
 export type LedgerEntryScalarFieldEnum = (typeof LedgerEntryScalarFieldEnum)[keyof typeof LedgerEntryScalarFieldEnum]
 
 
-export const AccountSnapshotScalarFieldEnum = {
+export const SnapshotScalarFieldEnum = {
   id: 'id',
   branchId: 'branchId',
   account: 'account',
   balance: 'balance',
-  lastEventId: 'lastEventId',
+  lastVersion: 'lastVersion',
   updatedAt: 'updatedAt'
 } as const
 
-export type AccountSnapshotScalarFieldEnum = (typeof AccountSnapshotScalarFieldEnum)[keyof typeof AccountSnapshotScalarFieldEnum]
-
-
-export const InventorySnapshotScalarFieldEnum = {
-  id: 'id',
-  productId: 'productId',
-  branchId: 'branchId',
-  quantity: 'quantity',
-  updatedAt: 'updatedAt'
-} as const
-
-export type InventorySnapshotScalarFieldEnum = (typeof InventorySnapshotScalarFieldEnum)[keyof typeof InventorySnapshotScalarFieldEnum]
-
-
-export const CategoryScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  businessId: 'businessId',
-  branchId: 'branchId',
-  imageUrl: 'imageUrl',
-  createdAt: 'createdAt'
-} as const
-
-export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
-
-
-export const BrandScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  businessId: 'businessId',
-  categoryId: 'categoryId',
-  branchId: 'branchId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type BrandScalarFieldEnum = (typeof BrandScalarFieldEnum)[keyof typeof BrandScalarFieldEnum]
-
-
-export const ProductScalarFieldEnum = {
-  id: 'id',
-  businessId: 'businessId',
-  branchId: 'branchId',
-  categoryId: 'categoryId',
-  brandId: 'brandId',
-  name: 'name',
-  type: 'type',
-  stockMode: 'stockMode',
-  model: 'model',
-  costPrice: 'costPrice',
-  sellingPrice: 'sellingPrice',
-  quantity: 'quantity',
-  imageUrl: 'imageUrl',
-  sku: 'sku',
-  reorderLevel: 'reorderLevel',
-  isDeleted: 'isDeleted',
-  imei: 'imei',
-  condition: 'condition',
-  isActive: 'isActive',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
-
-
-export const StockMovementScalarFieldEnum = {
-  id: 'id',
-  businessId: 'businessId',
-  branchId: 'branchId',
-  productId: 'productId',
-  type: 'type',
-  quantity: 'quantity',
-  remainingQty: 'remainingQty',
-  costPrice: 'costPrice',
-  sellingPrice: 'sellingPrice',
-  isOpening: 'isOpening',
-  date: 'date',
-  createdAt: 'createdAt'
-} as const
-
-export type StockMovementScalarFieldEnum = (typeof StockMovementScalarFieldEnum)[keyof typeof StockMovementScalarFieldEnum]
-
-
-export const SaleScalarFieldEnum = {
-  id: 'id',
-  businessId: 'businessId',
-  branchId: 'branchId',
-  discount: 'discount',
-  totalAmount: 'totalAmount',
-  createdAt: 'createdAt',
-  status: 'status',
-  refundedAt: 'refundedAt',
-  refundReason: 'refundReason',
-  taxAmount: 'taxAmount'
-} as const
-
-export type SaleScalarFieldEnum = (typeof SaleScalarFieldEnum)[keyof typeof SaleScalarFieldEnum]
-
-
-export const SaleItemScalarFieldEnum = {
-  id: 'id',
-  saleId: 'saleId',
-  productId: 'productId',
-  quantity: 'quantity',
-  costPrice: 'costPrice',
-  unitPrice: 'unitPrice',
-  totalPrice: 'totalPrice'
-} as const
-
-export type SaleItemScalarFieldEnum = (typeof SaleItemScalarFieldEnum)[keyof typeof SaleItemScalarFieldEnum]
-
-
-export const PaymentScalarFieldEnum = {
-  id: 'id',
-  saleId: 'saleId',
-  amount: 'amount',
-  method: 'method',
-  date: 'date',
-  reference: 'reference'
-} as const
-
-export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
-
-
-export const LiabilityScalarFieldEnum = {
-  id: 'id',
-  businessId: 'businessId',
-  branchId: 'branchId',
-  title: 'title',
-  type: 'type',
-  principalAmount: 'principalAmount',
-  interestRate: 'interestRate',
-  startDate: 'startDate',
-  dueDate: 'dueDate',
-  lender: 'lender',
-  outstandingAmount: 'outstandingAmount',
-  description: 'description',
-  isOpening: 'isOpening',
-  status: 'status',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type LiabilityScalarFieldEnum = (typeof LiabilityScalarFieldEnum)[keyof typeof LiabilityScalarFieldEnum]
-
-
-export const LiabilityPaymentScalarFieldEnum = {
-  id: 'id',
-  liabilityId: 'liabilityId',
-  amount: 'amount',
-  paymentDate: 'paymentDate'
-} as const
-
-export type LiabilityPaymentScalarFieldEnum = (typeof LiabilityPaymentScalarFieldEnum)[keyof typeof LiabilityPaymentScalarFieldEnum]
-
-
-export const AssetScalarFieldEnum = {
-  id: 'id',
-  businessId: 'businessId',
-  branchId: 'branchId',
-  name: 'name',
-  purchaseCost: 'purchaseCost',
-  purchaseDate: 'purchaseDate',
-  assetType: 'assetType',
-  totalCost: 'totalCost',
-  currentValue: 'currentValue',
-  quantity: 'quantity',
-  isOpeninig: 'isOpeninig',
-  condition: 'condition',
-  supplier: 'supplier',
-  usefulLifeMonths: 'usefulLifeMonths',
-  salvageValue: 'salvageValue',
-  accumulatedDepreciation: 'accumulatedDepreciation',
-  disposedAt: 'disposedAt',
-  disposalAmount: 'disposalAmount',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type AssetScalarFieldEnum = (typeof AssetScalarFieldEnum)[keyof typeof AssetScalarFieldEnum]
-
-
-export const ExpenseScalarFieldEnum = {
-  id: 'id',
-  businessId: 'businessId',
-  branchId: 'branchId',
-  categoryId: 'categoryId',
-  amount: 'amount',
-  paymentMethod: 'paymentMethod',
-  reference: 'reference',
-  supplier: 'supplier',
-  status: 'status',
-  description: 'description',
-  date: 'date',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type ExpenseScalarFieldEnum = (typeof ExpenseScalarFieldEnum)[keyof typeof ExpenseScalarFieldEnum]
-
-
-export const CapitalExpenditureScalarFieldEnum = {
-  id: 'id',
-  type: 'type',
-  amount: 'amount',
-  referenceType: 'referenceType',
-  referenceId: 'referenceId',
-  description: 'description',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type CapitalExpenditureScalarFieldEnum = (typeof CapitalExpenditureScalarFieldEnum)[keyof typeof CapitalExpenditureScalarFieldEnum]
-
-
-export const LoanScalarFieldEnum = {
-  id: 'id',
-  businessId: 'businessId',
-  principal: 'principal',
-  amount: 'amount',
-  interestRate: 'interestRate',
-  dueDate: 'dueDate',
-  lender: 'lender',
-  description: 'description',
-  createdById: 'createdById'
-} as const
-
-export type LoanScalarFieldEnum = (typeof LoanScalarFieldEnum)[keyof typeof LoanScalarFieldEnum]
-
-
-export const LoanRepaymentScalarFieldEnum = {
-  id: 'id',
-  loanId: 'loanId',
-  amount: 'amount',
-  date: 'date'
-} as const
-
-export type LoanRepaymentScalarFieldEnum = (typeof LoanRepaymentScalarFieldEnum)[keyof typeof LoanRepaymentScalarFieldEnum]
-
-
-export const EmployeeScalarFieldEnum = {
-  id: 'id',
-  businessId: 'businessId',
-  name: 'name',
-  position: 'position',
-  salary: 'salary',
-  salaryType: 'salaryType',
-  hiredAt: 'hiredAt',
-  createdAt: 'createdAt'
-} as const
-
-export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typeof EmployeeScalarFieldEnum]
-
-
-export const SalaryAccrualScalarFieldEnum = {
-  id: 'id',
-  employeeId: 'employeeId',
-  amount: 'amount',
-  month: 'month',
-  year: 'year',
-  createdAt: 'createdAt'
-} as const
-
-export type SalaryAccrualScalarFieldEnum = (typeof SalaryAccrualScalarFieldEnum)[keyof typeof SalaryAccrualScalarFieldEnum]
-
-
-export const ExpenseCategoryScalarFieldEnum = {
-  id: 'id',
-  businessId: 'businessId',
-  name: 'name',
-  createdAt: 'createdAt'
-} as const
-
-export type ExpenseCategoryScalarFieldEnum = (typeof ExpenseCategoryScalarFieldEnum)[keyof typeof ExpenseCategoryScalarFieldEnum]
+export type SnapshotScalarFieldEnum = (typeof SnapshotScalarFieldEnum)[keyof typeof SnapshotScalarFieldEnum]
 
 
 export const AlertScalarFieldEnum = {

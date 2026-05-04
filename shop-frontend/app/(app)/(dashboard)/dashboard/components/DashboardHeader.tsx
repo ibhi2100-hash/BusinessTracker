@@ -4,8 +4,8 @@ import { Bell, Plus } from "lucide-react";
 import { useBranchStore } from "@/src/store/useBranchStore";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-import { BusinessService } from "@/src/services/businessService";
 import { useState } from "react";
+import { useBusinessStore } from "@/src/store/businessStore";
 
 
 export const DashboardHeader = () => {
@@ -21,6 +21,7 @@ export const DashboardHeader = () => {
     setActiveBranch,
     role,
   } = useBranchStore();
+  const business = useBusinessStore((s)=> s.business)
 
 
   
@@ -86,7 +87,7 @@ export const DashboardHeader = () => {
           Good Morning
         </p>
 
-        <h1 className="text-xl font-semibold">{businessName}</h1>
+        <h1 className="text-xl font-semibold">{business.name}</h1>
 
         <select
           value={activeBranchId ?? ""}

@@ -2,10 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { BusinessEventTypes } from "@/offline/core/events/eventGroups/businessEvents";
+import { eventService } from "@/src/services/eventService";
 import { useBusinessStore } from "@/src/store/businessStore";
 import { useRouter } from "next/navigation";  
 import { useState } from "react";
-import { BusinessService } from "@/src/services/businessService";
 import { toast } from "sonner";
 
 
@@ -18,7 +19,11 @@ export const ActivateBusinessButton = () => {
 
   const handleActivate = async () => {
     setLoading(true)
-    await BusinessService.activateMyBusiness()
+    eventService.create({
+      type: BusinessEventTypes.BUSINESS_ACTIVATION,
+      mode: "OPENING",
+      payload: ""
+    })
     toast.success("Business Activated✅")
     setLoading(false)
 

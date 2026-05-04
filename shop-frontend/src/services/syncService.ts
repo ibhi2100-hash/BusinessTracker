@@ -1,10 +1,12 @@
 import { getDb } from "@/src/db/index";
+import { useAuthStore } from "../store/useAuthStore";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const syncService = {
   async sync() {
-    const db = getDb();
+    const userId = useAuthStore.getState().user?.id;
+    const db = getDb(userId);
     if (!db) return;
 
     const events = await db.events
@@ -21,7 +23,7 @@ export const syncService = {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ events }),
+      body: JSON.stringify(events),
     });
 
     // IMPORTANT: check HTTP status explicitly
@@ -45,11 +47,19 @@ export const syncService = {
     await db.transaction("rw", db.events, async () => {
       for (const r of updates) {
         if (r.status === "synced") {
-          await db.events.update(r.id, {
+          await db.events.update(r.eventId, {
             synced: true,
             status: "synced",
           });
         }
+
+        if (r.status === "duplicate") {
+          await db.events.update(r.eventId, {
+            synced: true,
+            status: "synced",
+          });
+        }
+
 
         if (r.status === "failed") {
           await db.events.update(r.id, {

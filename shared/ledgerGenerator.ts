@@ -15,6 +15,11 @@ function buildEntry(
   direction: Direction,
   amount: number
 ): LedgerEntry {
+ if (!Number.isFinite(amount)) {
+  throw new Error(
+    `Invalid amount for ${event.type}: ${amount}`
+  );
+}
   return {
     id: `${event.id}-${index}`, // ✅ deterministic
     eventId: event.id,
@@ -48,8 +53,8 @@ export function generateLedgerEntries(event: BaseEvent): LedgerEntry[] {
         buildEntry(event, 0, Account.CASH, "DEBIT", payload.amount),
         buildEntry(event, 1, Account.REVENUE, "CREDIT", payload.amount),
 
-        buildEntry(event, 2, Account.COGS, "DEBIT", payload.cost),
-        buildEntry(event, 3, Account.INVENTORY, "CREDIT", payload.cost),
+        buildEntry(event, 2, Account.COGS, "DEBIT", payload.costPrice),
+        buildEntry(event, 3, Account.INVENTORY, "CREDIT", payload.costPrice),
       ];
       break;
 
@@ -75,12 +80,26 @@ export function generateLedgerEntries(event: BaseEvent): LedgerEntry[] {
 
       break;
     }
+    case InventoryEventType.PRODUCT_CREATED:
+      return []; // ✅ NO financial impact
     /**
      * OPENING CAPITAL
      * Dr Cash
      * Cr Owner Capital
      */
     case financeEventType.OPENING_CAPITAL:
+      entries = [
+        buildEntry(event, 0, Account.CASH, "DEBIT", payload.amount),
+        buildEntry(event, 1, Account.OWNER_CAPITAL, "CREDIT", payload.amount),
+      ];
+      break;
+
+    /**
+     * OPENING CAPITAL
+     * Dr Cash
+     * Cr Owner Capital
+     */
+    case financeEventType.CASH_ADDED:
       entries = [
         buildEntry(event, 0, Account.CASH, "DEBIT", payload.amount),
         buildEntry(event, 1, Account.OWNER_CAPITAL, "CREDIT", payload.amount),

@@ -1,7 +1,8 @@
 import Dexie, { Table } from "dexie";
 import { getDbName, DB_VERSION, TABLES } from "./schema";
 import { BaseEvent } from "@/offline/core/events/types";
-import { Business, Branch, Product } from "@/types/types";
+import { Business, Branch, Product, User } from "@/types/types";
+import { LedgerEntry } from "../domain/ledger";
 
 // ---------------------------
 // DOMAIN TYPES
@@ -18,16 +19,6 @@ export interface Inventory {
   createdAt?: number;
 }
 
-export interface LedgerEntry {
-  id: string;
-  eventId: string;
-  businessId: string;
-  branchId: string;
-  account: string;
-  amount: number;
-  createdAt: number;
-}
-
 export interface Category {
   id: string;
   businessId: string;
@@ -39,13 +30,6 @@ export interface Brand {
   businessId: string;
   categoryId?: string;
   name: string;
-}
-
-export interface User {
-  id: string;
-  email?: string;
-  name?: string;
-  createdAt: number;
 }
 
 export interface Session {

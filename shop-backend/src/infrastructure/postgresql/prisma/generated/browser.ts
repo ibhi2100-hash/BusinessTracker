@@ -63,100 +63,10 @@ export type Event = Prisma.EventModel
  */
 export type LedgerEntry = Prisma.LedgerEntryModel
 /**
- * Model AccountSnapshot
+ * Model Snapshot
  * 
  */
-export type AccountSnapshot = Prisma.AccountSnapshotModel
-/**
- * Model InventorySnapshot
- * 
- */
-export type InventorySnapshot = Prisma.InventorySnapshotModel
-/**
- * Model Category
- * 
- */
-export type Category = Prisma.CategoryModel
-/**
- * Model Brand
- * 
- */
-export type Brand = Prisma.BrandModel
-/**
- * Model Product
- * 
- */
-export type Product = Prisma.ProductModel
-/**
- * Model StockMovement
- * 
- */
-export type StockMovement = Prisma.StockMovementModel
-/**
- * Model Sale
- * 
- */
-export type Sale = Prisma.SaleModel
-/**
- * Model SaleItem
- * 
- */
-export type SaleItem = Prisma.SaleItemModel
-/**
- * Model Payment
- * 
- */
-export type Payment = Prisma.PaymentModel
-/**
- * Model Liability
- * 
- */
-export type Liability = Prisma.LiabilityModel
-/**
- * Model LiabilityPayment
- * 
- */
-export type LiabilityPayment = Prisma.LiabilityPaymentModel
-/**
- * Model Asset
- * 
- */
-export type Asset = Prisma.AssetModel
-/**
- * Model Expense
- * 
- */
-export type Expense = Prisma.ExpenseModel
-/**
- * Model CapitalExpenditure
- * 
- */
-export type CapitalExpenditure = Prisma.CapitalExpenditureModel
-/**
- * Model Loan
- * 
- */
-export type Loan = Prisma.LoanModel
-/**
- * Model LoanRepayment
- * 
- */
-export type LoanRepayment = Prisma.LoanRepaymentModel
-/**
- * Model Employee
- * 
- */
-export type Employee = Prisma.EmployeeModel
-/**
- * Model SalaryAccrual
- * 
- */
-export type SalaryAccrual = Prisma.SalaryAccrualModel
-/**
- * Model ExpenseCategory
- * 
- */
-export type ExpenseCategory = Prisma.ExpenseCategoryModel
+export type Snapshot = Prisma.SnapshotModel
 /**
  * Model Alert
  * 

@@ -1,64 +1,31 @@
-// components/business-onboarding/SetupProgressTracker.tsx
 "use client";
 
-import { Card } from "@/components/ui/card";
 import clsx from "clsx";
 
-
 export const SetupProgressTracker = () => {
-
-  const storePercentage = 100
-  
-
-  const percentage = storePercentage;
+  const percentage = 100;
   const isComplete = percentage === 100;
 
   return (
-    <Card className="space-y-4 relative p-6 overflow-hidden">
-      <div>
-        <h2 className="text-sm font-medium">Setup Progress</h2>
-        <p className="text-xs text-gray-500">
-          Complete all steps to activate your business
-        </p>
-      </div>
-
-      {/* Progress Bar Wrapper */}
-      <div className="relative w-full bg-gray-100 rounded-full h-3 overflow-hidden">
-        {/* Milestones */}
-        <div className="absolute inset-0 flex justify-between px-1 pointer-events-none">
-          {[25, 50, 75].map((mark) => (
-            <div
-              key={mark}
-              className="w-px bg-gray-300 opacity-40"
-            />
-          ))}
-        </div>
-
-        {/* Gradient Fill */}
+    <div className="sticky top-0 z-50 w-full">
+      {/* Background track */}
+      <div className="h-[3px] w-full bg-gray-200/60 backdrop-blur-md">
+        {/* Progress fill */}
         <div
           className={clsx(
-            "h-3 rounded-full transition-all duration-700 ease-out relative",
-            "bg-gradient-to-r from-red-500 via-yellow-500 to-green-500",
-            isComplete && "animate-pulse shadow-[0_0_12px_rgba(34,197,94,0.7)]"
+            "h-full transition-all duration-500 ease-out",
+            "bg-gradient-to-r from-green-400 via-green-500 to-green-600",
+            isComplete && "shadow-[0_0_8px_rgba(34,197,94,0.7)]"
           )}
           style={{ width: `${percentage}%` }}
-        >
-          {/* Shimmer Effect */}
-          {percentage > 0 && percentage < 100 && (
-            <div className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-          )}
-        </div>
+        />
       </div>
 
-      {/* Percentage Text */}
-      <div
-        className={clsx(
-          "text-xs text-right transition-colors duration-300",
-          isComplete ? "text-green-600 font-medium" : "text-gray-500"
-        )}
-      >
-        {isComplete ? "100% — Setup Complete 🎉" : `${percentage}% completed`}
+      {/* Optional subtle label */}
+      <div className="px-4 py-1 text-[11px] text-gray-500 flex justify-between">
+        <span>Setup</span>
+        <span>{isComplete ? "Done" : `${percentage}%`}</span>
       </div>
-    </Card>
+    </div>
   );
 };

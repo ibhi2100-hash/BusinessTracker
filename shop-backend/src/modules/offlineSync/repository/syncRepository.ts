@@ -1,30 +1,87 @@
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
 import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
-import { Events } from "../dto/event.js";
+import { Events } from "../../../domain/event.js";
+import { getEventScope } from "../../../lib/getEventScoped.js";
+
 
 export class SyncRepository {
 
-  async findExistingEvent(eventId: string, tx: Prisma.TransactionClient) {
+async findExistingEvent(eventId: string, tx: Prisma.TransactionClient) {
     return tx.event.findUnique({
       where: { id: eventId }
     });
   }
 
- async storeEvent(event: Events, tx: Prisma.TransactionClient) {
-  return tx.event.create({
-    data: {
-      id: event.id,
-      type: event.type,
-      payload: event.payload,
+async findEventAfterSnapshotVersion(
+  event: Events,
+  version: number
+) {
+  const scope = getEventScope(event);
 
-      businessId: event.businessId,
-      branchId: event.branchId,
-      userId: event.userId ?? null,
+  let where: any = {
+    version: { gt: version },
+    scope
+  };
 
-      createdAt: new Date(event.createdAt),
-      syncedAt: new Date(),
-    }
+  if (scope === "BUSINESS") {
+    where.businessId = event.businessId;
+  }
+
+  if (scope === "BRANCH") {
+    where.businessId = event.businessId;
+    where.branchId = event.branchId;
+  }
+
+  return prisma.event.findMany({
+    where,
+    orderBy: { version: "asc" }
   });
+}
+
+async storeEvents(event: Events, tx: Prisma.TransactionClient) {
+  const existing = await tx.event.findUnique({
+    where: { id: event.id }
+  });
+
+  if (existing) return existing;
+
+  await this.validateLogicClock(event, tx);
+
+  for (let i = 0; i < 3; i++) {
+    try {
+      const version = await this.getNextVersion(event, tx);
+
+      return await tx.event.create({
+        data: {
+          id: event.id,
+          type: event.type,
+          payload: event.payload,
+
+          scope: getEventScope(event),
+
+          businessId: event.businessId,
+          branchId: event.branchId,
+          mode: event.mode,
+
+          createdAt: new Date(event.createdAt),
+          logicClock: event.logicClock,
+          version,
+
+          deviceId: event.deviceId,
+          userId: event.userId ?? null,
+
+          status: "SYNCED",
+          synced: true
+        }
+      });
+
+    } catch (err: any) {
+      if (err.code === "P2002") continue; // retry on unique violation
+      throw err;
+    }
+  }
+
+  throw new Error("Failed to assign version after retries");
 }
 
   async createLedger(
@@ -53,7 +110,7 @@ export class SyncRepository {
     });
 
     for (const g of grouped) {
-      await tx.accountSnapshot.upsert({
+      await tx.snapshot.upsert({
         where: {
           branchId_account: {
             branchId,
@@ -76,7 +133,7 @@ export class SyncRepository {
     return tx.processedSyncEvent.upsert({
       where: { id: event.id },
       update: {
-        status: "PROCESSED",
+        status: "SYNCED",
         error: null
       },
       create: {
@@ -86,7 +143,7 @@ export class SyncRepository {
         branchId: event.branchId ?? null,
         userId: event.userId ?? null,
         version: event.version,
-        status: "PROCESSED"
+        status: "SYNCED"
       }
     });
   }
@@ -110,4 +167,54 @@ export class SyncRepository {
       }
     });
   }
+
+async validateLogicClock(event: Events, tx: Prisma.TransactionClient) {
+  const last = await tx.event.findFirst({
+    where: { deviceId: event.deviceId },
+    orderBy: { logicClock: "desc" }
+  });
+
+ if (last && event.logicClock === last.logicClock) {
+  throw new Error("Duplicate logicClock for device");
+}
+}
+
+async getNextVersion(event: Events, tx: Prisma.TransactionClient) {
+  const scope = getEventScope(event);
+
+  let where: any = {};
+
+  if (scope === "GLOBAL") {
+    // no filters → global stream
+  }
+
+  if (scope === "BUSINESS") {
+    if (!event.businessId) {
+      throw new Error("BUSINESS scope requires businessId");
+    }
+
+    where.businessId = event.businessId;
+  }
+
+  if (scope === "BRANCH") {
+    if (!event.businessId || !event.branchId) {
+      throw new Error("BRANCH scope requires businessId + branchId");
+    }
+
+    where.businessId = event.businessId;
+    where.branchId = event.branchId;
+  }
+
+  const last = await tx.event.findFirst({
+    where,
+    orderBy: { version: "desc" }
+  });
+
+  return (last?.version ?? 0) + 1;
+}
+async alreadyProcessed(eventId: string, tx: Prisma.TransactionClient) {
+  return tx.processedSyncEvent.findUnique({
+    where: { id: eventId }
+  });
+}
 }

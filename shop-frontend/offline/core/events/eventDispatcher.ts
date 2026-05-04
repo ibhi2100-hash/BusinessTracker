@@ -30,7 +30,6 @@ export const dispatchEvent = async (event: BaseEvent) => {
       if (entries.length) {
         await db.ledgerEntries.bulkAdd(entries);
       }
-
       // 3. projection handlers
       const eventHandlers = handlers[event.type] || [];
       for (const handler of eventHandlers) {
@@ -47,6 +46,7 @@ export const dispatchEvent = async (event: BaseEvent) => {
     db.snapshots,
     db.assets,
     db.liabilities,
+    db.users
   );
 
   // emit AFTER commit

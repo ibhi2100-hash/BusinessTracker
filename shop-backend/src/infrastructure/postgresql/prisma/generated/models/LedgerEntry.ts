@@ -306,7 +306,7 @@ export type LedgerEntryScalarWhereWithAggregatesInput = {
 }
 
 export type LedgerEntryCreateInput = {
-  id: string
+  id?: string
   businessId: string
   branchId: string
   account: $Enums.Account
@@ -317,7 +317,7 @@ export type LedgerEntryCreateInput = {
 }
 
 export type LedgerEntryUncheckedCreateInput = {
-  id: string
+  id?: string
   businessId: string
   branchId: string
   eventId: string
@@ -350,7 +350,7 @@ export type LedgerEntryUncheckedUpdateInput = {
 }
 
 export type LedgerEntryCreateManyInput = {
-  id: string
+  id?: string
   businessId: string
   branchId: string
   eventId: string
@@ -486,7 +486,7 @@ export type EnumAccountFieldUpdateOperationsInput = {
 }
 
 export type LedgerEntryCreateWithoutEventInput = {
-  id: string
+  id?: string
   businessId: string
   branchId: string
   account: $Enums.Account
@@ -496,7 +496,7 @@ export type LedgerEntryCreateWithoutEventInput = {
 }
 
 export type LedgerEntryUncheckedCreateWithoutEventInput = {
-  id: string
+  id?: string
   businessId: string
   branchId: string
   account: $Enums.Account
@@ -546,7 +546,7 @@ export type LedgerEntryScalarWhereInput = {
 }
 
 export type LedgerEntryCreateManyEventInput = {
-  id: string
+  id?: string
   businessId: string
   branchId: string
   account: $Enums.Account

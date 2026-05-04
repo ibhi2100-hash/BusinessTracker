@@ -13,7 +13,7 @@ export interface BaseEvent<T extends EventType = EventType, p = any> {
 
   // sync + ordering
   createdAt: number;       // device time
-  logicalClock: number;    // monotonic per device
+  logicClock: number;    // monotonic per device
   version: number;         // per branch stream
 
   // origin

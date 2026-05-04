@@ -151,7 +151,7 @@ export interface Product {
   imageUrl?: string;
   description?: string;
 
-  cost: number;
+  costPrice: number;
   price: number;
 
   reorderLevel?: number;

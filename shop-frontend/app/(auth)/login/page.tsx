@@ -6,7 +6,6 @@ import { loginSchema, LoginInput } from "@/lib/validations/auth.schema";
 import { useRouter } from "next/navigation";
 import { useAutoLogin } from "@/hooks/useAutoLogin";
 import { useAuthStore } from "@/src/store/useAuthStore";
-import { hydrateStores } from "@/offline/features/hydration/actions/hydrationStore";
 import Link from "next/link";
 import { AuthService } from "@/src/services/authService";
 import { useState } from "react";
@@ -49,12 +48,6 @@ export default function LoginPage() {
         throw new Error(result.message || "Login failed");
       }
       // 2️⃣ Hydrate Zustand (from API payload)
-            hydrateStores({
-              user: result.user,
-              accessToken: result.accessToken,
-              expiresAt: result.expiresIn,
-            });
-      
       useAuthStore.getState().setUser(result.user);
       login(result.user, result.accessToken, result.expiresIn, result.branches, result.activeBranch.id )
       // persist offline

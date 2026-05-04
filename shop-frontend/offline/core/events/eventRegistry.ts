@@ -1,3 +1,4 @@
+import { BusinessEventTypes } from "./eventGroups/businessEvents";
 import { financeEventType } from "./eventGroups/financeEvent";
 import { InventoryEventType } from "./eventGroups/inventoryEvents";
 import { OpeninigEventType } from "./eventGroups/openingEvents";
@@ -19,6 +20,15 @@ export const eventValidators: Record<string, (event: any) => boolean> = {
     typeof p.branch?.name === "string"
   );
 },
+
+ [BusinessEventTypes.BUSINESS_ACTIVATION]: (event) => {
+
+  return (
+    !!event.userId &&
+    !!event.businessId &&
+    !!event.branchId 
+  );
+},
 //Opening Event 
 [OpeninigEventType.OPENING_INVENTORY_CREATED]: (event) => {
     const p = event.payload;
@@ -31,6 +41,19 @@ export const eventValidators: Record<string, (event: any) => boolean> = {
       typeof p.costPrice === "number"
     );
   },
+  [financeEventType.OPENING_CAPITAL]: (event) => {
+    const p = event.payload;
+    console.log("The payload in the Opening Capital", p)
+
+    return (
+      !!event.businessId &&                     // REQUIRED here
+      !!event.branchId &&
+      typeof p.amount === "number" &&
+      p.amount > 0
+    );
+  },
+
+
 
 
   // ✅ OPERATIONAL EVENT
@@ -41,8 +64,44 @@ export const eventValidators: Record<string, (event: any) => boolean> = {
       !!event.businessId &&                     // REQUIRED here
       !!event.branchId &&
       typeof p.name === "string" &&
-      typeof p.cost === "number" &&
+      typeof p.costPrice === "number" &&
       typeof p.price === "number"
+    );
+  },
+  [InventoryEventType.INVENTORY_UPDATED]: (event) => {
+  const p = event.payload;
+
+  return (
+    !!event.businessId &&
+    !!event.branchId &&
+    typeof p.productId === "string" &&
+    typeof p.quantityDelta === "number"
+  );
+},
+ [financeEventType.CASH_ADDED]: (event) => {
+    const p = event.payload;
+
+    return (
+      !!event.businessId &&                     // REQUIRED here
+      !!event.branchId &&
+      typeof p.amount === "number" &&
+      p.amount > 0
+    );
+  },
+
+    [salesEventType.SALE_ADDED]: (event) => {
+    const p = event.payload;
+
+    return (
+      !!event.businessId &&                     // REQUIRED here
+      !!event.branchId &&
+      !!p.productId &&
+      typeof p.productId === "string" &&
+      typeof p.amount === "number" &&
+      p.amount > 0 &&
+      typeof p.costPrice === "number" &&
+      typeof p.quantity === "number" &&
+      p.quantity > 0
     );
   },
 
