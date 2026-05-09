@@ -1,6 +1,6 @@
 // /offline/db/clearUserData.ts
 
-import { useAuthStore } from "@/store/useAuthStore";
+import { useAuthStore } from "@/src/store/useAuthStore";
 
 export async function clearUserData() {
   const user = useAuthStore.getState().user;

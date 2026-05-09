@@ -1,11 +1,10 @@
-import { nanoid } from "nanoid";
 import { AppDB } from "@/src/db";
 import { BaseEvent } from "../../types";
 
 
 export const InventoryHandler = {
   async openingInventory(db: AppDB, event: BaseEvent) {
-    const { productId, quantity, costPrice } = event.payload;
+    const { id,  productId, quantity, costPrice } = event.payload;
 
     const existing = await db.inventory
       .where("[productId+branchId]")
@@ -19,7 +18,7 @@ export const InventoryHandler = {
       });
     } else {
       await db.inventory.add({
-        id: nanoid(),
+        id,
         productId,
         branchId: event.branchId,
         quantity,

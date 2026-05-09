@@ -82,7 +82,7 @@ export class AppDB extends Dexie {
 
     this.version(DB_VERSION).stores({
       events:
-        "id,status,synced,type,createdAt,businessId,branchId,[status+synced],[type+createdAt]",
+        "id,status,synced,type,createdAt,businessId,branchId,aggregateId,aggregateType,[status+synced],[type+createdAt],[aggregateType+aggregateId]",
 
       inventory:
         "id,productId,branchId,updatedAt,[productId+branchId]",

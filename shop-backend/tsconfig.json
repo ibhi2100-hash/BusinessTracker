@@ -3,8 +3,8 @@
     /* =========================
        Project Structure
     ========================== */
-    "rootDir": "src",
-    "outDir": "dist",
+      "rootDir": "..",
+      "outDir": "dist",
 
     /* =========================
        Module System (Node ESM)
@@ -56,6 +56,6 @@
   /* =========================
      Compilation Scope
   ========================== */
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../shared/**/*"],
   "exclude": ["node_modules", "dist"]
 }

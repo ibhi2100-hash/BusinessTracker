@@ -13,6 +13,7 @@ export const repayLiabilitySchema = z.object({
     (val) => (val ? new Date(val as string) : new Date()),
     z.date()
   ),
+  payload: z.object
 });
 
 export type RepayLiabilityInput =

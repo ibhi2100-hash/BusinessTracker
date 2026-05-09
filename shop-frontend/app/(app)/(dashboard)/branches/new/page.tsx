@@ -2,14 +2,14 @@
 "use client";
 
 import { useState } from "react";
-import { useAddBranch } from "@/hooks/useAddBranch";
-import { useBranchStore } from "@/store/useBranchStore";
+import { useBranchStore } from "@/src/store/useBranchStore";
 import { useRouter } from "next/navigation";
 
 export default function AddBranchPage() {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
   const [branchName, setBranchName] = useState("");
   const router = useRouter();
-  const addBranchMutation = useAddBranch();
   const branches = useBranchStore((s) => s.branches);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -17,7 +17,6 @@ export default function AddBranchPage() {
     if (!branchName.trim()) return;
 
     try {
-      await addBranchMutation.mutateAsync(branchName);
       setBranchName(""); // reset form after successful add
       router.push('/dashboard')
     } catch (err) {
@@ -39,14 +38,14 @@ export default function AddBranchPage() {
         />
         <button
           type="submit"
-          disabled={addBranchMutation.isLoading}
+          disabled={loading}
           className="bg-blue-500 text-white p-2 rounded disabled:opacity-50"
         >
-          {addBranchMutation.isLoading ? "Adding..." : "Add"}
+          {loading ? "Adding..." : "Add"}
         </button>
       </form>
 
-      {addBranchMutation.isError && (
+      {error && (
         <p className="text-red-500 mt-2">
           Failed to add branch. Please try again.
         </p>

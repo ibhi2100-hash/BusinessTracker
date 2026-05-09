@@ -1,30 +1,43 @@
 export type EventScope = "GLOBAL" | "BUSINESS" | "BRANCH";  
 
-export interface Events {
-    id: string;
+export interface Event {
+  // EVENT ID
+  id: string;
 
-    type: string;
-    payload: any;
+  // STREAM / AGGREGATE
+  aggregateId: string;
+  aggregateType: string;
 
-    branchId: string;
-    businessId: string;
+  // EVENT INFO
+  type: string;
+  payload: Record<string, any>;
 
-    mode: "OPENING" | "LIVE"
+  // TENANCY
+  businessId?: string | null;
 
-    // sync + ordering 
+  branchId?: string | null;
 
-    createdAt: Date;
-    logicClock: number;
-    version: number;
+  // OPERATING MODE
+  mode: "OPENING" | "LIVE";
 
-    //origin
-    deviceId: string;
-    userId: string;
+  // STREAM VERSIONING
+  version: number;
 
-    //sync state
+  // DEVICE ORDERING
+  logicClock: number;
 
-    status: "pending" | "synced" | "failed";
-    synced: boolean;
-    
-    
+  // SYNC SCOPE
+  scope: EventScope;
+
+  // EVENT ORIGIN
+  deviceId: string;
+  userId?: string | null;
+
+  // SYNC STATUS
+  status: "PENDING" | "SYNCED" | "FAILED";
+
+  synced: boolean;
+
+  // TIMESTAMPS
+  createdAt: Date;
 }

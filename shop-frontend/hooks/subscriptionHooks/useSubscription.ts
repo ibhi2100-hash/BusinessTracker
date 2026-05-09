@@ -1,8 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { subscriptionService } from "@/services/subscriptionService";
-import { useSubscriptionStore } from "@/store/useSubscriptionStore";
+import { useSubscriptionStore } from "@/src/store/useSubscriptionStore";
 import { useEffect } from "react";
-import { saveSubscription } from "@/lib/subscriptionHelpers";
 
 export const useSubscription = () => {
   const setSubscription = useSubscriptionStore(
@@ -12,7 +10,7 @@ export const useSubscription = () => {
   const query = useQuery({
     queryKey: ["subscription"],
     queryFn: async () => {
-      const res = await subscriptionService.getSubscription();
+      const res = [];
       const subscription = await res // must await
 
       return subscription;
@@ -22,7 +20,7 @@ export const useSubscription = () => {
 useEffect(() => {
     if (query.data) {
         setSubscription(query.data);
-        async()=> await saveSubscription(query.data)
+        async()=> console.log(query.data)
     }
   }, [query.data]);
 

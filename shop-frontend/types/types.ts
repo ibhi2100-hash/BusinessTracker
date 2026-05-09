@@ -57,29 +57,6 @@ export type SalePayload = {
   paymentMethod: PaymentMethod;
 };
 
-// ===========================
-// LEDGER CORE (FIXED)
-// ===========================
-export type LedgerTransaction = {
-  id: string;
-  businessId: string;
-  branchId: string;
-  description?: string;
-  reference?: string;
-  createdAt: number;
-};
-
-export type LedgerEntry = {
-  id: string;
-  transactionId: string;
-  accountId: AccountType;
-  debit: number;
-  credit: number;
-  businessId: string;
-  branchId: string;
-  createdAt: number;
-};
-
 // ---------------------------
 // USER
 // ---------------------------
@@ -153,6 +130,8 @@ export interface Product {
 
   costPrice: number;
   price: number;
+
+  category?: string; 
 
   reorderLevel?: number;
 

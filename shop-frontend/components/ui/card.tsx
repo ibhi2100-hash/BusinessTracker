@@ -1,14 +1,15 @@
-import { ReactNode } from "react";
+import { ReactEventHandler, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 interface CardProps {
   title?: string;
   value?: number;
 
-  children: ReactNode;
+  children?: ReactNode;
   className?: string;
   variant?: "default" | "gradient";
   gradient?: string;
+  onClick?: ReactEventHandler
 }
 
 export const Card = ({

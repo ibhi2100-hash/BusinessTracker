@@ -7,19 +7,31 @@ import { salesEventType } from "./eventGroups/salesEvent";
 export const eventValidators: Record<string, (event: any) => boolean> = {
 
   // ✅ BOOTSTRAP EVENT
-  BUSINESS_CREATED: (event) => {
+ [BusinessEventTypes.BUSINESS_CREATED]: (event) => {
   const p = event.payload;
 
   return (
     !!event.userId &&
     event.businessId == null &&
     event.branchId == null &&
-    typeof p.business?.id === "string" &&
-    typeof p.business?.name === "string" &&
-    typeof p.branch?.id === "string" &&
-    typeof p.branch?.name === "string"
+    typeof p.id === "string" &&
+    typeof p.name === "string" &&
+    typeof p.address === "string"
   );
 },
+ [BusinessEventTypes.BRANCH_CREATED]: (event) => {
+  const p = event.payload;
+
+  return (
+    !!event.userId &&
+    !!event.businessId &&
+    event.branchId == null &&
+    typeof p.id === "string" &&
+    typeof p.name === "string" &&
+    typeof p.businessId === "string"
+  );
+},
+
 
  [BusinessEventTypes.BUSINESS_ACTIVATION]: (event) => {
 

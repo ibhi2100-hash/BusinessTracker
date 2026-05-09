@@ -1,8 +1,8 @@
 "use client"
 
 import { useEffect } from "react";
-import { getSubscriptionCache } from "@/lib/subscriptionHelpers";
-import { useSubscriptionStore } from "@/store/useSubscriptionStore";
+
+import { useSubscriptionStore } from "@/src/store/useSubscriptionStore";
 
 export const useInitializeSubscription = () => {
   const setSubscription = useSubscriptionStore(
@@ -12,7 +12,7 @@ export const useInitializeSubscription = () => {
   useEffect(() => {
     
     const hydrate = async () => {
-      const cached = await getSubscriptionCache();
+      const cached = [];
 
       if (cached) {
         setSubscription(cached);

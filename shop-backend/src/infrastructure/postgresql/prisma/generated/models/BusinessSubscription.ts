@@ -262,7 +262,7 @@ export type BusinessSubscriptionCreateInput = {
   trialEndDate?: Date | string | null
   status?: string
   business: Prisma.BusinessCreateNestedOneWithoutSubscriptionsInput
-  subscription: Prisma.SubscriptionPlanCreateNestedOneWithoutSubscriptionInput
+  subscription: Prisma.SubscriptionPlanCreateNestedOneWithoutSubscriptionsInput
 }
 
 export type BusinessSubscriptionUncheckedCreateInput = {
@@ -282,7 +282,7 @@ export type BusinessSubscriptionUpdateInput = {
   trialEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutSubscriptionsNestedInput
-  subscription?: Prisma.SubscriptionPlanUpdateOneRequiredWithoutSubscriptionNestedInput
+  subscription?: Prisma.SubscriptionPlanUpdateOneRequiredWithoutSubscriptionsNestedInput
 }
 
 export type BusinessSubscriptionUncheckedUpdateInput = {
@@ -453,7 +453,7 @@ export type BusinessSubscriptionCreateWithoutBusinessInput = {
   expiresAt: Date | string
   trialEndDate?: Date | string | null
   status?: string
-  subscription: Prisma.SubscriptionPlanCreateNestedOneWithoutSubscriptionInput
+  subscription: Prisma.SubscriptionPlanCreateNestedOneWithoutSubscriptionsInput
 }
 
 export type BusinessSubscriptionUncheckedCreateWithoutBusinessInput = {
@@ -563,7 +563,7 @@ export type BusinessSubscriptionUpdateWithoutBusinessInput = {
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   trialEndDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  subscription?: Prisma.SubscriptionPlanUpdateOneRequiredWithoutSubscriptionNestedInput
+  subscription?: Prisma.SubscriptionPlanUpdateOneRequiredWithoutSubscriptionsNestedInput
 }
 
 export type BusinessSubscriptionUncheckedUpdateWithoutBusinessInput = {

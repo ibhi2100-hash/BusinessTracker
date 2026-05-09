@@ -4,35 +4,42 @@ import { BaseEvent } from "../../types";
 
 export const BusinessHandler = {
 
-    async create (db: AppDB, event: BaseEvent ) {
-        const { business, branch } = event.payload;
+    async createBusiness (db: AppDB, event: BaseEvent ) {
+        const  { id, name, address} = event.payload
 
-        const existingBusiness = await db.businesses.get(business.id);
-        const existingBranch = await db.branches.get(branch.id);
+        const existingBusiness = await db.businesses.get(id);
 
         if (existingBusiness) {
             throw new Error("Business already exists");
             }
-
-            if (existingBranch) {
-            throw new Error("Branch already exists");
-            }
-            
+   
 
         await db.businesses.add({
-            ...business,
+            id,
+            name,
+            address,
             userId: event.userId,
-            createdAt: Date.now(),
+            createdAt: event.createdAt,
             isOnboarding: true,
             onboardingCompleted: false,
             status: "ONBOARDING"
         });
+    },
+    async createBranch(db: AppDB, event: BaseEvent){
+        const { id, businessId, name, phone } = event.payload
+
+        const existingBranch = await db.branches.get(id);
+        if(existingBranch) throw new Error("Branch already Exist")
+
         await db.branches.add({
-            ...branch,
-            businessId: business.id,
+            id,
+            name,
+            phone,
+            businessId,
             isActive: true,
             isDefault: true,
-            createdAt: Date.now()
+            createdAt: event.createdAt
+
         })
     },
     async activate(db: AppDB, event: BaseEvent){

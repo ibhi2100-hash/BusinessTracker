@@ -26,40 +26,43 @@ export type AggregateUser = {
 
 export type UserMinAggregateOutputType = {
   id: string | null
+  businessId: string | null
+  branchId: string | null
+  branchBusinessId: string | null
   name: string | null
   email: string | null
   password: string | null
   role: $Enums.Role | null
   isActive: boolean | null
   onboardingCompleted: boolean | null
-  branchId: string | null
-  businessId: string | null
   createdAt: Date | null
 }
 
 export type UserMaxAggregateOutputType = {
   id: string | null
+  businessId: string | null
+  branchId: string | null
+  branchBusinessId: string | null
   name: string | null
   email: string | null
   password: string | null
   role: $Enums.Role | null
   isActive: boolean | null
   onboardingCompleted: boolean | null
-  branchId: string | null
-  businessId: string | null
   createdAt: Date | null
 }
 
 export type UserCountAggregateOutputType = {
   id: number
+  businessId: number
+  branchId: number
+  branchBusinessId: number
   name: number
   email: number
   password: number
   role: number
   isActive: number
   onboardingCompleted: number
-  branchId: number
-  businessId: number
   createdAt: number
   _all: number
 }
@@ -67,40 +70,43 @@ export type UserCountAggregateOutputType = {
 
 export type UserMinAggregateInputType = {
   id?: true
+  businessId?: true
+  branchId?: true
+  branchBusinessId?: true
   name?: true
   email?: true
   password?: true
   role?: true
   isActive?: true
   onboardingCompleted?: true
-  branchId?: true
-  businessId?: true
   createdAt?: true
 }
 
 export type UserMaxAggregateInputType = {
   id?: true
+  businessId?: true
+  branchId?: true
+  branchBusinessId?: true
   name?: true
   email?: true
   password?: true
   role?: true
   isActive?: true
   onboardingCompleted?: true
-  branchId?: true
-  businessId?: true
   createdAt?: true
 }
 
 export type UserCountAggregateInputType = {
   id?: true
+  businessId?: true
+  branchId?: true
+  branchBusinessId?: true
   name?: true
   email?: true
   password?: true
   role?: true
   isActive?: true
   onboardingCompleted?: true
-  branchId?: true
-  businessId?: true
   createdAt?: true
   _all?: true
 }
@@ -179,14 +185,15 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 
 export type UserGroupByOutputType = {
   id: string
+  businessId: string | null
+  branchId: string | null
+  branchBusinessId: string | null
   name: string
   email: string
   password: string
   role: $Enums.Role
   isActive: boolean
   onboardingCompleted: boolean
-  branchId: string | null
-  businessId: string | null
   createdAt: Date
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
@@ -213,34 +220,40 @@ export type UserWhereInput = {
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   id?: Prisma.StringFilter<"User"> | string
+  businessId?: Prisma.StringNullableFilter<"User"> | string | null
+  branchId?: Prisma.StringNullableFilter<"User"> | string | null
+  branchBusinessId?: Prisma.StringNullableFilter<"User"> | string | null
   name?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   isActive?: Prisma.BoolFilter<"User"> | boolean
   onboardingCompleted?: Prisma.BoolFilter<"User"> | boolean
-  branchId?: Prisma.StringNullableFilter<"User"> | string | null
-  businessId?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessNullableScalarRelationFilter, Prisma.BusinessWhereInput> | null
   branch?: Prisma.XOR<Prisma.BranchNullableScalarRelationFilter, Prisma.BranchWhereInput> | null
+  ownedBusinesses?: Prisma.BusinessListRelationFilter
   passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
+  events?: Prisma.EventListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  businessId?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchBusinessId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   role?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   onboardingCompleted?: Prisma.SortOrder
-  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
-  businessId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   business?: Prisma.BusinessOrderByWithRelationInput
   branch?: Prisma.BranchOrderByWithRelationInput
-  passwordResetTokens?: Prisma.passwordResetTokenOrderByRelationAggregateInput
+  ownedBusinesses?: Prisma.BusinessOrderByRelationAggregateInput
+  passwordResetTokens?: Prisma.PasswordResetTokenOrderByRelationAggregateInput
+  events?: Prisma.EventOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -249,29 +262,33 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
+  businessId?: Prisma.StringNullableFilter<"User"> | string | null
+  branchId?: Prisma.StringNullableFilter<"User"> | string | null
+  branchBusinessId?: Prisma.StringNullableFilter<"User"> | string | null
   name?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   isActive?: Prisma.BoolFilter<"User"> | boolean
   onboardingCompleted?: Prisma.BoolFilter<"User"> | boolean
-  branchId?: Prisma.StringNullableFilter<"User"> | string | null
-  businessId?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessNullableScalarRelationFilter, Prisma.BusinessWhereInput> | null
   branch?: Prisma.XOR<Prisma.BranchNullableScalarRelationFilter, Prisma.BranchWhereInput> | null
+  ownedBusinesses?: Prisma.BusinessListRelationFilter
   passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
+  events?: Prisma.EventListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  businessId?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchBusinessId?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   role?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   onboardingCompleted?: Prisma.SortOrder
-  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
-  businessId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
@@ -283,14 +300,15 @@ export type UserScalarWhereWithAggregatesInput = {
   OR?: Prisma.UserScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"User"> | string
+  businessId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  branchId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  branchBusinessId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   name?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   password?: Prisma.StringWithAggregatesFilter<"User"> | string
   role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
   isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   onboardingCompleted?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
-  branchId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
-  businessId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
 
@@ -305,21 +323,26 @@ export type UserCreateInput = {
   createdAt?: Date | string
   business?: Prisma.BusinessCreateNestedOneWithoutUsersInput
   branch?: Prisma.BranchCreateNestedOneWithoutUsersInput
-  passwordResetTokens?: Prisma.passwordResetTokenCreateNestedManyWithoutUserInput
+  ownedBusinesses?: Prisma.BusinessCreateNestedManyWithoutOwnerInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  events?: Prisma.EventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
   id?: string
+  businessId?: string | null
+  branchId?: string | null
+  branchBusinessId?: string | null
   name: string
   email: string
   password: string
   role?: $Enums.Role
   isActive?: boolean
   onboardingCompleted?: boolean
-  branchId?: string | null
-  businessId?: string | null
   createdAt?: Date | string
-  passwordResetTokens?: Prisma.passwordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  ownedBusinesses?: Prisma.BusinessUncheckedCreateNestedManyWithoutOwnerInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -333,33 +356,39 @@ export type UserUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneWithoutUsersNestedInput
   branch?: Prisma.BranchUpdateOneWithoutUsersNestedInput
-  passwordResetTokens?: Prisma.passwordResetTokenUpdateManyWithoutUserNestedInput
+  ownedBusinesses?: Prisma.BusinessUpdateManyWithoutOwnerNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  events?: Prisma.EventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  passwordResetTokens?: Prisma.passwordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  ownedBusinesses?: Prisma.BusinessUncheckedUpdateManyWithoutOwnerNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
   id?: string
+  businessId?: string | null
+  branchId?: string | null
+  branchBusinessId?: string | null
   name: string
   email: string
   password: string
   role?: $Enums.Role
   isActive?: boolean
   onboardingCompleted?: boolean
-  branchId?: string | null
-  businessId?: string | null
   createdAt?: Date | string
 }
 
@@ -376,15 +405,21 @@ export type UserUpdateManyMutationInput = {
 
 export type UserUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
 }
 
 export type UserListRelationFilter = {
@@ -399,46 +434,55 @@ export type UserOrderByRelationAggregateInput = {
 
 export type UserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  businessId?: Prisma.SortOrder
+  branchId?: Prisma.SortOrder
+  branchBusinessId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   role?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   onboardingCompleted?: Prisma.SortOrder
-  branchId?: Prisma.SortOrder
-  businessId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  businessId?: Prisma.SortOrder
+  branchId?: Prisma.SortOrder
+  branchBusinessId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   role?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   onboardingCompleted?: Prisma.SortOrder
-  branchId?: Prisma.SortOrder
-  businessId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  businessId?: Prisma.SortOrder
+  branchId?: Prisma.SortOrder
+  branchBusinessId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
   role?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   onboardingCompleted?: Prisma.SortOrder
-  branchId?: Prisma.SortOrder
-  businessId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
   is?: Prisma.UserWhereInput
   isNot?: Prisma.UserWhereInput
+}
+
+export type UserCreateNestedOneWithoutOwnedBusinessesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOwnedBusinessesInput, Prisma.UserUncheckedCreateWithoutOwnedBusinessesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOwnedBusinessesInput
+  connect?: Prisma.UserWhereUniqueInput
 }
 
 export type UserCreateNestedManyWithoutBusinessInput = {
@@ -453,6 +497,16 @@ export type UserUncheckedCreateNestedManyWithoutBusinessInput = {
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutBusinessInput | Prisma.UserCreateOrConnectWithoutBusinessInput[]
   createMany?: Prisma.UserCreateManyBusinessInputEnvelope
   connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUpdateOneWithoutOwnedBusinessesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOwnedBusinessesInput, Prisma.UserUncheckedCreateWithoutOwnedBusinessesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOwnedBusinessesInput
+  upsert?: Prisma.UserUpsertWithoutOwnedBusinessesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOwnedBusinessesInput, Prisma.UserUpdateWithoutOwnedBusinessesInput>, Prisma.UserUncheckedUpdateWithoutOwnedBusinessesInput>
 }
 
 export type UserUpdateManyWithoutBusinessNestedInput = {
@@ -543,6 +597,58 @@ export type UserUpdateOneRequiredWithoutPasswordResetTokensNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPasswordResetTokensInput, Prisma.UserUpdateWithoutPasswordResetTokensInput>, Prisma.UserUncheckedUpdateWithoutPasswordResetTokensInput>
 }
 
+export type UserCreateNestedOneWithoutEventsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEventsInput, Prisma.UserUncheckedCreateWithoutEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEventsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEventsInput, Prisma.UserUncheckedCreateWithoutEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEventsInput
+  upsert?: Prisma.UserUpsertWithoutEventsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEventsInput, Prisma.UserUpdateWithoutEventsInput>, Prisma.UserUncheckedUpdateWithoutEventsInput>
+}
+
+export type UserCreateWithoutOwnedBusinessesInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  role?: $Enums.Role
+  isActive?: boolean
+  onboardingCompleted?: boolean
+  createdAt?: Date | string
+  business?: Prisma.BusinessCreateNestedOneWithoutUsersInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUsersInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  events?: Prisma.EventCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutOwnedBusinessesInput = {
+  id?: string
+  businessId?: string | null
+  branchId?: string | null
+  branchBusinessId?: string | null
+  name: string
+  email: string
+  password: string
+  role?: $Enums.Role
+  isActive?: boolean
+  onboardingCompleted?: boolean
+  createdAt?: Date | string
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutOwnedBusinessesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutOwnedBusinessesInput, Prisma.UserUncheckedCreateWithoutOwnedBusinessesInput>
+}
+
 export type UserCreateWithoutBusinessInput = {
   id?: string
   name: string
@@ -553,20 +659,25 @@ export type UserCreateWithoutBusinessInput = {
   onboardingCompleted?: boolean
   createdAt?: Date | string
   branch?: Prisma.BranchCreateNestedOneWithoutUsersInput
-  passwordResetTokens?: Prisma.passwordResetTokenCreateNestedManyWithoutUserInput
+  ownedBusinesses?: Prisma.BusinessCreateNestedManyWithoutOwnerInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  events?: Prisma.EventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBusinessInput = {
   id?: string
+  branchId?: string | null
+  branchBusinessId?: string | null
   name: string
   email: string
   password: string
   role?: $Enums.Role
   isActive?: boolean
   onboardingCompleted?: boolean
-  branchId?: string | null
   createdAt?: Date | string
-  passwordResetTokens?: Prisma.passwordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  ownedBusinesses?: Prisma.BusinessUncheckedCreateNestedManyWithoutOwnerInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBusinessInput = {
@@ -577,6 +688,48 @@ export type UserCreateOrConnectWithoutBusinessInput = {
 export type UserCreateManyBusinessInputEnvelope = {
   data: Prisma.UserCreateManyBusinessInput | Prisma.UserCreateManyBusinessInput[]
   skipDuplicates?: boolean
+}
+
+export type UserUpsertWithoutOwnedBusinessesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutOwnedBusinessesInput, Prisma.UserUncheckedUpdateWithoutOwnedBusinessesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOwnedBusinessesInput, Prisma.UserUncheckedCreateWithoutOwnedBusinessesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutOwnedBusinessesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutOwnedBusinessesInput, Prisma.UserUncheckedUpdateWithoutOwnedBusinessesInput>
+}
+
+export type UserUpdateWithoutOwnedBusinessesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  business?: Prisma.BusinessUpdateOneWithoutUsersNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUsersNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  events?: Prisma.EventUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutOwnedBusinessesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithWhereUniqueWithoutBusinessInput = {
@@ -600,14 +753,15 @@ export type UserScalarWhereInput = {
   OR?: Prisma.UserScalarWhereInput[]
   NOT?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
   id?: Prisma.StringFilter<"User"> | string
+  businessId?: Prisma.StringNullableFilter<"User"> | string | null
+  branchId?: Prisma.StringNullableFilter<"User"> | string | null
+  branchBusinessId?: Prisma.StringNullableFilter<"User"> | string | null
   name?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   isActive?: Prisma.BoolFilter<"User"> | boolean
   onboardingCompleted?: Prisma.BoolFilter<"User"> | boolean
-  branchId?: Prisma.StringNullableFilter<"User"> | string | null
-  businessId?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
 }
 
@@ -621,20 +775,24 @@ export type UserCreateWithoutBranchInput = {
   onboardingCompleted?: boolean
   createdAt?: Date | string
   business?: Prisma.BusinessCreateNestedOneWithoutUsersInput
-  passwordResetTokens?: Prisma.passwordResetTokenCreateNestedManyWithoutUserInput
+  ownedBusinesses?: Prisma.BusinessCreateNestedManyWithoutOwnerInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  events?: Prisma.EventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBranchInput = {
   id?: string
+  businessId?: string | null
   name: string
   email: string
   password: string
   role?: $Enums.Role
   isActive?: boolean
   onboardingCompleted?: boolean
-  businessId?: string | null
   createdAt?: Date | string
-  passwordResetTokens?: Prisma.passwordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  ownedBusinesses?: Prisma.BusinessUncheckedCreateNestedManyWithoutOwnerInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBranchInput = {
@@ -674,19 +832,24 @@ export type UserCreateWithoutPasswordResetTokensInput = {
   createdAt?: Date | string
   business?: Prisma.BusinessCreateNestedOneWithoutUsersInput
   branch?: Prisma.BranchCreateNestedOneWithoutUsersInput
+  ownedBusinesses?: Prisma.BusinessCreateNestedManyWithoutOwnerInput
+  events?: Prisma.EventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
   id?: string
+  businessId?: string | null
+  branchId?: string | null
+  branchBusinessId?: string | null
   name: string
   email: string
   password: string
   role?: $Enums.Role
   isActive?: boolean
   onboardingCompleted?: boolean
-  branchId?: string | null
-  businessId?: string | null
   createdAt?: Date | string
+  ownedBusinesses?: Prisma.BusinessUncheckedCreateNestedManyWithoutOwnerInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPasswordResetTokensInput = {
@@ -716,22 +879,27 @@ export type UserUpdateWithoutPasswordResetTokensInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneWithoutUsersNestedInput
   branch?: Prisma.BranchUpdateOneWithoutUsersNestedInput
+  ownedBusinesses?: Prisma.BusinessUpdateManyWithoutOwnerNestedInput
+  events?: Prisma.EventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ownedBusinesses?: Prisma.BusinessUncheckedUpdateManyWithoutOwnerNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutUserNestedInput
 }
 
-export type UserCreateManyBusinessInput = {
+export type UserCreateWithoutEventsInput = {
   id?: string
   name: string
   email: string
@@ -739,7 +907,86 @@ export type UserCreateManyBusinessInput = {
   role?: $Enums.Role
   isActive?: boolean
   onboardingCompleted?: boolean
+  createdAt?: Date | string
+  business?: Prisma.BusinessCreateNestedOneWithoutUsersInput
+  branch?: Prisma.BranchCreateNestedOneWithoutUsersInput
+  ownedBusinesses?: Prisma.BusinessCreateNestedManyWithoutOwnerInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutEventsInput = {
+  id?: string
+  businessId?: string | null
   branchId?: string | null
+  branchBusinessId?: string | null
+  name: string
+  email: string
+  password: string
+  role?: $Enums.Role
+  isActive?: boolean
+  onboardingCompleted?: boolean
+  createdAt?: Date | string
+  ownedBusinesses?: Prisma.BusinessUncheckedCreateNestedManyWithoutOwnerInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutEventsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutEventsInput, Prisma.UserUncheckedCreateWithoutEventsInput>
+}
+
+export type UserUpsertWithoutEventsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutEventsInput, Prisma.UserUncheckedUpdateWithoutEventsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutEventsInput, Prisma.UserUncheckedCreateWithoutEventsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutEventsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutEventsInput, Prisma.UserUncheckedUpdateWithoutEventsInput>
+}
+
+export type UserUpdateWithoutEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  business?: Prisma.BusinessUpdateOneWithoutUsersNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutUsersNestedInput
+  ownedBusinesses?: Prisma.BusinessUpdateManyWithoutOwnerNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ownedBusinesses?: Prisma.BusinessUncheckedUpdateManyWithoutOwnerNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateManyBusinessInput = {
+  id?: string
+  branchId?: string | null
+  branchBusinessId?: string | null
+  name: string
+  email: string
+  password: string
+  role?: $Enums.Role
+  isActive?: boolean
+  onboardingCompleted?: boolean
   createdAt?: Date | string
 }
 
@@ -753,43 +1000,49 @@ export type UserUpdateWithoutBusinessInput = {
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   branch?: Prisma.BranchUpdateOneWithoutUsersNestedInput
-  passwordResetTokens?: Prisma.passwordResetTokenUpdateManyWithoutUserNestedInput
+  ownedBusinesses?: Prisma.BusinessUpdateManyWithoutOwnerNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  events?: Prisma.EventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  passwordResetTokens?: Prisma.passwordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  ownedBusinesses?: Prisma.BusinessUncheckedUpdateManyWithoutOwnerNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UserCreateManyBranchInput = {
   id?: string
+  businessId?: string | null
   name: string
   email: string
   password: string
   role?: $Enums.Role
   isActive?: boolean
   onboardingCompleted?: boolean
-  businessId?: string | null
   createdAt?: Date | string
 }
 
@@ -803,31 +1056,35 @@ export type UserUpdateWithoutBranchInput = {
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneWithoutUsersNestedInput
-  passwordResetTokens?: Prisma.passwordResetTokenUpdateManyWithoutUserNestedInput
+  ownedBusinesses?: Prisma.BusinessUpdateManyWithoutOwnerNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  events?: Prisma.EventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  passwordResetTokens?: Prisma.passwordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  ownedBusinesses?: Prisma.BusinessUncheckedUpdateManyWithoutOwnerNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -837,11 +1094,15 @@ export type UserUncheckedUpdateManyWithoutBranchInput = {
  */
 
 export type UserCountOutputType = {
+  ownedBusinesses: number
   passwordResetTokens: number
+  events: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  ownedBusinesses?: boolean | UserCountOutputTypeCountOwnedBusinessesArgs
   passwordResetTokens?: boolean | UserCountOutputTypeCountPasswordResetTokensArgs
+  events?: boolean | UserCountOutputTypeCountEventsArgs
 }
 
 /**
@@ -857,38 +1118,56 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountOwnedBusinessesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BusinessWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountPasswordResetTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.passwordResetTokenWhereInput
+  where?: Prisma.PasswordResetTokenWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EventWhereInput
 }
 
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  businessId?: boolean
+  branchId?: boolean
+  branchBusinessId?: boolean
   name?: boolean
   email?: boolean
   password?: boolean
   role?: boolean
   isActive?: boolean
   onboardingCompleted?: boolean
-  branchId?: boolean
-  businessId?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.User$businessArgs<ExtArgs>
   branch?: boolean | Prisma.User$branchArgs<ExtArgs>
+  ownedBusinesses?: boolean | Prisma.User$ownedBusinessesArgs<ExtArgs>
   passwordResetTokens?: boolean | Prisma.User$passwordResetTokensArgs<ExtArgs>
+  events?: boolean | Prisma.User$eventsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  businessId?: boolean
+  branchId?: boolean
+  branchBusinessId?: boolean
   name?: boolean
   email?: boolean
   password?: boolean
   role?: boolean
   isActive?: boolean
   onboardingCompleted?: boolean
-  branchId?: boolean
-  businessId?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.User$businessArgs<ExtArgs>
   branch?: boolean | Prisma.User$branchArgs<ExtArgs>
@@ -896,14 +1175,15 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  businessId?: boolean
+  branchId?: boolean
+  branchBusinessId?: boolean
   name?: boolean
   email?: boolean
   password?: boolean
   role?: boolean
   isActive?: boolean
   onboardingCompleted?: boolean
-  branchId?: boolean
-  businessId?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.User$businessArgs<ExtArgs>
   branch?: boolean | Prisma.User$branchArgs<ExtArgs>
@@ -911,22 +1191,25 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 
 export type UserSelectScalar = {
   id?: boolean
+  businessId?: boolean
+  branchId?: boolean
+  branchBusinessId?: boolean
   name?: boolean
   email?: boolean
   password?: boolean
   role?: boolean
   isActive?: boolean
   onboardingCompleted?: boolean
-  branchId?: boolean
-  businessId?: boolean
   createdAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "isActive" | "onboardingCompleted" | "branchId" | "businessId" | "createdAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "branchBusinessId" | "name" | "email" | "password" | "role" | "isActive" | "onboardingCompleted" | "createdAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.User$businessArgs<ExtArgs>
   branch?: boolean | Prisma.User$branchArgs<ExtArgs>
+  ownedBusinesses?: boolean | Prisma.User$ownedBusinessesArgs<ExtArgs>
   passwordResetTokens?: boolean | Prisma.User$passwordResetTokensArgs<ExtArgs>
+  events?: boolean | Prisma.User$eventsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -943,18 +1226,21 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     business: Prisma.$BusinessPayload<ExtArgs> | null
     branch: Prisma.$BranchPayload<ExtArgs> | null
-    passwordResetTokens: Prisma.$passwordResetTokenPayload<ExtArgs>[]
+    ownedBusinesses: Prisma.$BusinessPayload<ExtArgs>[]
+    passwordResetTokens: Prisma.$PasswordResetTokenPayload<ExtArgs>[]
+    events: Prisma.$EventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    businessId: string | null
+    branchId: string | null
+    branchBusinessId: string | null
     name: string
     email: string
     password: string
     role: $Enums.Role
     isActive: boolean
     onboardingCompleted: boolean
-    branchId: string | null
-    businessId: string | null
     createdAt: Date
   }, ExtArgs["result"]["user"]>
   composites: {}
@@ -1352,7 +1638,9 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   business<T extends Prisma.User$businessArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$businessArgs<ExtArgs>>): Prisma.Prisma__BusinessClient<runtime.Types.Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   branch<T extends Prisma.User$branchArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$branchArgs<ExtArgs>>): Prisma.Prisma__BranchClient<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  passwordResetTokens<T extends Prisma.User$passwordResetTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$passwordResetTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$passwordResetTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ownedBusinesses<T extends Prisma.User$ownedBusinessesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ownedBusinessesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  passwordResetTokens<T extends Prisma.User$passwordResetTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$passwordResetTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  events<T extends Prisma.User$eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1383,14 +1671,15 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
  */
 export interface UserFieldRefs {
   readonly id: Prisma.FieldRef<"User", 'String'>
+  readonly businessId: Prisma.FieldRef<"User", 'String'>
+  readonly branchId: Prisma.FieldRef<"User", 'String'>
+  readonly branchBusinessId: Prisma.FieldRef<"User", 'String'>
   readonly name: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly password: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'Role'>
   readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
   readonly onboardingCompleted: Prisma.FieldRef<"User", 'Boolean'>
-  readonly branchId: Prisma.FieldRef<"User", 'String'>
-  readonly businessId: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
 }
     
@@ -1826,27 +2115,75 @@ export type User$branchArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 }
 
 /**
+ * User.ownedBusinesses
+ */
+export type User$ownedBusinessesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Business
+   */
+  select?: Prisma.BusinessSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Business
+   */
+  omit?: Prisma.BusinessOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BusinessInclude<ExtArgs> | null
+  where?: Prisma.BusinessWhereInput
+  orderBy?: Prisma.BusinessOrderByWithRelationInput | Prisma.BusinessOrderByWithRelationInput[]
+  cursor?: Prisma.BusinessWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BusinessScalarFieldEnum | Prisma.BusinessScalarFieldEnum[]
+}
+
+/**
  * User.passwordResetTokens
  */
 export type User$passwordResetTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the passwordResetToken
+   * Select specific fields to fetch from the PasswordResetToken
    */
-  select?: Prisma.passwordResetTokenSelect<ExtArgs> | null
+  select?: Prisma.PasswordResetTokenSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the passwordResetToken
+   * Omit specific fields from the PasswordResetToken
    */
-  omit?: Prisma.passwordResetTokenOmit<ExtArgs> | null
+  omit?: Prisma.PasswordResetTokenOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.passwordResetTokenInclude<ExtArgs> | null
-  where?: Prisma.passwordResetTokenWhereInput
-  orderBy?: Prisma.passwordResetTokenOrderByWithRelationInput | Prisma.passwordResetTokenOrderByWithRelationInput[]
-  cursor?: Prisma.passwordResetTokenWhereUniqueInput
+  include?: Prisma.PasswordResetTokenInclude<ExtArgs> | null
+  where?: Prisma.PasswordResetTokenWhereInput
+  orderBy?: Prisma.PasswordResetTokenOrderByWithRelationInput | Prisma.PasswordResetTokenOrderByWithRelationInput[]
+  cursor?: Prisma.PasswordResetTokenWhereUniqueInput
   take?: number
   skip?: number
   distinct?: Prisma.PasswordResetTokenScalarFieldEnum | Prisma.PasswordResetTokenScalarFieldEnum[]
+}
+
+/**
+ * User.events
+ */
+export type User$eventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Event
+   */
+  select?: Prisma.EventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Event
+   */
+  omit?: Prisma.EventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EventInclude<ExtArgs> | null
+  where?: Prisma.EventWhereInput
+  orderBy?: Prisma.EventOrderByWithRelationInput | Prisma.EventOrderByWithRelationInput[]
+  cursor?: Prisma.EventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EventScalarFieldEnum | Prisma.EventScalarFieldEnum[]
 }
 
 /**

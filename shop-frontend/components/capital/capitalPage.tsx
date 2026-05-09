@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { useBranchStore } from "@/src/store/useBranchStore";
 import { toast } from "sonner";
 import { eventService } from "@/src/services/eventService";
-import { OpeninigEventType } from "@/offline/core/events/eventGroups/openingEvents";
 import { financeEventType } from "@/offline/core/events/eventGroups/financeEvent";
 
 interface CashflowTableProps {
@@ -116,7 +115,7 @@ const CashflowTable = ({ mode, onCompleted }: CashflowTableProps) => {
             Withdraw
           </Button>
 
-          <Button onClick={() => getCashBalance(activeBranchId)} variant="secondary" className="gap-1">
+          <Button onClick= {() => console.log("what is your name")} variant="secondary" className="gap-1">
             <RefreshCw className="w-4 h-4" />
             Refresh
           </Button>

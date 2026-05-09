@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { useAuthStore } from "@/store/useAuthStore";
+import { useAuthStore } from "@/src/store/useAuthStore";
 
 const UserSchema = z.object({
   id: z.string(),

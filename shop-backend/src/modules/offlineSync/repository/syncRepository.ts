@@ -1,19 +1,19 @@
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
 import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
-import { Events } from "../../../domain/event.js";
+import { Event } from "../../../domain/event.js";
 import { getEventScope } from "../../../lib/getEventScoped.js";
 
 
 export class SyncRepository {
 
 async findExistingEvent(eventId: string, tx: Prisma.TransactionClient) {
-    return tx.event.findUnique({
+    return tx.event.findFirst({
       where: { id: eventId }
     });
-  }
+  } 
 
 async findEventAfterSnapshotVersion(
-  event: Events,
+  event: Event,
   version: number
 ) {
   const scope = getEventScope(event);
@@ -38,8 +38,8 @@ async findEventAfterSnapshotVersion(
   });
 }
 
-async storeEvents(event: Events, tx: Prisma.TransactionClient) {
-  const existing = await tx.event.findUnique({
+async storeEvents(event: Event, tx: Prisma.TransactionClient) {
+  const existing = await tx.event.findFirst({
     where: { id: event.id }
   });
 
@@ -55,12 +55,20 @@ async storeEvents(event: Events, tx: Prisma.TransactionClient) {
         data: {
           id: event.id,
           type: event.type,
+
+          aggregateId: event.aggregateId,
+          aggregateType: event.aggregateType,
+
           payload: event.payload,
 
           scope: getEventScope(event),
 
-          businessId: event.businessId,
-          branchId: event.branchId,
+          businessId: event.businessId ?? null,
+          branchId: event.branchId ?? null,
+          branchBusinessId: 
+            event.branchId && event.businessId
+              ? event.businessId
+              : null,
           mode: event.mode,
 
           createdAt: new Date(event.createdAt),
@@ -129,7 +137,7 @@ async storeEvents(event: Events, tx: Prisma.TransactionClient) {
     }
   }
 
-  async markProcessed(event: Events, tx: Prisma.TransactionClient) {
+  async markProcessed(event: Event, tx: Prisma.TransactionClient) {
     return tx.processedSyncEvent.upsert({
       where: { id: event.id },
       update: {
@@ -148,7 +156,7 @@ async storeEvents(event: Events, tx: Prisma.TransactionClient) {
     });
   }
 
-  async markFailed(event: Events, error: string) {
+  async markFailed(event: Event, error: string) {
     return prisma.processedSyncEvent.upsert({
       where: { id: event.id },
       update: {
@@ -168,7 +176,7 @@ async storeEvents(event: Events, tx: Prisma.TransactionClient) {
     });
   }
 
-async validateLogicClock(event: Events, tx: Prisma.TransactionClient) {
+async validateLogicClock(event: Event, tx: Prisma.TransactionClient) {
   const last = await tx.event.findFirst({
     where: { deviceId: event.deviceId },
     orderBy: { logicClock: "desc" }
@@ -179,7 +187,7 @@ async validateLogicClock(event: Events, tx: Prisma.TransactionClient) {
 }
 }
 
-async getNextVersion(event: Events, tx: Prisma.TransactionClient) {
+async getNextVersion(event: Event, tx: Prisma.TransactionClient) {
   const scope = getEventScope(event);
 
   let where: any = {};
@@ -213,7 +221,7 @@ async getNextVersion(event: Events, tx: Prisma.TransactionClient) {
   return (last?.version ?? 0) + 1;
 }
 async alreadyProcessed(eventId: string, tx: Prisma.TransactionClient) {
-  return tx.processedSyncEvent.findUnique({
+  return tx.processedSyncEvent.findFirst({
     where: { id: eventId }
   });
 }

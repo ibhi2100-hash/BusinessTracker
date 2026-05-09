@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useBusinessStore } from "@/src/store/businessStore";
+import { eventService } from "@/src/services/eventService";
+import { BusinessEventTypes } from "@/offline/core/events/eventGroups/businessEvents";
 
 
 export const DashboardHeader = () => {
@@ -59,7 +61,11 @@ export const DashboardHeader = () => {
       setIsSwitching(true);
 
       // 1️⃣ request new token for selected branch
-      const data = await BusinessService.switchBranch(value);
+      const data = await eventService.create({
+        type: BusinessEventTypes.BRANCH_CREATED,
+        mode: "LIVE",
+        payload: ""
+      });
       
 
       // 2️⃣ update UI state

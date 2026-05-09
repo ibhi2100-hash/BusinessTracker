@@ -5,6 +5,6 @@ import LiabilitiesPage from "@/components/liabilities/liabilitiesPage";
 
 export default function LiabilitiesStep() {
   return (
-      <LiabilitiesPage />
+      <LiabilitiesPage  mode="LIVE"/>
   );
 }

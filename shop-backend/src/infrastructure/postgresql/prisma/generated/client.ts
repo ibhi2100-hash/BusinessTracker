@@ -55,10 +55,10 @@ export type Branch = Prisma.BranchModel
  */
 export type User = Prisma.UserModel
 /**
- * Model passwordResetToken
+ * Model PasswordResetToken
  * 
  */
-export type passwordResetToken = Prisma.passwordResetTokenModel
+export type PasswordResetToken = Prisma.PasswordResetTokenModel
 /**
  * Model SubscriptionPlan
  * 
@@ -69,6 +69,16 @@ export type SubscriptionPlan = Prisma.SubscriptionPlanModel
  * 
  */
 export type BusinessSubscription = Prisma.BusinessSubscriptionModel
+/**
+ * Model Product
+ * 
+ */
+export type Product = Prisma.ProductModel
+/**
+ * Model Inventory
+ * 
+ */
+export type Inventory = Prisma.InventoryModel
 /**
  * Model ProcessedSyncEvent
  * 

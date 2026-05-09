@@ -11,7 +11,7 @@ export const syncService = {
 
     const events = await db.events
       .where("status")
-      .equals("pending") // safer than false in IndexedDB contexts
+      .equals("PENDING") // safer than false in IndexedDB contexts
       .toArray();
 
     if (!events.length) return;
@@ -49,14 +49,16 @@ export const syncService = {
         if (r.status === "synced") {
           await db.events.update(r.eventId, {
             synced: true,
-            status: "synced",
+            status: "SYNCED",
+            version: r.version
           });
         }
 
         if (r.status === "duplicate") {
           await db.events.update(r.eventId, {
             synced: true,
-            status: "synced",
+            status: "SYNCED",
+            version: r.version
           });
         }
 
@@ -64,7 +66,7 @@ export const syncService = {
         if (r.status === "failed") {
           await db.events.update(r.id, {
             synced: false,
-            status: "failed",
+            status: "FAILED",
           });
         }
       }

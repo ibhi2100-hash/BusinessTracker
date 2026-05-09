@@ -7,7 +7,6 @@ datasource db {
   provider = "postgresql"
 }
 
-
 /////**** ENUMS ****/////
 
 enum Mode {
@@ -18,6 +17,11 @@ enum Mode {
 enum Role {
   ADMIN
   STAFF
+}
+
+enum LedgerDirection {
+  DEBIT
+  CREDIT
 }
 
 enum Account {
@@ -53,213 +57,462 @@ enum BusinessStatus {
   ACTIVE
   SUSPENDED
 }
+
 enum SyncEventStatus {
   PENDING
   SYNCED
   FAILED
 }
 
-///**** MODELS****///
-
+/////**** MODELS ****/////
 
 model Business {
-  id          String    @id 
+  id          String @id
+
   name        String
+
+  userId      String?
   address     String?
-  isOnboarding  Boolean   @default(true)
-  onboardingCompleted   Boolean   @default(false)
-  createdAt   DateTime  @default(now())
+
+  isOnboarding        Boolean @default(true)
+  onboardingCompleted Boolean @default(false)
+
+  status      BusinessStatus @default(ONBOARDING)
+
+  createdAt   DateTime @default(now())
   activatedAt DateTime?
-  status      BusinessStatus    @default(ONBOARDING)
 
-  users       User[]
-  branches    Branch[]
-  subscriptions   BusinessSubscription[]
-  alerts      Alert[]
+  owner User? @relation("BusinessOwner", fields: [userId], references: [id])
 
+  branches      Branch[]
+  users         User[]
+  products      Product[]
+  inventories   Inventory[]
+  snapshots     Snapshot[]
+  alerts        Alert[]
+  events        Event[]
+  ledgerEntries LedgerEntry[]
+
+  subscriptions BusinessSubscription[]
+
+  @@index([userId])
 }
+
 model Branch {
-  id      String    @id    
-  businessId    String  
-  name          String
-  address       String?   
-  phone         String?
-  isActive      Boolean       @default(true)
-  isDefault     Boolean       @default(false)
-  createdAt     DateTime      @default(now())
-  business      Business      @relation(fields: [businessId], references: [id])
+  id         String
+
+  businessId String
+
+  name       String
+
+  address    String?
+  phone      String?
+
+  isActive   Boolean @default(true)
+  isDefault  Boolean @default(false)
+
+  createdAt  DateTime @default(now())
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
 
   users         User[]
-  alerts        Alert[]
+  products      Product[]
+  inventories   Inventory[]
   snapshots     Snapshot[]
-}
+  alerts        Alert[]
+  events        Event[]
+  ledgerEntries LedgerEntry[]
 
-model User {
-  id          String    @id   @default(uuid())
-  name        String
-  email       String    @unique
-  password    String
-  role        Role      @default(STAFF)
+  @@id([id, businessId])
 
-  isActive    Boolean   @default(true)
-  onboardingCompleted   Boolean     @default(false)
-  branchId    String?
-  businessId  String?
-  createdAt   DateTime  @default(now())
-
-  business    Business? @relation(fields: [businessId], references: [id])
-  branch      Branch?    @relation(fields: [branchId], references: [id])
-
-  passwordResetTokens passwordResetToken[]
-
-
+  @@unique([businessId, name])
 
   @@index([businessId])
 }
 
+model User {
+  id String @id @default(uuid())
 
-model passwordResetToken {
-  id          String    @id 
-  userId      String
-  token       String    @unique
-  expiresAt   DateTime
-  used        Boolean   @default(false)
-  createdAt   DateTime  @default(now())
+  businessId String?
 
-  user        User      @relation(fields: [userId], references: [id])
+  branchId         String?
+  branchBusinessId String?
+
+  name     String
+  email    String @unique
+  password String
+
+  role Role @default(STAFF)
+
+  isActive Boolean @default(true)
+
+  onboardingCompleted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  business Business? @relation(fields: [businessId], references: [id], onDelete: SetNull)
+
+  branch Branch? @relation(fields: [branchId, branchBusinessId],references: [id, businessId],onDelete: SetNull)
+
+  ownedBusinesses Business[] @relation("BusinessOwner")
+
+  passwordResetTokens PasswordResetToken[]
+
+  events Event[]
+
+  @@index([businessId])
+
+  @@index([branchId, branchBusinessId])
+}
+
+model PasswordResetToken {
+  id String @id
+
+  userId String
+
+  token String @unique
+
+  expiresAt DateTime
+
+  used Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
 
   @@index([userId])
+
   @@index([expiresAt])
 }
 
 model SubscriptionPlan {
-  id    String  @id   
-  name  String
-  price   Decimal
-  billingCycle  String
+  id String @id
 
-  maxUsers    Int
-  maxBranch   Int
-  maxProduct  Int
-  maxStaff    Int
-  
-  features    Json
-  createdAt   DateTime    @default(now())
+  name String
 
-  subscription    BusinessSubscription[]
+  price Decimal @db.Decimal(18, 6)
+
+  billingCycle String
+
+  maxUsers   Int
+  maxBranch  Int
+  maxProduct Int
+  maxStaff   Int
+
+  features Json
+
+  createdAt DateTime @default(now())
+
+  subscriptions BusinessSubscription[]
 }
 
 model BusinessSubscription {
-  id              String    @id     
-  businessId      String  @unique   
-  subscriptionId  String
-  startedAt       DateTime        @default(now())
-  expiresAt       DateTime
-  trialEndDate    DateTime?
-  status          String          @default("ACTIVE")
+  id String @id
 
-  business        Business @relation(fields: [businessId], references: [id])
-  subscription    SubscriptionPlan @relation(fields: [subscriptionId], references: [id])
+  businessId String @unique
+
+  subscriptionId String
+
+  startedAt DateTime @default(now())
+
+  expiresAt DateTime
+
+  trialEndDate DateTime?
+
+  status String @default("ACTIVE")
+
+  business Business @relation(fields: [businessId],references: [id],onDelete: Cascade)
+
+  subscription SubscriptionPlan @relation(fields: [subscriptionId],references: [id])
+
+  @@index([subscriptionId])
 }
-model ProcessedSyncEvent {
-  id          String   @id
-  eventType   String
-  businessId  String?
-  branchId    String?
-  userId      String?
-  version     Int
-  status      SyncEventStatus
-  processedAt DateTime @default(now())
-  error       String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+
+model Product {
+  id String
+
+  businessId String
+
+  branchId         String?
+  branchBusinessId String?
+
+  sku     String?
+  barcode String?
+
+  name String
+
+  imageUrl   String?
+  description String?
+
+  category String?
+
+  costPrice Decimal @db.Decimal(18, 6)
+
+  price Decimal @db.Decimal(18, 6)
+
+  reorderLevel Decimal? @db.Decimal(18, 6)
+
+  isActive  Boolean @default(true)
+  isDeleted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  deletedAt DateTime?
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  branch Branch? @relation(fields: [branchId, branchBusinessId], references: [id, businessId], onDelete: Restrict)
+
+  inventories Inventory[]
+
+  @@id([id, businessId])
+
+  @@unique([businessId, sku])
+
+  @@unique([businessId, barcode])
 
   @@index([businessId])
-  @@index([branchId])
-  @@unique([id, status])
+
+  @@index([branchId, branchBusinessId])
+
+  @@index([name])
+
+  @@index([category])
+}
+
+model Inventory {
+  id String @id
+
+  businessId String
+
+  branchId         String
+  branchBusinessId String
+
+  productId String
+
+  quantity Decimal @db.Decimal(18, 6)
+
+  costPrice Decimal @db.Decimal(18, 6)
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  branch Branch @relation(fields: [branchId, branchBusinessId], references: [id, businessId], onDelete: Cascade)
+
+  product Product @relation(fields: [productId, businessId], references: [id, businessId], onDelete: Restrict)
+
+  @@unique([businessId, branchId, productId])
+
+  @@index([businessId])
+
+  @@index([branchId, branchBusinessId])
+
+  @@index([productId])
+}
+
+model ProcessedSyncEvent {
+  id String @id
+
+  eventType String
+
+  businessId String?
+
+  branchId         String?
+  branchBusinessId String?
+
+  userId String?
+
+  version Int
+
+  status SyncEventStatus
+
+  processedAt DateTime @default(now())
+
+  error String?
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  @@index([businessId])
+
+  @@index([branchId, branchBusinessId])
 }
 
 model Event {
-  id         String   @id
-  type       String
-  payload    Json
+  id String   @id
 
   businessId String?
-  branchId   String?
-  
-  mode       Mode
-  scope      String
 
-  createdAt  DateTime
+  branchId         String?
+  branchBusinessId String?
+
+  aggregateId   String
+  aggregateType String
+
+  type String
+
+  payload Json
+
+  mode Mode
+
+  scope String
+
+  version Int
+
   logicClock Int
-  version    Int      @default(1)
 
-  deviceId   String
-  userId     String?
+  deviceId String
 
-  status     SyncEventStatus
-  synced     Boolean 
+  userId String?
+
+  status SyncEventStatus
+
+  synced Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  business Business? @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  branch Branch? @relation(fields: [branchId, branchBusinessId], references: [id, businessId], onDelete: SetNull)
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   ledgerEntries LedgerEntry[]
 
-  @@index([scope, businessId, branchId, version])
+  @@unique([aggregateType, aggregateId, version])
+
+  @@index([businessId])
+
+  @@index([branchId, branchBusinessId])
+
+  @@index([aggregateType, aggregateId])
+
   @@index([deviceId, logicClock])
 
-  @@unique([scope, businessId, branchId, version])
+  @@index([createdAt])
+
+  @@index([userId])
 }
 
-
 model LedgerEntry {
-  id          String   @id @default(uuid())
-  businessId  String
-  branchId    String
-  eventId     String
+  id String @id @default(uuid())
 
-  account     Account
-  amount      Decimal
+  businessId String
 
-  index       Int       // 👈 ensures deterministic ordering
-  createdAt   DateTime  @default(now())
+  branchId         String
+  branchBusinessId String
 
-  event       Event     @relation(fields: [eventId], references: [id])
+  eventId String
 
-  @@unique([eventId, index]) // 👈 idempotency
+  type String
+
+  account Account
+
+  direction LedgerDirection
+
+  amount Decimal @db.Decimal(18, 6)
+
+  index Int
+
+  createdAt DateTime @default(now())
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  branch Branch @relation(fields: [branchId, branchBusinessId], references: [id, businessId], onDelete: Restrict)
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, index])
+
   @@index([businessId, branchId])
+
+  @@index([account])
+
+  @@index([createdAt])
 }
 
 model Snapshot {
-  id         String   @id @default(uuid())
-  branchId   String
-  account    String
-  balance    Decimal
+  id String @id
+
+  businessId String
+
+  branchId         String?
+  branchBusinessId String?
+
+  account String?
+
+  balance Decimal? @db.Decimal(18, 6)
+
+  version Int
+
+  snapshotType String
+
+  scope String
+
+  data Json
 
   lastVersion Int
-  updatedAt   DateTime @updatedAt
 
-  branch Branch @relation(fields: [branchId], references: [id])
+  createdAt DateTime @default(now())
 
-  @@unique([branchId, account])
+  updatedAt DateTime @updatedAt
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  branch Branch? @relation(fields: [branchId, branchBusinessId], references: [id, businessId], onDelete: SetNull)
+
+  @@unique([businessId,branchId,account,snapshotType,scope])
+
+  @@index([businessId, version])
+
+  @@index([branchId, branchBusinessId, version])
+
+  @@index([snapshotType])
 }
 
 model Alert {
-  id            String   @id 
-  businessId    String
-  branchId      String   // null = global alert
-  type          AlertType
-  severity      AlertSeverity
-  title         String
-  message       String
-  isResolved    Boolean   @default(false)
-  isRead        Boolean   @default(false)
-  metadata      Json?
-  createdAt     DateTime  @default(now())
-  resolvedAt    DateTime?
+  id String @id
 
-  business Business @relation(fields: [businessId], references: [id])
-  branch   Branch?  @relation(fields: [branchId], references: [id])
+  businessId String
 
-  @@index([branchId, isResolved])
+  branchId         String?
+  branchBusinessId String?
+
+  type AlertType
+
+  severity AlertSeverity
+
+  title String
+
+  message String
+
+  metadata Json?
+
+  isResolved Boolean @default(false)
+
+  isRead Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  resolvedAt DateTime?
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  branch Branch? @relation(fields: [branchId, branchBusinessId], references: [id, businessId], onDelete: SetNull)
+
   @@index([businessId, isResolved])
+
+  @@index([branchId, branchBusinessId, isResolved])
+
   @@index([type])
-  @@unique([branchId, type, isResolved, metadata])
+
+  @@index([severity])
+
+  @@index([createdAt])
 }

@@ -39,6 +39,7 @@ export type ProcessedSyncEventMinAggregateOutputType = {
   eventType: string | null
   businessId: string | null
   branchId: string | null
+  branchBusinessId: string | null
   userId: string | null
   version: number | null
   status: $Enums.SyncEventStatus | null
@@ -53,6 +54,7 @@ export type ProcessedSyncEventMaxAggregateOutputType = {
   eventType: string | null
   businessId: string | null
   branchId: string | null
+  branchBusinessId: string | null
   userId: string | null
   version: number | null
   status: $Enums.SyncEventStatus | null
@@ -67,6 +69,7 @@ export type ProcessedSyncEventCountAggregateOutputType = {
   eventType: number
   businessId: number
   branchId: number
+  branchBusinessId: number
   userId: number
   version: number
   status: number
@@ -91,6 +94,7 @@ export type ProcessedSyncEventMinAggregateInputType = {
   eventType?: true
   businessId?: true
   branchId?: true
+  branchBusinessId?: true
   userId?: true
   version?: true
   status?: true
@@ -105,6 +109,7 @@ export type ProcessedSyncEventMaxAggregateInputType = {
   eventType?: true
   businessId?: true
   branchId?: true
+  branchBusinessId?: true
   userId?: true
   version?: true
   status?: true
@@ -119,6 +124,7 @@ export type ProcessedSyncEventCountAggregateInputType = {
   eventType?: true
   businessId?: true
   branchId?: true
+  branchBusinessId?: true
   userId?: true
   version?: true
   status?: true
@@ -220,6 +226,7 @@ export type ProcessedSyncEventGroupByOutputType = {
   eventType: string
   businessId: string | null
   branchId: string | null
+  branchBusinessId: string | null
   userId: string | null
   version: number
   status: $Enums.SyncEventStatus
@@ -257,6 +264,7 @@ export type ProcessedSyncEventWhereInput = {
   eventType?: Prisma.StringFilter<"ProcessedSyncEvent"> | string
   businessId?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
   branchId?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
+  branchBusinessId?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
   userId?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
   version?: Prisma.IntFilter<"ProcessedSyncEvent"> | number
   status?: Prisma.EnumSyncEventStatusFilter<"ProcessedSyncEvent"> | $Enums.SyncEventStatus
@@ -271,6 +279,7 @@ export type ProcessedSyncEventOrderByWithRelationInput = {
   eventType?: Prisma.SortOrder
   businessId?: Prisma.SortOrderInput | Prisma.SortOrder
   branchId?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchBusinessId?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
   version?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -282,13 +291,13 @@ export type ProcessedSyncEventOrderByWithRelationInput = {
 
 export type ProcessedSyncEventWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  id_status?: Prisma.ProcessedSyncEventIdStatusCompoundUniqueInput
   AND?: Prisma.ProcessedSyncEventWhereInput | Prisma.ProcessedSyncEventWhereInput[]
   OR?: Prisma.ProcessedSyncEventWhereInput[]
   NOT?: Prisma.ProcessedSyncEventWhereInput | Prisma.ProcessedSyncEventWhereInput[]
   eventType?: Prisma.StringFilter<"ProcessedSyncEvent"> | string
   businessId?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
   branchId?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
+  branchBusinessId?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
   userId?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
   version?: Prisma.IntFilter<"ProcessedSyncEvent"> | number
   status?: Prisma.EnumSyncEventStatusFilter<"ProcessedSyncEvent"> | $Enums.SyncEventStatus
@@ -296,13 +305,14 @@ export type ProcessedSyncEventWhereUniqueInput = Prisma.AtLeast<{
   error?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ProcessedSyncEvent"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ProcessedSyncEvent"> | Date | string
-}, "id" | "id_status">
+}, "id">
 
 export type ProcessedSyncEventOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   eventType?: Prisma.SortOrder
   businessId?: Prisma.SortOrderInput | Prisma.SortOrder
   branchId?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchBusinessId?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
   version?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -325,6 +335,7 @@ export type ProcessedSyncEventScalarWhereWithAggregatesInput = {
   eventType?: Prisma.StringWithAggregatesFilter<"ProcessedSyncEvent"> | string
   businessId?: Prisma.StringNullableWithAggregatesFilter<"ProcessedSyncEvent"> | string | null
   branchId?: Prisma.StringNullableWithAggregatesFilter<"ProcessedSyncEvent"> | string | null
+  branchBusinessId?: Prisma.StringNullableWithAggregatesFilter<"ProcessedSyncEvent"> | string | null
   userId?: Prisma.StringNullableWithAggregatesFilter<"ProcessedSyncEvent"> | string | null
   version?: Prisma.IntWithAggregatesFilter<"ProcessedSyncEvent"> | number
   status?: Prisma.EnumSyncEventStatusWithAggregatesFilter<"ProcessedSyncEvent"> | $Enums.SyncEventStatus
@@ -339,6 +350,7 @@ export type ProcessedSyncEventCreateInput = {
   eventType: string
   businessId?: string | null
   branchId?: string | null
+  branchBusinessId?: string | null
   userId?: string | null
   version: number
   status: $Enums.SyncEventStatus
@@ -353,6 +365,7 @@ export type ProcessedSyncEventUncheckedCreateInput = {
   eventType: string
   businessId?: string | null
   branchId?: string | null
+  branchBusinessId?: string | null
   userId?: string | null
   version: number
   status: $Enums.SyncEventStatus
@@ -367,6 +380,7 @@ export type ProcessedSyncEventUpdateInput = {
   eventType?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
@@ -381,6 +395,7 @@ export type ProcessedSyncEventUncheckedUpdateInput = {
   eventType?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
@@ -395,6 +410,7 @@ export type ProcessedSyncEventCreateManyInput = {
   eventType: string
   businessId?: string | null
   branchId?: string | null
+  branchBusinessId?: string | null
   userId?: string | null
   version: number
   status: $Enums.SyncEventStatus
@@ -409,6 +425,7 @@ export type ProcessedSyncEventUpdateManyMutationInput = {
   eventType?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
@@ -423,6 +440,7 @@ export type ProcessedSyncEventUncheckedUpdateManyInput = {
   eventType?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
@@ -432,16 +450,12 @@ export type ProcessedSyncEventUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type ProcessedSyncEventIdStatusCompoundUniqueInput = {
-  id: string
-  status: $Enums.SyncEventStatus
-}
-
 export type ProcessedSyncEventCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   eventType?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
+  branchBusinessId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   version?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -460,6 +474,7 @@ export type ProcessedSyncEventMaxOrderByAggregateInput = {
   eventType?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
+  branchBusinessId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   version?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -474,6 +489,7 @@ export type ProcessedSyncEventMinOrderByAggregateInput = {
   eventType?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
+  branchBusinessId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   version?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -498,6 +514,7 @@ export type ProcessedSyncEventSelect<ExtArgs extends runtime.Types.Extensions.In
   eventType?: boolean
   businessId?: boolean
   branchId?: boolean
+  branchBusinessId?: boolean
   userId?: boolean
   version?: boolean
   status?: boolean
@@ -512,6 +529,7 @@ export type ProcessedSyncEventSelectCreateManyAndReturn<ExtArgs extends runtime.
   eventType?: boolean
   businessId?: boolean
   branchId?: boolean
+  branchBusinessId?: boolean
   userId?: boolean
   version?: boolean
   status?: boolean
@@ -526,6 +544,7 @@ export type ProcessedSyncEventSelectUpdateManyAndReturn<ExtArgs extends runtime.
   eventType?: boolean
   businessId?: boolean
   branchId?: boolean
+  branchBusinessId?: boolean
   userId?: boolean
   version?: boolean
   status?: boolean
@@ -540,6 +559,7 @@ export type ProcessedSyncEventSelectScalar = {
   eventType?: boolean
   businessId?: boolean
   branchId?: boolean
+  branchBusinessId?: boolean
   userId?: boolean
   version?: boolean
   status?: boolean
@@ -549,7 +569,7 @@ export type ProcessedSyncEventSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ProcessedSyncEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "eventType" | "businessId" | "branchId" | "userId" | "version" | "status" | "processedAt" | "error" | "createdAt" | "updatedAt", ExtArgs["result"]["processedSyncEvent"]>
+export type ProcessedSyncEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "eventType" | "businessId" | "branchId" | "branchBusinessId" | "userId" | "version" | "status" | "processedAt" | "error" | "createdAt" | "updatedAt", ExtArgs["result"]["processedSyncEvent"]>
 
 export type $ProcessedSyncEventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ProcessedSyncEvent"
@@ -559,6 +579,7 @@ export type $ProcessedSyncEventPayload<ExtArgs extends runtime.Types.Extensions.
     eventType: string
     businessId: string | null
     branchId: string | null
+    branchBusinessId: string | null
     userId: string | null
     version: number
     status: $Enums.SyncEventStatus
@@ -993,6 +1014,7 @@ export interface ProcessedSyncEventFieldRefs {
   readonly eventType: Prisma.FieldRef<"ProcessedSyncEvent", 'String'>
   readonly businessId: Prisma.FieldRef<"ProcessedSyncEvent", 'String'>
   readonly branchId: Prisma.FieldRef<"ProcessedSyncEvent", 'String'>
+  readonly branchBusinessId: Prisma.FieldRef<"ProcessedSyncEvent", 'String'>
   readonly userId: Prisma.FieldRef<"ProcessedSyncEvent", 'String'>
   readonly version: Prisma.FieldRef<"ProcessedSyncEvent", 'Int'>
   readonly status: Prisma.FieldRef<"ProcessedSyncEvent", 'SyncEventStatus'>

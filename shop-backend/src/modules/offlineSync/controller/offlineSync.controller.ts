@@ -1,6 +1,7 @@
 // controllers/offlineSync.controller.ts
 import type { Request, Response } from "express";
 import { OfflineSyncService } from "../service/offlineSync.service.js";
+import strict from "node:assert/strict";
 
 
 export class OfflineSyncController {
@@ -103,5 +104,9 @@ export class OfflineSyncController {
       });
     }
   }
+
+  async getProcessedProducts(businessId: stringify, branchId: string) {
+      
+    }
 
 }

@@ -21,7 +21,7 @@ export const dispatchEvent = async (event: BaseEvent) => {
       // 1. persist event (PENDING first)
       await db.events.add({
         ...event,
-        status: "pending",
+        status: "PENDING",
         synced: false,
       });
 

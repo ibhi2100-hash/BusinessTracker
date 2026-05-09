@@ -1,10 +1,9 @@
-import { Account } from "@/src/domain/ledger";
-import { financeEventType } from "../shop-frontend/offline/core/events/eventGroups/financeEvent";
-import { InventoryEventType } from "../shop-frontend/offline/core/events/eventGroups/inventoryEvents";
-import { salesEventType } from "../shop-frontend/offline/core/events/eventGroups/salesEvent";
-import { LedgerEntry } from "@/src/domain/ledger";
-import { OpeninigEventType } from "@/offline/core/events/eventGroups/openingEvents";
-import { BaseEvent } from "@/offline/core/events/types";
+import { Account, LedgerEntry } from "./domain/ledger";
+import { financeEventType } from "./domain/events";
+import { InventoryEventType } from "./domain/events";
+import { salesEventType } from "./domain/events";
+import { OpeninigEventType } from "./domain/events";
+import { BaseEvent } from "../shop-frontend/offline/core/events/types";
 
 type Direction = "DEBIT" | "CREDIT";
 

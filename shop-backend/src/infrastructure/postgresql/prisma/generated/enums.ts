@@ -25,6 +25,14 @@ export const Role = {
 export type Role = (typeof Role)[keyof typeof Role]
 
 
+export const LedgerDirection = {
+  DEBIT: 'DEBIT',
+  CREDIT: 'CREDIT'
+} as const
+
+export type LedgerDirection = (typeof LedgerDirection)[keyof typeof LedgerDirection]
+
+
 export const Account = {
   CASH: 'CASH',
   BANK: 'BANK',

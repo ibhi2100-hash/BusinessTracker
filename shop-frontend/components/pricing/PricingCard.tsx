@@ -1,17 +1,23 @@
 "use client";
+import { useSubscriptionStore } from "@/src/store/useSubscriptionStore";
 
-import { useSubscriptionStore } from "@/store/useSubscriptionStore";
-import { useInitializeSubscription } from "@/hooks/subscriptionHooks/useInitializeSubscription";
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { eventService } from "@/src/services/eventService";
 
 export const PricingCards = () => {
   const plans = useSubscriptionStore((state) => state.subscription);
-  const { mutate, isPending } = useInitializeSubscription();
+  const [loading, setLoading] = useState(false)
+
 
   const handleSubscribe = (planId: string) => {
-    mutate(planId);
+    eventService.create({
+      type: "SUBSCRIBE",
+      mode: "LIVE",
+      payload: {planId}
+    });
   };
 
   if (!plans?.length) {
@@ -74,7 +80,7 @@ export const PricingCards = () => {
               </div>
 
               <Button
-                disabled={isPending}
+                disabled={loading}
                 onClick={() => handleSubscribe(plan.id)}
                 className="mt-8 w-full"
                 variant={plan.name === "Growth" ? "primary" : "secondary"}

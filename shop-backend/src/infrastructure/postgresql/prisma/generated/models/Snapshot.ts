@@ -28,38 +28,59 @@ export type AggregateSnapshot = {
 
 export type SnapshotAvgAggregateOutputType = {
   balance: runtime.Decimal | null
+  version: number | null
   lastVersion: number | null
 }
 
 export type SnapshotSumAggregateOutputType = {
   balance: runtime.Decimal | null
+  version: number | null
   lastVersion: number | null
 }
 
 export type SnapshotMinAggregateOutputType = {
   id: string | null
+  businessId: string | null
   branchId: string | null
+  branchBusinessId: string | null
   account: string | null
   balance: runtime.Decimal | null
+  version: number | null
+  snapshotType: string | null
+  scope: string | null
   lastVersion: number | null
+  createdAt: Date | null
   updatedAt: Date | null
 }
 
 export type SnapshotMaxAggregateOutputType = {
   id: string | null
+  businessId: string | null
   branchId: string | null
+  branchBusinessId: string | null
   account: string | null
   balance: runtime.Decimal | null
+  version: number | null
+  snapshotType: string | null
+  scope: string | null
   lastVersion: number | null
+  createdAt: Date | null
   updatedAt: Date | null
 }
 
 export type SnapshotCountAggregateOutputType = {
   id: number
+  businessId: number
   branchId: number
+  branchBusinessId: number
   account: number
   balance: number
+  version: number
+  snapshotType: number
+  scope: number
+  data: number
   lastVersion: number
+  createdAt: number
   updatedAt: number
   _all: number
 }
@@ -67,38 +88,59 @@ export type SnapshotCountAggregateOutputType = {
 
 export type SnapshotAvgAggregateInputType = {
   balance?: true
+  version?: true
   lastVersion?: true
 }
 
 export type SnapshotSumAggregateInputType = {
   balance?: true
+  version?: true
   lastVersion?: true
 }
 
 export type SnapshotMinAggregateInputType = {
   id?: true
+  businessId?: true
   branchId?: true
+  branchBusinessId?: true
   account?: true
   balance?: true
+  version?: true
+  snapshotType?: true
+  scope?: true
   lastVersion?: true
+  createdAt?: true
   updatedAt?: true
 }
 
 export type SnapshotMaxAggregateInputType = {
   id?: true
+  businessId?: true
   branchId?: true
+  branchBusinessId?: true
   account?: true
   balance?: true
+  version?: true
+  snapshotType?: true
+  scope?: true
   lastVersion?: true
+  createdAt?: true
   updatedAt?: true
 }
 
 export type SnapshotCountAggregateInputType = {
   id?: true
+  businessId?: true
   branchId?: true
+  branchBusinessId?: true
   account?: true
   balance?: true
+  version?: true
+  snapshotType?: true
+  scope?: true
+  data?: true
   lastVersion?: true
+  createdAt?: true
   updatedAt?: true
   _all?: true
 }
@@ -191,10 +233,17 @@ export type SnapshotGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 
 export type SnapshotGroupByOutputType = {
   id: string
-  branchId: string
-  account: string
-  balance: runtime.Decimal
+  businessId: string
+  branchId: string | null
+  branchBusinessId: string | null
+  account: string | null
+  balance: runtime.Decimal | null
+  version: number
+  snapshotType: string
+  scope: string
+  data: runtime.JsonValue
   lastVersion: number
+  createdAt: Date
   updatedAt: Date
   _count: SnapshotCountAggregateOutputType | null
   _avg: SnapshotAvgAggregateOutputType | null
@@ -223,44 +272,75 @@ export type SnapshotWhereInput = {
   OR?: Prisma.SnapshotWhereInput[]
   NOT?: Prisma.SnapshotWhereInput | Prisma.SnapshotWhereInput[]
   id?: Prisma.StringFilter<"Snapshot"> | string
-  branchId?: Prisma.StringFilter<"Snapshot"> | string
-  account?: Prisma.StringFilter<"Snapshot"> | string
-  balance?: Prisma.DecimalFilter<"Snapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  businessId?: Prisma.StringFilter<"Snapshot"> | string
+  branchId?: Prisma.StringNullableFilter<"Snapshot"> | string | null
+  branchBusinessId?: Prisma.StringNullableFilter<"Snapshot"> | string | null
+  account?: Prisma.StringNullableFilter<"Snapshot"> | string | null
+  balance?: Prisma.DecimalNullableFilter<"Snapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  version?: Prisma.IntFilter<"Snapshot"> | number
+  snapshotType?: Prisma.StringFilter<"Snapshot"> | string
+  scope?: Prisma.StringFilter<"Snapshot"> | string
+  data?: Prisma.JsonFilter<"Snapshot">
   lastVersion?: Prisma.IntFilter<"Snapshot"> | number
+  createdAt?: Prisma.DateTimeFilter<"Snapshot"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Snapshot"> | Date | string
-  branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
+  business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
+  branch?: Prisma.XOR<Prisma.BranchNullableScalarRelationFilter, Prisma.BranchWhereInput> | null
 }
 
 export type SnapshotOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  branchId?: Prisma.SortOrder
-  account?: Prisma.SortOrder
-  balance?: Prisma.SortOrder
+  businessId?: Prisma.SortOrder
+  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchBusinessId?: Prisma.SortOrderInput | Prisma.SortOrder
+  account?: Prisma.SortOrderInput | Prisma.SortOrder
+  balance?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
+  snapshotType?: Prisma.SortOrder
+  scope?: Prisma.SortOrder
+  data?: Prisma.SortOrder
   lastVersion?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  business?: Prisma.BusinessOrderByWithRelationInput
   branch?: Prisma.BranchOrderByWithRelationInput
 }
 
 export type SnapshotWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  branchId_account?: Prisma.SnapshotBranchIdAccountCompoundUniqueInput
+  businessId_branchId_account_snapshotType_scope?: Prisma.SnapshotBusinessIdBranchIdAccountSnapshotTypeScopeCompoundUniqueInput
   AND?: Prisma.SnapshotWhereInput | Prisma.SnapshotWhereInput[]
   OR?: Prisma.SnapshotWhereInput[]
   NOT?: Prisma.SnapshotWhereInput | Prisma.SnapshotWhereInput[]
-  branchId?: Prisma.StringFilter<"Snapshot"> | string
-  account?: Prisma.StringFilter<"Snapshot"> | string
-  balance?: Prisma.DecimalFilter<"Snapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  businessId?: Prisma.StringFilter<"Snapshot"> | string
+  branchId?: Prisma.StringNullableFilter<"Snapshot"> | string | null
+  branchBusinessId?: Prisma.StringNullableFilter<"Snapshot"> | string | null
+  account?: Prisma.StringNullableFilter<"Snapshot"> | string | null
+  balance?: Prisma.DecimalNullableFilter<"Snapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  version?: Prisma.IntFilter<"Snapshot"> | number
+  snapshotType?: Prisma.StringFilter<"Snapshot"> | string
+  scope?: Prisma.StringFilter<"Snapshot"> | string
+  data?: Prisma.JsonFilter<"Snapshot">
   lastVersion?: Prisma.IntFilter<"Snapshot"> | number
+  createdAt?: Prisma.DateTimeFilter<"Snapshot"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Snapshot"> | Date | string
-  branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
-}, "id" | "branchId_account">
+  business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
+  branch?: Prisma.XOR<Prisma.BranchNullableScalarRelationFilter, Prisma.BranchWhereInput> | null
+}, "id" | "businessId_branchId_account_snapshotType_scope">
 
 export type SnapshotOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  branchId?: Prisma.SortOrder
-  account?: Prisma.SortOrder
-  balance?: Prisma.SortOrder
+  businessId?: Prisma.SortOrder
+  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchBusinessId?: Prisma.SortOrderInput | Prisma.SortOrder
+  account?: Prisma.SortOrderInput | Prisma.SortOrder
+  balance?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
+  snapshotType?: Prisma.SortOrder
+  scope?: Prisma.SortOrder
+  data?: Prisma.SortOrder
   lastVersion?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.SnapshotCountOrderByAggregateInput
   _avg?: Prisma.SnapshotAvgOrderByAggregateInput
@@ -274,72 +354,124 @@ export type SnapshotScalarWhereWithAggregatesInput = {
   OR?: Prisma.SnapshotScalarWhereWithAggregatesInput[]
   NOT?: Prisma.SnapshotScalarWhereWithAggregatesInput | Prisma.SnapshotScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Snapshot"> | string
-  branchId?: Prisma.StringWithAggregatesFilter<"Snapshot"> | string
-  account?: Prisma.StringWithAggregatesFilter<"Snapshot"> | string
-  balance?: Prisma.DecimalWithAggregatesFilter<"Snapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  businessId?: Prisma.StringWithAggregatesFilter<"Snapshot"> | string
+  branchId?: Prisma.StringNullableWithAggregatesFilter<"Snapshot"> | string | null
+  branchBusinessId?: Prisma.StringNullableWithAggregatesFilter<"Snapshot"> | string | null
+  account?: Prisma.StringNullableWithAggregatesFilter<"Snapshot"> | string | null
+  balance?: Prisma.DecimalNullableWithAggregatesFilter<"Snapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  version?: Prisma.IntWithAggregatesFilter<"Snapshot"> | number
+  snapshotType?: Prisma.StringWithAggregatesFilter<"Snapshot"> | string
+  scope?: Prisma.StringWithAggregatesFilter<"Snapshot"> | string
+  data?: Prisma.JsonWithAggregatesFilter<"Snapshot">
   lastVersion?: Prisma.IntWithAggregatesFilter<"Snapshot"> | number
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Snapshot"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Snapshot"> | Date | string
 }
 
 export type SnapshotCreateInput = {
-  id?: string
-  account: string
-  balance: runtime.Decimal | runtime.DecimalJsLike | number | string
+  id: string
+  account?: string | null
+  balance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  version: number
+  snapshotType: string
+  scope: string
+  data: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastVersion: number
+  createdAt?: Date | string
   updatedAt?: Date | string
-  branch: Prisma.BranchCreateNestedOneWithoutSnapshotsInput
+  business: Prisma.BusinessCreateNestedOneWithoutSnapshotsInput
+  branch?: Prisma.BranchCreateNestedOneWithoutSnapshotsInput
 }
 
 export type SnapshotUncheckedCreateInput = {
-  id?: string
-  branchId: string
-  account: string
-  balance: runtime.Decimal | runtime.DecimalJsLike | number | string
+  id: string
+  businessId: string
+  branchId?: string | null
+  branchBusinessId?: string | null
+  account?: string | null
+  balance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  version: number
+  snapshotType: string
+  scope: string
+  data: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastVersion: number
+  createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type SnapshotUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  account?: Prisma.StringFieldUpdateOperationsInput | string
-  balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  balance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  snapshotType?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  branch?: Prisma.BranchUpdateOneRequiredWithoutSnapshotsNestedInput
+  business?: Prisma.BusinessUpdateOneRequiredWithoutSnapshotsNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutSnapshotsNestedInput
 }
 
 export type SnapshotUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
-  account?: Prisma.StringFieldUpdateOperationsInput | string
-  balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  balance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  snapshotType?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SnapshotCreateManyInput = {
-  id?: string
-  branchId: string
-  account: string
-  balance: runtime.Decimal | runtime.DecimalJsLike | number | string
+  id: string
+  businessId: string
+  branchId?: string | null
+  branchBusinessId?: string | null
+  account?: string | null
+  balance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  version: number
+  snapshotType: string
+  scope: string
+  data: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastVersion: number
+  createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type SnapshotUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  account?: Prisma.StringFieldUpdateOperationsInput | string
-  balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  balance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  snapshotType?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SnapshotUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
-  account?: Prisma.StringFieldUpdateOperationsInput | string
-  balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  balance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  snapshotType?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -353,46 +485,112 @@ export type SnapshotOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type SnapshotBranchIdAccountCompoundUniqueInput = {
+export type SnapshotBusinessIdBranchIdAccountSnapshotTypeScopeCompoundUniqueInput = {
+  businessId: string
   branchId: string
   account: string
+  snapshotType: string
+  scope: string
 }
 
 export type SnapshotCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
+  branchBusinessId?: Prisma.SortOrder
   account?: Prisma.SortOrder
   balance?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  snapshotType?: Prisma.SortOrder
+  scope?: Prisma.SortOrder
+  data?: Prisma.SortOrder
   lastVersion?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type SnapshotAvgOrderByAggregateInput = {
   balance?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   lastVersion?: Prisma.SortOrder
 }
 
 export type SnapshotMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
+  branchBusinessId?: Prisma.SortOrder
   account?: Prisma.SortOrder
   balance?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  snapshotType?: Prisma.SortOrder
+  scope?: Prisma.SortOrder
   lastVersion?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type SnapshotMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
+  branchBusinessId?: Prisma.SortOrder
   account?: Prisma.SortOrder
   balance?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+  snapshotType?: Prisma.SortOrder
+  scope?: Prisma.SortOrder
   lastVersion?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type SnapshotSumOrderByAggregateInput = {
   balance?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   lastVersion?: Prisma.SortOrder
+}
+
+export type SnapshotCreateNestedManyWithoutBusinessInput = {
+  create?: Prisma.XOR<Prisma.SnapshotCreateWithoutBusinessInput, Prisma.SnapshotUncheckedCreateWithoutBusinessInput> | Prisma.SnapshotCreateWithoutBusinessInput[] | Prisma.SnapshotUncheckedCreateWithoutBusinessInput[]
+  connectOrCreate?: Prisma.SnapshotCreateOrConnectWithoutBusinessInput | Prisma.SnapshotCreateOrConnectWithoutBusinessInput[]
+  createMany?: Prisma.SnapshotCreateManyBusinessInputEnvelope
+  connect?: Prisma.SnapshotWhereUniqueInput | Prisma.SnapshotWhereUniqueInput[]
+}
+
+export type SnapshotUncheckedCreateNestedManyWithoutBusinessInput = {
+  create?: Prisma.XOR<Prisma.SnapshotCreateWithoutBusinessInput, Prisma.SnapshotUncheckedCreateWithoutBusinessInput> | Prisma.SnapshotCreateWithoutBusinessInput[] | Prisma.SnapshotUncheckedCreateWithoutBusinessInput[]
+  connectOrCreate?: Prisma.SnapshotCreateOrConnectWithoutBusinessInput | Prisma.SnapshotCreateOrConnectWithoutBusinessInput[]
+  createMany?: Prisma.SnapshotCreateManyBusinessInputEnvelope
+  connect?: Prisma.SnapshotWhereUniqueInput | Prisma.SnapshotWhereUniqueInput[]
+}
+
+export type SnapshotUpdateManyWithoutBusinessNestedInput = {
+  create?: Prisma.XOR<Prisma.SnapshotCreateWithoutBusinessInput, Prisma.SnapshotUncheckedCreateWithoutBusinessInput> | Prisma.SnapshotCreateWithoutBusinessInput[] | Prisma.SnapshotUncheckedCreateWithoutBusinessInput[]
+  connectOrCreate?: Prisma.SnapshotCreateOrConnectWithoutBusinessInput | Prisma.SnapshotCreateOrConnectWithoutBusinessInput[]
+  upsert?: Prisma.SnapshotUpsertWithWhereUniqueWithoutBusinessInput | Prisma.SnapshotUpsertWithWhereUniqueWithoutBusinessInput[]
+  createMany?: Prisma.SnapshotCreateManyBusinessInputEnvelope
+  set?: Prisma.SnapshotWhereUniqueInput | Prisma.SnapshotWhereUniqueInput[]
+  disconnect?: Prisma.SnapshotWhereUniqueInput | Prisma.SnapshotWhereUniqueInput[]
+  delete?: Prisma.SnapshotWhereUniqueInput | Prisma.SnapshotWhereUniqueInput[]
+  connect?: Prisma.SnapshotWhereUniqueInput | Prisma.SnapshotWhereUniqueInput[]
+  update?: Prisma.SnapshotUpdateWithWhereUniqueWithoutBusinessInput | Prisma.SnapshotUpdateWithWhereUniqueWithoutBusinessInput[]
+  updateMany?: Prisma.SnapshotUpdateManyWithWhereWithoutBusinessInput | Prisma.SnapshotUpdateManyWithWhereWithoutBusinessInput[]
+  deleteMany?: Prisma.SnapshotScalarWhereInput | Prisma.SnapshotScalarWhereInput[]
+}
+
+export type SnapshotUncheckedUpdateManyWithoutBusinessNestedInput = {
+  create?: Prisma.XOR<Prisma.SnapshotCreateWithoutBusinessInput, Prisma.SnapshotUncheckedCreateWithoutBusinessInput> | Prisma.SnapshotCreateWithoutBusinessInput[] | Prisma.SnapshotUncheckedCreateWithoutBusinessInput[]
+  connectOrCreate?: Prisma.SnapshotCreateOrConnectWithoutBusinessInput | Prisma.SnapshotCreateOrConnectWithoutBusinessInput[]
+  upsert?: Prisma.SnapshotUpsertWithWhereUniqueWithoutBusinessInput | Prisma.SnapshotUpsertWithWhereUniqueWithoutBusinessInput[]
+  createMany?: Prisma.SnapshotCreateManyBusinessInputEnvelope
+  set?: Prisma.SnapshotWhereUniqueInput | Prisma.SnapshotWhereUniqueInput[]
+  disconnect?: Prisma.SnapshotWhereUniqueInput | Prisma.SnapshotWhereUniqueInput[]
+  delete?: Prisma.SnapshotWhereUniqueInput | Prisma.SnapshotWhereUniqueInput[]
+  connect?: Prisma.SnapshotWhereUniqueInput | Prisma.SnapshotWhereUniqueInput[]
+  update?: Prisma.SnapshotUpdateWithWhereUniqueWithoutBusinessInput | Prisma.SnapshotUpdateWithWhereUniqueWithoutBusinessInput[]
+  updateMany?: Prisma.SnapshotUpdateManyWithWhereWithoutBusinessInput | Prisma.SnapshotUpdateManyWithWhereWithoutBusinessInput[]
+  deleteMany?: Prisma.SnapshotScalarWhereInput | Prisma.SnapshotScalarWhereInput[]
 }
 
 export type SnapshotCreateNestedManyWithoutBranchInput = {
@@ -437,19 +635,105 @@ export type SnapshotUncheckedUpdateManyWithoutBranchNestedInput = {
   deleteMany?: Prisma.SnapshotScalarWhereInput | Prisma.SnapshotScalarWhereInput[]
 }
 
-export type SnapshotCreateWithoutBranchInput = {
-  id?: string
-  account: string
-  balance: runtime.Decimal | runtime.DecimalJsLike | number | string
+export type SnapshotCreateWithoutBusinessInput = {
+  id: string
+  account?: string | null
+  balance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  version: number
+  snapshotType: string
+  scope: string
+  data: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastVersion: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  branch?: Prisma.BranchCreateNestedOneWithoutSnapshotsInput
+}
+
+export type SnapshotUncheckedCreateWithoutBusinessInput = {
+  id: string
+  branchId?: string | null
+  branchBusinessId?: string | null
+  account?: string | null
+  balance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  version: number
+  snapshotType: string
+  scope: string
+  data: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  lastVersion: number
+  createdAt?: Date | string
   updatedAt?: Date | string
 }
 
-export type SnapshotUncheckedCreateWithoutBranchInput = {
-  id?: string
-  account: string
-  balance: runtime.Decimal | runtime.DecimalJsLike | number | string
+export type SnapshotCreateOrConnectWithoutBusinessInput = {
+  where: Prisma.SnapshotWhereUniqueInput
+  create: Prisma.XOR<Prisma.SnapshotCreateWithoutBusinessInput, Prisma.SnapshotUncheckedCreateWithoutBusinessInput>
+}
+
+export type SnapshotCreateManyBusinessInputEnvelope = {
+  data: Prisma.SnapshotCreateManyBusinessInput | Prisma.SnapshotCreateManyBusinessInput[]
+  skipDuplicates?: boolean
+}
+
+export type SnapshotUpsertWithWhereUniqueWithoutBusinessInput = {
+  where: Prisma.SnapshotWhereUniqueInput
+  update: Prisma.XOR<Prisma.SnapshotUpdateWithoutBusinessInput, Prisma.SnapshotUncheckedUpdateWithoutBusinessInput>
+  create: Prisma.XOR<Prisma.SnapshotCreateWithoutBusinessInput, Prisma.SnapshotUncheckedCreateWithoutBusinessInput>
+}
+
+export type SnapshotUpdateWithWhereUniqueWithoutBusinessInput = {
+  where: Prisma.SnapshotWhereUniqueInput
+  data: Prisma.XOR<Prisma.SnapshotUpdateWithoutBusinessInput, Prisma.SnapshotUncheckedUpdateWithoutBusinessInput>
+}
+
+export type SnapshotUpdateManyWithWhereWithoutBusinessInput = {
+  where: Prisma.SnapshotScalarWhereInput
+  data: Prisma.XOR<Prisma.SnapshotUpdateManyMutationInput, Prisma.SnapshotUncheckedUpdateManyWithoutBusinessInput>
+}
+
+export type SnapshotScalarWhereInput = {
+  AND?: Prisma.SnapshotScalarWhereInput | Prisma.SnapshotScalarWhereInput[]
+  OR?: Prisma.SnapshotScalarWhereInput[]
+  NOT?: Prisma.SnapshotScalarWhereInput | Prisma.SnapshotScalarWhereInput[]
+  id?: Prisma.StringFilter<"Snapshot"> | string
+  businessId?: Prisma.StringFilter<"Snapshot"> | string
+  branchId?: Prisma.StringNullableFilter<"Snapshot"> | string | null
+  branchBusinessId?: Prisma.StringNullableFilter<"Snapshot"> | string | null
+  account?: Prisma.StringNullableFilter<"Snapshot"> | string | null
+  balance?: Prisma.DecimalNullableFilter<"Snapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  version?: Prisma.IntFilter<"Snapshot"> | number
+  snapshotType?: Prisma.StringFilter<"Snapshot"> | string
+  scope?: Prisma.StringFilter<"Snapshot"> | string
+  data?: Prisma.JsonFilter<"Snapshot">
+  lastVersion?: Prisma.IntFilter<"Snapshot"> | number
+  createdAt?: Prisma.DateTimeFilter<"Snapshot"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Snapshot"> | Date | string
+}
+
+export type SnapshotCreateWithoutBranchInput = {
+  id: string
+  account?: string | null
+  balance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  version: number
+  snapshotType: string
+  scope: string
+  data: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastVersion: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  business: Prisma.BusinessCreateNestedOneWithoutSnapshotsInput
+}
+
+export type SnapshotUncheckedCreateWithoutBranchInput = {
+  id: string
+  businessId: string
+  account?: string | null
+  balance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  version: number
+  snapshotType: string
+  scope: string
+  data: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  lastVersion: number
+  createdAt?: Date | string
   updatedAt?: Date | string
 }
 
@@ -479,47 +763,118 @@ export type SnapshotUpdateManyWithWhereWithoutBranchInput = {
   data: Prisma.XOR<Prisma.SnapshotUpdateManyMutationInput, Prisma.SnapshotUncheckedUpdateManyWithoutBranchInput>
 }
 
-export type SnapshotScalarWhereInput = {
-  AND?: Prisma.SnapshotScalarWhereInput | Prisma.SnapshotScalarWhereInput[]
-  OR?: Prisma.SnapshotScalarWhereInput[]
-  NOT?: Prisma.SnapshotScalarWhereInput | Prisma.SnapshotScalarWhereInput[]
-  id?: Prisma.StringFilter<"Snapshot"> | string
-  branchId?: Prisma.StringFilter<"Snapshot"> | string
-  account?: Prisma.StringFilter<"Snapshot"> | string
-  balance?: Prisma.DecimalFilter<"Snapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  lastVersion?: Prisma.IntFilter<"Snapshot"> | number
-  updatedAt?: Prisma.DateTimeFilter<"Snapshot"> | Date | string
+export type SnapshotCreateManyBusinessInput = {
+  id: string
+  branchId?: string | null
+  branchBusinessId?: string | null
+  account?: string | null
+  balance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  version: number
+  snapshotType: string
+  scope: string
+  data: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  lastVersion: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type SnapshotUpdateWithoutBusinessInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  balance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  snapshotType?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  lastVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  branch?: Prisma.BranchUpdateOneWithoutSnapshotsNestedInput
+}
+
+export type SnapshotUncheckedUpdateWithoutBusinessInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  balance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  snapshotType?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  lastVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type SnapshotUncheckedUpdateManyWithoutBusinessInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  balance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  snapshotType?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  lastVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SnapshotCreateManyBranchInput = {
-  id?: string
-  account: string
-  balance: runtime.Decimal | runtime.DecimalJsLike | number | string
+  id: string
+  businessId: string
+  account?: string | null
+  balance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  version: number
+  snapshotType: string
+  scope: string
+  data: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastVersion: number
+  createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type SnapshotUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  account?: Prisma.StringFieldUpdateOperationsInput | string
-  balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  balance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  snapshotType?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  business?: Prisma.BusinessUpdateOneRequiredWithoutSnapshotsNestedInput
 }
 
 export type SnapshotUncheckedUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  account?: Prisma.StringFieldUpdateOperationsInput | string
-  balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  balance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  snapshotType?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SnapshotUncheckedUpdateManyWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  account?: Prisma.StringFieldUpdateOperationsInput | string
-  balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  balance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  snapshotType?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lastVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -527,65 +882,107 @@ export type SnapshotUncheckedUpdateManyWithoutBranchInput = {
 
 export type SnapshotSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  businessId?: boolean
   branchId?: boolean
+  branchBusinessId?: boolean
   account?: boolean
   balance?: boolean
+  version?: boolean
+  snapshotType?: boolean
+  scope?: boolean
+  data?: boolean
   lastVersion?: boolean
+  createdAt?: boolean
   updatedAt?: boolean
-  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
+  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
+  branch?: boolean | Prisma.Snapshot$branchArgs<ExtArgs>
 }, ExtArgs["result"]["snapshot"]>
 
 export type SnapshotSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  businessId?: boolean
   branchId?: boolean
+  branchBusinessId?: boolean
   account?: boolean
   balance?: boolean
+  version?: boolean
+  snapshotType?: boolean
+  scope?: boolean
+  data?: boolean
   lastVersion?: boolean
+  createdAt?: boolean
   updatedAt?: boolean
-  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
+  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
+  branch?: boolean | Prisma.Snapshot$branchArgs<ExtArgs>
 }, ExtArgs["result"]["snapshot"]>
 
 export type SnapshotSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  businessId?: boolean
   branchId?: boolean
+  branchBusinessId?: boolean
   account?: boolean
   balance?: boolean
+  version?: boolean
+  snapshotType?: boolean
+  scope?: boolean
+  data?: boolean
   lastVersion?: boolean
+  createdAt?: boolean
   updatedAt?: boolean
-  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
+  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
+  branch?: boolean | Prisma.Snapshot$branchArgs<ExtArgs>
 }, ExtArgs["result"]["snapshot"]>
 
 export type SnapshotSelectScalar = {
   id?: boolean
+  businessId?: boolean
   branchId?: boolean
+  branchBusinessId?: boolean
   account?: boolean
   balance?: boolean
+  version?: boolean
+  snapshotType?: boolean
+  scope?: boolean
+  data?: boolean
   lastVersion?: boolean
+  createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type SnapshotOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "branchId" | "account" | "balance" | "lastVersion" | "updatedAt", ExtArgs["result"]["snapshot"]>
+export type SnapshotOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "branchBusinessId" | "account" | "balance" | "version" | "snapshotType" | "scope" | "data" | "lastVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["snapshot"]>
 export type SnapshotInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
+  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
+  branch?: boolean | Prisma.Snapshot$branchArgs<ExtArgs>
 }
 export type SnapshotIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
+  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
+  branch?: boolean | Prisma.Snapshot$branchArgs<ExtArgs>
 }
 export type SnapshotIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
+  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
+  branch?: boolean | Prisma.Snapshot$branchArgs<ExtArgs>
 }
 
 export type $SnapshotPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Snapshot"
   objects: {
-    branch: Prisma.$BranchPayload<ExtArgs>
+    business: Prisma.$BusinessPayload<ExtArgs>
+    branch: Prisma.$BranchPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    branchId: string
-    account: string
-    balance: runtime.Decimal
+    businessId: string
+    branchId: string | null
+    branchBusinessId: string | null
+    account: string | null
+    balance: runtime.Decimal | null
+    version: number
+    snapshotType: string
+    scope: string
+    data: runtime.JsonValue
     lastVersion: number
+    createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["snapshot"]>
   composites: {}
@@ -981,7 +1378,8 @@ readonly fields: SnapshotFieldRefs;
  */
 export interface Prisma__SnapshotClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  branch<T extends Prisma.BranchDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BranchDefaultArgs<ExtArgs>>): Prisma.Prisma__BranchClient<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  business<T extends Prisma.BusinessDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BusinessDefaultArgs<ExtArgs>>): Prisma.Prisma__BusinessClient<runtime.Types.Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  branch<T extends Prisma.Snapshot$branchArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Snapshot$branchArgs<ExtArgs>>): Prisma.Prisma__BranchClient<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1012,10 +1410,17 @@ export interface Prisma__SnapshotClient<T, Null = never, ExtArgs extends runtime
  */
 export interface SnapshotFieldRefs {
   readonly id: Prisma.FieldRef<"Snapshot", 'String'>
+  readonly businessId: Prisma.FieldRef<"Snapshot", 'String'>
   readonly branchId: Prisma.FieldRef<"Snapshot", 'String'>
+  readonly branchBusinessId: Prisma.FieldRef<"Snapshot", 'String'>
   readonly account: Prisma.FieldRef<"Snapshot", 'String'>
   readonly balance: Prisma.FieldRef<"Snapshot", 'Decimal'>
+  readonly version: Prisma.FieldRef<"Snapshot", 'Int'>
+  readonly snapshotType: Prisma.FieldRef<"Snapshot", 'String'>
+  readonly scope: Prisma.FieldRef<"Snapshot", 'String'>
+  readonly data: Prisma.FieldRef<"Snapshot", 'Json'>
   readonly lastVersion: Prisma.FieldRef<"Snapshot", 'Int'>
+  readonly createdAt: Prisma.FieldRef<"Snapshot", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Snapshot", 'DateTime'>
 }
     
@@ -1410,6 +1815,25 @@ export type SnapshotDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many Snapshots to delete.
    */
   limit?: number
+}
+
+/**
+ * Snapshot.branch
+ */
+export type Snapshot$branchArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Branch
+   */
+  select?: Prisma.BranchSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Branch
+   */
+  omit?: Prisma.BranchOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BranchInclude<ExtArgs> | null
+  where?: Prisma.BranchWhereInput
 }
 
 /**

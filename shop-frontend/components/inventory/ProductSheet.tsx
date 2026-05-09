@@ -42,9 +42,9 @@ export default function ProductSheet({
     if (mode === "edit" && initialData) {
       setForm({
         name: initialData.name,
-        costPrice: String(initialData.cost),
+        costPrice: String(initialData.costPrice),
         sellingPrice: String(initialData.price),
-        quantity: String(initialData.quantity),
+        quantity: String(form.quantity),
       });
     } else {
       setForm({

@@ -1,15 +1,21 @@
 import { EventType } from "./eventType";
 // eventTypes.ts
-export interface BaseEvent<T extends EventType = EventType, p = any> {
+export interface BaseEvent<T extends EventType = EventType, p = Record<string, any>> {
   id: string;
 
+  aggregateId: string;
+  aggregateType: string;
+
   type: T;
+
   payload: p;
 
-  businessId: string;
-  branchId: string;
+  businessId?: string | null;
+  branchId?: string  | null;
 
   mode: "OPENING" | "LIVE";
+
+  scope: "GLOBAL" | "BUSINESS" | "BRANCH";
 
   // sync + ordering
   createdAt: number;       // device time
@@ -18,9 +24,9 @@ export interface BaseEvent<T extends EventType = EventType, p = any> {
 
   // origin
   deviceId: string;
-  userId: string;
+  userId: string | null;
 
   // sync state
-  status: "pending" | "synced" | "failed";
+  status: "PENDING" | "SYNCED" | "FAILED";
   synced: boolean;
 }

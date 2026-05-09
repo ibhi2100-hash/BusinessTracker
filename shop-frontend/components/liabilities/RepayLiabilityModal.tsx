@@ -1,12 +1,12 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { useRepayLiability } from "@/hooks/liabilitiesHooks/useRepayLiability";
 import { repayLiabilitySchema, RepayLiabilityInput } from "@/schemas/repayliability.schema";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 
 interface Props {
   liabilityId: string;
@@ -14,9 +14,9 @@ interface Props {
 }
 
 export const RepayLiabilityModal = ({ liabilityId, onClose }: Props) => {
+  const [pending, setPending] = useState(false)
   const qc = useQueryClient();
 
-  const { mutate, isPending } = useRepayLiability();
   const { register, handleSubmit } = useForm<RepayLiabilityInput>({
     resolver: zodResolver(repayLiabilitySchema) as any,
     defaultValues: {
@@ -27,11 +27,9 @@ export const RepayLiabilityModal = ({ liabilityId, onClose }: Props) => {
 
   const onSubmit = (data : RepayLiabilityInput) => {
     const dataPayload: RepayLiabilityInput = {
-      ...data.payload,
-      paymentDate: data.paymentDate ? new Date(data.paymentDate).toISOString() : undefined,
+      ...data,
+      paymentDate: data.paymentDate ? new Date(data.paymentDate) : undefined,
     }
-    mutate({ liabilityId, dataPayload  },
-       { onSuccess: onClose });
   };
 
   return (
@@ -66,9 +64,9 @@ export const RepayLiabilityModal = ({ liabilityId, onClose }: Props) => {
           <Button
             type="submit"
             className="flex-1"
-            disabled={isPending}
+            disabled={pending}
           >
-            {isPending ? "Processing..." : "Repay"}
+            {pending ? "Processing..." : "Repay"}
           </Button>
         </div>
       </form>

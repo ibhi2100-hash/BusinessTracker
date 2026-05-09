@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginInput } from "@/lib/validations/auth.schema";
 import { useRouter } from "next/navigation";
-import { useAutoLogin } from "@/hooks/useAutoLogin";
 import { useAuthStore } from "@/src/store/useAuthStore";
 import Link from "next/link";
 import { AuthService } from "@/src/services/authService";

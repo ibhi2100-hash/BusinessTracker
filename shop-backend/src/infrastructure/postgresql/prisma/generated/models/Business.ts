@@ -27,34 +27,37 @@ export type AggregateBusiness = {
 export type BusinessMinAggregateOutputType = {
   id: string | null
   name: string | null
+  userId: string | null
   address: string | null
   isOnboarding: boolean | null
   onboardingCompleted: boolean | null
+  status: $Enums.BusinessStatus | null
   createdAt: Date | null
   activatedAt: Date | null
-  status: $Enums.BusinessStatus | null
 }
 
 export type BusinessMaxAggregateOutputType = {
   id: string | null
   name: string | null
+  userId: string | null
   address: string | null
   isOnboarding: boolean | null
   onboardingCompleted: boolean | null
+  status: $Enums.BusinessStatus | null
   createdAt: Date | null
   activatedAt: Date | null
-  status: $Enums.BusinessStatus | null
 }
 
 export type BusinessCountAggregateOutputType = {
   id: number
   name: number
+  userId: number
   address: number
   isOnboarding: number
   onboardingCompleted: number
+  status: number
   createdAt: number
   activatedAt: number
-  status: number
   _all: number
 }
 
@@ -62,34 +65,37 @@ export type BusinessCountAggregateOutputType = {
 export type BusinessMinAggregateInputType = {
   id?: true
   name?: true
+  userId?: true
   address?: true
   isOnboarding?: true
   onboardingCompleted?: true
+  status?: true
   createdAt?: true
   activatedAt?: true
-  status?: true
 }
 
 export type BusinessMaxAggregateInputType = {
   id?: true
   name?: true
+  userId?: true
   address?: true
   isOnboarding?: true
   onboardingCompleted?: true
+  status?: true
   createdAt?: true
   activatedAt?: true
-  status?: true
 }
 
 export type BusinessCountAggregateInputType = {
   id?: true
   name?: true
+  userId?: true
   address?: true
   isOnboarding?: true
   onboardingCompleted?: true
+  status?: true
   createdAt?: true
   activatedAt?: true
-  status?: true
   _all?: true
 }
 
@@ -168,12 +174,13 @@ export type BusinessGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 export type BusinessGroupByOutputType = {
   id: string
   name: string
+  userId: string | null
   address: string | null
   isOnboarding: boolean
   onboardingCompleted: boolean
+  status: $Enums.BusinessStatus
   createdAt: Date
   activatedAt: Date | null
-  status: $Enums.BusinessStatus
   _count: BusinessCountAggregateOutputType | null
   _min: BusinessMinAggregateOutputType | null
   _max: BusinessMaxAggregateOutputType | null
@@ -200,31 +207,45 @@ export type BusinessWhereInput = {
   NOT?: Prisma.BusinessWhereInput | Prisma.BusinessWhereInput[]
   id?: Prisma.StringFilter<"Business"> | string
   name?: Prisma.StringFilter<"Business"> | string
+  userId?: Prisma.StringNullableFilter<"Business"> | string | null
   address?: Prisma.StringNullableFilter<"Business"> | string | null
   isOnboarding?: Prisma.BoolFilter<"Business"> | boolean
   onboardingCompleted?: Prisma.BoolFilter<"Business"> | boolean
+  status?: Prisma.EnumBusinessStatusFilter<"Business"> | $Enums.BusinessStatus
   createdAt?: Prisma.DateTimeFilter<"Business"> | Date | string
   activatedAt?: Prisma.DateTimeNullableFilter<"Business"> | Date | string | null
-  status?: Prisma.EnumBusinessStatusFilter<"Business"> | $Enums.BusinessStatus
-  users?: Prisma.UserListRelationFilter
+  owner?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   branches?: Prisma.BranchListRelationFilter
-  subscriptions?: Prisma.BusinessSubscriptionListRelationFilter
+  users?: Prisma.UserListRelationFilter
+  products?: Prisma.ProductListRelationFilter
+  inventories?: Prisma.InventoryListRelationFilter
+  snapshots?: Prisma.SnapshotListRelationFilter
   alerts?: Prisma.AlertListRelationFilter
+  events?: Prisma.EventListRelationFilter
+  ledgerEntries?: Prisma.LedgerEntryListRelationFilter
+  subscriptions?: Prisma.BusinessSubscriptionListRelationFilter
 }
 
 export type BusinessOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
   isOnboarding?: Prisma.SortOrder
   onboardingCompleted?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   activatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrder
-  users?: Prisma.UserOrderByRelationAggregateInput
+  owner?: Prisma.UserOrderByWithRelationInput
   branches?: Prisma.BranchOrderByRelationAggregateInput
-  subscriptions?: Prisma.BusinessSubscriptionOrderByRelationAggregateInput
+  users?: Prisma.UserOrderByRelationAggregateInput
+  products?: Prisma.ProductOrderByRelationAggregateInput
+  inventories?: Prisma.InventoryOrderByRelationAggregateInput
+  snapshots?: Prisma.SnapshotOrderByRelationAggregateInput
   alerts?: Prisma.AlertOrderByRelationAggregateInput
+  events?: Prisma.EventOrderByRelationAggregateInput
+  ledgerEntries?: Prisma.LedgerEntryOrderByRelationAggregateInput
+  subscriptions?: Prisma.BusinessSubscriptionOrderByRelationAggregateInput
 }
 
 export type BusinessWhereUniqueInput = Prisma.AtLeast<{
@@ -233,27 +254,35 @@ export type BusinessWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.BusinessWhereInput[]
   NOT?: Prisma.BusinessWhereInput | Prisma.BusinessWhereInput[]
   name?: Prisma.StringFilter<"Business"> | string
+  userId?: Prisma.StringNullableFilter<"Business"> | string | null
   address?: Prisma.StringNullableFilter<"Business"> | string | null
   isOnboarding?: Prisma.BoolFilter<"Business"> | boolean
   onboardingCompleted?: Prisma.BoolFilter<"Business"> | boolean
+  status?: Prisma.EnumBusinessStatusFilter<"Business"> | $Enums.BusinessStatus
   createdAt?: Prisma.DateTimeFilter<"Business"> | Date | string
   activatedAt?: Prisma.DateTimeNullableFilter<"Business"> | Date | string | null
-  status?: Prisma.EnumBusinessStatusFilter<"Business"> | $Enums.BusinessStatus
-  users?: Prisma.UserListRelationFilter
+  owner?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   branches?: Prisma.BranchListRelationFilter
-  subscriptions?: Prisma.BusinessSubscriptionListRelationFilter
+  users?: Prisma.UserListRelationFilter
+  products?: Prisma.ProductListRelationFilter
+  inventories?: Prisma.InventoryListRelationFilter
+  snapshots?: Prisma.SnapshotListRelationFilter
   alerts?: Prisma.AlertListRelationFilter
+  events?: Prisma.EventListRelationFilter
+  ledgerEntries?: Prisma.LedgerEntryListRelationFilter
+  subscriptions?: Prisma.BusinessSubscriptionListRelationFilter
 }, "id">
 
 export type BusinessOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
   isOnboarding?: Prisma.SortOrder
   onboardingCompleted?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   activatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrder
   _count?: Prisma.BusinessCountOrderByAggregateInput
   _max?: Prisma.BusinessMaxOrderByAggregateInput
   _min?: Prisma.BusinessMinOrderByAggregateInput
@@ -265,12 +294,13 @@ export type BusinessScalarWhereWithAggregatesInput = {
   NOT?: Prisma.BusinessScalarWhereWithAggregatesInput | Prisma.BusinessScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Business"> | string
   name?: Prisma.StringWithAggregatesFilter<"Business"> | string
+  userId?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
   address?: Prisma.StringNullableWithAggregatesFilter<"Business"> | string | null
   isOnboarding?: Prisma.BoolWithAggregatesFilter<"Business"> | boolean
   onboardingCompleted?: Prisma.BoolWithAggregatesFilter<"Business"> | boolean
+  status?: Prisma.EnumBusinessStatusWithAggregatesFilter<"Business"> | $Enums.BusinessStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Business"> | Date | string
   activatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Business"> | Date | string | null
-  status?: Prisma.EnumBusinessStatusWithAggregatesFilter<"Business"> | $Enums.BusinessStatus
 }
 
 export type BusinessCreateInput = {
@@ -279,28 +309,40 @@ export type BusinessCreateInput = {
   address?: string | null
   isOnboarding?: boolean
   onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
   createdAt?: Date | string
   activatedAt?: Date | string | null
-  status?: $Enums.BusinessStatus
-  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateInput = {
   id: string
   name: string
+  userId?: string | null
   address?: string | null
   isOnboarding?: boolean
   onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
   createdAt?: Date | string
   activatedAt?: Date | string | null
-  status?: $Enums.BusinessStatus
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUpdateInput = {
@@ -309,39 +351,52 @@ export type BusinessUpdateInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
-  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
-  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateManyInput = {
   id: string
   name: string
+  userId?: string | null
   address?: string | null
   isOnboarding?: boolean
   onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
   createdAt?: Date | string
   activatedAt?: Date | string | null
-  status?: $Enums.BusinessStatus
 }
 
 export type BusinessUpdateManyMutationInput = {
@@ -350,53 +405,57 @@ export type BusinessUpdateManyMutationInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
 }
 
 export type BusinessUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
 }
 
 export type BusinessCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   address?: Prisma.SortOrder
   isOnboarding?: Prisma.SortOrder
   onboardingCompleted?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   activatedAt?: Prisma.SortOrder
-  status?: Prisma.SortOrder
 }
 
 export type BusinessMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   address?: Prisma.SortOrder
   isOnboarding?: Prisma.SortOrder
   onboardingCompleted?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   activatedAt?: Prisma.SortOrder
-  status?: Prisma.SortOrder
 }
 
 export type BusinessMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   address?: Prisma.SortOrder
   isOnboarding?: Prisma.SortOrder
   onboardingCompleted?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   activatedAt?: Prisma.SortOrder
-  status?: Prisma.SortOrder
 }
 
 export type BusinessScalarRelationFilter = {
@@ -407,6 +466,16 @@ export type BusinessScalarRelationFilter = {
 export type BusinessNullableScalarRelationFilter = {
   is?: Prisma.BusinessWhereInput | null
   isNot?: Prisma.BusinessWhereInput | null
+}
+
+export type BusinessListRelationFilter = {
+  every?: Prisma.BusinessWhereInput
+  some?: Prisma.BusinessWhereInput
+  none?: Prisma.BusinessWhereInput
+}
+
+export type BusinessOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type StringFieldUpdateOperationsInput = {
@@ -421,16 +490,16 @@ export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
 
+export type EnumBusinessStatusFieldUpdateOperationsInput = {
+  set?: $Enums.BusinessStatus
+}
+
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
-}
-
-export type EnumBusinessStatusFieldUpdateOperationsInput = {
-  set?: $Enums.BusinessStatus
 }
 
 export type BusinessCreateNestedOneWithoutBranchesInput = {
@@ -453,6 +522,20 @@ export type BusinessCreateNestedOneWithoutUsersInput = {
   connect?: Prisma.BusinessWhereUniqueInput
 }
 
+export type BusinessCreateNestedManyWithoutOwnerInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutOwnerInput, Prisma.BusinessUncheckedCreateWithoutOwnerInput> | Prisma.BusinessCreateWithoutOwnerInput[] | Prisma.BusinessUncheckedCreateWithoutOwnerInput[]
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutOwnerInput | Prisma.BusinessCreateOrConnectWithoutOwnerInput[]
+  createMany?: Prisma.BusinessCreateManyOwnerInputEnvelope
+  connect?: Prisma.BusinessWhereUniqueInput | Prisma.BusinessWhereUniqueInput[]
+}
+
+export type BusinessUncheckedCreateNestedManyWithoutOwnerInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutOwnerInput, Prisma.BusinessUncheckedCreateWithoutOwnerInput> | Prisma.BusinessCreateWithoutOwnerInput[] | Prisma.BusinessUncheckedCreateWithoutOwnerInput[]
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutOwnerInput | Prisma.BusinessCreateOrConnectWithoutOwnerInput[]
+  createMany?: Prisma.BusinessCreateManyOwnerInputEnvelope
+  connect?: Prisma.BusinessWhereUniqueInput | Prisma.BusinessWhereUniqueInput[]
+}
+
 export type BusinessUpdateOneWithoutUsersNestedInput = {
   create?: Prisma.XOR<Prisma.BusinessCreateWithoutUsersInput, Prisma.BusinessUncheckedCreateWithoutUsersInput>
   connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutUsersInput
@@ -461,6 +544,34 @@ export type BusinessUpdateOneWithoutUsersNestedInput = {
   delete?: Prisma.BusinessWhereInput | boolean
   connect?: Prisma.BusinessWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutUsersInput, Prisma.BusinessUpdateWithoutUsersInput>, Prisma.BusinessUncheckedUpdateWithoutUsersInput>
+}
+
+export type BusinessUpdateManyWithoutOwnerNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutOwnerInput, Prisma.BusinessUncheckedCreateWithoutOwnerInput> | Prisma.BusinessCreateWithoutOwnerInput[] | Prisma.BusinessUncheckedCreateWithoutOwnerInput[]
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutOwnerInput | Prisma.BusinessCreateOrConnectWithoutOwnerInput[]
+  upsert?: Prisma.BusinessUpsertWithWhereUniqueWithoutOwnerInput | Prisma.BusinessUpsertWithWhereUniqueWithoutOwnerInput[]
+  createMany?: Prisma.BusinessCreateManyOwnerInputEnvelope
+  set?: Prisma.BusinessWhereUniqueInput | Prisma.BusinessWhereUniqueInput[]
+  disconnect?: Prisma.BusinessWhereUniqueInput | Prisma.BusinessWhereUniqueInput[]
+  delete?: Prisma.BusinessWhereUniqueInput | Prisma.BusinessWhereUniqueInput[]
+  connect?: Prisma.BusinessWhereUniqueInput | Prisma.BusinessWhereUniqueInput[]
+  update?: Prisma.BusinessUpdateWithWhereUniqueWithoutOwnerInput | Prisma.BusinessUpdateWithWhereUniqueWithoutOwnerInput[]
+  updateMany?: Prisma.BusinessUpdateManyWithWhereWithoutOwnerInput | Prisma.BusinessUpdateManyWithWhereWithoutOwnerInput[]
+  deleteMany?: Prisma.BusinessScalarWhereInput | Prisma.BusinessScalarWhereInput[]
+}
+
+export type BusinessUncheckedUpdateManyWithoutOwnerNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutOwnerInput, Prisma.BusinessUncheckedCreateWithoutOwnerInput> | Prisma.BusinessCreateWithoutOwnerInput[] | Prisma.BusinessUncheckedCreateWithoutOwnerInput[]
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutOwnerInput | Prisma.BusinessCreateOrConnectWithoutOwnerInput[]
+  upsert?: Prisma.BusinessUpsertWithWhereUniqueWithoutOwnerInput | Prisma.BusinessUpsertWithWhereUniqueWithoutOwnerInput[]
+  createMany?: Prisma.BusinessCreateManyOwnerInputEnvelope
+  set?: Prisma.BusinessWhereUniqueInput | Prisma.BusinessWhereUniqueInput[]
+  disconnect?: Prisma.BusinessWhereUniqueInput | Prisma.BusinessWhereUniqueInput[]
+  delete?: Prisma.BusinessWhereUniqueInput | Prisma.BusinessWhereUniqueInput[]
+  connect?: Prisma.BusinessWhereUniqueInput | Prisma.BusinessWhereUniqueInput[]
+  update?: Prisma.BusinessUpdateWithWhereUniqueWithoutOwnerInput | Prisma.BusinessUpdateWithWhereUniqueWithoutOwnerInput[]
+  updateMany?: Prisma.BusinessUpdateManyWithWhereWithoutOwnerInput | Prisma.BusinessUpdateManyWithWhereWithoutOwnerInput[]
+  deleteMany?: Prisma.BusinessScalarWhereInput | Prisma.BusinessScalarWhereInput[]
 }
 
 export type BusinessCreateNestedOneWithoutSubscriptionsInput = {
@@ -475,6 +586,78 @@ export type BusinessUpdateOneRequiredWithoutSubscriptionsNestedInput = {
   upsert?: Prisma.BusinessUpsertWithoutSubscriptionsInput
   connect?: Prisma.BusinessWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutSubscriptionsInput, Prisma.BusinessUpdateWithoutSubscriptionsInput>, Prisma.BusinessUncheckedUpdateWithoutSubscriptionsInput>
+}
+
+export type BusinessCreateNestedOneWithoutProductsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutProductsInput, Prisma.BusinessUncheckedCreateWithoutProductsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutProductsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutProductsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutProductsInput, Prisma.BusinessUncheckedCreateWithoutProductsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutProductsInput
+  upsert?: Prisma.BusinessUpsertWithoutProductsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutProductsInput, Prisma.BusinessUpdateWithoutProductsInput>, Prisma.BusinessUncheckedUpdateWithoutProductsInput>
+}
+
+export type BusinessCreateNestedOneWithoutInventoriesInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutInventoriesInput, Prisma.BusinessUncheckedCreateWithoutInventoriesInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutInventoriesInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutInventoriesNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutInventoriesInput, Prisma.BusinessUncheckedCreateWithoutInventoriesInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutInventoriesInput
+  upsert?: Prisma.BusinessUpsertWithoutInventoriesInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutInventoriesInput, Prisma.BusinessUpdateWithoutInventoriesInput>, Prisma.BusinessUncheckedUpdateWithoutInventoriesInput>
+}
+
+export type BusinessCreateNestedOneWithoutEventsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutEventsInput, Prisma.BusinessUncheckedCreateWithoutEventsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutEventsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneWithoutEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutEventsInput, Prisma.BusinessUncheckedCreateWithoutEventsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutEventsInput
+  upsert?: Prisma.BusinessUpsertWithoutEventsInput
+  disconnect?: Prisma.BusinessWhereInput | boolean
+  delete?: Prisma.BusinessWhereInput | boolean
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutEventsInput, Prisma.BusinessUpdateWithoutEventsInput>, Prisma.BusinessUncheckedUpdateWithoutEventsInput>
+}
+
+export type BusinessCreateNestedOneWithoutLedgerEntriesInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutLedgerEntriesInput, Prisma.BusinessUncheckedCreateWithoutLedgerEntriesInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutLedgerEntriesInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutLedgerEntriesNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutLedgerEntriesInput, Prisma.BusinessUncheckedCreateWithoutLedgerEntriesInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutLedgerEntriesInput
+  upsert?: Prisma.BusinessUpsertWithoutLedgerEntriesInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutLedgerEntriesInput, Prisma.BusinessUpdateWithoutLedgerEntriesInput>, Prisma.BusinessUncheckedUpdateWithoutLedgerEntriesInput>
+}
+
+export type BusinessCreateNestedOneWithoutSnapshotsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutSnapshotsInput, Prisma.BusinessUncheckedCreateWithoutSnapshotsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutSnapshotsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutSnapshotsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutSnapshotsInput, Prisma.BusinessUncheckedCreateWithoutSnapshotsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutSnapshotsInput
+  upsert?: Prisma.BusinessUpsertWithoutSnapshotsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutSnapshotsInput, Prisma.BusinessUpdateWithoutSnapshotsInput>, Prisma.BusinessUncheckedUpdateWithoutSnapshotsInput>
 }
 
 export type BusinessCreateNestedOneWithoutAlertsInput = {
@@ -497,26 +680,38 @@ export type BusinessCreateWithoutBranchesInput = {
   address?: string | null
   isOnboarding?: boolean
   onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
   createdAt?: Date | string
   activatedAt?: Date | string | null
-  status?: $Enums.BusinessStatus
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBranchesInput = {
   id: string
   name: string
+  userId?: string | null
   address?: string | null
   isOnboarding?: boolean
   onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
   createdAt?: Date | string
   activatedAt?: Date | string | null
-  status?: $Enums.BusinessStatus
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBranchesInput = {
@@ -541,26 +736,38 @@ export type BusinessUpdateWithoutBranchesInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBranchesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutUsersInput = {
@@ -569,31 +776,93 @@ export type BusinessCreateWithoutUsersInput = {
   address?: string | null
   isOnboarding?: boolean
   onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
   createdAt?: Date | string
   activatedAt?: Date | string | null
-  status?: $Enums.BusinessStatus
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutUsersInput = {
   id: string
   name: string
+  userId?: string | null
   address?: string | null
   isOnboarding?: boolean
   onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
   createdAt?: Date | string
   activatedAt?: Date | string | null
-  status?: $Enums.BusinessStatus
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutUsersInput = {
   where: Prisma.BusinessWhereUniqueInput
   create: Prisma.XOR<Prisma.BusinessCreateWithoutUsersInput, Prisma.BusinessUncheckedCreateWithoutUsersInput>
+}
+
+export type BusinessCreateWithoutOwnerInput = {
+  id: string
+  name: string
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  activatedAt?: Date | string | null
+  branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutOwnerInput = {
+  id: string
+  name: string
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  activatedAt?: Date | string | null
+  branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutOwnerInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutOwnerInput, Prisma.BusinessUncheckedCreateWithoutOwnerInput>
+}
+
+export type BusinessCreateManyOwnerInputEnvelope = {
+  data: Prisma.BusinessCreateManyOwnerInput | Prisma.BusinessCreateManyOwnerInput[]
+  skipDuplicates?: boolean
 }
 
 export type BusinessUpsertWithoutUsersInput = {
@@ -613,26 +882,69 @@ export type BusinessUpdateWithoutUsersInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutUsersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUpsertWithWhereUniqueWithoutOwnerInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutOwnerInput, Prisma.BusinessUncheckedUpdateWithoutOwnerInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutOwnerInput, Prisma.BusinessUncheckedCreateWithoutOwnerInput>
+}
+
+export type BusinessUpdateWithWhereUniqueWithoutOwnerInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutOwnerInput, Prisma.BusinessUncheckedUpdateWithoutOwnerInput>
+}
+
+export type BusinessUpdateManyWithWhereWithoutOwnerInput = {
+  where: Prisma.BusinessScalarWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateManyMutationInput, Prisma.BusinessUncheckedUpdateManyWithoutOwnerInput>
+}
+
+export type BusinessScalarWhereInput = {
+  AND?: Prisma.BusinessScalarWhereInput | Prisma.BusinessScalarWhereInput[]
+  OR?: Prisma.BusinessScalarWhereInput[]
+  NOT?: Prisma.BusinessScalarWhereInput | Prisma.BusinessScalarWhereInput[]
+  id?: Prisma.StringFilter<"Business"> | string
+  name?: Prisma.StringFilter<"Business"> | string
+  userId?: Prisma.StringNullableFilter<"Business"> | string | null
+  address?: Prisma.StringNullableFilter<"Business"> | string | null
+  isOnboarding?: Prisma.BoolFilter<"Business"> | boolean
+  onboardingCompleted?: Prisma.BoolFilter<"Business"> | boolean
+  status?: Prisma.EnumBusinessStatusFilter<"Business"> | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFilter<"Business"> | Date | string
+  activatedAt?: Prisma.DateTimeNullableFilter<"Business"> | Date | string | null
 }
 
 export type BusinessCreateWithoutSubscriptionsInput = {
@@ -641,26 +953,38 @@ export type BusinessCreateWithoutSubscriptionsInput = {
   address?: string | null
   isOnboarding?: boolean
   onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
   createdAt?: Date | string
   activatedAt?: Date | string | null
-  status?: $Enums.BusinessStatus
-  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutSubscriptionsInput = {
   id: string
   name: string
+  userId?: string | null
   address?: string | null
   isOnboarding?: boolean
   onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
   createdAt?: Date | string
   activatedAt?: Date | string | null
-  status?: $Enums.BusinessStatus
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutSubscriptionsInput = {
@@ -685,26 +1009,518 @@ export type BusinessUpdateWithoutSubscriptionsInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
-  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutSubscriptionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
-  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutProductsInput = {
+  id: string
+  name: string
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  activatedAt?: Date | string | null
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
+  branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutProductsInput = {
+  id: string
+  name: string
+  userId?: string | null
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  activatedAt?: Date | string | null
+  branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutProductsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutProductsInput, Prisma.BusinessUncheckedCreateWithoutProductsInput>
+}
+
+export type BusinessUpsertWithoutProductsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutProductsInput, Prisma.BusinessUncheckedUpdateWithoutProductsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutProductsInput, Prisma.BusinessUncheckedCreateWithoutProductsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutProductsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutProductsInput, Prisma.BusinessUncheckedUpdateWithoutProductsInput>
+}
+
+export type BusinessUpdateWithoutProductsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
+  branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutProductsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutInventoriesInput = {
+  id: string
+  name: string
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  activatedAt?: Date | string | null
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
+  branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutInventoriesInput = {
+  id: string
+  name: string
+  userId?: string | null
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  activatedAt?: Date | string | null
+  branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutInventoriesInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutInventoriesInput, Prisma.BusinessUncheckedCreateWithoutInventoriesInput>
+}
+
+export type BusinessUpsertWithoutInventoriesInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutInventoriesInput, Prisma.BusinessUncheckedUpdateWithoutInventoriesInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutInventoriesInput, Prisma.BusinessUncheckedCreateWithoutInventoriesInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutInventoriesInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutInventoriesInput, Prisma.BusinessUncheckedUpdateWithoutInventoriesInput>
+}
+
+export type BusinessUpdateWithoutInventoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
+  branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutInventoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutEventsInput = {
+  id: string
+  name: string
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  activatedAt?: Date | string | null
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
+  branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutEventsInput = {
+  id: string
+  name: string
+  userId?: string | null
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  activatedAt?: Date | string | null
+  branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutEventsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutEventsInput, Prisma.BusinessUncheckedCreateWithoutEventsInput>
+}
+
+export type BusinessUpsertWithoutEventsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutEventsInput, Prisma.BusinessUncheckedUpdateWithoutEventsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutEventsInput, Prisma.BusinessUncheckedCreateWithoutEventsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutEventsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutEventsInput, Prisma.BusinessUncheckedUpdateWithoutEventsInput>
+}
+
+export type BusinessUpdateWithoutEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
+  branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutLedgerEntriesInput = {
+  id: string
+  name: string
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  activatedAt?: Date | string | null
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
+  branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutLedgerEntriesInput = {
+  id: string
+  name: string
+  userId?: string | null
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  activatedAt?: Date | string | null
+  branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutLedgerEntriesInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutLedgerEntriesInput, Prisma.BusinessUncheckedCreateWithoutLedgerEntriesInput>
+}
+
+export type BusinessUpsertWithoutLedgerEntriesInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutLedgerEntriesInput, Prisma.BusinessUncheckedUpdateWithoutLedgerEntriesInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutLedgerEntriesInput, Prisma.BusinessUncheckedCreateWithoutLedgerEntriesInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutLedgerEntriesInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutLedgerEntriesInput, Prisma.BusinessUncheckedUpdateWithoutLedgerEntriesInput>
+}
+
+export type BusinessUpdateWithoutLedgerEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
+  branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutLedgerEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutSnapshotsInput = {
+  id: string
+  name: string
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  activatedAt?: Date | string | null
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
+  branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutSnapshotsInput = {
+  id: string
+  name: string
+  userId?: string | null
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  activatedAt?: Date | string | null
+  branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutSnapshotsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutSnapshotsInput, Prisma.BusinessUncheckedCreateWithoutSnapshotsInput>
+}
+
+export type BusinessUpsertWithoutSnapshotsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutSnapshotsInput, Prisma.BusinessUncheckedUpdateWithoutSnapshotsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutSnapshotsInput, Prisma.BusinessUncheckedCreateWithoutSnapshotsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutSnapshotsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutSnapshotsInput, Prisma.BusinessUncheckedUpdateWithoutSnapshotsInput>
+}
+
+export type BusinessUpdateWithoutSnapshotsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
+  branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutSnapshotsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutAlertsInput = {
@@ -713,25 +1529,37 @@ export type BusinessCreateWithoutAlertsInput = {
   address?: string | null
   isOnboarding?: boolean
   onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
   createdAt?: Date | string
   activatedAt?: Date | string | null
-  status?: $Enums.BusinessStatus
-  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutAlertsInput = {
   id: string
   name: string
+  userId?: string | null
   address?: string | null
   isOnboarding?: boolean
   onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
   createdAt?: Date | string
   activatedAt?: Date | string | null
-  status?: $Enums.BusinessStatus
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
@@ -757,26 +1585,100 @@ export type BusinessUpdateWithoutAlertsInput = {
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
-  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutAlertsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
-  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateManyOwnerInput = {
+  id: string
+  name: string
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  activatedAt?: Date | string | null
+}
+
+export type BusinessUpdateWithoutOwnerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutOwnerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateManyWithoutOwnerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -785,17 +1687,27 @@ export type BusinessUncheckedUpdateWithoutAlertsInput = {
  */
 
 export type BusinessCountOutputType = {
-  users: number
   branches: number
-  subscriptions: number
+  users: number
+  products: number
+  inventories: number
+  snapshots: number
   alerts: number
+  events: number
+  ledgerEntries: number
+  subscriptions: number
 }
 
 export type BusinessCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  users?: boolean | BusinessCountOutputTypeCountUsersArgs
   branches?: boolean | BusinessCountOutputTypeCountBranchesArgs
-  subscriptions?: boolean | BusinessCountOutputTypeCountSubscriptionsArgs
+  users?: boolean | BusinessCountOutputTypeCountUsersArgs
+  products?: boolean | BusinessCountOutputTypeCountProductsArgs
+  inventories?: boolean | BusinessCountOutputTypeCountInventoriesArgs
+  snapshots?: boolean | BusinessCountOutputTypeCountSnapshotsArgs
   alerts?: boolean | BusinessCountOutputTypeCountAlertsArgs
+  events?: boolean | BusinessCountOutputTypeCountEventsArgs
+  ledgerEntries?: boolean | BusinessCountOutputTypeCountLedgerEntriesArgs
+  subscriptions?: boolean | BusinessCountOutputTypeCountSubscriptionsArgs
 }
 
 /**
@@ -811,13 +1723,6 @@ export type BusinessCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
 /**
  * BusinessCountOutputType without action
  */
-export type BusinessCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.UserWhereInput
-}
-
-/**
- * BusinessCountOutputType without action
- */
 export type BusinessCountOutputTypeCountBranchesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.BranchWhereInput
 }
@@ -825,8 +1730,29 @@ export type BusinessCountOutputTypeCountBranchesArgs<ExtArgs extends runtime.Typ
 /**
  * BusinessCountOutputType without action
  */
-export type BusinessCountOutputTypeCountSubscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.BusinessSubscriptionWhereInput
+export type BusinessCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountProductsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProductWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountInventoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InventoryWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountSnapshotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SnapshotWhereInput
 }
 
 /**
@@ -836,84 +1762,134 @@ export type BusinessCountOutputTypeCountAlertsArgs<ExtArgs extends runtime.Types
   where?: Prisma.AlertWhereInput
 }
 
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EventWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountLedgerEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LedgerEntryWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountSubscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BusinessSubscriptionWhereInput
+}
+
 
 export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  userId?: boolean
   address?: boolean
   isOnboarding?: boolean
   onboardingCompleted?: boolean
+  status?: boolean
   createdAt?: boolean
   activatedAt?: boolean
-  status?: boolean
-  users?: boolean | Prisma.Business$usersArgs<ExtArgs>
+  owner?: boolean | Prisma.Business$ownerArgs<ExtArgs>
   branches?: boolean | Prisma.Business$branchesArgs<ExtArgs>
-  subscriptions?: boolean | Prisma.Business$subscriptionsArgs<ExtArgs>
+  users?: boolean | Prisma.Business$usersArgs<ExtArgs>
+  products?: boolean | Prisma.Business$productsArgs<ExtArgs>
+  inventories?: boolean | Prisma.Business$inventoriesArgs<ExtArgs>
+  snapshots?: boolean | Prisma.Business$snapshotsArgs<ExtArgs>
   alerts?: boolean | Prisma.Business$alertsArgs<ExtArgs>
+  events?: boolean | Prisma.Business$eventsArgs<ExtArgs>
+  ledgerEntries?: boolean | Prisma.Business$ledgerEntriesArgs<ExtArgs>
+  subscriptions?: boolean | Prisma.Business$subscriptionsArgs<ExtArgs>
   _count?: boolean | Prisma.BusinessCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["business"]>
 
 export type BusinessSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  userId?: boolean
   address?: boolean
   isOnboarding?: boolean
   onboardingCompleted?: boolean
+  status?: boolean
   createdAt?: boolean
   activatedAt?: boolean
-  status?: boolean
+  owner?: boolean | Prisma.Business$ownerArgs<ExtArgs>
 }, ExtArgs["result"]["business"]>
 
 export type BusinessSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  userId?: boolean
   address?: boolean
   isOnboarding?: boolean
   onboardingCompleted?: boolean
+  status?: boolean
   createdAt?: boolean
   activatedAt?: boolean
-  status?: boolean
+  owner?: boolean | Prisma.Business$ownerArgs<ExtArgs>
 }, ExtArgs["result"]["business"]>
 
 export type BusinessSelectScalar = {
   id?: boolean
   name?: boolean
+  userId?: boolean
   address?: boolean
   isOnboarding?: boolean
   onboardingCompleted?: boolean
+  status?: boolean
   createdAt?: boolean
   activatedAt?: boolean
-  status?: boolean
 }
 
-export type BusinessOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "address" | "isOnboarding" | "onboardingCompleted" | "createdAt" | "activatedAt" | "status", ExtArgs["result"]["business"]>
+export type BusinessOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "userId" | "address" | "isOnboarding" | "onboardingCompleted" | "status" | "createdAt" | "activatedAt", ExtArgs["result"]["business"]>
 export type BusinessInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  users?: boolean | Prisma.Business$usersArgs<ExtArgs>
+  owner?: boolean | Prisma.Business$ownerArgs<ExtArgs>
   branches?: boolean | Prisma.Business$branchesArgs<ExtArgs>
-  subscriptions?: boolean | Prisma.Business$subscriptionsArgs<ExtArgs>
+  users?: boolean | Prisma.Business$usersArgs<ExtArgs>
+  products?: boolean | Prisma.Business$productsArgs<ExtArgs>
+  inventories?: boolean | Prisma.Business$inventoriesArgs<ExtArgs>
+  snapshots?: boolean | Prisma.Business$snapshotsArgs<ExtArgs>
   alerts?: boolean | Prisma.Business$alertsArgs<ExtArgs>
+  events?: boolean | Prisma.Business$eventsArgs<ExtArgs>
+  ledgerEntries?: boolean | Prisma.Business$ledgerEntriesArgs<ExtArgs>
+  subscriptions?: boolean | Prisma.Business$subscriptionsArgs<ExtArgs>
   _count?: boolean | Prisma.BusinessCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type BusinessIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type BusinessIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type BusinessIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  owner?: boolean | Prisma.Business$ownerArgs<ExtArgs>
+}
+export type BusinessIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  owner?: boolean | Prisma.Business$ownerArgs<ExtArgs>
+}
 
 export type $BusinessPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Business"
   objects: {
-    users: Prisma.$UserPayload<ExtArgs>[]
+    owner: Prisma.$UserPayload<ExtArgs> | null
     branches: Prisma.$BranchPayload<ExtArgs>[]
-    subscriptions: Prisma.$BusinessSubscriptionPayload<ExtArgs>[]
+    users: Prisma.$UserPayload<ExtArgs>[]
+    products: Prisma.$ProductPayload<ExtArgs>[]
+    inventories: Prisma.$InventoryPayload<ExtArgs>[]
+    snapshots: Prisma.$SnapshotPayload<ExtArgs>[]
     alerts: Prisma.$AlertPayload<ExtArgs>[]
+    events: Prisma.$EventPayload<ExtArgs>[]
+    ledgerEntries: Prisma.$LedgerEntryPayload<ExtArgs>[]
+    subscriptions: Prisma.$BusinessSubscriptionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
+    userId: string | null
     address: string | null
     isOnboarding: boolean
     onboardingCompleted: boolean
+    status: $Enums.BusinessStatus
     createdAt: Date
     activatedAt: Date | null
-    status: $Enums.BusinessStatus
   }, ExtArgs["result"]["business"]>
   composites: {}
 }
@@ -1308,10 +2284,16 @@ readonly fields: BusinessFieldRefs;
  */
 export interface Prisma__BusinessClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  users<T extends Prisma.Business$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  owner<T extends Prisma.Business$ownerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$ownerArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   branches<T extends Prisma.Business$branchesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$branchesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  subscriptions<T extends Prisma.Business$subscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BusinessSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  users<T extends Prisma.Business$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  products<T extends Prisma.Business$productsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$productsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  inventories<T extends Prisma.Business$inventoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$inventoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InventoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  snapshots<T extends Prisma.Business$snapshotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$snapshotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SnapshotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   alerts<T extends Prisma.Business$alertsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$alertsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AlertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  events<T extends Prisma.Business$eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ledgerEntries<T extends Prisma.Business$ledgerEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$ledgerEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LedgerEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  subscriptions<T extends Prisma.Business$subscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BusinessSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1343,12 +2325,13 @@ export interface Prisma__BusinessClient<T, Null = never, ExtArgs extends runtime
 export interface BusinessFieldRefs {
   readonly id: Prisma.FieldRef<"Business", 'String'>
   readonly name: Prisma.FieldRef<"Business", 'String'>
+  readonly userId: Prisma.FieldRef<"Business", 'String'>
   readonly address: Prisma.FieldRef<"Business", 'String'>
   readonly isOnboarding: Prisma.FieldRef<"Business", 'Boolean'>
   readonly onboardingCompleted: Prisma.FieldRef<"Business", 'Boolean'>
+  readonly status: Prisma.FieldRef<"Business", 'BusinessStatus'>
   readonly createdAt: Prisma.FieldRef<"Business", 'DateTime'>
   readonly activatedAt: Prisma.FieldRef<"Business", 'DateTime'>
-  readonly status: Prisma.FieldRef<"Business", 'BusinessStatus'>
 }
     
 
@@ -1598,6 +2581,10 @@ export type BusinessCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    */
   data: Prisma.BusinessCreateManyInput | Prisma.BusinessCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BusinessIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1668,6 +2655,10 @@ export type BusinessUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    * Limit how many Businesses to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BusinessIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1737,9 +2728,9 @@ export type BusinessDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
- * Business.users
+ * Business.owner
  */
-export type Business$usersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Business$ownerArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the User
    */
@@ -1753,11 +2744,6 @@ export type Business$usersArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   include?: Prisma.UserInclude<ExtArgs> | null
   where?: Prisma.UserWhereInput
-  orderBy?: Prisma.UserOrderByWithRelationInput | Prisma.UserOrderByWithRelationInput[]
-  cursor?: Prisma.UserWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
 }
 
 /**
@@ -1785,27 +2771,99 @@ export type Business$branchesArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * Business.subscriptions
+ * Business.users
  */
-export type Business$subscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Business$usersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the BusinessSubscription
+   * Select specific fields to fetch from the User
    */
-  select?: Prisma.BusinessSubscriptionSelect<ExtArgs> | null
+  select?: Prisma.UserSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the BusinessSubscription
+   * Omit specific fields from the User
    */
-  omit?: Prisma.BusinessSubscriptionOmit<ExtArgs> | null
+  omit?: Prisma.UserOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.BusinessSubscriptionInclude<ExtArgs> | null
-  where?: Prisma.BusinessSubscriptionWhereInput
-  orderBy?: Prisma.BusinessSubscriptionOrderByWithRelationInput | Prisma.BusinessSubscriptionOrderByWithRelationInput[]
-  cursor?: Prisma.BusinessSubscriptionWhereUniqueInput
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+  orderBy?: Prisma.UserOrderByWithRelationInput | Prisma.UserOrderByWithRelationInput[]
+  cursor?: Prisma.UserWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.BusinessSubscriptionScalarFieldEnum | Prisma.BusinessSubscriptionScalarFieldEnum[]
+  distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
+}
+
+/**
+ * Business.products
+ */
+export type Business$productsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Product
+   */
+  select?: Prisma.ProductSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Product
+   */
+  omit?: Prisma.ProductOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProductInclude<ExtArgs> | null
+  where?: Prisma.ProductWhereInput
+  orderBy?: Prisma.ProductOrderByWithRelationInput | Prisma.ProductOrderByWithRelationInput[]
+  cursor?: Prisma.ProductWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProductScalarFieldEnum | Prisma.ProductScalarFieldEnum[]
+}
+
+/**
+ * Business.inventories
+ */
+export type Business$inventoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Inventory
+   */
+  select?: Prisma.InventorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Inventory
+   */
+  omit?: Prisma.InventoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InventoryInclude<ExtArgs> | null
+  where?: Prisma.InventoryWhereInput
+  orderBy?: Prisma.InventoryOrderByWithRelationInput | Prisma.InventoryOrderByWithRelationInput[]
+  cursor?: Prisma.InventoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InventoryScalarFieldEnum | Prisma.InventoryScalarFieldEnum[]
+}
+
+/**
+ * Business.snapshots
+ */
+export type Business$snapshotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Snapshot
+   */
+  select?: Prisma.SnapshotSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Snapshot
+   */
+  omit?: Prisma.SnapshotOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SnapshotInclude<ExtArgs> | null
+  where?: Prisma.SnapshotWhereInput
+  orderBy?: Prisma.SnapshotOrderByWithRelationInput | Prisma.SnapshotOrderByWithRelationInput[]
+  cursor?: Prisma.SnapshotWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SnapshotScalarFieldEnum | Prisma.SnapshotScalarFieldEnum[]
 }
 
 /**
@@ -1830,6 +2888,78 @@ export type Business$alertsArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.AlertScalarFieldEnum | Prisma.AlertScalarFieldEnum[]
+}
+
+/**
+ * Business.events
+ */
+export type Business$eventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Event
+   */
+  select?: Prisma.EventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Event
+   */
+  omit?: Prisma.EventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EventInclude<ExtArgs> | null
+  where?: Prisma.EventWhereInput
+  orderBy?: Prisma.EventOrderByWithRelationInput | Prisma.EventOrderByWithRelationInput[]
+  cursor?: Prisma.EventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EventScalarFieldEnum | Prisma.EventScalarFieldEnum[]
+}
+
+/**
+ * Business.ledgerEntries
+ */
+export type Business$ledgerEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LedgerEntry
+   */
+  select?: Prisma.LedgerEntrySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LedgerEntry
+   */
+  omit?: Prisma.LedgerEntryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LedgerEntryInclude<ExtArgs> | null
+  where?: Prisma.LedgerEntryWhereInput
+  orderBy?: Prisma.LedgerEntryOrderByWithRelationInput | Prisma.LedgerEntryOrderByWithRelationInput[]
+  cursor?: Prisma.LedgerEntryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LedgerEntryScalarFieldEnum | Prisma.LedgerEntryScalarFieldEnum[]
+}
+
+/**
+ * Business.subscriptions
+ */
+export type Business$subscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BusinessSubscription
+   */
+  select?: Prisma.BusinessSubscriptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BusinessSubscription
+   */
+  omit?: Prisma.BusinessSubscriptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BusinessSubscriptionInclude<ExtArgs> | null
+  where?: Prisma.BusinessSubscriptionWhereInput
+  orderBy?: Prisma.BusinessSubscriptionOrderByWithRelationInput | Prisma.BusinessSubscriptionOrderByWithRelationInput[]
+  cursor?: Prisma.BusinessSubscriptionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BusinessSubscriptionScalarFieldEnum | Prisma.BusinessSubscriptionScalarFieldEnum[]
 }
 
 /**

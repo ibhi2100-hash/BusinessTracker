@@ -40,8 +40,11 @@ export type LedgerEntryMinAggregateOutputType = {
   id: string | null
   businessId: string | null
   branchId: string | null
+  branchBusinessId: string | null
   eventId: string | null
+  type: string | null
   account: $Enums.Account | null
+  direction: $Enums.LedgerDirection | null
   amount: runtime.Decimal | null
   index: number | null
   createdAt: Date | null
@@ -51,8 +54,11 @@ export type LedgerEntryMaxAggregateOutputType = {
   id: string | null
   businessId: string | null
   branchId: string | null
+  branchBusinessId: string | null
   eventId: string | null
+  type: string | null
   account: $Enums.Account | null
+  direction: $Enums.LedgerDirection | null
   amount: runtime.Decimal | null
   index: number | null
   createdAt: Date | null
@@ -62,8 +68,11 @@ export type LedgerEntryCountAggregateOutputType = {
   id: number
   businessId: number
   branchId: number
+  branchBusinessId: number
   eventId: number
+  type: number
   account: number
+  direction: number
   amount: number
   index: number
   createdAt: number
@@ -85,8 +94,11 @@ export type LedgerEntryMinAggregateInputType = {
   id?: true
   businessId?: true
   branchId?: true
+  branchBusinessId?: true
   eventId?: true
+  type?: true
   account?: true
+  direction?: true
   amount?: true
   index?: true
   createdAt?: true
@@ -96,8 +108,11 @@ export type LedgerEntryMaxAggregateInputType = {
   id?: true
   businessId?: true
   branchId?: true
+  branchBusinessId?: true
   eventId?: true
+  type?: true
   account?: true
+  direction?: true
   amount?: true
   index?: true
   createdAt?: true
@@ -107,8 +122,11 @@ export type LedgerEntryCountAggregateInputType = {
   id?: true
   businessId?: true
   branchId?: true
+  branchBusinessId?: true
   eventId?: true
+  type?: true
   account?: true
+  direction?: true
   amount?: true
   index?: true
   createdAt?: true
@@ -205,8 +223,11 @@ export type LedgerEntryGroupByOutputType = {
   id: string
   businessId: string
   branchId: string
+  branchBusinessId: string
   eventId: string
+  type: string
   account: $Enums.Account
+  direction: $Enums.LedgerDirection
   amount: runtime.Decimal
   index: number
   createdAt: Date
@@ -239,11 +260,16 @@ export type LedgerEntryWhereInput = {
   id?: Prisma.StringFilter<"LedgerEntry"> | string
   businessId?: Prisma.StringFilter<"LedgerEntry"> | string
   branchId?: Prisma.StringFilter<"LedgerEntry"> | string
+  branchBusinessId?: Prisma.StringFilter<"LedgerEntry"> | string
   eventId?: Prisma.StringFilter<"LedgerEntry"> | string
+  type?: Prisma.StringFilter<"LedgerEntry"> | string
   account?: Prisma.EnumAccountFilter<"LedgerEntry"> | $Enums.Account
+  direction?: Prisma.EnumLedgerDirectionFilter<"LedgerEntry"> | $Enums.LedgerDirection
   amount?: Prisma.DecimalFilter<"LedgerEntry"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   index?: Prisma.IntFilter<"LedgerEntry"> | number
   createdAt?: Prisma.DateTimeFilter<"LedgerEntry"> | Date | string
+  business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
+  branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
   event?: Prisma.XOR<Prisma.EventScalarRelationFilter, Prisma.EventWhereInput>
 }
 
@@ -251,11 +277,16 @@ export type LedgerEntryOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
+  branchBusinessId?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   account?: Prisma.SortOrder
+  direction?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   index?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  business?: Prisma.BusinessOrderByWithRelationInput
+  branch?: Prisma.BranchOrderByWithRelationInput
   event?: Prisma.EventOrderByWithRelationInput
 }
 
@@ -267,11 +298,16 @@ export type LedgerEntryWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.LedgerEntryWhereInput | Prisma.LedgerEntryWhereInput[]
   businessId?: Prisma.StringFilter<"LedgerEntry"> | string
   branchId?: Prisma.StringFilter<"LedgerEntry"> | string
+  branchBusinessId?: Prisma.StringFilter<"LedgerEntry"> | string
   eventId?: Prisma.StringFilter<"LedgerEntry"> | string
+  type?: Prisma.StringFilter<"LedgerEntry"> | string
   account?: Prisma.EnumAccountFilter<"LedgerEntry"> | $Enums.Account
+  direction?: Prisma.EnumLedgerDirectionFilter<"LedgerEntry"> | $Enums.LedgerDirection
   amount?: Prisma.DecimalFilter<"LedgerEntry"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   index?: Prisma.IntFilter<"LedgerEntry"> | number
   createdAt?: Prisma.DateTimeFilter<"LedgerEntry"> | Date | string
+  business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
+  branch?: Prisma.XOR<Prisma.BranchScalarRelationFilter, Prisma.BranchWhereInput>
   event?: Prisma.XOR<Prisma.EventScalarRelationFilter, Prisma.EventWhereInput>
 }, "id" | "eventId_index">
 
@@ -279,8 +315,11 @@ export type LedgerEntryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
+  branchBusinessId?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   account?: Prisma.SortOrder
+  direction?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   index?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -298,8 +337,11 @@ export type LedgerEntryScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"LedgerEntry"> | string
   businessId?: Prisma.StringWithAggregatesFilter<"LedgerEntry"> | string
   branchId?: Prisma.StringWithAggregatesFilter<"LedgerEntry"> | string
+  branchBusinessId?: Prisma.StringWithAggregatesFilter<"LedgerEntry"> | string
   eventId?: Prisma.StringWithAggregatesFilter<"LedgerEntry"> | string
+  type?: Prisma.StringWithAggregatesFilter<"LedgerEntry"> | string
   account?: Prisma.EnumAccountWithAggregatesFilter<"LedgerEntry"> | $Enums.Account
+  direction?: Prisma.EnumLedgerDirectionWithAggregatesFilter<"LedgerEntry"> | $Enums.LedgerDirection
   amount?: Prisma.DecimalWithAggregatesFilter<"LedgerEntry"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   index?: Prisma.IntWithAggregatesFilter<"LedgerEntry"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"LedgerEntry"> | Date | string
@@ -307,12 +349,14 @@ export type LedgerEntryScalarWhereWithAggregatesInput = {
 
 export type LedgerEntryCreateInput = {
   id?: string
-  businessId: string
-  branchId: string
+  type: string
   account: $Enums.Account
+  direction: $Enums.LedgerDirection
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   index: number
   createdAt?: Date | string
+  business: Prisma.BusinessCreateNestedOneWithoutLedgerEntriesInput
+  branch: Prisma.BranchCreateNestedOneWithoutLedgerEntriesInput
   event: Prisma.EventCreateNestedOneWithoutLedgerEntriesInput
 }
 
@@ -320,8 +364,11 @@ export type LedgerEntryUncheckedCreateInput = {
   id?: string
   businessId: string
   branchId: string
+  branchBusinessId: string
   eventId: string
+  type: string
   account: $Enums.Account
+  direction: $Enums.LedgerDirection
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   index: number
   createdAt?: Date | string
@@ -329,12 +376,14 @@ export type LedgerEntryUncheckedCreateInput = {
 
 export type LedgerEntryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
+  direction?: Prisma.EnumLedgerDirectionFieldUpdateOperationsInput | $Enums.LedgerDirection
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   index?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  business?: Prisma.BusinessUpdateOneRequiredWithoutLedgerEntriesNestedInput
+  branch?: Prisma.BranchUpdateOneRequiredWithoutLedgerEntriesNestedInput
   event?: Prisma.EventUpdateOneRequiredWithoutLedgerEntriesNestedInput
 }
 
@@ -342,8 +391,11 @@ export type LedgerEntryUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
+  direction?: Prisma.EnumLedgerDirectionFieldUpdateOperationsInput | $Enums.LedgerDirection
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   index?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -353,8 +405,11 @@ export type LedgerEntryCreateManyInput = {
   id?: string
   businessId: string
   branchId: string
+  branchBusinessId: string
   eventId: string
+  type: string
   account: $Enums.Account
+  direction: $Enums.LedgerDirection
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   index: number
   createdAt?: Date | string
@@ -362,9 +417,9 @@ export type LedgerEntryCreateManyInput = {
 
 export type LedgerEntryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
+  direction?: Prisma.EnumLedgerDirectionFieldUpdateOperationsInput | $Enums.LedgerDirection
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   index?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -374,8 +429,11 @@ export type LedgerEntryUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
+  direction?: Prisma.EnumLedgerDirectionFieldUpdateOperationsInput | $Enums.LedgerDirection
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   index?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -400,8 +458,11 @@ export type LedgerEntryCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
+  branchBusinessId?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   account?: Prisma.SortOrder
+  direction?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   index?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -416,8 +477,11 @@ export type LedgerEntryMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
+  branchBusinessId?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   account?: Prisma.SortOrder
+  direction?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   index?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -427,8 +491,11 @@ export type LedgerEntryMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
+  branchBusinessId?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   account?: Prisma.SortOrder
+  direction?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   index?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -437,6 +504,90 @@ export type LedgerEntryMinOrderByAggregateInput = {
 export type LedgerEntrySumOrderByAggregateInput = {
   amount?: Prisma.SortOrder
   index?: Prisma.SortOrder
+}
+
+export type LedgerEntryCreateNestedManyWithoutBusinessInput = {
+  create?: Prisma.XOR<Prisma.LedgerEntryCreateWithoutBusinessInput, Prisma.LedgerEntryUncheckedCreateWithoutBusinessInput> | Prisma.LedgerEntryCreateWithoutBusinessInput[] | Prisma.LedgerEntryUncheckedCreateWithoutBusinessInput[]
+  connectOrCreate?: Prisma.LedgerEntryCreateOrConnectWithoutBusinessInput | Prisma.LedgerEntryCreateOrConnectWithoutBusinessInput[]
+  createMany?: Prisma.LedgerEntryCreateManyBusinessInputEnvelope
+  connect?: Prisma.LedgerEntryWhereUniqueInput | Prisma.LedgerEntryWhereUniqueInput[]
+}
+
+export type LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput = {
+  create?: Prisma.XOR<Prisma.LedgerEntryCreateWithoutBusinessInput, Prisma.LedgerEntryUncheckedCreateWithoutBusinessInput> | Prisma.LedgerEntryCreateWithoutBusinessInput[] | Prisma.LedgerEntryUncheckedCreateWithoutBusinessInput[]
+  connectOrCreate?: Prisma.LedgerEntryCreateOrConnectWithoutBusinessInput | Prisma.LedgerEntryCreateOrConnectWithoutBusinessInput[]
+  createMany?: Prisma.LedgerEntryCreateManyBusinessInputEnvelope
+  connect?: Prisma.LedgerEntryWhereUniqueInput | Prisma.LedgerEntryWhereUniqueInput[]
+}
+
+export type LedgerEntryUpdateManyWithoutBusinessNestedInput = {
+  create?: Prisma.XOR<Prisma.LedgerEntryCreateWithoutBusinessInput, Prisma.LedgerEntryUncheckedCreateWithoutBusinessInput> | Prisma.LedgerEntryCreateWithoutBusinessInput[] | Prisma.LedgerEntryUncheckedCreateWithoutBusinessInput[]
+  connectOrCreate?: Prisma.LedgerEntryCreateOrConnectWithoutBusinessInput | Prisma.LedgerEntryCreateOrConnectWithoutBusinessInput[]
+  upsert?: Prisma.LedgerEntryUpsertWithWhereUniqueWithoutBusinessInput | Prisma.LedgerEntryUpsertWithWhereUniqueWithoutBusinessInput[]
+  createMany?: Prisma.LedgerEntryCreateManyBusinessInputEnvelope
+  set?: Prisma.LedgerEntryWhereUniqueInput | Prisma.LedgerEntryWhereUniqueInput[]
+  disconnect?: Prisma.LedgerEntryWhereUniqueInput | Prisma.LedgerEntryWhereUniqueInput[]
+  delete?: Prisma.LedgerEntryWhereUniqueInput | Prisma.LedgerEntryWhereUniqueInput[]
+  connect?: Prisma.LedgerEntryWhereUniqueInput | Prisma.LedgerEntryWhereUniqueInput[]
+  update?: Prisma.LedgerEntryUpdateWithWhereUniqueWithoutBusinessInput | Prisma.LedgerEntryUpdateWithWhereUniqueWithoutBusinessInput[]
+  updateMany?: Prisma.LedgerEntryUpdateManyWithWhereWithoutBusinessInput | Prisma.LedgerEntryUpdateManyWithWhereWithoutBusinessInput[]
+  deleteMany?: Prisma.LedgerEntryScalarWhereInput | Prisma.LedgerEntryScalarWhereInput[]
+}
+
+export type LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput = {
+  create?: Prisma.XOR<Prisma.LedgerEntryCreateWithoutBusinessInput, Prisma.LedgerEntryUncheckedCreateWithoutBusinessInput> | Prisma.LedgerEntryCreateWithoutBusinessInput[] | Prisma.LedgerEntryUncheckedCreateWithoutBusinessInput[]
+  connectOrCreate?: Prisma.LedgerEntryCreateOrConnectWithoutBusinessInput | Prisma.LedgerEntryCreateOrConnectWithoutBusinessInput[]
+  upsert?: Prisma.LedgerEntryUpsertWithWhereUniqueWithoutBusinessInput | Prisma.LedgerEntryUpsertWithWhereUniqueWithoutBusinessInput[]
+  createMany?: Prisma.LedgerEntryCreateManyBusinessInputEnvelope
+  set?: Prisma.LedgerEntryWhereUniqueInput | Prisma.LedgerEntryWhereUniqueInput[]
+  disconnect?: Prisma.LedgerEntryWhereUniqueInput | Prisma.LedgerEntryWhereUniqueInput[]
+  delete?: Prisma.LedgerEntryWhereUniqueInput | Prisma.LedgerEntryWhereUniqueInput[]
+  connect?: Prisma.LedgerEntryWhereUniqueInput | Prisma.LedgerEntryWhereUniqueInput[]
+  update?: Prisma.LedgerEntryUpdateWithWhereUniqueWithoutBusinessInput | Prisma.LedgerEntryUpdateWithWhereUniqueWithoutBusinessInput[]
+  updateMany?: Prisma.LedgerEntryUpdateManyWithWhereWithoutBusinessInput | Prisma.LedgerEntryUpdateManyWithWhereWithoutBusinessInput[]
+  deleteMany?: Prisma.LedgerEntryScalarWhereInput | Prisma.LedgerEntryScalarWhereInput[]
+}
+
+export type LedgerEntryCreateNestedManyWithoutBranchInput = {
+  create?: Prisma.XOR<Prisma.LedgerEntryCreateWithoutBranchInput, Prisma.LedgerEntryUncheckedCreateWithoutBranchInput> | Prisma.LedgerEntryCreateWithoutBranchInput[] | Prisma.LedgerEntryUncheckedCreateWithoutBranchInput[]
+  connectOrCreate?: Prisma.LedgerEntryCreateOrConnectWithoutBranchInput | Prisma.LedgerEntryCreateOrConnectWithoutBranchInput[]
+  createMany?: Prisma.LedgerEntryCreateManyBranchInputEnvelope
+  connect?: Prisma.LedgerEntryWhereUniqueInput | Prisma.LedgerEntryWhereUniqueInput[]
+}
+
+export type LedgerEntryUncheckedCreateNestedManyWithoutBranchInput = {
+  create?: Prisma.XOR<Prisma.LedgerEntryCreateWithoutBranchInput, Prisma.LedgerEntryUncheckedCreateWithoutBranchInput> | Prisma.LedgerEntryCreateWithoutBranchInput[] | Prisma.LedgerEntryUncheckedCreateWithoutBranchInput[]
+  connectOrCreate?: Prisma.LedgerEntryCreateOrConnectWithoutBranchInput | Prisma.LedgerEntryCreateOrConnectWithoutBranchInput[]
+  createMany?: Prisma.LedgerEntryCreateManyBranchInputEnvelope
+  connect?: Prisma.LedgerEntryWhereUniqueInput | Prisma.LedgerEntryWhereUniqueInput[]
+}
+
+export type LedgerEntryUpdateManyWithoutBranchNestedInput = {
+  create?: Prisma.XOR<Prisma.LedgerEntryCreateWithoutBranchInput, Prisma.LedgerEntryUncheckedCreateWithoutBranchInput> | Prisma.LedgerEntryCreateWithoutBranchInput[] | Prisma.LedgerEntryUncheckedCreateWithoutBranchInput[]
+  connectOrCreate?: Prisma.LedgerEntryCreateOrConnectWithoutBranchInput | Prisma.LedgerEntryCreateOrConnectWithoutBranchInput[]
+  upsert?: Prisma.LedgerEntryUpsertWithWhereUniqueWithoutBranchInput | Prisma.LedgerEntryUpsertWithWhereUniqueWithoutBranchInput[]
+  createMany?: Prisma.LedgerEntryCreateManyBranchInputEnvelope
+  set?: Prisma.LedgerEntryWhereUniqueInput | Prisma.LedgerEntryWhereUniqueInput[]
+  disconnect?: Prisma.LedgerEntryWhereUniqueInput | Prisma.LedgerEntryWhereUniqueInput[]
+  delete?: Prisma.LedgerEntryWhereUniqueInput | Prisma.LedgerEntryWhereUniqueInput[]
+  connect?: Prisma.LedgerEntryWhereUniqueInput | Prisma.LedgerEntryWhereUniqueInput[]
+  update?: Prisma.LedgerEntryUpdateWithWhereUniqueWithoutBranchInput | Prisma.LedgerEntryUpdateWithWhereUniqueWithoutBranchInput[]
+  updateMany?: Prisma.LedgerEntryUpdateManyWithWhereWithoutBranchInput | Prisma.LedgerEntryUpdateManyWithWhereWithoutBranchInput[]
+  deleteMany?: Prisma.LedgerEntryScalarWhereInput | Prisma.LedgerEntryScalarWhereInput[]
+}
+
+export type LedgerEntryUncheckedUpdateManyWithoutBranchNestedInput = {
+  create?: Prisma.XOR<Prisma.LedgerEntryCreateWithoutBranchInput, Prisma.LedgerEntryUncheckedCreateWithoutBranchInput> | Prisma.LedgerEntryCreateWithoutBranchInput[] | Prisma.LedgerEntryUncheckedCreateWithoutBranchInput[]
+  connectOrCreate?: Prisma.LedgerEntryCreateOrConnectWithoutBranchInput | Prisma.LedgerEntryCreateOrConnectWithoutBranchInput[]
+  upsert?: Prisma.LedgerEntryUpsertWithWhereUniqueWithoutBranchInput | Prisma.LedgerEntryUpsertWithWhereUniqueWithoutBranchInput[]
+  createMany?: Prisma.LedgerEntryCreateManyBranchInputEnvelope
+  set?: Prisma.LedgerEntryWhereUniqueInput | Prisma.LedgerEntryWhereUniqueInput[]
+  disconnect?: Prisma.LedgerEntryWhereUniqueInput | Prisma.LedgerEntryWhereUniqueInput[]
+  delete?: Prisma.LedgerEntryWhereUniqueInput | Prisma.LedgerEntryWhereUniqueInput[]
+  connect?: Prisma.LedgerEntryWhereUniqueInput | Prisma.LedgerEntryWhereUniqueInput[]
+  update?: Prisma.LedgerEntryUpdateWithWhereUniqueWithoutBranchInput | Prisma.LedgerEntryUpdateWithWhereUniqueWithoutBranchInput[]
+  updateMany?: Prisma.LedgerEntryUpdateManyWithWhereWithoutBranchInput | Prisma.LedgerEntryUpdateManyWithWhereWithoutBranchInput[]
+  deleteMany?: Prisma.LedgerEntryScalarWhereInput | Prisma.LedgerEntryScalarWhereInput[]
 }
 
 export type LedgerEntryCreateNestedManyWithoutEventInput = {
@@ -485,21 +636,148 @@ export type EnumAccountFieldUpdateOperationsInput = {
   set?: $Enums.Account
 }
 
-export type LedgerEntryCreateWithoutEventInput = {
+export type EnumLedgerDirectionFieldUpdateOperationsInput = {
+  set?: $Enums.LedgerDirection
+}
+
+export type LedgerEntryCreateWithoutBusinessInput = {
   id?: string
-  businessId: string
-  branchId: string
+  type: string
   account: $Enums.Account
+  direction: $Enums.LedgerDirection
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   index: number
   createdAt?: Date | string
+  branch: Prisma.BranchCreateNestedOneWithoutLedgerEntriesInput
+  event: Prisma.EventCreateNestedOneWithoutLedgerEntriesInput
+}
+
+export type LedgerEntryUncheckedCreateWithoutBusinessInput = {
+  id?: string
+  branchId: string
+  branchBusinessId: string
+  eventId: string
+  type: string
+  account: $Enums.Account
+  direction: $Enums.LedgerDirection
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  index: number
+  createdAt?: Date | string
+}
+
+export type LedgerEntryCreateOrConnectWithoutBusinessInput = {
+  where: Prisma.LedgerEntryWhereUniqueInput
+  create: Prisma.XOR<Prisma.LedgerEntryCreateWithoutBusinessInput, Prisma.LedgerEntryUncheckedCreateWithoutBusinessInput>
+}
+
+export type LedgerEntryCreateManyBusinessInputEnvelope = {
+  data: Prisma.LedgerEntryCreateManyBusinessInput | Prisma.LedgerEntryCreateManyBusinessInput[]
+  skipDuplicates?: boolean
+}
+
+export type LedgerEntryUpsertWithWhereUniqueWithoutBusinessInput = {
+  where: Prisma.LedgerEntryWhereUniqueInput
+  update: Prisma.XOR<Prisma.LedgerEntryUpdateWithoutBusinessInput, Prisma.LedgerEntryUncheckedUpdateWithoutBusinessInput>
+  create: Prisma.XOR<Prisma.LedgerEntryCreateWithoutBusinessInput, Prisma.LedgerEntryUncheckedCreateWithoutBusinessInput>
+}
+
+export type LedgerEntryUpdateWithWhereUniqueWithoutBusinessInput = {
+  where: Prisma.LedgerEntryWhereUniqueInput
+  data: Prisma.XOR<Prisma.LedgerEntryUpdateWithoutBusinessInput, Prisma.LedgerEntryUncheckedUpdateWithoutBusinessInput>
+}
+
+export type LedgerEntryUpdateManyWithWhereWithoutBusinessInput = {
+  where: Prisma.LedgerEntryScalarWhereInput
+  data: Prisma.XOR<Prisma.LedgerEntryUpdateManyMutationInput, Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessInput>
+}
+
+export type LedgerEntryScalarWhereInput = {
+  AND?: Prisma.LedgerEntryScalarWhereInput | Prisma.LedgerEntryScalarWhereInput[]
+  OR?: Prisma.LedgerEntryScalarWhereInput[]
+  NOT?: Prisma.LedgerEntryScalarWhereInput | Prisma.LedgerEntryScalarWhereInput[]
+  id?: Prisma.StringFilter<"LedgerEntry"> | string
+  businessId?: Prisma.StringFilter<"LedgerEntry"> | string
+  branchId?: Prisma.StringFilter<"LedgerEntry"> | string
+  branchBusinessId?: Prisma.StringFilter<"LedgerEntry"> | string
+  eventId?: Prisma.StringFilter<"LedgerEntry"> | string
+  type?: Prisma.StringFilter<"LedgerEntry"> | string
+  account?: Prisma.EnumAccountFilter<"LedgerEntry"> | $Enums.Account
+  direction?: Prisma.EnumLedgerDirectionFilter<"LedgerEntry"> | $Enums.LedgerDirection
+  amount?: Prisma.DecimalFilter<"LedgerEntry"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  index?: Prisma.IntFilter<"LedgerEntry"> | number
+  createdAt?: Prisma.DateTimeFilter<"LedgerEntry"> | Date | string
+}
+
+export type LedgerEntryCreateWithoutBranchInput = {
+  id?: string
+  type: string
+  account: $Enums.Account
+  direction: $Enums.LedgerDirection
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  index: number
+  createdAt?: Date | string
+  business: Prisma.BusinessCreateNestedOneWithoutLedgerEntriesInput
+  event: Prisma.EventCreateNestedOneWithoutLedgerEntriesInput
+}
+
+export type LedgerEntryUncheckedCreateWithoutBranchInput = {
+  id?: string
+  businessId: string
+  eventId: string
+  type: string
+  account: $Enums.Account
+  direction: $Enums.LedgerDirection
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  index: number
+  createdAt?: Date | string
+}
+
+export type LedgerEntryCreateOrConnectWithoutBranchInput = {
+  where: Prisma.LedgerEntryWhereUniqueInput
+  create: Prisma.XOR<Prisma.LedgerEntryCreateWithoutBranchInput, Prisma.LedgerEntryUncheckedCreateWithoutBranchInput>
+}
+
+export type LedgerEntryCreateManyBranchInputEnvelope = {
+  data: Prisma.LedgerEntryCreateManyBranchInput | Prisma.LedgerEntryCreateManyBranchInput[]
+  skipDuplicates?: boolean
+}
+
+export type LedgerEntryUpsertWithWhereUniqueWithoutBranchInput = {
+  where: Prisma.LedgerEntryWhereUniqueInput
+  update: Prisma.XOR<Prisma.LedgerEntryUpdateWithoutBranchInput, Prisma.LedgerEntryUncheckedUpdateWithoutBranchInput>
+  create: Prisma.XOR<Prisma.LedgerEntryCreateWithoutBranchInput, Prisma.LedgerEntryUncheckedCreateWithoutBranchInput>
+}
+
+export type LedgerEntryUpdateWithWhereUniqueWithoutBranchInput = {
+  where: Prisma.LedgerEntryWhereUniqueInput
+  data: Prisma.XOR<Prisma.LedgerEntryUpdateWithoutBranchInput, Prisma.LedgerEntryUncheckedUpdateWithoutBranchInput>
+}
+
+export type LedgerEntryUpdateManyWithWhereWithoutBranchInput = {
+  where: Prisma.LedgerEntryScalarWhereInput
+  data: Prisma.XOR<Prisma.LedgerEntryUpdateManyMutationInput, Prisma.LedgerEntryUncheckedUpdateManyWithoutBranchInput>
+}
+
+export type LedgerEntryCreateWithoutEventInput = {
+  id?: string
+  type: string
+  account: $Enums.Account
+  direction: $Enums.LedgerDirection
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  index: number
+  createdAt?: Date | string
+  business: Prisma.BusinessCreateNestedOneWithoutLedgerEntriesInput
+  branch: Prisma.BranchCreateNestedOneWithoutLedgerEntriesInput
 }
 
 export type LedgerEntryUncheckedCreateWithoutEventInput = {
   id?: string
   businessId: string
   branchId: string
+  branchBusinessId: string
+  type: string
   account: $Enums.Account
+  direction: $Enums.LedgerDirection
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   index: number
   createdAt?: Date | string
@@ -531,25 +809,113 @@ export type LedgerEntryUpdateManyWithWhereWithoutEventInput = {
   data: Prisma.XOR<Prisma.LedgerEntryUpdateManyMutationInput, Prisma.LedgerEntryUncheckedUpdateManyWithoutEventInput>
 }
 
-export type LedgerEntryScalarWhereInput = {
-  AND?: Prisma.LedgerEntryScalarWhereInput | Prisma.LedgerEntryScalarWhereInput[]
-  OR?: Prisma.LedgerEntryScalarWhereInput[]
-  NOT?: Prisma.LedgerEntryScalarWhereInput | Prisma.LedgerEntryScalarWhereInput[]
-  id?: Prisma.StringFilter<"LedgerEntry"> | string
-  businessId?: Prisma.StringFilter<"LedgerEntry"> | string
-  branchId?: Prisma.StringFilter<"LedgerEntry"> | string
-  eventId?: Prisma.StringFilter<"LedgerEntry"> | string
-  account?: Prisma.EnumAccountFilter<"LedgerEntry"> | $Enums.Account
-  amount?: Prisma.DecimalFilter<"LedgerEntry"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  index?: Prisma.IntFilter<"LedgerEntry"> | number
-  createdAt?: Prisma.DateTimeFilter<"LedgerEntry"> | Date | string
+export type LedgerEntryCreateManyBusinessInput = {
+  id?: string
+  branchId: string
+  branchBusinessId: string
+  eventId: string
+  type: string
+  account: $Enums.Account
+  direction: $Enums.LedgerDirection
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  index: number
+  createdAt?: Date | string
+}
+
+export type LedgerEntryUpdateWithoutBusinessInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
+  direction?: Prisma.EnumLedgerDirectionFieldUpdateOperationsInput | $Enums.LedgerDirection
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  index?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  branch?: Prisma.BranchUpdateOneRequiredWithoutLedgerEntriesNestedInput
+  event?: Prisma.EventUpdateOneRequiredWithoutLedgerEntriesNestedInput
+}
+
+export type LedgerEntryUncheckedUpdateWithoutBusinessInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
+  eventId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
+  direction?: Prisma.EnumLedgerDirectionFieldUpdateOperationsInput | $Enums.LedgerDirection
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  index?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type LedgerEntryUncheckedUpdateManyWithoutBusinessInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
+  eventId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
+  direction?: Prisma.EnumLedgerDirectionFieldUpdateOperationsInput | $Enums.LedgerDirection
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  index?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type LedgerEntryCreateManyBranchInput = {
+  id?: string
+  businessId: string
+  eventId: string
+  type: string
+  account: $Enums.Account
+  direction: $Enums.LedgerDirection
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  index: number
+  createdAt?: Date | string
+}
+
+export type LedgerEntryUpdateWithoutBranchInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
+  direction?: Prisma.EnumLedgerDirectionFieldUpdateOperationsInput | $Enums.LedgerDirection
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  index?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  business?: Prisma.BusinessUpdateOneRequiredWithoutLedgerEntriesNestedInput
+  event?: Prisma.EventUpdateOneRequiredWithoutLedgerEntriesNestedInput
+}
+
+export type LedgerEntryUncheckedUpdateWithoutBranchInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  eventId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
+  direction?: Prisma.EnumLedgerDirectionFieldUpdateOperationsInput | $Enums.LedgerDirection
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  index?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type LedgerEntryUncheckedUpdateManyWithoutBranchInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  eventId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
+  direction?: Prisma.EnumLedgerDirectionFieldUpdateOperationsInput | $Enums.LedgerDirection
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  index?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LedgerEntryCreateManyEventInput = {
   id?: string
   businessId: string
   branchId: string
+  branchBusinessId: string
+  type: string
   account: $Enums.Account
+  direction: $Enums.LedgerDirection
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   index: number
   createdAt?: Date | string
@@ -557,19 +923,24 @@ export type LedgerEntryCreateManyEventInput = {
 
 export type LedgerEntryUpdateWithoutEventInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
+  direction?: Prisma.EnumLedgerDirectionFieldUpdateOperationsInput | $Enums.LedgerDirection
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   index?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  business?: Prisma.BusinessUpdateOneRequiredWithoutLedgerEntriesNestedInput
+  branch?: Prisma.BranchUpdateOneRequiredWithoutLedgerEntriesNestedInput
 }
 
 export type LedgerEntryUncheckedUpdateWithoutEventInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
+  direction?: Prisma.EnumLedgerDirectionFieldUpdateOperationsInput | $Enums.LedgerDirection
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   index?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -579,7 +950,10 @@ export type LedgerEntryUncheckedUpdateManyWithoutEventInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   branchId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.StringFieldUpdateOperationsInput | string
   account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
+  direction?: Prisma.EnumLedgerDirectionFieldUpdateOperationsInput | $Enums.LedgerDirection
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   index?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -591,11 +965,16 @@ export type LedgerEntrySelect<ExtArgs extends runtime.Types.Extensions.InternalA
   id?: boolean
   businessId?: boolean
   branchId?: boolean
+  branchBusinessId?: boolean
   eventId?: boolean
+  type?: boolean
   account?: boolean
+  direction?: boolean
   amount?: boolean
   index?: boolean
   createdAt?: boolean
+  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
+  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ledgerEntry"]>
 
@@ -603,11 +982,16 @@ export type LedgerEntrySelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   id?: boolean
   businessId?: boolean
   branchId?: boolean
+  branchBusinessId?: boolean
   eventId?: boolean
+  type?: boolean
   account?: boolean
+  direction?: boolean
   amount?: boolean
   index?: boolean
   createdAt?: boolean
+  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
+  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ledgerEntry"]>
 
@@ -615,11 +999,16 @@ export type LedgerEntrySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   id?: boolean
   businessId?: boolean
   branchId?: boolean
+  branchBusinessId?: boolean
   eventId?: boolean
+  type?: boolean
   account?: boolean
+  direction?: boolean
   amount?: boolean
   index?: boolean
   createdAt?: boolean
+  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
+  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ledgerEntry"]>
 
@@ -627,35 +1016,49 @@ export type LedgerEntrySelectScalar = {
   id?: boolean
   businessId?: boolean
   branchId?: boolean
+  branchBusinessId?: boolean
   eventId?: boolean
+  type?: boolean
   account?: boolean
+  direction?: boolean
   amount?: boolean
   index?: boolean
   createdAt?: boolean
 }
 
-export type LedgerEntryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "eventId" | "account" | "amount" | "index" | "createdAt", ExtArgs["result"]["ledgerEntry"]>
+export type LedgerEntryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "branchBusinessId" | "eventId" | "type" | "account" | "direction" | "amount" | "index" | "createdAt", ExtArgs["result"]["ledgerEntry"]>
 export type LedgerEntryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
+  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
 }
 export type LedgerEntryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
+  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
 }
 export type LedgerEntryIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
+  branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
 }
 
 export type $LedgerEntryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "LedgerEntry"
   objects: {
+    business: Prisma.$BusinessPayload<ExtArgs>
+    branch: Prisma.$BranchPayload<ExtArgs>
     event: Prisma.$EventPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     businessId: string
     branchId: string
+    branchBusinessId: string
     eventId: string
+    type: string
     account: $Enums.Account
+    direction: $Enums.LedgerDirection
     amount: runtime.Decimal
     index: number
     createdAt: Date
@@ -1053,6 +1456,8 @@ readonly fields: LedgerEntryFieldRefs;
  */
 export interface Prisma__LedgerEntryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  business<T extends Prisma.BusinessDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BusinessDefaultArgs<ExtArgs>>): Prisma.Prisma__BusinessClient<runtime.Types.Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  branch<T extends Prisma.BranchDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BranchDefaultArgs<ExtArgs>>): Prisma.Prisma__BranchClient<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   event<T extends Prisma.EventDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EventDefaultArgs<ExtArgs>>): Prisma.Prisma__EventClient<runtime.Types.Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1086,8 +1491,11 @@ export interface LedgerEntryFieldRefs {
   readonly id: Prisma.FieldRef<"LedgerEntry", 'String'>
   readonly businessId: Prisma.FieldRef<"LedgerEntry", 'String'>
   readonly branchId: Prisma.FieldRef<"LedgerEntry", 'String'>
+  readonly branchBusinessId: Prisma.FieldRef<"LedgerEntry", 'String'>
   readonly eventId: Prisma.FieldRef<"LedgerEntry", 'String'>
+  readonly type: Prisma.FieldRef<"LedgerEntry", 'String'>
   readonly account: Prisma.FieldRef<"LedgerEntry", 'Account'>
+  readonly direction: Prisma.FieldRef<"LedgerEntry", 'LedgerDirection'>
   readonly amount: Prisma.FieldRef<"LedgerEntry", 'Decimal'>
   readonly index: Prisma.FieldRef<"LedgerEntry", 'Int'>
   readonly createdAt: Prisma.FieldRef<"LedgerEntry", 'DateTime'>

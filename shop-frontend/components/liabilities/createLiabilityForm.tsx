@@ -36,9 +36,8 @@ export const CreateLiabilityForm = ({ mode, onComplete }: Props) => {
     setLoading(true);
     const payload: CreateLiabilityInput = {
         ...data,
-        liabilityType: mode === "OPENING" ? "OPENING" : "LIVE",
-        startDate: data.startDate ? new Date(data.startDate).toISOString() : undefined,
-        dueDate: data.dueDate ? new Date(data.dueDate).toISOString() : undefined
+        type: mode === "OPENING" ? "OPENING" : "LIVE",
+
     }
 
       eventService.create({

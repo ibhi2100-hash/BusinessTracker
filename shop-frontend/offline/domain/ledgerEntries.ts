@@ -1,0 +1,35 @@
+export enum Account {
+  CASH = "CASH",
+  BANK = "BANK",
+  INVENTORY = "INVENTORY",
+  COGS = "COGS",
+  REVENUE = "REVENUE",
+  EXPENSE = "EXPENSE",
+  LIABILITIES = "LIABILITIES",
+  OWNER_CAPITAL = "OWNER_CAPITAL",
+  OWNER_DRAWINGS = "OWNER_DRAWINGS",
+  FIXED_ASSETS = "FIXED_ASSETS",
+  INTER_BRANCH = "INTER_BRANCH",
+}
+
+export interface LedgerEntry {
+  id: string;
+
+  // linkage
+  eventId: string;
+  businessId: string;
+  branchId: string;
+
+  // classification (for reporting only)
+  type: string;
+
+  // accounting core
+  account: Account;
+  direction: "DEBIT" | "CREDIT";
+  amount: number; // ALWAYS POSITIVE
+
+  // ordering
+  index: number; // position inside event
+
+  createdAt: number;
+}

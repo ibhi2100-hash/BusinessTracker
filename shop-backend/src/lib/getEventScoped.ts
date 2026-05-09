@@ -1,11 +1,14 @@
-import { Events, EventScope } from "../domain/event.js";
+import { Event, EventScope } from "../domain/event.js";
 
-export function getEventScope(event: Events): EventScope {
+export function getEventScope(event: Event): EventScope {
   switch (event.type) {
     case "BUSINESS_CREATED":
       return "GLOBAL";
 
     case "BUSINESS_ACTIVATION":
+    case "BRANCH_CREATED":
+    case "BRANCH_SWITCH":
+      return "BUSINESS";
     case "PRODUCT_CREATED":
       return "BUSINESS";
 

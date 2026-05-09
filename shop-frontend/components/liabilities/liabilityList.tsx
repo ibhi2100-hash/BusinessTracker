@@ -1,16 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { useLiabilities } from "@/hooks/liabilitiesHooks/useLiabilities";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { RepayLiabilityModal } from "./RepayLiabilityModal";
 
 export const LiabilityList = () => {
-  const { data, isLoading } = useLiabilities();
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([])
   const [selected, setSelected] = useState<string | null>(null);
 
-  if (isLoading) return <p className="text-center text-gray-500">Loading liabilities...</p>;
+  if (loading) return <p className="text-center text-gray-500">Loading liabilities...</p>;
   if (!data?.length)
     return (
       <Card className="p-6 text-center text-sm text-gray-500">

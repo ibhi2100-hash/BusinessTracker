@@ -1,8 +1,8 @@
 import { useAuthStore } from "./useAuthStore";
 import { useBusinessStore } from "./businessStore";
 import { useBranchStore } from "./useBranchStore";
-import { useInventoryStore } from "./inventoryStore";
-import { useFinancialStore } from "./financialDataStore";
+
+
 
 
 export function resetAllStores() {
@@ -12,6 +12,5 @@ export function resetAllStores() {
     branches: [],
     activeBranchId: null,
   });
-  useInventoryStore.setState({ products: [] });
-  useFinancialStore.setState({ ledger: [] });
+
 }

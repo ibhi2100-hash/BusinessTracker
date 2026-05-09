@@ -1,7 +1,7 @@
 import { createEvent } from "@/offline/core/events/eventFactory";
 import { dispatchEvent } from "@/offline/core/events/eventDispatcher";
 import { useAuthStore } from "@/src/store/useAuthStore";
-import { useBusinessStore } from "@/src/store/businessStore";
+import { useBusinessStore } from "../store/businessStore";
 import { useBranchStore } from "@/src/store/useBranchStore";
 import { nanoid } from "nanoid";
 import { InventoryEventType } from "@/offline/core/events/eventGroups/inventoryEvents";
@@ -11,28 +11,55 @@ import { useInventoryStore } from "../store/inventoryStore";
 export const eventService = {
   async create(input: {
     type: string;
+    aggregateId: string;
+    aggregateType: string;
     payload: any;
     mode: "OPENING" | "LIVE";
+
+    //optional Overrides
+    businessId?: string | null
+    branchId?: string | null
+    
   }) {
     const user = useAuthStore.getState().user;
     if (!user?.id) throw new Error("Not authenticated");
 
-    let businessId = useBusinessStore.getState().business?.id;
-    let branchId = useBranchStore.getState().activeBranchId;
+    if (!input.aggregateId) {
+  throw new Error("Missing aggregateId");
+}
+// Business Context 
 
-    if (input.type === "BUSINESS_CREATED") {
-      businessId = undefined;
-      branchId = undefined;
-    }
+const storedBusinessId =
+  useBusinessStore.getState().business?.id ?? null;
+const storeBranchId =
+  useBranchStore.getState().activeBranchId ?? null;
 
-    const event = createEvent({
+// explicit overide wins
+const businessId = 
+  input.businessId !== undefined
+    ? input.businessId
+    : storedBusinessId;
+
+const branchId = 
+  input.branchId !== undefined
+    ? input.branchId
+    : storeBranchId
+
+    const scope =
+    !businessId
+      ? "GLOBAL"
+      : !branchId
+      ? "BUSINESS"
+      : "BRANCH";
+
+    const event = await createEvent({
       ...input,
+      scope,
       userId: user.id,
-      businessId: businessId ?? null,
-      branchId: branchId ?? null,
+      businessId: businessId,
+      branchId: branchId,
     });
-    console.log("Event Before Dispatched ", event)
-
+    console.log("Event Before dispatched", event)
     await dispatchEvent(event);
     return event;
   },
@@ -46,10 +73,15 @@ export const eventService = {
     mode: "OPENING" | "LIVE";
   }) {
     const productId = nanoid();
+    const branchId = useBranchStore.getState().activeBranchId;
+    if (!branchId) throw new Error("No active branch");
 
     // 1️⃣ PRODUCT EVENT
     await this.create({
       type: InventoryEventType.PRODUCT_CREATED,
+      aggregateId: productId,
+      aggregateType: "PRODUCT",
+
       mode: data.mode,
       payload: {
         id: productId,
@@ -63,8 +95,12 @@ export const eventService = {
     if (data.quantity > 0) {
       await this.create({
         type: OpeninigEventType.OPENING_INVENTORY_CREATED,
+
+        aggregateId: `${productId}_${branchId}`, // separate aggregate for inventory
+        aggregateType: "INVENTORY",
         mode: data.mode,
         payload: {
+          id: nanoid(),
           productId,
           quantity: data.quantity,
           costPrice: data.costPrice, // normalized field
@@ -93,6 +129,9 @@ export const eventService = {
     events.push(
       this.create({
         type: InventoryEventType.PRODUCT_UPDATED,
+        aggregateId: input.productId,
+        aggregateType: "PRODUCT",
+
         mode: "LIVE",
         payload: {
           productId: input.productId,
@@ -113,6 +152,8 @@ export const eventService = {
     events.push(
       this.create({
         type: InventoryEventType.INVENTORY_UPDATED,
+        aggregateId: `${input.productId}_${useBranchStore.getState().activeBranchId}`,
+        aggregateType: "INVENTORY",
         mode: "LIVE",
         payload: {
           productId: input.productId,

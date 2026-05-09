@@ -76,5 +76,5 @@ async function populateUserData(db: IDBDatabase, data: any) {
   data.inventory?.forEach((item: any) => invStore.put(item));
   data.sales?.forEach((sale: any) => salesStore.put(sale));
 
-  return tx.complete;
+  return tx.oncomplete;
 }
