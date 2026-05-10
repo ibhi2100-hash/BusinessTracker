@@ -3,6 +3,7 @@ import { getDbName, DB_VERSION, TABLES } from "./schema";
 import { BaseEvent } from "@/offline/core/events/types";
 import { Business, Branch, Product, User } from "@/types/types";
 import { LedgerEntry } from "../domain/ledger";
+import { AggregateRecord, ReplicaMeta } from "@/offline/domain/aggregate";
 
 // ---------------------------
 // DOMAIN TYPES
@@ -64,6 +65,8 @@ export interface Snapshot {
 
 export class AppDB extends Dexie {
   events!: Table<BaseEvent, string>;
+  aggregates!: Table<AggregateRecord, string>;
+  replicaMeta!: Table<ReplicaMeta, string>;
   inventory!: Table<Inventory, string>;
   products!: Table<Product, string>;
   ledgerEntries!: Table<LedgerEntry, string>;
@@ -83,6 +86,16 @@ export class AppDB extends Dexie {
     this.version(DB_VERSION).stores({
       events:
         "id,status,synced,type,createdAt,businessId,branchId,aggregateId,aggregateType,[status+synced],[type+createdAt],[aggregateType+aggregateId]",
+
+      aggregates:
+        "id,aggregateId,aggregateType,version,lastGlobalPosition,lastSnapshotVersion,[aggregateType+aggregateId]",
+
+      snapshots:
+        "id,aggregateId,aggregateType,version,lastGlobalPosition,[aggregateType+aggregateId]",
+
+      replicaMeta:
+        "deviceId,lastLogicClock",
+
 
       inventory:
         "id,productId,branchId,updatedAt,[productId+branchId]",
@@ -116,9 +129,6 @@ export class AppDB extends Dexie {
 
       liabilities:
         "id,businessId,branchId,[businessId+branchId]",
-
-      snapshots:
-        "id,businessId,branchId,createdAt,[businessId+branchId]",
     });
 
     this.on("blocked", () => {

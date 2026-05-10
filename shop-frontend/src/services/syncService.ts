@@ -42,15 +42,15 @@ export const syncService = {
      * }
      */
 
-    const updates = result.results || [];
+    const successUpdates = result.results.success || [];
+    const failedUpadates = result.results.failed
 
     await db.transaction("rw", db.events, async () => {
-      for (const r of updates) {
-        if (r.status === "synced") {
+      for (const r of successUpdates) {
+        if (r.status === "SYNCED") {
           await db.events.update(r.eventId, {
             synced: true,
             status: "SYNCED",
-            version: r.version
           });
         }
 
@@ -58,13 +58,12 @@ export const syncService = {
           await db.events.update(r.eventId, {
             synced: true,
             status: "SYNCED",
-            version: r.version
           });
         }
-
-
-        if (r.status === "failed") {
-          await db.events.update(r.id, {
+      };
+      for(const r of failedUpadates){
+        if (r.status === "FAILED") {
+          await db.events.update(r.eventId, {
             synced: false,
             status: "FAILED",
           });

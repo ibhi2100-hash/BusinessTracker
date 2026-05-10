@@ -31,7 +31,7 @@ export type ProcessedSyncEventAvgAggregateOutputType = {
 }
 
 export type ProcessedSyncEventSumAggregateOutputType = {
-  version: number | null
+  version: bigint | null
 }
 
 export type ProcessedSyncEventMinAggregateOutputType = {
@@ -41,7 +41,7 @@ export type ProcessedSyncEventMinAggregateOutputType = {
   branchId: string | null
   branchBusinessId: string | null
   userId: string | null
-  version: number | null
+  version: bigint | null
   status: $Enums.SyncEventStatus | null
   processedAt: Date | null
   error: string | null
@@ -56,7 +56,7 @@ export type ProcessedSyncEventMaxAggregateOutputType = {
   branchId: string | null
   branchBusinessId: string | null
   userId: string | null
-  version: number | null
+  version: bigint | null
   status: $Enums.SyncEventStatus | null
   processedAt: Date | null
   error: string | null
@@ -228,7 +228,7 @@ export type ProcessedSyncEventGroupByOutputType = {
   branchId: string | null
   branchBusinessId: string | null
   userId: string | null
-  version: number
+  version: bigint | null
   status: $Enums.SyncEventStatus
   processedAt: Date
   error: string | null
@@ -266,7 +266,7 @@ export type ProcessedSyncEventWhereInput = {
   branchId?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
   branchBusinessId?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
   userId?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
-  version?: Prisma.IntFilter<"ProcessedSyncEvent"> | number
+  version?: Prisma.BigIntNullableFilter<"ProcessedSyncEvent"> | bigint | number | null
   status?: Prisma.EnumSyncEventStatusFilter<"ProcessedSyncEvent"> | $Enums.SyncEventStatus
   processedAt?: Prisma.DateTimeFilter<"ProcessedSyncEvent"> | Date | string
   error?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
@@ -281,7 +281,7 @@ export type ProcessedSyncEventOrderByWithRelationInput = {
   branchId?: Prisma.SortOrderInput | Prisma.SortOrder
   branchBusinessId?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
-  version?: Prisma.SortOrder
+  version?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   processedAt?: Prisma.SortOrder
   error?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -299,7 +299,7 @@ export type ProcessedSyncEventWhereUniqueInput = Prisma.AtLeast<{
   branchId?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
   branchBusinessId?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
   userId?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
-  version?: Prisma.IntFilter<"ProcessedSyncEvent"> | number
+  version?: Prisma.BigIntNullableFilter<"ProcessedSyncEvent"> | bigint | number | null
   status?: Prisma.EnumSyncEventStatusFilter<"ProcessedSyncEvent"> | $Enums.SyncEventStatus
   processedAt?: Prisma.DateTimeFilter<"ProcessedSyncEvent"> | Date | string
   error?: Prisma.StringNullableFilter<"ProcessedSyncEvent"> | string | null
@@ -314,7 +314,7 @@ export type ProcessedSyncEventOrderByWithAggregationInput = {
   branchId?: Prisma.SortOrderInput | Prisma.SortOrder
   branchBusinessId?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
-  version?: Prisma.SortOrder
+  version?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   processedAt?: Prisma.SortOrder
   error?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -337,7 +337,7 @@ export type ProcessedSyncEventScalarWhereWithAggregatesInput = {
   branchId?: Prisma.StringNullableWithAggregatesFilter<"ProcessedSyncEvent"> | string | null
   branchBusinessId?: Prisma.StringNullableWithAggregatesFilter<"ProcessedSyncEvent"> | string | null
   userId?: Prisma.StringNullableWithAggregatesFilter<"ProcessedSyncEvent"> | string | null
-  version?: Prisma.IntWithAggregatesFilter<"ProcessedSyncEvent"> | number
+  version?: Prisma.BigIntNullableWithAggregatesFilter<"ProcessedSyncEvent"> | bigint | number | null
   status?: Prisma.EnumSyncEventStatusWithAggregatesFilter<"ProcessedSyncEvent"> | $Enums.SyncEventStatus
   processedAt?: Prisma.DateTimeWithAggregatesFilter<"ProcessedSyncEvent"> | Date | string
   error?: Prisma.StringNullableWithAggregatesFilter<"ProcessedSyncEvent"> | string | null
@@ -352,7 +352,7 @@ export type ProcessedSyncEventCreateInput = {
   branchId?: string | null
   branchBusinessId?: string | null
   userId?: string | null
-  version: number
+  version?: bigint | number | null
   status: $Enums.SyncEventStatus
   processedAt?: Date | string
   error?: string | null
@@ -367,7 +367,7 @@ export type ProcessedSyncEventUncheckedCreateInput = {
   branchId?: string | null
   branchBusinessId?: string | null
   userId?: string | null
-  version: number
+  version?: bigint | number | null
   status: $Enums.SyncEventStatus
   processedAt?: Date | string
   error?: string | null
@@ -382,7 +382,7 @@ export type ProcessedSyncEventUpdateInput = {
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  version?: Prisma.IntFieldUpdateOperationsInput | number
+  version?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
   processedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -397,7 +397,7 @@ export type ProcessedSyncEventUncheckedUpdateInput = {
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  version?: Prisma.IntFieldUpdateOperationsInput | number
+  version?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
   processedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -412,7 +412,7 @@ export type ProcessedSyncEventCreateManyInput = {
   branchId?: string | null
   branchBusinessId?: string | null
   userId?: string | null
-  version: number
+  version?: bigint | number | null
   status: $Enums.SyncEventStatus
   processedAt?: Date | string
   error?: string | null
@@ -427,7 +427,7 @@ export type ProcessedSyncEventUpdateManyMutationInput = {
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  version?: Prisma.IntFieldUpdateOperationsInput | number
+  version?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
   processedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -442,7 +442,7 @@ export type ProcessedSyncEventUncheckedUpdateManyInput = {
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  version?: Prisma.IntFieldUpdateOperationsInput | number
+  version?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
   processedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -501,6 +501,14 @@ export type ProcessedSyncEventMinOrderByAggregateInput = {
 
 export type ProcessedSyncEventSumOrderByAggregateInput = {
   version?: Prisma.SortOrder
+}
+
+export type NullableBigIntFieldUpdateOperationsInput = {
+  set?: bigint | number | null
+  increment?: bigint | number
+  decrement?: bigint | number
+  multiply?: bigint | number
+  divide?: bigint | number
 }
 
 export type EnumSyncEventStatusFieldUpdateOperationsInput = {
@@ -581,7 +589,7 @@ export type $ProcessedSyncEventPayload<ExtArgs extends runtime.Types.Extensions.
     branchId: string | null
     branchBusinessId: string | null
     userId: string | null
-    version: number
+    version: bigint | null
     status: $Enums.SyncEventStatus
     processedAt: Date
     error: string | null
@@ -1016,7 +1024,7 @@ export interface ProcessedSyncEventFieldRefs {
   readonly branchId: Prisma.FieldRef<"ProcessedSyncEvent", 'String'>
   readonly branchBusinessId: Prisma.FieldRef<"ProcessedSyncEvent", 'String'>
   readonly userId: Prisma.FieldRef<"ProcessedSyncEvent", 'String'>
-  readonly version: Prisma.FieldRef<"ProcessedSyncEvent", 'Int'>
+  readonly version: Prisma.FieldRef<"ProcessedSyncEvent", 'BigInt'>
   readonly status: Prisma.FieldRef<"ProcessedSyncEvent", 'SyncEventStatus'>
   readonly processedAt: Prisma.FieldRef<"ProcessedSyncEvent", 'DateTime'>
   readonly error: Prisma.FieldRef<"ProcessedSyncEvent", 'String'>

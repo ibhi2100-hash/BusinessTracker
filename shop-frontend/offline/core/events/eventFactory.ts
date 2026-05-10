@@ -1,14 +1,15 @@
 import { createEntity } from "@/offline/core/entities/entityFactory";
 import { BaseEvent } from "./types";
-import { getNextLogicClock } from "@/src/utils/logicClock";
-import { nanoid } from "nanoid";
-import { getNextAggregateVersion } from "../../../src/helpers/aggregateHelper";
+import { getDeviceId } from "@/src/utils/deviceIdGenerator";
+import { nextLogicClock } from "@/src/utils/nextLogicClock";
+import { AppDB } from "@/src/db";
 
 type CreateEventInput = {
   type: string;
 
   aggregateId: string;
   aggregateType: string;
+  expectedAggregateVersion?: number;
 
   payload: Record<string, any>;
 
@@ -22,61 +23,41 @@ type CreateEventInput = {
   scope?: "GLOBAL" | "BUSINESS" | "BRANCH";
 
   status?: "PENDING" | "SYNCED" | "FAILED";
+  isCreationEvent?: boolean;
 
-  deviceId?: string;
 };
 
 export async function createEvent(
+  db: AppDB,
   input: CreateEventInput
 ): Promise<BaseEvent> {
-  const {
-    type,
-    aggregateId,
-    aggregateType,
-    payload,
-    mode,
-    businessId,
-    branchId,
-    userId,
-    status = "PENDING",
-    scope = "BUSINESS",
-  } = input;
+ const deviceId = await getDeviceId();
 
-  const version = await getNextAggregateVersion(
-    userId,
-    aggregateType,
-    aggregateId
-  );
+ const aggregate = await db.aggregates
+  .where("[aggregateType+aggregateId]")
+  .equals([input.aggregateType, input.aggregateId])
+  .first();
+
+const currentVersion = aggregate?.version ?? 0;
+const logicClock = await nextLogicClock(db, deviceId);
 
   return createEntity({
-    id: nanoid(),
+    aggregateId: input.aggregateId,
+    aggregateType: input.aggregateType,
+    expectedAggregateVersion: currentVersion,
+    isCreationEvent: !aggregate,
 
-    aggregateId,
-    aggregateType,
+    type: input.type,
+    payload: input.payload,
 
-    type,
+    mode: input.mode,
+    businessId: input.businessId ?? null,
+    branchId: input.branchId ?? null,
 
-    payload,
-
-    mode,
-
-    businessId,
-    branchId,
-
-    userId,
-
-    status,
-
-    scope,
-
-    version,
-
-    logicClock: getNextLogicClock(),
-
-    deviceId: "local-device",
-
-    synced: false,
-
-    createdAt: new Date(),
-  });
+    scope: input.scope,
+    logicClock,
+    deviceId,
+    userId: input.userId,
+    status: input.status ?? "PENDING",
+  })
 }

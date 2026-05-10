@@ -327,7 +327,7 @@ model ProcessedSyncEvent {
 
   userId String?
 
-  version Int
+  version BigInt?
 
   status SyncEventStatus
 
@@ -354,6 +354,9 @@ model Event {
 
   aggregateId   String
   aggregateType String
+  aggregateVersion Int
+
+  globalPosition BigInt @default(autoincrement())
 
   type String
 
@@ -363,17 +366,19 @@ model Event {
 
   scope String
 
-  version Int
-
-  logicClock Int
+  logicClock BigInt
 
   deviceId String
 
   userId String?
 
+
   status SyncEventStatus
 
   synced Boolean @default(false)
+  isCreationEvent Boolean @default(false)
+  causationId  String?
+  correlationId String?
 
   createdAt DateTime @default(now())
 
@@ -385,7 +390,7 @@ model Event {
 
   ledgerEntries LedgerEntry[]
 
-  @@unique([aggregateType, aggregateId, version])
+  @@unique([aggregateType, aggregateId, aggregateVersion])
 
   @@index([businessId])
 
@@ -399,7 +404,11 @@ model Event {
 
   @@index([userId])
 }
-
+model DeviceClock {
+  deviceId   String @id
+  lastClock  Int
+  updatedAt  DateTime @updatedAt
+}
 model LedgerEntry {
   id String @id @default(uuid())
 
@@ -445,6 +454,9 @@ model Snapshot {
   branchId         String?
   branchBusinessId String?
 
+  aggregateId String?
+  aggregateType String?
+
   account String?
 
   balance Decimal? @db.Decimal(18, 6)
@@ -457,7 +469,13 @@ model Snapshot {
 
   data Json
 
-  lastVersion Int
+  lastGlobalPosition BigInt
+  snapshotKey String   @unique
+
+  compressed Boolean @default(false)
+
+  checksum String?
+  eventCount Int  @default(0)
 
   createdAt DateTime @default(now())
 
@@ -467,8 +485,7 @@ model Snapshot {
 
   branch Branch? @relation(fields: [branchId, branchBusinessId], references: [id, businessId], onDelete: SetNull)
 
-  @@unique([businessId,branchId,account,snapshotType,scope])
-
+  
   @@index([businessId, version])
 
   @@index([branchId, branchBusinessId, version])

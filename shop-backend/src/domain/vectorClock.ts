@@ -1,0 +1,1 @@
+export type VectorClock = Record<string, number>;

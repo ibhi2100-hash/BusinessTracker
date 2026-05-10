@@ -13,6 +13,7 @@ export const eventService = {
     type: string;
     aggregateId: string;
     aggregateType: string;
+    expectedAggregateVersion?: number
     payload: any;
     mode: "OPENING" | "LIVE";
 
@@ -51,7 +52,7 @@ const branchId =
       : !branchId
       ? "BUSINESS"
       : "BRANCH";
-
+    
     const event = await createEvent({
       ...input,
       scope,

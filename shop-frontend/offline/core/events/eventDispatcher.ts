@@ -15,15 +15,44 @@ export const dispatchEvent = async (event: BaseEvent) => {
   await runTx(
     db,
     async () => {
-      const exists = await db.events.get(event.id);
-      if (exists) return;
+      const aggregate =
+        await db.aggregates
+          .where("[aggregateType+aggregateId]")
+          .equals([
+            event.aggregateType,
+            event.aggregateId
+          ])
+          .first();
 
-      // 1. persist event (PENDING first)
-      await db.events.add({
-        ...event,
-        status: "PENDING",
-        synced: false,
-      });
+        const currentVersion =
+          aggregate?.version ?? 0;
+
+        await db.aggregates.put({
+
+          id:
+            `${event.aggregateType}:${event.aggregateId}`,
+
+          aggregateId:
+            event.aggregateId,
+
+          aggregateType:
+            event.aggregateType,
+
+          version:
+            currentVersion + 1,
+
+          updatedAt:
+            Date.now(),
+        });
+        const exists = await db.events.get(event.id);
+        if (exists) return;
+
+        // 1. persist event (PENDING first)
+        await db.events.add({
+          ...event,
+          status: "PENDING",
+          synced: false,
+        });
 
       // 2. ledger projection
       const entries = generateLedgerEntries(event);
@@ -37,6 +66,8 @@ export const dispatchEvent = async (event: BaseEvent) => {
       }
     },
     db.events,
+    db.aggregates,
+    db.replicaMeta,
     db.ledgerEntries,
     db.inventory,
     db.businesses,

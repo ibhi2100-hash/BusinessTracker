@@ -1,228 +1,418 @@
-import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
-import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
-import { Event } from "../../../domain/event.js";
-import { getEventScope } from "../../../lib/getEventScoped.js";
+// sync.repository.ts
 
+import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
+import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
+
+import { Event as DomainEvent } from "../../../domain/event.js";
+
+import { getEventScope } from "../../../helpers/eventScope.js";
+import { branchRelationData } from "../../../helpers/branchRelation.js";
 
 export class SyncRepository {
 
-async findExistingEvent(eventId: string, tx: Prisma.TransactionClient) {
-    return tx.event.findFirst({
-      where: { id: eventId }
+  /* =========================================================
+     IDEMPOTENCY
+  ========================================================= */
+
+  async findExistingEvent(
+    eventId: string,
+    tx: Prisma.TransactionClient
+  ) {
+    return tx.event.findUnique({
+      where: {
+        id: eventId,
+      },
     });
-  } 
-
-async findEventAfterSnapshotVersion(
-  event: Event,
-  version: number
-) {
-  const scope = getEventScope(event);
-
-  let where: any = {
-    version: { gt: version },
-    scope
-  };
-
-  if (scope === "BUSINESS") {
-    where.businessId = event.businessId;
   }
 
-  if (scope === "BRANCH") {
-    where.businessId = event.businessId;
-    where.branchId = event.branchId;
-  }
+  async assertEventIntegrity(
+    incoming: DomainEvent,
+    existing: any
+  ) {
 
-  return prisma.event.findMany({
-    where,
-    orderBy: { version: "asc" }
-  });
-}
+    const existingPayload =
+      JSON.stringify(existing.payload);
 
-async storeEvents(event: Event, tx: Prisma.TransactionClient) {
-  const existing = await tx.event.findFirst({
-    where: { id: event.id }
-  });
+    const incomingPayload =
+      JSON.stringify(incoming.payload);
 
-  if (existing) return existing;
-
-  await this.validateLogicClock(event, tx);
-
-  for (let i = 0; i < 3; i++) {
-    try {
-      const version = await this.getNextVersion(event, tx);
-
-      return await tx.event.create({
-        data: {
-          id: event.id,
-          type: event.type,
-
-          aggregateId: event.aggregateId,
-          aggregateType: event.aggregateType,
-
-          payload: event.payload,
-
-          scope: getEventScope(event),
-
-          businessId: event.businessId ?? null,
-          branchId: event.branchId ?? null,
-          branchBusinessId: 
-            event.branchId && event.businessId
-              ? event.businessId
-              : null,
-          mode: event.mode,
-
-          createdAt: new Date(event.createdAt),
-          logicClock: event.logicClock,
-          version,
-
-          deviceId: event.deviceId,
-          userId: event.userId ?? null,
-
-          status: "SYNCED",
-          synced: true
-        }
-      });
-
-    } catch (err: any) {
-      if (err.code === "P2002") continue; // retry on unique violation
-      throw err;
+    if (
+      existingPayload !== incomingPayload
+    ) {
+      throw new Error(
+        `EVENT_ID_COLLISION: ${incoming.id}`
+      );
     }
   }
 
-  throw new Error("Failed to assign version after retries");
-}
+  /* =========================================================
+     REPLICA CLOCK VALIDATION
+     IMPORTANT:
+     - ONLY FOR DEDUPLICATION
+     - NOT FOR STRICT SEQUENTIAL ORDERING
+  ========================================================= */
 
-  async createLedger(
-    entries: any[],
-    businessId: string,
-    tx: Prisma.TransactionClient
-  ) {
-    return tx.ledgerEntry.createMany({
-      data: entries.map(e => ({
-        ...e,
-        businessId
-      })),
-      skipDuplicates: true // ✅ CRITICAL
-    });
-  }
-
-  async updateAccountSnapshots(
-    branchId: string,
+  async validateReplicaClock(
+    event: DomainEvent,
     tx: Prisma.TransactionClient
   ) {
 
-    const grouped = await tx.ledgerEntry.groupBy({
-      by: ["account"],
-      where: { branchId },
-      _sum: { amount: true }
-    });
-
-    for (const g of grouped) {
-      await tx.snapshot.upsert({
+    const duplicateClock =
+      await tx.event.findFirst({
         where: {
-          branchId_account: {
-            branchId,
-            account: g.account
-          }
+          deviceId: event.deviceId,
+          logicClock: event.logicClock,
         },
-        update: {
-          balance: g._sum.amount ?? 0
-        },
-        create: {
-          branchId,
-          account: g.account,
-          balance: g._sum.amount ?? 0
-        }
       });
+
+    if (duplicateClock) {
+
+      if (duplicateClock.id === event.id) {
+        return;
+      }
+
+      throw new Error(
+        `DUPLICATE_REPLICA_CLOCK: device=${event.deviceId} clock=${event.logicClock}`
+      );
     }
   }
 
-  async markProcessed(event: Event, tx: Prisma.TransactionClient) {
+  /* =========================================================
+     AGGREGATE VERSION LOOKUP
+  ========================================================= */
+
+  async getLastAggregateEvent(
+    aggregateId: string,
+    aggregateType: string,
+    tx: Prisma.TransactionClient
+  ) {
+    return tx.event.findFirst({
+      where: {
+        aggregateId,
+        aggregateType,
+      },
+      orderBy: {
+        aggregateVersion: "desc",
+      },
+    });
+  }
+
+  /* =========================================================
+     MAIN STORE EVENT
+  ========================================================= */
+
+  async storeEvent(
+    event: DomainEvent,
+    tx: Prisma.TransactionClient
+  ) {
+
+    /* -----------------------------------------------------
+       STEP 1 — IDEMPOTENCY CHECK
+    ----------------------------------------------------- */
+
+    const existing =
+      await this.findExistingEvent(
+        event.id,
+        tx
+      );
+
+    if (existing) {
+
+      await this.assertEventIntegrity(
+        event,
+        existing
+      );
+
+      return existing;
+    }
+
+    /* -----------------------------------------------------
+       STEP 2 — REPLICA CLOCK VALIDATION
+    ----------------------------------------------------- */
+
+    await this.validateReplicaClock(
+      event,
+      tx
+    );
+
+    /* -----------------------------------------------------
+       STEP 3 — OCC + RETRY LOOP
+    ----------------------------------------------------- */
+
+    for (let retry = 0; retry < 5; retry++) {
+
+      const lastEvent =
+        await this.getLastAggregateEvent(
+          event.aggregateId,
+          event.aggregateType,
+          tx
+        );
+
+      const currentVersion =
+        lastEvent?.aggregateVersion ?? 0;
+
+      const aggregateExists =
+        !!lastEvent;
+
+      /* -------------------------------------------------
+         CREATION SEMANTICS
+      ------------------------------------------------- */
+
+      if (
+        !aggregateExists &&
+        !event.isCreationEvent
+      ) {
+        throw new Error(
+          `AGGREGATE_NOT_FOUND aggregateId=${event.aggregateId}`
+        );
+      }
+
+      if (
+        aggregateExists &&
+        event.isCreationEvent
+      ) {
+        throw new Error(
+          `AGGREGATE_ALREADY_EXISTS aggregateId=${event.aggregateId}`
+        );
+      }
+
+      /* -------------------------------------------------
+         OPTIMISTIC CONCURRENCY
+      ------------------------------------------------- */
+
+      if (
+        currentVersion !==
+        event.expectedAggregateVersion
+      ) {
+        throw new Error(
+          `VERSION_CONFLICT aggregateId=${event.aggregateId} expected=${event.expectedAggregateVersion} current=${currentVersion}`
+        );
+      }
+
+      const nextVersion =
+        currentVersion + 1;
+
+      try {
+
+        const saved =
+          await tx.event.create({
+            data: {
+
+              /* ---------------------------------------
+                 IDENTIFIERS
+              --------------------------------------- */
+
+              id: event.id,
+
+              aggregateId:
+                event.aggregateId,
+
+              aggregateType:
+                event.aggregateType,
+
+              aggregateVersion:
+                nextVersion,
+
+              /* ---------------------------------------
+                 EVENT
+              --------------------------------------- */
+
+              type: event.type,
+
+              payload: event.payload,
+
+              /* ---------------------------------------
+                 SCOPE
+              --------------------------------------- */
+
+              scope:
+                getEventScope(event),
+
+              mode:
+                event.mode,
+
+              /* ---------------------------------------
+                 BUSINESS RELATIONS
+              --------------------------------------- */
+
+              businessId:
+                event.businessId ?? null,
+
+              ...branchRelationData(event),
+
+              /* ---------------------------------------
+                 REPLICA METADATA
+              --------------------------------------- */
+
+              logicClock:
+                event.logicClock,
+
+              deviceId:
+                event.deviceId,
+
+              /* ---------------------------------------
+                 USER
+              --------------------------------------- */
+
+              userId:
+                event.userId ?? null,
+
+              /* ---------------------------------------
+                 SYNC STATE
+              --------------------------------------- */
+
+              status: "SYNCED",
+
+              synced: true,
+
+              /* ---------------------------------------
+                 CREATED
+              --------------------------------------- */
+
+              createdAt:
+                new Date(event.createdAt),
+            },
+          });
+
+        return saved;
+
+      } catch (err: any) {
+
+        /* ---------------------------------------------
+           VERSION COLLISION
+        --------------------------------------------- */
+
+        if (err.code === "P2002") {
+          continue;
+        }
+
+        throw err;
+      }
+    }
+
+    throw new Error(
+      `FAILED_TO_ASSIGN_AGGREGATE_VERSION aggregateId=${event.aggregateId}`
+    );
+  }
+
+  /* =========================================================
+     PROCESSED EVENT TRACKING
+  ========================================================= */
+
+  async markProcessed(
+    savedEvent: any,
+    tx: Prisma.TransactionClient
+  ) {
+
     return tx.processedSyncEvent.upsert({
-      where: { id: event.id },
+      where: {
+        id: savedEvent.id,
+      },
+
       update: {
         status: "SYNCED",
-        error: null
+        error: null,
+        version:
+          savedEvent.aggregateVersion,
       },
+
       create: {
-        id: event.id,
-        eventType: event.type,
-        businessId: event.businessId,
-        branchId: event.branchId ?? null,
-        userId: event.userId ?? null,
-        version: event.version,
-        status: "SYNCED"
-      }
+
+        id: savedEvent.id,
+
+        eventType:
+          savedEvent.type,
+
+        businessId:
+          savedEvent.businessId,
+
+        branchId:
+          savedEvent.branchId,
+
+        branchBusinessId:
+          savedEvent.branchBusinessId,
+
+        userId:
+          savedEvent.userId,
+
+        version:
+          savedEvent.aggregateVersion,
+
+        status: "SYNCED",
+      },
     });
   }
 
-  async markFailed(event: Event, error: string) {
+  /* =========================================================
+     FAILED EVENTS
+  ========================================================= */
+
+  async markFailed(
+    event: DomainEvent,
+    error: string
+  ) {
+
     return prisma.processedSyncEvent.upsert({
-      where: { id: event.id },
+      where: {
+        id: event.id,
+      },
+
       update: {
         status: "FAILED",
-        error
+        error,
       },
+
       create: {
+
         id: event.id,
-        eventType: event.type,
-        businessId: event.businessId ?? null,
-        branchId: event.branchId ?? null,
-        userId: event.userId ?? null,
-        version: event.version,
+
+        eventType:
+          event.type,
+
+        businessId:
+          event.businessId ?? null,
+
+        branchId:
+          event.branchId ?? null,
+
+        branchBusinessId:
+          event.businessId ?? null,
+
+        userId:
+          event.userId ?? null,
+
+        version:
+          event.expectedAggregateVersion ?? null,
+
         status: "FAILED",
-        error
-      }
+
+        error,
+      },
     });
   }
 
-async validateLogicClock(event: Event, tx: Prisma.TransactionClient) {
-  const last = await tx.event.findFirst({
-    where: { deviceId: event.deviceId },
-    orderBy: { logicClock: "desc" }
-  });
+  /* =========================================================
+     SNAPSHOT EVENT FETCH
+  ========================================================= */
 
- if (last && event.logicClock === last.logicClock) {
-  throw new Error("Duplicate logicClock for device");
-}
-}
+  async findEventsAfterSnapshotVersion(
+    aggregateId: string,
+    aggregateType: string,
+    version: number
+  ) {
 
-async getNextVersion(event: Event, tx: Prisma.TransactionClient) {
-  const scope = getEventScope(event);
+    return prisma.event.findMany({
+      where: {
+        aggregateId,
+        aggregateType,
+        aggregateVersion: {
+          gt: version,
+        },
+      },
 
-  let where: any = {};
-
-  if (scope === "GLOBAL") {
-    // no filters → global stream
+      orderBy: {
+        aggregateVersion: "asc",
+      },
+    });
   }
-
-  if (scope === "BUSINESS") {
-    if (!event.businessId) {
-      throw new Error("BUSINESS scope requires businessId");
-    }
-
-    where.businessId = event.businessId;
-  }
-
-  if (scope === "BRANCH") {
-    if (!event.businessId || !event.branchId) {
-      throw new Error("BRANCH scope requires businessId + branchId");
-    }
-
-    where.businessId = event.businessId;
-    where.branchId = event.branchId;
-  }
-
-  const last = await tx.event.findFirst({
-    where,
-    orderBy: { version: "desc" }
-  });
-
-  return (last?.version ?? 0) + 1;
-}
-async alreadyProcessed(eventId: string, tx: Prisma.TransactionClient) {
-  return tx.processedSyncEvent.findFirst({
-    where: { id: eventId }
-  });
-}
 }

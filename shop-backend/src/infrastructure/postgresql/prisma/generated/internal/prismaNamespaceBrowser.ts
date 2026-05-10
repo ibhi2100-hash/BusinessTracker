@@ -61,6 +61,7 @@ export const ModelName = {
   Inventory: 'Inventory',
   ProcessedSyncEvent: 'ProcessedSyncEvent',
   Event: 'Event',
+  DeviceClock: 'DeviceClock',
   LedgerEntry: 'LedgerEntry',
   Snapshot: 'Snapshot',
   Alert: 'Alert'
@@ -233,20 +234,33 @@ export const EventScalarFieldEnum = {
   branchBusinessId: 'branchBusinessId',
   aggregateId: 'aggregateId',
   aggregateType: 'aggregateType',
+  aggregateVersion: 'aggregateVersion',
+  globalPosition: 'globalPosition',
   type: 'type',
   payload: 'payload',
   mode: 'mode',
   scope: 'scope',
-  version: 'version',
   logicClock: 'logicClock',
   deviceId: 'deviceId',
   userId: 'userId',
   status: 'status',
   synced: 'synced',
+  isCreationEvent: 'isCreationEvent',
+  causationId: 'causationId',
+  correlationId: 'correlationId',
   createdAt: 'createdAt'
 } as const
 
 export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
+
+
+export const DeviceClockScalarFieldEnum = {
+  deviceId: 'deviceId',
+  lastClock: 'lastClock',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DeviceClockScalarFieldEnum = (typeof DeviceClockScalarFieldEnum)[keyof typeof DeviceClockScalarFieldEnum]
 
 
 export const LedgerEntryScalarFieldEnum = {
@@ -271,13 +285,19 @@ export const SnapshotScalarFieldEnum = {
   businessId: 'businessId',
   branchId: 'branchId',
   branchBusinessId: 'branchBusinessId',
+  aggregateId: 'aggregateId',
+  aggregateType: 'aggregateType',
   account: 'account',
   balance: 'balance',
   version: 'version',
   snapshotType: 'snapshotType',
   scope: 'scope',
   data: 'data',
-  lastVersion: 'lastVersion',
+  lastGlobalPosition: 'lastGlobalPosition',
+  snapshotKey: 'snapshotKey',
+  compressed: 'compressed',
+  checksum: 'checksum',
+  eventCount: 'eventCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

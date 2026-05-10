@@ -105,7 +105,7 @@ export class OfflineSyncController {
     }
   }
 
-  async getProcessedProducts(businessId: stringify, branchId: string) {
+  async getProcessedProducts(businessId: string, branchId: string) {
       
     }
 

@@ -394,6 +394,7 @@ export const ModelName = {
   Inventory: 'Inventory',
   ProcessedSyncEvent: 'ProcessedSyncEvent',
   Event: 'Event',
+  DeviceClock: 'DeviceClock',
   LedgerEntry: 'LedgerEntry',
   Snapshot: 'Snapshot',
   Alert: 'Alert'
@@ -412,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "business" | "branch" | "user" | "passwordResetToken" | "subscriptionPlan" | "businessSubscription" | "product" | "inventory" | "processedSyncEvent" | "event" | "ledgerEntry" | "snapshot" | "alert"
+    modelProps: "business" | "branch" | "user" | "passwordResetToken" | "subscriptionPlan" | "businessSubscription" | "product" | "inventory" | "processedSyncEvent" | "event" | "deviceClock" | "ledgerEntry" | "snapshot" | "alert"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1156,6 +1157,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DeviceClock: {
+      payload: Prisma.$DeviceClockPayload<ExtArgs>
+      fields: Prisma.DeviceClockFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DeviceClockFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceClockPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DeviceClockFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceClockPayload>
+        }
+        findFirst: {
+          args: Prisma.DeviceClockFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceClockPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DeviceClockFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceClockPayload>
+        }
+        findMany: {
+          args: Prisma.DeviceClockFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceClockPayload>[]
+        }
+        create: {
+          args: Prisma.DeviceClockCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceClockPayload>
+        }
+        createMany: {
+          args: Prisma.DeviceClockCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DeviceClockCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceClockPayload>[]
+        }
+        delete: {
+          args: Prisma.DeviceClockDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceClockPayload>
+        }
+        update: {
+          args: Prisma.DeviceClockUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceClockPayload>
+        }
+        deleteMany: {
+          args: Prisma.DeviceClockDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DeviceClockUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DeviceClockUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceClockPayload>[]
+        }
+        upsert: {
+          args: Prisma.DeviceClockUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceClockPayload>
+        }
+        aggregate: {
+          args: Prisma.DeviceClockAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDeviceClock>
+        }
+        groupBy: {
+          args: Prisma.DeviceClockGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DeviceClockGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DeviceClockCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DeviceClockCountAggregateOutputType> | number
+        }
+      }
+    }
     LedgerEntry: {
       payload: Prisma.$LedgerEntryPayload<ExtArgs>
       fields: Prisma.LedgerEntryFieldRefs
@@ -1568,20 +1643,33 @@ export const EventScalarFieldEnum = {
   branchBusinessId: 'branchBusinessId',
   aggregateId: 'aggregateId',
   aggregateType: 'aggregateType',
+  aggregateVersion: 'aggregateVersion',
+  globalPosition: 'globalPosition',
   type: 'type',
   payload: 'payload',
   mode: 'mode',
   scope: 'scope',
-  version: 'version',
   logicClock: 'logicClock',
   deviceId: 'deviceId',
   userId: 'userId',
   status: 'status',
   synced: 'synced',
+  isCreationEvent: 'isCreationEvent',
+  causationId: 'causationId',
+  correlationId: 'correlationId',
   createdAt: 'createdAt'
 } as const
 
 export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
+
+
+export const DeviceClockScalarFieldEnum = {
+  deviceId: 'deviceId',
+  lastClock: 'lastClock',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DeviceClockScalarFieldEnum = (typeof DeviceClockScalarFieldEnum)[keyof typeof DeviceClockScalarFieldEnum]
 
 
 export const LedgerEntryScalarFieldEnum = {
@@ -1606,13 +1694,19 @@ export const SnapshotScalarFieldEnum = {
   businessId: 'businessId',
   branchId: 'branchId',
   branchBusinessId: 'branchBusinessId',
+  aggregateId: 'aggregateId',
+  aggregateType: 'aggregateType',
   account: 'account',
   balance: 'balance',
   version: 'version',
   snapshotType: 'snapshotType',
   scope: 'scope',
   data: 'data',
-  lastVersion: 'lastVersion',
+  lastGlobalPosition: 'lastGlobalPosition',
+  snapshotKey: 'snapshotKey',
+  compressed: 'compressed',
+  checksum: 'checksum',
+  eventCount: 'eventCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1795,6 +1889,20 @@ export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'J
  * Reference to a field of type 'QueryMode'
  */
 export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'BigInt'
+ */
+export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt'>
+    
+
+
+/**
+ * Reference to a field of type 'BigInt[]'
+ */
+export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>
     
 
 
@@ -2000,6 +2108,7 @@ export type GlobalOmitConfig = {
   inventory?: Prisma.InventoryOmit
   processedSyncEvent?: Prisma.ProcessedSyncEventOmit
   event?: Prisma.EventOmit
+  deviceClock?: Prisma.DeviceClockOmit
   ledgerEntry?: Prisma.LedgerEntryOmit
   snapshot?: Prisma.SnapshotOmit
   alert?: Prisma.AlertOmit

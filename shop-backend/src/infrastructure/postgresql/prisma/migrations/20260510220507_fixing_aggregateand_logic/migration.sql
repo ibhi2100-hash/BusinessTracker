@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Event" ALTER COLUMN "logicClock" SET DATA TYPE BIGINT;

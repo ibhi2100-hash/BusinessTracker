@@ -29,13 +29,15 @@ export type AggregateSnapshot = {
 export type SnapshotAvgAggregateOutputType = {
   balance: runtime.Decimal | null
   version: number | null
-  lastVersion: number | null
+  lastGlobalPosition: number | null
+  eventCount: number | null
 }
 
 export type SnapshotSumAggregateOutputType = {
   balance: runtime.Decimal | null
   version: number | null
-  lastVersion: number | null
+  lastGlobalPosition: bigint | null
+  eventCount: number | null
 }
 
 export type SnapshotMinAggregateOutputType = {
@@ -43,12 +45,18 @@ export type SnapshotMinAggregateOutputType = {
   businessId: string | null
   branchId: string | null
   branchBusinessId: string | null
+  aggregateId: string | null
+  aggregateType: string | null
   account: string | null
   balance: runtime.Decimal | null
   version: number | null
   snapshotType: string | null
   scope: string | null
-  lastVersion: number | null
+  lastGlobalPosition: bigint | null
+  snapshotKey: string | null
+  compressed: boolean | null
+  checksum: string | null
+  eventCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -58,12 +66,18 @@ export type SnapshotMaxAggregateOutputType = {
   businessId: string | null
   branchId: string | null
   branchBusinessId: string | null
+  aggregateId: string | null
+  aggregateType: string | null
   account: string | null
   balance: runtime.Decimal | null
   version: number | null
   snapshotType: string | null
   scope: string | null
-  lastVersion: number | null
+  lastGlobalPosition: bigint | null
+  snapshotKey: string | null
+  compressed: boolean | null
+  checksum: string | null
+  eventCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -73,13 +87,19 @@ export type SnapshotCountAggregateOutputType = {
   businessId: number
   branchId: number
   branchBusinessId: number
+  aggregateId: number
+  aggregateType: number
   account: number
   balance: number
   version: number
   snapshotType: number
   scope: number
   data: number
-  lastVersion: number
+  lastGlobalPosition: number
+  snapshotKey: number
+  compressed: number
+  checksum: number
+  eventCount: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -89,13 +109,15 @@ export type SnapshotCountAggregateOutputType = {
 export type SnapshotAvgAggregateInputType = {
   balance?: true
   version?: true
-  lastVersion?: true
+  lastGlobalPosition?: true
+  eventCount?: true
 }
 
 export type SnapshotSumAggregateInputType = {
   balance?: true
   version?: true
-  lastVersion?: true
+  lastGlobalPosition?: true
+  eventCount?: true
 }
 
 export type SnapshotMinAggregateInputType = {
@@ -103,12 +125,18 @@ export type SnapshotMinAggregateInputType = {
   businessId?: true
   branchId?: true
   branchBusinessId?: true
+  aggregateId?: true
+  aggregateType?: true
   account?: true
   balance?: true
   version?: true
   snapshotType?: true
   scope?: true
-  lastVersion?: true
+  lastGlobalPosition?: true
+  snapshotKey?: true
+  compressed?: true
+  checksum?: true
+  eventCount?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -118,12 +146,18 @@ export type SnapshotMaxAggregateInputType = {
   businessId?: true
   branchId?: true
   branchBusinessId?: true
+  aggregateId?: true
+  aggregateType?: true
   account?: true
   balance?: true
   version?: true
   snapshotType?: true
   scope?: true
-  lastVersion?: true
+  lastGlobalPosition?: true
+  snapshotKey?: true
+  compressed?: true
+  checksum?: true
+  eventCount?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -133,13 +167,19 @@ export type SnapshotCountAggregateInputType = {
   businessId?: true
   branchId?: true
   branchBusinessId?: true
+  aggregateId?: true
+  aggregateType?: true
   account?: true
   balance?: true
   version?: true
   snapshotType?: true
   scope?: true
   data?: true
-  lastVersion?: true
+  lastGlobalPosition?: true
+  snapshotKey?: true
+  compressed?: true
+  checksum?: true
+  eventCount?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -236,13 +276,19 @@ export type SnapshotGroupByOutputType = {
   businessId: string
   branchId: string | null
   branchBusinessId: string | null
+  aggregateId: string | null
+  aggregateType: string | null
   account: string | null
   balance: runtime.Decimal | null
   version: number
   snapshotType: string
   scope: string
   data: runtime.JsonValue
-  lastVersion: number
+  lastGlobalPosition: bigint
+  snapshotKey: string
+  compressed: boolean
+  checksum: string | null
+  eventCount: number
   createdAt: Date
   updatedAt: Date
   _count: SnapshotCountAggregateOutputType | null
@@ -275,13 +321,19 @@ export type SnapshotWhereInput = {
   businessId?: Prisma.StringFilter<"Snapshot"> | string
   branchId?: Prisma.StringNullableFilter<"Snapshot"> | string | null
   branchBusinessId?: Prisma.StringNullableFilter<"Snapshot"> | string | null
+  aggregateId?: Prisma.StringNullableFilter<"Snapshot"> | string | null
+  aggregateType?: Prisma.StringNullableFilter<"Snapshot"> | string | null
   account?: Prisma.StringNullableFilter<"Snapshot"> | string | null
   balance?: Prisma.DecimalNullableFilter<"Snapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   version?: Prisma.IntFilter<"Snapshot"> | number
   snapshotType?: Prisma.StringFilter<"Snapshot"> | string
   scope?: Prisma.StringFilter<"Snapshot"> | string
   data?: Prisma.JsonFilter<"Snapshot">
-  lastVersion?: Prisma.IntFilter<"Snapshot"> | number
+  lastGlobalPosition?: Prisma.BigIntFilter<"Snapshot"> | bigint | number
+  snapshotKey?: Prisma.StringFilter<"Snapshot"> | string
+  compressed?: Prisma.BoolFilter<"Snapshot"> | boolean
+  checksum?: Prisma.StringNullableFilter<"Snapshot"> | string | null
+  eventCount?: Prisma.IntFilter<"Snapshot"> | number
   createdAt?: Prisma.DateTimeFilter<"Snapshot"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Snapshot"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
@@ -293,13 +345,19 @@ export type SnapshotOrderByWithRelationInput = {
   businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrderInput | Prisma.SortOrder
   branchBusinessId?: Prisma.SortOrderInput | Prisma.SortOrder
+  aggregateId?: Prisma.SortOrderInput | Prisma.SortOrder
+  aggregateType?: Prisma.SortOrderInput | Prisma.SortOrder
   account?: Prisma.SortOrderInput | Prisma.SortOrder
   balance?: Prisma.SortOrderInput | Prisma.SortOrder
   version?: Prisma.SortOrder
   snapshotType?: Prisma.SortOrder
   scope?: Prisma.SortOrder
   data?: Prisma.SortOrder
-  lastVersion?: Prisma.SortOrder
+  lastGlobalPosition?: Prisma.SortOrder
+  snapshotKey?: Prisma.SortOrder
+  compressed?: Prisma.SortOrder
+  checksum?: Prisma.SortOrderInput | Prisma.SortOrder
+  eventCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   business?: Prisma.BusinessOrderByWithRelationInput
@@ -308,38 +366,49 @@ export type SnapshotOrderByWithRelationInput = {
 
 export type SnapshotWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  businessId_branchId_account_snapshotType_scope?: Prisma.SnapshotBusinessIdBranchIdAccountSnapshotTypeScopeCompoundUniqueInput
+  snapshotKey?: string
   AND?: Prisma.SnapshotWhereInput | Prisma.SnapshotWhereInput[]
   OR?: Prisma.SnapshotWhereInput[]
   NOT?: Prisma.SnapshotWhereInput | Prisma.SnapshotWhereInput[]
   businessId?: Prisma.StringFilter<"Snapshot"> | string
   branchId?: Prisma.StringNullableFilter<"Snapshot"> | string | null
   branchBusinessId?: Prisma.StringNullableFilter<"Snapshot"> | string | null
+  aggregateId?: Prisma.StringNullableFilter<"Snapshot"> | string | null
+  aggregateType?: Prisma.StringNullableFilter<"Snapshot"> | string | null
   account?: Prisma.StringNullableFilter<"Snapshot"> | string | null
   balance?: Prisma.DecimalNullableFilter<"Snapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   version?: Prisma.IntFilter<"Snapshot"> | number
   snapshotType?: Prisma.StringFilter<"Snapshot"> | string
   scope?: Prisma.StringFilter<"Snapshot"> | string
   data?: Prisma.JsonFilter<"Snapshot">
-  lastVersion?: Prisma.IntFilter<"Snapshot"> | number
+  lastGlobalPosition?: Prisma.BigIntFilter<"Snapshot"> | bigint | number
+  compressed?: Prisma.BoolFilter<"Snapshot"> | boolean
+  checksum?: Prisma.StringNullableFilter<"Snapshot"> | string | null
+  eventCount?: Prisma.IntFilter<"Snapshot"> | number
   createdAt?: Prisma.DateTimeFilter<"Snapshot"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Snapshot"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
   branch?: Prisma.XOR<Prisma.BranchNullableScalarRelationFilter, Prisma.BranchWhereInput> | null
-}, "id" | "businessId_branchId_account_snapshotType_scope">
+}, "id" | "snapshotKey">
 
 export type SnapshotOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrderInput | Prisma.SortOrder
   branchBusinessId?: Prisma.SortOrderInput | Prisma.SortOrder
+  aggregateId?: Prisma.SortOrderInput | Prisma.SortOrder
+  aggregateType?: Prisma.SortOrderInput | Prisma.SortOrder
   account?: Prisma.SortOrderInput | Prisma.SortOrder
   balance?: Prisma.SortOrderInput | Prisma.SortOrder
   version?: Prisma.SortOrder
   snapshotType?: Prisma.SortOrder
   scope?: Prisma.SortOrder
   data?: Prisma.SortOrder
-  lastVersion?: Prisma.SortOrder
+  lastGlobalPosition?: Prisma.SortOrder
+  snapshotKey?: Prisma.SortOrder
+  compressed?: Prisma.SortOrder
+  checksum?: Prisma.SortOrderInput | Prisma.SortOrder
+  eventCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.SnapshotCountOrderByAggregateInput
@@ -357,26 +426,38 @@ export type SnapshotScalarWhereWithAggregatesInput = {
   businessId?: Prisma.StringWithAggregatesFilter<"Snapshot"> | string
   branchId?: Prisma.StringNullableWithAggregatesFilter<"Snapshot"> | string | null
   branchBusinessId?: Prisma.StringNullableWithAggregatesFilter<"Snapshot"> | string | null
+  aggregateId?: Prisma.StringNullableWithAggregatesFilter<"Snapshot"> | string | null
+  aggregateType?: Prisma.StringNullableWithAggregatesFilter<"Snapshot"> | string | null
   account?: Prisma.StringNullableWithAggregatesFilter<"Snapshot"> | string | null
   balance?: Prisma.DecimalNullableWithAggregatesFilter<"Snapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   version?: Prisma.IntWithAggregatesFilter<"Snapshot"> | number
   snapshotType?: Prisma.StringWithAggregatesFilter<"Snapshot"> | string
   scope?: Prisma.StringWithAggregatesFilter<"Snapshot"> | string
   data?: Prisma.JsonWithAggregatesFilter<"Snapshot">
-  lastVersion?: Prisma.IntWithAggregatesFilter<"Snapshot"> | number
+  lastGlobalPosition?: Prisma.BigIntWithAggregatesFilter<"Snapshot"> | bigint | number
+  snapshotKey?: Prisma.StringWithAggregatesFilter<"Snapshot"> | string
+  compressed?: Prisma.BoolWithAggregatesFilter<"Snapshot"> | boolean
+  checksum?: Prisma.StringNullableWithAggregatesFilter<"Snapshot"> | string | null
+  eventCount?: Prisma.IntWithAggregatesFilter<"Snapshot"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Snapshot"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Snapshot"> | Date | string
 }
 
 export type SnapshotCreateInput = {
   id: string
+  aggregateId?: string | null
+  aggregateType?: string | null
   account?: string | null
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   version: number
   snapshotType: string
   scope: string
   data: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastVersion: number
+  lastGlobalPosition: bigint | number
+  snapshotKey: string
+  compressed?: boolean
+  checksum?: string | null
+  eventCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutSnapshotsInput
@@ -388,26 +469,38 @@ export type SnapshotUncheckedCreateInput = {
   businessId: string
   branchId?: string | null
   branchBusinessId?: string | null
+  aggregateId?: string | null
+  aggregateType?: string | null
   account?: string | null
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   version: number
   snapshotType: string
   scope: string
   data: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastVersion: number
+  lastGlobalPosition: bigint | number
+  snapshotKey: string
+  compressed?: boolean
+  checksum?: string | null
+  eventCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type SnapshotUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aggregateType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   snapshotType?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  lastGlobalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  snapshotKey?: Prisma.StringFieldUpdateOperationsInput | string
+  compressed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eventCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutSnapshotsNestedInput
@@ -419,13 +512,19 @@ export type SnapshotUncheckedUpdateInput = {
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aggregateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aggregateType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   snapshotType?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  lastGlobalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  snapshotKey?: Prisma.StringFieldUpdateOperationsInput | string
+  compressed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eventCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -435,26 +534,38 @@ export type SnapshotCreateManyInput = {
   businessId: string
   branchId?: string | null
   branchBusinessId?: string | null
+  aggregateId?: string | null
+  aggregateType?: string | null
   account?: string | null
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   version: number
   snapshotType: string
   scope: string
   data: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastVersion: number
+  lastGlobalPosition: bigint | number
+  snapshotKey: string
+  compressed?: boolean
+  checksum?: string | null
+  eventCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type SnapshotUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aggregateType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   snapshotType?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  lastGlobalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  snapshotKey?: Prisma.StringFieldUpdateOperationsInput | string
+  compressed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eventCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -464,13 +575,19 @@ export type SnapshotUncheckedUpdateManyInput = {
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aggregateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aggregateType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   snapshotType?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  lastGlobalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  snapshotKey?: Prisma.StringFieldUpdateOperationsInput | string
+  compressed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eventCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -485,26 +602,24 @@ export type SnapshotOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type SnapshotBusinessIdBranchIdAccountSnapshotTypeScopeCompoundUniqueInput = {
-  businessId: string
-  branchId: string
-  account: string
-  snapshotType: string
-  scope: string
-}
-
 export type SnapshotCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
   branchBusinessId?: Prisma.SortOrder
+  aggregateId?: Prisma.SortOrder
+  aggregateType?: Prisma.SortOrder
   account?: Prisma.SortOrder
   balance?: Prisma.SortOrder
   version?: Prisma.SortOrder
   snapshotType?: Prisma.SortOrder
   scope?: Prisma.SortOrder
   data?: Prisma.SortOrder
-  lastVersion?: Prisma.SortOrder
+  lastGlobalPosition?: Prisma.SortOrder
+  snapshotKey?: Prisma.SortOrder
+  compressed?: Prisma.SortOrder
+  checksum?: Prisma.SortOrder
+  eventCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -512,7 +627,8 @@ export type SnapshotCountOrderByAggregateInput = {
 export type SnapshotAvgOrderByAggregateInput = {
   balance?: Prisma.SortOrder
   version?: Prisma.SortOrder
-  lastVersion?: Prisma.SortOrder
+  lastGlobalPosition?: Prisma.SortOrder
+  eventCount?: Prisma.SortOrder
 }
 
 export type SnapshotMaxOrderByAggregateInput = {
@@ -520,12 +636,18 @@ export type SnapshotMaxOrderByAggregateInput = {
   businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
   branchBusinessId?: Prisma.SortOrder
+  aggregateId?: Prisma.SortOrder
+  aggregateType?: Prisma.SortOrder
   account?: Prisma.SortOrder
   balance?: Prisma.SortOrder
   version?: Prisma.SortOrder
   snapshotType?: Prisma.SortOrder
   scope?: Prisma.SortOrder
-  lastVersion?: Prisma.SortOrder
+  lastGlobalPosition?: Prisma.SortOrder
+  snapshotKey?: Prisma.SortOrder
+  compressed?: Prisma.SortOrder
+  checksum?: Prisma.SortOrder
+  eventCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -535,12 +657,18 @@ export type SnapshotMinOrderByAggregateInput = {
   businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
   branchBusinessId?: Prisma.SortOrder
+  aggregateId?: Prisma.SortOrder
+  aggregateType?: Prisma.SortOrder
   account?: Prisma.SortOrder
   balance?: Prisma.SortOrder
   version?: Prisma.SortOrder
   snapshotType?: Prisma.SortOrder
   scope?: Prisma.SortOrder
-  lastVersion?: Prisma.SortOrder
+  lastGlobalPosition?: Prisma.SortOrder
+  snapshotKey?: Prisma.SortOrder
+  compressed?: Prisma.SortOrder
+  checksum?: Prisma.SortOrder
+  eventCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -548,7 +676,8 @@ export type SnapshotMinOrderByAggregateInput = {
 export type SnapshotSumOrderByAggregateInput = {
   balance?: Prisma.SortOrder
   version?: Prisma.SortOrder
-  lastVersion?: Prisma.SortOrder
+  lastGlobalPosition?: Prisma.SortOrder
+  eventCount?: Prisma.SortOrder
 }
 
 export type SnapshotCreateNestedManyWithoutBusinessInput = {
@@ -637,13 +766,19 @@ export type SnapshotUncheckedUpdateManyWithoutBranchNestedInput = {
 
 export type SnapshotCreateWithoutBusinessInput = {
   id: string
+  aggregateId?: string | null
+  aggregateType?: string | null
   account?: string | null
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   version: number
   snapshotType: string
   scope: string
   data: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastVersion: number
+  lastGlobalPosition: bigint | number
+  snapshotKey: string
+  compressed?: boolean
+  checksum?: string | null
+  eventCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   branch?: Prisma.BranchCreateNestedOneWithoutSnapshotsInput
@@ -653,13 +788,19 @@ export type SnapshotUncheckedCreateWithoutBusinessInput = {
   id: string
   branchId?: string | null
   branchBusinessId?: string | null
+  aggregateId?: string | null
+  aggregateType?: string | null
   account?: string | null
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   version: number
   snapshotType: string
   scope: string
   data: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastVersion: number
+  lastGlobalPosition: bigint | number
+  snapshotKey: string
+  compressed?: boolean
+  checksum?: string | null
+  eventCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -698,26 +839,38 @@ export type SnapshotScalarWhereInput = {
   businessId?: Prisma.StringFilter<"Snapshot"> | string
   branchId?: Prisma.StringNullableFilter<"Snapshot"> | string | null
   branchBusinessId?: Prisma.StringNullableFilter<"Snapshot"> | string | null
+  aggregateId?: Prisma.StringNullableFilter<"Snapshot"> | string | null
+  aggregateType?: Prisma.StringNullableFilter<"Snapshot"> | string | null
   account?: Prisma.StringNullableFilter<"Snapshot"> | string | null
   balance?: Prisma.DecimalNullableFilter<"Snapshot"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   version?: Prisma.IntFilter<"Snapshot"> | number
   snapshotType?: Prisma.StringFilter<"Snapshot"> | string
   scope?: Prisma.StringFilter<"Snapshot"> | string
   data?: Prisma.JsonFilter<"Snapshot">
-  lastVersion?: Prisma.IntFilter<"Snapshot"> | number
+  lastGlobalPosition?: Prisma.BigIntFilter<"Snapshot"> | bigint | number
+  snapshotKey?: Prisma.StringFilter<"Snapshot"> | string
+  compressed?: Prisma.BoolFilter<"Snapshot"> | boolean
+  checksum?: Prisma.StringNullableFilter<"Snapshot"> | string | null
+  eventCount?: Prisma.IntFilter<"Snapshot"> | number
   createdAt?: Prisma.DateTimeFilter<"Snapshot"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Snapshot"> | Date | string
 }
 
 export type SnapshotCreateWithoutBranchInput = {
   id: string
+  aggregateId?: string | null
+  aggregateType?: string | null
   account?: string | null
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   version: number
   snapshotType: string
   scope: string
   data: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastVersion: number
+  lastGlobalPosition: bigint | number
+  snapshotKey: string
+  compressed?: boolean
+  checksum?: string | null
+  eventCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   business: Prisma.BusinessCreateNestedOneWithoutSnapshotsInput
@@ -726,13 +879,19 @@ export type SnapshotCreateWithoutBranchInput = {
 export type SnapshotUncheckedCreateWithoutBranchInput = {
   id: string
   businessId: string
+  aggregateId?: string | null
+  aggregateType?: string | null
   account?: string | null
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   version: number
   snapshotType: string
   scope: string
   data: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastVersion: number
+  lastGlobalPosition: bigint | number
+  snapshotKey: string
+  compressed?: boolean
+  checksum?: string | null
+  eventCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -767,26 +926,38 @@ export type SnapshotCreateManyBusinessInput = {
   id: string
   branchId?: string | null
   branchBusinessId?: string | null
+  aggregateId?: string | null
+  aggregateType?: string | null
   account?: string | null
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   version: number
   snapshotType: string
   scope: string
   data: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastVersion: number
+  lastGlobalPosition: bigint | number
+  snapshotKey: string
+  compressed?: boolean
+  checksum?: string | null
+  eventCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type SnapshotUpdateWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aggregateType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   snapshotType?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  lastGlobalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  snapshotKey?: Prisma.StringFieldUpdateOperationsInput | string
+  compressed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eventCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   branch?: Prisma.BranchUpdateOneWithoutSnapshotsNestedInput
@@ -796,13 +967,19 @@ export type SnapshotUncheckedUpdateWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aggregateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aggregateType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   snapshotType?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  lastGlobalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  snapshotKey?: Prisma.StringFieldUpdateOperationsInput | string
+  compressed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eventCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -811,13 +988,19 @@ export type SnapshotUncheckedUpdateManyWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aggregateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aggregateType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   snapshotType?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  lastGlobalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  snapshotKey?: Prisma.StringFieldUpdateOperationsInput | string
+  compressed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eventCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -825,26 +1008,38 @@ export type SnapshotUncheckedUpdateManyWithoutBusinessInput = {
 export type SnapshotCreateManyBranchInput = {
   id: string
   businessId: string
+  aggregateId?: string | null
+  aggregateType?: string | null
   account?: string | null
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   version: number
   snapshotType: string
   scope: string
   data: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastVersion: number
+  lastGlobalPosition: bigint | number
+  snapshotKey: string
+  compressed?: boolean
+  checksum?: string | null
+  eventCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type SnapshotUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aggregateType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   snapshotType?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  lastGlobalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  snapshotKey?: Prisma.StringFieldUpdateOperationsInput | string
+  compressed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eventCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneRequiredWithoutSnapshotsNestedInput
@@ -853,13 +1048,19 @@ export type SnapshotUpdateWithoutBranchInput = {
 export type SnapshotUncheckedUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aggregateType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   snapshotType?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  lastGlobalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  snapshotKey?: Prisma.StringFieldUpdateOperationsInput | string
+  compressed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eventCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -867,13 +1068,19 @@ export type SnapshotUncheckedUpdateWithoutBranchInput = {
 export type SnapshotUncheckedUpdateManyWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aggregateType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   balance?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   snapshotType?: Prisma.StringFieldUpdateOperationsInput | string
   scope?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  lastVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  lastGlobalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  snapshotKey?: Prisma.StringFieldUpdateOperationsInput | string
+  compressed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eventCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -885,13 +1092,19 @@ export type SnapshotSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   businessId?: boolean
   branchId?: boolean
   branchBusinessId?: boolean
+  aggregateId?: boolean
+  aggregateType?: boolean
   account?: boolean
   balance?: boolean
   version?: boolean
   snapshotType?: boolean
   scope?: boolean
   data?: boolean
-  lastVersion?: boolean
+  lastGlobalPosition?: boolean
+  snapshotKey?: boolean
+  compressed?: boolean
+  checksum?: boolean
+  eventCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
@@ -903,13 +1116,19 @@ export type SnapshotSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   businessId?: boolean
   branchId?: boolean
   branchBusinessId?: boolean
+  aggregateId?: boolean
+  aggregateType?: boolean
   account?: boolean
   balance?: boolean
   version?: boolean
   snapshotType?: boolean
   scope?: boolean
   data?: boolean
-  lastVersion?: boolean
+  lastGlobalPosition?: boolean
+  snapshotKey?: boolean
+  compressed?: boolean
+  checksum?: boolean
+  eventCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
@@ -921,13 +1140,19 @@ export type SnapshotSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   businessId?: boolean
   branchId?: boolean
   branchBusinessId?: boolean
+  aggregateId?: boolean
+  aggregateType?: boolean
   account?: boolean
   balance?: boolean
   version?: boolean
   snapshotType?: boolean
   scope?: boolean
   data?: boolean
-  lastVersion?: boolean
+  lastGlobalPosition?: boolean
+  snapshotKey?: boolean
+  compressed?: boolean
+  checksum?: boolean
+  eventCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
@@ -939,18 +1164,24 @@ export type SnapshotSelectScalar = {
   businessId?: boolean
   branchId?: boolean
   branchBusinessId?: boolean
+  aggregateId?: boolean
+  aggregateType?: boolean
   account?: boolean
   balance?: boolean
   version?: boolean
   snapshotType?: boolean
   scope?: boolean
   data?: boolean
-  lastVersion?: boolean
+  lastGlobalPosition?: boolean
+  snapshotKey?: boolean
+  compressed?: boolean
+  checksum?: boolean
+  eventCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type SnapshotOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "branchBusinessId" | "account" | "balance" | "version" | "snapshotType" | "scope" | "data" | "lastVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["snapshot"]>
+export type SnapshotOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "branchBusinessId" | "aggregateId" | "aggregateType" | "account" | "balance" | "version" | "snapshotType" | "scope" | "data" | "lastGlobalPosition" | "snapshotKey" | "compressed" | "checksum" | "eventCount" | "createdAt" | "updatedAt", ExtArgs["result"]["snapshot"]>
 export type SnapshotInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.Snapshot$branchArgs<ExtArgs>
@@ -975,13 +1206,19 @@ export type $SnapshotPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     businessId: string
     branchId: string | null
     branchBusinessId: string | null
+    aggregateId: string | null
+    aggregateType: string | null
     account: string | null
     balance: runtime.Decimal | null
     version: number
     snapshotType: string
     scope: string
     data: runtime.JsonValue
-    lastVersion: number
+    lastGlobalPosition: bigint
+    snapshotKey: string
+    compressed: boolean
+    checksum: string | null
+    eventCount: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["snapshot"]>
@@ -1413,13 +1650,19 @@ export interface SnapshotFieldRefs {
   readonly businessId: Prisma.FieldRef<"Snapshot", 'String'>
   readonly branchId: Prisma.FieldRef<"Snapshot", 'String'>
   readonly branchBusinessId: Prisma.FieldRef<"Snapshot", 'String'>
+  readonly aggregateId: Prisma.FieldRef<"Snapshot", 'String'>
+  readonly aggregateType: Prisma.FieldRef<"Snapshot", 'String'>
   readonly account: Prisma.FieldRef<"Snapshot", 'String'>
   readonly balance: Prisma.FieldRef<"Snapshot", 'Decimal'>
   readonly version: Prisma.FieldRef<"Snapshot", 'Int'>
   readonly snapshotType: Prisma.FieldRef<"Snapshot", 'String'>
   readonly scope: Prisma.FieldRef<"Snapshot", 'String'>
   readonly data: Prisma.FieldRef<"Snapshot", 'Json'>
-  readonly lastVersion: Prisma.FieldRef<"Snapshot", 'Int'>
+  readonly lastGlobalPosition: Prisma.FieldRef<"Snapshot", 'BigInt'>
+  readonly snapshotKey: Prisma.FieldRef<"Snapshot", 'String'>
+  readonly compressed: Prisma.FieldRef<"Snapshot", 'Boolean'>
+  readonly checksum: Prisma.FieldRef<"Snapshot", 'String'>
+  readonly eventCount: Prisma.FieldRef<"Snapshot", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Snapshot", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Snapshot", 'DateTime'>
 }

@@ -5,6 +5,7 @@ export interface BaseEvent<T extends EventType = EventType, p = Record<string, a
 
   aggregateId: string;
   aggregateType: string;
+  expectedAggregateVersion?: number
 
   type: T;
 
@@ -20,7 +21,6 @@ export interface BaseEvent<T extends EventType = EventType, p = Record<string, a
   // sync + ordering
   createdAt: number;       // device time
   logicClock: number;    // monotonic per device
-  version: number;         // per branch stream
 
   // origin
   deviceId: string;
@@ -29,4 +29,7 @@ export interface BaseEvent<T extends EventType = EventType, p = Record<string, a
   // sync state
   status: "PENDING" | "SYNCED" | "FAILED";
   synced: boolean;
+  isCreationEvent: boolean;
+  causationId?: string;
+  correlationId?: string;
 }

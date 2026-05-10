@@ -13,6 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   if (navigator.onLine && !isAuthPage) {
     
   }
+  
 
   return (
     <html lang="en">

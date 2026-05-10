@@ -13,3 +13,27 @@ export enum AggregateType {
   SALE = "SALE",
   EXPENSE = "EXPENSE",
 }
+
+export interface AggregateRecord {
+
+  id: string;
+
+  aggregateId: string;
+
+  aggregateType: string;
+
+  version: number;
+
+  lastGlobalPosition?: number;
+
+  lastSnapshotVersion?: number;
+
+  updatedAt: number;
+}
+
+export interface ReplicaMeta {
+
+  deviceId: string;
+
+  lastLogicClock: number;
+}

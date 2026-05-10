@@ -36,6 +36,9 @@ export interface Event {
   status: "PENDING" | "SYNCED" | "FAILED";
 
   synced: boolean;
+  isCreationEvent: boolean;
+  causationId?: string;
+  correlationId?: string;
 
   // TIMESTAMPS
   createdAt: Date;

@@ -90,6 +90,11 @@ export type ProcessedSyncEvent = Prisma.ProcessedSyncEventModel
  */
 export type Event = Prisma.EventModel
 /**
+ * Model DeviceClock
+ * 
+ */
+export type DeviceClock = Prisma.DeviceClockModel
+/**
  * Model LedgerEntry
  * 
  */

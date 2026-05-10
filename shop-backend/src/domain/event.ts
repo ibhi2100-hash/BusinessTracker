@@ -8,6 +8,8 @@ export interface Event {
   aggregateId: string;
   aggregateType: string;
 
+  expectedAggregateVersion?: number | null;
+
   // EVENT INFO
   type: string;
   payload: Record<string, any>;
@@ -20,8 +22,6 @@ export interface Event {
   // OPERATING MODE
   mode: "OPENING" | "LIVE";
 
-  // STREAM VERSIONING
-  version: number;
 
   // DEVICE ORDERING
   logicClock: number;
@@ -37,6 +37,9 @@ export interface Event {
   status: "PENDING" | "SYNCED" | "FAILED";
 
   synced: boolean;
+  isCreationEvent: boolean;
+  causationId?: string;
+  correlationId?: string;
 
   // TIMESTAMPS
   createdAt: Date;

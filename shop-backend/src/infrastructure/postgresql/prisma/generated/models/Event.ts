@@ -27,13 +27,15 @@ export type AggregateEvent = {
 }
 
 export type EventAvgAggregateOutputType = {
-  version: number | null
+  aggregateVersion: number | null
+  globalPosition: number | null
   logicClock: number | null
 }
 
 export type EventSumAggregateOutputType = {
-  version: number | null
-  logicClock: number | null
+  aggregateVersion: number | null
+  globalPosition: bigint | null
+  logicClock: bigint | null
 }
 
 export type EventMinAggregateOutputType = {
@@ -43,15 +45,19 @@ export type EventMinAggregateOutputType = {
   branchBusinessId: string | null
   aggregateId: string | null
   aggregateType: string | null
+  aggregateVersion: number | null
+  globalPosition: bigint | null
   type: string | null
   mode: $Enums.Mode | null
   scope: string | null
-  version: number | null
-  logicClock: number | null
+  logicClock: bigint | null
   deviceId: string | null
   userId: string | null
   status: $Enums.SyncEventStatus | null
   synced: boolean | null
+  isCreationEvent: boolean | null
+  causationId: string | null
+  correlationId: string | null
   createdAt: Date | null
 }
 
@@ -62,15 +68,19 @@ export type EventMaxAggregateOutputType = {
   branchBusinessId: string | null
   aggregateId: string | null
   aggregateType: string | null
+  aggregateVersion: number | null
+  globalPosition: bigint | null
   type: string | null
   mode: $Enums.Mode | null
   scope: string | null
-  version: number | null
-  logicClock: number | null
+  logicClock: bigint | null
   deviceId: string | null
   userId: string | null
   status: $Enums.SyncEventStatus | null
   synced: boolean | null
+  isCreationEvent: boolean | null
+  causationId: string | null
+  correlationId: string | null
   createdAt: Date | null
 }
 
@@ -81,28 +91,34 @@ export type EventCountAggregateOutputType = {
   branchBusinessId: number
   aggregateId: number
   aggregateType: number
+  aggregateVersion: number
+  globalPosition: number
   type: number
   payload: number
   mode: number
   scope: number
-  version: number
   logicClock: number
   deviceId: number
   userId: number
   status: number
   synced: number
+  isCreationEvent: number
+  causationId: number
+  correlationId: number
   createdAt: number
   _all: number
 }
 
 
 export type EventAvgAggregateInputType = {
-  version?: true
+  aggregateVersion?: true
+  globalPosition?: true
   logicClock?: true
 }
 
 export type EventSumAggregateInputType = {
-  version?: true
+  aggregateVersion?: true
+  globalPosition?: true
   logicClock?: true
 }
 
@@ -113,15 +129,19 @@ export type EventMinAggregateInputType = {
   branchBusinessId?: true
   aggregateId?: true
   aggregateType?: true
+  aggregateVersion?: true
+  globalPosition?: true
   type?: true
   mode?: true
   scope?: true
-  version?: true
   logicClock?: true
   deviceId?: true
   userId?: true
   status?: true
   synced?: true
+  isCreationEvent?: true
+  causationId?: true
+  correlationId?: true
   createdAt?: true
 }
 
@@ -132,15 +152,19 @@ export type EventMaxAggregateInputType = {
   branchBusinessId?: true
   aggregateId?: true
   aggregateType?: true
+  aggregateVersion?: true
+  globalPosition?: true
   type?: true
   mode?: true
   scope?: true
-  version?: true
   logicClock?: true
   deviceId?: true
   userId?: true
   status?: true
   synced?: true
+  isCreationEvent?: true
+  causationId?: true
+  correlationId?: true
   createdAt?: true
 }
 
@@ -151,16 +175,20 @@ export type EventCountAggregateInputType = {
   branchBusinessId?: true
   aggregateId?: true
   aggregateType?: true
+  aggregateVersion?: true
+  globalPosition?: true
   type?: true
   payload?: true
   mode?: true
   scope?: true
-  version?: true
   logicClock?: true
   deviceId?: true
   userId?: true
   status?: true
   synced?: true
+  isCreationEvent?: true
+  causationId?: true
+  correlationId?: true
   createdAt?: true
   _all?: true
 }
@@ -258,16 +286,20 @@ export type EventGroupByOutputType = {
   branchBusinessId: string | null
   aggregateId: string
   aggregateType: string
+  aggregateVersion: number
+  globalPosition: bigint
   type: string
   payload: runtime.JsonValue
   mode: $Enums.Mode
   scope: string
-  version: number
-  logicClock: number
+  logicClock: bigint
   deviceId: string
   userId: string | null
   status: $Enums.SyncEventStatus
   synced: boolean
+  isCreationEvent: boolean
+  causationId: string | null
+  correlationId: string | null
   createdAt: Date
   _count: EventCountAggregateOutputType | null
   _avg: EventAvgAggregateOutputType | null
@@ -301,16 +333,20 @@ export type EventWhereInput = {
   branchBusinessId?: Prisma.StringNullableFilter<"Event"> | string | null
   aggregateId?: Prisma.StringFilter<"Event"> | string
   aggregateType?: Prisma.StringFilter<"Event"> | string
+  aggregateVersion?: Prisma.IntFilter<"Event"> | number
+  globalPosition?: Prisma.BigIntFilter<"Event"> | bigint | number
   type?: Prisma.StringFilter<"Event"> | string
   payload?: Prisma.JsonFilter<"Event">
   mode?: Prisma.EnumModeFilter<"Event"> | $Enums.Mode
   scope?: Prisma.StringFilter<"Event"> | string
-  version?: Prisma.IntFilter<"Event"> | number
-  logicClock?: Prisma.IntFilter<"Event"> | number
+  logicClock?: Prisma.BigIntFilter<"Event"> | bigint | number
   deviceId?: Prisma.StringFilter<"Event"> | string
   userId?: Prisma.StringNullableFilter<"Event"> | string | null
   status?: Prisma.EnumSyncEventStatusFilter<"Event"> | $Enums.SyncEventStatus
   synced?: Prisma.BoolFilter<"Event"> | boolean
+  isCreationEvent?: Prisma.BoolFilter<"Event"> | boolean
+  causationId?: Prisma.StringNullableFilter<"Event"> | string | null
+  correlationId?: Prisma.StringNullableFilter<"Event"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessNullableScalarRelationFilter, Prisma.BusinessWhereInput> | null
   branch?: Prisma.XOR<Prisma.BranchNullableScalarRelationFilter, Prisma.BranchWhereInput> | null
@@ -325,16 +361,20 @@ export type EventOrderByWithRelationInput = {
   branchBusinessId?: Prisma.SortOrderInput | Prisma.SortOrder
   aggregateId?: Prisma.SortOrder
   aggregateType?: Prisma.SortOrder
+  aggregateVersion?: Prisma.SortOrder
+  globalPosition?: Prisma.SortOrder
   type?: Prisma.SortOrder
   payload?: Prisma.SortOrder
   mode?: Prisma.SortOrder
   scope?: Prisma.SortOrder
-  version?: Prisma.SortOrder
   logicClock?: Prisma.SortOrder
   deviceId?: Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   synced?: Prisma.SortOrder
+  isCreationEvent?: Prisma.SortOrder
+  causationId?: Prisma.SortOrderInput | Prisma.SortOrder
+  correlationId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   business?: Prisma.BusinessOrderByWithRelationInput
   branch?: Prisma.BranchOrderByWithRelationInput
@@ -344,7 +384,7 @@ export type EventOrderByWithRelationInput = {
 
 export type EventWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  aggregateType_aggregateId_version?: Prisma.EventAggregateTypeAggregateIdVersionCompoundUniqueInput
+  aggregateType_aggregateId_aggregateVersion?: Prisma.EventAggregateTypeAggregateIdAggregateVersionCompoundUniqueInput
   AND?: Prisma.EventWhereInput | Prisma.EventWhereInput[]
   OR?: Prisma.EventWhereInput[]
   NOT?: Prisma.EventWhereInput | Prisma.EventWhereInput[]
@@ -353,22 +393,26 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   branchBusinessId?: Prisma.StringNullableFilter<"Event"> | string | null
   aggregateId?: Prisma.StringFilter<"Event"> | string
   aggregateType?: Prisma.StringFilter<"Event"> | string
+  aggregateVersion?: Prisma.IntFilter<"Event"> | number
+  globalPosition?: Prisma.BigIntFilter<"Event"> | bigint | number
   type?: Prisma.StringFilter<"Event"> | string
   payload?: Prisma.JsonFilter<"Event">
   mode?: Prisma.EnumModeFilter<"Event"> | $Enums.Mode
   scope?: Prisma.StringFilter<"Event"> | string
-  version?: Prisma.IntFilter<"Event"> | number
-  logicClock?: Prisma.IntFilter<"Event"> | number
+  logicClock?: Prisma.BigIntFilter<"Event"> | bigint | number
   deviceId?: Prisma.StringFilter<"Event"> | string
   userId?: Prisma.StringNullableFilter<"Event"> | string | null
   status?: Prisma.EnumSyncEventStatusFilter<"Event"> | $Enums.SyncEventStatus
   synced?: Prisma.BoolFilter<"Event"> | boolean
+  isCreationEvent?: Prisma.BoolFilter<"Event"> | boolean
+  causationId?: Prisma.StringNullableFilter<"Event"> | string | null
+  correlationId?: Prisma.StringNullableFilter<"Event"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   business?: Prisma.XOR<Prisma.BusinessNullableScalarRelationFilter, Prisma.BusinessWhereInput> | null
   branch?: Prisma.XOR<Prisma.BranchNullableScalarRelationFilter, Prisma.BranchWhereInput> | null
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   ledgerEntries?: Prisma.LedgerEntryListRelationFilter
-}, "id" | "aggregateType_aggregateId_version">
+}, "id" | "aggregateType_aggregateId_aggregateVersion">
 
 export type EventOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -377,16 +421,20 @@ export type EventOrderByWithAggregationInput = {
   branchBusinessId?: Prisma.SortOrderInput | Prisma.SortOrder
   aggregateId?: Prisma.SortOrder
   aggregateType?: Prisma.SortOrder
+  aggregateVersion?: Prisma.SortOrder
+  globalPosition?: Prisma.SortOrder
   type?: Prisma.SortOrder
   payload?: Prisma.SortOrder
   mode?: Prisma.SortOrder
   scope?: Prisma.SortOrder
-  version?: Prisma.SortOrder
   logicClock?: Prisma.SortOrder
   deviceId?: Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   synced?: Prisma.SortOrder
+  isCreationEvent?: Prisma.SortOrder
+  causationId?: Prisma.SortOrderInput | Prisma.SortOrder
+  correlationId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.EventCountOrderByAggregateInput
   _avg?: Prisma.EventAvgOrderByAggregateInput
@@ -405,16 +453,20 @@ export type EventScalarWhereWithAggregatesInput = {
   branchBusinessId?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   aggregateId?: Prisma.StringWithAggregatesFilter<"Event"> | string
   aggregateType?: Prisma.StringWithAggregatesFilter<"Event"> | string
+  aggregateVersion?: Prisma.IntWithAggregatesFilter<"Event"> | number
+  globalPosition?: Prisma.BigIntWithAggregatesFilter<"Event"> | bigint | number
   type?: Prisma.StringWithAggregatesFilter<"Event"> | string
   payload?: Prisma.JsonWithAggregatesFilter<"Event">
   mode?: Prisma.EnumModeWithAggregatesFilter<"Event"> | $Enums.Mode
   scope?: Prisma.StringWithAggregatesFilter<"Event"> | string
-  version?: Prisma.IntWithAggregatesFilter<"Event"> | number
-  logicClock?: Prisma.IntWithAggregatesFilter<"Event"> | number
+  logicClock?: Prisma.BigIntWithAggregatesFilter<"Event"> | bigint | number
   deviceId?: Prisma.StringWithAggregatesFilter<"Event"> | string
   userId?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   status?: Prisma.EnumSyncEventStatusWithAggregatesFilter<"Event"> | $Enums.SyncEventStatus
   synced?: Prisma.BoolWithAggregatesFilter<"Event"> | boolean
+  isCreationEvent?: Prisma.BoolWithAggregatesFilter<"Event"> | boolean
+  causationId?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
+  correlationId?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Event"> | Date | string
 }
 
@@ -422,15 +474,19 @@ export type EventCreateInput = {
   id: string
   aggregateId: string
   aggregateType: string
+  aggregateVersion: number
+  globalPosition?: bigint | number
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
   scope: string
-  version: number
-  logicClock: number
+  logicClock: bigint | number
   deviceId: string
   status: $Enums.SyncEventStatus
   synced?: boolean
+  isCreationEvent?: boolean
+  causationId?: string | null
+  correlationId?: string | null
   createdAt?: Date | string
   business?: Prisma.BusinessCreateNestedOneWithoutEventsInput
   branch?: Prisma.BranchCreateNestedOneWithoutEventsInput
@@ -445,16 +501,20 @@ export type EventUncheckedCreateInput = {
   branchBusinessId?: string | null
   aggregateId: string
   aggregateType: string
+  aggregateVersion: number
+  globalPosition?: bigint | number
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
   scope: string
-  version: number
-  logicClock: number
+  logicClock: bigint | number
   deviceId: string
   userId?: string | null
   status: $Enums.SyncEventStatus
   synced?: boolean
+  isCreationEvent?: boolean
+  causationId?: string | null
+  correlationId?: string | null
   createdAt?: Date | string
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutEventInput
 }
@@ -463,15 +523,19 @@ export type EventUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
   scope?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  logicClock?: Prisma.IntFieldUpdateOperationsInput | number
+  logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
   synced?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCreationEvent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneWithoutEventsNestedInput
   branch?: Prisma.BranchUpdateOneWithoutEventsNestedInput
@@ -486,16 +550,20 @@ export type EventUncheckedUpdateInput = {
   branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
   scope?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  logicClock?: Prisma.IntFieldUpdateOperationsInput | number
+  logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
   synced?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCreationEvent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutEventNestedInput
 }
@@ -507,16 +575,20 @@ export type EventCreateManyInput = {
   branchBusinessId?: string | null
   aggregateId: string
   aggregateType: string
+  aggregateVersion: number
+  globalPosition?: bigint | number
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
   scope: string
-  version: number
-  logicClock: number
+  logicClock: bigint | number
   deviceId: string
   userId?: string | null
   status: $Enums.SyncEventStatus
   synced?: boolean
+  isCreationEvent?: boolean
+  causationId?: string | null
+  correlationId?: string | null
   createdAt?: Date | string
 }
 
@@ -524,15 +596,19 @@ export type EventUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
   scope?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  logicClock?: Prisma.IntFieldUpdateOperationsInput | number
+  logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
   synced?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCreationEvent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -543,16 +619,20 @@ export type EventUncheckedUpdateManyInput = {
   branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
   scope?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  logicClock?: Prisma.IntFieldUpdateOperationsInput | number
+  logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
   synced?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCreationEvent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -566,10 +646,10 @@ export type EventOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type EventAggregateTypeAggregateIdVersionCompoundUniqueInput = {
+export type EventAggregateTypeAggregateIdAggregateVersionCompoundUniqueInput = {
   aggregateType: string
   aggregateId: string
-  version: number
+  aggregateVersion: number
 }
 
 export type EventCountOrderByAggregateInput = {
@@ -579,21 +659,26 @@ export type EventCountOrderByAggregateInput = {
   branchBusinessId?: Prisma.SortOrder
   aggregateId?: Prisma.SortOrder
   aggregateType?: Prisma.SortOrder
+  aggregateVersion?: Prisma.SortOrder
+  globalPosition?: Prisma.SortOrder
   type?: Prisma.SortOrder
   payload?: Prisma.SortOrder
   mode?: Prisma.SortOrder
   scope?: Prisma.SortOrder
-  version?: Prisma.SortOrder
   logicClock?: Prisma.SortOrder
   deviceId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   synced?: Prisma.SortOrder
+  isCreationEvent?: Prisma.SortOrder
+  causationId?: Prisma.SortOrder
+  correlationId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type EventAvgOrderByAggregateInput = {
-  version?: Prisma.SortOrder
+  aggregateVersion?: Prisma.SortOrder
+  globalPosition?: Prisma.SortOrder
   logicClock?: Prisma.SortOrder
 }
 
@@ -604,15 +689,19 @@ export type EventMaxOrderByAggregateInput = {
   branchBusinessId?: Prisma.SortOrder
   aggregateId?: Prisma.SortOrder
   aggregateType?: Prisma.SortOrder
+  aggregateVersion?: Prisma.SortOrder
+  globalPosition?: Prisma.SortOrder
   type?: Prisma.SortOrder
   mode?: Prisma.SortOrder
   scope?: Prisma.SortOrder
-  version?: Prisma.SortOrder
   logicClock?: Prisma.SortOrder
   deviceId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   synced?: Prisma.SortOrder
+  isCreationEvent?: Prisma.SortOrder
+  causationId?: Prisma.SortOrder
+  correlationId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -623,20 +712,25 @@ export type EventMinOrderByAggregateInput = {
   branchBusinessId?: Prisma.SortOrder
   aggregateId?: Prisma.SortOrder
   aggregateType?: Prisma.SortOrder
+  aggregateVersion?: Prisma.SortOrder
+  globalPosition?: Prisma.SortOrder
   type?: Prisma.SortOrder
   mode?: Prisma.SortOrder
   scope?: Prisma.SortOrder
-  version?: Prisma.SortOrder
   logicClock?: Prisma.SortOrder
   deviceId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   synced?: Prisma.SortOrder
+  isCreationEvent?: Prisma.SortOrder
+  causationId?: Prisma.SortOrder
+  correlationId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type EventSumOrderByAggregateInput = {
-  version?: Prisma.SortOrder
+  aggregateVersion?: Prisma.SortOrder
+  globalPosition?: Prisma.SortOrder
   logicClock?: Prisma.SortOrder
 }
 
@@ -771,6 +865,14 @@ export type EventUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.EventScalarWhereInput | Prisma.EventScalarWhereInput[]
 }
 
+export type BigIntFieldUpdateOperationsInput = {
+  set?: bigint | number
+  increment?: bigint | number
+  decrement?: bigint | number
+  multiply?: bigint | number
+  divide?: bigint | number
+}
+
 export type EnumModeFieldUpdateOperationsInput = {
   set?: $Enums.Mode
 }
@@ -793,15 +895,19 @@ export type EventCreateWithoutBusinessInput = {
   id: string
   aggregateId: string
   aggregateType: string
+  aggregateVersion: number
+  globalPosition?: bigint | number
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
   scope: string
-  version: number
-  logicClock: number
+  logicClock: bigint | number
   deviceId: string
   status: $Enums.SyncEventStatus
   synced?: boolean
+  isCreationEvent?: boolean
+  causationId?: string | null
+  correlationId?: string | null
   createdAt?: Date | string
   branch?: Prisma.BranchCreateNestedOneWithoutEventsInput
   user?: Prisma.UserCreateNestedOneWithoutEventsInput
@@ -814,16 +920,20 @@ export type EventUncheckedCreateWithoutBusinessInput = {
   branchBusinessId?: string | null
   aggregateId: string
   aggregateType: string
+  aggregateVersion: number
+  globalPosition?: bigint | number
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
   scope: string
-  version: number
-  logicClock: number
+  logicClock: bigint | number
   deviceId: string
   userId?: string | null
   status: $Enums.SyncEventStatus
   synced?: boolean
+  isCreationEvent?: boolean
+  causationId?: string | null
+  correlationId?: string | null
   createdAt?: Date | string
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutEventInput
 }
@@ -864,16 +974,20 @@ export type EventScalarWhereInput = {
   branchBusinessId?: Prisma.StringNullableFilter<"Event"> | string | null
   aggregateId?: Prisma.StringFilter<"Event"> | string
   aggregateType?: Prisma.StringFilter<"Event"> | string
+  aggregateVersion?: Prisma.IntFilter<"Event"> | number
+  globalPosition?: Prisma.BigIntFilter<"Event"> | bigint | number
   type?: Prisma.StringFilter<"Event"> | string
   payload?: Prisma.JsonFilter<"Event">
   mode?: Prisma.EnumModeFilter<"Event"> | $Enums.Mode
   scope?: Prisma.StringFilter<"Event"> | string
-  version?: Prisma.IntFilter<"Event"> | number
-  logicClock?: Prisma.IntFilter<"Event"> | number
+  logicClock?: Prisma.BigIntFilter<"Event"> | bigint | number
   deviceId?: Prisma.StringFilter<"Event"> | string
   userId?: Prisma.StringNullableFilter<"Event"> | string | null
   status?: Prisma.EnumSyncEventStatusFilter<"Event"> | $Enums.SyncEventStatus
   synced?: Prisma.BoolFilter<"Event"> | boolean
+  isCreationEvent?: Prisma.BoolFilter<"Event"> | boolean
+  causationId?: Prisma.StringNullableFilter<"Event"> | string | null
+  correlationId?: Prisma.StringNullableFilter<"Event"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
 }
 
@@ -881,15 +995,19 @@ export type EventCreateWithoutBranchInput = {
   id: string
   aggregateId: string
   aggregateType: string
+  aggregateVersion: number
+  globalPosition?: bigint | number
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
   scope: string
-  version: number
-  logicClock: number
+  logicClock: bigint | number
   deviceId: string
   status: $Enums.SyncEventStatus
   synced?: boolean
+  isCreationEvent?: boolean
+  causationId?: string | null
+  correlationId?: string | null
   createdAt?: Date | string
   business?: Prisma.BusinessCreateNestedOneWithoutEventsInput
   user?: Prisma.UserCreateNestedOneWithoutEventsInput
@@ -901,16 +1019,20 @@ export type EventUncheckedCreateWithoutBranchInput = {
   businessId?: string | null
   aggregateId: string
   aggregateType: string
+  aggregateVersion: number
+  globalPosition?: bigint | number
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
   scope: string
-  version: number
-  logicClock: number
+  logicClock: bigint | number
   deviceId: string
   userId?: string | null
   status: $Enums.SyncEventStatus
   synced?: boolean
+  isCreationEvent?: boolean
+  causationId?: string | null
+  correlationId?: string | null
   createdAt?: Date | string
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutEventInput
 }
@@ -945,15 +1067,19 @@ export type EventCreateWithoutUserInput = {
   id: string
   aggregateId: string
   aggregateType: string
+  aggregateVersion: number
+  globalPosition?: bigint | number
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
   scope: string
-  version: number
-  logicClock: number
+  logicClock: bigint | number
   deviceId: string
   status: $Enums.SyncEventStatus
   synced?: boolean
+  isCreationEvent?: boolean
+  causationId?: string | null
+  correlationId?: string | null
   createdAt?: Date | string
   business?: Prisma.BusinessCreateNestedOneWithoutEventsInput
   branch?: Prisma.BranchCreateNestedOneWithoutEventsInput
@@ -967,15 +1093,19 @@ export type EventUncheckedCreateWithoutUserInput = {
   branchBusinessId?: string | null
   aggregateId: string
   aggregateType: string
+  aggregateVersion: number
+  globalPosition?: bigint | number
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
   scope: string
-  version: number
-  logicClock: number
+  logicClock: bigint | number
   deviceId: string
   status: $Enums.SyncEventStatus
   synced?: boolean
+  isCreationEvent?: boolean
+  causationId?: string | null
+  correlationId?: string | null
   createdAt?: Date | string
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutEventInput
 }
@@ -1010,15 +1140,19 @@ export type EventCreateWithoutLedgerEntriesInput = {
   id: string
   aggregateId: string
   aggregateType: string
+  aggregateVersion: number
+  globalPosition?: bigint | number
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
   scope: string
-  version: number
-  logicClock: number
+  logicClock: bigint | number
   deviceId: string
   status: $Enums.SyncEventStatus
   synced?: boolean
+  isCreationEvent?: boolean
+  causationId?: string | null
+  correlationId?: string | null
   createdAt?: Date | string
   business?: Prisma.BusinessCreateNestedOneWithoutEventsInput
   branch?: Prisma.BranchCreateNestedOneWithoutEventsInput
@@ -1032,16 +1166,20 @@ export type EventUncheckedCreateWithoutLedgerEntriesInput = {
   branchBusinessId?: string | null
   aggregateId: string
   aggregateType: string
+  aggregateVersion: number
+  globalPosition?: bigint | number
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
   scope: string
-  version: number
-  logicClock: number
+  logicClock: bigint | number
   deviceId: string
   userId?: string | null
   status: $Enums.SyncEventStatus
   synced?: boolean
+  isCreationEvent?: boolean
+  causationId?: string | null
+  correlationId?: string | null
   createdAt?: Date | string
 }
 
@@ -1065,15 +1203,19 @@ export type EventUpdateWithoutLedgerEntriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
   scope?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  logicClock?: Prisma.IntFieldUpdateOperationsInput | number
+  logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
   synced?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCreationEvent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneWithoutEventsNestedInput
   branch?: Prisma.BranchUpdateOneWithoutEventsNestedInput
@@ -1087,16 +1229,20 @@ export type EventUncheckedUpdateWithoutLedgerEntriesInput = {
   branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
   scope?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  logicClock?: Prisma.IntFieldUpdateOperationsInput | number
+  logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
   synced?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCreationEvent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -1106,16 +1252,20 @@ export type EventCreateManyBusinessInput = {
   branchBusinessId?: string | null
   aggregateId: string
   aggregateType: string
+  aggregateVersion: number
+  globalPosition?: bigint | number
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
   scope: string
-  version: number
-  logicClock: number
+  logicClock: bigint | number
   deviceId: string
   userId?: string | null
   status: $Enums.SyncEventStatus
   synced?: boolean
+  isCreationEvent?: boolean
+  causationId?: string | null
+  correlationId?: string | null
   createdAt?: Date | string
 }
 
@@ -1123,15 +1273,19 @@ export type EventUpdateWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
   scope?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  logicClock?: Prisma.IntFieldUpdateOperationsInput | number
+  logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
   synced?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCreationEvent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   branch?: Prisma.BranchUpdateOneWithoutEventsNestedInput
   user?: Prisma.UserUpdateOneWithoutEventsNestedInput
@@ -1144,16 +1298,20 @@ export type EventUncheckedUpdateWithoutBusinessInput = {
   branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
   scope?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  logicClock?: Prisma.IntFieldUpdateOperationsInput | number
+  logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
   synced?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCreationEvent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutEventNestedInput
 }
@@ -1164,16 +1322,20 @@ export type EventUncheckedUpdateManyWithoutBusinessInput = {
   branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
   scope?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  logicClock?: Prisma.IntFieldUpdateOperationsInput | number
+  logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
   synced?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCreationEvent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -1182,16 +1344,20 @@ export type EventCreateManyBranchInput = {
   businessId?: string | null
   aggregateId: string
   aggregateType: string
+  aggregateVersion: number
+  globalPosition?: bigint | number
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
   scope: string
-  version: number
-  logicClock: number
+  logicClock: bigint | number
   deviceId: string
   userId?: string | null
   status: $Enums.SyncEventStatus
   synced?: boolean
+  isCreationEvent?: boolean
+  causationId?: string | null
+  correlationId?: string | null
   createdAt?: Date | string
 }
 
@@ -1199,15 +1365,19 @@ export type EventUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
   scope?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  logicClock?: Prisma.IntFieldUpdateOperationsInput | number
+  logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
   synced?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCreationEvent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneWithoutEventsNestedInput
   user?: Prisma.UserUpdateOneWithoutEventsNestedInput
@@ -1219,16 +1389,20 @@ export type EventUncheckedUpdateWithoutBranchInput = {
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
   scope?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  logicClock?: Prisma.IntFieldUpdateOperationsInput | number
+  logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
   synced?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCreationEvent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutEventNestedInput
 }
@@ -1238,16 +1412,20 @@ export type EventUncheckedUpdateManyWithoutBranchInput = {
   businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
   scope?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  logicClock?: Prisma.IntFieldUpdateOperationsInput | number
+  logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
   synced?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCreationEvent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -1258,15 +1436,19 @@ export type EventCreateManyUserInput = {
   branchBusinessId?: string | null
   aggregateId: string
   aggregateType: string
+  aggregateVersion: number
+  globalPosition?: bigint | number
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
   scope: string
-  version: number
-  logicClock: number
+  logicClock: bigint | number
   deviceId: string
   status: $Enums.SyncEventStatus
   synced?: boolean
+  isCreationEvent?: boolean
+  causationId?: string | null
+  correlationId?: string | null
   createdAt?: Date | string
 }
 
@@ -1274,15 +1456,19 @@ export type EventUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
   scope?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  logicClock?: Prisma.IntFieldUpdateOperationsInput | number
+  logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
   synced?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCreationEvent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   business?: Prisma.BusinessUpdateOneWithoutEventsNestedInput
   branch?: Prisma.BranchUpdateOneWithoutEventsNestedInput
@@ -1296,15 +1482,19 @@ export type EventUncheckedUpdateWithoutUserInput = {
   branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
   scope?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  logicClock?: Prisma.IntFieldUpdateOperationsInput | number
+  logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
   synced?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCreationEvent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutEventNestedInput
 }
@@ -1316,15 +1506,19 @@ export type EventUncheckedUpdateManyWithoutUserInput = {
   branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
   scope?: Prisma.StringFieldUpdateOperationsInput | string
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  logicClock?: Prisma.IntFieldUpdateOperationsInput | number
+  logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
   synced?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isCreationEvent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -1366,16 +1560,20 @@ export type EventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   branchBusinessId?: boolean
   aggregateId?: boolean
   aggregateType?: boolean
+  aggregateVersion?: boolean
+  globalPosition?: boolean
   type?: boolean
   payload?: boolean
   mode?: boolean
   scope?: boolean
-  version?: boolean
   logicClock?: boolean
   deviceId?: boolean
   userId?: boolean
   status?: boolean
   synced?: boolean
+  isCreationEvent?: boolean
+  causationId?: boolean
+  correlationId?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.Event$businessArgs<ExtArgs>
   branch?: boolean | Prisma.Event$branchArgs<ExtArgs>
@@ -1391,16 +1589,20 @@ export type EventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   branchBusinessId?: boolean
   aggregateId?: boolean
   aggregateType?: boolean
+  aggregateVersion?: boolean
+  globalPosition?: boolean
   type?: boolean
   payload?: boolean
   mode?: boolean
   scope?: boolean
-  version?: boolean
   logicClock?: boolean
   deviceId?: boolean
   userId?: boolean
   status?: boolean
   synced?: boolean
+  isCreationEvent?: boolean
+  causationId?: boolean
+  correlationId?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.Event$businessArgs<ExtArgs>
   branch?: boolean | Prisma.Event$branchArgs<ExtArgs>
@@ -1414,16 +1616,20 @@ export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   branchBusinessId?: boolean
   aggregateId?: boolean
   aggregateType?: boolean
+  aggregateVersion?: boolean
+  globalPosition?: boolean
   type?: boolean
   payload?: boolean
   mode?: boolean
   scope?: boolean
-  version?: boolean
   logicClock?: boolean
   deviceId?: boolean
   userId?: boolean
   status?: boolean
   synced?: boolean
+  isCreationEvent?: boolean
+  causationId?: boolean
+  correlationId?: boolean
   createdAt?: boolean
   business?: boolean | Prisma.Event$businessArgs<ExtArgs>
   branch?: boolean | Prisma.Event$branchArgs<ExtArgs>
@@ -1437,20 +1643,24 @@ export type EventSelectScalar = {
   branchBusinessId?: boolean
   aggregateId?: boolean
   aggregateType?: boolean
+  aggregateVersion?: boolean
+  globalPosition?: boolean
   type?: boolean
   payload?: boolean
   mode?: boolean
   scope?: boolean
-  version?: boolean
   logicClock?: boolean
   deviceId?: boolean
   userId?: boolean
   status?: boolean
   synced?: boolean
+  isCreationEvent?: boolean
+  causationId?: boolean
+  correlationId?: boolean
   createdAt?: boolean
 }
 
-export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "branchBusinessId" | "aggregateId" | "aggregateType" | "type" | "payload" | "mode" | "scope" | "version" | "logicClock" | "deviceId" | "userId" | "status" | "synced" | "createdAt", ExtArgs["result"]["event"]>
+export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "branchBusinessId" | "aggregateId" | "aggregateType" | "aggregateVersion" | "globalPosition" | "type" | "payload" | "mode" | "scope" | "logicClock" | "deviceId" | "userId" | "status" | "synced" | "isCreationEvent" | "causationId" | "correlationId" | "createdAt", ExtArgs["result"]["event"]>
 export type EventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.Event$businessArgs<ExtArgs>
   branch?: boolean | Prisma.Event$branchArgs<ExtArgs>
@@ -1484,16 +1694,20 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     branchBusinessId: string | null
     aggregateId: string
     aggregateType: string
+    aggregateVersion: number
+    globalPosition: bigint
     type: string
     payload: runtime.JsonValue
     mode: $Enums.Mode
     scope: string
-    version: number
-    logicClock: number
+    logicClock: bigint
     deviceId: string
     userId: string | null
     status: $Enums.SyncEventStatus
     synced: boolean
+    isCreationEvent: boolean
+    causationId: string | null
+    correlationId: string | null
     createdAt: Date
   }, ExtArgs["result"]["event"]>
   composites: {}
@@ -1928,16 +2142,20 @@ export interface EventFieldRefs {
   readonly branchBusinessId: Prisma.FieldRef<"Event", 'String'>
   readonly aggregateId: Prisma.FieldRef<"Event", 'String'>
   readonly aggregateType: Prisma.FieldRef<"Event", 'String'>
+  readonly aggregateVersion: Prisma.FieldRef<"Event", 'Int'>
+  readonly globalPosition: Prisma.FieldRef<"Event", 'BigInt'>
   readonly type: Prisma.FieldRef<"Event", 'String'>
   readonly payload: Prisma.FieldRef<"Event", 'Json'>
   readonly mode: Prisma.FieldRef<"Event", 'Mode'>
   readonly scope: Prisma.FieldRef<"Event", 'String'>
-  readonly version: Prisma.FieldRef<"Event", 'Int'>
-  readonly logicClock: Prisma.FieldRef<"Event", 'Int'>
+  readonly logicClock: Prisma.FieldRef<"Event", 'BigInt'>
   readonly deviceId: Prisma.FieldRef<"Event", 'String'>
   readonly userId: Prisma.FieldRef<"Event", 'String'>
   readonly status: Prisma.FieldRef<"Event", 'SyncEventStatus'>
   readonly synced: Prisma.FieldRef<"Event", 'Boolean'>
+  readonly isCreationEvent: Prisma.FieldRef<"Event", 'Boolean'>
+  readonly causationId: Prisma.FieldRef<"Event", 'String'>
+  readonly correlationId: Prisma.FieldRef<"Event", 'String'>
   readonly createdAt: Prisma.FieldRef<"Event", 'DateTime'>
 }
     
