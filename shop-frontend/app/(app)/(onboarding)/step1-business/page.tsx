@@ -47,7 +47,6 @@ const router = useRouter();
         type: BusinessEventTypes.BUSINESS_CREATED,
         aggregateType: AggregateType.BUSINESS,
         aggregateId: businessId,
-        expectedAggregateVersion: 0,
         businessId: null,
         branchId: null,
         mode: "OPENING",

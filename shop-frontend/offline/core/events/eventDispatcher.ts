@@ -1,88 +1,148 @@
 import { getDb, runTx } from "@/src/db";
-import { eventBus } from "../eventBus/eventBus";
-import { generateLedgerEntries } from "../../../../shared/ledgerGenerator";
-import { queueSync } from "@/src/sync/syncQueue";
-import { handlers } from "@/offline/core/events/handlers/eventHandler";
-import { validateEvent } from "./validationEngine";
-import { BaseEvent } from "./types";
 
-export const dispatchEvent = async (event: BaseEvent) => {
-  validateEvent(event);
+import { eventBus }
+  from "../eventBus/eventBus";
 
-  const db = getDb(event.userId);
-  if (!db) return;
+import { queueSync }
+  from "@/src/sync/syncQueue";
 
-  await runTx(
-    db,
-    async () => {
-      const aggregate =
-        await db.aggregates
-          .where("[aggregateType+aggregateId]")
-          .equals([
-            event.aggregateType,
-            event.aggregateId
-          ])
-          .first();
+import { validateEvent }
+  from "./validationEngine";
 
-        const currentVersion =
-          aggregate?.version ?? 0;
+import { BaseEvent }
+  from "./types";
 
-        await db.aggregates.put({
+import {
+  handlers
+} from "./handler/handlers";
 
-          id:
-            `${event.aggregateType}:${event.aggregateId}`,
+import {
+  projectors
+} from "./projectors/projectorRegistry";
 
-          aggregateId:
-            event.aggregateId,
+import {
+  updateAggregateVersion
+} from "./aggregate/updateAggregateVersion";
 
-          aggregateType:
-            event.aggregateType,
+import {
+  generateLedgerEntries
+} from "../../../../shared/ledgerGenerator";
 
-          version:
-            currentVersion + 1,
+export const dispatchEvent =
+  async (
+    event: BaseEvent
+  ) => {
 
-          updatedAt:
-            Date.now(),
-        });
-        const exists = await db.events.get(event.id);
-        if (exists) return;
+    validateEvent(event);
 
-        // 1. persist event (PENDING first)
-        await db.events.add({
-          ...event,
-          status: "PENDING",
-          synced: false,
-        });
+    const db =
+      getDb(event.userId);
 
-      // 2. ledger projection
-      const entries = generateLedgerEntries(event);
-      if (entries.length) {
-        await db.ledgerEntries.bulkAdd(entries);
-      }
-      // 3. projection handlers
-      const eventHandlers = handlers[event.type] || [];
-      for (const handler of eventHandlers) {
-        await handler(db, event);
-      }
-    },
-    db.events,
-    db.aggregates,
-    db.replicaMeta,
-    db.ledgerEntries,
-    db.inventory,
-    db.businesses,
-    db.branches,
-    db.products,
-    db.inventory,
-    db.snapshots,
-    db.assets,
-    db.liabilities,
-    db.users
-  );
+    if (!db) {
+      return;
+    }
 
-  // emit AFTER commit
-  eventBus.emit(event);
+    await runTx(
 
-  // queue sync (safe now)
-  queueSync();
+      db,
+
+      async () => {
+
+        /* -----------------------------
+           IDEMPOTENCY
+        ----------------------------- */
+
+        const existing =
+          await db.events.get(event.id);
+
+        if (existing) {
+          return;
+        }
+
+        /* -----------------------------
+           APPEND EVENT
+        ----------------------------- */
+
+        await db.events.add(event);
+
+        /* -----------------------------
+           UPDATE LOCAL AGGREGATE VERSION
+        ----------------------------- */
+
+        await updateAggregateVersion(
+          db,
+          event
+        );
+
+        /* -----------------------------
+           PROJECT EVENT
+        ----------------------------- */
+
+        const eventProjectors =
+          projectors[event.type] ?? [];
+
+        for (const projector of eventProjectors) {
+
+          await projector(
+            db,
+            event
+          );
+        }
+
+        /* -----------------------------
+           DETERMINISTIC LEDGER PROJECTION
+        ----------------------------- */
+
+        const entries =
+          generateLedgerEntries(event);
+
+        if (entries.length) {
+
+          await db.ledgerEntries.bulkPut(
+            entries
+          );
+        }
+
+        /* -----------------------------
+           SNAPSHOT UPDATE
+        ----------------------------- */
+      },
+
+      db.events,
+      db.aggregates,
+      db.snapshots,
+      db.replicaMeta,
+      db.products,
+      db.inventory,
+      db.businesses,
+      db.branches,
+      db.users,
+      db.ledgerEntries
+    );
+
+    /* --------------------------------
+       SIDE EFFECTS AFTER COMMIT
+    -------------------------------- */
+
+    const effects =
+      handlers[
+        event.type
+      ] ?? [];
+
+    for (const effect of effects) {
+
+      await effect(event);
+    }
+
+    /* --------------------------------
+       EMIT EVENT BUS
+    -------------------------------- */
+
+    eventBus.emit(event);
+
+    /* --------------------------------
+       QUEUE SYNC
+    -------------------------------- */
+
+    queueSync();
 };

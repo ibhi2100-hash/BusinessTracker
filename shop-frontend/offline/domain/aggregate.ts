@@ -5,6 +5,8 @@ export enum AggregateType {
   PRODUCT = "PRODUCT",
   INVENTORY = "INVENTORY",
 
+  
+
   ASSET = "ASSET",
   LIABILITY = "LIABILITY",
 
@@ -23,6 +25,10 @@ export interface AggregateRecord {
   aggregateType: string;
 
   version: number;
+
+  lastEventId: string;
+
+  lastLogicClock: number;
 
   lastGlobalPosition?: number;
 

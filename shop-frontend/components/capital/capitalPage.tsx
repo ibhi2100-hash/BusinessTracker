@@ -7,6 +7,8 @@ import { useBranchStore } from "@/src/store/useBranchStore";
 import { toast } from "sonner";
 import { eventService } from "@/src/services/eventService";
 import { financeEventType } from "@/offline/core/events/eventGroups/financeEvent";
+import { nanoid } from "nanoid";
+import { AggregateType } from "@/offline/domain/aggregate";
 
 interface CashflowTableProps {
   mode: "OPENING" | "LIVE";
@@ -37,10 +39,14 @@ const CashflowTable = ({ mode, onCompleted }: CashflowTableProps) => {
 
   const handleInject = async () => {
     setLoading(true)
+    const aggregateId = nanoid()
     const amount = Number(rawAmount);
     if (amount <= 0) return;
     eventService.create({
+
       type: mode === "OPENING" ? financeEventType.OPENING_CAPITAL: financeEventType.CASH_ADDED,
+      aggregateType: AggregateType.CAPITAL_ACCOUNT,
+      aggregateId,
       payload : { amount: amount},
       mode
     })

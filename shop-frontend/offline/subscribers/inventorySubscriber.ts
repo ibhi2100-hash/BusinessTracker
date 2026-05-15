@@ -10,6 +10,8 @@ export function startInventorySubscriber() {
   const userId = useAuthStore.getState().user?.id;
   const branchId = useBranchStore.getState().activeBranchId;
 
+  console.log("BranchId From products subscriber: ", branchId)
+
   if (!userId || !branchId) return;
 
   const db = getDb(userId);

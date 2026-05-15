@@ -7,13 +7,13 @@ import { nanoid } from "nanoid";
 import { InventoryEventType } from "@/offline/core/events/eventGroups/inventoryEvents";
 import { OpeninigEventType } from "@/offline/core/events/eventGroups/openingEvents";
 import { useInventoryStore } from "../store/inventoryStore";
+import { getDb } from "../db";
 
 export const eventService = {
   async create(input: {
     type: string;
-    aggregateId: string;
     aggregateType: string;
-    expectedAggregateVersion?: number
+    aggregateId: string;
     payload: any;
     mode: "OPENING" | "LIVE";
 
@@ -52,8 +52,8 @@ const branchId =
       : !branchId
       ? "BUSINESS"
       : "BRANCH";
-    
-    const event = await createEvent({
+    const db = await getDb(user.id)
+    const event = await createEvent(db, {
       ...input,
       scope,
       userId: user.id,
@@ -75,6 +75,7 @@ const branchId =
   }) {
     const productId = nanoid();
     const branchId = useBranchStore.getState().activeBranchId;
+  
     if (!branchId) throw new Error("No active branch");
 
     // 1️⃣ PRODUCT EVENT
@@ -126,7 +127,7 @@ const branchId =
     input.price !== undefined ||
     input.costPrice !== undefined;
 
-  if (productChanged) {
+  if (productChanged) { 
     events.push(
       this.create({
         type: InventoryEventType.PRODUCT_UPDATED,

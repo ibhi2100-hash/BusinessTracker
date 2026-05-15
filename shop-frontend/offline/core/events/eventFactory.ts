@@ -7,8 +7,8 @@ import { AppDB } from "@/src/db";
 type CreateEventInput = {
   type: string;
 
-  aggregateId: string;
   aggregateType: string;
+  aggregateId: string;
   expectedAggregateVersion?: number;
 
   payload: Record<string, any>;

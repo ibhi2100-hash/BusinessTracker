@@ -1,84 +1,56 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { Branch, BranchRole, BranchData } from "@/types/types";
+import { Branch } from "@/types/types";
 
 interface BranchState {
   businessName: string;
   branches: Branch[];
   activeBranchId: string | null;
-  role: BranchRole;
-  branchData: Record<string, BranchData>;
-  hydrated: boolean;
 
   setBranches: (branches: Branch[]) => void;
+
   setContext: (data: {
     businessName: string;
     branches: Branch[];
-    role: BranchRole;
-    activeBranchId?: string;
+    activeBranchId?: string | null;
   }) => void;
-  setActiveBranch: (id: string) => void;
-  setBranchData: (branchId: string, data: BranchData) => void;
-  setHydrated: () => void;
+
+  setActiveBranch: (id: string | null) => void;
 
   clear: () => void;
-  
 }
 
-export const useBranchStore = create<BranchState>()(
-  persist(
-    (set, get) => ({
-      businessName: "",
-      branches: [],
-      activeBranchId: null,
-      role: "STAFF",
-      branchData: {},
-      hydrated: false,
+const initialState = {
+  businessName: "",
+  branches: [],
+  activeBranchId: null,
+};
 
-      setBranches: (branches) => {
-        const store = get();
-        set({
-          branches,
-          activeBranchId: store.activeBranchId ?? branches?.[0]?.id ?? null,
-        });
-      },
+export const useBranchStore = create<BranchState>((set) => ({
+  ...initialState,
 
-      setContext: ({ businessName, branches, role, activeBranchId }) => {
-        set({
-          businessName,
-          branches,
-          role,
-          activeBranchId: activeBranchId ?? branches?.[0]?.id ?? null,
-        });
-      },
+  setBranches: (branches: Branch[]) =>
+    set(() => ({
+      branches,
+    })),
 
-      setActiveBranch: (id) => set({ activeBranchId: id }),
+  setContext: ({
+    businessName,
+    branches,
+    activeBranchId = null,
+  }) =>
+    set(() => ({
+      businessName,
+      branches,
+      activeBranchId,
+    })),
 
-      setBranchData: (branchId, data) =>
-        set((state) => ({
-          branchData: { ...state.branchData, [branchId]: data },
-        })),
+  setActiveBranch: (id: string | null) =>
+    set(() => ({
+      activeBranchId: id,
+    })),
 
-      setHydrated: () => set({ hydrated: true }),
-
-      clear: () =>
-        set({
-          businessName: "",
-          branches: [],
-          activeBranchId: null,
-          role: "STAFF",
-          branchData: {},
-        }),
-    }),
-    {
-      name: "branch-storage",
-      partialize: (state) => ({
-        businessName: state.businessName,
-        branches: state.branches,
-        activeBranchId: state.activeBranchId,
-        role: state.role,
-        branchData: state.branchData,
-      }),
-    }
-  )
-);
+  clear: () =>
+    set(() => ({
+      ...initialState,
+    })),
+}));

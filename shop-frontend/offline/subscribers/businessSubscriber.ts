@@ -23,11 +23,14 @@ export function startBusinessSubscriber() {
     return {
       business: business[0] ?? null,
       branches,
+      activeBranch: branches[0] ?? null
     };
   }).subscribe({
     next: (data) => {
         useBusinessStore.getState().setBusiness(data.business)
         useBranchStore.getState().setBranches(data.branches)
+        useBranchStore.getState().setActiveBranch(data.activeBranch.id)
+
     
     },
     error: (err) => {

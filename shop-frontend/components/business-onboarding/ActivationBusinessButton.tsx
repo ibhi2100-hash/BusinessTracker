@@ -2,8 +2,47 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useBusinessStore } from "@/src/store/businessStore";
+import { eventService } from "@/src/services/eventService";
+import { BusinessEventTypes } from "@/offline/core/events/eventGroups/businessEvents";
+import { AggregateType } from "@/offline/domain/aggregate";
 
 export const ActivateBusinessButton = () => {
+
+  const [ loading, setLoading] = useState(false);
+  const business = useBusinessStore((state) => state.business);
+  const router = useRouter()
+  const [canActivate, setCanActivate] = useState(true)
+  const [error, setError] = useState("")
+
+
+
+  const handleActivate = async () => {
+    setLoading(true)
+    try{
+    await eventService.create({
+      type: BusinessEventTypes.BUSINESS_ACTIVATION,
+      aggregateType: AggregateType.BUSINESS,
+      aggregateId: business.id,
+      payload: {},
+      mode: "OPENING"
+    })
+    toast.success("Business Activated✅")
+
+    router.replace("/dashboard")
+  }catch(err: any){
+    setError(err?.message ?? "Failed to activateBusiness")
+    throw new Error(err)
+  }finally{
+    setLoading(false)
+  }
+    
+    
+  }
+
   return (
     <div
       className="
@@ -61,6 +100,8 @@ export const ActivateBusinessButton = () => {
             duration-200
             active:scale-[0.985]
           "
+          onClick={handleActivate}
+          disabled={!canActivate || loading}
         >
 
           {/* BUTTON SHINE */}

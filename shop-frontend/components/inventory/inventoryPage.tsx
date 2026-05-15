@@ -23,6 +23,7 @@ import { eventService } from "@/src/services/eventService";
 import { OpeninigEventType } from "@/offline/core/events/eventGroups/openingEvents";
 import { InventoryEventType } from "@/offline/core/events/eventGroups/inventoryEvents";
 import { salesEventType } from "@/offline/core/events/eventGroups/salesEvent";
+import { AggregateType } from "@/offline/domain/aggregate";
 
 interface InventoryPageProps {
   context: "sell" | "admin";
@@ -107,6 +108,8 @@ export default function InventoryPage({
  const handleDelete = async (productId: string) => {
   try {
     await eventService.create({
+      aggregateType: AggregateType.PRODUCT,
+      aggregateId: productId,
       type: mode === "OPENING" ? OpeninigEventType.OPENING_INVENTORY_DELETED : InventoryEventType.PRODUCT_DELETED,
       mode,
       payload: { productId },
@@ -126,6 +129,8 @@ const handleCheckout = async () => {
 
     for (const item of cart) {
       await eventService.create({
+        aggregateType: AggregateType.SALE,
+        aggregateId: item.productId,
         type: "SALE_ADDED",
         mode: "LIVE",
         payload: {
@@ -150,6 +155,8 @@ const handleSell = async (productId: string, quantity: number) => {
   if (!product) return;
 
   await eventService.create({
+    aggregateType: AggregateType.SALE,
+    aggregateId: productId,
     type: salesEventType.SALE_ADDED,
     mode,
     payload: {
@@ -185,6 +192,8 @@ const handleSell = async (productId: string, quantity: number) => {
 
       if (sheetMode === "edit" && selectedProduct) {
         await eventService.create({
+          aggregateType: AggregateType.INVENTORY,
+          aggregateId: selectedProduct.id,
           type: mode === "OPENING" ? OpeninigEventType.OPENING_INVENTORY_UPDATED : InventoryEventType.PRODUCT_UPDATED,
           mode,
           payload: {
