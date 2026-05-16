@@ -2,7 +2,7 @@ import { AppDB }
   from "@/src/db";
 
 import { reducers }
-  from "../reducers";
+  from "../events/reducers/reducerRegistry";
 
 export async function rebuildAggregateState(
 

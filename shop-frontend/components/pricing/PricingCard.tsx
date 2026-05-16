@@ -14,6 +14,8 @@ export const PricingCards = () => {
 
   const handleSubscribe = (planId: string) => {
     eventService.create({
+      aggregateType: "SUBSCRIBE",
+      aggregateId: planId,
       type: "SUBSCRIBE",
       mode: "LIVE",
       payload: {planId}

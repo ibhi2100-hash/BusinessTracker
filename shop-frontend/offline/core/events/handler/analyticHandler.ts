@@ -1,5 +1,9 @@
 import { BaseEvent } from "@/offline/core/events/types";
-
+const analytics =  {
+  async track(eventType: string, payload: any){
+    console.log("i am analytic")
+  }
+}
 
 export async function analyticsHandler(
   event: BaseEvent

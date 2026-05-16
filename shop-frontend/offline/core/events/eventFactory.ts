@@ -45,6 +45,7 @@ const logicClock = await nextLogicClock(db, deviceId);
     aggregateId: input.aggregateId,
     aggregateType: input.aggregateType,
     expectedAggregateVersion: currentVersion,
+    aggregateVersion: currentVersion + 1,
     isCreationEvent: !aggregate,
 
     type: input.type,

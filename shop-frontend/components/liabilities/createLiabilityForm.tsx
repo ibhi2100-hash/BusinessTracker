@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { eventService } from "@/src/services/eventService";
 import { OpeninigEventType } from "@/offline/core/events/eventGroups/openingEvents";
 import { financeEventType } from "@/offline/core/events/eventGroups/financeEvent";
+import { nanoid } from "nanoid";
 
 interface Props {
   mode?: "OPENING" | "LIVE";
@@ -41,6 +42,8 @@ export const CreateLiabilityForm = ({ mode, onComplete }: Props) => {
     }
 
       eventService.create({
+        aggregateType: mode === "OPENING" ? OpeninigEventType.OPENING_LIABILITIES : financeEventType.LIABILITY_ADDED,
+        aggregateId: nanoid(),
         type: mode === "OPENING" ?  OpeninigEventType.OPENING_LIABILITIES : financeEventType.LIABILITY_ADDED,
         payload: payload,
         mode,

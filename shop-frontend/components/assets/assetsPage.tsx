@@ -19,6 +19,7 @@ import { formatCurrency } from "@/lib/format";
 import { eventService } from "@/src/services/eventService";
 import { OpeninigEventType } from "@/offline/core/events/eventGroups/openingEvents";
 import { financeEventType } from "@/offline/core/events/eventGroups/financeEvent";
+import { nanoid } from "nanoid";
 
 interface AssetsProps {
   mode: "OPENING" | "LIVE";
@@ -70,6 +71,8 @@ export default function AddAssetPage({
         assetType: mode === "OPENING" ? "OPENING" : "PURCHASE",
       };
         eventService.create({
+          aggregateType: financeEventType.ASSET_ADDED,
+          aggregateId: nanoid(),
           type: mode === "OPENING" ? OpeninigEventType.OPENING_ASSET : financeEventType.ASSET_ADDED,
           payload: payload,
           mode,

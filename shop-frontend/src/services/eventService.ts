@@ -21,49 +21,49 @@ export const eventService = {
     businessId?: string | null
     branchId?: string | null
     
-  }) {
-    const user = useAuthStore.getState().user;
-    if (!user?.id) throw new Error("Not authenticated");
+    }) {
+      const user = useAuthStore.getState().user;
+      if (!user?.id) throw new Error("Not authenticated");
 
-    if (!input.aggregateId) {
-  throw new Error("Missing aggregateId");
-}
-// Business Context 
+      if (!input.aggregateId) {
+    throw new Error("Missing aggregateId");
+  }
+  // Business Context 
 
-const storedBusinessId =
-  useBusinessStore.getState().business?.id ?? null;
-const storeBranchId =
-  useBranchStore.getState().activeBranchId ?? null;
+  const storedBusinessId =
+    useBusinessStore.getState().business?.id ?? null;
+  const storeBranchId =
+    useBranchStore.getState().activeBranchId ?? null;
 
-// explicit overide wins
-const businessId = 
-  input.businessId !== undefined
-    ? input.businessId
-    : storedBusinessId;
+  // explicit overide wins
+  const businessId = 
+    input.businessId !== undefined
+      ? input.businessId
+      : storedBusinessId;
 
-const branchId = 
-  input.branchId !== undefined
-    ? input.branchId
-    : storeBranchId
+  const branchId = 
+    input.branchId !== undefined
+      ? input.branchId
+      : storeBranchId
 
-    const scope =
-    !businessId
-      ? "GLOBAL"
-      : !branchId
-      ? "BUSINESS"
-      : "BRANCH";
-    const db = await getDb(user.id)
-    const event = await createEvent(db, {
-      ...input,
-      scope,
-      userId: user.id,
-      businessId: businessId,
-      branchId: branchId,
-    });
-    console.log("Event Before dispatched", event)
-    await dispatchEvent(event);
-    return event;
-  },
+      const scope =
+      !businessId
+        ? "GLOBAL"
+        : !branchId
+        ? "BUSINESS"
+        : "BRANCH";
+      const db = await getDb(user.id)
+      const event = await createEvent(db, {
+        ...input,
+        scope,
+        userId: user.id,
+        businessId: businessId,
+        branchId: branchId,
+      });
+      console.log("Event Before dispatched", event)
+      await dispatchEvent(event);
+      return event;
+    },
 
   // ✅ COMPOSITE COMMAND (this is what you need)
   async createProductWithOpeningStock(data: {

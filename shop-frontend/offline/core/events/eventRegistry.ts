@@ -90,6 +90,18 @@ export const eventValidators: Record<string, (event: any) => boolean> = {
     typeof p.quantityDelta === "number"
   );
 },
+  // ✅ OPERATIONAL EVENT
+  [InventoryEventType.PRODUCT_UPDATED]: (event) => {
+    const p = event.payload;
+
+    return (
+      !!event.businessId &&                     // REQUIRED here
+      !!event.branchId &&
+      typeof p.name === "string" &&
+      typeof p.costPrice === "number" &&
+      typeof p.price === "number"
+    );
+  },
  [financeEventType.CASH_ADDED]: (event) => {
     const p = event.payload;
 

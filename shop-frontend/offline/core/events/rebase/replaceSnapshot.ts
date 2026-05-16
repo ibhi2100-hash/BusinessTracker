@@ -11,7 +11,7 @@ export async function replaceSnapshot(
 
   snapshot: any,
 
-  version: number
+  version: number,
 
 ) {
 

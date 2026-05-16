@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useBusinessStore } from "@/src/store/businessStore";
 import { eventService } from "@/src/services/eventService";
 import { BusinessEventTypes } from "@/offline/core/events/eventGroups/businessEvents";
+import { useAuthStore } from "@/src/store/useAuthStore";
 
 
 export const DashboardHeader = () => {
@@ -21,10 +22,9 @@ export const DashboardHeader = () => {
     branches,
     activeBranchId,
     setActiveBranch,
-    role,
   } = useBranchStore();
   const business = useBusinessStore((s)=> s.business)
-
+  const role = useAuthStore(s=> s.user?.role)
 
   
 
@@ -62,16 +62,16 @@ export const DashboardHeader = () => {
 
       // 1️⃣ request new token for selected branch
       const data = await eventService.create({
-        type: BusinessEventTypes.BRANCH_CREATED,
-        mode: "LIVE",
-        payload: ""
+        type: BusinessEventTypes.BRANCH_SWITCH,
+        aggregateType: "BRANCH_SWITCH",
+        aggregateId: value,
+        payload: { branchId: value },
+        mode: "LIVE"
       });
       
 
       // 2️⃣ update UI state
       setActiveBranch(value);
-      // 3️⃣ clear server cache tied to previous branch
-      queryClient.clear();
 
       // 4️⃣ refresh server components & hooks
       router.refresh();

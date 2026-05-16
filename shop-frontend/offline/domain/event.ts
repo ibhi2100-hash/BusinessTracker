@@ -20,7 +20,8 @@ export interface Event {
   mode: "OPENING" | "LIVE";
 
   // STREAM VERSIONING
-  version: number;
+  AggregateVersion: number;
+  expectedAggregateVersion: number;
 
   // DEVICE ORDERING
   logicClock: number;

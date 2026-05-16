@@ -54,9 +54,14 @@ export interface Liability {
 
 export interface Snapshot {
   id: string;
-  businessId: string;
-  branchId: string;
-  createdAt: number;
+  aggregateId: string;
+  aggregateType: string;
+  version: number;
+  state: any;
+  businessId?: string;
+  branchId?: string;
+  createdAt?: number;
+  updatedAt?: number;
 }
 
 // ---------------------------

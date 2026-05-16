@@ -12,7 +12,8 @@ export async function syncEngine() {
   const events = await db.events
     .where("status")
     .equals("PENDING")
-    .toArray();
+    .toArray()
+    
 
   if (!events.length) return;
 

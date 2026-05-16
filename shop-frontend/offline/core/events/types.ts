@@ -5,6 +5,7 @@ export interface BaseEvent<T extends EventType = EventType, p = Record<string, a
 
   aggregateId: string;
   aggregateType: string;
+  aggregateVersion?: number;
   expectedAggregateVersion?: number
 
   type: T;

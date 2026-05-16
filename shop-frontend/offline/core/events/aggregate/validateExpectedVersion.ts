@@ -2,7 +2,7 @@ import { AppDB }
   from "@/src/db";
 
 import { BaseEvent }
-  from "../events/types";
+  from "../types";
 
 export async function validateExpectedVersion(
 
