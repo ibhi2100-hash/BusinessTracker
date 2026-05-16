@@ -7,17 +7,19 @@ export interface Event {
   // STREAM / AGGREGATE
   aggregateId: string;
   aggregateType: string;
+  aggregateVersion: number;
 
   expectedAggregateVersion?: number | null;
 
   // EVENT INFO
   type: string;
-  payload: Record<string, any>;
+  payload: any;
 
   // TENANCY
   businessId?: string | null;
 
   branchId?: string | null;
+  branchBusinessId?: string | null;
 
   // OPERATING MODE
   mode: "OPENING" | "LIVE";

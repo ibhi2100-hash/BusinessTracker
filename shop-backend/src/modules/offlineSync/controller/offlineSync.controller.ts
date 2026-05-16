@@ -1,112 +1,59 @@
-// controllers/offlineSync.controller.ts
 import type { Request, Response } from "express";
 import { OfflineSyncService } from "../service/offlineSync.service.js";
-import strict from "node:assert/strict";
-
 
 export class OfflineSyncController {
   constructor(private syncService: OfflineSyncService) {}
 
   async sync(req: Request, res: Response) {
-
-    const  events  = req.body;
-    console.log("Event that hits the backend: ", events)
-    if (!Array.isArray(events)) {
-      return res.status(400).json({
-        message: "Invalid payload. 'events' must be an array."
-      });
-    }
-
-    console.log("Received offline sync events:", events.length);
-
     try {
+      const { aggregateId, aggregateType, baseVersion, events } = req.body;
 
-      const results = await this.syncService.syncEvents(events);
+      if (!aggregateId || !aggregateType || !Array.isArray(events)) {
+        return res.status(400).json({
+          message: "Invalid sync payload",
+        });
+      }
+
+      const result = await this.syncService.syncAggregateBatch({
+        aggregateId,
+        aggregateType,
+        baseVersion,
+        events,
+      });
 
       return res.status(200).json({
         success: true,
-        results,
-        snapshot: []
+        ...result,
       });
-
-    } catch (error) {
-
-      console.error("Offline sync failed:", error);
+    } catch (error: any) {
+      console.error("SYNC_ERROR:", error);
 
       return res.status(500).json({
         success: false,
-        message: "Offline sync failed",
-      });
-    }
-  }
-  
-  async getBranchEvent(req: Request, res: Response) {
-
-    const businessId = req.user?.businessId;
-        if(!businessId) {
-          return res.status(400).json({ message: "Business ID not found in user context"});
-          }
-        const branchId = req.user?.branchId
-            console.log("BRANCH ID: ", branchId)
-            if(!branchId) {
-                return res.status(400).json({ message: "Branch ID not found"})
-            }
-
-
-    try {
-
-      const result = await this.syncService.getBusinessEvents(businessId, branchId);
-
-      return res.status(200).json({
-        success: true,
-        result,
-      });
-
-    } catch (error) {
-
-      console.error("Offline sync failed:", error);
-
-      return res.status(500).json({
-        success: false,
-        message: "Offline sync failed",
-      });
-    }
-  };
-    async getBusinessSnapShot(req: Request, res: Response) {
-
-    const businessId = req.user?.businessId;
-        if(!businessId) {
-          return res.status(400).json({ message: "Business ID not found in user context"});
-          }
-        const branchId = req.user?.branchId
-            console.log("BRANCH ID: ", branchId)
-            if(!branchId) {
-                return res.status(400).json({ message: "Branch ID not found"})
-            }
-
-    try {
-
-      const results = await this.syncService.getBusinessEvents
-
-      return res.status(200).json({
-        success: true,
-        results,
-        snapshot: []
-      });
-
-    } catch (error) {
-
-      console.error("Offline sync failed:", error);
-
-      return res.status(500).json({
-        success: false,
-        message: "Offline sync failed",
+        message: error.message || "Sync failed",
       });
     }
   }
 
-  async getProcessedProducts(businessId: string, branchId: string) {
-      
-    }
+  async getAggregateEvents(req: Request, res: Response) {
+    try {
+      const { aggregateId, aggregateType, version } = req.query;
 
+      const events =
+        await this.syncService.getAggregateEventsAfterVersion(
+          String(aggregateId),
+          String(aggregateType),
+          Number(version)
+        );
+
+      return res.json({
+        success: true,
+        events,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+      });
+    }
+  }
 }

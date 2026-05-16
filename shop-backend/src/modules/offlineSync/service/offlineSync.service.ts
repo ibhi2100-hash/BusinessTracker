@@ -1,133 +1,141 @@
-// offline-sync.service.ts
-
+import { SyncRepository } from "../repository/syncRepository.js";
+import { LedgerRepository } from "../../ledger/ledgerRepository.js";
+import { HanldeEvent } from "../proccessor/processEvent.js";
+import { generateLedgerEntries } from "../../../../../shared/ledgerGenerator.js";
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
 
-import { Event } from "../../../domain/event.js";
-
-import { generateLedgerEntries } from "../../../../../shared/ledgerGenerator.js";
-
-import { SyncRepository } from "../repository/syncRepository.js";
-
-import { LedgerRepository } from "../../ledger/ledgerRepository.js";
-
-import { HanldeEvent } from "../proccessor/processEvent.js";
-
 export class OfflineSyncService {
-
   constructor(
     private syncRepository: SyncRepository,
     private ledgerRepo: LedgerRepository
   ) {}
 
-  async syncEvents(events: Event[]) {
+  async syncAggregateBatch({
+    aggregateId,
+    aggregateType,
+    baseVersion,
+    events,
+  }: {
+    aggregateId: string;
+    aggregateType: string;
+    baseVersion: number;
+    events: any[];
+  }) {
 
-    const success: any[] = [];
+    const serverLast =
+      await this.syncRepository.getLastAggregateVersion(
+        aggregateId,
+        aggregateType
+      );
 
-    const failed: any[] = [];
+    const serverVersion = serverLast?.aggregateVersion ?? 0;
 
-    for (const event of events) {
+    // ---------------------------
+    // CONFLICT DETECTION
+    // ---------------------------
+    if (baseVersion !== serverVersion) {
+      const serverEvents =
+        await this.syncRepository.findEventsAfterSnapshotVersion(
+          aggregateId,
+          aggregateType,
+          baseVersion
+        );
 
-      try {
-
-        await prisma.$transaction(
-          async (tx) => {
-
-            /* -----------------------------------------
-               STORE EVENT
-            ----------------------------------------- */
-
-            const saved =
-              await this.syncRepository.storeEvent(
-                event,
-                tx
-              );
-
-            /* -----------------------------------------
-               LEDGER GENERATION
-            ----------------------------------------- */
-
-            const entries =
-              generateLedgerEntries(event);
-
-            if (entries.length > 0) {
-
-              await this.ledgerRepo.bulkAddEntries(
-                entries,
-                event.businessId,
-                event.branchId,
-                tx
-              );
-            }
-
-            /* -----------------------------------------
-               PROJECTIONS
-               IMPORTANT:
-               EVENTS REMAIN SOURCE OF TRUTH
-            ----------------------------------------- */
-
-            await HanldeEvent(
-              saved,
-              tx
-            );
-
-            /* -----------------------------------------
-               PROCESSED MARKER
-            ----------------------------------------- */
-
-            await this.syncRepository.markProcessed(
-              saved,
-              tx
-            );
-
-            success.push({
-              eventId: event.id,
-              aggregateId:
-                event.aggregateId,
-              aggregateVersion:
-                saved.aggregateVersion,
-              status: "SYNCED",
-            });
-          },
+      return {
+        success: [],
+        failed: [],
+        conflicts: [
           {
-            isolationLevel:
-              Prisma.TransactionIsolationLevel.Serializable,
-          }
-        );
-
-      } catch (error: any) {
-
-        await this.syncRepository.markFailed(
-          event,
-          String(error)
-        );
-
-        failed.push({
-          eventId: event.id,
-          aggregateId:
-            event.aggregateId,
-          status: "FAILED",
-          error: String(error),
-        });
-      }
+            aggregateId,
+            aggregateType,
+            serverVersion,
+            serverEvents,
+          },
+        ],
+        serverState: {
+          version: serverVersion,
+          lastGlobalPosition: serverLast?.globalPosition,
+        },
+      };
     }
 
-    return {
-      success,
-      failed,
-    };
-  }
+    // ---------------------------
+    // APPLY AS SINGLE ATOMIC BATCH
+    // ---------------------------
+    return prisma.$transaction(async (tx) => {
 
-  async getAggregateEventsAfterVersion(
-    aggregateId: string,
-    aggregateType: string,
-    version: number
-  ) {
+      let version = serverVersion;
 
-    return this.syncRepository
-      .findEventsAfterSnapshotVersion(
-        aggregateId,
-        aggregateType,
-        version
-      );
+      const success: any[] = [];
+      const failed: any[] = [];
+
+      for (const event of events) {
+        try {
+
+          version++;
+
+          const enrichedEvent = {
+            ...event,
+            aggregateVersion: version,
+          };
+
+          const saved =
+            await this.syncRepository.storeEvent(
+              enrichedEvent,
+              tx
+            );
+
+          const entries =
+            generateLedgerEntries(saved);
+
+          if (entries.length) {
+            await this.ledgerRepo.bulkAddEntries(
+              entries,
+              saved.businessId!,
+              saved.branchId!,
+              tx
+            );
+          }
+
+          await HanldeEvent(saved, tx);
+
+          await this.syncRepository.markProcessed(
+            saved,
+            tx
+          );
+
+          success.push({
+            eventId: saved.id,
+            aggregateId,
+            aggregateVersion: version,
+          });
+
+        } catch (error: any) {
+
+          await this.syncRepository.markFailed(
+            event,
+            String(error)
+          );
+
+          failed.push({
+            eventId: event.id,
+            error: String(error),
+          });
+        }
+      }
+
+      const finalVersion = version;
+
+      return {
+        success,
+        failed,
+        conflicts: [],
+        serverState: {
+          version: finalVersion,
+          lastGlobalPosition:
+            serverLast?.globalPosition,
+        },
+      };
+    });
   }
 }

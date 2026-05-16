@@ -1,325 +1,154 @@
-import { getDb }
-  from "@/src/db";
+import { getDb } from "@/src/db";
+import { useAuthStore } from "../store/useAuthStore";
+import { rebaseAggregate } from "@/offline/core/events/rebase/rebaseAggregate";
 
-import { useAuthStore }
-  from "../store/useAuthStore";
-
-import { rebaseAggregate }
-  from "@/offline/core/events/rebase/rebaseAggregate";
-
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 let syncing = false;
 
 export const syncService = {
-
   async sync() {
-
-    if (syncing) {
-      return;
-    }
-
+    if (syncing) return;
     syncing = true;
 
     try {
+      const userId = useAuthStore.getState().user?.id;
+      const db = getDb(userId);
+      if (!db) return;
 
-      const userId =
-        useAuthStore
-          .getState()
-          .user?.id;
+      const pendingEvents = await db.events
+        .where("status")
+        .equals("PENDING")
+        .sortBy("logicClock");
 
-      const db =
-        getDb(userId);
+      if (!pendingEvents.length) return;
 
-      if (!db) {
-        return;
-      }
-
-      /* -----------------------------------
-         LOAD PENDING EVENTS
-      ----------------------------------- */
-
-      const pendingEvents =
-        await db.events
-          .where("status")
-          .equals("PENDING")
-          .sortBy("logicClock");
-
-      if (!pendingEvents.length) {
-        return;
-      }
-
-      /* -----------------------------------
-         GROUP BY AGGREGATE
-      ----------------------------------- */
-
-      const grouped =
-        groupEventsByAggregate(
-          pendingEvents
-        );
-
-      /* -----------------------------------
-         SYNC EACH AGGREGATE
-      ----------------------------------- */
+      const grouped = groupEventsByAggregate(pendingEvents);
 
       for (const group of grouped) {
-
-        await this.syncAggregate(
-          db,
-          group
-        );
+        await this.syncAggregate(db, group);
       }
-
     } finally {
-
       syncing = false;
     }
   },
 
-  /* -----------------------------------
-     SYNC SINGLE AGGREGATE
-  ----------------------------------- */
+  async syncAggregate(db: any, events: any[]) {
+    const first = events[0];
 
-  async syncAggregate(
-    db,
-    events
-  ) {
+    const aggregateId = first.aggregateId;
+    const aggregateType = first.aggregateType;
 
-    try {
+    // LOCAL BASE VERSION (optimistic)
+    const aggregateRecord = await db.aggregates
+      .where("[aggregateType+aggregateId]")
+      .equals([aggregateType, aggregateId])
+      .first();
 
-      const response =
-        await fetch(
-          `${API_URL}/sync`,
-          {
-            method: "POST",
+    const baseVersion = aggregateRecord?.version ?? 0;
 
-            credentials: "include",
+    const response = await fetch(`${API_URL}/sync`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        aggregateId,
+        aggregateType,
+        baseVersion,
+        events,
+      }),
+    });
 
-            headers: {
-              "Content-Type":
-                "application/json",
-            },
-
-            body:
-              JSON.stringify(events),
-          }
-        );
-
-      if (!response.ok) {
-
-        throw new Error(
-          `HTTP_${response.status}`
-        );
-      }
-
-      const result =
-        await response.json();
-
-      await this.applySyncResult(
-        db,
-        result
-      );
-
-    } catch (error) {
-
-      console.error(
-        "SYNC_FAILED",
-        error
-      );
+    if (!response.ok) {
+      throw new Error(`SYNC_HTTP_${response.status}`);
     }
-  },
 
-  /* -----------------------------------
-     APPLY SERVER RESULT
-  ----------------------------------- */
+    const result = await response.json();
+
+    await this.applySyncResult(db, result, aggregateId, aggregateType);
+  },
 
   async applySyncResult(
-    db,
-    result
+    db: any,
+    result: any,
+    aggregateId: string,
+    aggregateType: string
   ) {
+    const { success = [], failed = [], conflicts = [], serverState } = result;
 
-    const success =
-      result.success ?? [];
-
-    const failed =
-      result.failed ?? [];
-
-    const conflicts =
-      result.conflicts ?? [];
-
-    await db.transaction(
-
-      "rw",
-
-      db.events,
-      db.aggregates,
-
-      async () => {
-
-        /* -----------------------------
-           APPLY SUCCESS
-        ----------------------------- */
-
-        for (const item of success) {
-
-          await db.events.update(
-            item.eventId,
-            {
-              synced: true,
-              status: "SYNCED",
-            }
-          );
-
-          /* -------------------------
-             UPDATE LOCAL VERSION
-          ------------------------- */
-
-          const aggregate =
-            await db.aggregates
-              .where(
-                "[aggregateType+aggregateId]"
-              )
-              .equals([
-                item.aggregateType,
-                item.aggregateId
-              ])
-              .first();
-
-          if (aggregate) {
-
-            await db.aggregates.update(
-              aggregate.id,
-              {
-                version:
-                  item.aggregateVersion,
-              }
-            );
-          }
-        }
-
-        /* -----------------------------
-           APPLY FAILED
-        ----------------------------- */
-
-        for (const item of failed) {
-
-          await db.events.update(
-            item.eventId,
-            {
-              status: "FAILED",
-            }
-          );
-        }
+    await db.transaction("rw", db.events, db.aggregates, async () => {
+      // 1. mark synced events
+      for (const item of success) {
+        await db.events.update(item.eventId, {
+          synced: true,
+          status: "SYNCED",
+        });
       }
-    );
 
-    /* -----------------------------------
-       HANDLE CONFLICTS
-    ----------------------------------- */
+      // 2. authoritative aggregate update (SERVER WINS)
+      if (serverState) {
+        const key = `${aggregateType}:${aggregateId}`;
 
-    for (const conflict of conflicts) {
+        await db.aggregates.put({
+          id: key,
+          aggregateId,
+          aggregateType,
+          version: serverState.version,
+          lastGlobalPosition: serverState.lastGlobalPosition,
+          lastSnapshotVersion: serverState.lastSnapshotVersion,
+        });
+      }
 
-      await this.handleConflict(
-        db,
-        conflict
-      );
+      // 3. failed events
+      for (const item of failed) {
+        await db.events.update(item.eventId, {
+          status: "FAILED",
+        });
+      }
+    });
+
+    // 4. conflicts → rebase
+    if (conflicts.length > 0) {
+      for (const conflict of conflicts) {
+        await this.handleConflict(db, conflict);
+      }
     }
   },
 
-  /* -----------------------------------
-     CONFLICT REBASE
-  ----------------------------------- */
+  async handleConflict(db: any, conflict: any) {
+    console.warn("REBASING AGGREGATE:", conflict.aggregateId);
 
-  async handleConflict(
-    db,
-    conflict
-  ) {
+    const pending = await db.events
+      .where("[aggregateType+aggregateId]")
+      .equals([conflict.aggregateType, conflict.aggregateId])
+      .filter((x: any) => x.status === "PENDING")
+      .sortBy("logicClock");
 
-    console.warn(
-      "REBASING",
-      conflict.aggregateId
-    );
-
-    /* -----------------------------------
-       LOAD LOCAL PENDING EVENTS
-    ----------------------------------- */
-
-    const pending =
-      await db.events
-        .where(
-          "[aggregateType+aggregateId]"
-        )
-        .equals([
-          conflict.aggregateType,
-          conflict.aggregateId
-        ])
-        .filter(
-          x =>
-            x.status === "PENDING"
-        )
-        .sortBy("logicClock");
-
-    /* -----------------------------------
-       REBASE
-    ----------------------------------- */
-
-    await rebaseAggregate(
-      db,
-      {
-
-        aggregateId:
-          conflict.aggregateId,
-
-        aggregateType:
-          conflict.aggregateType,
-
-        serverVersion:
-          conflict.serverVersion,
-
-        serverSnapshot:
-          conflict.snapshot,
-
-        serverEvents:
-          conflict.serverEvents,
-
-        pendingEvents:
-          pending,
-      }
-    );
-
-    /* -----------------------------------
-       RETRY SYNC
-    ----------------------------------- */
+    await rebaseAggregate(db, {
+      aggregateId: conflict.aggregateId,
+      aggregateType: conflict.aggregateType,
+      serverVersion: conflict.serverVersion,
+      serverSnapshot: conflict.snapshot,
+      serverEvents: conflict.serverEvents,
+      pendingEvents: pending,
+    });
 
     await this.sync();
   },
 };
 
-/* ---------------------------------------
-   GROUP EVENTS
---------------------------------------- */
-
-function groupEventsByAggregate(
-  events
-) {
-
-  const map =
-    new Map();
+function groupEventsByAggregate(events: any[]) {
+  const map = new Map<string, any[]>();
 
   for (const event of events) {
-
-    const key =
-      `${event.aggregateType}:${event.aggregateId}`;
+    const key = `${event.aggregateType}:${event.aggregateId}`;
 
     if (!map.has(key)) {
       map.set(key, []);
     }
 
-    map.get(key).push(event);
+    map.get(key)!.push(event);
   }
 
-  return Array.from(
-    map.values()
-  );
+  return Array.from(map.values());
 }
