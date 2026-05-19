@@ -28,8 +28,12 @@ export interface BaseEvent<T extends EventType = EventType, p = Record<string, a
   userId: string | null;
 
   // sync state
-  status: "PENDING" | "SYNCED" | "FAILED";
+status: "PENDING" | "SYNCED" | "FAILED" | "DEAD";
   synced: boolean;
+  retryCount?: number;
+  lastRetrayAt?: number;
+  nextRetryAt?: number;
+  lastError?: string;
   isCreationEvent: boolean;
   causationId?: string;
   correlationId?: string;

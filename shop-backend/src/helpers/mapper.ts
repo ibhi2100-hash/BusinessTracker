@@ -2,7 +2,8 @@ import { Event as PrismaEvent } from "../infrastructure/postgresql/prisma/genera
 import { Event as DomainEvent } from "../domain/event.js";
 
 export function toDomainEvent(event: PrismaEvent): DomainEvent {
-  return {
+
+  const base: DomainEvent = {
     id: event.id,
 
     aggregateId: event.aggregateId,
@@ -13,7 +14,6 @@ export function toDomainEvent(event: PrismaEvent): DomainEvent {
 
     type: event.type,
 
-    // 🔥 FIX 1: normalize payload
     payload: normalizePayload(event.payload),
 
     businessId: event.businessId ?? null,
@@ -22,7 +22,6 @@ export function toDomainEvent(event: PrismaEvent): DomainEvent {
 
     mode: event.mode,
 
-    // 🔥 FIX 2: bigint → number
     logicClock: Number(event.logicClock),
 
     scope: event.scope as any,
@@ -35,16 +34,21 @@ export function toDomainEvent(event: PrismaEvent): DomainEvent {
 
     isCreationEvent: event.isCreationEvent ?? false,
 
-    causationId: event.causationId ?? undefined,
-    correlationId: event.correlationId ?? undefined,
-
     createdAt: event.createdAt,
   };
+
+  // 🔥 ONLY ADD OPTIONAL FIELDS IF THEY EXIST
+  if (event.causationId !== null && event.causationId !== undefined) {
+    base.causationId = event.causationId;
+  }
+
+  if (event.correlationId !== null && event.correlationId !== undefined) {
+    base.correlationId = event.correlationId;
+  }
+
+  return base;
 }
 
-/**
- * ensures payload always matches Record<string, any>
- */
 function normalizePayload(payload: any): Record<string, any> {
   if (!payload || typeof payload !== "object") {
     return {};

@@ -1,6 +1,7 @@
-import { getDb } from "@/src/db";
+import { AppDB, getDb } from "@/src/db";
 import { useAuthStore } from "../store/useAuthStore";
 import { rebaseAggregate } from "@/offline/core/events/rebase/rebaseAggregate";
+import { calculateRetryDelay } from "../helpers/retryDelay";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -15,14 +16,40 @@ export const syncService = {
       const userId = useAuthStore.getState().user?.id;
       const db = getDb(userId);
       if (!db) return;
+      const now = Date.now();
 
-      const pendingEvents = await db.events
+      
+
+      const pending = await db.events
         .where("status")
         .equals("PENDING")
-        .sortBy("logicClock");
+        .toArray()
+    
+      const failed =
+        await db.events
+          .where("status")
+          .equals("FAILED")
+          .filter(event => {
+            if(
+              (event.retryCount ?? 0) >= 10
+            ){
+              return false
+            }
 
-      if (!pendingEvents.length) return;
-
+            return (
+              !event.nextRetryAt ||
+              event.nextRetryAt <= now
+            );
+          })
+          .toArray()
+     const pendingEvents = [
+        ...pending,
+        ...failed
+     ].sort(
+        (a, b) =>
+          a.logicClock - b.logicClock
+     )
+console.log(" This is are the pending events that remain: ", pendingEvents)
       const grouped = groupEventsByAggregate(pendingEvents);
 
       for (const group of grouped) {
@@ -33,19 +60,21 @@ export const syncService = {
     }
   },
 
-  async syncAggregate(db: any, events: any[]) {
+  async syncAggregate(db: AppDB, events: any[]) {
     const first = events[0];
 
     const aggregateId = first.aggregateId;
     const aggregateType = first.aggregateType;
 
     // LOCAL BASE VERSION (optimistic)
-    const aggregateRecord = await db.aggregates
+
+    const lastEvent = await db.events
       .where("[aggregateType+aggregateId]")
       .equals([aggregateType, aggregateId])
-      .first();
+      .filter(x => x.status === "SYNCED")
+      .last() 
 
-    const baseVersion = aggregateRecord?.version ?? 0;
+    const baseVersion = lastEvent?.aggregateVersion ?? 0;
 
     const response = await fetch(`${API_URL}/sync`, {
       method: "POST",
@@ -80,6 +109,7 @@ export const syncService = {
       // 1. mark synced events
       for (const item of success) {
         await db.events.update(item.eventId, {
+          aggregateVersion: item.aggregateVersion,
           synced: true,
           status: "SYNCED",
         });
@@ -101,8 +131,23 @@ export const syncService = {
 
       // 3. failed events
       for (const item of failed) {
+      
+        const current = await db.events.get(item.eventId);
+        if (!current) continue;
+        if (current.status === "SYNCED") continue; // already marked by another sync process
+        const retryCount = (current.retryCount ?? 0) + 1;
+        const dead = 
+          retryCount >= 10;
+          
+        const delay = calculateRetryDelay(retryCount)
+        
         await db.events.update(item.eventId, {
-          status: "FAILED",
+          status: dead ? "DEAD" : "FAILED",
+          retryCount,
+          lastRetryAt: Date.now(),
+          nextRetryAt:
+            dead ? undefined : Date.now() + delay,
+          lastError: item.error ?? "SYNC_FAILED",
         });
       }
     });

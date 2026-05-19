@@ -34,9 +34,13 @@ export interface Event {
   userId?: string | null;
 
   // SYNC STATUS
-  status: "PENDING" | "SYNCED" | "FAILED";
+  status: "PENDING" | "SYNCED" | "FAILED" | "DEAD";
 
   synced: boolean;
+  retryCount?: number;
+  lastRetryAt?: number;
+  nextRetryAt?: number;
+  lastError?: string;
   isCreationEvent: boolean;
   causationId?: string;
   correlationId?: string;

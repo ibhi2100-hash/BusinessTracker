@@ -4,25 +4,29 @@ import "./globals.css"
 
 import { Toaster } from "sonner"
 import { Providers } from "./providers"
+import SyncBootstrap from "@/offline/bootstrap/syncBootstrap"
 
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  // Do not auto-start sync on pages like /register or /login
-  const isAuthPage = typeof window !== "undefined" && location.pathname.startsWith("/register");
-
-  if (navigator.onLine && !isAuthPage) {
-    
-  }
-  
-
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="en">
       <body>
         <Providers>
+
+          {/* Global Sync Engine */}
+          <SyncBootstrap />
+
           {children}
-          <Toaster richColors position="top-right" />
+
+          <Toaster
+            richColors
+            position="top-right"
+          />
         </Providers>
       </body>
     </html>
-  );
+  )
 }

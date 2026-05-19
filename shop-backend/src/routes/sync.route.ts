@@ -14,8 +14,7 @@ const offlineSyncController = new OfflineSyncController(offlineSyncService);
 const router = Router();
 
 router.post('/', authMiddleware,  offlineSyncController.sync.bind(offlineSyncController));
-router.get('/event', authMiddleware, offlineSyncController.getBranchEvent.bind(offlineSyncController));
-router.get('/snapshots', authMiddleware, offlineSyncController.getBusinessSnapShot.bind(offlineSyncController));
+router.get('/event', authMiddleware, offlineSyncController.getAggregateEvents.bind(offlineSyncController));
 
 
 export default router; 

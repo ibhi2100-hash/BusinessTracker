@@ -1,10 +1,6 @@
 import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
 
-import { Event as DomainEvent } from "../../../domain/event.js";
-import { getEventScope } from "../../../helpers/eventScope.js";
-import { branchRelationData } from "../../../helpers/branchRelation.js";
-
 export class SyncRepository {
 
   /* =========================

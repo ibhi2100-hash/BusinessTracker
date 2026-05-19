@@ -1,4 +1,7 @@
-export function replay(events: DomainEvent[], reducer: Function) {
+import { Event } from "../domain/event.js";
+import { deterministicSort} from "./deterministicSort.js"
+
+export function replay(events: Event[], reducer: Function) {
   const sorted = deterministicSort(events);
 
   let state: any = null;

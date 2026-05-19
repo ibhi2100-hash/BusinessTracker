@@ -3,6 +3,7 @@ import { LedgerRepository } from "../../ledger/ledgerRepository.js";
 import { HanldeEvent } from "../proccessor/processEvent.js";
 import { generateLedgerEntries } from "../../../../../shared/ledgerGenerator.js";
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
+import { toDomainEvent } from "../../../helpers/mapper.js";
 
 export class OfflineSyncService {
   constructor(
@@ -29,7 +30,7 @@ export class OfflineSyncService {
       );
 
     const serverVersion = serverLast?.aggregateVersion ?? 0;
-
+    console.log("This is the server Version: ", serverVersion)
     // ---------------------------
     // CONFLICT DETECTION
     // ---------------------------
@@ -84,6 +85,7 @@ export class OfflineSyncService {
               enrichedEvent,
               tx
             );
+            console.log("This is the saved Event in the backend", saved)
 
           const entries =
             generateLedgerEntries(saved);
@@ -97,7 +99,7 @@ export class OfflineSyncService {
             );
           }
 
-          await HanldeEvent(saved, tx);
+          await HanldeEvent(toDomainEvent(saved), tx);
 
           await this.syncRepository.markProcessed(
             saved,
@@ -138,4 +140,15 @@ export class OfflineSyncService {
       };
     });
   }
+  async getAggregateEventsAfterVersion(
+    aggregateId: string,
+    aggregateType: string,
+    version: number
+  ) {
+    return this.syncRepository.findEventsAfterSnapshotVersion(
+      aggregateId,
+      aggregateType,
+      version
+    );
+}
 }

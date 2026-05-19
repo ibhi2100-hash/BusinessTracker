@@ -1,7 +1,8 @@
 import { signTokenWithExpiry } from "../../../helpers/jwtHelper/jwthelper.js";
 import { BusinessRepository } from "../repository/business.repository.js";
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
-import { Events } from "../../../domain/event.js";
+import { Event } from "../../../domain/event.js";
+import { throwDeprecation } from "node:process";
 export class BusinessService {
     constructor(private repo: BusinessRepository){}
 
@@ -18,12 +19,12 @@ getSwitchedBranch = async (userId: string, branchId: string, businessId: string,
   return {branch, token, expiresIn}
 
 }
-async activateBusiness(event: Events) {
-
+async activateBusiness(event: Event) {
+  
     return prisma.$transaction(async (tx) => {
-
+        if(!event.businessId)throw new Error("BusinessId does not exist")
         const business = await tx.business.findUnique({
-            where: { id: event.businessId}
+            where: { id: event.businessId!}
         });
 
         if (!business) {
@@ -40,7 +41,7 @@ async activateBusiness(event: Events) {
         
 
         // Optional: ensure at least one stock record exists
-        const products = await tx.products.findFirst({
+        const products = await tx.product.findFirst({
             where: { businessId: event.businessId }
         });
 
@@ -52,7 +53,7 @@ async activateBusiness(event: Events) {
         // Flip lifecycle state
         await tx.business.update({
             where: { id: event.businessId},
-            data: { isOnboarding: false, status: "ACTIVE", activatedAt: Date.now() }
+            data: { isOnboarding: false, status: "ACTIVE", activatedAt: event.createdAt }
         });
 
         return { message: "Business activated successfully" };
