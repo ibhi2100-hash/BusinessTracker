@@ -25,7 +25,6 @@ export async function HanldeEvent(event: Event, tx: Prisma.TransactionClient) {
             return productRepo.createProduct(event, tx)
 
         case "OPENING_INVENTORY_CREATED":
-            
 
         case "OPENING_INVENTORY_UPDATED":
             return await inventoryRepo.createOrUpdateInventory(event, tx) 

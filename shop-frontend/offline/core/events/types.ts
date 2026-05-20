@@ -31,7 +31,7 @@ export interface BaseEvent<T extends EventType = EventType, p = Record<string, a
 status: "PENDING" | "SYNCED" | "FAILED" | "DEAD";
   synced: boolean;
   retryCount?: number;
-  lastRetrayAt?: number;
+  lastRetryAt?: number;
   nextRetryAt?: number;
   lastError?: string;
   isCreationEvent: boolean;

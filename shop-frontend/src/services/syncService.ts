@@ -1,199 +1,395 @@
-import { AppDB, getDb } from "@/src/db";
-import { useAuthStore } from "../store/useAuthStore";
-import { rebaseAggregate } from "@/offline/core/events/rebase/rebaseAggregate";
-import { calculateRetryDelay } from "../helpers/retryDelay";
+import Dexie from "dexie"
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { AppDB, getDb } from "@/src/db"
 
-let syncing = false;
+import { useAuthStore } from "../store/useAuthStore"
+
+import { calculateRetryDelay }
+  from "../helpers/retryDelay"
+
+import { groupEventsByAggregate }
+  from "../sync/groupEvents"
+
+import { fetchWithTimeout }
+  from "../sync/fetchWithTimeout"
+
+import { rebaseAggregate }
+  from "../../offline/core/events/rebase/rebaseAggregate"
+
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL
+
+const MAX_RETRY = 10
+
+let syncing = false
 
 export const syncService = {
   async sync() {
-    if (syncing) return;
-    syncing = true;
+    if (syncing) {
+      console.log("Sync already running")
+      return
+    }
+
+    if (!navigator.onLine) {
+      console.log("Offline → skipping sync")
+      return
+    }
+
+    syncing = true
 
     try {
-      const userId = useAuthStore.getState().user?.id;
-      const db = getDb(userId);
-      if (!db) return;
-      const now = Date.now();
+      const userId =
+        useAuthStore.getState().user?.id
 
-      
+      if (!userId) return
 
-      const pending = await db.events
-        .where("status")
-        .equals("PENDING")
-        .toArray()
-    
-      const failed =
+      const db = getDb(userId)
+
+      if (!db) return
+
+      const now = Date.now()
+
+      // PENDING
+      const pending =
         await db.events
           .where("status")
-          .equals("FAILED")
-          .filter(event => {
-            if(
-              (event.retryCount ?? 0) >= 10
-            ){
-              return false
-            }
-
-            return (
-              !event.nextRetryAt ||
-              event.nextRetryAt <= now
-            );
-          })
+          .equals("PENDING")
           .toArray()
-     const pendingEvents = [
+
+      // FAILED eligible for retry
+      const failed =
+        await db.events
+          .where("[nextRetryAt+status]")
+          .between(
+            ["FAILED", Dexie.minKey],
+            ["FAILED", now]
+          )
+          .toArray()
+
+      const events = [
         ...pending,
-        ...failed
-     ].sort(
+        ...failed,
+      ].sort(
         (a, b) =>
           a.logicClock - b.logicClock
-     )
-console.log(" This is are the pending events that remain: ", pendingEvents)
-      const grouped = groupEventsByAggregate(pendingEvents);
+      )
+
+      if (!events.length) {
+        console.log("No events to sync")
+        return
+      }
+
+      const grouped =
+        groupEventsByAggregate(events)
 
       for (const group of grouped) {
-        await this.syncAggregate(db, group);
+        try {
+          await this.syncAggregate(
+            db,
+            group
+          )
+        } catch (error) {
+          console.error(
+            "Aggregate sync failed:",
+            error
+          )
+
+          await this.markAggregateFailed(
+            db,
+            group,
+            error
+          )
+        }
       }
     } finally {
-      syncing = false;
+      syncing = false
     }
   },
 
-  async syncAggregate(db: AppDB, events: any[]) {
-    const first = events[0];
+  async syncAggregate(
+    db: AppDB,
+    events: any[]
+  ) {
+    const first = events[0]
 
-    const aggregateId = first.aggregateId;
-    const aggregateType = first.aggregateType;
+    const aggregateId =
+      first.aggregateId
 
-    // LOCAL BASE VERSION (optimistic)
+    const aggregateType =
+      first.aggregateType
 
-    const lastEvent = await db.events
-      .where("[aggregateType+aggregateId]")
-      .equals([aggregateType, aggregateId])
-      .filter(x => x.status === "SYNCED")
-      .last() 
+    // Latest synced version
+    const synced =
+      await db.events
+        .where(
+          "[aggregateType+aggregateId]"
+        )
+        .equals([
+          aggregateType,
+          aggregateId,
+        ])
+        .filter(
+          x => x.status === "SYNCED"
+        )
+        .sortBy("aggregateVersion")
 
-    const baseVersion = lastEvent?.aggregateVersion ?? 0;
+    const last =
+      synced[synced.length - 1]
 
-    const response = await fetch(`${API_URL}/sync`, {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        aggregateId,
-        aggregateType,
-        baseVersion,
-        events,
-      }),
-    });
+    const baseVersion =
+      last?.aggregateVersion ?? 0
+
+    const response =
+      await fetchWithTimeout(
+        `${API_URL}/sync`,
+        {
+          method: "POST",
+
+          credentials: "include",
+
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
+
+          body: JSON.stringify({
+            aggregateId,
+            aggregateType,
+            baseVersion,
+            events,
+          }),
+        }
+      )
 
     if (!response.ok) {
-      throw new Error(`SYNC_HTTP_${response.status}`);
+      throw new Error(
+        `HTTP_${response.status}`
+      )
     }
 
-    const result = await response.json();
+    const result =
+      await response.json()
 
-    await this.applySyncResult(db, result, aggregateId, aggregateType);
+    await this.applySyncResult(
+      db,
+      result,
+      aggregateId,
+      aggregateType
+    )
   },
 
   async applySyncResult(
-    db: any,
+    db: AppDB,
     result: any,
     aggregateId: string,
     aggregateType: string
   ) {
-    const { success = [], failed = [], conflicts = [], serverState } = result;
+    const {
+      success = [],
+      failed = [],
+      conflicts = [],
+      serverState,
+    } = result
 
-    await db.transaction("rw", db.events, db.aggregates, async () => {
-      // 1. mark synced events
-      for (const item of success) {
-        await db.events.update(item.eventId, {
-          aggregateVersion: item.aggregateVersion,
-          synced: true,
-          status: "SYNCED",
-        });
+    await db.transaction(
+      "rw",
+      db.events,
+      db.aggregates,
+      async () => {
+
+        // SUCCESS
+        for (const item of success) {
+          await db.events.update(
+            item.eventId,
+            {
+              status: "SYNCED",
+              synced: true,
+              aggregateVersion:
+                item.aggregateVersion,
+
+              retryCount: 0,
+              nextRetryAt: undefined,
+              lastError: undefined,
+            }
+          )
+        }
+
+        // SERVER STATE
+        if (serverState) {
+          await db.aggregates.put({
+            id:
+              `${aggregateType}:${aggregateId}`,
+
+            aggregateId,
+            aggregateType,
+
+            version:
+              serverState.version,
+
+            lastEventId:
+              serverState.lastEventId,
+            
+            lastLogicClock:
+              serverState.lastLogicClock,
+
+            lastGlobalPosition:
+              serverState.lastGlobalPosition,
+
+            lastSnapshotVersion:
+              serverState.lastSnapshotVersion,
+
+            updatedAt:
+              Date.now(),
+          })
+        }
+
+        // FAILED
+        for (const item of failed) {
+          const current =
+            await db.events.get(
+              item.eventId
+            )
+
+          if (!current) continue
+
+          if (
+            current.status === "SYNCED"
+          ) {
+            continue
+          }
+
+          const retryCount =
+            (current.retryCount ?? 0) + 1
+
+          const dead =
+            retryCount >= MAX_RETRY
+
+          const delay =
+            calculateRetryDelay(
+              retryCount
+            )
+
+          await db.events.update(
+            item.eventId,
+            {
+              status:
+                dead
+                  ? "DEAD"
+                  : "FAILED",
+
+              retryCount,
+
+              lastRetryAt: Date.now(),
+
+              nextRetryAt:
+                dead
+                  ? undefined
+                  : Date.now() + delay,
+
+              lastError:
+                item.error ??
+                "SYNC_FAILED",
+            }
+          )
+        }
       }
+    )
 
-      // 2. authoritative aggregate update (SERVER WINS)
-      if (serverState) {
-        const key = `${aggregateType}:${aggregateId}`;
-
-        await db.aggregates.put({
-          id: key,
-          aggregateId,
-          aggregateType,
-          version: serverState.version,
-          lastGlobalPosition: serverState.lastGlobalPosition,
-          lastSnapshotVersion: serverState.lastSnapshotVersion,
-        });
-      }
-
-      // 3. failed events
-      for (const item of failed) {
-      
-        const current = await db.events.get(item.eventId);
-        if (!current) continue;
-        if (current.status === "SYNCED") continue; // already marked by another sync process
-        const retryCount = (current.retryCount ?? 0) + 1;
-        const dead = 
-          retryCount >= 10;
-          
-        const delay = calculateRetryDelay(retryCount)
-        
-        await db.events.update(item.eventId, {
-          status: dead ? "DEAD" : "FAILED",
-          retryCount,
-          lastRetryAt: Date.now(),
-          nextRetryAt:
-            dead ? undefined : Date.now() + delay,
-          lastError: item.error ?? "SYNC_FAILED",
-        });
-      }
-    });
-
-    // 4. conflicts → rebase
-    if (conflicts.length > 0) {
-      for (const conflict of conflicts) {
-        await this.handleConflict(db, conflict);
-      }
+    // HANDLE CONFLICTS
+    for (const conflict of conflicts) {
+      await this.handleConflict(
+        db,
+        conflict
+      )
     }
   },
 
-  async handleConflict(db: any, conflict: any) {
-    console.warn("REBASING AGGREGATE:", conflict.aggregateId);
+  async handleConflict(
+    db: AppDB,
+    conflict: any
+  ) {
+    console.warn(
+      "REBASING:",
+      conflict.aggregateId
+    )
 
-    const pending = await db.events
-      .where("[aggregateType+aggregateId]")
-      .equals([conflict.aggregateType, conflict.aggregateId])
-      .filter((x: any) => x.status === "PENDING")
-      .sortBy("logicClock");
+    const pending =
+      await db.events
+        .where(
+          "[aggregateType+aggregateId]"
+        )
+        .equals([
+          conflict.aggregateType,
+          conflict.aggregateId,
+        ])
+        .filter(
+          x =>
+            x.status === "PENDING"
+        )
+        .sortBy("logicClock")
 
     await rebaseAggregate(db, {
-      aggregateId: conflict.aggregateId,
-      aggregateType: conflict.aggregateType,
-      serverVersion: conflict.serverVersion,
-      serverSnapshot: conflict.snapshot,
-      serverEvents: conflict.serverEvents,
-      pendingEvents: pending,
-    });
+      aggregateId:
+        conflict.aggregateId,
 
-    await this.sync();
+      aggregateType:
+        conflict.aggregateType,
+
+      serverVersion:
+        conflict.serverVersion,
+
+      serverSnapshot:
+        conflict.snapshot,
+
+      serverEvents:
+        conflict.serverEvents,
+
+      pendingEvents:
+        pending,
+    })
   },
-};
 
-function groupEventsByAggregate(events: any[]) {
-  const map = new Map<string, any[]>();
+  async markAggregateFailed(
+    db: AppDB,
+    events: any[],
+    error: any
+  ) {
+    const now = Date.now()
 
-  for (const event of events) {
-    const key = `${event.aggregateType}:${event.aggregateId}`;
+    for (const event of events) {
+      const retryCount =
+        (event.retryCount ?? 0) + 1
 
-    if (!map.has(key)) {
-      map.set(key, []);
+      const dead =
+        retryCount >= MAX_RETRY
+
+      const delay =
+        calculateRetryDelay(
+          retryCount
+        )
+
+      await db.events.update(
+        event.id,
+        {
+          status:
+            dead
+              ? "DEAD"
+              : "FAILED",
+
+          retryCount,
+
+          lastRetryAt: Date.now(),
+
+          nextRetryAt:
+            dead
+              ? undefined
+              : now + delay,
+
+          lastError:
+            error?.message ??
+            "SYNC_FAILED",
+        }
+      )
     }
-
-    map.get(key)!.push(event);
-  }
-
-  return Array.from(map.values());
+  },
 }

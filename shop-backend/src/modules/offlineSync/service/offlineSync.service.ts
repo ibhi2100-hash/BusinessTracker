@@ -30,7 +30,7 @@ export class OfflineSyncService {
       );
 
     const serverVersion = serverLast?.aggregateVersion ?? 0;
-    console.log("This is the server Version: ", serverVersion)
+
     // ---------------------------
     // CONFLICT DETECTION
     // ---------------------------

@@ -20,7 +20,7 @@ export class InventoryRepository {
         if(!event.branchId) return;
 
         const existing = await this.findExisting(event.businessId, event.branchId, payload.productId, tx)
-
+        const branchBusinessId = `${event.branchId}-${event.businessId}`
         if(existing) {
             await tx.inventory.update({
                 where: {id: existing.id},
@@ -35,7 +35,7 @@ export class InventoryRepository {
                 id: payload.id,
                 businessId: event.businessId,
                 branchId: event.businessId,
-                branchBusinessId: event.businessId,
+                branchBusinessId: branchBusinessId,
 
                 productId: payload.productId,
 
