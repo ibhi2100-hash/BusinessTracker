@@ -1,7 +1,7 @@
 import { SyncRepository } from "../repository/syncRepository.js";
 import { LedgerRepository } from "../../ledger/ledgerRepository.js";
 import { HanldeEvent } from "../proccessor/processEvent.js";
-import { generateLedgerEntries } from "../../../../../shared/ledgerGenerator.js";
+import { generateLedgerEntries } from "../../../../../packages/shared/dist/ledgerGenerator.js";
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
 import { toDomainEvent } from "../../../helpers/mapper.js";
 

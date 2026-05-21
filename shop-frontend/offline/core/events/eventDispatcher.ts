@@ -24,10 +24,7 @@ import {
   updateAggregateVersion
 } from "./aggregate/updateAggregateVersion";
 
-import {
-  generateLedgerEntries
-} from "../../../../shared/ledgerGenerator";
-
+import { generateLedgerEntries } from "../../../../packages/shared/dist/ledgerGenerator";
 
 export const dispatchEvent =
   async (

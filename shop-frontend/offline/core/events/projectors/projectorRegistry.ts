@@ -1,4 +1,4 @@
-import { OpeninigEventType } from "../../../../../shared/domain/events";
+import { OpeninigEventType } from "../eventGroups/openingEvents";
 import { BusinessEventTypes } from "../eventGroups/businessEvents";
 import { InventoryEventType } from "../eventGroups/inventoryEvents";
 import { projectInventory } from "./inventory.projector";
