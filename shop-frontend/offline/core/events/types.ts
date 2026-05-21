@@ -5,7 +5,7 @@ export interface BaseEvent<T extends EventType = EventType, p = Record<string, a
 
   aggregateId: string;
   aggregateType: string;
-  aggregateVersion?: number;
+  aggregateVersion: number;
   expectedAggregateVersion?: number
 
   type: T;
@@ -20,15 +20,15 @@ export interface BaseEvent<T extends EventType = EventType, p = Record<string, a
   scope: "GLOBAL" | "BUSINESS" | "BRANCH";
 
   // sync + ordering
-  createdAt: number;       // device time
-  logicClock: number;    // monotonic per device
+  createdAt: Date;       // device time
+  logicClock: bigint;    // monotonic per device
 
   // origin
   deviceId: string;
   userId: string | null;
 
   // sync state
-status: "PENDING" | "SYNCED" | "FAILED" | "DEAD";
+  status: "PENDING" | "SYNCED" | "FAILED" | "DEAD";
   synced: boolean;
   retryCount?: number;
   lastRetryAt?: number;

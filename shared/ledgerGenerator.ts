@@ -1,8 +1,8 @@
-import { Account, LedgerEntry } from "./domain/ledger.js";
-import { Event, financeEventType } from "./domain/events.js";
-import { InventoryEventType } from "./domain/events.js";
-import { salesEventType } from "./domain/events.js";
-import { OpeninigEventType } from "./domain/events.js";
+import { Account, LedgerEntry } from "../shared/domain/ledger";
+import { Event, financeEventType } from "../shared/domain/events";
+import { InventoryEventType } from "../shared/domain/events";
+import { salesEventType } from "../shared/domain/events";
+import { OpeninigEventType } from "../shared/domain/events";
 
 
 type Direction = "DEBIT" | "CREDIT";

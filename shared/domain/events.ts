@@ -77,7 +77,7 @@ export interface Event {
   userId?: string | null;
 
   // SYNC STATUS
-  status: "PENDING" | "SYNCED" | "FAILED";
+  status: "PENDING" | "SYNCED" | "FAILED" | "DEAD";
 
   synced: boolean;
   isCreationEvent: boolean;

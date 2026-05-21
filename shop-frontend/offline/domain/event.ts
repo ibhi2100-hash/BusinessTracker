@@ -24,10 +24,10 @@ export interface Event {
   expectedAggregateVersion: number;
 
   // DEVICE ORDERING
-  logicClock: number;
+  logicClock: bigint;
 
   // SYNC SCOPE
-  scope: string;
+  scope: EventScope;
 
   // EVENT ORIGIN
   deviceId: string;
