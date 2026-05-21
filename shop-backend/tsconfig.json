@@ -3,8 +3,8 @@
     /* =========================
        Project Structure
     ========================== */
-      "rootDir": "./src",
-      "outDir": "./dist",
+      "rootDir": "..",
+      "outDir": "dist",
 
     /* =========================
        Module System (Node ESM)
