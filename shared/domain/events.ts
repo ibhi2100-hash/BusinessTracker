@@ -48,7 +48,7 @@ export interface Event {
   // STREAM / AGGREGATE
   aggregateId: string;
   aggregateType: string;
-  aggregateVersion: number;
+  aggregateVersion?: number;
 
   expectedAggregateVersion?: number | null;
 

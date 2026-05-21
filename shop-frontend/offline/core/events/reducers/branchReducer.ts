@@ -1,4 +1,3 @@
-import { Phone } from "lucide-react";
 import { BusinessEventTypes } from "../eventGroups/businessEvents";
 import { BaseEvent } from "../types";
 

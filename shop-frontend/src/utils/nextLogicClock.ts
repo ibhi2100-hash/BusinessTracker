@@ -8,8 +8,8 @@ export async function nextLogicClock(
   const meta =
     await db.replicaMeta.get(deviceId);
 
-  const next =
-    (meta?.lastLogicClock ?? 0) + 1;
+  const lastLogicClock = meta?.lastLogicClock ?? 0;
+  const next = BigInt(lastLogicClock) + BigInt(1);
 
   await db.replicaMeta.put({
     deviceId,

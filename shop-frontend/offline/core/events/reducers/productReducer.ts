@@ -41,10 +41,10 @@ export const ProductReducer = {
           isDeleted: false,
 
           createdAt:
-            event.createdAt,
+            new Date(event.createdAt),
 
           updatedAt:
-            event.createdAt,
+            new Date(event.createdAt),
         };
 
       case "PRODUCT_UPDATED":
@@ -67,7 +67,7 @@ export const ProductReducer = {
             event.payload.costPrice,
 
           updatedAt:
-            event.createdAt,
+            new Date(event.createdAt),
         };
 
       case "PRODUCT_DELETED":
@@ -85,7 +85,7 @@ export const ProductReducer = {
           isDeleted: true,
 
           deletedAt:
-            event.createdAt,
+            new Date(event.createdAt),
         };
 
       default:

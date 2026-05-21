@@ -2,15 +2,15 @@ import { nanoid } from "nanoid";
 
 export interface BaseEntity {
   id: string;
-  createdAt: number;
-  updatedAt: number;
+  createdAt: Date;
+  updatedAt: Date;
   synced: boolean;
 }
 
 export function createEntity<T extends object>(
   data: T
 ): T & BaseEntity {
-  const now = Date.now();
+  const now = new Date();
 
   return {
     ...data,
@@ -28,7 +28,7 @@ export function updateEntity<T>(
   return {
     ...entity,
     ...updates,
-    updatedAt: Date.now(),
+    updatedAt: new Date(),
     synced: false,
   };
 }

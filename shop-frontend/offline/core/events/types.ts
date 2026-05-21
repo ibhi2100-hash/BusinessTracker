@@ -5,8 +5,8 @@ export interface BaseEvent<T extends EventType = EventType, p = Record<string, a
 
   aggregateId: string;
   aggregateType: string;
-  aggregateVersion: number;
-  expectedAggregateVersion?: number
+  aggregateVersion?: number;
+  expectedAggregateVersion?: number;
 
   type: T;
 
@@ -21,6 +21,7 @@ export interface BaseEvent<T extends EventType = EventType, p = Record<string, a
 
   // sync + ordering
   createdAt: Date;       // device time
+  updatedAt?: Date;      // device time
   logicClock: bigint;    // monotonic per device
 
   // origin

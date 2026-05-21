@@ -69,7 +69,7 @@ export interface User {
   branchId?: string;
   onboardingCompleted?: boolean;
   isActive?: boolean;
-  createdAt?: number;
+  createdAt?: Date;
 }
 
 // ---------------------------
@@ -78,7 +78,7 @@ export interface User {
 export interface Session {
   userId: string;
   accessToken: string;
-  expiresIn?: number;
+  expiresIn?: Date;
 }
 
 // ---------------------------
@@ -89,8 +89,8 @@ export interface Business {
   userId: string;
   name: string;
   address?: string;
-  createdAt?: number;
-  activatedAt?: number;
+  createdAt?: Date;
+  activatedAt?: Date;
   isOnboarding?: boolean;
   onboardingCompleted?: boolean;
   status?: "ONBOARDING" | "ACTIVE" | "SUSPENDED";
@@ -107,13 +107,13 @@ export interface Branch {
   phone?: string;
   isActive?: boolean;
   isDefault?: boolean;
-  createdAt?: number;
+  createdAt?: Date;
 }
 
 export interface BranchData {
   inventoryCount?: number;
   cashBalance?: number;
-  lastSynced?: number;
+  lastSynced?: Date;
 }
 
 
@@ -138,10 +138,10 @@ export interface Product {
   isActive: boolean;
   isDeleted?: boolean;
 
-  createdAt?: number;
-  updatedAt?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 
-  deletedAt?: number;
+  deletedAt?: Date;
 }
 // ---------------------------
 // SUBSCRIPTION / PLAN
@@ -156,15 +156,15 @@ export interface Plan {
   maxProduct: number;
   maxStaff: number;
   features: string[];
-  createdAt?: number;
+  createdAt?: Date;
 }
 
 export interface BusinessSubscription {
   businessId: string;
   subscriptionId: string;
-  startedAt: number;
-  expiresAt: number;
-  trialEndDate?: number;
+  startedAt: Date;
+  expiresAt: Date;
+  trialEndDate?: Date;
   status: SubscriptionStatus;
 }
 

@@ -28,18 +28,18 @@ export interface AggregateRecord {
 
   lastEventId: string;
 
-  lastLogicClock: number;
+  lastLogicClock: bigint;
 
   lastGlobalPosition?: number;
 
   lastSnapshotVersion?: number;
 
-  updatedAt: number;
+  updatedAt: Date;
 }
 
 export interface ReplicaMeta {
 
   deviceId: string;
 
-  lastLogicClock: number;
+  lastLogicClock: bigint;
 }

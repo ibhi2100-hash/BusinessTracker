@@ -47,7 +47,7 @@ export const syncService = {
 
       if (!db) return
 
-      const now = Date.now()
+      const now = new Date().getTime()
 
       // PENDING
       const pending =
@@ -69,10 +69,11 @@ export const syncService = {
       const events = [
         ...pending,
         ...failed,
-      ].sort(
-        (a, b) =>
-          a.logicClock - b.logicClock
-      )
+      ].sort((a, b) => {
+        if (a.logicClock < b.logicClock) return -1
+        if (a.logicClock > b.logicClock) return 1
+        return 0
+      })
 
       if (!events.length) {
         console.log("No events to sync")
@@ -239,7 +240,7 @@ export const syncService = {
               serverState.lastSnapshotVersion,
 
             updatedAt:
-              Date.now(),
+              new Date(),
           })
         }
 
@@ -383,7 +384,7 @@ export const syncService = {
           nextRetryAt:
             dead
               ? undefined
-              : now + delay,
+              : Date.now() + delay,
 
           lastError:
             error?.message ??

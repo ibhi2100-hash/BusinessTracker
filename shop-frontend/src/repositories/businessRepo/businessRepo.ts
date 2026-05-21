@@ -4,7 +4,7 @@ import { nanoid } from "nanoid";
 
 export class BusinessRepo extends BaseRepo {
   async createBusiness(businessData: Business, branchData: Branch) {
-    const now = Date.now();
+    const now = new Date();
 
     return this.tx(
       async () => {

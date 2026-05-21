@@ -185,7 +185,7 @@ export class AggregateRegistry {
         existing?.lastLogicClock,
 
       updatedAt:
-        Date.now(),
+        new Date(),
     });
   }
 
