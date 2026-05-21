@@ -38,3 +38,52 @@ export const OpeninigEventType = {
 export const salesEventType = {
         SALE_ADDED: "SALE_ADDED"
 }
+
+export type EventScope = "GLOBAL" | "BUSINESS" | "BRANCH";  
+
+export interface Event {
+  // EVENT ID
+  id: string;
+
+  // STREAM / AGGREGATE
+  aggregateId: string;
+  aggregateType: string;
+  aggregateVersion: number;
+
+  expectedAggregateVersion?: number | null;
+
+  // EVENT INFO
+  type: string;
+  payload: any;
+
+  // TENANCY
+  businessId?: string | null;
+
+  branchId?: string | null;
+  branchBusinessId?: string | null;
+
+  // OPERATING MODE
+  mode: "OPENING" | "LIVE";
+
+
+  // DEVICE ORDERING
+  logicClock: bigint;
+
+  // SYNC SCOPE
+  scope: EventScope;
+
+  // EVENT ORIGIN
+  deviceId: string;
+  userId?: string | null;
+
+  // SYNC STATUS
+  status: "PENDING" | "SYNCED" | "FAILED";
+
+  synced: boolean;
+  isCreationEvent: boolean;
+  causationId?: string;
+  correlationId?: string;
+
+  // TIMESTAMPS
+  createdAt: Date;
+}

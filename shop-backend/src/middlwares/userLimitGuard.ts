@@ -9,7 +9,9 @@ export const userLimitGuard = async (req: Request, res: Response, next: NextFunc
   if(!limit) return res.status(401).json({ message: "There is no user limit"})
 
   const userCount = await prisma.user.count({
-    where: { businessId}
+    where: {
+      ...businessId? { businessId } : {}
+    }
   })
 
   if (userCount >= limit) {

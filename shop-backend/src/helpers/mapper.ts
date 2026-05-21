@@ -22,7 +22,7 @@ export function toDomainEvent(event: PrismaEvent): DomainEvent {
 
     mode: event.mode,
 
-    logicClock: Number(event.logicClock),
+    logicClock: event.logicClock,
 
     scope: event.scope as any,
 
@@ -37,21 +37,27 @@ export function toDomainEvent(event: PrismaEvent): DomainEvent {
     createdAt: event.createdAt,
   };
 
-  // 🔥 ONLY ADD OPTIONAL FIELDS IF THEY EXIST
-  if (event.causationId !== null && event.causationId !== undefined) {
+  // ONLY SET IF EXISTS
+  if (event.causationId !== null) {
     base.causationId = event.causationId;
   }
 
-  if (event.correlationId !== null && event.correlationId !== undefined) {
+  if (event.correlationId !== null) {
     base.correlationId = event.correlationId;
   }
 
   return base;
 }
-
-function normalizePayload(payload: any): Record<string, any> {
-  if (!payload || typeof payload !== "object") {
-    return {};
+function normalizePayload(
+  payload: unknown
+): Record<string, unknown> {
+  if (
+    payload &&
+    typeof payload === "object" &&
+    !Array.isArray(payload)
+  ) {
+    return payload as Record<string, unknown>;
   }
-  return payload;
+
+  return {};
 }

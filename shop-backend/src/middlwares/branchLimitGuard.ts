@@ -2,8 +2,11 @@ import { Request, Response, NextFunction } from "express";
 import { prisma } from "../infrastructure/postgresql/prismaClient.js";
 
 export const branchLimitGuard = async (req: Request, res: Response, next: NextFunction) => {
-
+  if (!req.user) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
   const businessId = req.user.businessId;
+
   const limit = req.subscription?.subscription.maxBranch;
 
   if(!limit) return res.status(401).json({ message: "There is no user limit"})

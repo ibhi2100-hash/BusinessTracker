@@ -26,7 +26,7 @@ export interface Event {
 
 
   // DEVICE ORDERING
-  logicClock: number;
+  logicClock: bigint;
 
   // SYNC SCOPE
   scope: EventScope;

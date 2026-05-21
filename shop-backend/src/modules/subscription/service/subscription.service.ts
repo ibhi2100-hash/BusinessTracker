@@ -1,5 +1,4 @@
 import { SubscriptionRepository } from "../repository/subscription.repository.js";
-import { User } from "../../auth/entity/user.js";
 import cron from "node-cron";
 import axios from "axios";
 
@@ -17,7 +16,7 @@ export class SubscriptionService {
 
         return result
     }
-    initializeSubscriptionPayment = async (businessId: string, planId: string, user: User)=> {
+    initializeSubscriptionPayment = async (businessId: string, planId: string, user: any)=> {
         const plan = await this.repo.findPlanById(planId);
             if(!plan) throw new Error("Plan does not exist");
 

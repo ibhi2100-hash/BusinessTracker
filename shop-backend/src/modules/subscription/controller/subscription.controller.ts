@@ -1,6 +1,5 @@
-import { ResolveFnOutput } from "node:module";
 import { SubscriptionService } from "../service/subscription.service.js";
-import { response, type Request, type Response } from "express";
+import type { Request, Response } from "express";
 
 export class SubscriptionController {
     constructor(private service: SubscriptionService){}
@@ -12,6 +11,9 @@ export class SubscriptionController {
     }
 
     initializeSubscriptionPayment = async (req: Request, res: Response)=> {
+    if(!req.user) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
         const businessId = req.user.businessId;
         const user = req.user;
         const { planId } = req.body;

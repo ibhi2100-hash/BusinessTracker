@@ -1,6 +1,5 @@
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
-import axios from "axios";
-import { User } from "../../auth/entity/user.js";
+
 
 export class SubscriptionRepository {
   findPlanById = async (planId: string) => {
@@ -8,7 +7,7 @@ export class SubscriptionRepository {
     const subscriptionPlan = await prisma.subscriptionPlan.findUnique({
       where: { id: planId },
       include: {
-        subscription: true
+        subscriptions: true
       }
     });
 
@@ -19,7 +18,7 @@ export class SubscriptionRepository {
 
     const subscriptionPlan = await prisma.subscriptionPlan.findMany({
       include: {
-        subscription: true
+        subscriptions: true
       }
     });
 
@@ -44,6 +43,7 @@ create = async (businessId: string, subscriptionId: string) => {
       expiresAt
     },
     create: {
+      id: subscriptionId,
       businessId,
       subscriptionId,
       startedAt: new Date(),
@@ -61,7 +61,7 @@ create = async (businessId: string, subscriptionId: string) => {
 verifyPayment = async (metadata: any)=> {
   // Activate subscription in your database
     const subscription = await prisma.businessSubscription.updateMany({
-      where: { businessId: metadata.businessId, planId: metadata.planId },
+      where: { businessId: metadata.businessId, subscriptionId: metadata.planId },
       data: { status: "ACTIVE" },
     });
 }

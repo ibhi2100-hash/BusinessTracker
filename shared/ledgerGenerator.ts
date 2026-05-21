@@ -1,19 +1,24 @@
-import { Account, LedgerEntry } from "./domain/ledger";
-import { financeEventType } from "./domain/events";
-import { InventoryEventType } from "./domain/events";
-import { salesEventType } from "./domain/events";
-import { OpeninigEventType } from "./domain/events";
-import { BaseEvent } from "../shop-frontend/offline/core/events/types";
+import { Account, LedgerEntry } from "./domain/ledger.js";
+import { Event, financeEventType } from "./domain/events.js";
+import { InventoryEventType } from "./domain/events.js";
+import { salesEventType } from "./domain/events.js";
+import { OpeninigEventType } from "./domain/events.js";
+
 
 type Direction = "DEBIT" | "CREDIT";
 
 function buildEntry(
-  event: BaseEvent,
+  event: Event,
   index: number,
   account: Account,
   direction: Direction,
   amount: number
 ): LedgerEntry {
+  if (!event.businessId || !event.branchId) {
+  throw new Error(
+    `Ledger generation requires businessId and branchId. Event: ${event.id}`
+  );
+}
  if (!Number.isFinite(amount)) {
   throw new Error(
     `Invalid amount for ${event.type}: ${amount}`
@@ -29,11 +34,11 @@ function buildEntry(
     direction,
     amount, // ✅ ALWAYS POSITIVE
     index,
-    createdAt: event.createdAt ?? Date.now(),
+    createdAt: event.createdAt.getTime(), // ✅ timestamp in ms
   };
 }
 
-export function generateLedgerEntries(event: BaseEvent): LedgerEntry[] {
+export function generateLedgerEntries(event: Event): LedgerEntry[] {
   const { payload } = event;
 
   let entries: LedgerEntry[] = [];

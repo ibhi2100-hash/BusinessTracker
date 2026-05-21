@@ -1,3 +1,6 @@
+export interface MergeStrategy {
+  merge: (base: any, next: any) => any;
+}
 export function mergeState(
   base: any,
   next: any,

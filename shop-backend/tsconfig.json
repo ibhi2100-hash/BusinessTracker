@@ -56,6 +56,6 @@
   /* =========================
      Compilation Scope
   ========================== */
-  "include": ["src/**/*", "../shared/**/*"],
+  "include": ["src/**/*", "../shared/**/*", "src/types"],
   "exclude": ["node_modules", "dist"]
 }

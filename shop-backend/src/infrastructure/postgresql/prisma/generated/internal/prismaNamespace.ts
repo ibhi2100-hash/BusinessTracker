@@ -1935,6 +1935,20 @@ export type ListEnumModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
+ * Reference to a field of type 'Scope'
+ */
+export type EnumScopeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Scope'>
+    
+
+
+/**
+ * Reference to a field of type 'Scope[]'
+ */
+export type ListEnumScopeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Scope[]'>
+    
+
+
+/**
  * Reference to a field of type 'Account'
  */
 export type EnumAccountFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Account'>

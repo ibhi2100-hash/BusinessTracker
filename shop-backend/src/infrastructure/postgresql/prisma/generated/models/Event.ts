@@ -49,7 +49,7 @@ export type EventMinAggregateOutputType = {
   globalPosition: bigint | null
   type: string | null
   mode: $Enums.Mode | null
-  scope: string | null
+  scope: $Enums.Scope | null
   logicClock: bigint | null
   deviceId: string | null
   userId: string | null
@@ -72,7 +72,7 @@ export type EventMaxAggregateOutputType = {
   globalPosition: bigint | null
   type: string | null
   mode: $Enums.Mode | null
-  scope: string | null
+  scope: $Enums.Scope | null
   logicClock: bigint | null
   deviceId: string | null
   userId: string | null
@@ -291,7 +291,7 @@ export type EventGroupByOutputType = {
   type: string
   payload: runtime.JsonValue
   mode: $Enums.Mode
-  scope: string
+  scope: $Enums.Scope
   logicClock: bigint
   deviceId: string
   userId: string | null
@@ -338,7 +338,7 @@ export type EventWhereInput = {
   type?: Prisma.StringFilter<"Event"> | string
   payload?: Prisma.JsonFilter<"Event">
   mode?: Prisma.EnumModeFilter<"Event"> | $Enums.Mode
-  scope?: Prisma.StringFilter<"Event"> | string
+  scope?: Prisma.EnumScopeFilter<"Event"> | $Enums.Scope
   logicClock?: Prisma.BigIntFilter<"Event"> | bigint | number
   deviceId?: Prisma.StringFilter<"Event"> | string
   userId?: Prisma.StringNullableFilter<"Event"> | string | null
@@ -398,7 +398,7 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   type?: Prisma.StringFilter<"Event"> | string
   payload?: Prisma.JsonFilter<"Event">
   mode?: Prisma.EnumModeFilter<"Event"> | $Enums.Mode
-  scope?: Prisma.StringFilter<"Event"> | string
+  scope?: Prisma.EnumScopeFilter<"Event"> | $Enums.Scope
   logicClock?: Prisma.BigIntFilter<"Event"> | bigint | number
   deviceId?: Prisma.StringFilter<"Event"> | string
   userId?: Prisma.StringNullableFilter<"Event"> | string | null
@@ -458,7 +458,7 @@ export type EventScalarWhereWithAggregatesInput = {
   type?: Prisma.StringWithAggregatesFilter<"Event"> | string
   payload?: Prisma.JsonWithAggregatesFilter<"Event">
   mode?: Prisma.EnumModeWithAggregatesFilter<"Event"> | $Enums.Mode
-  scope?: Prisma.StringWithAggregatesFilter<"Event"> | string
+  scope?: Prisma.EnumScopeWithAggregatesFilter<"Event"> | $Enums.Scope
   logicClock?: Prisma.BigIntWithAggregatesFilter<"Event"> | bigint | number
   deviceId?: Prisma.StringWithAggregatesFilter<"Event"> | string
   userId?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
@@ -479,7 +479,7 @@ export type EventCreateInput = {
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
-  scope: string
+  scope: $Enums.Scope
   logicClock: bigint | number
   deviceId: string
   status: $Enums.SyncEventStatus
@@ -506,7 +506,7 @@ export type EventUncheckedCreateInput = {
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
-  scope: string
+  scope: $Enums.Scope
   logicClock: bigint | number
   deviceId: string
   userId?: string | null
@@ -528,7 +528,7 @@ export type EventUpdateInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
-  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumScopeFieldUpdateOperationsInput | $Enums.Scope
   logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
@@ -555,7 +555,7 @@ export type EventUncheckedUpdateInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
-  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumScopeFieldUpdateOperationsInput | $Enums.Scope
   logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -580,7 +580,7 @@ export type EventCreateManyInput = {
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
-  scope: string
+  scope: $Enums.Scope
   logicClock: bigint | number
   deviceId: string
   userId?: string | null
@@ -601,7 +601,7 @@ export type EventUpdateManyMutationInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
-  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumScopeFieldUpdateOperationsInput | $Enums.Scope
   logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
@@ -624,7 +624,7 @@ export type EventUncheckedUpdateManyInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
-  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumScopeFieldUpdateOperationsInput | $Enums.Scope
   logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -877,6 +877,10 @@ export type EnumModeFieldUpdateOperationsInput = {
   set?: $Enums.Mode
 }
 
+export type EnumScopeFieldUpdateOperationsInput = {
+  set?: $Enums.Scope
+}
+
 export type EventCreateNestedOneWithoutLedgerEntriesInput = {
   create?: Prisma.XOR<Prisma.EventCreateWithoutLedgerEntriesInput, Prisma.EventUncheckedCreateWithoutLedgerEntriesInput>
   connectOrCreate?: Prisma.EventCreateOrConnectWithoutLedgerEntriesInput
@@ -900,7 +904,7 @@ export type EventCreateWithoutBusinessInput = {
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
-  scope: string
+  scope: $Enums.Scope
   logicClock: bigint | number
   deviceId: string
   status: $Enums.SyncEventStatus
@@ -925,7 +929,7 @@ export type EventUncheckedCreateWithoutBusinessInput = {
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
-  scope: string
+  scope: $Enums.Scope
   logicClock: bigint | number
   deviceId: string
   userId?: string | null
@@ -979,7 +983,7 @@ export type EventScalarWhereInput = {
   type?: Prisma.StringFilter<"Event"> | string
   payload?: Prisma.JsonFilter<"Event">
   mode?: Prisma.EnumModeFilter<"Event"> | $Enums.Mode
-  scope?: Prisma.StringFilter<"Event"> | string
+  scope?: Prisma.EnumScopeFilter<"Event"> | $Enums.Scope
   logicClock?: Prisma.BigIntFilter<"Event"> | bigint | number
   deviceId?: Prisma.StringFilter<"Event"> | string
   userId?: Prisma.StringNullableFilter<"Event"> | string | null
@@ -1000,7 +1004,7 @@ export type EventCreateWithoutBranchInput = {
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
-  scope: string
+  scope: $Enums.Scope
   logicClock: bigint | number
   deviceId: string
   status: $Enums.SyncEventStatus
@@ -1024,7 +1028,7 @@ export type EventUncheckedCreateWithoutBranchInput = {
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
-  scope: string
+  scope: $Enums.Scope
   logicClock: bigint | number
   deviceId: string
   userId?: string | null
@@ -1072,7 +1076,7 @@ export type EventCreateWithoutUserInput = {
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
-  scope: string
+  scope: $Enums.Scope
   logicClock: bigint | number
   deviceId: string
   status: $Enums.SyncEventStatus
@@ -1098,7 +1102,7 @@ export type EventUncheckedCreateWithoutUserInput = {
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
-  scope: string
+  scope: $Enums.Scope
   logicClock: bigint | number
   deviceId: string
   status: $Enums.SyncEventStatus
@@ -1145,7 +1149,7 @@ export type EventCreateWithoutLedgerEntriesInput = {
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
-  scope: string
+  scope: $Enums.Scope
   logicClock: bigint | number
   deviceId: string
   status: $Enums.SyncEventStatus
@@ -1171,7 +1175,7 @@ export type EventUncheckedCreateWithoutLedgerEntriesInput = {
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
-  scope: string
+  scope: $Enums.Scope
   logicClock: bigint | number
   deviceId: string
   userId?: string | null
@@ -1208,7 +1212,7 @@ export type EventUpdateWithoutLedgerEntriesInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
-  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumScopeFieldUpdateOperationsInput | $Enums.Scope
   logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
@@ -1234,7 +1238,7 @@ export type EventUncheckedUpdateWithoutLedgerEntriesInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
-  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumScopeFieldUpdateOperationsInput | $Enums.Scope
   logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1257,7 +1261,7 @@ export type EventCreateManyBusinessInput = {
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
-  scope: string
+  scope: $Enums.Scope
   logicClock: bigint | number
   deviceId: string
   userId?: string | null
@@ -1278,7 +1282,7 @@ export type EventUpdateWithoutBusinessInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
-  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumScopeFieldUpdateOperationsInput | $Enums.Scope
   logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
@@ -1303,7 +1307,7 @@ export type EventUncheckedUpdateWithoutBusinessInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
-  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumScopeFieldUpdateOperationsInput | $Enums.Scope
   logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1327,7 +1331,7 @@ export type EventUncheckedUpdateManyWithoutBusinessInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
-  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumScopeFieldUpdateOperationsInput | $Enums.Scope
   logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1349,7 +1353,7 @@ export type EventCreateManyBranchInput = {
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
-  scope: string
+  scope: $Enums.Scope
   logicClock: bigint | number
   deviceId: string
   userId?: string | null
@@ -1370,7 +1374,7 @@ export type EventUpdateWithoutBranchInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
-  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumScopeFieldUpdateOperationsInput | $Enums.Scope
   logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
@@ -1394,7 +1398,7 @@ export type EventUncheckedUpdateWithoutBranchInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
-  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumScopeFieldUpdateOperationsInput | $Enums.Scope
   logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1417,7 +1421,7 @@ export type EventUncheckedUpdateManyWithoutBranchInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
-  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumScopeFieldUpdateOperationsInput | $Enums.Scope
   logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1441,7 +1445,7 @@ export type EventCreateManyUserInput = {
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
-  scope: string
+  scope: $Enums.Scope
   logicClock: bigint | number
   deviceId: string
   status: $Enums.SyncEventStatus
@@ -1461,7 +1465,7 @@ export type EventUpdateWithoutUserInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
-  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumScopeFieldUpdateOperationsInput | $Enums.Scope
   logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
@@ -1487,7 +1491,7 @@ export type EventUncheckedUpdateWithoutUserInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
-  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumScopeFieldUpdateOperationsInput | $Enums.Scope
   logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
@@ -1511,7 +1515,7 @@ export type EventUncheckedUpdateManyWithoutUserInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
-  scope?: Prisma.StringFieldUpdateOperationsInput | string
+  scope?: Prisma.EnumScopeFieldUpdateOperationsInput | $Enums.Scope
   logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumSyncEventStatusFieldUpdateOperationsInput | $Enums.SyncEventStatus
@@ -1699,7 +1703,7 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     type: string
     payload: runtime.JsonValue
     mode: $Enums.Mode
-    scope: string
+    scope: $Enums.Scope
     logicClock: bigint
     deviceId: string
     userId: string | null
@@ -2147,7 +2151,7 @@ export interface EventFieldRefs {
   readonly type: Prisma.FieldRef<"Event", 'String'>
   readonly payload: Prisma.FieldRef<"Event", 'Json'>
   readonly mode: Prisma.FieldRef<"Event", 'Mode'>
-  readonly scope: Prisma.FieldRef<"Event", 'String'>
+  readonly scope: Prisma.FieldRef<"Event", 'Scope'>
   readonly logicClock: Prisma.FieldRef<"Event", 'BigInt'>
   readonly deviceId: Prisma.FieldRef<"Event", 'String'>
   readonly userId: Prisma.FieldRef<"Event", 'String'>

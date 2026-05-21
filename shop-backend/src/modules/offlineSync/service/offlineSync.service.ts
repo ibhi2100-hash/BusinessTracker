@@ -85,10 +85,9 @@ export class OfflineSyncService {
               enrichedEvent,
               tx
             );
-            console.log("This is the saved Event in the backend", saved)
-
+          const domainEvent = toDomainEvent(saved);
           const entries =
-            generateLedgerEntries(saved);
+            generateLedgerEntries(domainEvent);
 
           if (entries.length) {
             await this.ledgerRepo.bulkAddEntries(

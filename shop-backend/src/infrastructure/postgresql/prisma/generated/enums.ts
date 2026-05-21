@@ -17,6 +17,15 @@ export const Mode = {
 export type Mode = (typeof Mode)[keyof typeof Mode]
 
 
+export const Scope = {
+  GLOBAL: 'GLOBAL',
+  BUSINESS: 'BUSINESS',
+  BRANCH: 'BRANCH'
+} as const
+
+export type Scope = (typeof Scope)[keyof typeof Scope]
+
+
 export const Role = {
   ADMIN: 'ADMIN',
   STAFF: 'STAFF'

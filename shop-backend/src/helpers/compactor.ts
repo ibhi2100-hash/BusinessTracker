@@ -1,4 +1,4 @@
-export async function compactEvents(aggregateId, lastVersion, prisma) {
+export async function compactEvents(aggregateId: string, lastVersion: number, prisma: any) {
   await prisma.event.updateMany({
     where: {
       aggregateId,

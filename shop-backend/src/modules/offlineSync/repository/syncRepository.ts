@@ -94,7 +94,18 @@ export class SyncRepository {
         status: "SYNCED",
         synced: true,
 
+        causationId:
+            event.causationId === null
+              ? undefined
+              : event.causationId,
+
+          correlationId:
+            event.correlationId === null
+              ? undefined
+              : event.correlationId,
+
         createdAt: new Date(event.createdAt),
+
       },
     });
   }
