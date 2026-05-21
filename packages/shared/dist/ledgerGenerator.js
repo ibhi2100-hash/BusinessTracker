@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateLedgerEntries = generateLedgerEntries;
-const ledger_js_1 = require("./domain/ledger.js");
-const events_js_1 = require("./domain/events.js");
+import { Account } from "./domain/ledger.js";
+import { financeEventType, InventoryEventType, salesEventType, OpeninigEventType, } from "./domain/events.js";
 function buildEntry(event, index, account, direction, amount) {
     if (!event.businessId || !event.branchId) {
         throw new Error(`Ledger generation requires businessId and branchId. Event: ${event.id}`);
@@ -23,7 +20,7 @@ function buildEntry(event, index, account, direction, amount) {
         createdAt: event.createdAt.getTime(), // ✅ timestamp in ms
     };
 }
-function generateLedgerEntries(event) {
+export function generateLedgerEntries(event) {
     const { payload } = event;
     let entries = [];
     switch (event.type) {
@@ -34,46 +31,46 @@ function generateLedgerEntries(event) {
          * Dr COGS
          * Cr Inventory
          */
-        case events_js_1.salesEventType.SALE_ADDED:
+        case salesEventType.SALE_ADDED:
             entries = [
-                buildEntry(event, 0, ledger_js_1.Account.CASH, "DEBIT", payload.amount),
-                buildEntry(event, 1, ledger_js_1.Account.REVENUE, "CREDIT", payload.amount),
-                buildEntry(event, 2, ledger_js_1.Account.COGS, "DEBIT", payload.costPrice),
-                buildEntry(event, 3, ledger_js_1.Account.INVENTORY, "CREDIT", payload.costPrice),
+                buildEntry(event, 0, Account.CASH, "DEBIT", payload.amount),
+                buildEntry(event, 1, Account.REVENUE, "CREDIT", payload.amount),
+                buildEntry(event, 2, Account.COGS, "DEBIT", payload.costPrice),
+                buildEntry(event, 3, Account.INVENTORY, "CREDIT", payload.costPrice),
             ];
             break;
         /**
          * INVENTORY (Opening or Purchase)
          */
-        case events_js_1.OpeninigEventType.OPENING_INVENTORY_CREATED: {
+        case OpeninigEventType.OPENING_INVENTORY_CREATED: {
             const value = payload.costPrice * payload.quantity;
             if (event.mode === "OPENING") {
                 // ✅ Opening balance — no cash movement
                 entries = [
-                    buildEntry(event, 0, ledger_js_1.Account.INVENTORY, "DEBIT", value),
-                    buildEntry(event, 1, ledger_js_1.Account.OWNER_CAPITAL, "CREDIT", value),
+                    buildEntry(event, 0, Account.INVENTORY, "DEBIT", value),
+                    buildEntry(event, 1, Account.OWNER_CAPITAL, "CREDIT", value),
                 ];
             }
             else {
                 // ✅ Live purchase
                 entries = [
-                    buildEntry(event, 0, ledger_js_1.Account.INVENTORY, "DEBIT", value),
-                    buildEntry(event, 1, ledger_js_1.Account.CASH, "CREDIT", value),
+                    buildEntry(event, 0, Account.INVENTORY, "DEBIT", value),
+                    buildEntry(event, 1, Account.CASH, "CREDIT", value),
                 ];
             }
             break;
         }
-        case events_js_1.InventoryEventType.PRODUCT_CREATED:
+        case InventoryEventType.PRODUCT_CREATED:
             return []; // ✅ NO financial impact
         /**
          * OPENING CAPITAL
          * Dr Cash
          * Cr Owner Capital
          */
-        case events_js_1.financeEventType.OPENING_CAPITAL:
+        case financeEventType.OPENING_CAPITAL:
             entries = [
-                buildEntry(event, 0, ledger_js_1.Account.CASH, "DEBIT", payload.amount),
-                buildEntry(event, 1, ledger_js_1.Account.OWNER_CAPITAL, "CREDIT", payload.amount),
+                buildEntry(event, 0, Account.CASH, "DEBIT", payload.amount),
+                buildEntry(event, 1, Account.OWNER_CAPITAL, "CREDIT", payload.amount),
             ];
             break;
         /**
@@ -81,10 +78,10 @@ function generateLedgerEntries(event) {
          * Dr Cash
          * Cr Owner Capital
          */
-        case events_js_1.financeEventType.CASH_ADDED:
+        case financeEventType.CASH_ADDED:
             entries = [
-                buildEntry(event, 0, ledger_js_1.Account.CASH, "DEBIT", payload.amount),
-                buildEntry(event, 1, ledger_js_1.Account.OWNER_CAPITAL, "CREDIT", payload.amount),
+                buildEntry(event, 0, Account.CASH, "DEBIT", payload.amount),
+                buildEntry(event, 1, Account.OWNER_CAPITAL, "CREDIT", payload.amount),
             ];
             break;
         /**
@@ -92,10 +89,10 @@ function generateLedgerEntries(event) {
          * Dr Fixed Assets
          * Cr Cash
          */
-        case events_js_1.financeEventType.ASSET_ADDED:
+        case financeEventType.ASSET_ADDED:
             entries = [
-                buildEntry(event, 0, ledger_js_1.Account.FIXED_ASSETS, "DEBIT", payload.cost),
-                buildEntry(event, 1, ledger_js_1.Account.CASH, "CREDIT", payload.cost),
+                buildEntry(event, 0, Account.FIXED_ASSETS, "DEBIT", payload.cost),
+                buildEntry(event, 1, Account.CASH, "CREDIT", payload.cost),
             ];
             break;
         /**
@@ -103,10 +100,10 @@ function generateLedgerEntries(event) {
          * Dr Cash
          * Cr Fixed Assets
          */
-        case events_js_1.financeEventType.ASSET_DISPOSED:
+        case financeEventType.ASSET_DISPOSED:
             entries = [
-                buildEntry(event, 0, ledger_js_1.Account.CASH, "DEBIT", payload.value),
-                buildEntry(event, 1, ledger_js_1.Account.FIXED_ASSETS, "CREDIT", payload.value),
+                buildEntry(event, 0, Account.CASH, "DEBIT", payload.value),
+                buildEntry(event, 1, Account.FIXED_ASSETS, "CREDIT", payload.value),
             ];
             break;
         /**
@@ -114,10 +111,10 @@ function generateLedgerEntries(event) {
          * Dr Cash
          * Cr Liabilities
          */
-        case events_js_1.financeEventType.LIABILITY_ADDED:
+        case financeEventType.LIABILITY_ADDED:
             entries = [
-                buildEntry(event, 0, ledger_js_1.Account.CASH, "DEBIT", payload.principalAmount),
-                buildEntry(event, 1, ledger_js_1.Account.LIABILITIES, "CREDIT", payload.principalAmount),
+                buildEntry(event, 0, Account.CASH, "DEBIT", payload.principalAmount),
+                buildEntry(event, 1, Account.LIABILITIES, "CREDIT", payload.principalAmount),
             ];
             break;
         /**
@@ -125,10 +122,10 @@ function generateLedgerEntries(event) {
          * Dr Liabilities
          * Cr Cash
          */
-        case events_js_1.financeEventType.LIABILITY_REPAYMENT:
+        case financeEventType.LIABILITY_REPAYMENT:
             entries = [
-                buildEntry(event, 0, ledger_js_1.Account.LIABILITIES, "DEBIT", payload.amount),
-                buildEntry(event, 1, ledger_js_1.Account.CASH, "CREDIT", payload.amount),
+                buildEntry(event, 0, Account.LIABILITIES, "DEBIT", payload.amount),
+                buildEntry(event, 1, Account.CASH, "CREDIT", payload.amount),
             ];
             break;
         /**
@@ -136,10 +133,10 @@ function generateLedgerEntries(event) {
          * Dr Expense
          * Cr Cash
          */
-        case events_js_1.financeEventType.EXPENSES_ADDED:
+        case financeEventType.EXPENSES_ADDED:
             entries = [
-                buildEntry(event, 0, ledger_js_1.Account.EXPENSE, "DEBIT", payload.amount),
-                buildEntry(event, 1, ledger_js_1.Account.CASH, "CREDIT", payload.amount),
+                buildEntry(event, 0, Account.EXPENSE, "DEBIT", payload.amount),
+                buildEntry(event, 1, Account.CASH, "CREDIT", payload.amount),
             ];
             break;
         /**
@@ -147,10 +144,10 @@ function generateLedgerEntries(event) {
          * Dr Cash
          * Cr Owner Capital
          */
-        case events_js_1.financeEventType.CAPITAL_INJECTION:
+        case financeEventType.CAPITAL_INJECTION:
             entries = [
-                buildEntry(event, 0, ledger_js_1.Account.CASH, "DEBIT", payload.amount),
-                buildEntry(event, 1, ledger_js_1.Account.OWNER_CAPITAL, "CREDIT", payload.amount),
+                buildEntry(event, 0, Account.CASH, "DEBIT", payload.amount),
+                buildEntry(event, 1, Account.OWNER_CAPITAL, "CREDIT", payload.amount),
             ];
             break;
         /**
@@ -158,10 +155,10 @@ function generateLedgerEntries(event) {
          * Dr Drawings
          * Cr Cash
          */
-        case events_js_1.financeEventType.CAPITAL_DRAWINGS:
+        case financeEventType.CAPITAL_DRAWINGS:
             entries = [
-                buildEntry(event, 0, ledger_js_1.Account.OWNER_DRAWINGS, "DEBIT", payload.amount),
-                buildEntry(event, 1, ledger_js_1.Account.CASH, "CREDIT", payload.amount),
+                buildEntry(event, 0, Account.OWNER_DRAWINGS, "DEBIT", payload.amount),
+                buildEntry(event, 1, Account.CASH, "CREDIT", payload.amount),
             ];
             break;
         /**
@@ -169,10 +166,10 @@ function generateLedgerEntries(event) {
          * Dr Inter-Branch
          * Cr Cash
          */
-        case events_js_1.financeEventType.BRANCH_TRANSFER_OUT:
+        case financeEventType.BRANCH_TRANSFER_OUT:
             entries = [
-                buildEntry(event, 0, ledger_js_1.Account.INTER_BRANCH, "DEBIT", payload.amount),
-                buildEntry(event, 1, ledger_js_1.Account.CASH, "CREDIT", payload.amount),
+                buildEntry(event, 0, Account.INTER_BRANCH, "DEBIT", payload.amount),
+                buildEntry(event, 1, Account.CASH, "CREDIT", payload.amount),
             ];
             break;
         /**
@@ -180,14 +177,14 @@ function generateLedgerEntries(event) {
          * Dr Cash
          * Cr Inter-Branch
          */
-        case events_js_1.financeEventType.BRANCH_TRANSFER_IN:
+        case financeEventType.BRANCH_TRANSFER_IN:
             entries = [
                 {
-                    ...buildEntry(event, 0, ledger_js_1.Account.CASH, "DEBIT", payload.amount),
+                    ...buildEntry(event, 0, Account.CASH, "DEBIT", payload.amount),
                     branchId: payload.toBranchId, // ✅ override
                 },
                 {
-                    ...buildEntry(event, 1, ledger_js_1.Account.INTER_BRANCH, "CREDIT", payload.amount),
+                    ...buildEntry(event, 1, Account.INTER_BRANCH, "CREDIT", payload.amount),
                     branchId: payload.toBranchId,
                 },
             ];

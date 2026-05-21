@@ -1,12 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.salesEventType = exports.OpeninigEventType = exports.InventoryEventType = exports.financeEventType = exports.BusinessEventTypes = void 0;
-exports.BusinessEventTypes = {
+export const BusinessEventTypes = {
     BUSINESS_CREATED: "BUSINESS_CREATED",
     BUSINESS_ACTIVATION: "BUSINESS_ACTIVATION",
     BRANCH_CREATED: "BRANCH_CREATED"
 };
-exports.financeEventType = {
+export const financeEventType = {
     ASSET_ADDED: "ASSET_ADDED",
     ASSET_DISPOSED: "ASSET_DISPOSED",
     EXPENSES_ADDED: "EXPENSES_ADDED",
@@ -20,14 +17,14 @@ exports.financeEventType = {
     BRANCH_TRANSFER_OUT: "BRANCH_TRANSFER_OUT",
     BRANCH_TRANSFER_IN: "BRANCH_TRANSFER_IN"
 };
-exports.InventoryEventType = {
+export const InventoryEventType = {
     PRODUCT_CREATED: "PRODUCT_CREATED",
     PRODUCT_UPDATED: "PRODUCT_UPDATED",
     PRODUCT_DELETED: "PRODUCT_DELETED",
     INVENTORY_ADDED: "INVENTORY_ADDED",
     INVENTORY_UPDATED: "INVENTORY_UPDATED",
 };
-exports.OpeninigEventType = {
+export const OpeninigEventType = {
     OPENING_INVENTORY_CREATED: "OPENING_INVENTORY_CREATED",
     OPENING_INVENTORY_UPDATED: "OPENING_INVENTORY_UPDATED",
     OPENING_INVENTORY_DELETED: "OPENING_INVENTORY_DELETED",
@@ -35,6 +32,6 @@ exports.OpeninigEventType = {
     OPENING_LIABILITIES: "OPENING_LIABILITIES",
     OPENING_CASH_ADDED: "OPENING_CASH"
 };
-exports.salesEventType = {
+export const salesEventType = {
     SALE_ADDED: "SALE_ADDED"
 };

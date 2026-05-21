@@ -1,8 +1,9 @@
 {
-  "private": true,
-  "workspaces": [
-    "shop-frontend",
-    "shop-backend",
-    "packages/*"
+    "name": "business-tracker",
+    "private": true,
+    "workspaces": [
+        "shop-frontend",
+        "shop-backend",
+        "packages/*"
   ]
 }
