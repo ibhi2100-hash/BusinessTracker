@@ -1,6 +1,6 @@
 import { getDb } from "@/src/db";
 import { useAuthStore } from "@/src/store/useAuthStore";
-import { generateLedgerEntries } from "../../../../packages/shared/dist/ledgerGenerator";
+import { generateLedgerEntries } from "@business/shared/dist/ledgerGenerator";
 import { projectors } from "../events/projectors/projectorRegistry";
 
 async function rebuildProjections(branchId) {

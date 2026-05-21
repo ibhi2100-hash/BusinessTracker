@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "workspaces": [
+    "shop-frontend",
+    "shop-backend",
+    "packages/*"
+  ]
+}
