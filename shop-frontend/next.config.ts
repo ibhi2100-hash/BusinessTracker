@@ -23,6 +23,9 @@ const withPWA = withPWAInit({
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+
+  
+  transpilePackages: ["@business/shared"],
 };
 
 export default withPWA(nextConfig);
