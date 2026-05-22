@@ -1,9 +1,15 @@
 {
-    "name": "business-tracker",
-    "private": true,
-    "workspaces": [
-        "shop-frontend",
-        "shop-backend",
-        "packages/*"
-  ]
+  "name": "business-tracker",
+  "private": true,
+  "workspaces": [
+    "shop-frontend",
+    "shop-backend",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace=shop-frontend"
+  },
+  "devDependencies": {
+    "next": "16.1.6"
+  }
 }

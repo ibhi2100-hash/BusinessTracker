@@ -26,6 +26,7 @@ const nextConfig: NextConfig = {
 
   
   transpilePackages: ["@business/shared"],
+  
 };
 
 export default withPWA(nextConfig);
