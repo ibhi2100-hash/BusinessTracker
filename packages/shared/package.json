@@ -7,6 +7,9 @@
   "author": "MrShrek",
   "license": "ISC",
   "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
   "devDependencies": {
     "typescript": "^5"
   }
