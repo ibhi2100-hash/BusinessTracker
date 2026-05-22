@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",
+    "pribuild": "npm run build --workspace=@business/shared",
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint"
@@ -11,6 +12,7 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@tanstack/react-query": "^5.90.21",
+    "@business/shared": "*",
     "axios": "^1.13.5",
     "clsx": "^2.1.1",
     "dexie-react-hooks": "^4.4.0",
