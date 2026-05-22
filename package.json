@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspace=shop-frontend"
+    "build": "npm run build --workspace=@business/shared && npm run build --workspace=shop-frontend"
   },
   "devDependencies": {
     "next": "16.1.6"
