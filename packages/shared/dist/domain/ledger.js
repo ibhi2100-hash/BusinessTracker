@@ -1,4 +1,7 @@
-export var Account;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Account = void 0;
+var Account;
 (function (Account) {
     Account["CASH"] = "CASH";
     Account["BANK"] = "BANK";
@@ -11,4 +14,4 @@ export var Account;
     Account["OWNER_DRAWINGS"] = "OWNER_DRAWINGS";
     Account["FIXED_ASSETS"] = "FIXED_ASSETS";
     Account["INTER_BRANCH"] = "INTER_BRANCH";
-})(Account || (Account = {}));
+})(Account || (exports.Account = Account = {}));

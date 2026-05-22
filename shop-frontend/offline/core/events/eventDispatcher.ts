@@ -29,6 +29,7 @@ import { generateLedgerEntries } from "@business/shared";
 export const dispatchEvent =
   async (
     event: BaseEvent
+    
   ) => {
 
     validateEvent(event);

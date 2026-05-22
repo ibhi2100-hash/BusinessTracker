@@ -1,20 +1,16 @@
 {
   "name": "@business/shared",
   "version": "1.0.0",
-  "description": "",
+  "private": true,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "keywords": [],
-  "author": "MrShrek",
-  "license": "ISC",
-  "type": "module",
-  "scripts": {
-    "build": "tsc"
-  },
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
   },
-  "devDependencies": {
-    "typescript": "^5"
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
   }
 }
