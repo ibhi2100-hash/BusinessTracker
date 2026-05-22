@@ -11,5 +11,8 @@
   },
   "devDependencies": {
     "next": "16.1.6"
+  },
+  "dependencies": {
+    "lightningcss": "^1.32.0"
   }
 }
