@@ -87,6 +87,7 @@ model Business {
   status      BusinessStatus @default(ONBOARDING)
 
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
   activatedAt DateTime?
 
   owner User? @relation("BusinessOwner", fields: [userId], references: [id])
@@ -119,6 +120,7 @@ model Branch {
   isDefault  Boolean @default(false)
 
   createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
 
   business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
 
@@ -157,7 +159,7 @@ model User {
   onboardingCompleted Boolean @default(false)
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 
   business Business? @relation(fields: [businessId], references: [id], onDelete: SetNull)
 
@@ -287,7 +289,7 @@ model Product {
 
   createdAt DateTime @default(now())
 
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 
   deletedAt DateTime?
 
@@ -328,7 +330,7 @@ model Inventory {
 
   createdAt DateTime @default(now())
 
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 
   business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
 
@@ -367,7 +369,7 @@ model ProcessedSyncEvent {
 
   createdAt DateTime @default(now())
 
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@index([businessId])
 
@@ -509,7 +511,7 @@ model Snapshot {
 
   createdAt DateTime @default(now())
 
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 
   business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
 

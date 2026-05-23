@@ -1576,6 +1576,7 @@ export const BusinessScalarFieldEnum = {
   onboardingCompleted: 'onboardingCompleted',
   status: 'status',
   createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   activatedAt: 'activatedAt'
 } as const
 
@@ -1590,7 +1591,8 @@ export const BranchScalarFieldEnum = {
   phone: 'phone',
   isActive: 'isActive',
   isDefault: 'isDefault',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type BranchScalarFieldEnum = (typeof BranchScalarFieldEnum)[keyof typeof BranchScalarFieldEnum]
