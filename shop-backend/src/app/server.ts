@@ -65,9 +65,9 @@ io.on("connection", (socket) => {
 // --------------------
 // Routes
 // --------------------
-app.use('api/auth', authRoutes);
-app.use('api/subscription', subscriptionRoute)
-app.use('api/sync', syncRoute)
+app.use('/auth', authRoutes);
+app.use('/subscription', subscriptionRoute)
+app.use('/sync', syncRoute)
 
 // --------------------
 // Start server
