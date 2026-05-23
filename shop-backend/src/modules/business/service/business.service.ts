@@ -1,8 +1,8 @@
-import { signTokenWithExpiry } from "../../../helpers/jwtHelper/jwthelper.js";
+import { signAccessTokenWithExpiry, signRefreshTokenWithExpiry } from "../../../helpers/jwtHelper/jwthelper.js";
 import { BusinessRepository } from "../repository/business.repository.js";
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
 import { Event } from "../../../domain/event.js";
-import { throwDeprecation } from "node:process";
+
 export class BusinessService {
     constructor(private repo: BusinessRepository){}
 
@@ -14,9 +14,10 @@ getSwitchedBranch = async (userId: string, branchId: string, businessId: string,
   if(!branchId) throw new Error("branchId does not exist")
   const branch = await this.repo.switchBranch(branchId, businessId)
 
-  const {token, expiresIn} = signTokenWithExpiry(userId, role, businessId, branchId)
+  const { token, expiresIn } = signAccessTokenWithExpiry(userId, role, businessId, branchId);
+  const { token: refreshToken, expiresIn: refreshExpiresIn } = signRefreshTokenWithExpiry(userId, role, businessId, branchId);
 
-  return {branch, token, expiresIn}
+  return { branch, token, expiresIn, refreshToken, refreshExpiresIn }
 
 }
 async activateBusiness(event: Event) {

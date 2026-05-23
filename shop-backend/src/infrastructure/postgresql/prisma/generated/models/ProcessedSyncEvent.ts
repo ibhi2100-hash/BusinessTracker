@@ -241,7 +241,7 @@ export type ProcessedSyncEventGroupByOutputType = {
   _max: ProcessedSyncEventMaxAggregateOutputType | null
 }
 
-type GetProcessedSyncEventGroupByPayload<T extends ProcessedSyncEventGroupByArgs> = Prisma.PrismaPromise<
+export type GetProcessedSyncEventGroupByPayload<T extends ProcessedSyncEventGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ProcessedSyncEventGroupByOutputType, T['by']> &
       {
@@ -1206,6 +1206,11 @@ export type ProcessedSyncEventFindManyArgs<ExtArgs extends runtime.Types.Extensi
    * Skip the first `n` ProcessedSyncEvents.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of ProcessedSyncEvents.
+   */
   distinct?: Prisma.ProcessedSyncEventScalarFieldEnum | Prisma.ProcessedSyncEventScalarFieldEnum[]
 }
 

@@ -100,5 +100,17 @@ export class AuthRepository {
     return defaultBranch;
   }
 
+  async createSession(userId: string) {
+    return prisma.session.create({
+      data: {
+        userId,
+        refreshToken: crypto.randomUUID(),
+        userAgent: "placeholder", // In real implementation, capture from request headers,
+        ipAddress: "placeholder", // In real implementation, capture from request,
+        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+      }
+    })
+
+  }
   
 }

@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { AuthService } from "../service/auth.service.js";
 import { LoginDto } from "../dto/login.dto.js";
+import { setAuthCookies } from "../../../lib/cookies.js"
 
 
 export class AuthController {
@@ -14,14 +15,16 @@ export class AuthController {
         return res.status(400).json({ message: "Registration failed" });
       }
 
-      const { user, token, expiresIn } = result;
+      const { user, token, expiresIn, refreshToken, refreshExpiresIn } = result;
 
-      this.setAuthCookie(res, token);
+      setAuthCookies(res, token, refreshToken);
 
       return res.status(201).json({
         user: this.safeUser(user),
         accessToken: token,
         expiresIn,
+        refreshToken,
+        refreshExpiresIn,
       });
 
     } catch (error: any) {
@@ -45,14 +48,16 @@ export class AuthController {
         return res.status(401).json({ message: "Invalid email or password" });
       }
 
-      const { user, token, expiresIn,  branches, activeBranch } = result;
+      const { user, token, expiresIn, refreshToken, refreshExpiresIn, branches, activeBranch } = result;
 
-      this.setAuthCookie(res, token);
+      setAuthCookies(res, token, refreshToken);
 
       return res.status(200).json({
         user: this.safeUser(user),
         accessToken: token,
         expiresIn,
+        refreshToken,
+        refreshExpiresIn,
         activeBranch,
         branches, // enables branch switch UI immediately
       });
@@ -76,15 +81,6 @@ export class AuthController {
     return res.json({ message: "Logged out" });
   }
 
-  // centralize cookie logic
-  private setAuthCookie(res: Response, token: string) {
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 1000 * 60 * 60 * 24,
-    });
-  }
 
   private safeUser(user: any) {
     return {

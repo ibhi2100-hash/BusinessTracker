@@ -91,7 +91,8 @@ export type BusinessStatus = (typeof BusinessStatus)[keyof typeof BusinessStatus
 export const SyncEventStatus = {
   PENDING: 'PENDING',
   SYNCED: 'SYNCED',
-  FAILED: 'FAILED'
+  FAILED: 'FAILED',
+  DEAD: 'DEAD'
 } as const
 
 export type SyncEventStatus = (typeof SyncEventStatus)[keyof typeof SyncEventStatus]

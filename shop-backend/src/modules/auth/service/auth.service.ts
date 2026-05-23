@@ -1,9 +1,10 @@
 import bcrypt from "bcryptjs";
-import { signTokenWithExpiry } from "../../../helpers/jwtHelper/jwthelper.js";
+import { signAccessTokenWithExpiry, signRefreshTokenWithExpiry} from "../../../helpers/jwtHelper/jwthelper.js";
 import { AuthRepository } from "../repository/auth.repository.js";
 import { LoginDto } from "../dto/login.dto.js";
 import { RegisterDto } from "../dto/register.dto.js";
 import { User } from "../entity/user.js";
+
 
 export class AuthService {
   constructor(private authRepo: AuthRepository) {}
@@ -25,7 +26,12 @@ async registerUser(
 
     const user = await this.authRepo.createUser(userData);
     
-    const { token, expiresIn } = signTokenWithExpiry(
+    const { token, expiresIn } = signAccessTokenWithExpiry(
+      user.id,
+      user.email,
+      user.role,
+    );
+    const { token: refreshToken, expiresIn: refreshExpiresIn } = signRefreshTokenWithExpiry(
       user.id,
       user.email,
       user.role,
@@ -35,6 +41,8 @@ async registerUser(
         user,
         token,
         expiresIn,
+        refreshToken,
+        refreshExpiresIn
      };
   }
 
@@ -44,6 +52,8 @@ async registerUser(
     user: User;
     token: string;
     expiresIn: number;
+    refreshToken: string;
+    refreshExpiresIn: number;
     activeBranch: any;
     branches: any[];
     business: any;
@@ -52,6 +62,9 @@ async registerUser(
 
     if (!user) {
       throw new Error("User not found");
+    }
+    if(!user.businessId) {
+      throw new Error("Onboarding not completed. Please complete onboarding to proceed.");
     }
     
     const business = await this.authRepo.findBusiness(user.id)
@@ -64,42 +77,42 @@ async registerUser(
     if (!isPasswordValid) {
       throw new Error("Invalid password");
     }
-    if(!user.businessId  || !user.onboardingCompleted){
-      const { token, expiresIn } = signTokenWithExpiry(
-        user.id,
-        user.email,
-        user.role,
-      )
-      return {
-        user,
-        token,
-        expiresIn,
-        activeBranch: null,
-        branches: [],
-        business,
-      }
-    }
+
+    const session = await this.authRepo.createSession(user.id);
+
+    const accessToken = signAccessTokenWithExpiry(
+      user.id,
+      user.email,
+      user.role,
+      user.businessId ?? undefined,
+      user.branchId ?? undefined
+    );
+
+    const refreshToken = signRefreshTokenWithExpiry(
+      user.id,
+      user.email,
+      user.role,
+      user.businessId ?? undefined,
+      user.branchId ?? undefined
+    );
+
 
 
     // Normal LOGIN FLOW
     const branches = await this.authRepo.getBusinessBranches(user.businessId);
-    const activeBranch = branches[0];
+    const activeBranch = branches.find((b) => b.isDefault === true) || branches[0];
 
-    const { token, expiresIn } = signTokenWithExpiry(
-      user.id,
-      user.email,
-      user.role,
-      user.businessId,
-      activeBranch?.id
-    )
-    return {
-      user,
-      token,
-      expiresIn,
-      activeBranch,
-      branches,
-      business
-    };
+      return {
+        user,
+        token: accessToken.token,
+        expiresIn: accessToken.expiresIn,
+        refreshToken: refreshToken.token,
+        refreshExpiresIn: refreshToken.expiresIn,
+        activeBranch,
+        branches,
+        business,
+      }
+  
   }
 
   async getCurrentUser(userId: string) {

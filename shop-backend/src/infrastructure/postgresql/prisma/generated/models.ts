@@ -11,6 +11,7 @@
 export type * from './models/Business.js'
 export type * from './models/Branch.js'
 export type * from './models/User.js'
+export type * from './models/Session.js'
 export type * from './models/PasswordResetToken.js'
 export type * from './models/SubscriptionPlan.js'
 export type * from './models/BusinessSubscription.js'

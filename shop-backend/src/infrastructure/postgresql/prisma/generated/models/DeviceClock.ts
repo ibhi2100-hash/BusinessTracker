@@ -178,7 +178,7 @@ export type DeviceClockGroupByOutputType = {
   _max: DeviceClockMaxAggregateOutputType | null
 }
 
-type GetDeviceClockGroupByPayload<T extends DeviceClockGroupByArgs> = Prisma.PrismaPromise<
+export type GetDeviceClockGroupByPayload<T extends DeviceClockGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<DeviceClockGroupByOutputType, T['by']> &
       {
@@ -942,6 +942,11 @@ export type DeviceClockFindManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Skip the first `n` DeviceClocks.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of DeviceClocks.
+   */
   distinct?: Prisma.DeviceClockScalarFieldEnum | Prisma.DeviceClockScalarFieldEnum[]
 }
 
