@@ -1,3 +1,4 @@
+"use client"
 import CashflowTable from "@/components/capital/capitalPage";
 
 export default function Page() {

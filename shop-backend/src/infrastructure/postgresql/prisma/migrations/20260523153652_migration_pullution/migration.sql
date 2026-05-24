@@ -1,29 +1,3 @@
--- CreateEnum
-CREATE TYPE "Mode" AS ENUM ('OPENING', 'LIVE');
-
--- CreateEnum
-CREATE TYPE "Scope" AS ENUM ('GLOBAL', 'BUSINESS', 'BRANCH');
-
--- CreateEnum
-CREATE TYPE "Role" AS ENUM ('ADMIN', 'STAFF');
-
--- CreateEnum
-CREATE TYPE "LedgerDirection" AS ENUM ('DEBIT', 'CREDIT');
-
--- CreateEnum
-CREATE TYPE "Account" AS ENUM ('CASH', 'BANK', 'INVENTORY', 'COGS', 'REVENUE', 'EXPENSE', 'LIABILITIES', 'OWNER_CAPITAL', 'OWNER_DRAWINGS', 'FIXED_ASSETS', 'INTER_BRANCH');
-
--- CreateEnum
-CREATE TYPE "AlertType" AS ENUM ('LOW_STOCK', 'SUBSCRIPTION', 'LIABILITY_DUE', 'CASH_VARIANCE', 'SYSTEM');
-
--- CreateEnum
-CREATE TYPE "AlertSeverity" AS ENUM ('INFO', 'WARNING', 'CRITICAL');
-
--- CreateEnum
-CREATE TYPE "BusinessStatus" AS ENUM ('ONBOARDING', 'ACTIVE', 'SUSPENDED');
-
--- CreateEnum
-CREATE TYPE "SyncEventStatus" AS ENUM ('PENDING', 'SYNCED', 'FAILED', 'DEAD');
 
 -- CreateTable
 CREATE TABLE "Business" (

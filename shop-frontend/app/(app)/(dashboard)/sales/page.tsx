@@ -1,3 +1,4 @@
+"use client"
 import InventoryPage from "@/components/inventory/inventoryPage";
 
 export default function Page() {
