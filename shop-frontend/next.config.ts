@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 import withPWAInit from "next-pwa";
 
 const isDev = process.env.NODE_ENV === "development";
-
+ 
 const runtimeCaching = [
   {
     urlPattern: ({ request }: any) =>
@@ -61,12 +61,10 @@ const runtimeCaching = [
     urlPattern: ({ url }: any) =>
       url.pathname.startsWith("/api"),
 
-    handler: "NetworkFirst",
+    handler: "CacheFirst",
 
     options: {
       cacheName: "api-cache",
-
-      networkTimeoutSeconds: 3,
 
       expiration: {
         maxEntries: 100,
@@ -83,12 +81,10 @@ const runtimeCaching = [
     urlPattern: ({ request }: any) =>
       request.mode === "navigate",
 
-    handler: "NetworkFirst",
+    handler: "CacheFirst",
 
     options: {
       cacheName: "pages",
-
-      networkTimeoutSeconds: 3,
 
       expiration: {
         maxEntries: 50,
@@ -104,7 +100,7 @@ const runtimeCaching = [
   {
     urlPattern: /^https:.*$/,
 
-    handler: "StaleWhileRevalidate",
+    handler: "CacheFirst",
 
     options: {
       cacheName: "https-calls",
@@ -128,7 +124,7 @@ const withPWA = withPWAInit({
 
   runtimeCaching,
 
-  buildExcludes: [/middleware-manifest\.json$/],
+  buildExcludes: [/manifest\.json$/],
 });
 
 const nextConfig: NextConfig = {
