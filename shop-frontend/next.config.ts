@@ -61,7 +61,7 @@ const runtimeCaching = [
     urlPattern: ({ url }: any) =>
       url.pathname.startsWith("/api"),
 
-    handler: "CacheFirst",
+    handler: "NetworkFirst",
 
     options: {
       cacheName: "api-cache",
@@ -81,7 +81,7 @@ const runtimeCaching = [
     urlPattern: ({ request }: any) =>
       request.mode === "navigate",
 
-    handler: "CacheFirst",
+    handler: "NetworkFirst",
 
     options: {
       cacheName: "pages",
@@ -98,7 +98,8 @@ const runtimeCaching = [
   },
 
   {
-    urlPattern: /^https:.*$/,
+    urlPattern: ({ url }: any) => 
+      url.hostname === "fonts.googleapis.com",
 
     handler: "CacheFirst",
 
@@ -123,8 +124,7 @@ const withPWA = withPWAInit({
   skipWaiting: true,
 
   runtimeCaching,
-
-  buildExcludes: [/manifest\.json$/],
+  
 });
 
 const nextConfig: NextConfig = {
@@ -135,6 +135,30 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["dexie"],
   },
+  
+async headers() {
+  return [
+    {
+      source: "/manifest.json",
+      headers: [
+        {
+          key: "Cache-Control",
+          value: "no-cache, no-store, must-revalidate",
+        },
+      ],
+    },
+    {
+      source: "/sw.js",
+      headers: [
+        {
+          key: "Cache-Control",
+          value: "no-cache, no-store, must-revalidate",
+        },
+      ],
+    },
+  ];
+}
 };
+
 
 export default withPWA(nextConfig);

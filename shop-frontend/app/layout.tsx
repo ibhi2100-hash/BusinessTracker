@@ -4,11 +4,11 @@ import { Providers } from "./providers";
 import SyncBootstrap from "@/offline/bootstrap/syncBootstrap";
 
 
-
 export const metadata = {
-  manifest: "/manifest.json",
   title: "Shrek POS",
   description: "Financial control for growing businesses",
+  manifest: "/manifest.json",
+  themeColor: "#0F766E",
 };
 
 export default function RootLayout({
@@ -26,14 +26,5 @@ export default function RootLayout({
         </Providers>
       </body>
     </html>
-  );
-}
-
-export function Head() {
-  return (
-    <>
-      <link rel="manifest" href="/manifest.json" />
-      <meta name="theme-color" content="#0F766E" />
-    </>
   );
 }
