@@ -8,6 +8,7 @@ import { InventoryEventType } from "@/offline/core/events/eventGroups/inventoryE
 import { OpeninigEventType } from "@/offline/core/events/eventGroups/openingEvents";
 import { useInventoryStore } from "../store/inventoryStore";
 import { getDb } from "../db";
+import { AggregateType } from "@/offline/domain/aggregate";
 
 export const eventService = {
   async create(input: {
@@ -60,7 +61,6 @@ export const eventService = {
         businessId: businessId,
         branchId: branchId,
       });
-      console.log("Event Before dispatched", event)
       await dispatchEvent(event);
       return event;
     },
@@ -99,7 +99,7 @@ export const eventService = {
         type: OpeninigEventType.OPENING_INVENTORY_CREATED,
 
         aggregateId: `${productId}_${branchId}`, // separate aggregate for inventory
-        aggregateType: "INVENTORY",
+        aggregateType: AggregateType.INVENTORY,
         mode: data.mode,
         payload: {
           id: nanoid(),
@@ -132,7 +132,7 @@ export const eventService = {
       this.create({
         type: InventoryEventType.PRODUCT_UPDATED,
         aggregateId: input.productId,
-        aggregateType: "PRODUCT",
+        aggregateType: AggregateType.PRODUCT,
 
         mode: "LIVE",
         payload: {
@@ -155,7 +155,7 @@ export const eventService = {
       this.create({
         type: InventoryEventType.INVENTORY_UPDATED,
         aggregateId: `${input.productId}_${useBranchStore.getState().activeBranchId}`,
-        aggregateType: "INVENTORY",
+        aggregateType: AggregateType.INVENTORY,
         mode: "LIVE",
         payload: {
           productId: input.productId,
@@ -168,8 +168,8 @@ export const eventService = {
   // -----------------------------
   // 3. Execute atomically (sequential dispatch)
   // -----------------------------
-  for (const e of events) {
-    await e;
+  for (const eventPromise of events) {
+    await eventPromise;
   }
 
   return true;

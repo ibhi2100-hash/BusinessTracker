@@ -97,6 +97,7 @@ export const eventValidators: Record<string, (event: any) => boolean> = {
     return (
       !!event.businessId &&                     // REQUIRED here
       !!event.branchId &&
+      typeof p.productId === "string" &&
       typeof p.name === "string" &&
       typeof p.costPrice === "number" &&
       typeof p.price === "number"

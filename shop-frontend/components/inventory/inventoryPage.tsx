@@ -191,16 +191,13 @@ const handleSell = async (productId: string, quantity: number) => {
       }
 
       if (sheetMode === "edit" && selectedProduct) {
-        await eventService.create({
-          aggregateType: AggregateType.INVENTORY,
-          aggregateId: selectedProduct.id,
-          type: mode === "OPENING" ? OpeninigEventType.OPENING_INVENTORY_UPDATED : InventoryEventType.PRODUCT_UPDATED,
-          mode,
-          payload: {
-            productId: selectedProduct.id,
-            ...data,
-          },
-        });
+        await eventService.updateProductSmart({
+          productId: selectedProduct.id,
+          name: data.name,
+          price: data.price,
+          costPrice: data.cost,
+          quantity: data.quantity,
+        })
 
         toast.success("Product updated");
       }

@@ -5,7 +5,7 @@ import SyncBootstrap from "@/offline/bootstrap/syncBootstrap";
 
 
 export const metadata = {
-  title: "Shrek POS",
+  title: "BizTru",
   description: "Financial control for growing businesses",
   manifest: "/manifest.json",
   themeColor: "#0F766E",
