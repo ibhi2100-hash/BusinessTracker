@@ -8,7 +8,7 @@ import { Card } from "@/components/ui/card";
 import { useState } from "react";
 import { toast } from "sonner";
 import { eventService } from "@/src/services/eventService";
-import { OpeninigEventType } from "@/offline/core/events/eventGroups/openingEvents";
+import { OpeningEventType } from "@/offline/core/events/eventGroups/openingEvents";
 import { financeEventType } from "@/offline/core/events/eventGroups/financeEvent";
 import { nanoid } from "nanoid";
 
@@ -42,9 +42,9 @@ export const CreateLiabilityForm = ({ mode, onComplete }: Props) => {
     }
 
       eventService.create({
-        aggregateType: mode === "OPENING" ? OpeninigEventType.OPENING_LIABILITIES : financeEventType.LIABILITY_ADDED,
+        aggregateType: mode === "OPENING" ? OpeningEventType.OPENING_LIABILITIES : financeEventType.LIABILITY_ADDED,
         aggregateId: nanoid(),
-        type: mode === "OPENING" ?  OpeninigEventType.OPENING_LIABILITIES : financeEventType.LIABILITY_ADDED,
+        type: mode === "OPENING" ?  OpeningEventType.OPENING_LIABILITIES : financeEventType.LIABILITY_ADDED,
         payload: payload,
         mode,
       })

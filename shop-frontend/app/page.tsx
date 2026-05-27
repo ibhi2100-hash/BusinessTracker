@@ -1,10 +1,18 @@
- "use client"
-import React from 'react'
+"use client";
 
-const page = () => {
-  return (
-    <div>page</div>
-  )
-}
+import React, { useEffect } from "react";
 
-export default page
+const Page = () => {
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/sw.js")
+        .then((reg) => console.log("Registered", reg))
+        .catch((err) => console.error("SW Error", err));
+    }
+  }, []);
+
+  return <div>page</div>;
+};
+
+export default Page;

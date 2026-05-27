@@ -1,6 +1,7 @@
-import { OpeninigEventType } from "../eventGroups/openingEvents";
+import { OpeningEventType } from "../eventGroups/openingEvents";
 import { BusinessEventTypes } from "../eventGroups/businessEvents";
 import { InventoryEventType } from "../eventGroups/inventoryEvents";
+import { salesEventType } from "../eventGroups/salesEvent";
 import { projectInventory } from "./inventory.projector";
 import { projectProduct } from "./product.projector";
 import { projectBranch } from "./project.branch";
@@ -28,7 +29,13 @@ export const projectors = {
   [InventoryEventType.PRODUCT_DELETED]: [
     projectProduct
   ],
-  [OpeninigEventType.OPENING_INVENTORY_CREATED]: [
+  [OpeningEventType.OPENING_INVENTORY_CREATED]: [
     projectInventory
-  ]
+  ],
+  [OpeningEventType.OPENING_INVENTORY_UPDATED]: [
+    projectInventory
+  ],
+  [salesEventType.SALE_ADDED]: [
+    projectInventory
+  ],
 };

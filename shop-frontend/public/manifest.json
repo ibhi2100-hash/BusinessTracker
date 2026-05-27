@@ -1,6 +1,6 @@
 {
-  "name": "Shrek POS",
-  "short_name": "ShrekPOS",
+  "name": "BizTru",
+  "short_name": "BizTru",
   "description": "Financial control for growing businesses",
   "start_url": "/",
   "display": "standalone",

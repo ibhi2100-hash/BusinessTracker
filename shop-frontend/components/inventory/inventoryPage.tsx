@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { useCartStore } from "@/src/store/useCartStore";
 import { eventService } from "@/src/services/eventService";
-import { OpeninigEventType } from "@/offline/core/events/eventGroups/openingEvents";
+import { OpeningEventType } from "@/offline/core/events/eventGroups/openingEvents";
 import { InventoryEventType } from "@/offline/core/events/eventGroups/inventoryEvents";
 import { salesEventType } from "@/offline/core/events/eventGroups/salesEvent";
 import { AggregateType } from "@/offline/domain/aggregate";
@@ -110,7 +110,7 @@ export default function InventoryPage({
     await eventService.create({
       aggregateType: AggregateType.PRODUCT,
       aggregateId: productId,
-      type: mode === "OPENING" ? OpeninigEventType.OPENING_INVENTORY_DELETED : InventoryEventType.PRODUCT_DELETED,
+      type: mode === "OPENING" ? OpeningEventType.OPENING_INVENTORY_DELETED : InventoryEventType.PRODUCT_DELETED,
       mode,
       payload: { productId },
     });

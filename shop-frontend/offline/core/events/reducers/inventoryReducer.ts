@@ -1,50 +1,79 @@
+import { OpeningEventType } from "../eventGroups/openingEvents";
+import { InventoryEventType } from "../eventGroups/inventoryEvents";
+import { salesEventType } from "../eventGroups/salesEvent";
 import { BaseEvent } from "../types";
 
 export const InventoryReducer = {
-
-  reduce(
-    current: any,
-    event: BaseEvent
-  ) {
+  reduce(current: any, event: BaseEvent) {
 
     switch (event.type) {
 
-      case "OPENING_INVENTORY_CREATED":
+      // =========================
+      // OPENING STOCK
+      // =========================
+      case OpeningEventType.OPENING_INVENTORY_CREATED:
 
         return {
+          id: event.aggregateId,
 
-          id:
-            event.payload.id,
+          productId: event.payload.productId,
 
-          productId:
-            event.payload.productId,
+          branchId: event.branchId,
 
-          branchId:
-            event.branchId,
+          quantity: event.payload.quantity,
 
-          quantity:
-            event.payload.quantity,
+          costPrice: event.payload.costPrice,
 
-          costPrice:
-            event.payload.costPrice,
-
-          updatedAt:
-            event.createdAt,
+          updatedAt: event.createdAt,
         };
 
-      case "INVENTORY_ADDED":
+      // =========================
+      // STOCK INCREMENT
+      // =========================
+      case InventoryEventType.INVENTORY_ADDED:
 
-        if (!current) {
-          return current;
-        }
+        if (!current) return current;
 
         return {
-
           ...current,
 
           quantity:
             current.quantity +
             event.payload.quantityDelta,
+
+          updatedAt: event.createdAt,
+        };
+
+      // =========================
+      // STOCK ADJUSTMENT
+      // =========================
+      case InventoryEventType.INVENTORY_UPDATED:
+
+        if (!current) return current;
+
+        return {
+          ...current,
+
+          quantity:
+            current.quantity +
+            event.payload.quantityDelta,
+
+          updatedAt: event.createdAt,
+        };
+
+      // =========================
+      // SALE
+      // =========================
+      case salesEventType.SALE_ADDED:
+
+        if (!current) return current;
+
+        return {
+          ...current,
+
+          quantity:
+            current.quantity -
+            event.payload.quantity,
 
           updatedAt:
             event.createdAt,

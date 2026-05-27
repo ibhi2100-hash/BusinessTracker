@@ -5,7 +5,7 @@ import { useBusinessStore } from "../store/businessStore";
 import { useBranchStore } from "@/src/store/useBranchStore";
 import { nanoid } from "nanoid";
 import { InventoryEventType } from "@/offline/core/events/eventGroups/inventoryEvents";
-import { OpeninigEventType } from "@/offline/core/events/eventGroups/openingEvents";
+import { OpeningEventType } from "@/offline/core/events/eventGroups/openingEvents";
 import { useInventoryStore } from "../store/inventoryStore";
 import { getDb } from "../db";
 import { AggregateType } from "@/offline/domain/aggregate";
@@ -96,7 +96,7 @@ export const eventService = {
     // 2️⃣ INVENTORY EVENT (only if needed)
     if (data.quantity > 0) {
       await this.create({
-        type: OpeninigEventType.OPENING_INVENTORY_CREATED,
+        type: OpeningEventType.OPENING_INVENTORY_CREATED,
 
         aggregateId: `${productId}_${branchId}`, // separate aggregate for inventory
         aggregateType: AggregateType.INVENTORY,

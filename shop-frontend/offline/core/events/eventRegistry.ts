@@ -1,7 +1,7 @@
 import { BusinessEventTypes } from "./eventGroups/businessEvents";
 import { financeEventType } from "./eventGroups/financeEvent";
 import { InventoryEventType } from "./eventGroups/inventoryEvents";
-import { OpeninigEventType } from "./eventGroups/openingEvents";
+import { OpeningEventType } from "./eventGroups/openingEvents";
 import { salesEventType } from "./eventGroups/salesEvent";
 
 export const eventValidators: Record<string, (event: any) => boolean> = {
@@ -42,7 +42,7 @@ export const eventValidators: Record<string, (event: any) => boolean> = {
   );
 },
 //Opening Event 
-[OpeninigEventType.OPENING_INVENTORY_CREATED]: (event) => {
+[OpeningEventType.OPENING_INVENTORY_CREATED]: (event) => {
     const p = event.payload;
 
     return (
