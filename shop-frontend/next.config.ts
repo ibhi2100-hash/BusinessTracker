@@ -81,7 +81,7 @@ const runtimeCaching = [
     urlPattern: ({ request }: any) =>
       request.mode === "navigate",
 
-    handler: "NetworkFirst",
+    handler: "StaleWhileRevalidate",
 
     options: {
       cacheName: "pages",
@@ -96,6 +96,25 @@ const runtimeCaching = [
       },
     },
   },
+  {
+  urlPattern: ({ url }: any) =>
+    url.search.includes("_rsc"),
+
+  handler: "StaleWhileRevalidate",
+
+  options: {
+    cacheName: "rsc-cache",
+
+    expiration: {
+      maxEntries: 100,
+      maxAgeSeconds: 60 * 60 * 24,
+    },
+
+    cacheableResponse: {
+      statuses: [0, 200],
+    },
+  },
+},
 
   {
     urlPattern: ({ url }: any) => 
