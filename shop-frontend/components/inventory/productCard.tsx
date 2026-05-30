@@ -1,6 +1,6 @@
 "use client";
 
-import { Product } from "@/types/types";
+import { inventoryProduct } from "@/src/store/inventoryStore";
 import { useRef } from "react";
 import {
   Edit2,
@@ -14,12 +14,12 @@ import { useBusinessStore } from "@/src/store/businessStore";
 import { useBranchStore } from "@/src/store/useBranchStore";
 
 interface Props {
-  product: any;
+  product: inventoryProduct;
   context: "sell" | "admin";
   onSell?: (productId: string, quantity: number) => void;
-  onEdit?: (product: Product) => void;
+  onEdit?: (product: inventoryProduct) => void;
   onDelete?: (productId: string) => void;
-  onOpenQuantityModal?: (product: Product) => void;
+  onOpenQuantityModal?: (product: inventoryProduct) => void;
 }
 
 export default function ProductCard({

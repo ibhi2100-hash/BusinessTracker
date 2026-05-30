@@ -16,6 +16,7 @@ export const eventValidators: Record<string, (event: any) => boolean> = {
     event.branchId == null &&
     typeof p.id === "string" &&
     typeof p.name === "string" &&
+    p.name.trim().length > 0 &&
     typeof p.address === "string"
   );
 },
@@ -28,6 +29,7 @@ export const eventValidators: Record<string, (event: any) => boolean> = {
     event.branchId == null &&
     typeof p.id === "string" &&
     typeof p.name === "string" &&
+    p.name.trim().length > 0 &&
     typeof p.businessId === "string"
   );
 },
@@ -55,7 +57,7 @@ export const eventValidators: Record<string, (event: any) => boolean> = {
   },
   [financeEventType.OPENING_CAPITAL]: (event) => {
     const p = event.payload;
-    console.log("The payload in the Opening Capital", p)
+    
 
     return (
       !!event.businessId &&                     // REQUIRED here
@@ -76,8 +78,22 @@ export const eventValidators: Record<string, (event: any) => boolean> = {
       !!event.businessId &&                     // REQUIRED here
       !!event.branchId &&
       typeof p.name === "string" &&
-      typeof p.costPrice === "number" &&
-      typeof p.price === "number"
+      p.name.trim().length > 0 &&
+      typeof p.price ===
+      "number" &&
+
+    Number.isFinite(p.price) &&
+
+    p.price >= 0 &&
+
+    typeof p.costPrice ===
+      "number" &&
+
+    Number.isFinite(
+      p.costPrice
+    ) &&
+
+    p.costPrice >= 0
     );
   },
   [InventoryEventType.INVENTORY_UPDATED]: (event) => {
@@ -99,8 +115,21 @@ export const eventValidators: Record<string, (event: any) => boolean> = {
       !!event.branchId &&
       typeof p.productId === "string" &&
       typeof p.name === "string" &&
-      typeof p.costPrice === "number" &&
-      typeof p.price === "number"
+      typeof p.price ===
+      "number" &&
+
+    Number.isFinite(p.price) &&
+
+    p.price >= 0 &&
+
+    typeof p.costPrice ===
+      "number" &&
+
+    Number.isFinite(
+      p.costPrice
+    ) &&
+
+    p.costPrice >= 0
     );
   },
  [financeEventType.CASH_ADDED]: (event) => {

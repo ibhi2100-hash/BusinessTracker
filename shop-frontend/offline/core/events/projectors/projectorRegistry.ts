@@ -32,7 +32,7 @@ export const projectors = {
   [OpeningEventType.OPENING_INVENTORY_CREATED]: [
     projectInventory
   ],
-  [OpeningEventType.OPENING_INVENTORY_UPDATED]: [
+  [InventoryEventType.INVENTORY_UPDATED]: [
     projectInventory
   ],
   [salesEventType.SALE_ADDED]: [

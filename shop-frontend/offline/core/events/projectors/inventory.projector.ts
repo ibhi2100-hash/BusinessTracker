@@ -8,10 +8,11 @@ export async function projectInventory(
 ) {
 
   const current =
-    await db.inventory.get(
-      event.aggregateId
-    );
-
+    await db.inventory
+      .where("productId")
+      .equals(event.payload.productId)
+      .first();
+      
   const next =
     InventoryReducer.reduce(
       current,

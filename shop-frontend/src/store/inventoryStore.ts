@@ -1,12 +1,16 @@
 import { Product } from "@/types/types";
 import { create } from "zustand";
 
+export interface inventoryProduct extends Product {
+  quantity: number;
+}
 interface InventoryState {
-  productsById: Record<string, Product>;
+  productsById: Record<string, inventoryProduct>;
 
-  setProducts: (products: Product[]) => void;
+  setProducts: (products: inventoryProduct[]) => void;
+  replaceProducts: (products: inventoryProduct[]) => void;
 
-  upsertProduct: (product: Product) => void;
+  upsertProduct: (product: inventoryProduct) => void;
 
   removeProduct: (id: string) => void;
 }
@@ -17,7 +21,16 @@ export const useInventoryStore = create<InventoryState>((set) => ({
   // ⚡ bulk load (subscriber)
   setProducts: (products) =>
     set(() => {
-      const map: Record<string, Product> = {};
+      const map: Record<string, inventoryProduct> = {};
+      for (const p of products) {
+        map[p.id] = p;
+      }
+      return { productsById: map };
+    }),
+  // ⚡ bulk replace (e.g. after sync)
+  replaceProducts: (products) =>
+    set(() => {
+      const map: Record<string, inventoryProduct> = {};
       for (const p of products) {
         map[p.id] = p;
       }

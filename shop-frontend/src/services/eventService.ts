@@ -123,47 +123,57 @@ export const eventService = {
   // 1. Detect PRODUCT changes
   // -----------------------------
   const productChanged =
-    input.name !== undefined ||
-    input.price !== undefined ||
-    input.costPrice !== undefined;
+  (input.name !== undefined &&
+    input.name !== db.name) ||
+  (input.price !== undefined &&
+    input.price !== db.price) ||
+  (input.costPrice !== undefined &&
+    input.costPrice !== db.costPrice);
 
-  if (productChanged) { 
-    events.push(
-      this.create({
-        type: InventoryEventType.PRODUCT_UPDATED,
-        aggregateId: input.productId,
-        aggregateType: AggregateType.PRODUCT,
+    if (productChanged) { 
+      events.push(
+        this.create({
+          type: InventoryEventType.PRODUCT_UPDATED,
+          aggregateId: input.productId,
+          aggregateType: AggregateType.PRODUCT,
 
-        mode: "LIVE",
-        payload: {
-          productId: input.productId,
-          name: input.name ?? db.name,
-          price: input.price ?? db.price,
-          cost: input.costPrice ?? db.costPrice,
-        },
-      })
-    );
-  }
+          mode: "LIVE",
+          payload: {
+            productId: input.productId,
+            name: input.name ?? db.name,
+            price: input.price ?? db.price,
+            costPrice: input.costPrice ?? db.costPrice,
+          },
+        })
+      );
+    }
+    
+    // -----------------------------
+    // 2. Detect INVENTORY changes
+    // -----------------------------
+    const currentQty = db.quantity ?? 0;
+    const delta = input.quantity! - currentQty
+    console.log("Current Qty:", currentQty, "Input Qty:", input.quantity, "Delta:", delta)
 
-  // -----------------------------
-  // 2. Detect INVENTORY changes
-  // -----------------------------
-  const stockChanged = input.quantity !== undefined;
+    if (delta) {
+      events.push(
+        this.create({
+          type: InventoryEventType.INVENTORY_UPDATED,
+          aggregateId: `${input.productId}_${useBranchStore.getState().activeBranchId}`,
+          aggregateType: AggregateType.INVENTORY,
+          mode: "LIVE",
+          payload: {
+            productId: input.productId,
+            quantityDelta: delta, // delta-based model
+          },
+        })
+      );
+    }
 
-  if (stockChanged) {
-    events.push(
-      this.create({
-        type: InventoryEventType.INVENTORY_UPDATED,
-        aggregateId: `${input.productId}_${useBranchStore.getState().activeBranchId}`,
-        aggregateType: AggregateType.INVENTORY,
-        mode: "LIVE",
-        payload: {
-          productId: input.productId,
-          quantityDelta: input.quantity!, // delta-based model
-        },
-      })
-    );
-  }
+console.log(
+  "update aggregate",
+  `${input.productId}_${useBranchStore.getState().activeBranchId}`
+);
 
   // -----------------------------
   // 3. Execute atomically (sequential dispatch)

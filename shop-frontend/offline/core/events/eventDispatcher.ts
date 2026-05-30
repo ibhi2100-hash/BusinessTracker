@@ -31,6 +31,7 @@ export const dispatchEvent =
     event: BaseEvent
     
   ) => {
+  
 
     validateEvent(event);
 
@@ -76,10 +77,14 @@ export const dispatchEvent =
         /* -----------------------------
            PROJECT EVENT
         ----------------------------- */
-
-        const eventProjectors =
+       const eventProjectors =
           projectors[event.type] ?? [];
 
+        console.log(
+          "Projectors for",
+          event.type,
+          eventProjectors
+        );
         for (const projector of eventProjectors) {
 
           await projector(

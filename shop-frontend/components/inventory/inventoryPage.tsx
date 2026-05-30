@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useInventoryStore } from "@/src/store/inventoryStore";
-import { Product } from "@/types/types";
+import { inventoryProduct } from "@/src/store/inventoryStore";
 import ProductCard from "./productCard";
 import ProductSheet from "./ProductSheet";
 import CartBar from "@/components/inventory/CartBar";
@@ -47,7 +47,7 @@ export default function InventoryPage({
   const [sheetMode, setSheetMode] =
     useState<"create" | "edit">("create");
   const [selectedProduct, setSelectedProduct] =
-    useState<Product | null>(null);
+    useState<inventoryProduct | null>(null);
   const [loading, setLoading] = useState(false);
 
   const [search, setSearch] = useState("");
@@ -99,7 +99,7 @@ export default function InventoryPage({
     setSheetOpen(true);
   };
 
-  const openEdit = (product: Product) => {
+  const openEdit = (product: inventoryProduct) => {
     setSheetMode("edit");
     setSelectedProduct(product);
     setSheetOpen(true);

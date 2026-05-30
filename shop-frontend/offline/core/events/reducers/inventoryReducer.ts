@@ -15,6 +15,8 @@ export const InventoryReducer = {
 
         return {
           id: event.aggregateId,
+          aggregateId: event.aggregateId,
+          aggregateType: event.aggregateType,
 
           productId: event.payload.productId,
 
@@ -48,7 +50,8 @@ export const InventoryReducer = {
       // STOCK ADJUSTMENT
       // =========================
       case InventoryEventType.INVENTORY_UPDATED:
-
+        console.log("Current inventory:", current);
+console.log("Incoming event:", event);
         if (!current) return current;
 
         return {
