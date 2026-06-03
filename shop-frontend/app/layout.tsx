@@ -2,6 +2,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import { Providers } from "./providers";
 import SyncBootstrap from "@/offline/bootstrap/syncBootstrap";
+import { AppShell } from "@/components/layout/AppShell";
 
 
 export const metadata = {
@@ -18,10 +19,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className="bg-black text-white">
         <Providers>
           <SyncBootstrap />
-          {children}
+          <AppShell>
+            {children}
+          </AppShell>
           <Toaster richColors position="top-right" />
         </Providers>
       </body>

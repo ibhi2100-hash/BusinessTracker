@@ -15,13 +15,12 @@ export default function InventoryStep() {
    
     router.replace("/onboarding-opening-cash")};
   return (
-    <div className=" bg-gray-50">
-      <SetupProgressTracker />
-
-      <div className="space-y-6 p-6">
+    <div>
+        <SetupProgressTracker />
         <InventoryPage context="admin" mode="OPENING" />
         <StepFooter onNext={handleNext} disabled={false} />
-      </div>
+      
     </div>
+  
   );
 }

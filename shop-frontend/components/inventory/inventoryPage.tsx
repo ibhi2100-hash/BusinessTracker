@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useInventoryStore } from "@/src/store/inventoryStore";
 import { inventoryProduct } from "@/src/store/inventoryStore";
 import ProductCard from "./productCard";
+import SaleCard from "./SalesCard";
 import ProductSheet from "./ProductSheet";
 import CartBar from "@/components/inventory/CartBar";
 import { toast } from "sonner";
@@ -24,6 +25,8 @@ import { OpeningEventType } from "@/offline/core/events/eventGroups/openingEvent
 import { InventoryEventType } from "@/offline/core/events/eventGroups/inventoryEvents";
 import { salesEventType } from "@/offline/core/events/eventGroups/salesEvent";
 import { AggregateType } from "@/offline/domain/aggregate";
+import SellCard from "./SalesCard";
+import { GlassButton } from "../ui/GlassButton";
 
 interface InventoryPageProps {
   context: "sell" | "admin";
@@ -211,13 +214,17 @@ const handleSell = async (productId: string, quantity: number) => {
   }
 };
 
+  function openQuantityModal(product: inventoryProduct): void {
+    throw new Error("Function not implemented.");
+  }
+
   // -----------------------------
   // UI
   // -----------------------------
   return (
-    <div className=" bg-gradient-to-b from-gray-50 to-gray-100 pb-32">
+    <div >
       {/* ================= HEADER ================= */}
-      <div className="sticky top-0 z-40 backdrop-blur-xl bg-white/70 border-b">
+      <div className="sticky top-0 z-40 backdrop-blur-xl border-b">
         <div className="px-4 pt-4 pb-3 space-y-3">
           {/* TITLE */}
           <div className="flex items-center justify-between">
@@ -239,7 +246,6 @@ const handleSell = async (productId: string, quantity: number) => {
               className="
                 w-full pl-10 pr-4 py-3
                 rounded-2xl
-                bg-white/80
                 border border-gray-200
                 shadow-sm
                 focus:outline-none focus:ring-2 focus:ring-green-500
@@ -291,14 +297,21 @@ const handleSell = async (productId: string, quantity: number) => {
               sm:gap-4
             "
           >
-            {filteredProducts.map((product) => (
+            {filteredProducts.map((product) =>
+            context === "sell" ? (
+              <SellCard
+                key={product.id}
+                product={product}
+                onSell={handleSell}
+                onOpenQuantityModal={openQuantityModal}
+              />
+            ) : (
               <ProductCard
                 key={product.id}
                 product={product}
                 context={context}
                 onEdit={openEdit}
                 onDelete={handleDelete}
-                onSell={context === "sell" ? handleSell : undefined}
               />
             ))}
           </div>
@@ -309,20 +322,12 @@ const handleSell = async (productId: string, quantity: number) => {
 
       {/* ================= FAB ================= */}
       {context === "admin" && (
-        <button
+        <GlassButton
           onClick={openCreate}
-          className="
-            fixed right-4 bottom-[90px]
-            w-14 h-14 rounded-2xl
-            bg-gradient-to-br from-green-500 to-green-700
-            text-white
-            flex items-center justify-center
-            shadow-[0_10px_30px_rgba(0,0,0,0.2)]
-            active:scale-90 transition
-          "
+          className="fixed right-4 bottom-[90px]"
         >
           <Plus className="w-6 h-6" />
-        </button>
+        </GlassButton>
       )}
 
       {/* ================= SHEET ================= */}

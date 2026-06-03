@@ -37,12 +37,24 @@ const DashboardPage = () => {
   }, [businessFromStore, router]);
 
   return (
-    <div className="space-y-6">
-      <DashboardHeader />
+  <div
+    className="
+      px-4
+      pb-24
+      space-y-6
+    "
+  >
+    <DashboardHeader />
+
+    <section>
       <FinancialCarousel />
+    </section>
+
+    <section>
       <QuickActions />
-    </div>
-  );
+    </section>
+  </div>
+);
 };
 
 export default DashboardPage;

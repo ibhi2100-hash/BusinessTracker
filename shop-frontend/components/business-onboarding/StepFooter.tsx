@@ -1,26 +1,36 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+
+import { GlassButton } from "@/components/ui/GlassButton";
 import { ActivateBusinessButton } from "@/components/business-onboarding/ActivationBusinessButton";
 
 interface StepFooterProps {
-  onNext?: () => void;         // callback for Next button
-  disabled?: boolean;           // disable Next button
-  isLastStep?: boolean;         // show Activate button instead
+  onNext?: () => void;
+  disabled?: boolean;
+  isLastStep?: boolean;
+  loading?: boolean;
 }
 
-export const StepFooter = ({ onNext,  disabled , isLastStep }: StepFooterProps) => {
+export function StepFooter({
+  onNext,
+  disabled,
+  isLastStep,
+  loading,
+}: StepFooterProps) {
   if (isLastStep) {
-    // Show Activate button on final step
     return <ActivateBusinessButton />;
   }
 
-  // Default: show Next button
   return (
-    <div className="mt-4 p-6 flex justify-end">
-      <Button onClick={onNext} disabled={disabled} className="w-32">
-        Next
-      </Button>
+    <div className="mt-6 flex justify-end">
+      <GlassButton
+        onClick={onNext}
+        disabled={disabled || loading}
+        icon={!loading ? <ArrowRight size={18} /> : undefined}
+      >
+        {loading ? "Saving..." : "Next"}
+      </GlassButton>
     </div>
   );
-};
+}

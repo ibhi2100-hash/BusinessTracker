@@ -3,6 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Product } from "@/types/types";
 import { Package, Tag, DollarSign } from "lucide-react";
+import { GlassSheet } from "@/components/ui/GlassSheet";
+import { GlassInput } from "@/components/ui/GlassInput";
+import { GlassButton } from "@/components/ui/GlassButton";
 
 interface Props {
   open: boolean;
@@ -90,99 +93,78 @@ export default function ProductSheet({
 };
 
   return (
-    <div
-      className="fixed inset-0 bg-black/40 z-50 flex items-end backdrop-blur-sm"
-      onClick={onClose}
+  <GlassSheet
+      open={open}
+      onClose={onClose}
+      title={
+        mode === "edit"
+          ? "Edit Product"
+          : "Add Product"
+      }
+      subtitle="Manage inventory items"
     >
-      <div
-        className="bg-white w-full rounded-t-3xl p-5 pb-8 animate-slideUp shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="w-10 h-1.5 bg-gray-300 rounded-full mx-auto mb-4" />
+  <div className="space-y-4">
 
-        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-          <Package className="w-5 h-5" />
-          {mode === "edit" ? "Edit Product" : "Add Product"}
-        </h2>
+    <GlassInput
+      value={form.name}
+      onChange={(e) =>
+        setForm((prev) => ({
+          ...prev,
+          name: e.target.value,
+        }))
+      }
+      icon={<Package size={18} />}
+      placeholder="Product name"
+    />
 
-        <div className="flex flex-col gap-3">
-          {/* NAME */}
-          <input
-            autoFocus
-            placeholder="Product name"
-            value={form.name}
-            onChange={(e) =>
-              setForm({ ...form, name: e.target.value })
-            }
-            onKeyDown={(e) => {
-              if (e.key === "Enter") costRef.current?.focus();
-            }}
-            className="border rounded-xl px-3 py-3"
-          />
+    <GlassInput
+      type="number"
+      value={form.costPrice}
+      onChange={(e) =>
+        setForm((prev) => ({
+          ...prev,
+          costPrice: e.target.value,
+        }))
+      }
+      icon={<DollarSign size={18} />}
+      placeholder="Cost price"
+    />
 
-          {/* PRICES */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="relative">
-              <DollarSign className="absolute left-2 top-3 w-4 h-4 text-gray-400" />
-              <input
-                ref={costRef}
-                type="number"
-                placeholder="Cost"
-                value={form.costPrice}
-                onChange={(e) =>
-                  setForm({ ...form, costPrice: e.target.value })
-                }
-                className="border rounded-xl px-8 py-3 w-full"
-              />
-            </div>
+    <GlassInput
+      type="number"
+      value={form.sellingPrice}
+      onChange={(e) =>
+        setForm((prev) => ({
+          ...prev,
+          sellingPrice: e.target.value,
+        }))
+      }
+      icon={<Tag size={18} />}
+      placeholder="Selling price"
+    />
 
-            <div className="relative">
-              <Tag className="absolute left-2 top-3 w-4 h-4 text-gray-400" />
-              <input
-                ref={sellingRef}
-                type="number"
-                placeholder="Selling"
-                value={form.sellingPrice}
-                onChange={(e) =>
-                  setForm({ ...form, sellingPrice: e.target.value })
-                }
-                className="border rounded-xl px-8 py-3 w-full"
-              />
-            </div>
-          </div>
+    <GlassInput
+      type="number"
+      value={form.quantity}
+      onChange={(e) =>
+        setForm((prev) => ({
+          ...prev,
+          quantity: e.target.value,
+        }))
+      }
+      icon={<Package size={18} />}
+      placeholder="Quantity"
+    />
 
-          {/* QUANTITY */}
-          <div className="relative">
-            <Package className="absolute left-2 top-3 w-4 h-4 text-gray-400" />
-            <input
-              ref={qtyRef}
-              type="number"
-              placeholder="Quantity"
-              value={form.quantity}
-              onChange={(e) =>
-                setForm({ ...form, quantity: e.target.value })
-              }
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleSubmit();
-              }}
-              className="border rounded-xl px-8 py-3 w-full"
-            />
-          </div>
+    <GlassButton
+      className="w-full"
+      onClick={handleSubmit}
+      disabled={!isValid || loading}
+    >
+      Save Product
+    </GlassButton>
 
-          {/* SUBMIT */}
-          <button
-            disabled={!isValid || loading}
-            onClick={handleSubmit}
-            className="mt-4 bg-green-600 text-white py-3 rounded-xl font-semibold active:scale-95 transition"
-          >
-            {loading
-              ? "Saving..."
-              : mode === "edit"
-              ? "Update Product"
-              : "Add Product"}
-          </button>
-        </div>
-      </div>
-    </div>
+  </div>
+</GlassSheet>
   );
 }

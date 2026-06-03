@@ -1,52 +1,47 @@
 "use client";
 
-import { Bell, Plus } from "lucide-react";
-import { useBranchStore } from "@/src/store/useBranchStore";
-import { useRouter } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+import {
+  Bell,
+  Plus,
+  Building2,
+  ChevronDown,
+} from "lucide-react";
+
+import { useBranchStore } from "@/src/store/useBranchStore";
 import { useBusinessStore } from "@/src/store/businessStore";
-import { eventService } from "@/src/services/eventService";
-import { BusinessEventTypes } from "@/offline/core/events/eventGroups/businessEvents";
 import { useAuthStore } from "@/src/store/useAuthStore";
 
+import { eventService } from "@/src/services/eventService";
+import { BusinessEventTypes } from "@/offline/core/events/eventGroups/businessEvents";
 
-export const DashboardHeader = () => {
-  const [loading, setLoading] = useState(false)
-  
+import { GlassCard } from "@/components/ui/GlassCard";
+import { GlassButton } from "@/components/ui/GlassButton";
+import { GlassIcon } from "@/components/ui/GlassIcon";
+
+export function DashboardHeader() {
   const router = useRouter();
-  const queryClient = useQueryClient();
+
+  const business = useBusinessStore((s) => s.business);
+
+  const role = useAuthStore(
+    (s) => s.user?.role
+  );
 
   const {
-    businessName,
     branches,
     activeBranchId,
     setActiveBranch,
   } = useBranchStore();
-  const business = useBusinessStore((s)=> s.business)
-  const role = useAuthStore(s=> s.user?.role)
 
-  
+  const [isSwitching, setIsSwitching] =
+    useState(false);
 
-  const [isSwitching, setIsSwitching] = useState(false);
-
-  // Skeleton while context loads
-  if (loading) {
-    return (
-      <div className="flex items-center justify-between animate-pulse">
-        <div className="space-y-2">
-          <div className="w-32 h-4 bg-gray-300 rounded"></div>
-          <div className="w-48 h-6 bg-gray-300 rounded"></div>
-          <div className="w-32 h-4 bg-gray-300 rounded mt-2"></div>
-        </div>
-        <div className="flex gap-3">
-          <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
-        </div>
-      </div>
-    );
-  }
-
-  const handleChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleChange = async (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     const value = e.target.value;
 
     if (value === "add_new") {
@@ -54,92 +49,144 @@ export const DashboardHeader = () => {
       return;
     }
 
-    // prevent duplicate switching
-    if (value === activeBranchId || isSwitching) return;
+    if (
+      value === activeBranchId ||
+      isSwitching
+    )
+      return;
 
     try {
       setIsSwitching(true);
 
-      // 1️⃣ request new token for selected branch
-      const data = await eventService.create({
-        type: BusinessEventTypes.BRANCH_SWITCH,
+      await eventService.create({
+        type:
+          BusinessEventTypes.BRANCH_SWITCH,
         aggregateType: "BRANCH_SWITCH",
         aggregateId: value,
-        payload: { branchId: value },
-        mode: "LIVE"
+        payload: {
+          branchId: value,
+        },
+        mode: "LIVE",
       });
-      
 
-      // 2️⃣ update UI state
       setActiveBranch(value);
 
-      // 4️⃣ refresh server components & hooks
       router.refresh();
     } catch (error) {
-      console.error("Branch switch failed:", error);
-
-      // optional: show toast notification
-      alert("Failed to switch branch. Please try again.");
+      console.error(error);
     } finally {
       setIsSwitching(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-between">
-      {/* LEFT */}
-      <div>
-        <p className="text-sm text-gray-500">
-          Good Morning
-        </p>
+    <GlassCard
+      variant="elevated"
+      className="p-5"
+    >
+      <div className="flex items-start justify-between gap-4">
+        {/* LEFT */}
+        <div className="flex gap-4 min-w-0">
+          <GlassIcon size="lg">
+            <Building2 size={24} />
+          </GlassIcon>
 
-        <h1 className="text-xl font-semibold">{business.name}</h1>
+          <div className="min-w-0">
+            <p className="text-sm text-gray-400">
+              Good Morning
+            </p>
 
-        <select
-          value={activeBranchId ?? ""}
-          onChange={handleChange}
-          disabled={isSwitching}
-          className="mt-1 text-sm bg-gray-100 rounded-lg px-2 py-1 disabled:opacity-50"
-        >
-          {branches.map((branch) => (
-            <option key={branch.id} value={branch.id}>
-              {branch.name}
-              {branch.id === activeBranchId ? " (Active)" : ""}
-            </option>
-          ))}
+            <h1
+              className="
+              text-2xl
+              font-bold
+              truncate
+            "
+            >
+              {business?.name}
+            </h1>
 
+            <div className="mt-3 relative">
+              <select
+                value={activeBranchId ?? ""}
+                onChange={handleChange}
+                disabled={isSwitching}
+                className="
+                  appearance-none
+                  bg-white/[0.04]
+                  border
+                  border-white/10
+                  rounded-xl
+                  px-3
+                  py-2
+                  pr-8
+                  text-sm
+                  text-white
+                  backdrop-blur-xl
+                  outline-none
+                  w-full
+                "
+              >
+                {branches.map((branch) => (
+                  <option
+                    key={branch.id}
+                    value={branch.id}
+                  >
+                    {branch.name}
+                  </option>
+                ))}
+
+                {role === "ADMIN" && (
+                  <option value="add_new">
+                    + Add Branch
+                  </option>
+                )}
+              </select>
+
+              <ChevronDown
+                size={16}
+                className="
+                  absolute
+                  right-3
+                  top-1/2
+                  -translate-y-1/2
+                  text-gray-400
+                  pointer-events-none
+                "
+              />
+            </div>
+
+            {isSwitching && (
+              <p className="mt-2 text-xs text-gray-400">
+                Switching branch...
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* RIGHT */}
+        <div className="flex items-center gap-2">
           {role === "ADMIN" && (
-            <option value="add_new">+ Add Branch</option>
+            <GlassButton
+              variant="secondary"
+              icon={<Plus size={16} />}
+              onClick={() =>
+                router.push("/branches/new")
+              }
+              className="hidden sm:flex"
+            >
+              Branch
+            </GlassButton>
           )}
-        </select>
 
-        {isSwitching && (
-          <p className="text-xs text-gray-400 mt-1">
-            Switching branch…
-          </p>
-        )}
-      </div>
-
-      {/* RIGHT */}
-      <div className="flex items-center gap-3">
-        {role === "ADMIN" && (
-          <button
-            onClick={() => router.push("/branches/new")}
-            className="hidden sm:flex items-center gap-1 text-sm font-medium px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          <GlassButton
+            variant="secondary"
+            className="px-3"
           >
-            <Plus size={16} />
-            Branch
-          </button>
-        )}
-
-        <button
-          className="relative p-2 rounded-full bg-white shadow hover:shadow-md transition"
-          aria-label="Notifications"
-        >
-          <Bell className="w-5 h-5" />
-          <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-        </button>
+            <Bell size={18} />
+          </GlassButton>
+        </div>
       </div>
-    </div>
+    </GlassCard>
   );
-};
+}

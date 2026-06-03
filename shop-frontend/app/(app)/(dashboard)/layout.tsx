@@ -1,23 +1,19 @@
-
-import BottomNav from "@/components/navigation/BottomNav";
-import React from "react";
 import { AuthGuard } from "@/hooks/useAuthGuard";
-
-interface DashboardLayoutProps {
-  children: React.ReactNode;
-}
+import { AppShell } from "@/components/layout/AppShell";
+import { DashboardShell } from "@/components/layout/DashBoardShell";
 
 export default function DashboardLayout({
-  children
-}: DashboardLayoutProps) {
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <AuthGuard >
-      <div className="min-h-screen bg-gray-50 flex flex-col">
-        <main className="flex-1 pb-20 px-4 pt-4">
+    <AuthGuard>
+      <AppShell>
+        <DashboardShell>
           {children}
-        </main>
-        <BottomNav />
-      </div>
+        </DashboardShell>
+      </AppShell>
     </AuthGuard>
   );
 }

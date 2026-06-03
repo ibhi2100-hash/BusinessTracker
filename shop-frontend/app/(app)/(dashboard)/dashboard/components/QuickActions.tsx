@@ -13,6 +13,7 @@ import {
 
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/src/store/useAuthStore";
+import { ActionTile } from "@/components/ui/ActionTile";
 
 export const QuickActions = () => {
   const router = useRouter();
@@ -39,20 +40,16 @@ export const QuickActions = () => {
       <h3 className="text-sm text-gray-400 mb-3">Quick Actions</h3>
 
       <div className="grid grid-cols-2 gap-4">
-        {actions.map((a) => {
-          const Icon = a.icon;
-
-          return (
-            <button
-              key={a.label}
-              onClick={() => router.push(a.path)}
-              className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-white/10 transition"
-            >
-              <Icon className="w-6 h-6" />
-              <span className="text-sm text-center">{a.label}</span>
-            </button>
-          );
-        })}
+        {actions.map((action) => (
+          <ActionTile
+            key={action.label}
+            icon={<action.icon />}
+            label={action.label}
+            onClick={() =>
+              router.push(action.path)
+            }
+          />
+        ))}
       </div>
     </section>
   );

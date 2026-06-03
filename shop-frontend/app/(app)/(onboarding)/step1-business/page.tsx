@@ -14,6 +14,7 @@ import { eventService } from "@/src/services/eventService";
 import { nanoid } from "nanoid";
 import { AggregateType } from "@/offline/domain/aggregate";
 import { BusinessEventTypes } from "@/offline/core/events/eventGroups/businessEvents";
+import { GlassButton } from "@/components/ui/GlassButton";
 
 export default function Step2Business() {
   const router = useRouter();
@@ -86,7 +87,7 @@ export default function Step2Business() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col justify-between px-4 py-8 bg-[#050816] text-white">
+    <div className="px-4 py-4 max-w-md mx-auto flex flex-col justify-between h-screen">
       {/* TOP SECTION */}
       <div>
         {/* ICON */}
@@ -154,28 +155,33 @@ export default function Step2Business() {
 
       {/* BOTTOM CTA */}
       <div className="space-y-4">
-        <button
+        <GlassButton 
+          variant="primary"
           disabled={loading}
           onClick={handleNext}
-          className="w-full h-14 rounded-2xl bg-white text-black font-medium flex items-center justify-center gap-2 disabled:opacity-60 active:scale-[0.98] transition"
-        >
-          {loading ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              Creating...
-            </>
-          ) : (
-            <>
-              Continue
-              <ArrowRight size={18} />
-            </>
-          )}
-        </button>
+          className="w-full h-14 rounded-2xl font-medium flex items-center justify-center gap-2 disabled:opacity-60 active:scale-[0.98]"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Creating...
+              </>
+            ) : (
+              <>
+                Continue 
+                <ArrowRight size={18} />
+              </>
+            )}
+        </GlassButton>
+        
+      
 
         <p className="text-center text-white/30 text-sm">
           Secure local-first business setup
         </p>
-      </div>
-    </main>
+        </div>
+      <div/>
+    </div>
+    
   );
 }
