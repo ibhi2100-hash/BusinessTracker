@@ -39,7 +39,7 @@ export function RepayLiabilityModal({
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<RepayLiabilityInput>({
+  } = useForm({
     resolver: zodResolver(
       repayLiabilitySchema
     ),
@@ -67,7 +67,7 @@ export function RepayLiabilityModal({
         aggregateId: liabilityId,
 
         type:
-          financeEventType.LIABILITY_REPAID,
+          financeEventType.LIABILITY_REPAYMENT,
 
         mode: "LIVE",
 

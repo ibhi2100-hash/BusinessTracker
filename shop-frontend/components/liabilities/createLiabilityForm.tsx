@@ -34,6 +34,8 @@ interface Props {
   onComplete?: () => void;
 }
 
+type CreateLiabilityFormValues = z.input<typeof createLiabilitySchema>;
+
 export function CreateLiabilityForm({
   mode = "LIVE",
   onComplete,
@@ -45,11 +47,12 @@ export function CreateLiabilityForm({
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<CreateLiabilityInput>({
+  } = useForm<CreateLiabilityFormValues, any, CreateLiabilityInput>({
     resolver: zodResolver(createLiabilitySchema),
     defaultValues: {
+      principalAmount: 0,
       interestRate: 0,
-      startDate: new Date().toISOString().split("T")[0] as any,
+      startDate: new Date().toISOString().split("T")[0],
     },
   });
 

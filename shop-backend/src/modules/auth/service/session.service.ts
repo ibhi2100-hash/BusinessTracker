@@ -28,8 +28,8 @@ export class SessionService {
     await this.sessionRepo.create({
       userId: user.id,
       refreshToken: hashToken(refresh.token),
-      ipAddress,
-      userAgent,
+      ...(ipAddress && { ipAddress }),
+      ...(userAgent && { userAgent }),
       expiresAt: new Date(
         Date.now() +
           refresh.expiresIn * 1000
@@ -93,8 +93,8 @@ async refresh(
       userId: payload.userId,
       email: payload.email,
       role: payload.role,
-      businessId: payload.businessId,
-      branchId: payload.branchId,
+      ...(payload.businessId && { businessId: payload.businessId }),
+      ...(payload.branchId && { branchId: payload.branchId }),
     });
 
   await this.sessionRepo.rotate(
@@ -111,8 +111,8 @@ async refresh(
       userId: payload.userId,
       email: payload.email,
       role: payload.role,
-      businessId: payload.businessId,
-      branchId: payload.branchId,
+      ...(payload.businessId && { businessId: payload.businessId }),
+      ...(payload.branchId && { branchId: payload.branchId }),
     });
 
   return {
