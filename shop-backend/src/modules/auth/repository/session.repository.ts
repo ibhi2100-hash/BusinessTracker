@@ -50,7 +50,7 @@ export class SessionRepository {
 
   rotate(
     sessionId: string,
-    refreshTokenHash: string,
+    refreshToken: string,
     expiresAt: Date
   ) {
     return prisma.session.update({
@@ -58,7 +58,7 @@ export class SessionRepository {
         id: sessionId,
       },
       data: {
-        refreshTokenHash,
+        refreshToken,
         expiresAt,
         lastUsedAt: new Date(),
       },

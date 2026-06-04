@@ -27,6 +27,14 @@ export class AuthService {
   ) {}
 async registerUser(dto: RegisterDto) {
 
+  if (!dto.email) {
+    throw new Error("Email is required");
+  }
+
+  if (!dto.password) {
+    throw new Error("Password is required");
+  }
+
   const existing =
     await this.authRepo.findByEmail(dto.email);
 
@@ -70,10 +78,22 @@ async registerUser(dto: RegisterDto) {
   }
 ): Promise<AuthResult> {
 
+  if (!dto.email) {
+    throw new Error("Invalid credentials");
+  }
+
   const user =
     await this.authRepo.findByEmail(dto.email);
 
   if (!user) {
+    throw new Error("Invalid credentials");
+  }
+
+  if (!user.password) {
+    throw new Error("Invalid credentials");
+  }
+
+  if (!dto.password) {
     throw new Error("Invalid credentials");
   }
 
@@ -95,10 +115,8 @@ async registerUser(dto: RegisterDto) {
       userId: user.id,
       email: user.email,
       role: user.role,
-      businessId:
-        user.businessId ?? undefined,
-      branchId:
-        user.branchId ?? undefined,
+      ...(user.businessId && { businessId: user.businessId }),
+      ...(user.branchId && { branchId: user.branchId }),
     });
 
   const refresh =
