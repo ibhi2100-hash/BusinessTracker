@@ -1,120 +1,153 @@
 import bcrypt from "bcryptjs";
-import { signAccessTokenWithExpiry, signRefreshTokenWithExpiry} from "../../../helpers/jwtHelper/jwthelper.js";
 import { AuthRepository } from "../repository/auth.repository.js";
 import { LoginDto } from "../dto/login.dto.js";
 import { RegisterDto } from "../dto/register.dto.js";
 import { User } from "../entity/user.js";
+import { SessionService } from "./session.service.js";
+import { TokenService } from "./token.service.js"
 
+type AuthResult = {
+  user: User;
+  accessToken: string;
+  accessExpiresIn: number;
+
+  refreshToken: string;
+  refreshExpiresIn: number;
+
+  activeBranch: any;
+  branches: any[];
+  business: any;
+};
 
 export class AuthService {
-  constructor(private authRepo: AuthRepository) {}
-async registerUser(
-    dto: RegisterDto
-  ){
-    const existingUser = await this.authRepo.findByEmail(dto.email!);
+    constructor(
+    private authRepo: AuthRepository,
+    private tokenService: TokenService,
+    private sessionService: SessionService
+  ) {}
+async registerUser(dto: RegisterDto) {
 
-    if (existingUser) {
-      throw new Error("Email already in use");
-    }
+  const existing =
+    await this.authRepo.findByEmail(dto.email);
 
-    const hashedPassword = await bcrypt.hash(dto.password, 10);
-
-    const userData = {
-      ...dto,
-      password: hashedPassword,
-    };
-
-    const user = await this.authRepo.createUser(userData);
-    
-    const { token, expiresIn } = signAccessTokenWithExpiry(
-      user.id,
-      user.email,
-      user.role,
-    );
-    const { token: refreshToken, expiresIn: refreshExpiresIn } = signRefreshTokenWithExpiry(
-      user.id,
-      user.email,
-      user.role,
-    );
-
-    return { 
-        user,
-        token,
-        expiresIn,
-        refreshToken,
-        refreshExpiresIn
-     };
+  if (existing) {
+    throw new Error("Email already in use");
   }
 
+  const hashedPassword =
+    await bcrypt.hash(dto.password, 12);
+
+  const user =
+    await this.authRepo.createUser({
+      ...dto,
+      password: hashedPassword,
+    });
+
+  const access =
+    this.tokenService.generateAccessToken({
+      userId: user.id,
+      email: user.email,
+      role: user.role,
+    });
+
+  const refresh =
+    await this.sessionService.createSession(user);
+
+  return {
+    user,
+    accessToken: access.token,
+    accessExpiresIn: access.expiresIn,
+    refreshToken: refresh.token,
+    refreshExpiresIn: refresh.expiresIn,
+  };
+}
+
   async loginUser(
-    dto: LoginDto
-  ): Promise<{
-    user: User;
-    token: string;
-    expiresIn: number;
-    refreshToken: string;
-    refreshExpiresIn: number;
-    activeBranch: any;
-    branches: any[];
-    business: any;
-  }> {
-    const user = await this.authRepo.findByEmail(dto.email!);
+  dto: LoginDto,
+  metadata?: {
+    ipAddress?: string;
+    userAgent?: string;
+  }
+): Promise<AuthResult> {
 
-    if (!user) {
-      throw new Error("User not found");
-    }
-    if(!user.businessId) {
-      throw new Error("Onboarding not completed. Please complete onboarding to proceed.");
-    }
-    
-    const business = await this.authRepo.findBusiness(user.id)
+  const user =
+    await this.authRepo.findByEmail(dto.email);
 
-    const isPasswordValid = await bcrypt.compare(
-      dto.password!,
+  if (!user) {
+    throw new Error("Invalid credentials");
+  }
+
+  const valid =
+    await bcrypt.compare(
+      dto.password,
       user.password
     );
 
-    if (!isPasswordValid) {
-      throw new Error("Invalid password");
-    }
-
-    const session = await this.authRepo.createSession(user.id);
-
-    const accessToken = signAccessTokenWithExpiry(
-      user.id,
-      user.email,
-      user.role,
-      user.businessId ?? undefined,
-      user.branchId ?? undefined
-    );
-
-    const refreshToken = signRefreshTokenWithExpiry(
-      user.id,
-      user.email,
-      user.role,
-      user.businessId ?? undefined,
-      user.branchId ?? undefined
-    );
-
-
-
-    // Normal LOGIN FLOW
-    const branches = await this.authRepo.getBusinessBranches(user.businessId);
-    const activeBranch = branches.find((b) => b.isDefault === true) || branches[0];
-
-      return {
-        user,
-        token: accessToken.token,
-        expiresIn: accessToken.expiresIn,
-        refreshToken: refreshToken.token,
-        refreshExpiresIn: refreshToken.expiresIn,
-        activeBranch,
-        branches,
-        business,
-      }
-  
+  if (!valid) {
+    throw new Error("Invalid credentials");
   }
 
+  const business =
+    await this.authRepo.findBusiness(user.id);
+
+  const access =
+    this.tokenService.generateAccessToken({
+      userId: user.id,
+      email: user.email,
+      role: user.role,
+      businessId:
+        user.businessId ?? undefined,
+      branchId:
+        user.branchId ?? undefined,
+    });
+
+  const refresh =
+    await this.sessionService.createSession(
+      user,
+      metadata?.ipAddress,
+      metadata?.userAgent
+    );
+
+  let branches: any[] = [];
+  let activeBranch: any = null;
+
+  if (user.businessId) {
+    branches =
+      await this.authRepo.getBusinessBranches(
+        user.businessId
+      );
+
+    activeBranch =
+      branches.find(
+        (x) => x.id === user.branchId
+      ) ??
+      branches.find(
+        (x) => x.isDefault
+      ) ??
+      branches[0] ??
+      null;
+  }
+
+  return {
+    user,
+
+    accessToken:
+      access.token,
+
+    accessExpiresIn:
+      access.expiresIn,
+
+    refreshToken:
+      refresh.token,
+
+    refreshExpiresIn:
+      refresh.expiresIn,
+
+    activeBranch,
+    branches,
+    business,
+  };
+}
   async getCurrentUser(userId: string) {
   const user = await this.authRepo.findById(userId);
 
@@ -145,5 +178,22 @@ async registerUser(
     branches,
     business,
   };
+}
+
+async refreshSession(
+  refreshToken: string
+) {
+
+  return this.sessionService.refresh(
+    refreshToken
+  );
+}
+
+async logout(
+  refreshToken: string
+) {
+  await this.sessionService.revoke(
+    refreshToken
+  );
 }
 }

@@ -183,12 +183,18 @@ model Session {
   userId String
 
   refreshToken String @unique
+  deviceId String?
+  deviceName  String?
   ipAddress String?
   userAgent String?
+
+  lastUsedAt  DateTime  @default(now())
 
   expiresAt DateTime
 
   createdAt DateTime @default(now())
+
+  revokedAt  DateTime?
 
   user User @relation(fields: [userId],references: [id],onDelete: Cascade)
 

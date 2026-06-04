@@ -38,60 +38,112 @@ export class AuthController {
     }
   }
 
-  async login(req: Request, res: Response): Promise<Response> {
-    const dto: LoginDto = req.body;
+  async login(
+  req: Request,
+  res: Response
+) {
 
-    try {
-      const result = await this.authService.loginUser(dto);
-
-      if (!result) {
-        return res.status(401).json({ message: "Invalid email or password" });
+  const result =
+    await this.authService.loginUser(
+      req.body,
+      {
+        ipAddress:
+          req.ip,
+        userAgent:
+          req.get("user-agent")
       }
+    );
 
-      const { user, token, expiresIn, refreshToken, refreshExpiresIn, branches, activeBranch } = result;
+  setRefreshCookie(
+    res,
+    result.refreshToken
+  );
 
-      setAuthCookies(res, token, refreshToken);
+  return res.json({
+    user:
+      this.safeUser(
+        result.user
+      ),
 
-      return res.status(200).json({
-        user: this.safeUser(user),
-        accessToken: token,
-        expiresIn,
-        refreshToken,
-        refreshExpiresIn,
-        activeBranch,
-        branches, // enables branch switch UI immediately
+    accessToken:
+      result.accessToken,
+
+    expiresIn:
+      result.accessExpiresIn,
+
+    activeBranch:
+      result.activeBranch,
+
+    branches:
+      result.branches,
+
+    business:
+      result.business
+  });
+}
+async refresh(
+  req: Request,
+  res: Response
+) {
+
+  const refreshToken =
+    req.cookies.refresh_token;
+
+  if (!refreshToken) {
+    return res
+      .status(401)
+      .json({
+        message:
+          "Missing refresh token"
       });
-
-    } catch (error: any) {
-      if (
-        error.message === "User not found" ||
-        error.message === "Invalid password"
-      ) {
-        return res.status(401).json({ message: error.message });
-      }
-
-      return res.status(500).json({
-        message: error instanceof Error ? error.message : String(error),
-      });
-    }
   }
 
-  async logout(req: Request, res: Response) {
-    res.clearCookie("token");
-    return res.json({ message: "Logged out" });
+  const result =
+    await this.authService
+      .refreshSession(
+        refreshToken
+      );
+
+  setRefreshCookie(
+    res,
+    result.refreshToken
+  );
+
+  return res.json({
+    accessToken:
+      result.accessToken,
+
+    expiresIn:
+      result.accessExpiresIn,
+
+    user:
+      this.safeUser(
+        result.user
+      )
+  });
+}
+  async logout(
+  req: Request,
+  res: Response
+) {
+
+  const refreshToken =
+    req.cookies.refresh_token;
+
+  if (refreshToken) {
+    await this.authService.logout(
+      refreshToken
+    );
   }
 
+  res.clearCookie(
+    "refresh_token"
+  );
 
-  private safeUser(user: any) {
-    return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      onboardingCompleted: user.onboardingCompleted,
-      businessId: user.businessId,
-    };
-  }
+  return res.json({
+    success: true
+  });
+}
 
   async me(req: any, res: Response): Promise<Response> {
   try {

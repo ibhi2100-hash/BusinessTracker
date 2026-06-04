@@ -1,98 +1,173 @@
 "use client";
+
+import {
+  Building2,
+  Users,
+  Package,
+  Check,
+} from "lucide-react";
+
+import { GlassCard } from "@/components/ui/GlassCard";
+import { GlassButton } from "@/components/ui/GlassButton";
+import { GlassIcon } from "@/components/ui/GlassIcon";
+
 import { useSubscriptionStore } from "@/src/store/useSubscriptionStore";
-
-
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
 import { eventService } from "@/src/services/eventService";
 
-export const PricingCards = () => {
-  const plans = useSubscriptionStore((state) => state.subscription);
-  const [loading, setLoading] = useState(false)
+export function PricingCards() {
+  const plans = useSubscriptionStore(
+    (s) => s.subscription
+  );
 
-
-  const handleSubscribe = (planId: string) => {
-    eventService.create({
+  const handleSubscribe = async (
+    planId: string
+  ) => {
+    await eventService.create({
       aggregateType: "SUBSCRIBE",
       aggregateId: planId,
       type: "SUBSCRIBE",
       mode: "LIVE",
-      payload: {planId}
+      payload: { planId },
     });
   };
 
   if (!plans?.length) {
-    return <p className="text-center">Loading plans...</p>;
+    return (
+      <div className="grid gap-4 md:grid-cols-3">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <GlassCard
+            key={i}
+            className="h-96 animate-pulse"
+          >
+            <div />
+          </GlassCard>
+        ))}
+      </div>
+    );
   }
 
   return (
-    <section className="w-full max-w-6xl px-6 pb-24">
-      <div className="grid md:grid-cols-3 gap-8">
-        {plans.map((plan: any) => {
-          
-          const featureList = Object.keys(plan.features || {})
-            .filter((key) => plan.features[key])
-            .map((key) => key.charAt(0).toUpperCase() + key.slice(1));
+    <div
+      className="
+      grid
+      gap-6
+      md:grid-cols-3
+      "
+    >
+      {plans.map((plan: any) => {
+        const features = Object.keys(
+          plan.features || {}
+        ).filter(
+          (key) => plan.features[key]
+        );
 
-          const formattedPrice =
-            plan.price === "0" ? "Free" : `₦${Number(plan.price).toLocaleString()}`;
+        return (
+          <GlassCard
+            key={plan.id}
+            variant={
+              plan.name === "Growth"
+                ? "accent"
+                : "default"
+            }
+            className="
+              p-6
+              flex
+              flex-col
+            "
+          >
+            <div>
+              <div className="flex justify-between">
+                <div>
+                  <h3 className="text-xl font-bold">
+                    {plan.name}
+                  </h3>
 
-          return (
-            <Card
-              key={plan.id}
-              className={`bg-gradient-to-b from-slate-50 to-white p-8 flex flex-col justify-between ${
-                plan.name === "Growth"
-                  ? "border-primary shadow-lg scale-[1.03]"
-                  : ""
-              }`}
-            >
-              <div>
-                <h3 className="text-lg font-semibold">{plan.name}</h3>
-
-                <p className="text-sm text-muted-foreground mt-1">
-                  {plan.name === "Starter"
-                    ? "For businesses just starting"
-                    : plan.name === "Growth"
-                    ? "For growing businesses"
-                    : "For large operations"}
-                </p>
-
-                <div className="mt-6 flex items-end gap-1">
-                  <span className="text-3xl font-bold">
-                    {formattedPrice}
-                  </span>
-
-                  {plan.price !== "0" && (
-                    <span className="text-sm text-muted-foreground">
-                      /{plan.billingCycle}
-                    </span>
-                  )}
+                  <p className="text-gray-400 text-sm">
+                    {plan.description}
+                  </p>
                 </div>
 
-                <ul className="mt-6 space-y-2 text-sm">
-                  <li>• {plan.maxBranch} branches</li>
-                  <li>• {plan.maxStaff} staff</li>
-                  <li>• {plan.maxProduct} products</li>
-
-                  {featureList.map((f: string) => (
-                    <li key={f}>• {f}</li>
-                  ))}
-                </ul>
+                <GlassIcon>
+                  <Building2 size={22} />
+                </GlassIcon>
               </div>
 
-              <Button
-                disabled={loading}
-                onClick={() => handleSubscribe(plan.id)}
-                className="mt-8 w-full"
-                variant={plan.name === "Growth" ? "primary" : "secondary"}
-              >
-                {plan.price === "0" ? "Start Free" : "Subscribe"}
-              </Button>
-            </Card>
-          );
-        })}
-      </div>
-    </section>
+              <div className="mt-6">
+                <span
+                  className="
+                  text-5xl
+                  font-bold
+                  "
+                >
+                  {plan.price === "0"
+                    ? "Free"
+                    : `₦${Number(
+                        plan.price
+                      ).toLocaleString()}`}
+                </span>
+
+                {plan.price !== "0" && (
+                  <span className="text-gray-400 ml-2">
+                    /{plan.billingCycle}
+                  </span>
+                )}
+              </div>
+
+              <div className="mt-8 space-y-4">
+                <div className="flex gap-3">
+                  <Users size={18} />
+                  <span>
+                    {plan.maxStaff} Staff
+                  </span>
+                </div>
+
+                <div className="flex gap-3">
+                  <Building2 size={18} />
+                  <span>
+                    {plan.maxBranch} Branches
+                  </span>
+                </div>
+
+                <div className="flex gap-3">
+                  <Package size={18} />
+                  <span>
+                    {plan.maxProduct} Products
+                  </span>
+                </div>
+
+                {features.map(
+                  (feature: string) => (
+                    <div
+                      key={feature}
+                      className="flex gap-3"
+                    >
+                      <Check
+                        size={18}
+                        className="text-emerald-400"
+                      />
+
+                      <span>
+                        {feature}
+                      </span>
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+
+            <GlassButton
+              className="mt-8 w-full"
+              onClick={() =>
+                handleSubscribe(plan.id)
+              }
+            >
+              {plan.price === "0"
+                ? "Start Free"
+                : "Subscribe"}
+            </GlassButton>
+          </GlassCard>
+        );
+      })}
+    </div>
   );
-};
+}

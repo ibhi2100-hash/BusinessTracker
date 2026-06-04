@@ -1,4 +1,4 @@
-import { Card } from "@/components/ui/card";
+import { GlassCard } from "@/components/ui/GlassCard";
 
 const features = [
   {
@@ -27,34 +27,52 @@ const features = [
   }
 ];
 
-export const FeatureComparison = () => {
+
+export function FeatureComparison() {
   return (
-    <section className="w-full max-w-5xl px-6 pb-24">
+    <GlassCard className="p-6">
+      <h2
+        className="
+        text-xl
+        font-semibold
+        mb-6
+        "
+      >
+        Compare Plans
+      </h2>
 
-      <Card className="p-8">
+      <div className="overflow-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="text-left">
+              <th>Feature</th>
+              <th>Starter</th>
+              <th>Growth</th>
+              <th>Enterprise</th>
+            </tr>
+          </thead>
 
-        <h2 className="text-xl font-semibold mb-6">
-          Compare plans
-        </h2>
+          <tbody>
+            {features.map((feature) => (
+              <tr
+                key={feature.name}
+                className="
+                border-t
+                border-white/5
+                "
+              >
+                <td className="py-4">
+                  {feature.name}
+                </td>
 
-        <div className="space-y-4">
-
-          {features.map((f) => (
-            <div
-              key={f.name}
-              className="grid grid-cols-4 text-sm"
-            >
-              <div className="font-medium">{f.name}</div>
-              <div>{f.starter}</div>
-              <div>{f.growth}</div>
-              <div>{f.enterprise}</div>
-            </div>
-          ))}
-
-        </div>
-
-      </Card>
-
-    </section>
+                <td>{feature.starter}</td>
+                <td>{feature.growth}</td>
+                <td>{feature.enterprise}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </GlassCard>
   );
-};
+}

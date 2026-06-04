@@ -1,21 +1,43 @@
-import { Button } from "@/components/ui/button";
+import { GlassCard } from "@/components/ui/GlassCard";
+import { GlassButton } from "@/components/ui/GlassButton";
 
-export const PricingCTA = () => {
+export function PricingCTA() {
   return (
-    <section className="text-center py-20">
-
-      <h2 className="text-3xl font-semibold">
-        Start running your business smarter
+    <GlassCard
+      variant="accent"
+      className="
+        p-10
+        text-center
+      "
+    >
+      <h2
+        className="
+        text-3xl
+        font-bold
+        "
+      >
+        Ready to scale your business?
       </h2>
 
-      <p className="text-muted-foreground mt-3">
-        Join businesses using our platform to manage finances.
+      <p
+        className="
+        mt-3
+        text-gray-400
+        "
+      >
+        Join thousands of businesses
+        managing inventory, cashflow,
+        branches and sales in one place.
       </p>
 
-      <Button className="mt-6">
-        Get Started Free
-      </Button>
-
-    </section>
+      <GlassButton
+        className="
+        mt-8
+        px-8
+        "
+      >
+        Start Free
+      </GlassButton>
+    </GlassCard>
   );
-};
+}

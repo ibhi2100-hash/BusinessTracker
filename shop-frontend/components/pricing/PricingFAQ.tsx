@@ -1,4 +1,6 @@
-export const PricingFAQ = () => {
+  import { GlassCard } from "@/components/ui/GlassCard";
+
+  
   const faqs = [
     {
       q: "Can I start for free?",
@@ -14,26 +16,31 @@ export const PricingFAQ = () => {
     }
   ];
 
+
+
+export function PricingFAQ() {
   return (
-    <section className="max-w-3xl px-6 pb-24">
+    <div className="space-y-4">
+      {faqs.map((faq) => (
+        <GlassCard
+          key={faq.q}
+          className="p-5"
+        >
+          <h3 className="font-semibold">
+            {faq.q}
+          </h3>
 
-      <h2 className="text-2xl font-semibold text-center mb-10">
-        Frequently asked questions
-      </h2>
-
-      <div className="space-y-6">
-
-        {faqs.map((faq) => (
-          <div key={faq.q}>
-            <p className="font-medium">{faq.q}</p>
-            <p className="text-muted-foreground text-sm">
-              {faq.a}
-            </p>
-          </div>
-        ))}
-
-      </div>
-
-    </section>
+          <p
+            className="
+            mt-2
+            text-sm
+            text-gray-400
+            "
+          >
+            {faq.a}
+          </p>
+        </GlassCard>
+      ))}
+    </div>
   );
-};
+}
