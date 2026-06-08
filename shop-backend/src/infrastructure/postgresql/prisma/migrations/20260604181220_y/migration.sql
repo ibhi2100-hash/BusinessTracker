@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Session" ADD COLUMN     "deviceId" TEXT,
+ADD COLUMN     "deviceName" TEXT,
+ADD COLUMN     "lastUsedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ADD COLUMN     "revokedAt" TIMESTAMP(3);

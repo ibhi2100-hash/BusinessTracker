@@ -1,19 +1,22 @@
-import { Event, EventScope } from "../domain/event.js";
+import { BaseEvent } from "@business/shared-types"
+import { BusinessEventTypes, OpeningEventType, InventoryEventType , salesEventType} from "@business/shared-types";
 
-export function getEventScope(event: Event): EventScope {
+
+export function getEventScope(event: BaseEvent){
   switch (event.type) {
-    case "BUSINESS_CREATED":
+    case BusinessEventTypes.BUSINESS_CREATED:
       return "GLOBAL";
 
-    case "BUSINESS_ACTIVATION":
-    case "BRANCH_CREATED":
-    case "BRANCH_SWITCH":
-      return "BUSINESS";
-    case "PRODUCT_CREATED":
+    case BusinessEventTypes.BUSINESS_ACTIVATION:
+    case BusinessEventTypes.BRANCH_CREATED:
+    case BusinessEventTypes.BRANCH_SWITCH:
+      return "BUSINESS"
+      ;
+    case InventoryEventType.PRODUCT_CREATED:
       return "BUSINESS";
 
-    case "SALE_ADDED":
-    case "OPENING_INVENTORY_CREATED":
+    case salesEventType.SALE_ADDED:
+    case OpeningEventType.OPENING_INVENTORY_CREATED:
       return "BRANCH";
 
     default:

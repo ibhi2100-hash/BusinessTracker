@@ -1,7 +1,7 @@
 import { projectProduct }
-  from "./product.projector";
+  from "./operational-projectors/product.projector";
 
-import { projectInventory } from "./inventory.projector";
+import { projectInventory } from "./operational-projectors/inventory.projector";
 export const projectors = {
 
   PRODUCT_CREATED: [

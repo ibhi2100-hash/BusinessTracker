@@ -4,6 +4,15 @@ import { SessionRepository } from "../repository/session.repository.js";
 import { TokenService } from "./token.service.js";
 import { hashToken } from "../../../utils/crypto.util.js";
 
+
+type SessionUser = {
+  id: string;
+  email: string;
+  role: string;
+  businessId?: string | null;
+  branchId?: string | null;
+};
+
 export class SessionService {
   constructor(
     private sessionRepo: SessionRepository,

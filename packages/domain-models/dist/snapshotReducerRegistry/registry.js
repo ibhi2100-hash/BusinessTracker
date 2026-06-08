@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.snapshotReducerRegistry = void 0;
+const snapshotReduce_1 = require("./snapshotReduce");
+const productSnapshotReducer_1 = require("../reducers/snapshotReducers/productSnapshotReducer");
+const inventorySnapshotReducer_1 = require("../reducers/snapshotReducers/inventorySnapshotReducer");
+const businessSnapshotReducer_1 = require("../reducers/snapshotReducers/businessSnapshotReducer");
+const dashboardSnapshotReducer_1 = require("../reducers/snapshotReducers/dashboardSnapshotReducer");
+exports.snapshotReducerRegistry = new snapshotReduce_1.SnapshotReducerRegistry();
+exports.snapshotReducerRegistry.register(productSnapshotReducer_1.ProductSnapshotReducer);
+exports.snapshotReducerRegistry.register(inventorySnapshotReducer_1.InventorySnapshotReducer);
+exports.snapshotReducerRegistry.register(businessSnapshotReducer_1.BusinessSnapshotReducer);
+exports.snapshotReducerRegistry.register(dashboardSnapshotReducer_1.DashboardSnapshotReducer);

@@ -1,8 +1,8 @@
-import { BusinessEventTypes } from "./eventGroups/businessEvents";
-import { financeEventType } from "./eventGroups/financeEvent";
-import { InventoryEventType } from "./eventGroups/inventoryEvents";
-import { OpeningEventType } from "./eventGroups/openingEvents";
-import { salesEventType } from "./eventGroups/salesEvent";
+import { BusinessEventTypes } from "@business/shared-types";
+import { financeEventType } from "@business/shared-types";
+import { InventoryEventType } from "@business/shared-types";
+import { OpeningEventType } from "@business/shared-types";
+import { salesEventType } from "@business/shared-types";
 
 export const eventValidators: Record<string, (event: any) => boolean> = {
 

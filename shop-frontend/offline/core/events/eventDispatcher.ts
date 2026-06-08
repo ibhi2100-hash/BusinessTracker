@@ -1,30 +1,10 @@
 import { getDb, runTx } from "@/src/db";
-
-import { eventBus }
-  from "../eventBus/eventBus";
-
-import { queueSync }
-  from "@/src/sync/syncQueue";
-
-import { validateEvent }
-  from "./validationEngine";
-
-import { BaseEvent }
-  from "./types";
-
-import {
-  handlers
-} from "./handler/handlers";
-
-import {
-  projectors
-} from "./projectors/projectorRegistry";
-
-import {
-  updateAggregateVersion
-} from "./aggregate/updateAggregateVersion";
-
-import { generateLedgerEntries } from "@business/shared";
+import { eventBus }from "../eventBus/eventBus";
+import { queueSync } from "@/src/sync/syncQueue";
+import { validateEvent }from "./validationEngine";
+import { BaseEvent } from "@business/shared-types"
+import { updateAggregateVersion } from "./aggregate/updateAggregateVersion";
+import { ledgerEngine } from "../LedgerEngine";
 
 export const dispatchEvent =
   async (
@@ -35,81 +15,28 @@ export const dispatchEvent =
 
     validateEvent(event);
 
-    const db =
-      getDb(event.userId);
+    const db = getDb(event.userId);
+    if (!db) { return;}
 
-    if (!db) {
-      return;
-    }
-
-    await runTx(
-
-      db,
-
-      async () => {
+    await runTx(db, async () => {
 
         /* -----------------------------
            IDEMPOTENCY
         ----------------------------- */
-
         const existing =
           await db.events.get(event.id);
-
         if (existing) {
           return;
         }
-
         /* -----------------------------
            APPEND EVENT
         ----------------------------- */
-
         await db.events.add(event);
-
-        /* -----------------------------
-           UPDATE LOCAL AGGREGATE VERSION
-        ----------------------------- */
-
-        await updateAggregateVersion(
-          db,
-          event
-        );
-
-        /* -----------------------------
-           PROJECT EVENT
-        ----------------------------- */
-       const eventProjectors =
-          projectors[event.type] ?? [];
-
-        console.log(
-          "Projectors for",
-          event.type,
-          eventProjectors
-        );
-        for (const projector of eventProjectors) {
-
-          await projector(
-            db,
-            event
-          );
-        }
 
         /* -----------------------------
            DETERMINISTIC LEDGER PROJECTION
         ----------------------------- */
-
-        const entries =
-          generateLedgerEntries(event);
-
-        if (entries.length) {
-
-          await db.ledgerEntries.bulkPut(
-            entries
-          );
-        }
-
-        /* -----------------------------
-           SNAPSHOT UPDATE
-        ----------------------------- */
+        ledgerEngine.process(event)
       },
 
       db.events,
@@ -127,23 +54,7 @@ export const dispatchEvent =
     /* --------------------------------
        SIDE EFFECTS AFTER COMMIT
     -------------------------------- */
-
-    const effects =
-      handlers[
-        event.type
-      ] ?? [];
-
-    for (const effect of effects) {
-
-      await effect(event);
-    }
-
-    /* --------------------------------
-       EMIT EVENT BUS
-    -------------------------------- */
-
-    eventBus.emit(event);
-
+    eventBus.emit(event)
     /* --------------------------------
        QUEUE SYNC
     -------------------------------- */

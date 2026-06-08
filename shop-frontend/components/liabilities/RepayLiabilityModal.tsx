@@ -14,7 +14,7 @@ import {
 } from "@/schemas/repayliability.schema";
 
 import { eventService } from "@/src/services/eventService";
-import { financeEventType } from "@/offline/core/events/eventGroups/financeEvent";
+import { financeEventType } from "@business/shared-types"
 import { AggregateType } from "@/offline/domain/aggregate";
 
 import { GlassCard } from "@/components/ui/GlassCard";

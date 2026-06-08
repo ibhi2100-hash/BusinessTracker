@@ -202,11 +202,32 @@ async refreshSession(
   refreshToken: string
 ) {
 
-  return this.sessionService.refresh(
-    refreshToken
-  );
-}
+  const session =
+    await this.sessionService.refresh(
+      refreshToken
+    );
 
+  const context =
+    await this.getCurrentUser(
+      session.user.id
+    );
+
+  return {
+    ...session,
+
+    user:
+      context.user,
+
+    business:
+      context.business,
+
+    activeBranch:
+      context.activeBranch,
+
+    branches:
+      context.branches,
+  };
+}
 async logout(
   refreshToken: string
 ) {

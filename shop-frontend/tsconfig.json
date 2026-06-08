@@ -31,6 +31,6 @@
     "**/*.mts",
     "*.css",
     "types/**/*.d.ts"
-  ],
+, "../packages/domain-models/src/reducers/branchReducer.ts", "../packages/domain-models/src/reducers/businessReducer.ts", "../packages/domain-models/src/reducers/inventoryReducer.ts", "../packages/domain-models/src/reducers/productReducer.ts"  ],
   "exclude": ["node_modules"]
 }

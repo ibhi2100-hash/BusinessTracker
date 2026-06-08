@@ -14,6 +14,9 @@ export abstract class BaseRepo {
     fn: () => Promise<T>,
     ...tables: Table<any, any>[]
   ): Promise<T> {
+    if(tables.length === 0){
+      return fn()
+    }
     return runTx(this.db, fn, ...tables);
   }
 }

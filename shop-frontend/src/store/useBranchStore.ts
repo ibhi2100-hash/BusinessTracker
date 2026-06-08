@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Branch } from "@/types/types";
+import { Branch } from "@business/shared-types";
 
 interface BranchState {
   businessName: string;

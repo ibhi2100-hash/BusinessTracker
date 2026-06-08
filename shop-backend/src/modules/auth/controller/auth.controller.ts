@@ -44,8 +44,6 @@ export class AuthController {
         user: this.safeUser(user),
         accessToken: token,
         accessExpiresIn: expiresIn,
-        refreshToken,
-        refreshExpiresIn: refreshExpiresIn,
       });
     } catch (error) {
       if (

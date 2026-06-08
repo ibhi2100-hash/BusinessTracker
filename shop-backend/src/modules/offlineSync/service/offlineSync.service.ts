@@ -1,14 +1,10 @@
 import { SyncRepository } from "../repository/syncRepository.js";
-import { LedgerRepository } from "../../ledger/ledgerRepository.js";
-import { HanldeEvent } from "../proccessor/processEvent.js";
-import { generateLedgerEntries } from "@business/shared";
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
-import { toDomainEvent } from "../../../helpers/mapper.js";
+import { createBackendLedgerEngine } from "../../../infrastructure/ledger/backendLedgerEngine.js";
 
 export class OfflineSyncService {
   constructor(
     private syncRepository: SyncRepository,
-    private ledgerRepo: LedgerRepository
   ) {}
 
   async syncAggregateBatch({
@@ -79,34 +75,15 @@ export class OfflineSyncService {
             ...event,
             aggregateVersion: version,
           };
-
-          const saved =
-            await this.syncRepository.storeEvent(
-              enrichedEvent,
-              tx
-            );
-          const domainEvent = toDomainEvent(saved);
-          const entries =
-            generateLedgerEntries(domainEvent);
-
-          if (entries.length) {
-            await this.ledgerRepo.bulkAddEntries(
-              entries,
-              saved.businessId!,
-              saved.branchId!,
-              tx
-            );
-          }
-
-          await HanldeEvent(toDomainEvent(saved), tx);
-
+         const ledgerEngine = createBackendLedgerEngine(tx)
+         await ledgerEngine.process(event)
           await this.syncRepository.markProcessed(
-            saved,
+            enrichedEvent,
             tx
           );
 
           success.push({
-            eventId: saved.id,
+            eventId: enrichedEvent.id,
             aggregateId,
             aggregateVersion: version,
           });

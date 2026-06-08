@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { Business } from "@/types/types";
+import { Business } from "@business/shared-types";
 
 interface BusinessState {
   business: Business | null;

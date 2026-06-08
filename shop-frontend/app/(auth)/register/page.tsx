@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, RegisterInput } from "@/lib/validations/auth.schema";
-
+import { AuthRepo } from "@/src/repositories/auth/authRepo"
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -46,14 +46,24 @@ export default function RegisterPage() {
           }),
         }
       );
+    
 
       const result = await res.json();
+
 
       if (!res.ok) {
         throw new Error(result.message || "Registration failed");
       }
+      localStorage.setItem("accessToken", result.accessToken);
+      const authRepo = new AuthRepo(result.user.id);
 
       await AuthService.saveUser(result.user);
+      await authRepo.saveAuth({
+        user: result.user,
+        business: result.business,
+        branches: result.branches,
+        activeBranch: result.activeBranch,
+      });
 
       router.push("/step1-business");
     } catch (error: any) {

@@ -1,23 +1,22 @@
 import Dexie, { Table } from "dexie";
 import { getDbName, DB_VERSION, TABLES } from "./schema";
-import { BaseEvent } from "@/offline/core/events/types";
-import { Business, Branch, Product, User } from "@/types/types";
-import { LedgerEntry } from "../domain/ledger";
+import { BaseEvent, LedgerEntry } from "@business/shared-types"
+import { Business, Branch, Product, User, Snapshot, Inventory } from "@business/shared-types";
 import { AggregateRecord, ReplicaMeta } from "@/offline/domain/aggregate";
+
 
 // ---------------------------
 // DOMAIN TYPES
 // ---------------------------
 
-
-export interface Inventory {
-  id: string;
-  productId: string;
-  branchId: string;
-  quantity: number;
-  costPrice: number;
-  updatedAt?: number;
-  createdAt?: number;
+export interface AuthData {
+  id: "current"
+  user: any;
+  business: any;
+  branches: any[];
+  activeBranch: any;
+  createdAt: number;
+  updatedAt: number;
 }
 
 export interface Category {
@@ -37,6 +36,20 @@ export interface Session {
   id: string;
   userId: string;
   createdAt: number;
+
+}
+
+export interface Sales {
+  
+  id: string;
+  businessId?: string;
+  branchId?: string;
+  productId: string;
+  costPrice: number;
+  aggregateId: string;
+  amount: number;
+  createdAt: Date;
+
 }
 
 
@@ -52,17 +65,6 @@ export interface Liability {
   branchId: string;
 }
 
-export interface Snapshot {
-  id: string;
-  aggregateId: string;
-  aggregateType: string;
-  version: number;
-  state: any;
-  businessId?: string;
-  branchId?: string;
-  createdAt?: number;
-  updatedAt?: number;
-}
 
 // ---------------------------
 // DB CLASS
@@ -74,10 +76,12 @@ export class AppDB extends Dexie {
   replicaMeta!: Table<ReplicaMeta, string>;
   inventory!: Table<Inventory, string>;
   products!: Table<Product, string>;
+  sales!: Table<Sales, String>;
   ledgerEntries!: Table<LedgerEntry, string>;
   categories!: Table<Category, string>;
   brands!: Table<Brand, string>;
   users!: Table<User, string>;
+  auth!: Table<AuthData, string>;
   sessions!: Table<Session, string>;
   businesses!: Table<Business, string>;
   branches!: Table<Branch, string>;
@@ -94,6 +98,9 @@ export class AppDB extends Dexie {
 
       aggregates:
         "id,aggregateId,aggregateType,version,lastGlobalPosition,lastSnapshotVersion,[aggregateType+aggregateId]",
+      
+      auth: 
+        "id",
 
       snapshots:
         "id,aggregateId,aggregateType,version,lastGlobalPosition,[aggregateType+aggregateId]",
@@ -102,11 +109,14 @@ export class AppDB extends Dexie {
         "deviceId,lastLogicClock",
 
 
+
       inventory:
         "id,productId,branchId,updatedAt,[productId+branchId]",
 
       products:
         "id,name,brandId,categoryId,businessId,branchId,createdAt,[businessId+branchId],[businessId+name]",
+      sales: 
+        "id,productId,createdAt",
 
       ledgerEntries:
         "id,eventId,account,branchId,businessId,createdAt,[eventId],[businessId+branchId],[account+createdAt]",

@@ -1,4 +1,4 @@
-import { Product } from "@/types/types";
+import { Product } from "@business/shared-types";
 import { create } from "zustand";
 
 export interface inventoryProduct extends Product {

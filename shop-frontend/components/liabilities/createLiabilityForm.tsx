@@ -21,8 +21,7 @@ import {
 } from "@/schemas/liabilities.schema";
 
 import { eventService } from "@/src/services/eventService";
-import { OpeningEventType } from "@/offline/core/events/eventGroups/openingEvents";
-import { financeEventType } from "@/offline/core/events/eventGroups/financeEvent";
+import { OpeningEventType, financeEventType} from "@business/shared-types"
 import { AggregateType } from "@/offline/domain/aggregate";
 
 import { GlassCard } from "@/components/ui/GlassCard";
