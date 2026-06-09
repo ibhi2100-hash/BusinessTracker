@@ -10,62 +10,62 @@ export const projectorRegistry = {
   [InventoryEventType.PRODUCT_CREATED]: [
     {
       reducer: ProductReducer,
-      target: "products"
+      projection: "product"
     }
   ],
 
   [InventoryEventType.PRODUCT_UPDATED]: [
     {
       reducer: ProductReducer,
-      target: "products"
+      projection: "product"
     }
   ],
    [InventoryEventType.PRODUCT_DELETED]: [
     {
       reducer: ProductReducer,
-      target: "products"
+      projection: "product"
     }
   ],
    [OpeningEventType.OPENING_INVENTORY_CREATED]: [
     {
       reducer: InventoryReducer,
-      target: "inventory"
+      projection: "inventory"
     }
   ],
    [InventoryEventType.INVENTORY_ADDED]: [
     {
       reducer: InventoryReducer,
-      target: "inventory"
+      projection: "inventory"
     }
   ],
    [BusinessEventTypes.BUSINESS_CREATED]: [
     {
       reducer: BusinessReducer,
-      target: "business"
+      projection: "business"
     }
   ],
    [BusinessEventTypes.BUSINESS_ACTIVATION]: [
     {
       reducer: BusinessReducer,
-      target: "business"
+      projection: "business"
     }
   ],
 [salesEventType.SALE_ADDED]: [
     {
       reducer: SaleReducer,
-      target: "sales"
+      projection: "sales"
     }
   ],
    [BusinessEventTypes.BRANCH_CREATED]: [
     {
       reducer: BranchReducer,
-      target: "branches"
+      projection: "branches"
     }
   ],
    [BusinessEventTypes.BRANCH_SWITCH]: [
     {
       reducer: BranchReducer,
-      target: "branches"
+      projection: "branches"
     }
   ],
    

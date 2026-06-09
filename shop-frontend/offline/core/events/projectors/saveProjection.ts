@@ -18,7 +18,7 @@ export async function saveProjection(
       await db.businesses.put(state, state.id);
 
       break;
-    case "branch":
+    case "branches":
 
       await db.branches.put(state, state.id);
 

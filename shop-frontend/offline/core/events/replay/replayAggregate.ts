@@ -1,11 +1,9 @@
 import { AppDB }
   from "@/src/db";
 
-import { projectors }
-  from "../projectors/index";
-
 import { AggregateRegistry }
   from "../aggregate/aggregateRegistry";
+import { IndexedDbProjectionEngine } from "../projectors/projectEngine";
 
 export async function replayAggregate(
 
@@ -17,16 +15,8 @@ export async function replayAggregate(
 
   for (const event of events) {
 
-    const eventProjectors =
-      projectors[event.type] ?? [];
-
-    for (const projector of eventProjectors) {
-
-      await projector(
-        db,
-        event
-      );
-    }
+    const projection = new IndexedDbProjectionEngine();
+    projection.process(event)
 
     await AggregateRegistry.applyEvent(
       db,

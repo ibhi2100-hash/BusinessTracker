@@ -13,7 +13,7 @@ import {
 import { eventService } from "@/src/services/eventService";
 import { nanoid } from "nanoid";
 import { AggregateType } from "@/offline/domain/aggregate";
-import { BusinessEventTypes } from "@/offline/core/events/eventGroups/businessEvents";
+import { BusinessEventTypes } from "@business/shared-types";
 import { GlassButton } from "@/components/ui/GlassButton";
 
 export default function Step2Business() {

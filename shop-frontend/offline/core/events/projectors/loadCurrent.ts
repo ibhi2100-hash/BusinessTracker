@@ -28,7 +28,7 @@ export async function loadCurrentState(
         .equals(aggregateId)
         .toArray();
     
-    case "branch":
+    case "branches":
       return db.branches
         .where("aggregateId")
         .equals(aggregateId)

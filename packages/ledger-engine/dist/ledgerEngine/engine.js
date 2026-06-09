@@ -6,10 +6,13 @@ class LedgerEngine {
         this.ctx = ctx;
     }
     async process(event) {
+        console.log("Ledger Start");
         // 1. IDEMPOTENCY CHECK
         const exists = await this.ctx.eventStore.exists(event.id);
         if (exists)
             return;
+        console.log("Exists?", exists);
+        console.log("continue");
         // 2. PERSIST EVENT
         await this.ctx.eventStore.append(event);
         // 3. GENERATE LEDGER ENTRIES (deterministic)

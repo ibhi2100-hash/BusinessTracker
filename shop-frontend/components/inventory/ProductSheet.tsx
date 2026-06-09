@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Product } from "@/types/types";
+import { Product } from "@business/shared-types";
 import { Package, Tag, DollarSign } from "lucide-react";
 import { GlassSheet } from "@/components/ui/GlassSheet";
 import { GlassInput } from "@/components/ui/GlassInput";

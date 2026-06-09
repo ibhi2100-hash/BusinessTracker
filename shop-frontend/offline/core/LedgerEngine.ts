@@ -4,11 +4,21 @@ import { IndexedDbEventStore } from "@/src/repositories/IndexDbStore";
 import { IndexedDbProjectionEngine } from "./events/projectors/projectEngine";
 import { IndexedDbVersionManager } from "./events/versionManager";
 import { snapshotEngine } from "./snapshots/registry";
+import { IndexedDbProjectionRepository } from "./events/projectors/indexedDbProjectRepo";
+import { AppDB } from "@/src/db";
 
-export const ledgerEngine = new LedgerEngine({
-  eventStore: new IndexedDbEventStore(),
-  snapshotEngine,
-  projectionEngine: new IndexedDbProjectionEngine(),
-  ledgerGenerator: generateLedgerEntries,
-  versionManager: new IndexedDbVersionManager()
-});
+export function createFrontendLedgerEngine(
+  db: AppDB 
+) {
+  const repo = new IndexedDbProjectionRepository(db);
+
+  const projectionEngine = new IndexedDbProjectionEngine(repo)
+
+  return new LedgerEngine({
+    eventStore: new IndexedDbEventStore(),
+    snapshotEngine,
+    projectionEngine,
+    ledgerGenerator: generateLedgerEntries,
+    versionManager: new IndexedDbVersionManager(),
+  });
+}

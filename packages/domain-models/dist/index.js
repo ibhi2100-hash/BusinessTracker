@@ -15,4 +15,5 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./projectorRegistry/projectorRegistry"), exports);
+__exportStar(require("./projectorRegistry/projectionRepository"), exports);
 __exportStar(require("./reducers/snapshotReducers/snapshotReducers"), exports);

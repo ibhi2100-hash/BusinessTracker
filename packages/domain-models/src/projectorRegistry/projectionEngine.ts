@@ -1,10 +1,7 @@
-import {
-  projectorRegistry
-} from "@business/domain-models";
-import { ProjectionRepository } from "@business/domain-models";
+import { ProjectionRepository } from "./projectionRepository";
+import { projectorRegistry } from "./projectorRegistry";
 import { BaseEvent } from "@business/shared-types";
-
-export class IndexedDbProjectionEngine {
+export class ProjectionEngine {
 
   constructor(
     private repo: ProjectionRepository

@@ -1,5 +1,5 @@
 import { createEntity } from "@/offline/core/entities/entityFactory";
-import { BaseEvent } from "./types";
+import { BaseEvent } from "@business/shared-types";
 import { getDeviceId } from "@/src/utils/deviceIdGenerator";
 import { nextLogicClock } from "@/src/utils/nextLogicClock";
 import { AppDB } from "@/src/db";

@@ -3,6 +3,7 @@ import { Toaster } from "sonner";
 import { Providers } from "./providers";
 import SyncBootstrap from "@/offline/bootstrap/syncBootstrap";
 import { AppShell } from "@/components/layout/AppShell";
+import PageWrapper from "@/components/ui/PageWrapper";
 
 
 export const metadata = {
@@ -23,7 +24,9 @@ export default function RootLayout({
         <Providers>
           <SyncBootstrap />
           <AppShell>
-            {children}
+            <PageWrapper>
+              {children}
+            </PageWrapper>
           </AppShell>
           <Toaster richColors position="top-right" />
         </Providers>

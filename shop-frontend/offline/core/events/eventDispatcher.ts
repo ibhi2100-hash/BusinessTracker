@@ -3,8 +3,7 @@ import { eventBus }from "../eventBus/eventBus";
 import { queueSync } from "@/src/sync/syncQueue";
 import { validateEvent }from "./validationEngine";
 import { BaseEvent } from "@business/shared-types"
-import { updateAggregateVersion } from "./aggregate/updateAggregateVersion";
-import { ledgerEngine } from "../LedgerEngine";
+import { createFrontendLedgerEngine } from "../LedgerEngine";
 
 export const dispatchEvent =
   async (
@@ -20,25 +19,10 @@ export const dispatchEvent =
 
     await runTx(db, async () => {
 
-        /* -----------------------------
-           IDEMPOTENCY
-        ----------------------------- */
-        const existing =
-          await db.events.get(event.id);
-        if (existing) {
-          return;
-        }
-        /* -----------------------------
-           APPEND EVENT
-        ----------------------------- */
-        await db.events.add(event);
-
-        /* -----------------------------
-           DETERMINISTIC LEDGER PROJECTION
-        ----------------------------- */
-        ledgerEngine.process(event)
+       const ledgerEngine = createFrontendLedgerEngine(db);
+       await ledgerEngine.process(event)
+        console.log("Even Succefully passed the LedgerEngine: ", event)
       },
-
       db.events,
       db.aggregates,
       db.snapshots,
@@ -58,6 +42,5 @@ export const dispatchEvent =
     /* --------------------------------
        QUEUE SYNC
     -------------------------------- */
-
     queueSync();
 };
