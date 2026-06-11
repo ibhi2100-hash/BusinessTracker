@@ -1,8 +1,8 @@
-import { financeEventType } from "@business/shared-types/src/eventGroups/financeEvent";
-import { InventoryEventType } from "@business/shared-types/src/eventGroups/inventoryEvents";
-import { salesEventType } from "@business/shared-types/src/eventGroups/salesEvent";
-import { BusinessEventTypes } from "@business/shared-types/src/eventGroups/businessEvents";
-import { OpeningEventType } from "@business/shared-types/src/eventGroups/openingEvents";
+import { financeEventType } from "@business/shared-types";
+import { InventoryEventType } from "@business/shared-types";
+import { salesEventType } from "@business/shared-types";
+import { BusinessEventTypes } from "@business/shared-types";
+import { OpeningEventType } from "@business/shared-types";
 
 export type EventType =
   | typeof financeEventType[keyof typeof financeEventType]

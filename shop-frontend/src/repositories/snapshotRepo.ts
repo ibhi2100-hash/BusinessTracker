@@ -1,6 +1,6 @@
 import { SnapshotRepo} from "@business/snapshot-engine"
 import { Snapshot } from "@business/shared-types";
-import { AppDB, getDb } from "../db";
+import { AppDB } from "../db";
 
 
 export class IndexedDbSnapshotRepo

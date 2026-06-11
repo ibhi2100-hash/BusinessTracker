@@ -6,9 +6,14 @@ export class IndexedDbEventStore {
 
   async exists(id: string): Promise<boolean> {
 
-    const userId =
-      useAuthStore.getState().user.id;
+    const user =
+      useAuthStore.getState().user;
 
+      if (!user?.id) {
+        throw new Error("User not available");
+      }
+
+    const userId = user.id;
     const db = getDb(userId);
 
     const event =
@@ -21,8 +26,14 @@ export class IndexedDbEventStore {
     event: BaseEvent
   ): Promise<void> {
 
-    const userId =
-      useAuthStore.getState().user.id;
+    const user =
+      useAuthStore.getState().user;
+
+    if (!user?.id) {
+      throw new Error("User not available");
+    }
+
+    const userId = user.id;
 
     const db = getDb(userId);
 

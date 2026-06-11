@@ -8,27 +8,36 @@ export class LedgerEngine {
   ) {}
 
   async process(event: BaseEvent) {
-    console.log("Ledger Start")
-    // 1. IDEMPOTENCY CHECK
-    const exists = await this.ctx.eventStore.exists(event.id);
-    if (exists) return;
-    console.log("Exists?", exists)
-    console.log("continue");
-    
-    // 2. PERSIST EVENT
-    await this.ctx.eventStore.append(event);
+    try {
+  console.log("1 exists");
+  const exists = await this.ctx.eventStore.exists(event.id);
+  console.log("1 done");
 
-    // 3. GENERATE LEDGER ENTRIES (deterministic)
-    const entries =
-      this.ctx.ledgerGenerator(event);
+  if (exists) return;
 
-    // 4. SNAPSHOT UPDATE (state compression)
-    await this.ctx.snapshotEngine.process(event);
+  console.log("2 append");
+  await this.ctx.eventStore.append(event);
+  console.log("2 done");
 
-    // 5. PROJECTIONS (read models)
-    await this.ctx.projectionEngine.process(event, entries);
+  console.log("3 ledger");
+  const entries = this.ctx.ledgerGenerator(event);
+  console.log("3 done");
 
-    // 6. VERSION / AGGREGATE STATE TRACKING
-    await this.ctx.versionManager.update(event);
+  console.log("4 snapshot");
+  await this.ctx.snapshotEngine.process(event);
+  console.log("4 done");
+
+  console.log("5 projections");
+  await this.ctx.projectionEngine.process(event, entries);
+  console.log("5 done");
+
+  console.log("6 version");
+  await this.ctx.versionManager.update(event);
+  console.log("6 done");
+
+} catch (e) {
+  console.error("FAILED INSIDE LEDGER", e);
+  throw e;
+}
   }
 }

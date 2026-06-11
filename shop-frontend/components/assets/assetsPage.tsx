@@ -24,8 +24,8 @@ import { useDepreciationPreview } from "@/hooks/liveDepreciation";
 import { formatCurrency } from "@/lib/format";
 
 import { eventService } from "@/src/services/eventService";
-import { OpeningEventType } from "@/offline/core/events/eventGroups/openingEvents";
-import { financeEventType } from "@/offline/core/events/eventGroups/financeEvent";
+import { OpeningEventType } from "@business/shared-types";
+import { financeEventType } from "@business/shared-types";
 import { nanoid } from "nanoid";
 
 import { GlassCard } from "@/components/ui/GlassCard";

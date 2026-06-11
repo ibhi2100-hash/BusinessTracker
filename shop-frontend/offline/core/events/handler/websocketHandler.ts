@@ -1,4 +1,4 @@
-import { BaseEvent } from "../types";
+import { BaseEvent } from "@business/shared-types";
 
 
 export async function websocketHandler(

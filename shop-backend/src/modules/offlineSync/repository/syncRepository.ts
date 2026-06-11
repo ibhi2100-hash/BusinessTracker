@@ -1,3 +1,4 @@
+import { BaseEvent } from "@business/shared-types";
 import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
 

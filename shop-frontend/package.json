@@ -10,13 +10,14 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@business/events": "*",
+    "@business/shared-types": "*",
+    "@business/snapshot-engine": "*",
     "@hookform/resolvers": "^5.2.2",
     "@tanstack/react-query": "^5.90.21",
-    "@business/shared-types": "*",
-    "@business/events": "*",
-    "@business/snapshot-engine": "*",
     "axios": "^1.13.5",
     "clsx": "^2.1.1",
+    "dexie": "^4.4.3",
     "dexie-react-hooks": "^4.4.0",
     "lightningcss": "^1.32.0",
     "localforage": "^1.10.0",

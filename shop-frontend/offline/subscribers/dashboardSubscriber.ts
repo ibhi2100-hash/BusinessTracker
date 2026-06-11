@@ -3,7 +3,7 @@ import { getDb } from "@/src/db";
 import { useAuthStore } from "@/src/store/useAuthStore";
 import { useBranchStore } from "@/src/store/useBranchStore";
 import { useDashboardStore } from "@/src/store/DashboardStore";
-import { Account } from "@/src/domain/ledger";
+import { Account } from "@business/shared-types"
 
 let subscription: any;
 

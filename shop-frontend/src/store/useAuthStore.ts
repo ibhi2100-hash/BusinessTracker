@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { User, Branch } from "@/types/types";
+import { User, Branch } from "@business/shared-types";
 
 interface AuthState {
   user: User | null;

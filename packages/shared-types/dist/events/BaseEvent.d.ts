@@ -14,7 +14,7 @@ export interface BaseEvent<T extends string = string, p = Record<string, any>> {
     createdAt: Date;
     updatedAt?: Date;
     logicClock: bigint;
-    globalPosition: bigint;
+    globalPosition?: bigint;
     deviceId: string;
     userId: string | null;
     status: "PENDING" | "SYNCED" | "FAILED" | "DEAD";

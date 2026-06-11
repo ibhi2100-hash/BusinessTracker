@@ -1,4 +1,4 @@
-import { Branch, Business } from "@/types/types";
+import { Branch, Business } from "@business/shared-types";
 import { BaseRepo } from "../baseRepo/baseRepo";
 import { nanoid } from "nanoid";
 

@@ -1,4 +1,4 @@
-import { BaseEvent } from "@/offline/core/events/types";
+import { BaseEvent } from "@business/shared-types";
 const analytics =  {
   async track(eventType: string, payload: any){
     console.log("i am analytic")

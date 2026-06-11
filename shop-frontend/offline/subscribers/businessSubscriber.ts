@@ -27,11 +27,14 @@ export function startBusinessSubscriber() {
     };
   }).subscribe({
     next: (data) => {
-        useBusinessStore.getState().setBusiness(data.business)
-        useBranchStore.getState().setBranches(data.branches)
-        useBranchStore.getState().setActiveBranch(data.activeBranch.id)
+      useBusinessStore.getState().setBusiness(data.business);
+      useBranchStore.getState().setBranches(data.branches);
 
-    
+      if (data.activeBranch) {
+        useBranchStore
+          .getState()
+          .setActiveBranch(data.activeBranch.id);
+      }
     },
     error: (err) => {
       console.error("[BusinessSubscriber] error:", err);

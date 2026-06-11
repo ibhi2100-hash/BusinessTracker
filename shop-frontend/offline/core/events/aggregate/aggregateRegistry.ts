@@ -2,7 +2,7 @@ import { AppDB }
   from "@/src/db";
 
 import { BaseEvent }
-  from "../types";
+  from "@business/shared-types";
 
 import { AggregateRecord }
   from "../../../domain/aggregate";

@@ -11,16 +11,18 @@ import { PrismaVersionManager } from "../../modules/offlineSync/versionManager/v
 import { Prisma } from "../postgresql/prisma/generated/client.js";
 import { createSnapshotEngine } from "../../modules/snapshot/SnapShotEngine.js";
 import { SyncRepository } from "../../modules/offlineSync/repository/syncRepository.js";
+import { PrismaProjectionRepository } from "../../modules/offlineSync/projectionEngine/prismaProjectionRepo.js";
 
 export function createBackendLedgerEngine(
   tx: Prisma.TransactionClient
 ) {
-  const repo = new SyncRepository();
+  const repo = new SyncRepository()
+  const projectionRepo = new PrismaProjectionRepository(tx);
 
   return new LedgerEngine({
-    eventStore: new PrismaEventStore(repo, tx),
+    eventStore: new PrismaEventStore(tx, repo),
     snapshotEngine: createSnapshotEngine(tx),
-    projectionEngine: new PrismaProjectionEngine(tx),
+    projectionEngine: new PrismaProjectionEngine(projectionRepo),
     ledgerGenerator: generateLedgerEntries,
     versionManager: new PrismaVersionManager(tx),
   });

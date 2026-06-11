@@ -23,6 +23,10 @@ export declare const InventoryEventType: {
     PRODUCT_DELETED: string;
     INVENTORY_ADDED: string;
     INVENTORY_UPDATED: string;
+    INVENTORY_SOLD: string;
+    INVENTORY_ADJUSTED: string;
+    INVENTORY_TRANSFER: string;
+    INVENTORY_RECEIVED: string;
 };
 export declare const OpeningEventType: {
     OPENING_INVENTORY_CREATED: string;

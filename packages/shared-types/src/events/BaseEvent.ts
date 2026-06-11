@@ -24,7 +24,7 @@ export interface BaseEvent<T extends string = string, p = Record<string, any>> {
   createdAt: Date;       // device time
   updatedAt?: Date;      // device time
   logicClock: bigint;    // monotonic per device
-  globalPosition: bigint
+  globalPosition?: bigint
 
   // origin
   deviceId: string;

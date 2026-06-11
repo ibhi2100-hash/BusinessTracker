@@ -1,16 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { useInventoryStore } from "@/src/store/inventoryStore";
+import { useMemo, useState } from "react";
 import { inventoryProduct } from "@/src/store/inventoryStore";
 import ProductCard from "./productCard";
 import ProductSheet from "./ProductSheet";
+import AdjustStockSheet from "./AdjustStockSheet";
+import ReceiveStockSheet from "./ReceivedStockSheet";
+import TransferStockSheet from "./TransferStockSheet";
+import ProductHistorySheet from "./ProductHistorySheet";
 import CartBar from "@/components/inventory/CartBar";
 import { toast } from "sonner";
-import {
-  startInventorySubscriber,
-  stopInventorySubscriber,
-} from "@/offline/subscribers/inventorySubscriber";
 
 import {
   Search,
@@ -26,6 +25,9 @@ import { salesEventType } from "@business/shared-types";
 import { AggregateType } from "@/offline/domain/aggregate";
 import SellCard from "./SalesCard";
 import { GlassButton } from "../ui/GlassButton";
+import { useInventoryProducts } from "@/hooks/useProduct";
+import ProductDetailsSheet from "./ProductsManagement";
+import { useBranchStore } from "@/src/store/useBranchStore";
 
 interface InventoryPageProps {
   context: "sell" | "admin";
@@ -36,18 +38,10 @@ export default function InventoryPage({
   context,
   mode,
 }: InventoryPageProps) {
-  const productsMap = useInventoryStore((s) => s.productsById);
-
-  const products = useMemo(() => {
-    return Object.values(productsMap);
-  }, [productsMap]);
-
+  const products = useInventoryProducts();
   // -----------------------------
   // UI STATE
   // -----------------------------
-  const [sheetOpen, setSheetOpen] = useState(false);
-  const [sheetMode, setSheetMode] =
-    useState<"create" | "edit">("create");
   const [selectedProduct, setSelectedProduct] =
     useState<inventoryProduct | null>(null);
   const [loading, setLoading] = useState(false);
@@ -55,14 +49,21 @@ export default function InventoryPage({
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] =
     useState<string>("All");
+  const branches = useBranchStore((s) => s.branches);
+  
 
-  // -----------------------------
-  // SUBSCRIBER
-  // -----------------------------
-  useEffect(() => {
-    startInventorySubscriber();
-    return () => stopInventorySubscriber();
-  }, []);
+  type ActiveSheet =
+  | null
+  | "create"
+  | "manage"
+  | "edit"
+  | "receive"
+  | "adjust"
+  | "transfer"
+  | "history";
+
+const [activeSheet, setActiveSheet] =
+  useState<ActiveSheet>(null);
 
   // -----------------------------
   // 📦 CATEGORIES
@@ -96,17 +97,21 @@ export default function InventoryPage({
   // ACTIONS
   // -----------------------------
   const openCreate = () => {
-    setSheetMode("create");
+    setActiveSheet("create")
     setSelectedProduct(null);
-    setSheetOpen(true);
+  
   };
 
   const openEdit = (product: inventoryProduct) => {
-    setSheetMode("edit");
-    setSelectedProduct(product);
-    setSheetOpen(true);
-  };
+    setActiveSheet("edit")
+    setSelectedProduct(product)
+  }
 
+  const openManage = (product: inventoryProduct) => {
+    setActiveSheet("manage");
+    setSelectedProduct(product);
+  };
+ 
  const handleDelete = async (productId: string) => {
   try {
     await eventService.create({
@@ -171,7 +176,116 @@ const handleSell = async (productId: string, quantity: number) => {
 
   toast.success("Sale recorded");
 };
+const handleReceiveStock = async (
+  quantity: number,
+  costPrice?: number,
+  note?: string
+) => {
+  if (!selectedProduct) return;
 
+  await eventService.create({
+    aggregateType:
+      AggregateType.INVENTORY,
+
+    aggregateId:
+      selectedProduct.id,
+
+    type:
+      InventoryEventType.INVENTORY_RECEIVED,
+
+    mode,
+
+    payload: {
+      productId:
+        selectedProduct.id,
+
+      quantity,
+      costPrice,
+      note,
+    },
+  });
+
+  toast.success(
+    "Stock received"
+  );
+
+  setActiveSheet(null);
+};
+
+const handleAdjustStock = async (
+  direction:
+    | "increase"
+    | "decrease",
+  quantity: number,
+  reason: string
+) => {
+  if (!selectedProduct) return;
+
+  await eventService.create({
+    aggregateType:
+      AggregateType.INVENTORY,
+
+    aggregateId:
+      selectedProduct.id,
+
+    type:
+      InventoryEventType.INVENTORY_ADJUSTED,
+
+    mode,
+
+    payload: {
+      productId:
+        selectedProduct.id,
+
+      direction,
+      quantity,
+      reason,
+    },
+  });
+
+  toast.success(
+    "Inventory adjusted"
+  );
+
+  setActiveSheet(null);
+};
+const handleTransferStock = async (
+  branchId: string,
+  quantity: number,
+  note?: string
+) => {
+  if (!selectedProduct) return;
+
+  await eventService.create({
+    aggregateType:
+      AggregateType.INVENTORY,
+
+    aggregateId:
+      selectedProduct.id,
+
+    type:
+      InventoryEventType.INVENTORY_TRANSFER,
+
+    mode,
+
+    payload: {
+      productId:
+        selectedProduct.id,
+
+      targetBranchId:
+        branchId,
+
+      quantity,
+      note,
+    },
+  });
+
+  toast.success(
+    "Stock transferred"
+  );
+
+  setActiveSheet(null);
+};
   const handleSubmit = async (data: {
   name: string;
   price: number;
@@ -181,7 +295,7 @@ const handleSell = async (productId: string, quantity: number) => {
   try {
     setLoading(true);
 
-       if (sheetMode === "create") {
+       if (activeSheet === "create") {
         await eventService.createProductWithOpeningStock({
           name: data.name,
           price: data.price,
@@ -192,7 +306,7 @@ const handleSell = async (productId: string, quantity: number) => {
         toast.success("Product created");
       }
 
-      if (sheetMode === "edit" && selectedProduct) {
+      if (activeSheet === "manage" && selectedProduct) {
         await eventService.updateProductSmart({
           productId: selectedProduct.id,
           name: data.name,
@@ -203,8 +317,6 @@ const handleSell = async (productId: string, quantity: number) => {
 
         toast.success("Product updated");
       }
-
-    setSheetOpen(false);
   } catch (e) {
     console.error(e);
     toast.error("Operation failed");
@@ -309,7 +421,7 @@ const handleSell = async (productId: string, quantity: number) => {
                 key={product.id}
                 product={product}
                 context={context}
-                onEdit={openEdit}
+                onManage={openManage}
                 onDelete={handleDelete}
               />
             ))}
@@ -331,13 +443,102 @@ const handleSell = async (productId: string, quantity: number) => {
 
       {/* ================= SHEET ================= */}
       <ProductSheet
-        open={sheetOpen}
-        mode={sheetMode}
+        open={
+              activeSheet === "create" ||
+              activeSheet === "edit"
+        }
+        mode={
+          activeSheet === "create"
+            ? "create"
+            : "edit"
+          }
         initialData={selectedProduct}
         loading={loading}
-        onClose={() => setSheetOpen(false)}
+        onClose={() => setActiveSheet(null)}
         onSubmit={handleSubmit}
       />
+
+      <ProductDetailsSheet
+        open={activeSheet === "manage"}
+        onclose={() =>
+          setActiveSheet(null)
+        }
+        product={selectedProduct}
+
+        onEditDetails={() => {
+          if (!selectedProduct) return;
+
+          setActiveSheet("edit");
+        }}
+
+        onReceiveStock={() =>
+          setActiveSheet("receive")
+        }
+
+        onAdjustStock={() =>
+          setActiveSheet("adjust")
+        }
+
+        onTransferStock={() =>
+          setActiveSheet("transfer")
+        }
+
+        onViewHistory={() =>
+          setActiveSheet("history")
+        }
+      />
+
+      <ReceiveStockSheet
+        open={
+          activeSheet === "receive"
+        }
+        product={selectedProduct}
+        onClose={() =>
+          setActiveSheet(null)
+        }
+        onSubmit={
+          handleReceiveStock
+        }
+      />
+
+      <AdjustStockSheet
+        open={
+          activeSheet === "adjust"
+        }
+        product={selectedProduct}
+        onClose={() =>
+          setActiveSheet(null)
+        }
+        onSubmit={
+          handleAdjustStock
+        }
+      />
+
+      <TransferStockSheet
+        open={
+          activeSheet === "transfer"
+        }
+        product={selectedProduct}
+        branches={branches}
+        onClose={() =>
+          setActiveSheet(null)
+        }
+        onSubmit={
+          handleTransferStock
+        }
+      />
+
+      <ProductHistorySheet
+        open={
+          activeSheet === "history"
+        }
+        product={selectedProduct}
+        history={history}
+        onClose={() =>
+          setActiveSheet(null)
+        }
+      />
+
     </div>
   );
 }

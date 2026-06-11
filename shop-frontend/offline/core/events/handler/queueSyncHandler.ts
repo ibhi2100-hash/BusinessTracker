@@ -1,4 +1,4 @@
-import { BaseEvent } from "../types";
+import { BaseEvent } from "@business/shared-types";
 import { queueSync } from "../../../../src/sync/syncQueue";
 
 export async function queueSyncHandler(

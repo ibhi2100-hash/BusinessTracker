@@ -10,7 +10,6 @@ export const metadata = {
   title: "BizTru",
   description: "Financial control for growing businesses",
   manifest: "/manifest.json",
-  themeColor: "#0F766E",
 };
 
 export default function RootLayout({

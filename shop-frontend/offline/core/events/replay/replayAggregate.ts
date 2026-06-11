@@ -3,20 +3,16 @@ import { AppDB }
 
 import { AggregateRegistry }
   from "../aggregate/aggregateRegistry";
-import { IndexedDbProjectionEngine } from "../projectors/projectEngine";
 
-export async function replayAggregate(
+export async function replayAggregatet(
 
   db: AppDB,
 
   events: any[]
 
 ) {
-
+  
   for (const event of events) {
-
-    const projection = new IndexedDbProjectionEngine();
-    projection.process(event)
 
     await AggregateRegistry.applyEvent(
       db,

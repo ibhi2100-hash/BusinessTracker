@@ -1,5 +1,6 @@
 import {ProjectionRepository } from "@business/domain-models";
 import { AppDB } from "@/src/db";
+import Dexie from "dexie";
 
 export class IndexedDbProjectionRepository
   implements ProjectionRepository {
@@ -12,7 +13,13 @@ export class IndexedDbProjectionRepository
     projection: string,
     aggregateId: string
   ) {
-
+    console.log(
+      "LOAD",
+      projection,
+      aggregateId,
+      "TX",
+      !!Dexie.currentTransaction
+    )
     switch (projection) {
 
       case "product":
@@ -21,7 +28,7 @@ export class IndexedDbProjectionRepository
       case "business":
         return this.db.businesses.get(aggregateId);
 
-      case "branch":
+      case "branches":
         return this.db.branches.get(aggregateId);
 
       case "inventory":
@@ -36,7 +43,12 @@ export class IndexedDbProjectionRepository
     projection: string,
     state: any
   ) {
-
+      console.log(
+      "LOAD",
+      projection,
+      "TX",
+      !!Dexie.currentTransaction
+    )
     switch (projection) {
 
       case "product":
@@ -45,7 +57,7 @@ export class IndexedDbProjectionRepository
       case "business":
         return this.db.businesses.put(state);
 
-      case "branch":
+      case "branches":
         return this.db.branches.put(state);
 
       case "inventory":

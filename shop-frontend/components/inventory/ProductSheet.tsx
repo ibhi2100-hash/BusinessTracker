@@ -9,7 +9,7 @@ import { GlassButton } from "@/components/ui/GlassButton";
 
 interface Props {
   open: boolean;
-  mode: "create" | "edit";
+  mode: "create" | "edit" | "manage";
   initialData?: Product | null;
   loading?: boolean;
   onClose: () => void;

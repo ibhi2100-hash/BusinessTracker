@@ -18,10 +18,9 @@ export const dispatchEvent =
     if (!db) { return;}
 
     await runTx(db, async () => {
-
+      
        const ledgerEngine = createFrontendLedgerEngine(db);
        await ledgerEngine.process(event)
-        console.log("Even Succefully passed the LedgerEngine: ", event)
       },
       db.events,
       db.aggregates,

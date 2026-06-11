@@ -1,7 +1,7 @@
 "use client";
 
 import { inventoryProduct } from "@/src/store/inventoryStore";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { DataCard } from "@/components/ui/DataCard";
 import { StockBadge } from "@/components/ui/StockBadge";
 import { useBusinessStore } from "@/src/store/businessStore";
@@ -12,7 +12,7 @@ interface Props {
   product: inventoryProduct;
   context: "sell" | "admin";
   onSell?: (productId: string, quantity: number) => void;
-  onEdit?: (product: inventoryProduct) => void;
+  onManage?: (product: inventoryProduct) => void;
   onDelete?: (productId: string) => void;
   onOpenQuantityModal?: (product: inventoryProduct) => void;
 }
@@ -21,7 +21,7 @@ export default function ProductCard({
   product,
   context,
   onSell,
-  onEdit,
+  onManage,
   onDelete,
   onOpenQuantityModal,
 }: Props) {
@@ -35,6 +35,7 @@ export default function ProductCard({
   const pressTimer = useRef<NodeJS.Timeout | null>(null);
   const longPressTriggered = useRef(false);
 
+  const [sheetOpen, setSheetOpen] = useState(false);
   // ---------------------------
   // SELL GESTURE
   // ---------------------------
@@ -109,9 +110,9 @@ export default function ProductCard({
         <>
           <GlassButton
             variant="secondary"
-            onClick={() => onEdit?.(product)}
+            onClick={() => onManage?.(product)}
           >
-            Edit
+            Manage
           </GlassButton>
 
           <GlassButton

@@ -1,5 +1,5 @@
 import { BaseEvent }
-  from "../types";
+  from "@business/shared-types";
 
 export interface RebasePayload {
 

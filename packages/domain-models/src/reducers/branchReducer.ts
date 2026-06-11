@@ -20,21 +20,21 @@ export const BranchReducer = {
             name:
                 event.payload.name,
 
-            Phone:
+            phone:
                 event.payload.phone,
 
             businessId: event.businessId,
             
             isActive: true,
             
-            isDefault: true,
+            isDefault: false,
 
             createdAt:
                 event.createdAt,
         };
 
       default:
-        return current;
+        return current ?? null;
     }
   }
 };

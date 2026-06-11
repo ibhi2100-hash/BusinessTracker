@@ -1,11 +1,17 @@
 import { getDb } from "@/src/db";
 import { useAuthStore } from "@/src/store/useAuthStore";
-import { generateLedgerEntries } from "@business/shared";
-import { projectors } from "../events/projectors/projectorRegistry";
+import { generateLedgerEntries } from "@business/ledger-engine";
+
 
 async function rebuildProjections(branchId) {
-  const userId = useAuthStore.getState().user.id
+  const user =
+  useAuthStore.getState().user;
 
+  if (!user?.id) {
+    throw new Error("User not available");
+  }
+
+  const userId = user.id;
   const db = await getDb(userId)
   await db.inventory.clear();
   await db.products.clear();
@@ -19,8 +25,8 @@ async function rebuildProjections(branchId) {
   for (const event of events) {
     const entries = generateLedgerEntries(event);
     await db.ledgerEntries.bulkAdd(entries);
-      const eventProjectors = projectors[event.type] || [];
-      
+     
+     const eventProjectors = [] 
     for (const projector of eventProjectors) {
       await projector(db, event);
     }

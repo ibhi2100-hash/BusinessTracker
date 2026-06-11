@@ -15,7 +15,7 @@ import { useBusinessStore } from "@/src/store/businessStore";
 import { useAuthStore } from "@/src/store/useAuthStore";
 
 import { eventService } from "@/src/services/eventService";
-import { BusinessEventTypes } from "@/offline/core/events/eventGroups/businessEvents";
+import { BusinessEventTypes } from "@business/shared-types";
 
 import { GlassCard } from "@/components/ui/GlassCard";
 import { GlassButton } from "@/components/ui/GlassButton";

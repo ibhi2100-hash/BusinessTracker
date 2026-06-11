@@ -4,14 +4,11 @@ import { AppDB }
 import { AggregateRegistry }
   from "../aggregate/aggregateRegistry";
 
-import { replayAggregate }
+import { replayAggregatet }
   from "../replay/replayAggregate";
 
 import { resetAggregateState }
   from "./resetAggregateState";
-
-import { replaceSnapshot }
-  from "./replaceSnapshot";
 
 import { RebasePayload }
   from "./types";
@@ -74,25 +71,13 @@ export async function rebaseAggregate(
 
   if (serverSnapshot) {
 
-    await replaceSnapshot(
-
-      db,
-
-      aggregateId,
-
-      aggregateType,
-
-      serverSnapshot,
-
-      serverVersion
-    );
   }
 
   /* -----------------------------------
      4. REPLAY SERVER EVENTS
   ----------------------------------- */
 
-  await replayAggregate(
+  await replayAggregatet(
     db,
     serverEvents
   );
@@ -101,7 +86,7 @@ export async function rebaseAggregate(
      5. REPLAY LOCAL PENDING EVENTS
   ----------------------------------- */
 
-  await replayAggregate(
+  await replayAggregatet(
     db,
     pendingEvents
   );
