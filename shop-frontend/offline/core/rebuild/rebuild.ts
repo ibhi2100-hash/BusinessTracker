@@ -3,9 +3,9 @@ import { useAuthStore } from "@/src/store/useAuthStore";
 import { generateLedgerEntries } from "@business/ledger-engine";
 
 
-async function rebuildProjections(branchId) {
+export async function rebuildProjections(branchId) {
   const user =
-  useAuthStore.getState().user;
+    useAuthStore.getState().user;
 
   if (!user?.id) {
     throw new Error("User not available");

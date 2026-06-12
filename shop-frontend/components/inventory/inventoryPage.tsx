@@ -34,6 +34,15 @@ interface InventoryPageProps {
   mode: "OPENING" | "LIVE";
 }
 
+interface ProductHistoryItem {
+  id: string;
+  title: string;
+  date: string;
+  quantity?: number;
+  amount?: number;
+  description?: string;
+}
+
 export default function InventoryPage({
   context,
   mode,
@@ -50,6 +59,7 @@ export default function InventoryPage({
   const [activeCategory, setActiveCategory] =
     useState<string>("All");
   const branches = useBranchStore((s) => s.branches);
+  const [history, setHistory] = useState<ProductHistoryItem[]>([]);
   
 
   type ActiveSheet =

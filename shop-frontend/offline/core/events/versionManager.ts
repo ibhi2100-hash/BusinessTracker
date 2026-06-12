@@ -1,15 +1,13 @@
-import { getDb } from "@/src/db";
-import { useAuthStore } from "@/src/store/useAuthStore";
+import { AppDB } from "@/src/db";
 import { BaseEvent } from "@business/shared-types";
 
 
 export class IndexedDbVersionManager {
-
+  constructor(private db: AppDB){}
   async update(event: BaseEvent) {
-    const userId = useAuthStore.getState().user.id;
-    const db = getDb(userId)
+ 
     // Construct a full AggregateRecord expected by IndexedDB
-    await db.aggregates.put({
+    await this.db.aggregates.put({
       id: event.aggregateId,
       aggregateId: event.aggregateId,
       aggregateType: event.aggregateType ?? "unknown",

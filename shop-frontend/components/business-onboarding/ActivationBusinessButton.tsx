@@ -16,7 +16,6 @@ import { GlassIcon } from "@/components/ui/GlassIcon";
 
 import { useBusinessStore } from "@/src/store/businessStore";
 import { eventService } from "@/src/services/eventService";
-
 import { BusinessEventTypes } from "@business/shared-types";
 import { AggregateType } from "@/offline/domain/aggregate";
 
@@ -26,7 +25,7 @@ export function ActivateBusinessButton() {
   const business = useBusinessStore(
     (s) => s.business
   );
-
+  
   const [loading, setLoading] =
     useState(false);
 

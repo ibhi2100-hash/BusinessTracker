@@ -1,20 +1,10 @@
 import Dexie from "dexie"
-
 import { AppDB, getDb } from "@/src/db"
-
 import { useAuthStore } from "../store/useAuthStore"
-
-import { calculateRetryDelay }
-  from "../helpers/retryDelay"
-
-import { groupEventsByAggregate }
-  from "../sync/groupEvents"
-
-import { fetchWithTimeout }
-  from "../sync/fetchWithTimeout"
-
-import { rebaseAggregate }
-  from "../../offline/core/events/rebase/rebaseAggregate"
+import { calculateRetryDelay } from "../helpers/retryDelay"
+import { groupEventsByAggregate } from "../sync/groupEvents"
+import { fetchWithTimeout } from "../sync/fetchWithTimeout"
+import { rebaseAggregate } from "../../offline/core/events/rebase/rebaseAggregate"
 
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL
@@ -38,8 +28,7 @@ export const syncService = {
     syncing = true
 
     try {
-      const userId =
-        useAuthStore.getState().user?.id
+      const userId = useAuthStore.getState().user?.id
 
       if (!userId) return
 

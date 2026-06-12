@@ -21,7 +21,8 @@ export const eventService = {
     businessId?: string | null
     branchId?: string | null
     
-    }) {
+    }) 
+    {
       const user = useAuthStore.getState().user;
       if (!user?.id) throw new Error("Not authenticated");
 
