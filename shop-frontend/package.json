@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",
-    "pribuild": "npm run build --workspace",
+    "prebuild": "npm run build --workspace=@business/projection-families && npm run build --workspace=@business/ledger-engine && npm run build --workspace=@business/snapshot-engine && npm run build --workspace=@business/shared-types",
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint"
