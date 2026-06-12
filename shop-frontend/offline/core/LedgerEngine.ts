@@ -1,10 +1,10 @@
 import { LedgerEngine } from "@business/ledger-engine";
 import { generateLedgerEntries } from "@business/ledger-engine";
 import { IndexedDbEventStore } from "@/src/repositories/IndexDbStore";
-import { IndexedDbProjectionEngine } from "./events/projectors/projectEngine";
+import { projectionEngine } from "./events/projectors/projectEngine";
 import { IndexedDbVersionManager } from "./events/versionManager";
 import { snapshotEngine } from "./snapshots/registry";
-import { IndexedDbProjectionRepository } from "./events/projectors/indexedDbProjectRepo";
+import { IndexedDbProjectionRepository } from "../../src/repositories/indexedDbProjectRepo";
 import { AppDB } from "@/src/db";
 
 export function createFrontendLedgerEngine(
@@ -12,7 +12,7 @@ export function createFrontendLedgerEngine(
 ) {
   const repo = new IndexedDbProjectionRepository(db);
 
-  const projectionEngine = new IndexedDbProjectionEngine(repo)
+  
 
   return new LedgerEngine({
     eventStore: new IndexedDbEventStore(),

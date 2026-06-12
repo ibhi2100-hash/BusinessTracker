@@ -8,7 +8,7 @@ export interface LedgerEngineContext {
         process(event: BaseEvent): Promise<void>;
     };
     projectionEngine: {
-        process(event: BaseEvent, entries: any[]): Promise<void>;
+        process(event: BaseEvent): Promise<void>;
     };
     ledgerGenerator: (event: BaseEvent) => LedgerEntry[];
     versionManager: {

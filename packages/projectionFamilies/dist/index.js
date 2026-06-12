@@ -20,3 +20,4 @@ __exportStar(require("./intelligence/registry/index"), exports);
 __exportStar(require("./intelligence/engine/engine"), exports);
 __exportStar(require("./operational/registry/index"), exports);
 __exportStar(require("./operational/engine/OperationalProjectionEngine"), exports);
+__exportStar(require("./contracts/projectionRepository"), exports);

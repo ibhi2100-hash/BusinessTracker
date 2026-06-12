@@ -1,6 +1,6 @@
-import {ProjectionRepository } from "@business/domain-models";
+import {ProjectionRepository } from "@business/projection-families";
 import { AppDB } from "@/src/db";
-import Dexie from "dexie";
+import { string } from "zod";
 
 export class IndexedDbProjectionRepository
   implements ProjectionRepository {
@@ -13,13 +13,8 @@ export class IndexedDbProjectionRepository
     projection: string,
     aggregateId: string
   ) {
-    console.log(
-      "LOAD",
-      projection,
-      aggregateId,
-      "TX",
-      !!Dexie.currentTransaction
-    )
+
+    
     switch (projection) {
 
       case "product":
@@ -41,27 +36,32 @@ export class IndexedDbProjectionRepository
 
   async save(
     projection: string,
-    state: any
+    aggregateId: string,
+    state: any,
   ) {
-      console.log(
-      "LOAD",
+
+    const entity = {
+      ...state,
+      id: aggregateId
+    };
+    console.log({
       projection,
-      "TX",
-      !!Dexie.currentTransaction
-    )
+      aggregateId,
+      state
+    });
     switch (projection) {
 
       case "product":
-        return this.db.products.put(state);
+        return this.db.products.put(entity);
 
       case "business":
-        return this.db.businesses.put(state);
+        return this.db.businesses.put(entity);
 
       case "branches":
-        return this.db.branches.put(state);
+        return this.db.branches.put(entity);
 
       case "inventory":
-        return this.db.inventory.put(state);
+        return this.db.inventory.put(entity);
     }
   }
 }

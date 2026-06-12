@@ -317,6 +317,8 @@ const handleTransferStock = async (
 
         toast.success("Product updated");
       }
+
+      setActiveSheet(null)
   } catch (e) {
     console.error(e);
     toast.error("Operation failed");

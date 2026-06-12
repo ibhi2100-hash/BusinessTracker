@@ -12,7 +12,7 @@ export interface LedgerEngineContext {
   };
 
   projectionEngine: {
-    process(event: BaseEvent, entries: any[]): Promise<void>;
+    process(event: BaseEvent): Promise<void>;
   };
 
   ledgerGenerator: (

@@ -13,6 +13,8 @@
     "@business/events": "*",
     "@business/shared-types": "*",
     "@business/snapshot-engine": "*",
+    "@business/ledger-engine": "*",
+    "@business/projection-families": "*",
     "@hookform/resolvers": "^5.2.2",
     "@tanstack/react-query": "^5.90.21",
     "axios": "^1.13.5",

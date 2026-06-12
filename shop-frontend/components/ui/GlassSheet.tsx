@@ -62,6 +62,9 @@ export function GlassSheet({
           `
           relative
           w-full
+          
+          flex
+          flex-col
 
           rounded-t-[32px]
 
@@ -165,6 +168,7 @@ export function GlassSheet({
         {/* Content */}
         <div
           className="
+          flex-1
           overflow-y-auto
 
           px-5

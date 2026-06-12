@@ -22,7 +22,7 @@ class LedgerEngine {
             await this.ctx.snapshotEngine.process(event);
             console.log("4 done");
             console.log("5 projections");
-            await this.ctx.projectionEngine.process(event, entries);
+            await this.ctx.projectionEngine.process(event);
             console.log("5 done");
             console.log("6 version");
             await this.ctx.versionManager.update(event);

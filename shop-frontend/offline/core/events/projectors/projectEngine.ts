@@ -1,38 +1,14 @@
-import {
-  projectorRegistry
-} from "@business/domain-models";
-import { ProjectionRepository } from "@business/domain-models";
-import { BaseEvent } from "@business/shared-types";
+import { getDb } from "@/src/db";
+import { IndexedDbProjectionRepository } from "@/src/repositories/indexedDbProjectRepo";
+import { useAuthStore } from "@/src/store/useAuthStore";
+import { OperationalProjectionEngine } from "@business/projection-families"
 
-export class IndexedDbProjectionEngine {
+const user = useAuthStore.getState().user;
+const userId = user.id;
 
-  constructor(
-    private repo: ProjectionRepository
-  ) {}
+const db = getDb(userId)
 
-  async process(event: BaseEvent) {
+const repo = new IndexedDbProjectionRepository(db);
 
-    const projectors =
-      projectorRegistry[event.type] ?? [];
-
-    for (const projector of projectors) {
-
-      const current =
-        await this.repo.load(
-          projector.projection,
-          event.aggregateId
-        );
-
-      const next =
-        projector.reducer.reduce(
-          current,
-          event
-        );
-
-      await this.repo.save(
-        projector.projection,
-        next
-      );
-    }
-  }
-}
+export const projectionEngine =
+  new OperationalProjectionEngine(repo);
