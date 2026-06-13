@@ -5,7 +5,7 @@ import {
   InventorySnapshotReducer,
   BusinessSnapshotReducer,
   DashboardSnapshotReducer
-} from "@business/domain-models";
+} from "@business/snapshot-engine";
 
 export function createSnapshotRegistry() {
 
