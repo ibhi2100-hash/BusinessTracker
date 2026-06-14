@@ -10,7 +10,7 @@ export const dispatchEvent =
     event: BaseEvent
     
   ) => {
-  
+    console.log("Event before validation: ", event)
 
     validateEvent(event);
 

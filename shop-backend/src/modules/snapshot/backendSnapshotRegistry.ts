@@ -1,11 +1,9 @@
 import { SnapshotRegistry } from "@business/snapshot-engine";
 
-import {
-  ProductSnapshotReducer,
-  InventorySnapshotReducer,
-  BusinessSnapshotReducer,
-  DashboardSnapshotReducer
-} from "@business/domain-models";
+import { ProductSnapshotReducer } from "@business/snapshot-engine";
+import { BusinessSnapshotReducer } from "@business/snapshot-engine";
+import { InventorySnapshotReducer } from "@business/snapshot-engine";
+import { DashboardSnapshotReducer } from "@business/snapshot-engine";
 
 export function createSnapshotRegistry() {
 

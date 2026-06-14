@@ -10,6 +10,4 @@ export function CreateProjectionEngine(
     new OperationalProjectionEngine(repo);
   
   return projectionEngine
-
-
 }

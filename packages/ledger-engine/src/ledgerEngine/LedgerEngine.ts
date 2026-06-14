@@ -1,4 +1,6 @@
-import { BaseEvent, LedgerEntry } from "@business/shared-types";
+import { Account, BaseEvent, LedgerEntry } from "@business/shared-types";
+import { LedgerRepository } from "./ledgerRepo";
+
 
 export interface LedgerEngineContext {
 
@@ -18,6 +20,8 @@ export interface LedgerEngineContext {
   ledgerGenerator: (
     event: BaseEvent
   ) => LedgerEntry[];
+  ledgerRepository: LedgerRepository;
+  
   versionManager: {
     update(event: BaseEvent): Promise<void>;
   };

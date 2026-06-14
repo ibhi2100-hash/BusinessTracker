@@ -28,7 +28,7 @@ export interface AggregateRecord {
 
   lastEventId: string;
 
-  lastLogicClock: bigint;
+  lastLogicClock: number;
 
   lastGlobalPosition?: number;
 
@@ -41,5 +41,5 @@ export interface ReplicaMeta {
 
   deviceId: string;
 
-  lastLogicClock: bigint;
+  lastLogicClock: number;
 }

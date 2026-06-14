@@ -24,7 +24,7 @@ export interface Snapshot <T = any> {
 
   eventCount: number;
 
-  lastGlobalPosition: number;
+  lastGlobalPosition: bigint;
 
   checksum?: string;
 

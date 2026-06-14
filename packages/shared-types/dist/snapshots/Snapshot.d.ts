@@ -11,7 +11,7 @@ export interface Snapshot<T = any> {
     state: T;
     version: number;
     eventCount: number;
-    lastGlobalPosition: number;
+    lastGlobalPosition: bigint;
     checksum?: string;
     createdAt: number;
     updatedAt: number;

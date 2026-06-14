@@ -129,8 +129,7 @@ export class AggregateRegistry {
       lastEventId:
         event.id,
 
-      lastLogicClock:
-        event.logicClock,
+      lastLogicClock: event.logicClock,
 
       updatedAt:
         event.createdAt,

@@ -5,6 +5,7 @@ import { calculateRetryDelay } from "../helpers/retryDelay"
 import { groupEventsByAggregate } from "../sync/groupEvents"
 import { fetchWithTimeout } from "../sync/fetchWithTimeout"
 import { rebaseAggregate } from "../../offline/core/events/rebase/rebaseAggregate"
+import { stringifyEventData } from "../utils/serializer"
 
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL
@@ -142,12 +143,12 @@ export const syncService = {
               "application/json",
           },
 
-          body: JSON.stringify({
+          body: stringifyEventData({
             aggregateId,
             aggregateType,
             baseVersion,
-            events,
-          }),
+            events
+          })
         }
       )
 

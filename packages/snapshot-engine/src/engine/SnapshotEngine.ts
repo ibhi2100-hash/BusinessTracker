@@ -50,7 +50,7 @@ export class SnapshotEngine {
       version: nextVersion,
       eventCount: nextEventCount,
 
-      lastGlobalPosition: Number(event.globalPosition),
+      lastGlobalPosition: event.globalPosition ?? 0n,
 
       updatedAt: Date.now(),
       createdAt: snapshot?.createdAt ?? Date.now()

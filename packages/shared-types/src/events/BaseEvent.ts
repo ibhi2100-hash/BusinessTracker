@@ -23,7 +23,7 @@ export interface BaseEvent<T extends string = string, p = Record<string, any>> {
   // sync + ordering
   createdAt: Date;       // device time
   updatedAt?: Date;      // device time
-  logicClock: bigint;    // monotonic per device
+  logicClock: number;    // monotonic per device
   globalPosition?: bigint
 
   // origin

@@ -13,7 +13,7 @@ export interface BaseEvent<T extends string = string, p = Record<string, any>> {
     scope: Scope;
     createdAt: Date;
     updatedAt?: Date;
-    logicClock: bigint;
+    logicClock: number;
     globalPosition?: bigint;
     deviceId: string;
     userId: string | null;

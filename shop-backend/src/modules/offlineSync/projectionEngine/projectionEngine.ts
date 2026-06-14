@@ -1,38 +1,14 @@
-import {
-  projectorRegistry
-} from "@business/domain-models";
-import { ProjectionRepository } from "@business/domain-models";
-import { BaseEvent } from "@business/shared-types";
 
-export class PrismaProjectionEngine {
+import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
+import { PrismaProjectionRepository } from "./prismaProjectionRepo.js";
+import { OperationalProjectionEngine } from "@business/projection-families"
 
-  constructor(
-    private repo: ProjectionRepository
-  ) {}
-
-  async process(event: BaseEvent) {
-
-    const projectors =
-      projectorRegistry[event.type] ?? [];
-
-    for (const projector of projectors) {
-
-      const current =
-        await this.repo.load(
-          projector.projection,
-          event.aggregateId
-        );
-
-      const next =
-        projector.reducer.reduce(
-          current,
-          event
-        );
-
-      await this.repo.save(
-        projector.projection,
-        next
-      );
-    }
-  }
+export function CreateProjectionEngine(
+  tx: Prisma.TransactionClient
+) {
+  const repo = new PrismaProjectionRepository(tx);
+  const projectionEngine =
+    new OperationalProjectionEngine(repo);
+  
+  return projectionEngine
 }

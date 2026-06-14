@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { AuthUser } from "../types/auth-user.js";
 
-const JWT_SECRET = process.env.JWT_SECRET as string;
+const JWT_SECRET = process.env.JWT_ACCESS_SECRET as string;
 
 interface JwtPayload {
   userId: string;
@@ -18,13 +18,15 @@ export function authMiddleware(
   next: NextFunction
 ) {
   try {
+
     const token = req.cookies.accessToken;
 
     if (!token) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ message: "Unauthorized you dont have token please go back" });
     }
 
     const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
+    console.log("This is the decoded data: ", decoded)
 
 
     if (!decoded.userId ) {

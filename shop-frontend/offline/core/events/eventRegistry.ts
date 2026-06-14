@@ -6,7 +6,10 @@ import { salesEventType } from "@business/shared-types";
 
 export const eventValidators: Record<string, (event: any) => boolean> = {
 
-  // ✅ BOOTSTRAP EVENT
+/*======================================================================
+  | ✅ BUSINESS AND BRANCHS OPERATION
+=======================================================================*/
+
  [BusinessEventTypes.BUSINESS_CREATED]: (event) => {
   const p = event.payload;
 
@@ -43,7 +46,11 @@ export const eventValidators: Record<string, (event: any) => boolean> = {
     !!event.branchId 
   );
 },
-//Opening Event 
+
+/*======================================================================
+  | ✅ OPENING OPERATIONS
+=======================================================================*/
+
 [OpeningEventType.OPENING_INVENTORY_CREATED]: (event) => {
     const p = event.payload;
 
@@ -70,7 +77,11 @@ export const eventValidators: Record<string, (event: any) => boolean> = {
 
 
 
-  // ✅ OPERATIONAL EVENT
+
+/*======================================================================
+  | ✅ PRODUCT MASTER DATA OPERATIONS
+=======================================================================*/
+    // ✅ OPERATIONAL EVENT
   [InventoryEventType.PRODUCT_CREATED]: (event) => {
     const p = event.payload;
 
@@ -96,17 +107,8 @@ export const eventValidators: Record<string, (event: any) => boolean> = {
     p.costPrice >= 0
     );
   },
-  [InventoryEventType.INVENTORY_UPDATED]: (event) => {
-  const p = event.payload;
 
-  return (
-    !!event.businessId &&
-    !!event.branchId &&
-    typeof p.productId === "string" &&
-    typeof p.quantityDelta === "number"
-  );
-},
-  // ✅ OPERATIONAL EVENT
+
   [InventoryEventType.PRODUCT_UPDATED]: (event) => {
     const p = event.payload;
 
@@ -132,6 +134,124 @@ export const eventValidators: Record<string, (event: any) => boolean> = {
     p.costPrice >= 0
     );
   },
+
+  /*======================================================================
+  | ✅ INVENTORY OPERATIONS
+=======================================================================*/
+    [InventoryEventType.INVENTORY_ADDED]: (event) => {
+    const p = event.payload;
+
+    return (
+      !!event.businessId &&                     // REQUIRED here
+      !!event.branchId &&
+      typeof p.productId === "string" &&
+      typeof p.name === "string" &&
+      typeof p.price ===
+      "number" &&
+
+    Number.isFinite(p.price) &&
+
+    p.price >= 0 &&
+
+    typeof p.costPrice ===
+      "number" &&
+
+    Number.isFinite(
+      p.costPrice
+    ) &&
+
+    p.costPrice >= 0
+    );
+  },
+
+  [InventoryEventType.INVENTORY_UPDATED]: (event) => {
+      const p = event.payload;
+
+      return (
+        !!event.businessId &&
+        !!event.branchId &&
+        typeof p.productId === "string" &&
+        typeof p.quantityDelta === "number"
+      );
+    },
+
+  [InventoryEventType.INVENTORY_ADJUSTED]: (event) => {
+    const p = event.payload;
+
+    return (
+      !!event.businessId &&                     // REQUIRED here
+      !!event.branchId &&
+      typeof p.productId === "string" &&
+      typeof p.quantity ===
+      "number" &&
+
+    Number.isFinite(p.quantity) &&
+
+    p.quantity >= 0 &&
+    
+      typeof p.reason === "string"
+    )
+  },
+
+  [InventoryEventType.INVENTORY_RECEIVED]: (event) => {
+    const p = event.payload;
+
+    return (
+      !!event.businessId &&                     // REQUIRED here
+      !!event.branchId &&
+      typeof p.productId === "string" &&
+      typeof p.quantity ===
+      "number" &&
+
+    Number.isFinite(p.quantity) &&
+
+    p.quantity >= 0
+    )
+  },
+
+  [InventoryEventType.INVENTORY_TRANSFER]: (event) => {
+    const p = event.payload;
+
+    return (
+      !!event.businessId &&                     // REQUIRED here
+      !!event.branchId &&
+      typeof p.productId === "string" &&
+      typeof p.quantity ===
+      "number" &&
+
+    Number.isFinite(p.quantity) &&
+
+    p.quantity >= 0 &&
+     typeof p.targetBranchId === "string"
+    );
+  },
+
+  [InventoryEventType.INVENTORY_SOLD]: (event) => {
+    const p = event.payload;
+
+    return (
+      !!event.businessId &&                     // REQUIRED here
+      !!event.branchId &&
+      typeof p.productId === "string" &&
+      typeof p.name === "string" &&
+      typeof p.price ===
+      "number" &&
+
+    Number.isFinite(p.price) &&
+
+    p.price >= 0 &&
+
+    typeof p.costPrice ===
+      "number" &&
+
+    Number.isFinite(
+      p.costPrice
+    ) &&
+
+    p.costPrice >= 0
+    );
+  },
+
  [financeEventType.CASH_ADDED]: (event) => {
     const p = event.payload;
 

@@ -1,4 +1,4 @@
-import {ProjectionRepository } from "@business/domain-models";
+import {ProjectionRepository } from "@business/projection-families";
 import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
 
 export class PrismaProjectionRepository

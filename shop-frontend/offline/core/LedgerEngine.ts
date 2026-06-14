@@ -6,11 +6,13 @@ import { IndexedDbVersionManager } from "./events/versionManager";
 import { CreateSnapshotEngine } from "./snapshots/registry";
 import { IndexedDbProjectionRepository } from "../../src/repositories/indexedDbProjectRepo";
 import { AppDB } from "@/src/db";
+import { IndexedDbLedgerRepository } from "@/src/repositories/indexedDbLedgerRepo";
 
 export function createFrontendLedgerEngine(
   db: AppDB 
 ) {
   const repo = new IndexedDbProjectionRepository(db);
+  const ledgerRepo = new IndexedDbLedgerRepository(db)
 
   
 
@@ -19,6 +21,7 @@ export function createFrontendLedgerEngine(
     snapshotEngine: CreateSnapshotEngine(db),
     projectionEngine: CreateProjectionEngine(db),
     ledgerGenerator: generateLedgerEntries,
+    ledgerRepository: ledgerRepo,
     versionManager: new IndexedDbVersionManager(db),
   });
 }

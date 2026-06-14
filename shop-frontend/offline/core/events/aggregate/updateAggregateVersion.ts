@@ -44,8 +44,7 @@ export async function updateAggregateVersion(
     lastEventId:
       event.id,
 
-    lastLogicClock:
-      event.logicClock,
+    lastLogicClock: event.logicClock,
 
     updatedAt:
       event.createdAt,
