@@ -23,9 +23,7 @@ export default function RootLayout({
         <Providers>
           <SyncBootstrap />
           <AppShell>
-            <PageWrapper>
               {children}
-            </PageWrapper>
           </AppShell>
           <Toaster richColors position="top-right" />
         </Providers>
