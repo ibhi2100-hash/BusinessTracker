@@ -23,6 +23,7 @@ exports.BusinessReducer = {
                     createdAt: event.createdAt,
                 };
             case shared_types_1.BusinessEventTypes.BUSINESS_ACTIVATION:
+                console.log("Business Activation Reducer is Hit : ", current);
                 if (!current) {
                     return current;
                 }

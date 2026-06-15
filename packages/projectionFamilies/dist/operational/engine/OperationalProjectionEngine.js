@@ -9,6 +9,7 @@ class OperationalProjectionEngine {
     }
     async process(event) {
         const handlers = index_1.operationalRegistry[event.type] ?? [];
+        console.log("this is th event that hit Operational Engine: ", event.type);
         for (const handler of handlers) {
             const current = await this.repo.load(handler.projection, event.aggregateId);
             const next = handler.reducer.reduce(current, event);

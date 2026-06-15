@@ -12,6 +12,7 @@ export class OperationalProjectionEngine {
 
     const handlers =
       operationalRegistry[event.type] ?? [];
+      console.log("this is th event that hit Operational Engine: ", event.type)
 
     for (const handler of handlers) {
 

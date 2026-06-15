@@ -36,6 +36,9 @@ exports.operationalRegistry = {
     [shared_types_1.BusinessEventTypes.BUSINESS_CREATED]: [
         { reducer: businessReducer_1.BusinessReducer, projection: "business" }
     ],
+    [shared_types_1.BusinessEventTypes.BUSINESS_ACTIVATION]: [
+        { reducer: businessReducer_1.BusinessReducer, projection: "business" }
+    ],
     [shared_types_1.BusinessEventTypes.BRANCH_CREATED]: [
         { reducer: branchReducer_1.BranchReducer, projection: "branches" }
     ],

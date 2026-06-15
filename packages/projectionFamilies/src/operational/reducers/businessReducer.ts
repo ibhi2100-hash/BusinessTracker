@@ -43,7 +43,7 @@ export const BusinessReducer = {
         };
 
       case BusinessEventTypes.BUSINESS_ACTIVATION:
-
+        console.log("Business Activation Reducer is Hit : ", current)
         if (!current) {
           return current;
         }

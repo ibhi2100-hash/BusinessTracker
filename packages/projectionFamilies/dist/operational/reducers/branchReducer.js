@@ -10,7 +10,6 @@ exports.BranchReducer = {
         phone: ""
     }),
     reduce(current, event) {
-        console.log("This is the event that hit the branch Reducer: ", event.payload);
         switch (event.type) {
             case shared_types_1.BusinessEventTypes.BRANCH_CREATED:
                 return {

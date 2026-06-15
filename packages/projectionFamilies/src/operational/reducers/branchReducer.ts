@@ -14,7 +14,6 @@ export const BranchReducer = {
     current: any,
     event: BaseEvent
   ) {
-    console.log("This is the event that hit the branch Reducer: ", event.payload)
 
     switch (event.type) {
       

@@ -46,6 +46,10 @@ export const operationalRegistry = {
     { reducer: BusinessReducer, projection: "business" }
   ],
 
+  [BusinessEventTypes.BUSINESS_ACTIVATION]: [
+    { reducer: BusinessReducer, projection: "business" }
+  ],
+
   [BusinessEventTypes.BRANCH_CREATED]: [
     { reducer: BranchReducer, projection: "branches" }
   ],

@@ -133,6 +133,18 @@ export declare const operationalRegistry: {
         };
         projection: string;
     }[];
+    [BusinessEventTypes.BUSINESS_ACTIVATION]: {
+        reducer: {
+            initialState: () => {
+                id: string;
+                name: string;
+                userId: string;
+                address: string;
+            };
+            reduce(current: any, event: import("@business/shared-types").BaseEvent): any;
+        };
+        projection: string;
+    }[];
     [BusinessEventTypes.BRANCH_CREATED]: {
         reducer: {
             initialState: () => {
