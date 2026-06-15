@@ -80,6 +80,52 @@ export function generateLedgerEntries(event: BaseEvent): LedgerEntry[] {
 
       break;
     }
+
+    /**
+     * INVENTORY RECEIVED
+     */
+    case InventoryEventType.INVENTORY_RECEIVED: {
+      const value = payload.costPrice * payload.quantity;
+
+      if (event.mode === "OPENING") {
+        // ✅ Opening balance — no cash movement
+        entries = [
+          buildEntry(event, 0, Account.INVENTORY, "DEBIT", value),
+          buildEntry(event, 1, Account.OWNER_CAPITAL, "CREDIT", value),
+        ];
+      } else {
+        // ✅ Live purchase
+        entries = [
+          buildEntry(event, 0, Account.INVENTORY, "DEBIT", value),
+          buildEntry(event, 1, Account.CASH, "CREDIT", value),
+        ];
+      }
+
+      break;
+    }
+
+    /**
+     * INVENTORY (Opening or Purchase)
+     */
+    case InventoryEventType.INVENTORY_ADJUSTED: {
+      const value = payload.costPrice * payload.quantity;
+
+      if (event.mode === "OPENING") {
+        // ✅ Opening balance — no cash movement
+        entries = [
+          buildEntry(event, 0, Account.INVENTORY, "DEBIT", value),
+          buildEntry(event, 1, Account.OWNER_CAPITAL, "CREDIT", value),
+        ];
+      } else {
+        // ✅ Live purchase
+        entries = [
+          buildEntry(event, 0, Account.INVENTORY, "DEBIT", value),
+          buildEntry(event, 1, Account.CASH, "CREDIT", value),
+        ];
+      }
+
+      break;
+    }
     case InventoryEventType.PRODUCT_CREATED:
       return []; // ✅ NO financial impact
     /**

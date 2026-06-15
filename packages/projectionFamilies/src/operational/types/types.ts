@@ -11,3 +11,12 @@ export interface OperationalReducer<
 }
 
 
+export interface ProjectionHandler {
+  projection: string;
+
+  reducer: {
+    reduce(current: any, event: BaseEvent): any;
+  };
+
+  aggregateResolver?: (event: BaseEvent) => string;
+}

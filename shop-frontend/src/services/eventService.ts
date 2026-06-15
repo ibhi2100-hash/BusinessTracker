@@ -8,6 +8,7 @@ import { InventoryEventType, OpeningEventType } from "@business/shared-types";
 import { useInventoryStore } from "../store/inventoryStore";
 import { getDb } from "../db";
 import { AggregateType } from "@/offline/domain/aggregate";
+import { inventoryKey } from "../utils/keygenerator";
 
 export const eventService = {
   async create(input: {
@@ -98,7 +99,7 @@ export const eventService = {
       await this.create({
         type: OpeningEventType.OPENING_INVENTORY_CREATED,
 
-        aggregateId: `${productId}_${branchId}`, // separate aggregate for inventory
+        aggregateId: inventoryKey(productId, branchId), // separate aggregate for inventory
         aggregateType: AggregateType.INVENTORY,
         mode: data.mode,
         payload: {
@@ -116,7 +117,8 @@ export const eventService = {
  async updateProductSmart(input: ProductUpdateInput) {
   const db = useInventoryStore.getState().productsById[input.productId];
   if (!db) throw new Error("Product not found");
-
+  const branchId = useBranchStore.getState().activeBranchId;
+  const key = inventoryKey(input.productId, branchId)
   const events = [];
 
   // -----------------------------
@@ -153,13 +155,13 @@ export const eventService = {
     // -----------------------------
     const currentQty = db.quantity ?? 0;
     const delta = input.quantity! - currentQty
-    console.log("Current Qty:", currentQty, "Input Qty:", input.quantity, "Delta:", delta)
+    
 
     if (delta) {
       events.push(
         this.create({
           type: InventoryEventType.INVENTORY_UPDATED,
-          aggregateId: `${input.productId}_${useBranchStore.getState().activeBranchId}`,
+          aggregateId: key,
           aggregateType: AggregateType.INVENTORY,
           mode: "LIVE",
           payload: {

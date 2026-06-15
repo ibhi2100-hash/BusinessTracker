@@ -28,6 +28,7 @@ import { GlassButton } from "../ui/GlassButton";
 import { useInventoryProducts } from "@/hooks/useProduct";
 import ProductDetailsSheet from "./ProductsManagement";
 import { useBranchStore } from "@/src/store/useBranchStore";
+import { inventoryKey } from "@/src/utils/keygenerator";
 
 interface InventoryPageProps {
   context: "sell" | "admin";
@@ -84,6 +85,7 @@ const [activeSheet, setActiveSheet] =
     );
     return ["All", ...Array.from(set)];
   }, [products]);
+  const branchId = useBranchStore((s)=> s.activeBranchId)
 
   // -----------------------------
   // 🔍 FILTER
@@ -191,14 +193,16 @@ const handleReceiveStock = async (
   costPrice?: number,
   note?: string
 ) => {
-  if (!selectedProduct) return;
+  if (!selectedProduct || !branchId) return;
+
+  const key = inventoryKey(selectedProduct.id, branchId)
 
   await eventService.create({
     aggregateType:
       AggregateType.INVENTORY,
 
     aggregateId:
-      selectedProduct.id,
+      key,
 
     type:
       InventoryEventType.INVENTORY_RECEIVED,
@@ -229,14 +233,14 @@ const handleAdjustStock = async (
   quantity: number,
   reason: string
 ) => {
-  if (!selectedProduct) return;
-
+  if (!selectedProduct || !branchId) return;
+  const key = inventoryKey(selectedProduct.id, branchId)
   await eventService.create({
     aggregateType:
       AggregateType.INVENTORY,
 
     aggregateId:
-      selectedProduct.id,
+      key,
 
     type:
       InventoryEventType.INVENTORY_ADJUSTED,
@@ -264,14 +268,14 @@ const handleTransferStock = async (
   quantity: number,
   note?: string
 ) => {
-  if (!selectedProduct) return;
-
+  if (!selectedProduct || !branchId) return;
+  const key = inventoryKey(selectedProduct.id, branchId)
   await eventService.create({
     aggregateType:
       AggregateType.INVENTORY,
 
     aggregateId:
-      selectedProduct.id,
+      key,
 
     type:
       InventoryEventType.INVENTORY_TRANSFER,

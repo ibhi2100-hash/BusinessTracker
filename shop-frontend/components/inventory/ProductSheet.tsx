@@ -62,11 +62,12 @@ export default function ProductSheet({
   if (!open) return null;
 
   const isValid =
-    form.name.trim().length > 0 &&
-    form.sellingPrice !== "" &&
-    Number(form.sellingPrice) > 0 &&
-    form.quantity !== "" &&
-    Number(form.quantity) > 0;
+  form.name.trim().length > 0 &&
+  form.sellingPrice !== "" &&
+  Number(form.sellingPrice) > 0 &&
+  (mode === "create"
+    ? form.quantity !== "" && Number(form.quantity) > 0
+    : true);
 
   const handleSubmit = () => {
     if (!form.name.trim()) return;
@@ -143,18 +144,20 @@ export default function ProductSheet({
       placeholder="Selling price"
     />
 
-    <GlassInput
-      type="number"
-      value={form.quantity}
-      onChange={(e) =>
-        setForm((prev) => ({
-          ...prev,
-          quantity: e.target.value,
-        }))
-      }
-      icon={<Package size={18} />}
-      placeholder="Quantity"
-    />
+    {mode === "create" && (
+      <GlassInput
+        type="number"
+        value={form.quantity}
+        onChange={(e) =>
+          setForm((prev) => ({
+            ...prev,
+            quantity: e.target.value,
+          }))
+        }
+        icon={<Package size={18} />}
+        placeholder="Quantity"
+      />
+    )}
 
     <GlassButton
       className="w-full"

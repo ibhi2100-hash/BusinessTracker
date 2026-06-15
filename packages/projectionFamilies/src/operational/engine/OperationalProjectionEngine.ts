@@ -8,26 +8,27 @@ export class OperationalProjectionEngine {
 
   constructor(private repo: ProjectionRepository) {}
 
-  async process(event: BaseEvent) {
+  async process(event: BaseEvent): Promise<void> {
 
     const handlers =
       operationalRegistry[event.type] ?? [];
-      console.log("this is th event that hit Operational Engine: ", event.type)
-
+      
     for (const handler of handlers) {
+      const projectionId =
+        handler.aggregateResolver?.(event)
+        ?? event.aggregateId
 
       const current =
         await this.repo.load(
           handler.projection,
-          event.aggregateId
+          projectionId
         );
-
       const next =
         handler.reducer.reduce(current, event);
 
       await this.repo.save(
         handler.projection,
-        event.aggregateId,
+        projectionId,
         next
       );
     }

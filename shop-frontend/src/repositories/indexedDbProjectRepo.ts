@@ -38,30 +38,30 @@ export class IndexedDbProjectionRepository
     projection: string,
     aggregateId: string,
     state: any,
-  ) {
+  ): Promise<void> {
 
     const entity = {
       ...state,
       id: aggregateId
     };
-    console.log({
-      projection,
-      aggregateId,
-      state
-    });
+    
     switch (projection) {
 
       case "product":
-        return this.db.products.put(entity);
+        this.db.products.put(entity);
+        break;
 
       case "business":
-        return this.db.businesses.put(entity);
+        this.db.businesses.put(entity);
+        break;
 
       case "branches":
-        return this.db.branches.put(entity);
+        this.db.branches.put(entity);
+        break;
 
       case "inventory":
-        return this.db.inventory.put(entity);
+        this.db.inventory.put(entity);
+        break;
     }
   }
 }

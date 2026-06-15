@@ -1,4 +1,4 @@
-import { Product } from "@business/shared-types";
+import { InventoryEventType, Product } from "@business/shared-types";
 
 import { BaseEvent } from "@business/shared-types";
 
@@ -29,7 +29,7 @@ export const ProductReducer = {
         return {
 
           id:
-            event.payload.id,
+            event.payload.id!,
 
           name:
             event.payload.name,
@@ -100,6 +100,25 @@ export const ProductReducer = {
           deletedAt:
             new Date(event.createdAt),
         };
+
+       case InventoryEventType.INVENTORY_RECEIVED: {
+
+         if (!current) {
+           return current;
+         }
+
+         const newCost = event.payload.costPrice;
+
+         if (newCost === current.costPrice) {
+           return current;
+         }
+
+         return {
+           ...current,
+           costPrice: newCost,
+           updatedAt: event.createdAt
+         };
+       }
 
       default:
         return current;

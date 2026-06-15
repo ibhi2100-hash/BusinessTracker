@@ -8,7 +8,7 @@ export interface ProjectionRepository {
 
   save(
     projection: string,
-    state: any,
-    next: any
-  ): Promise<string>;
+    aggregateId: any,
+    state: any
+  ): Promise<void>;
 }

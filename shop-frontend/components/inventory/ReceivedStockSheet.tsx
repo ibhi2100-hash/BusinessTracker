@@ -20,7 +20,7 @@ interface Props {
 
   onSubmit: (
     quantity: number,
-    costPrice?: number,
+    costPrice: number,
     note?: string
   ) => void;
 }
@@ -39,14 +39,14 @@ export default function ReceiveStockSheet({
   if (!open || !product) return null;
 
   const valid =
-    Number(quantity) > 0;
+    Number(quantity) > 0 && Number(costPrice) > 0;
 
   const handleSubmit = () => {
     if (!valid) return;
 
     onSubmit(
       Number(quantity),
-      costPrice ? Number(costPrice) : undefined,
+      Number(costPrice),
       note
     );
 

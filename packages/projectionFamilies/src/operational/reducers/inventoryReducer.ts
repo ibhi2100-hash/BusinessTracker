@@ -61,8 +61,7 @@ export const InventoryReducer = {
       // STOCK ADJUSTMENT
       // =========================
       case InventoryEventType.INVENTORY_UPDATED:
-        console.log("Current inventory:", current);
-console.log("Incoming event:", event);
+
         if (!current) return current;
 
         return {
@@ -75,6 +74,56 @@ console.log("Incoming event:", event);
           updatedAt: event.createdAt,
         };
 
+      // =========================
+      // STOCK RECEIVED
+      // =========================
+      case InventoryEventType.INVENTORY_RECEIVED:
+        if (!current) return current;
+
+        return {
+          ...current,
+
+          quantity:
+            current.quantity +
+            event.payload.quantity,
+            costPrice: event.payload.costPrice,
+            updatedAt: event.createdAt,
+        };
+
+      // =========================
+      // STOCK ADJUSTMENT
+      // =========================
+      case InventoryEventType.INVENTORY_ADJUSTED:
+        
+        if (!current) return current;
+
+        return {
+          ...current,
+
+          quantity: 
+            event.payload.direction === "increase" 
+              ? current.quantity + event.payload.quantity
+              : current.quantity - event.payload.quantity,
+
+          updatedAt: event.createdAt,
+        };
+
+      // =========================
+      // STOCK TRANSFER
+      // =========================
+      case InventoryEventType.INVENTORY_TRANSFER:
+        
+        if (!current) return current;
+
+        return {
+          ...current,
+
+          quantity:
+            current.quantity -
+            event.payload.quantity,
+
+          updatedAt: event.createdAt,
+        };
       // =========================
       // SALE
       // =========================

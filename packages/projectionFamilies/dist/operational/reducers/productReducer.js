@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductReducer = void 0;
+const shared_types_1 = require("@business/shared-types");
 exports.ProductReducer = {
     initialState: () => ({
         id: "",
@@ -50,6 +51,20 @@ exports.ProductReducer = {
                     isDeleted: true,
                     deletedAt: new Date(event.createdAt),
                 };
+            case shared_types_1.InventoryEventType.INVENTORY_RECEIVED: {
+                if (!current) {
+                    return current;
+                }
+                const newCost = event.payload.costPrice;
+                if (newCost === current.costPrice) {
+                    return current;
+                }
+                return {
+                    ...current,
+                    costPrice: newCost,
+                    updatedAt: event.createdAt
+                };
+            }
             default:
                 return current;
         }
