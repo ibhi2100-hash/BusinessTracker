@@ -26,11 +26,11 @@ export interface AggregateRecord {
 
   version: number;
 
-  lastEventId: string;
+  lastEventId?: string;
 
-  lastLogicClock: number;
+  lastLogicClock?: number;
 
-  lastGlobalPosition?: number;
+  lastGlobalPosition: bigint;
 
   lastSnapshotVersion?: number;
 

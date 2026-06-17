@@ -1,0 +1,7 @@
+export declare enum ConflictType {
+    VERSION = "VERSION",
+    DELETE = "DELETE",
+    MERGE = "MERGE",
+    CONCURRENT_EDIT = "CONCURRENT_EDIT",
+    SERVER_RULE = "SERVER_RULE"
+}

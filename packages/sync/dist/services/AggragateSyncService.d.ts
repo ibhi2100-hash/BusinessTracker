@@ -1,8 +1,8 @@
 import { SyncRepository } from "../contracts/SyncRepository";
-import { SyncTransport } from "../contracts/SyncTransport";
+import { BaseEvent } from "@business/shared-types";
+import { SyncResult } from "../types/SyncResult";
 export declare class AggregateSyncService {
     private repository;
-    private transport;
-    constructor(repository: SyncRepository, transport: SyncTransport);
-    syncAggregate(events: any[]): Promise<import("..").SyncResponse>;
+    constructor(repository: SyncRepository);
+    syncAggregate(events: BaseEvent[]): Promise<SyncResult>;
 }

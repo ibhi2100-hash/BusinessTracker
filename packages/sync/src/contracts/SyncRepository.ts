@@ -1,5 +1,7 @@
 import { BaseEvent } from "@business/shared-types";
 import { AggregateState } from "../types/AggregateState";
+import { SyncConflict } from "../types/SyncConflict";
+import { ConflictResolution } from "./ConflictResolution";
 
 export interface SyncRepository {
     getEvent(
@@ -16,11 +18,21 @@ export interface SyncRepository {
         aggregateId: string,
         aggregateType: string
     ): Promise<BaseEvent[]>;
-
+    getAggregateState(
+        aggregateId: string,
+        aggregateType: string
+    ): Promise<AggregateState>
     markSyncing(
         eventId: string
     ): Promise<void>;
 
+    saveConflict(
+        conflict: SyncConflict,
+        resolution: ConflictResolution
+    ): Promise<void>
+    saveAggregateState(
+        state: any
+    ): Promise<AggregateState>
     markSynced(
         eventId: string,
         aggregateVersion: number,
@@ -42,13 +54,10 @@ export interface SyncRepository {
     resetForRetry(
         eventId: string
     ): Promise<void>;
+    markSyncingBatch(eventIds: string[]): Promise<void>;
 
-    saveAggregateState(
-        state: AggregateState
+    markConflict(
+        eventId: string,
+        reason: string
     ): Promise<void>;
-
-    getAggregateState(
-        aggregateId: string,
-        aggregateType: string
-    ): Promise<AggregateState | null>;
 }

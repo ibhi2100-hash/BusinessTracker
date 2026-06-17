@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { startBusinessSubscriber, stopBusinessSubscriber } from "@/offline/subscribers/businessSubscriber";
 import { startInventorySubscriber, stopInventorySubscriber } from "@/offline/subscribers/inventorySubscriber";
 import { useAuthStore } from "@/src/store/useAuthStore";
-import { runSync } from "@/src/sync/networkMonitor";
+import { runSync } from "@/lib/syncMonitor";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const user = useAuthStore((s) => s.user);

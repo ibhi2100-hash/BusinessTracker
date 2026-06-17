@@ -1,5 +1,5 @@
 import { SyncRequest } from "../types/SyncRequest";
-import { SyncResponse } from "../types/SyncResponse";
+import { SyncResult } from "../types/SyncResult";
 export interface SyncTransport {
-    syncAggregate(request: SyncRequest): Promise<SyncResponse>;
+    syncAggregate(request: SyncRequest): Promise<SyncResult>;
 }

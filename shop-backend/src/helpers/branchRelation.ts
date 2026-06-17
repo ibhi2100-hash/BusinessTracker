@@ -1,9 +1,8 @@
 // branchRelation.ts
-
-import { Event } from "../domain/event.js";
+import { BaseEvent } from "@business/shared-types";
 
 export function branchRelationData(
-  event: Event
+  event: BaseEvent
 ) {
 
   if (

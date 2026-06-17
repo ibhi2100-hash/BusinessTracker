@@ -1,36 +1,49 @@
 import { BaseEvent } from "@business/shared-types";
 
-export function groupEventsByAggregate(
-  events: BaseEvent[]
-): BaseEvent[][] {
 
-  const map =
-    new Map<string, BaseEvent[]>();
+export type AggregateGroup = {
+
+  aggregateId: string;
+
+  aggregateType: string;
+
+  events: BaseEvent[];
+
+};
+
+export function groupByAggregate(
+  events: BaseEvent[]
+): AggregateGroup[] {
+
+  const groups = new Map<string, AggregateGroup>();
 
   for (const event of events) {
 
     const key =
       `${event.aggregateType}:${event.aggregateId}`;
 
-    const existing =
-      map.get(key);
+    let group = groups.get(key);
 
-    if (existing) {
+    if (!group) {
 
-      existing.push(event);
+      group = {
 
-    } else {
+        aggregateId: event.aggregateId,
 
-      map.set(key, [event]);
+        aggregateType: event.aggregateType,
+
+        events: []
+
+      };
+
+      groups.set(key, group);
+
     }
+
+    group.events.push(event);
+
   }
 
-  return Array.from(map.values())
-    .map(group =>
-      group.sort(
-        (a, b) =>
-          a.logicClock -
-          b.logicClock
-      )
-    );
+  return [...groups.values()];
+
 }

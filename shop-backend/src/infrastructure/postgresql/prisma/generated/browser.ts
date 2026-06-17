@@ -58,6 +58,11 @@ export type BusinessSubscription = Prisma.BusinessSubscriptionModel
  */
 export type Product = Prisma.ProductModel
 /**
+ * Model Aggregate
+ * 
+ */
+export type Aggregate = Prisma.AggregateModel
+/**
  * Model Inventory
  * 
  */

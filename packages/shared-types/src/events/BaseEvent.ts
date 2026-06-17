@@ -31,7 +31,7 @@ export interface BaseEvent<T extends string = string, p = Record<string, any>> {
   userId: string | null;
 
   // sync state
-  status: "PENDING" | "SYNCED" | "FAILED" | "DEAD";
+  status: "PENDING" | "SYNCED" | "SYNCING" | "CONFLICT" | "RETRYING" | "FAILED" | "DEAD";
   synced: boolean;
   retryCount?: number;
   lastRetryAt?: number;

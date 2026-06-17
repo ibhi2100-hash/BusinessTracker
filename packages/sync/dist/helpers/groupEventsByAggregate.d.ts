@@ -1,2 +1,7 @@
 import { BaseEvent } from "@business/shared-types";
-export declare function groupEventsByAggregate(events: BaseEvent[]): BaseEvent[][];
+export type AggregateGroup = {
+    aggregateId: string;
+    aggregateType: string;
+    events: BaseEvent[];
+};
+export declare function groupByAggregate(events: BaseEvent[]): AggregateGroup[];

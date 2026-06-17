@@ -1,5 +1,5 @@
 import { Event as PrismaEvent } from "../infrastructure/postgresql/prisma/generated/client.js";
-import { Event as DomainEvent } from "../domain/event.js";
+import { BaseEvent as DomainEvent } from "@business/shared-types";
 
 export function toDomainEvent(event: PrismaEvent): DomainEvent {
 
@@ -10,19 +10,16 @@ export function toDomainEvent(event: PrismaEvent): DomainEvent {
     aggregateType: event.aggregateType,
     aggregateVersion: event.aggregateVersion,
 
-    expectedAggregateVersion: null,
-
     type: event.type,
 
     payload: normalizePayload(event.payload),
 
     businessId: event.businessId ?? null,
     branchId: event.branchId ?? null,
-    branchBusinessId: event.branchBusinessId ?? null,
 
     mode: event.mode,
 
-    logicClock: event.logicClock,
+    logicClock: typeof event.logicClock === "bigint" ? Number(event.logicClock) : (event.logicClock as unknown as number),
 
     scope: event.scope as any,
 

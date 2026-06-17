@@ -392,6 +392,7 @@ export const ModelName = {
   SubscriptionPlan: 'SubscriptionPlan',
   BusinessSubscription: 'BusinessSubscription',
   Product: 'Product',
+  Aggregate: 'Aggregate',
   Inventory: 'Inventory',
   ProcessedSyncEvent: 'ProcessedSyncEvent',
   Event: 'Event',
@@ -414,7 +415,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "business" | "branch" | "user" | "session" | "passwordResetToken" | "subscriptionPlan" | "businessSubscription" | "product" | "inventory" | "processedSyncEvent" | "event" | "deviceClock" | "ledgerEntry" | "snapshot" | "alert"
+    modelProps: "business" | "branch" | "user" | "session" | "passwordResetToken" | "subscriptionPlan" | "businessSubscription" | "product" | "aggregate" | "inventory" | "processedSyncEvent" | "event" | "deviceClock" | "ledgerEntry" | "snapshot" | "alert"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1007,6 +1008,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ProductCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ProductCountAggregateOutputType> | number
+        }
+      }
+    }
+    Aggregate: {
+      payload: Prisma.$AggregatePayload<ExtArgs>
+      fields: Prisma.AggregateFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AggregateFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AggregatePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AggregateFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AggregatePayload>
+        }
+        findFirst: {
+          args: Prisma.AggregateFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AggregatePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AggregateFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AggregatePayload>
+        }
+        findMany: {
+          args: Prisma.AggregateFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AggregatePayload>[]
+        }
+        create: {
+          args: Prisma.AggregateCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AggregatePayload>
+        }
+        createMany: {
+          args: Prisma.AggregateCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AggregateCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AggregatePayload>[]
+        }
+        delete: {
+          args: Prisma.AggregateDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AggregatePayload>
+        }
+        update: {
+          args: Prisma.AggregateUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AggregatePayload>
+        }
+        deleteMany: {
+          args: Prisma.AggregateDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AggregateUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AggregateUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AggregatePayload>[]
+        }
+        upsert: {
+          args: Prisma.AggregateUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AggregatePayload>
+        }
+        aggregate: {
+          args: Prisma.AggregateAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAggregate>
+        }
+        groupBy: {
+          args: Prisma.AggregateGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AggregateCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCountAggregateOutputType> | number
         }
       }
     }
@@ -1699,6 +1774,24 @@ export const ProductScalarFieldEnum = {
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
 
 
+export const AggregateScalarFieldEnum = {
+  id: 'id',
+  aggregateId: 'aggregateId',
+  aggregateType: 'aggregateType',
+  businessId: 'businessId',
+  branchId: 'branchId',
+  version: 'version',
+  lastEventId: 'lastEventId',
+  lastLogicClock: 'lastLogicClock',
+  lastGlobalPosition: 'lastGlobalPosition',
+  lastSnaphotVersion: 'lastSnaphotVersion',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AggregateScalarFieldEnum = (typeof AggregateScalarFieldEnum)[keyof typeof AggregateScalarFieldEnum]
+
+
 export const InventoryScalarFieldEnum = {
   id: 'id',
   businessId: 'businessId',
@@ -2231,6 +2324,7 @@ export type GlobalOmitConfig = {
   subscriptionPlan?: Prisma.SubscriptionPlanOmit
   businessSubscription?: Prisma.BusinessSubscriptionOmit
   product?: Prisma.ProductOmit
+  aggregate?: Prisma.AggregateOmit
   inventory?: Prisma.InventoryOmit
   processedSyncEvent?: Prisma.ProcessedSyncEventOmit
   event?: Prisma.EventOmit

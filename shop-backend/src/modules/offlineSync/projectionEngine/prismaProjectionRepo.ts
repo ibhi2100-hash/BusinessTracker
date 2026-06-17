@@ -42,29 +42,30 @@ export class PrismaProjectionRepository
 
   async save(
     projection: string,
+    aggregateId: any,
     state: any
-  ): Promise<string> {
+  ): Promise<void> {
 
     switch (projection) {
 
       case "product":
-        await this.tx.product.update(state);
-        return state.id;
+        await this.tx.product.update({ where: ({ id: aggregateId } as unknown) as Prisma.ProductWhereUniqueInput, data: state });
+        return;
 
       case "business":
-        await this.tx.business.update(state);
-        return state.id;
+        await this.tx.business.update({ where: { id: aggregateId }, data: state });
+        return;
 
       case "branch":
-        await this.tx.branch.update(state);
-        return state.id;
+        await this.tx.branch.updateMany({ where: { id: aggregateId }, data: state });
+        return;
 
       case "inventory":
-        await this.tx.inventory.update(state);
-        return state.id;
+        await this.tx.inventory.update({ where: { id: aggregateId }, data: state });
+        return;
 
       default:
-        return "";
+        return;
     }
   }
 }

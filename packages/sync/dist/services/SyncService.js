@@ -22,10 +22,7 @@ class SyncService {
     }
     async syncGroup(events) {
         try {
-            for (const event of events) {
-                await this.repository
-                    .markSyncing(event.id);
-            }
+            await this.repository.markSyncingBatch(events.map(e => e.id));
             const result = await this.aggregateSync
                 .syncAggregate(events);
             await this.processResult(events, result);
@@ -53,7 +50,7 @@ class SyncService {
                 continue;
             }
             await this.failureService
-                .failEvent(event, item.error);
+                .failEvent(event, item.code);
         }
         // SERVER STATE
         if (serverState) {

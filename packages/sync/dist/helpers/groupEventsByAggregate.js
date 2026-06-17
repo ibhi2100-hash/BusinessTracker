@@ -1,19 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.groupEventsByAggregate = groupEventsByAggregate;
-function groupEventsByAggregate(events) {
-    const map = new Map();
+exports.groupByAggregate = groupByAggregate;
+function groupByAggregate(events) {
+    const groups = new Map();
     for (const event of events) {
         const key = `${event.aggregateType}:${event.aggregateId}`;
-        const existing = map.get(key);
-        if (existing) {
-            existing.push(event);
+        let group = groups.get(key);
+        if (!group) {
+            group = {
+                aggregateId: event.aggregateId,
+                aggregateType: event.aggregateType,
+                events: []
+            };
+            groups.set(key, group);
         }
-        else {
-            map.set(key, [event]);
-        }
+        group.events.push(event);
     }
-    return Array.from(map.values())
-        .map(group => group.sort((a, b) => a.logicClock -
-        b.logicClock));
+    return [...groups.values()];
 }

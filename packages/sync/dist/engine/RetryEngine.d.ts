@@ -1,6 +1,11 @@
+import { BaseEvent } from "@business/shared-types";
+import { RetryPolicy } from "../contracts/RetryPolicy";
 import { SyncRepository } from "../contracts/SyncRepository";
 export declare class RetryEngine {
-    private repo;
-    constructor(repo: SyncRepository);
-    execute(): Promise<void>;
+    private repository;
+    private retryPolicy;
+    constructor(repository: SyncRepository, retryPolicy: RetryPolicy);
+    schedule(event: BaseEvent, reason?: string): Promise<void>;
+    reset(eventId: string): Promise<void>;
+    readyForRetry(): Promise<BaseEvent[]>;
 }

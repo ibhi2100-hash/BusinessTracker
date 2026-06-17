@@ -5,7 +5,7 @@ export interface AggregateState {
     version: number;
     lastEventId?: string;
     lastLogicClock?: number;
-    lastGlobalPosition?: bigint;
+    lastGlobalPosition: bigint;
     lastSnapshotVersion?: number;
     updatedAt: Date;
 }

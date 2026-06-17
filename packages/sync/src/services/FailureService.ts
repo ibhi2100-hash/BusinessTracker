@@ -1,5 +1,7 @@
+import { BaseEvent } from "@business/shared-types";
 import { SyncRepository } from "../contracts/SyncRepository";
 import { calculateRetryDelay } from "../helpers/calculateRetryDelay";
+import { SyncErrorCode } from "../types/SyncError";
 
 export class FailureService {
 
@@ -12,8 +14,8 @@ export class FailureService {
   ) {}
 
   async failEvent(
-    event: any,
-    error: string
+    event: BaseEvent,
+    error: SyncErrorCode
   ) {
 
     const retryCount =

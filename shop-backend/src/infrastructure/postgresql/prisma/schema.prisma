@@ -100,6 +100,7 @@ model Business {
   alerts        Alert[]
   events        Event[]
   ledgerEntries LedgerEntry[]
+  aggregates    Aggregate[]
 
   subscriptions BusinessSubscription[]
 
@@ -318,6 +319,23 @@ model Product {
   @@index([name])
 
   @@index([category])
+}
+model Aggregate {
+  id    String  @id
+  aggregateId   String
+  aggregateType   String
+  businessId      String?
+  branchId        String?
+  version       Int
+  lastEventId   String?
+  lastLogicClock    Decimal?
+  lastGlobalPosition    BigInt?
+  lastSnaphotVersion     Decimal?
+  createdAt               DateTime
+  updatedAt                 DateTime?
+
+  business Business? @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
 }
 
 model Inventory {

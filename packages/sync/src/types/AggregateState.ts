@@ -12,7 +12,7 @@ export interface AggregateState {
 
   lastLogicClock?: number;
 
-  lastGlobalPosition?: bigint;
+  lastGlobalPosition: bigint;
 
   lastSnapshotVersion?: number;
 

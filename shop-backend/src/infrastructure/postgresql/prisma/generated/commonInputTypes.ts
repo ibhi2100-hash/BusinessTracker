@@ -325,13 +325,6 @@ export type BigIntNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedBigIntNullableFilter<$PrismaModel> | bigint | number | null
 }
 
-export type EnumSyncEventStatusFilter<$PrismaModel = never> = {
-  equals?: $Enums.SyncEventStatus | Prisma.EnumSyncEventStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.SyncEventStatus[] | Prisma.ListEnumSyncEventStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.SyncEventStatus[] | Prisma.ListEnumSyncEventStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumSyncEventStatusFilter<$PrismaModel> | $Enums.SyncEventStatus
-}
-
 export type BigIntNullableWithAggregatesFilter<$PrismaModel = never> = {
   equals?: bigint | number | Prisma.BigIntFieldRefInput<$PrismaModel> | null
   in?: bigint[] | number[] | Prisma.ListBigIntFieldRefInput<$PrismaModel> | null
@@ -346,6 +339,13 @@ export type BigIntNullableWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedBigIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedBigIntNullableFilter<$PrismaModel>
   _max?: Prisma.NestedBigIntNullableFilter<$PrismaModel>
+}
+
+export type EnumSyncEventStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.SyncEventStatus | Prisma.EnumSyncEventStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.SyncEventStatus[] | Prisma.ListEnumSyncEventStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SyncEventStatus[] | Prisma.ListEnumSyncEventStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSyncEventStatusFilter<$PrismaModel> | $Enums.SyncEventStatus
 }
 
 export type EnumSyncEventStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -835,13 +835,6 @@ export type NestedBigIntNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedBigIntNullableFilter<$PrismaModel> | bigint | number | null
 }
 
-export type NestedEnumSyncEventStatusFilter<$PrismaModel = never> = {
-  equals?: $Enums.SyncEventStatus | Prisma.EnumSyncEventStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.SyncEventStatus[] | Prisma.ListEnumSyncEventStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.SyncEventStatus[] | Prisma.ListEnumSyncEventStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumSyncEventStatusFilter<$PrismaModel> | $Enums.SyncEventStatus
-}
-
 export type NestedBigIntNullableWithAggregatesFilter<$PrismaModel = never> = {
   equals?: bigint | number | Prisma.BigIntFieldRefInput<$PrismaModel> | null
   in?: bigint[] | number[] | Prisma.ListBigIntFieldRefInput<$PrismaModel> | null
@@ -867,6 +860,13 @@ export type NestedFloatNullableFilter<$PrismaModel = never> = {
   gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   not?: Prisma.NestedFloatNullableFilter<$PrismaModel> | number | null
+}
+
+export type NestedEnumSyncEventStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.SyncEventStatus | Prisma.EnumSyncEventStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.SyncEventStatus[] | Prisma.ListEnumSyncEventStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SyncEventStatus[] | Prisma.ListEnumSyncEventStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSyncEventStatusFilter<$PrismaModel> | $Enums.SyncEventStatus
 }
 
 export type NestedEnumSyncEventStatusWithAggregatesFilter<$PrismaModel = never> = {

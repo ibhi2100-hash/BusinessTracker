@@ -1,4 +1,6 @@
-import { syncEngine } from "./syncEngine";
+import { getDb } from "../db";
+import { useAuthStore } from "../store/useAuthStore";
+import { createSyncManager } from "../services/sync";
 
 let syncing = false;
 let queued = false;
@@ -8,11 +10,14 @@ export const queueSync = async () => {
     queued = true;
     return;
   }
-
+  const userId = useAuthStore.getState().user?.id
+  if(!userId) return;
+  const db  = getDb(userId)
   syncing = true;
-
+  
+  const syncManager = createSyncManager(db)
   try {
-    await syncEngine();
+    await syncManager.sync();
   } finally {
     syncing = false;
 

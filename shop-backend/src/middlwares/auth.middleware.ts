@@ -26,8 +26,6 @@ export function authMiddleware(
     }
 
     const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
-    console.log("This is the decoded data: ", decoded)
-
 
     if (!decoded.userId ) {
       return res.status(401).json({ message: "Invalid token" });

@@ -59,6 +59,7 @@ export const ModelName = {
   SubscriptionPlan: 'SubscriptionPlan',
   BusinessSubscription: 'BusinessSubscription',
   Product: 'Product',
+  Aggregate: 'Aggregate',
   Inventory: 'Inventory',
   ProcessedSyncEvent: 'ProcessedSyncEvent',
   Event: 'Event',
@@ -214,6 +215,24 @@ export const ProductScalarFieldEnum = {
 } as const
 
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
+
+
+export const AggregateScalarFieldEnum = {
+  id: 'id',
+  aggregateId: 'aggregateId',
+  aggregateType: 'aggregateType',
+  businessId: 'businessId',
+  branchId: 'branchId',
+  version: 'version',
+  lastEventId: 'lastEventId',
+  lastLogicClock: 'lastLogicClock',
+  lastGlobalPosition: 'lastGlobalPosition',
+  lastSnaphotVersion: 'lastSnaphotVersion',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AggregateScalarFieldEnum = (typeof AggregateScalarFieldEnum)[keyof typeof AggregateScalarFieldEnum]
 
 
 export const InventoryScalarFieldEnum = {

@@ -3,6 +3,8 @@ import { getDbName, DB_VERSION, TABLES } from "./schema";
 import { BaseEvent, LedgerEntry } from "@business/shared-types"
 import { Business, Branch, Product, User, Snapshot, Inventory } from "@business/shared-types";
 import { AggregateRecord, ReplicaMeta } from "@/offline/domain/aggregate";
+import { SyncConflict } from "@business/sync";
+import { ConflictResolution } from "@business/sync";
 
 
 // ---------------------------
@@ -17,6 +19,21 @@ export interface AuthData {
   activeBranch: any;
   createdAt: number;
   updatedAt: number;
+}
+export interface ConflictRecord {
+
+    id: string;
+
+    aggregateId: string;
+
+    aggregateType: string;
+
+    conflict: SyncConflict;
+
+    resolution?: ConflictResolution;
+
+    createdAt: number;
+
 }
 
 export interface Category {
@@ -75,6 +92,7 @@ export class AppDB extends Dexie {
   aggregates!: Table<AggregateRecord, string>;
   replicaMeta!: Table<ReplicaMeta, string>;
   inventory!: Table<Inventory, string>;
+  conflicts!: Table<ConflictRecord, string>;
   products!: Table<Product, string>;
   sales!: Table<Sales, String>;
   ledgerEntries!: Table<LedgerEntry, string>;
@@ -100,6 +118,8 @@ export class AppDB extends Dexie {
         "id,aggregateId,aggregateType,version,lastGlobalPosition,lastSnapshotVersion,[aggregateType+aggregateId]",
       
       auth: 
+        "id",
+      conflicts:
         "id",
 
       snapshots:

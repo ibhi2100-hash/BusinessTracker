@@ -1,50 +1,148 @@
 import { SyncRepository } from "../contracts/SyncRepository";
-import { SyncTransport } from "../contracts/SyncTransport";
+import { BaseEvent } from "@business/shared-types";
+
+import { SyncResult } from "../types/SyncResult";
+import { SyncSuccess } from "../types/SyncSuccess";
+import { SyncFailure } from "../types/SyncFailure";
+import { SyncConflict } from "../types/SyncConflict";
+import { ConflictType } from "../types/ConflictType";
+import { classifyError } from "../helpers/classifyErrors";
+import { isRetryable } from "../helpers/RetryPolicy";
 
 export class AggregateSyncService {
 
   constructor(
-    private repository:
-      SyncRepository,
-
-    private transport:
-      SyncTransport
+    private repository: SyncRepository
   ) {}
 
   async syncAggregate(
-    events: any[]
-  ) {
+    events: BaseEvent[]
+  ): Promise<SyncResult> {
 
-    const first =
-      events[0];
+    if (events.length === 0) {
+      return {
+        success: [],
+        failed: [],
+        conflicts: []
+      };
+    }
 
-    const synced =
-      await this.repository
-        .getSyncedEvents(
-          first.aggregateId,
-          first.aggregateType
-        );
+    const first = events[0];
 
-    const last =
-      synced[
-        synced.length - 1
-      ];
+    const aggregateId = first.aggregateId;
+    const aggregateType = first.aggregateType;
 
-    const baseVersion =
-      last?.aggregateVersion ??
-      0;
+    // 1. LOAD SERVER STATE
+    const serverState =
+      await this.repository.getAggregateState(
+        aggregateId,
+        aggregateType
+      );
 
-    return this.transport
-      .syncAggregate({
-        aggregateId:
-          first.aggregateId,
+    const serverVersion =
+      serverState?.version ?? 0;
 
-        aggregateType:
-          first.aggregateType,
+    const clientBaseVersion =
+      first.aggregateVersion ?? 0;
 
-        baseVersion,
+    const lastGlobalPosition =
+      serverState?.lastGlobalPosition ?? 0n;
 
-        events
-      });
+    const lastEventId =
+      serverState?.lastEventId;
+
+    // 2. CONFLICT DETECTION
+    if (
+      serverState &&
+      clientBaseVersion !== serverVersion
+    ) {
+
+      const conflict: SyncConflict = {
+        eventId: first.id,
+        aggregateId,
+        aggregateType,
+        type: ConflictType.VERSION ,
+        message:
+          `Version mismatch: client=${clientBaseVersion}, server=${serverVersion}`,
+        localVersion: clientBaseVersion,
+        clientLastGlobalPosition: first.globalPosition ?? 0n,
+        serverVersion,
+        serverState
+      };
+
+      return {
+        success: [],
+        failed: [],
+        conflicts: [conflict],
+        serverState
+      };
+    }
+
+    // 3. APPLY EVENTS (SERVER AUTHORITATIVE)
+    let version = serverVersion;
+    let globalPosition = lastGlobalPosition;
+
+    const success: SyncSuccess[] = [];
+    const failed: SyncFailure[] = [];
+
+    for (const event of events) {
+
+  try {
+
+    version += 1;
+    globalPosition += 1n;
+
+    success.push({
+      eventId: event.id,
+      aggregateId,
+      aggregateType,
+      aggregateVersion: version,
+      globalPosition,
+      processedAt: new Date().toISOString()
+    });
+
+  } catch (err: any) {
+
+    const message = err?.message ?? "Unknown error";
+
+    failed.push({
+      eventId: event.id,
+
+      code:
+        classifyError(message),
+
+      message,
+      retryable: isRetryable(message)
+    });
+  }
+}
+
+    // 4. BUILD NEW SERVER STATE
+   const lastSuccess =
+  success.reduce((prev, curr) => {
+    return (!prev || curr.aggregateVersion > prev.aggregateVersion)
+      ? curr
+      : prev;
+  }, undefined as SyncSuccess | undefined); 
+
+  const newServerState =
+  success.length > 0
+    ? {
+        id: aggregateId,
+        aggregateId,
+        aggregateType,
+        version: lastSuccess!.aggregateVersion,
+        lastEventId: lastSuccess!.eventId,
+        lastGlobalPosition: lastSuccess!.globalPosition,
+        updatedAt: new Date()
+      }
+    : serverState;
+    // 5. RETURN RESULT
+    return {
+      success,
+      failed,
+      conflicts: [],
+      serverState: newServerState
+    };
   }
 }

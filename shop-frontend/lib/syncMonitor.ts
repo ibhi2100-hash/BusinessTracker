@@ -1,6 +1,12 @@
 // lib/sync/syncMonitor.ts
 
-import { syncEngine } from "@/src/sync/syncEngine"
+import { getDb } from "@/src/db"
+import { createSyncManager } from "@/src/services/sync"
+import { useAuthStore } from "@/src/store/useAuthStore"
+
+
+
+
 
 let syncInProgress = false
 let intervalId: ReturnType<typeof setInterval> | null = null
@@ -12,17 +18,21 @@ export async function runSync() {
     return
   }
 
-  // Skip sync if offline
-  if (!navigator.onLine) {
-    console.log("Offline → sync skipped")
+  //ONline checker 
+
+  if(!navigator.onLine){
+     console.log("Offline → sync skipped")
     return
   }
-
   syncInProgress = true
 
   try {
     console.log("Running sync engine...")
-    await syncEngine()
+    const userId = useAuthStore.getState().user.id;
+    if(!userId) return;
+    const db = getDb(userId);
+    const synceManager = createSyncManager(db);
+    synceManager.sync()
   } catch (error) {
     console.error("Sync failed:", error)
   } finally {

@@ -1,21 +1,59 @@
+import { BaseEvent } from "@business/shared-types";
+
+import { RetryPolicy } from "../contracts/RetryPolicy";
 import { SyncRepository } from "../contracts/SyncRepository";
 
 export class RetryEngine {
+
     constructor(
-        private repo: SyncRepository
-    ){}
+        private repository: SyncRepository,
+        private retryPolicy: RetryPolicy
+    ) {}
 
-    async execute() {
-        const now =
-            Date.now()
+    async schedule(
+        event: BaseEvent,
+        reason?: string
+    ): Promise<void> {
 
-        const retryable = 
-            await this.repo 
-                .getRetryableEvents(now);
+        const retryCount = (event.retryCount ?? 0) + 1;
 
-        for(const event of retryable) {
-            await this.repo
-                .resetForRetry(event.id)
+        if (!this.retryPolicy.shouldRetry(retryCount)) {
+
+            await this.repository.markDead(
+                event.id,
+                reason ?? "Retry limit exceeded"
+            );
+
+            return;
         }
+
+        const nextRetryAt =
+            this.retryPolicy.nextDelay(retryCount);
+
+        await this.repository.markFailed(
+            event.id,
+            reason ?? "",
+            retryCount,
+            nextRetryAt
+        );
     }
+
+    async reset(
+        eventId: string
+    ): Promise<void> {
+
+        await this.repository.resetForRetry(
+            eventId
+        );
+
+    }
+
+    async readyForRetry(): Promise<BaseEvent[]> {
+
+        return this.repository.getRetryableEvents(
+            Date.now()
+        );
+
+    }
+
 }
