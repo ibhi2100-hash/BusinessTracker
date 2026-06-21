@@ -23,6 +23,7 @@ __exportStar(require("./types/SyncResult"), exports);
 __exportStar(require("./types/SyncConflict"), exports);
 __exportStar(require("./contracts/ConflictResolution"), exports);
 __exportStar(require("./contracts/RetryPolicy"), exports);
+__exportStar(require("./helpers/groupEventsByAggregate"), exports);
 __exportStar(require("./engine/SyncEngine"), exports);
 __exportStar(require("./engine/Scheduler"), exports);
 __exportStar(require("./engine/RetryEngine"), exports);

@@ -1,9 +1,9 @@
 // operational/types.ts
-import { BaseEvent } from "@business/shared-types";
+import { IntegrationEvent } from "@business/shared-types";
 
 export interface OperationalReducer<
   current = any,
-  Event = BaseEvent
+  Event = IntegrationEvent
 > {
   initialState(): current;
 
@@ -15,8 +15,8 @@ export interface ProjectionHandler {
   projection: string;
 
   reducer: {
-    reduce(current: any, event: BaseEvent): any;
+    reduce(current: any, event: IntegrationEvent): any;
   };
 
-  aggregateResolver?: (event: BaseEvent) => string;
+  aggregateResolver?: (event: IntegrationEvent) => string;
 }

@@ -1,0 +1,13 @@
+{
+  "name": "@business/event-bus",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@business/shared-types": "*"
+  }
+
+}

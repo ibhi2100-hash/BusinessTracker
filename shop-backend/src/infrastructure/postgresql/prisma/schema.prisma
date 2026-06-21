@@ -503,6 +503,20 @@ model LedgerEntry {
   @@index([createdAt])
 }
 
+model OutboxEvent {
+  id            String   @id
+  aggregateId   String
+  aggregateType String
+  type          String
+  payload       Json
+  aggregateVersion  Int
+
+  status        String   @default("PENDING") // PENDING | SENT | FAILED
+  attempts      Int      @default(0)
+  createdAt     DateTime @default(now())
+  processedAt   DateTime?
+}
+
 model Snapshot {
   id String @id
 

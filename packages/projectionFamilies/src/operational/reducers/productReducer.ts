@@ -1,6 +1,4 @@
-import { InventoryEventType, Product } from "@business/shared-types";
-
-import { BaseEvent } from "@business/shared-types";
+import { IntegrationEvent, InventoryEventType, Product } from "@business/shared-types";
 
 export const ProductReducer = {
     initialState: () => ({
@@ -18,8 +16,8 @@ export const ProductReducer = {
   }),
 
   reduce(
-    current: Product | null,
-    event: BaseEvent
+    current: any,
+    event: IntegrationEvent
   ): Product | null {
 
     switch (event.type) {

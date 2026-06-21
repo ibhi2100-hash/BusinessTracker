@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspace=@business/domain-models && npm run build --workspace=@business/projection-families && npm run build --workspace=@business/snapshot-engine && npm run build --workspace=@business/shared-types && npm run build --workspace=@business/ledger-engine && npm run build --workspace=@business/sync && npm run build --workspace=shop-frontend"
+    "build": "npm run build --workspace=@business/domain-models && npm run build --workspace=@business/projection-families && npm run build --workspace=@business/snapshot-engine  && npm run build --workspace=@business/event-bus && npm run build --workspace=@business/shared-types && npm run build --workspace=@business/ledger-engine && npm run build --workspace=@business/sync && npm run build --workspace=shop-frontend"
   },
   "devDependencies": {
     "next": "16.1.6"

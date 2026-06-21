@@ -7,6 +7,7 @@ export * from "./types/SyncResult";
 export * from "./types/SyncConflict";
 export * from "./contracts/ConflictResolution";
 export * from "./contracts/RetryPolicy";
+export * from "./helpers/groupEventsByAggregate";
 export * from "./engine/SyncEngine";
 export * from "./engine/Scheduler";
 export * from "./engine/RetryEngine";

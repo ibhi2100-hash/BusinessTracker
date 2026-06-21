@@ -6,3 +6,5 @@ export * from "./operational/registry/index";
 export * from "./operational/engine/OperationalProjectionEngine"
 export * from "./contracts/projectionRepository"
 
+export * from "./subscriber/projectionSubscriber"
+

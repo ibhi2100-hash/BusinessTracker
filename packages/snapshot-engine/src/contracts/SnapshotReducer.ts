@@ -1,6 +1,6 @@
 // packages/snapshot-engine/contracts/SnapshotReducer.ts
 
-import { BaseEvent } from "@business/shared-types";
+import { BaseEvent, IntegrationEvent } from "@business/shared-types";
 
 export interface SnapshotReducer<
   TState = any
@@ -11,6 +11,6 @@ export interface SnapshotReducer<
 
   reduce(
     current: TState,
-    event: BaseEvent
+    event: IntegrationEvent
   ): TState;
 }

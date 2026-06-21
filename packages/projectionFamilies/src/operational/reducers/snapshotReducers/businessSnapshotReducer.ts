@@ -1,4 +1,4 @@
-import { BaseEvent } from "@business/shared-types";
+import { IntegrationEvent } from "@business/shared-types";
 
 export const BusinessSnapshotReducer = {
 
@@ -8,7 +8,7 @@ export const BusinessSnapshotReducer = {
     return null;
   },
 
-  reduce(current: any, event: BaseEvent) {
+  reduce(current: any, event: IntegrationEvent) {
 
     switch(event.type) {
 

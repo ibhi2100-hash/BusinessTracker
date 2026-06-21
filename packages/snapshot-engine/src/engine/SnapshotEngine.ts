@@ -1,63 +1,104 @@
-import { BaseEvent } from "@business/shared-types";
 import { SnapshotRepo } from "../contracts/SnapshotRepo";
 import { SnapshotRegistry } from "../contracts/SnapshotRegistry";
+
+export interface SnapshotEngineContext {
+  eventStore: {
+    after(
+      aggregateId: string,
+      version: number
+    ): Promise<any[]>;
+  };
+}
+
 export class SnapshotEngine {
   constructor(
     private repo: SnapshotRepo,
-    private registry: SnapshotRegistry
+    private registry: SnapshotRegistry,
+    private ctx: SnapshotEngineContext
   ) {}
 
-  async process(event: BaseEvent) {
-
-    const reducer =
-      this.registry.get(event.aggregateType);
+  async build(
+    aggregateId: string,
+    aggregateType: string
+  ) {
+    const reducer = this.registry.get(aggregateType);
 
     if (!reducer) return;
 
-    const snapshotKey =
-      this.buildSnapshotKey(event);
-
+    // 1. Load existing snapshot
     const snapshot =
-      await this.repo.get(snapshotKey);
+      await this.repo.get(aggregateId);
 
-    const currentState =
+    const baseVersion =
+      snapshot?.version ?? 0;
+
+    // 2. Load all missing events
+    const events =
+      await this.ctx.eventStore.after(
+        aggregateId,
+        baseVersion
+      );
+
+    if (events.length === 0) return;
+
+    // 3. Start from snapshot state or initial state
+    let state =
       snapshot?.state ??
       reducer.initialState();
 
-    const nextState =
-      reducer.reduce(currentState, event);
+    let lastVersion = baseVersion;
+    let eventCount = snapshot?.eventCount ?? 0;
 
-    const nextVersion =
-      event.aggregateVersion ?? 0;
+    // 4. Replay ALL events deterministically
+    for (const event of events) {
+      state = reducer.reduce(state, event);
 
-    const nextEventCount =
-      (snapshot?.eventCount ?? 0) + 1;
+      lastVersion = event.aggregateVersion;
+      eventCount++;
+    }
 
+    // 5. Build snapshot key (stable identity)
+    const snapshotKey =
+      this.buildSnapshotKey(
+        aggregateType,
+        aggregateId
+      );
+
+    // 6. Persist snapshot
     await this.repo.save({
       id: snapshotKey,
       snapshotKey,
-      snapshotType: event.aggregateType,
-      scope: event.scope,
 
-      aggregateId: event.aggregateId,
-      aggregateType: event.aggregateType,
+      snapshotType: aggregateType,
+      scope: events[0]?.scope ?? snapshot?.scope,
 
-      businessId: event.businessId ?? undefined,
-      branchId: event.branchId ?? undefined,
+      aggregateId,
+      aggregateType,
 
-      state: nextState,
+      businessId: events[0]?.businessId ?? snapshot?.businessId ?? null,
+      branchId: events[0]?.branchId ?? snapshot?.branchId ?? null,
 
-      version: nextVersion,
-      eventCount: nextEventCount,
+      state,
 
-      lastGlobalPosition: event.globalPosition ?? 0n,
+      version: lastVersion,
+      eventCount,
 
-      updatedAt: Date.now(),
-      createdAt: snapshot?.createdAt ?? Date.now()
+      lastGlobalPosition:
+        events[events.length - 1]?.globalPosition ?? snapshot?.lastGlobalPosition ?? 0n,
+
+      checksum: undefined,
+
+      createdAt:
+        snapshot?.createdAt ?? Date.now(),
+
+      updatedAt: Date.now()
     });
   }
 
-  private buildSnapshotKey(event: BaseEvent): string {
-    return `${event.scope}:${event.aggregateType}:${event.aggregateId}`;
+  private buildSnapshotKey(
+    aggregateType: string,
+    aggregateId: string
+  ): string {
+    return `${aggregateType}:${aggregateId}`;
   }
 }

@@ -1,19 +1,11 @@
-import { BaseEvent, LedgerEntry } from "@business/shared-types";
-import { LedgerRepository } from "./ledgerRepo";
+import { IntegrationEvent, LedgerEntry } from "@business/shared-types";
 export interface LedgerEngineContext {
-    eventStore: {
-        exists(id: string): Promise<boolean>;
-        append(event: BaseEvent): Promise<void>;
+    ledgerGenerator: (event: IntegrationEvent) => LedgerEntry[];
+    ledgerRepository: {
+        append(entries: LedgerEntry[]): Promise<void>;
     };
-    snapshotEngine: {
-        process(event: BaseEvent): Promise<void>;
-    };
-    projectionEngine: {
-        process(event: BaseEvent): Promise<void>;
-    };
-    ledgerGenerator: (event: BaseEvent) => LedgerEntry[];
-    ledgerRepository: LedgerRepository;
-    versionManager: {
-        update(event: BaseEvent): Promise<void>;
+    idempotencyStore: {
+        exists(eventId: string): Promise<boolean>;
+        mark(eventId: string): Promise<void>;
     };
 }

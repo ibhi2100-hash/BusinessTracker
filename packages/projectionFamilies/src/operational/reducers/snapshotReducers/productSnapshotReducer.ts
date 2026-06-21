@@ -1,6 +1,6 @@
 import {
   Product,
-  BaseEvent
+  IntegrationEvent
 } from "@business/shared-types";
 
 import { SnapshotReducer }from "@business/snapshot-engine";
@@ -26,7 +26,8 @@ SnapshotReducer<Product | null> = {
     };
   },
 
-  reduce(current: any, event: BaseEvent) {
+  reduce(current: any, event: IntegrationEvent
+  ) {
 
     switch (event.type) {
 

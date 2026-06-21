@@ -1,4 +1,4 @@
-import { BaseEvent } from "@business/shared-types";
+import { IntegrationEvent } from "@business/shared-types";
 
 export const DashboardSnapshotReducer = {
 
@@ -16,7 +16,7 @@ export const DashboardSnapshotReducer = {
 
   reduce(
     current: any,
-    event: BaseEvent
+    event: IntegrationEvent
   ) {
 
     switch(event.type) {

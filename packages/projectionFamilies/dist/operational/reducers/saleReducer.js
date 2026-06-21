@@ -11,7 +11,7 @@ exports.SaleReducer = {
         quantity: 0,
         total: 0
     }),
-    reduce(current, event) {
+    reducer(current, event) {
         switch (event.type) {
             case shared_types_1.salesEventType.SALE_ADDED:
                 return {

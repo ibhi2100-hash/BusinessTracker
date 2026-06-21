@@ -19,3 +19,4 @@ __exportStar(require("./contracts/SnapshotRegistry"), exports);
 __exportStar(require("./contracts/SnapshotReducer"), exports);
 __exportStar(require("./snapshotReducer/snapshotReducer"), exports);
 __exportStar(require("./engine/SnapshotEngine"), exports);
+__exportStar(require("./scheduler/SnapshotScheduler"), exports);

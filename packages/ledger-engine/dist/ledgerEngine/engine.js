@@ -7,18 +7,22 @@ class LedgerEngine {
     }
     async process(event) {
         try {
-            const exists = await this.ctx.eventStore.exists(event.id);
+            // 1. Idempotency guard
+            const exists = await this.ctx.idempotencyStore.exists(event.id);
             if (exists)
                 return;
-            await this.ctx.eventStore.append(event);
+            // 2. Generate ledger entries
             const entries = this.ctx.ledgerGenerator(event);
+            // 3. Persist ledger entries ONLY
             await this.ctx.ledgerRepository.append(entries);
-            await this.ctx.snapshotEngine.process(event);
-            await this.ctx.projectionEngine.process(event);
-            await this.ctx.versionManager.update(event);
+            // 4. Mark processed (idempotency)
+            await this.ctx.idempotencyStore.mark(event.id);
         }
         catch (e) {
-            console.error("FAILED INSIDE LEDGER", e);
+            console.error("LEDGER_ENGINE_FAILED", {
+                eventId: event.id,
+                error: e
+            });
             throw e;
         }
     }

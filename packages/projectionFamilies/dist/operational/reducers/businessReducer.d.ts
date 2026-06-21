@@ -1,4 +1,4 @@
-import { BaseEvent } from "@business/shared-types";
+import { IntegrationEvent } from "@business/shared-types";
 export declare const BusinessReducer: {
     initialState: () => {
         id: string;
@@ -6,5 +6,5 @@ export declare const BusinessReducer: {
         userId: string;
         address: string;
     };
-    reduce(current: any, event: BaseEvent): any;
+    reduce(current: any, event: IntegrationEvent): any;
 };

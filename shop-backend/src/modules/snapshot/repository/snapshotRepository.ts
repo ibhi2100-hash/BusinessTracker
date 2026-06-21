@@ -31,16 +31,45 @@ export class PrismaSnapshotRepo implements SnapshotRepo {
   ): Promise<void> {
 
     await this.tx.snapshot.upsert({
+  where: {
+    snapshotKey: snapshot.snapshotKey,
+  },
 
-      where: {
-        snapshotKey:
-          snapshot.snapshotKey
-      },
+  create: {
+    id: snapshot.id,
 
-      // cast to any to satisfy Prisma's strict exactOptionalPropertyTypes checks
-      create: snapshot as any,
+    snapshotKey: snapshot.snapshotKey,
+    snapshotType: snapshot.snapshotType,
+    scope: snapshot.scope,
 
-      update: snapshot as any
-    });
+    businessId: snapshot.businessId!, // see below
+
+    branchId: snapshot.branchId ?? null,
+    branchBusinessId: snapshot.businessId ?? null,
+
+    aggregateId: snapshot.aggregateId ?? null,
+    aggregateType: snapshot.aggregateType ?? null,
+
+    version: snapshot.version,
+
+    data: snapshot.state,
+
+    lastGlobalPosition: snapshot.lastGlobalPosition,
+
+    checksum: snapshot.checksum ?? null,
+
+    eventCount: snapshot.eventCount,
+  },
+
+  update: {
+    version: snapshot.version,
+    eventCount: snapshot.eventCount,
+    lastGlobalPosition: snapshot.lastGlobalPosition,
+
+    checksum: snapshot.checksum ?? null,
+
+    data: snapshot.state,
+  },
+});
   }
 }

@@ -11,7 +11,7 @@ export * from "./contracts/ConflictResolution"
 export * from "./contracts/RetryPolicy"
 
 
-
+export * from  "./helpers/groupEventsByAggregate"
 
 export * from "./engine/SyncEngine";
 export * from "./engine/Scheduler";

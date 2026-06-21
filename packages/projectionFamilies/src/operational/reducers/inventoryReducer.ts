@@ -1,7 +1,7 @@
 import { OpeningEventType } from "@business/shared-types";
 import { InventoryEventType } from "@business/shared-types";
 import { salesEventType } from "@business/shared-types";
-import { BaseEvent } from "@business/shared-types";
+import { IntegrationEvent } from "@business/shared-types";
 
 export const InventoryReducer = {
 
@@ -15,7 +15,7 @@ export const InventoryReducer = {
 
   }),
 
-  reduce(current: any, event: BaseEvent) {
+  reduce(current: any, event: IntegrationEvent) {
     
     switch (event.type) {
 

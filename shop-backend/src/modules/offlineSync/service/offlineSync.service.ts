@@ -62,22 +62,47 @@ export class OfflineSyncService {
     // ---------------------------
     return prisma.$transaction(async (tx) => {
 
-      let version = serverVersion;
+      let currentVersion = serverVersion
 
       const success: any[] = [];
       const failed: any[] = [];
 
       for (const event of events) {
         try {
+          if(event.expectedAggregateVersion  !== currentVersion){
+            const serverEvents =
+        await this.syncRepository.findEventsAfterSnapshotVersion(
+          aggregateId,
+          aggregateType,
+          baseVersion
+        );
 
-          version++;
+      return {
+        success: [],
+        failed: [],
+        conflicts: [
+          {
+            aggregateId,
+            aggregateType,
+            serverVersion,
+            serverEvents,
+          },
+        ],
+        serverState: {
+          version: serverVersion,
+          lastGlobalPosition: serverLast?.globalPosition,
+        },
+      };
+          }
+          currentVersion++;
 
           const enrichedEvent = {
             ...event,
-            aggregateVersion: version,
+            aggregateVersion: currentVersion,
           };
+
          const ledgerEngine = createBackendLedgerEngine(tx)
-         await ledgerEngine.process(event)
+         await ledgerEngine.process(enrichedEvent)
           await this.syncRepository.markProcessed(
             enrichedEvent,
             tx
@@ -86,7 +111,7 @@ export class OfflineSyncService {
           success.push({
             eventId: enrichedEvent.id,
             aggregateId,
-            aggregateVersion: version,
+            aggregateVersion: currentVersion,
           });
 
         } catch (error: any) {
@@ -103,7 +128,7 @@ export class OfflineSyncService {
         }
       }
 
-      const finalVersion = version;
+      const finalVersion = currentVersion;
 
       return {
         success,

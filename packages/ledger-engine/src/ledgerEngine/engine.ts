@@ -1,42 +1,39 @@
-import { BaseEvent } from "@business/shared-types";
+import { IntegrationEvent } from "@business/shared-types";
 import { LedgerEngineContext } from "./LedgerEngine";
-import { LedgerRepository } from "./ledgerRepo";
 
 export class LedgerEngine {
 
   constructor(
-    private ctx: LedgerEngineContext
+    private readonly ctx: LedgerEngineContext
   ) {}
 
-  async process(event: BaseEvent) {
+  async process(event: IntegrationEvent) {
+
     try {
 
-  const exists = await this.ctx.eventStore.exists(event.id);
-  
+      // 1. Idempotency guard
+      const exists =
+        await this.ctx.idempotencyStore.exists(event.id);
 
-  if (exists) return;
+      if (exists) return;
 
- 
-  await this.ctx.eventStore.append(event);
-  
-  const entries = this.ctx.ledgerGenerator(event);
+      // 2. Generate ledger entries
+      const entries =
+        this.ctx.ledgerGenerator(event);
 
-  await this.ctx.ledgerRepository.append(entries)
+      // 3. Persist ledger entries ONLY
+      await this.ctx.ledgerRepository.append(entries);
 
-  await this.ctx.snapshotEngine.process(event);
+      // 4. Mark processed (idempotency)
+      await this.ctx.idempotencyStore.mark(event.id);
 
+    } catch (e) {
+      console.error("LEDGER_ENGINE_FAILED", {
+        eventId: event.id,
+        error: e
+      });
 
-
-  await this.ctx.projectionEngine.process(event);
-
-
-
-  await this.ctx.versionManager.update(event);
- 
-
-} catch (e) {
-  console.error("FAILED INSIDE LEDGER", e);
-  throw e;
-}
+      throw e;
+    }
   }
 }

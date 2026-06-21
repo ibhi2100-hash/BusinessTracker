@@ -1,7 +1,7 @@
-import { BaseEvent } from "@business/shared-types";
+import { IntegrationEvent } from "@business/shared-types";
 import { LedgerEngineContext } from "./LedgerEngine";
 export declare class LedgerEngine {
-    private ctx;
+    private readonly ctx;
     constructor(ctx: LedgerEngineContext);
-    process(event: BaseEvent): Promise<void>;
+    process(event: IntegrationEvent): Promise<void>;
 }

@@ -65,6 +65,7 @@ export const ModelName = {
   Event: 'Event',
   DeviceClock: 'DeviceClock',
   LedgerEntry: 'LedgerEntry',
+  OutboxEvent: 'OutboxEvent',
   Snapshot: 'Snapshot',
   Alert: 'Alert'
 } as const
@@ -319,6 +320,22 @@ export const LedgerEntryScalarFieldEnum = {
 } as const
 
 export type LedgerEntryScalarFieldEnum = (typeof LedgerEntryScalarFieldEnum)[keyof typeof LedgerEntryScalarFieldEnum]
+
+
+export const OutboxEventScalarFieldEnum = {
+  id: 'id',
+  aggregateId: 'aggregateId',
+  aggregateType: 'aggregateType',
+  type: 'type',
+  payload: 'payload',
+  aggregateVersion: 'aggregateVersion',
+  status: 'status',
+  attempts: 'attempts',
+  createdAt: 'createdAt',
+  processedAt: 'processedAt'
+} as const
+
+export type OutboxEventScalarFieldEnum = (typeof OutboxEventScalarFieldEnum)[keyof typeof OutboxEventScalarFieldEnum]
 
 
 export const SnapshotScalarFieldEnum = {

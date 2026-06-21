@@ -1,6 +1,5 @@
-import { Product, salesEventType } from "@business/shared-types";
+import { IntegrationEvent, salesEventType } from "@business/shared-types";
 
-import { BaseEvent } from "@business/shared-types";
 
 export const SaleReducer = {
     initialState: () => ({
@@ -13,9 +12,9 @@ export const SaleReducer = {
 
   }),
 
-  reduce(
+  reducer (
     current: any,
-    event: BaseEvent
+    event: IntegrationEvent
   ) {
 
     switch (event.type) {

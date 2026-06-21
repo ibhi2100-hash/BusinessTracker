@@ -3,7 +3,7 @@ import {
   OpeningEventType,
   salesEventType,
   BusinessEventTypes,
-  BaseEvent,
+  IntegrationEvent,
 } from "@business/shared-types";
 
 import { ProductReducer } from "../reducers/productReducer";
@@ -13,10 +13,7 @@ import { BusinessReducer } from "../reducers/businessReducer";
 import { BranchReducer } from "../reducers/branchReducer";
 import { ProjectionHandler } from "../types/types";
 
-export const operationalRegistry: Record<
-  string,
-  ProjectionHandler[]
-  >  = {
+export const operationalRegistry = {
 
   [InventoryEventType.PRODUCT_CREATED]: [
     {
@@ -79,14 +76,14 @@ export const operationalRegistry: Record<
     {
       reducer: InventoryReducer,
       projection: "inventory",
-      aggregateResolver: (event: BaseEvent) => event.aggregateId,
+      aggregateResolver: (event: IntegrationEvent) => event.aggregateId,
     },
 
     // Product projection uses product id
     {
       reducer: ProductReducer,
       projection: "product",
-      aggregateResolver: (event: BaseEvent) => event.payload.productId,
+      aggregateResolver: (event: IntegrationEvent) => event.payload.productId,
     },
   ],
 
@@ -124,4 +121,4 @@ export const operationalRegistry: Record<
       projection: "branches",
     },
   ],
-};
+} as Record<string, ProjectionHandler[]>;

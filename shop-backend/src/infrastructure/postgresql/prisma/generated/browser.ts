@@ -88,6 +88,11 @@ export type DeviceClock = Prisma.DeviceClockModel
  */
 export type LedgerEntry = Prisma.LedgerEntryModel
 /**
+ * Model OutboxEvent
+ * 
+ */
+export type OutboxEvent = Prisma.OutboxEventModel
+/**
  * Model Snapshot
  * 
  */

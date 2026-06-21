@@ -1,12 +1,12 @@
-import { BaseEvent } from "@business/shared-types";
-export interface OperationalReducer<current = any, Event = BaseEvent> {
+import { IntegrationEvent } from "@business/shared-types";
+export interface OperationalReducer<current = any, Event = IntegrationEvent> {
     initialState(): current;
     reduce(state: current, event: Event): current;
 }
 export interface ProjectionHandler {
     projection: string;
     reducer: {
-        reduce(current: any, event: BaseEvent): any;
+        reduce(current: any, event: IntegrationEvent): any;
     };
-    aggregateResolver?: (event: BaseEvent) => string;
+    aggregateResolver?: (event: IntegrationEvent) => string;
 }

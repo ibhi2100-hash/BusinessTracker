@@ -1,9 +1,16 @@
 {
-  "name": "@business/events",
+  "name": "@business/event-core",
   "version": "1.0.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc"
+  },
+   "dependencies": {
+    "@business/shared-types": "*",
+    "@business/event-bus": "*",
+    "@business/snapshot-engine": "*",
+    "@business/projection-families": "*",
+    "@business/sync": "*"
   }
 }

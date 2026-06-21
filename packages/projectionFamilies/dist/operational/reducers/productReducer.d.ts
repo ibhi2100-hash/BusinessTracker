@@ -1,5 +1,4 @@
-import { Product } from "@business/shared-types";
-import { BaseEvent } from "@business/shared-types";
+import { IntegrationEvent, Product } from "@business/shared-types";
 export declare const ProductReducer: {
     initialState: () => {
         id: string;
@@ -12,5 +11,5 @@ export declare const ProductReducer: {
         price: number;
         isDeleted: boolean;
     };
-    reduce(current: Product | null, event: BaseEvent): Product | null;
+    reduce(current: any, event: IntegrationEvent): Product | null;
 };

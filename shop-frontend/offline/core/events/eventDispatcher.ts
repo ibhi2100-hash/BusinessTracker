@@ -4,6 +4,7 @@ import { queueSync } from "@/src/sync/syncQueue";
 import { validateEvent }from "./validationEngine";
 import { BaseEvent } from "@business/shared-types"
 import { createFrontendLedgerEngine } from "../LedgerEngine";
+import { createFrontendEventEngine } from "../eventEngine/createEventEngine";
 
 export const dispatchEvent =
   async (
@@ -17,9 +18,9 @@ export const dispatchEvent =
     if (!db) { return;}
 
     await runTx(db, async () => {
-      
-       const ledgerEngine = createFrontendLedgerEngine(db);
-       await ledgerEngine.process(event)
+      const eventEngine = createFrontendEventEngine(db);
+      await eventEngine.pipeline.append(event)
+
       },
       db.events,
       db.aggregates,

@@ -7,7 +7,9 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@business/shared-types": "*"
+    "@business/shared-types": "*",
+    "@business/event-bus": "*",
+    "@business/sync": "*"
   }
 
 }

@@ -1,5 +1,5 @@
 import { BusinessEventTypes } from "@business/shared-types";
-import { BaseEvent } from "@business/shared-types";
+import { IntegrationEvent } from "@business/shared-types";
 
 export const BusinessReducer = {
     initialState: () => ({
@@ -11,7 +11,7 @@ export const BusinessReducer = {
   }),
   reduce(
     current: any,
-    event: BaseEvent
+    event: IntegrationEvent
   ) {
 
     switch (event.type) {

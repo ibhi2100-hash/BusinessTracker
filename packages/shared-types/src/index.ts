@@ -6,6 +6,10 @@ export * from "./entities/User"
 
 
 export * from "./events/BaseEvent";
+export * from "./events/IntegrationEvent";
+export * from "./events/cononicalEvent";
+
+export * from "./transformers/toCononicalEventTransformer"
 
 export * from "./snapshots/Snapshot";
 

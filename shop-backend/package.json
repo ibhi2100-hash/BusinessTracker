@@ -14,6 +14,7 @@
     "@business/shared-types": "*",
     "@business/events": "*",
     "@business/snapshot-engine": "*",
+    "@business/event-bus": "*",
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
     "axios": "^1.13.5",
