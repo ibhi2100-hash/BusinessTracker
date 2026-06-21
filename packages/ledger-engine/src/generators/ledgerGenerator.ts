@@ -1,10 +1,10 @@
-import { Account, LedgerEntry, BaseEvent } from "@business/shared-types"
+import { Account, LedgerEntry, IntegrationEvent } from "@business/shared-types"
 import { OpeningEventType, salesEventType, financeEventType, InventoryEventType,  } from "@business/shared-types"
 
 type Direction = "DEBIT" | "CREDIT";
 
 function buildEntry(
-  event: BaseEvent,
+  event: IntegrationEvent,
   index: number,
   account: Account,
   direction: Direction,
@@ -34,7 +34,7 @@ function buildEntry(
   };
 }
 
-export function generateLedgerEntries(event: BaseEvent): LedgerEntry[] {
+export function generateLedgerEntries(event: IntegrationEvent): LedgerEntry[] {
   const { payload } = event;
 
   let entries: LedgerEntry[] = [];

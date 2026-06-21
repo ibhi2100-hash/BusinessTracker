@@ -28,7 +28,7 @@ export interface BaseEvent<T extends string = string, p = Record<string, any>> {
 
   // origin
   deviceId: string;
-  userId: string | null;
+  userId: string ;
 
   // sync state
   status: "PENDING" | "SYNCED" | "SYNCING" | "CONFLICT" | "RETRYING" | "FAILED" | "DEAD";

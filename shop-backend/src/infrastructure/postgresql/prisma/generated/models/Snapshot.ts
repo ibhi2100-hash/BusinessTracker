@@ -445,6 +445,7 @@ export type SnapshotScalarWhereWithAggregatesInput = {
 
 export type SnapshotCreateInput = {
   id: string
+  branchBusinessId?: string | null
   aggregateId?: string | null
   aggregateType?: string | null
   account?: string | null
@@ -488,6 +489,7 @@ export type SnapshotUncheckedCreateInput = {
 
 export type SnapshotUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -553,6 +555,7 @@ export type SnapshotCreateManyInput = {
 
 export type SnapshotUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -766,6 +769,7 @@ export type SnapshotUncheckedUpdateManyWithoutBranchNestedInput = {
 
 export type SnapshotCreateWithoutBusinessInput = {
   id: string
+  branchBusinessId?: string | null
   aggregateId?: string | null
   aggregateType?: string | null
   account?: string | null
@@ -858,6 +862,7 @@ export type SnapshotScalarWhereInput = {
 
 export type SnapshotCreateWithoutBranchInput = {
   id: string
+  branchBusinessId?: string | null
   aggregateId?: string | null
   aggregateType?: string | null
   account?: string | null
@@ -879,6 +884,7 @@ export type SnapshotCreateWithoutBranchInput = {
 export type SnapshotUncheckedCreateWithoutBranchInput = {
   id: string
   businessId: string
+  branchBusinessId?: string | null
   aggregateId?: string | null
   aggregateType?: string | null
   account?: string | null
@@ -945,6 +951,7 @@ export type SnapshotCreateManyBusinessInput = {
 
 export type SnapshotUpdateWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1008,6 +1015,7 @@ export type SnapshotUncheckedUpdateManyWithoutBusinessInput = {
 export type SnapshotCreateManyBranchInput = {
   id: string
   businessId: string
+  branchBusinessId?: string | null
   aggregateId?: string | null
   aggregateType?: string | null
   account?: string | null
@@ -1027,6 +1035,7 @@ export type SnapshotCreateManyBranchInput = {
 
 export type SnapshotUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1048,6 +1057,7 @@ export type SnapshotUpdateWithoutBranchInput = {
 export type SnapshotUncheckedUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1068,6 +1078,7 @@ export type SnapshotUncheckedUpdateWithoutBranchInput = {
 export type SnapshotUncheckedUpdateManyWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   account?: Prisma.NullableStringFieldUpdateOperationsInput | string | null

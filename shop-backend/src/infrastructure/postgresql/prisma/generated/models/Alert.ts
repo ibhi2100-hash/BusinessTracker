@@ -325,6 +325,7 @@ export type AlertScalarWhereWithAggregatesInput = {
 
 export type AlertCreateInput = {
   id: string
+  branchBusinessId?: string | null
   type: $Enums.AlertType
   severity: $Enums.AlertSeverity
   title: string
@@ -356,6 +357,7 @@ export type AlertUncheckedCreateInput = {
 
 export type AlertUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumAlertTypeFieldUpdateOperationsInput | $Enums.AlertType
   severity?: Prisma.EnumAlertSeverityFieldUpdateOperationsInput | $Enums.AlertSeverity
   title?: Prisma.StringFieldUpdateOperationsInput | string
@@ -403,6 +405,7 @@ export type AlertCreateManyInput = {
 
 export type AlertUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumAlertTypeFieldUpdateOperationsInput | $Enums.AlertType
   severity?: Prisma.EnumAlertSeverityFieldUpdateOperationsInput | $Enums.AlertSeverity
   title?: Prisma.StringFieldUpdateOperationsInput | string
@@ -580,6 +583,7 @@ export type EnumAlertSeverityFieldUpdateOperationsInput = {
 
 export type AlertCreateWithoutBusinessInput = {
   id: string
+  branchBusinessId?: string | null
   type: $Enums.AlertType
   severity: $Enums.AlertSeverity
   title: string
@@ -654,6 +658,7 @@ export type AlertScalarWhereInput = {
 
 export type AlertCreateWithoutBranchInput = {
   id: string
+  branchBusinessId?: string | null
   type: $Enums.AlertType
   severity: $Enums.AlertSeverity
   title: string
@@ -669,6 +674,7 @@ export type AlertCreateWithoutBranchInput = {
 export type AlertUncheckedCreateWithoutBranchInput = {
   id: string
   businessId: string
+  branchBusinessId?: string | null
   type: $Enums.AlertType
   severity: $Enums.AlertSeverity
   title: string
@@ -723,6 +729,7 @@ export type AlertCreateManyBusinessInput = {
 
 export type AlertUpdateWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumAlertTypeFieldUpdateOperationsInput | $Enums.AlertType
   severity?: Prisma.EnumAlertSeverityFieldUpdateOperationsInput | $Enums.AlertSeverity
   title?: Prisma.StringFieldUpdateOperationsInput | string
@@ -768,6 +775,7 @@ export type AlertUncheckedUpdateManyWithoutBusinessInput = {
 export type AlertCreateManyBranchInput = {
   id: string
   businessId: string
+  branchBusinessId?: string | null
   type: $Enums.AlertType
   severity: $Enums.AlertSeverity
   title: string
@@ -781,6 +789,7 @@ export type AlertCreateManyBranchInput = {
 
 export type AlertUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumAlertTypeFieldUpdateOperationsInput | $Enums.AlertType
   severity?: Prisma.EnumAlertSeverityFieldUpdateOperationsInput | $Enums.AlertSeverity
   title?: Prisma.StringFieldUpdateOperationsInput | string
@@ -796,6 +805,7 @@ export type AlertUpdateWithoutBranchInput = {
 export type AlertUncheckedUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumAlertTypeFieldUpdateOperationsInput | $Enums.AlertType
   severity?: Prisma.EnumAlertSeverityFieldUpdateOperationsInput | $Enums.AlertSeverity
   title?: Prisma.StringFieldUpdateOperationsInput | string
@@ -810,6 +820,7 @@ export type AlertUncheckedUpdateWithoutBranchInput = {
 export type AlertUncheckedUpdateManyWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumAlertTypeFieldUpdateOperationsInput | $Enums.AlertType
   severity?: Prisma.EnumAlertSeverityFieldUpdateOperationsInput | $Enums.AlertSeverity
   title?: Prisma.StringFieldUpdateOperationsInput | string

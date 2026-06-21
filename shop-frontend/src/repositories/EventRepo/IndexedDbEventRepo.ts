@@ -7,7 +7,7 @@ export class IndexedDbRepository implements EventRepository<BaseEvent> {
         private readonly db: AppDB
     ){}
     async append(event: BaseEvent<string, Record<string, any>>): Promise<void> {
-        return this.appendMany([event])
+        this.appendMany([event])
     }
     async appendMany(events: BaseEvent<string, Record<string, any>>[]): Promise<void> {
         await this.db.transaction(

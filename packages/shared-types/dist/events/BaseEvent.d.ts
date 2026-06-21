@@ -16,7 +16,7 @@ export interface BaseEvent<T extends string = string, p = Record<string, any>> {
     logicClock: number;
     globalPosition?: bigint;
     deviceId: string;
-    userId: string | null;
+    userId: string;
     status: "PENDING" | "SYNCED" | "SYNCING" | "CONFLICT" | "RETRYING" | "FAILED" | "DEAD";
     synced: boolean;
     retryCount?: number;

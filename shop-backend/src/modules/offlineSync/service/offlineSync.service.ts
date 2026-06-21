@@ -1,7 +1,7 @@
 import { SyncRepository } from "../repository/syncRepository.js";
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
-import { createBackendLedgerEngine } from "../../../infrastructure/ledger/backendLedgerEngine.js";
-import { BaseEvent } from "@business/shared-types";
+import { creatBackendEventEngine } from "../EventEngine/eventPipeline.js"
+import { BaseEvent, toCanonicalEvent } from "@business/shared-types";
 
 export class OfflineSyncService {
   constructor(
@@ -69,6 +69,7 @@ export class OfflineSyncService {
 
       for (const event of events) {
         try {
+          
           if(event.expectedAggregateVersion  !== currentVersion){
             const serverEvents =
         await this.syncRepository.findEventsAfterSnapshotVersion(
@@ -100,11 +101,11 @@ export class OfflineSyncService {
             ...event,
             aggregateVersion: currentVersion,
           };
-
-         const ledgerEngine = createBackendLedgerEngine(tx)
-         await ledgerEngine.process(enrichedEvent)
+        const canonicalevent = toCanonicalEvent(enrichedEvent)
+        const eventPipeline = creatBackendEventEngine(tx)
+        eventPipeline.pipeline.append(canonicalevent)
           await this.syncRepository.markProcessed(
-            enrichedEvent,
+            canonicalevent,
             tx
           );
 

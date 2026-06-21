@@ -245,12 +245,11 @@ export type BranchOrderByWithRelationInput = {
 }
 
 export type BranchWhereUniqueInput = Prisma.AtLeast<{
+  id?: string
   businessId_name?: Prisma.BranchBusinessIdNameCompoundUniqueInput
-  id_businessId?: Prisma.BranchIdBusinessIdCompoundUniqueInput
   AND?: Prisma.BranchWhereInput | Prisma.BranchWhereInput[]
   OR?: Prisma.BranchWhereInput[]
   NOT?: Prisma.BranchWhereInput | Prisma.BranchWhereInput[]
-  id?: Prisma.StringFilter<"Branch"> | string
   businessId?: Prisma.StringFilter<"Branch"> | string
   name?: Prisma.StringFilter<"Branch"> | string
   address?: Prisma.StringNullableFilter<"Branch"> | string | null
@@ -267,7 +266,7 @@ export type BranchWhereUniqueInput = Prisma.AtLeast<{
   alerts?: Prisma.AlertListRelationFilter
   events?: Prisma.EventListRelationFilter
   ledgerEntries?: Prisma.LedgerEntryListRelationFilter
-}, "id_businessId" | "businessId_name">
+}, "id" | "businessId_name">
 
 export type BranchOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -423,11 +422,6 @@ export type BranchOrderByRelationAggregateInput = {
 export type BranchBusinessIdNameCompoundUniqueInput = {
   businessId: string
   name: string
-}
-
-export type BranchIdBusinessIdCompoundUniqueInput = {
-  id: string
-  businessId: string
 }
 
 export type BranchCountOrderByAggregateInput = {

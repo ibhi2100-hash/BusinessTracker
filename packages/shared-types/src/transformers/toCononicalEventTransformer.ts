@@ -11,6 +11,7 @@ export function toCanonicalEvent(event: BaseEvent): CanonicalEvent {
     aggregateVersion: event.expectedAggregateVersion ?? 0,
 
     type: event.type,
+    mode: event.mode,
     payload: event.payload,
 
     businessId: event.businessId ?? null,
@@ -18,7 +19,7 @@ export function toCanonicalEvent(event: BaseEvent): CanonicalEvent {
 
     createdAt: new Date(event.createdAt),
 
-    userId: event.userId,
+    userId: event.userId ?? "",
     causationId: event.causationId ?? null,
     correlationId: event.correlationId ?? null,
   };

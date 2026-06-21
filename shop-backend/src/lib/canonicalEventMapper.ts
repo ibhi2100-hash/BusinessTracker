@@ -1,12 +1,12 @@
 import { EventMapper } from "@business/events";
-import { BaseEvent, IntegrationEvent } from "@business/shared-types";
+import { CanonicalEvent, IntegrationEvent } from "@business/shared-types";
 
-export class BaseEventMapper implements 
-    EventMapper<BaseEvent, IntegrationEvent>
+export class CanonicalMapper implements 
+    EventMapper<CanonicalEvent, IntegrationEvent>
 
 {
     map(
-        event: BaseEvent
+        event: CanonicalEvent
     ): IntegrationEvent {
         return {
             id: event.id,
@@ -20,12 +20,10 @@ export class BaseEventMapper implements
             branchId: event.branchId,
             userId: event.userId,
             createdAt: event.createdAt,
-
-
         };
     }
 
-    mapMany(events: BaseEvent<string, Record<string, any>>[]): IntegrationEvent[] {
+    mapMany(events: CanonicalEvent[]): IntegrationEvent[] {
         return events.map(e => this.map(e))
     }
 }

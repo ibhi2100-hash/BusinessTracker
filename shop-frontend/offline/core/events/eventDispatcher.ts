@@ -1,5 +1,4 @@
 import { getDb, runTx } from "@/src/db";
-import { eventBus }from "../eventBus/eventBus";
 import { queueSync } from "@/src/sync/syncQueue";
 import { validateEvent }from "./validationEngine";
 import { BaseEvent } from "@business/shared-types"
@@ -37,7 +36,6 @@ export const dispatchEvent =
     /* --------------------------------
        SIDE EFFECTS AFTER COMMIT
     -------------------------------- */
-    eventBus.emit(event)
     /* --------------------------------
        QUEUE SYNC
     -------------------------------- */

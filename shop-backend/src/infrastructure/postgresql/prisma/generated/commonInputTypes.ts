@@ -376,13 +376,6 @@ export type EnumModeFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumModeFilter<$PrismaModel> | $Enums.Mode
 }
 
-export type EnumScopeFilter<$PrismaModel = never> = {
-  equals?: $Enums.Scope | Prisma.EnumScopeFieldRefInput<$PrismaModel>
-  in?: $Enums.Scope[] | Prisma.ListEnumScopeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.Scope[] | Prisma.ListEnumScopeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumScopeFilter<$PrismaModel> | $Enums.Scope
-}
-
 export type BigIntWithAggregatesFilter<$PrismaModel = never> = {
   equals?: bigint | number | Prisma.BigIntFieldRefInput<$PrismaModel>
   in?: bigint[] | number[] | Prisma.ListBigIntFieldRefInput<$PrismaModel>
@@ -407,16 +400,6 @@ export type EnumModeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumModeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumModeFilter<$PrismaModel>
-}
-
-export type EnumScopeWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.Scope | Prisma.EnumScopeFieldRefInput<$PrismaModel>
-  in?: $Enums.Scope[] | Prisma.ListEnumScopeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.Scope[] | Prisma.ListEnumScopeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumScopeWithAggregatesFilter<$PrismaModel> | $Enums.Scope
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumScopeFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumScopeFilter<$PrismaModel>
 }
 
 export type EnumAccountFilter<$PrismaModel = never> = {
@@ -897,13 +880,6 @@ export type NestedEnumModeFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumModeFilter<$PrismaModel> | $Enums.Mode
 }
 
-export type NestedEnumScopeFilter<$PrismaModel = never> = {
-  equals?: $Enums.Scope | Prisma.EnumScopeFieldRefInput<$PrismaModel>
-  in?: $Enums.Scope[] | Prisma.ListEnumScopeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.Scope[] | Prisma.ListEnumScopeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumScopeFilter<$PrismaModel> | $Enums.Scope
-}
-
 export type NestedBigIntWithAggregatesFilter<$PrismaModel = never> = {
   equals?: bigint | number | Prisma.BigIntFieldRefInput<$PrismaModel>
   in?: bigint[] | number[] | Prisma.ListBigIntFieldRefInput<$PrismaModel>
@@ -928,16 +904,6 @@ export type NestedEnumModeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumModeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumModeFilter<$PrismaModel>
-}
-
-export type NestedEnumScopeWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.Scope | Prisma.EnumScopeFieldRefInput<$PrismaModel>
-  in?: $Enums.Scope[] | Prisma.ListEnumScopeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.Scope[] | Prisma.ListEnumScopeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumScopeWithAggregatesFilter<$PrismaModel> | $Enums.Scope
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumScopeFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumScopeFilter<$PrismaModel>
 }
 
 export type NestedEnumAccountFilter<$PrismaModel = never> = {

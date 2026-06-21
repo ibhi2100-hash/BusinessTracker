@@ -325,6 +325,7 @@ export type InventoryScalarWhereWithAggregatesInput = {
 
 export type InventoryCreateInput = {
   id: string
+  branchBusinessId: string
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
@@ -348,6 +349,7 @@ export type InventoryUncheckedCreateInput = {
 
 export type InventoryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -383,6 +385,7 @@ export type InventoryCreateManyInput = {
 
 export type InventoryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -591,6 +594,7 @@ export type InventoryUncheckedUpdateManyWithoutProductNestedInput = {
 
 export type InventoryCreateWithoutBusinessInput = {
   id: string
+  branchBusinessId: string
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
@@ -653,6 +657,7 @@ export type InventoryScalarWhereInput = {
 
 export type InventoryCreateWithoutBranchInput = {
   id: string
+  branchBusinessId: string
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
@@ -664,6 +669,7 @@ export type InventoryCreateWithoutBranchInput = {
 export type InventoryUncheckedCreateWithoutBranchInput = {
   id: string
   businessId: string
+  branchBusinessId: string
   productId: string
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -699,6 +705,7 @@ export type InventoryUpdateManyWithWhereWithoutBranchInput = {
 
 export type InventoryCreateWithoutProductInput = {
   id: string
+  branchBusinessId: string
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
@@ -756,6 +763,7 @@ export type InventoryCreateManyBusinessInput = {
 
 export type InventoryUpdateWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -789,6 +797,7 @@ export type InventoryUncheckedUpdateManyWithoutBusinessInput = {
 export type InventoryCreateManyBranchInput = {
   id: string
   businessId: string
+  branchBusinessId: string
   productId: string
   quantity: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -798,6 +807,7 @@ export type InventoryCreateManyBranchInput = {
 
 export type InventoryUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -809,6 +819,7 @@ export type InventoryUpdateWithoutBranchInput = {
 export type InventoryUncheckedUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -819,6 +830,7 @@ export type InventoryUncheckedUpdateWithoutBranchInput = {
 export type InventoryUncheckedUpdateManyWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -838,6 +850,7 @@ export type InventoryCreateManyProductInput = {
 
 export type InventoryUpdateWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string

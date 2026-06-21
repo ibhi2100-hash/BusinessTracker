@@ -108,7 +108,7 @@ model Business {
 }
 
 model Branch {
-  id         String
+  id         String @id
 
   businessId String
 
@@ -133,7 +133,7 @@ model Branch {
   events        Event[]
   ledgerEntries LedgerEntry[]
 
-  @@id([id, businessId])
+  
 
   @@unique([businessId, name])
 
@@ -146,7 +146,7 @@ model User {
   businessId String?
 
   branchId         String?
-  branchBusinessId String?
+ 
 
   name     String
   email    String @unique
@@ -164,7 +164,7 @@ model User {
 
   business Business? @relation(fields: [businessId], references: [id], onDelete: SetNull)
 
-  branch Branch? @relation(fields: [branchId, branchBusinessId],references: [id, businessId],onDelete: SetNull)
+  branch Branch? @relation(fields: [branchId],references: [id],onDelete: SetNull)
 
   ownedBusinesses Business[] @relation("BusinessOwner")
 
@@ -175,7 +175,7 @@ model User {
 
   @@index([businessId])
 
-  @@index([branchId, branchBusinessId])
+  @@index([branchId, businessId])
 }
 
 model Session {
@@ -302,7 +302,7 @@ model Product {
 
   business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
 
-  branch Branch? @relation(fields: [branchId, branchBusinessId], references: [id, businessId], onDelete: Restrict)
+  branch Branch? @relation(fields: [branchId], references: [id], onDelete: Restrict)
 
   inventories Inventory[]
 
@@ -358,7 +358,7 @@ model Inventory {
 
   business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
 
-  branch Branch @relation(fields: [branchId, branchBusinessId], references: [id, businessId], onDelete: Cascade)
+  branch Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
 
   product Product @relation(fields: [productId, businessId], references: [id, businessId], onDelete: Restrict)
 
@@ -406,7 +406,6 @@ model Event {
   businessId String?
 
   branchId         String?
-  branchBusinessId String?
 
   aggregateId   String
   aggregateType String
@@ -420,19 +419,8 @@ model Event {
 
   mode Mode
 
-  scope Scope
-
-  logicClock BigInt
-
-  deviceId String
-
   userId String?
 
-
-  status SyncEventStatus
-
-  synced Boolean @default(false)
-  isCreationEvent Boolean @default(false)
   causationId  String?
   correlationId String?
 
@@ -440,7 +428,7 @@ model Event {
 
   business Business? @relation(fields: [businessId], references: [id], onDelete: Cascade)
 
-  branch Branch? @relation(fields: [branchId, branchBusinessId], references: [id, businessId], onDelete: SetNull)
+  branch Branch? @relation(fields: [branchId], references: [id], onDelete: SetNull)
 
   user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 
@@ -450,11 +438,9 @@ model Event {
 
   @@index([businessId])
 
-  @@index([branchId, branchBusinessId])
+  @@index([branchId])
 
   @@index([aggregateType, aggregateId])
-
-  @@index([deviceId, logicClock])
 
   @@index([createdAt])
 
@@ -490,7 +476,7 @@ model LedgerEntry {
 
   business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
 
-  branch Branch @relation(fields: [branchId, branchBusinessId], references: [id, businessId], onDelete: Restrict)
+  branch Branch @relation(fields: [branchId], references: [id], onDelete: Restrict)
 
   event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
@@ -554,7 +540,7 @@ model Snapshot {
 
   business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
 
-  branch Branch? @relation(fields: [branchId, branchBusinessId], references: [id, businessId], onDelete: SetNull)
+  branch Branch? @relation(fields: [branchId], references: [id], onDelete: SetNull)
 
   
   @@index([businessId, version])
@@ -592,7 +578,7 @@ model Alert {
 
   business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
 
-  branch Branch? @relation(fields: [branchId, branchBusinessId], references: [id, businessId], onDelete: SetNull)
+  branch Branch? @relation(fields: [branchId], references: [id], onDelete: SetNull)
 
   @@index([businessId, isResolved])
 

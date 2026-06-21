@@ -1752,7 +1752,6 @@ export const UserScalarFieldEnum = {
   id: 'id',
   businessId: 'businessId',
   branchId: 'branchId',
-  branchBusinessId: 'branchBusinessId',
   name: 'name',
   email: 'email',
   password: 'password',
@@ -1904,7 +1903,6 @@ export const EventScalarFieldEnum = {
   id: 'id',
   businessId: 'businessId',
   branchId: 'branchId',
-  branchBusinessId: 'branchBusinessId',
   aggregateId: 'aggregateId',
   aggregateType: 'aggregateType',
   aggregateVersion: 'aggregateVersion',
@@ -1912,13 +1910,7 @@ export const EventScalarFieldEnum = {
   type: 'type',
   payload: 'payload',
   mode: 'mode',
-  scope: 'scope',
-  logicClock: 'logicClock',
-  deviceId: 'deviceId',
   userId: 'userId',
-  status: 'status',
-  synced: 'synced',
-  isCreationEvent: 'isCreationEvent',
   causationId: 'causationId',
   correlationId: 'correlationId',
   createdAt: 'createdAt'
@@ -2211,20 +2203,6 @@ export type EnumModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'Mode[]'
  */
 export type ListEnumModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Mode[]'>
-    
-
-
-/**
- * Reference to a field of type 'Scope'
- */
-export type EnumScopeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Scope'>
-    
-
-
-/**
- * Reference to a field of type 'Scope[]'
- */
-export type ListEnumScopeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Scope[]'>
     
 
 
