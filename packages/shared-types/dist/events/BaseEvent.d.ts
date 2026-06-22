@@ -3,7 +3,7 @@ export interface BaseEvent<T extends string = string, p = Record<string, any>> {
     id: string;
     aggregateId: string;
     aggregateType: string;
-    aggregateVersion?: number;
+    aggregateVersion: number;
     expectedAggregateVersion?: number;
     type: T;
     payload: p;

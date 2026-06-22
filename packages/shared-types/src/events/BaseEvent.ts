@@ -6,7 +6,7 @@ export interface BaseEvent<T extends string = string, p = Record<string, any>> {
 
   aggregateId: string;
   aggregateType: string;
-  aggregateVersion?: number;
+  aggregateVersion: number;
   expectedAggregateVersion?: number;
 
   type: T;
@@ -31,7 +31,7 @@ export interface BaseEvent<T extends string = string, p = Record<string, any>> {
   userId: string ;
 
   // sync state
-  status: "PENDING" | "SYNCED" | "SYNCING" | "CONFLICT" | "RETRYING" | "FAILED" | "DEAD";
+  status: "PENDING" | "SYNCED"| "CONFLICT" | "RETRYING" | "FAILED" | "DEAD";
   synced: boolean;
   retryCount?: number;
   lastRetryAt?: number;

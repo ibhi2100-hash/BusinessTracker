@@ -16,4 +16,6 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./Contracts/EventRepo"), exports);
 __exportStar(require("./Contracts/EventMapper"), exports);
+__exportStar(require("./Contracts/VersionManager"), exports);
 __exportStar(require("./EventPipeline/EventPipeline"), exports);
+__exportStar(require("./Contracts/VersionProvider"), exports);

@@ -1,23 +1,27 @@
+import { CanonicalEvent } from "@business/shared-types";
+import { VersionManager } from "@business/events";
 
-import { BaseEvent } from "@business/shared-types";
-import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
+export class BackendVersionManager
+    implements VersionManager<CanonicalEvent>
+{
+    async prepare(
+        events: readonly CanonicalEvent[],
+        currentVersion: number
+    ): Promise<CanonicalEvent[]> {
 
+        let expected = currentVersion;
 
-export class PrismaVersionManager {
-  constructor(
-    private tx: Prisma.TransactionClient
-  ){}
-  async update(event: BaseEvent) {
-    
-   
-    await this.tx.aggregates.put({
-      id: event.aggregateId,
-      aggregateId: event.aggregateId,
-      aggregateType: event.aggregateType ?? "unknown",
-      version: event.aggregateVersion,
-      lastEventId: event.id,
-      lastLogicClock: event.logicClock,
-      updatedAt: event.createdAt
-    });
-  }
+        for (const event of events) {
+
+            expected++;
+
+            if (event.aggregateVersion !== expected) {
+                throw new Error(
+                    `VERSION_CONFLICT expected ${expected} received ${event.aggregateVersion}`
+                );
+            }
+        }
+
+        return [...events];
+    }
 }
