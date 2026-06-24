@@ -15,7 +15,7 @@ exports.BranchReducer = {
                 return {
                     id: event.payload.id,
                     name: event.payload.name,
-                    Phone: event.payload.phone,
+                    phone: event.payload.phone,
                     businessId: event.businessId,
                     isActive: true,
                     isDefault: true,

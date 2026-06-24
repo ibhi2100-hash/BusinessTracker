@@ -98,7 +98,6 @@ model Business {
   inventories   Inventory[]
   snapshots     Snapshot[]
   alerts        Alert[]
-  events        Event[]
   ledgerEntries LedgerEntry[]
   aggregates    Aggregate[]
 
@@ -130,7 +129,6 @@ model Branch {
   inventories   Inventory[]
   snapshots     Snapshot[]
   alerts        Alert[]
-  events        Event[]
   ledgerEntries LedgerEntry[]
 
   
@@ -170,7 +168,6 @@ model User {
 
   passwordResetTokens PasswordResetToken[]
 
-  events Event[]
   sessions   Session[]
 
   @@index([businessId])
@@ -344,7 +341,6 @@ model Inventory {
   businessId String
 
   branchId         String
-  branchBusinessId String
 
   productId String
 
@@ -366,7 +362,7 @@ model Inventory {
 
   @@index([businessId])
 
-  @@index([branchId, branchBusinessId])
+  @@index([branchId])
 
   @@index([productId])
 }
@@ -379,7 +375,7 @@ model ProcessedSyncEvent {
   businessId String?
 
   branchId         String?
-  branchBusinessId String?
+
 
   userId String?
 
@@ -397,7 +393,7 @@ model ProcessedSyncEvent {
 
   @@index([businessId])
 
-  @@index([branchId, branchBusinessId])
+  @@index([branchId])
 }
 
 model Event {
@@ -426,12 +422,6 @@ model Event {
 
   createdAt DateTime @default(now())
 
-  business Business? @relation(fields: [businessId], references: [id], onDelete: Cascade)
-
-  branch Branch? @relation(fields: [branchId], references: [id], onDelete: SetNull)
-
-  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
-
   ledgerEntries LedgerEntry[]
 
   @@unique([aggregateType, aggregateId, aggregateVersion])
@@ -457,8 +447,7 @@ model LedgerEntry {
   businessId String
 
   branchId         String
-  branchBusinessId String
-
+  
   eventId String
 
   type String
@@ -509,7 +498,6 @@ model Snapshot {
   businessId String
 
   branchId         String?
-  branchBusinessId String?
 
   aggregateId String?
   aggregateType String?
@@ -545,7 +533,7 @@ model Snapshot {
   
   @@index([businessId, version])
 
-  @@index([branchId, branchBusinessId, version])
+  @@index([branchId, version])
 
   @@index([snapshotType])
 }
@@ -556,7 +544,6 @@ model Alert {
   businessId String
 
   branchId         String?
-  branchBusinessId String?
 
   type AlertType
 
@@ -582,7 +569,7 @@ model Alert {
 
   @@index([businessId, isResolved])
 
-  @@index([branchId, branchBusinessId, isResolved])
+  @@index([branchId, isResolved])
 
   @@index([type])
 

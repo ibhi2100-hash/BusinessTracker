@@ -1,10 +1,11 @@
+import { CanonicalEvent } from "@business/shared-types";
 import { prisma } from "../../infrastructure/postgresql/prismaClient.js";
 import { EventBus } from "@business/event-bus";
 
 export class OutboxDispatcher {
 
   constructor(
-    private eventBus: EventBus
+    private eventBus: EventBus<CanonicalEvent>
   ) {}
 
   async runOnce() {
@@ -19,17 +20,20 @@ export class OutboxDispatcher {
 
     try {
 
-      // publish to event bus
-      await this.eventBus.publish(
-        batch.map(e => ({
-          id: e.id,
-          aggregateId: e.aggregateId,
-          aggregateType: e.aggregateType,
-          type: e.type,
-          payload: e.payload,
-          aggregateVersion: e.aggregateVersion
-        }))
-      );
+      // publish to event bus (publish each event individually)
+      const events: CanonicalEvent[] = batch.map(e => ({
+        id: e.id,
+        aggregateId: e.aggregateId,
+        aggregateType: e.aggregateType,
+        type: e.type,
+        payload: e.payload as any,
+        aggregateVersion: e.aggregateVersion,
+        timestamp: e.createdAt,
+        // include any additional fields from the original payload/record to satisfy CanonicalEvent
+        ...(e.payload || {})
+      } as unknown as CanonicalEvent));
+
+      await Promise.all(events.map(evt => this.eventBus.publish(evt)));
 
       // mark as sent
       await prisma.outboxEvent.updateMany({

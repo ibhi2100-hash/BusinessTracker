@@ -28,7 +28,7 @@ export const BranchReducer = {
             name:
                 event.payload.name,
 
-            Phone:
+            phone:
                 event.payload.phone,
 
             businessId: event.businessId,

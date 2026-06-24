@@ -1,8 +1,8 @@
 // SQLiteBusinessRepository.ts
 
 import { Business } from "@business/shared-types";
-import { getDB } from "../database/db";
-import { IProjectionEntityRepository } from "./IProjectionEntityRepository";
+import { getDB } from "../../sqlite/database/db";
+import { IProjectionEntityRepository } from "./repositoryContract";
 
 export class SQLiteBusinessRepository
   implements IProjectionEntityRepository<Business> {

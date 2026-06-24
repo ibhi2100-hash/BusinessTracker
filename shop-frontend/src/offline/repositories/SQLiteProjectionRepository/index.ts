@@ -1,6 +1,6 @@
 // SQLiteProjectionRepository.ts
 
-import { projectionRegistry } from "./ProjectionRegistry";
+import { projectionRegistry } from "./projectionRegistry";
 
 export class SQLiteProjectionRepository {
 

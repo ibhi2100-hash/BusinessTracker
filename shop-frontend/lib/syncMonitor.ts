@@ -1,12 +1,5 @@
 // lib/sync/syncMonitor.ts
-
-import { getDb } from "@/src/db"
 import { createSyncManager } from "@/src/services/sync"
-import { useAuthStore } from "@/src/store/useAuthStore"
-
-
-
-
 
 let syncInProgress = false
 let intervalId: ReturnType<typeof setInterval> | null = null
@@ -28,10 +21,7 @@ export async function runSync() {
 
   try {
     console.log("Running sync engine...")
-    const userId = useAuthStore.getState().user.id;
-    if(!userId) return;
-    const db = getDb(userId);
-    const synceManager = createSyncManager(db);
+    const synceManager = createSyncManager();
     synceManager.sync()
   } catch (error) {
     console.error("Sync failed:", error)

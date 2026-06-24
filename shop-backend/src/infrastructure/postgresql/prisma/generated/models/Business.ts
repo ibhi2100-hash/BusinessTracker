@@ -229,7 +229,6 @@ export type BusinessWhereInput = {
   inventories?: Prisma.InventoryListRelationFilter
   snapshots?: Prisma.SnapshotListRelationFilter
   alerts?: Prisma.AlertListRelationFilter
-  events?: Prisma.EventListRelationFilter
   ledgerEntries?: Prisma.LedgerEntryListRelationFilter
   aggregates?: Prisma.AggregateListRelationFilter
   subscriptions?: Prisma.BusinessSubscriptionListRelationFilter
@@ -253,7 +252,6 @@ export type BusinessOrderByWithRelationInput = {
   inventories?: Prisma.InventoryOrderByRelationAggregateInput
   snapshots?: Prisma.SnapshotOrderByRelationAggregateInput
   alerts?: Prisma.AlertOrderByRelationAggregateInput
-  events?: Prisma.EventOrderByRelationAggregateInput
   ledgerEntries?: Prisma.LedgerEntryOrderByRelationAggregateInput
   aggregates?: Prisma.AggregateOrderByRelationAggregateInput
   subscriptions?: Prisma.BusinessSubscriptionOrderByRelationAggregateInput
@@ -280,7 +278,6 @@ export type BusinessWhereUniqueInput = Prisma.AtLeast<{
   inventories?: Prisma.InventoryListRelationFilter
   snapshots?: Prisma.SnapshotListRelationFilter
   alerts?: Prisma.AlertListRelationFilter
-  events?: Prisma.EventListRelationFilter
   ledgerEntries?: Prisma.LedgerEntryListRelationFilter
   aggregates?: Prisma.AggregateListRelationFilter
   subscriptions?: Prisma.BusinessSubscriptionListRelationFilter
@@ -335,7 +332,6 @@ export type BusinessCreateInput = {
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
-  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   aggregates?: Prisma.AggregateCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
@@ -358,7 +354,6 @@ export type BusinessUncheckedCreateInput = {
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
-  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   aggregates?: Prisma.AggregateUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
@@ -381,7 +376,6 @@ export type BusinessUpdateInput = {
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
-  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   aggregates?: Prisma.AggregateUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
@@ -404,7 +398,6 @@ export type BusinessUncheckedUpdateInput = {
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
-  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   aggregates?: Prisma.AggregateUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
@@ -661,22 +654,6 @@ export type BusinessUpdateOneRequiredWithoutInventoriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutInventoriesInput, Prisma.BusinessUpdateWithoutInventoriesInput>, Prisma.BusinessUncheckedUpdateWithoutInventoriesInput>
 }
 
-export type BusinessCreateNestedOneWithoutEventsInput = {
-  create?: Prisma.XOR<Prisma.BusinessCreateWithoutEventsInput, Prisma.BusinessUncheckedCreateWithoutEventsInput>
-  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutEventsInput
-  connect?: Prisma.BusinessWhereUniqueInput
-}
-
-export type BusinessUpdateOneWithoutEventsNestedInput = {
-  create?: Prisma.XOR<Prisma.BusinessCreateWithoutEventsInput, Prisma.BusinessUncheckedCreateWithoutEventsInput>
-  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutEventsInput
-  upsert?: Prisma.BusinessUpsertWithoutEventsInput
-  disconnect?: Prisma.BusinessWhereInput | boolean
-  delete?: Prisma.BusinessWhereInput | boolean
-  connect?: Prisma.BusinessWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutEventsInput, Prisma.BusinessUpdateWithoutEventsInput>, Prisma.BusinessUncheckedUpdateWithoutEventsInput>
-}
-
 export type BusinessCreateNestedOneWithoutLedgerEntriesInput = {
   create?: Prisma.XOR<Prisma.BusinessCreateWithoutLedgerEntriesInput, Prisma.BusinessUncheckedCreateWithoutLedgerEntriesInput>
   connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutLedgerEntriesInput
@@ -735,7 +712,6 @@ export type BusinessCreateWithoutBranchesInput = {
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
-  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   aggregates?: Prisma.AggregateCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
@@ -757,7 +733,6 @@ export type BusinessUncheckedCreateWithoutBranchesInput = {
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
-  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   aggregates?: Prisma.AggregateUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
@@ -795,7 +770,6 @@ export type BusinessUpdateWithoutBranchesInput = {
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
-  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   aggregates?: Prisma.AggregateUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
@@ -817,7 +791,6 @@ export type BusinessUncheckedUpdateWithoutBranchesInput = {
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
-  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   aggregates?: Prisma.AggregateUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
@@ -839,7 +812,6 @@ export type BusinessCreateWithoutUsersInput = {
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
-  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   aggregates?: Prisma.AggregateCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
@@ -861,7 +833,6 @@ export type BusinessUncheckedCreateWithoutUsersInput = {
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
-  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   aggregates?: Prisma.AggregateUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
@@ -888,7 +859,6 @@ export type BusinessCreateWithoutOwnerInput = {
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
-  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   aggregates?: Prisma.AggregateCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
@@ -910,7 +880,6 @@ export type BusinessUncheckedCreateWithoutOwnerInput = {
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
-  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   aggregates?: Prisma.AggregateUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
@@ -953,7 +922,6 @@ export type BusinessUpdateWithoutUsersInput = {
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
-  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   aggregates?: Prisma.AggregateUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
@@ -975,7 +943,6 @@ export type BusinessUncheckedUpdateWithoutUsersInput = {
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
-  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   aggregates?: Prisma.AggregateUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1030,7 +997,6 @@ export type BusinessCreateWithoutSubscriptionsInput = {
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
-  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   aggregates?: Prisma.AggregateCreateNestedManyWithoutBusinessInput
 }
@@ -1052,7 +1018,6 @@ export type BusinessUncheckedCreateWithoutSubscriptionsInput = {
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
-  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   aggregates?: Prisma.AggregateUncheckedCreateNestedManyWithoutBusinessInput
 }
@@ -1090,7 +1055,6 @@ export type BusinessUpdateWithoutSubscriptionsInput = {
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
-  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   aggregates?: Prisma.AggregateUpdateManyWithoutBusinessNestedInput
 }
@@ -1112,7 +1076,6 @@ export type BusinessUncheckedUpdateWithoutSubscriptionsInput = {
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
-  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   aggregates?: Prisma.AggregateUncheckedUpdateManyWithoutBusinessNestedInput
 }
@@ -1133,7 +1096,6 @@ export type BusinessCreateWithoutProductsInput = {
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
-  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   aggregates?: Prisma.AggregateCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
@@ -1155,7 +1117,6 @@ export type BusinessUncheckedCreateWithoutProductsInput = {
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
-  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   aggregates?: Prisma.AggregateUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
@@ -1193,7 +1154,6 @@ export type BusinessUpdateWithoutProductsInput = {
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
-  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   aggregates?: Prisma.AggregateUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
@@ -1215,7 +1175,6 @@ export type BusinessUncheckedUpdateWithoutProductsInput = {
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
-  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   aggregates?: Prisma.AggregateUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1238,7 +1197,6 @@ export type BusinessCreateWithoutAggregatesInput = {
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
-  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
 }
@@ -1260,7 +1218,6 @@ export type BusinessUncheckedCreateWithoutAggregatesInput = {
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
-  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
 }
@@ -1298,7 +1255,6 @@ export type BusinessUpdateWithoutAggregatesInput = {
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
-  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
 }
@@ -1320,7 +1276,6 @@ export type BusinessUncheckedUpdateWithoutAggregatesInput = {
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
-  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
 }
@@ -1341,7 +1296,6 @@ export type BusinessCreateWithoutInventoriesInput = {
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
-  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   aggregates?: Prisma.AggregateCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
@@ -1363,7 +1317,6 @@ export type BusinessUncheckedCreateWithoutInventoriesInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
-  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   aggregates?: Prisma.AggregateUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
@@ -1401,7 +1354,6 @@ export type BusinessUpdateWithoutInventoriesInput = {
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
-  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   aggregates?: Prisma.AggregateUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
@@ -1421,111 +1373,6 @@ export type BusinessUncheckedUpdateWithoutInventoriesInput = {
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
-  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
-  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
-  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
-  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
-  aggregates?: Prisma.AggregateUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
-}
-
-export type BusinessCreateWithoutEventsInput = {
-  id: string
-  name: string
-  address?: string | null
-  isOnboarding?: boolean
-  onboardingCompleted?: boolean
-  status?: $Enums.BusinessStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  activatedAt?: Date | string | null
-  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
-  branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
-  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
-  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
-  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
-  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
-  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
-  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
-  aggregates?: Prisma.AggregateCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
-}
-
-export type BusinessUncheckedCreateWithoutEventsInput = {
-  id: string
-  name: string
-  userId?: string | null
-  address?: string | null
-  isOnboarding?: boolean
-  onboardingCompleted?: boolean
-  status?: $Enums.BusinessStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  activatedAt?: Date | string | null
-  branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
-  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
-  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
-  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
-  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
-  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
-  aggregates?: Prisma.AggregateUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
-}
-
-export type BusinessCreateOrConnectWithoutEventsInput = {
-  where: Prisma.BusinessWhereUniqueInput
-  create: Prisma.XOR<Prisma.BusinessCreateWithoutEventsInput, Prisma.BusinessUncheckedCreateWithoutEventsInput>
-}
-
-export type BusinessUpsertWithoutEventsInput = {
-  update: Prisma.XOR<Prisma.BusinessUpdateWithoutEventsInput, Prisma.BusinessUncheckedUpdateWithoutEventsInput>
-  create: Prisma.XOR<Prisma.BusinessCreateWithoutEventsInput, Prisma.BusinessUncheckedCreateWithoutEventsInput>
-  where?: Prisma.BusinessWhereInput
-}
-
-export type BusinessUpdateToOneWithWhereWithoutEventsInput = {
-  where?: Prisma.BusinessWhereInput
-  data: Prisma.XOR<Prisma.BusinessUpdateWithoutEventsInput, Prisma.BusinessUncheckedUpdateWithoutEventsInput>
-}
-
-export type BusinessUpdateWithoutEventsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
-  branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
-  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
-  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
-  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
-  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
-  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
-  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
-  aggregates?: Prisma.AggregateUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
-}
-
-export type BusinessUncheckedUpdateWithoutEventsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
-  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
-  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
-  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1550,7 +1397,6 @@ export type BusinessCreateWithoutLedgerEntriesInput = {
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
-  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   aggregates?: Prisma.AggregateCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
 }
@@ -1572,7 +1418,6 @@ export type BusinessUncheckedCreateWithoutLedgerEntriesInput = {
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
-  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   aggregates?: Prisma.AggregateUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
 }
@@ -1610,7 +1455,6 @@ export type BusinessUpdateWithoutLedgerEntriesInput = {
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
-  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   aggregates?: Prisma.AggregateUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
 }
@@ -1632,7 +1476,6 @@ export type BusinessUncheckedUpdateWithoutLedgerEntriesInput = {
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
-  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   aggregates?: Prisma.AggregateUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
 }
@@ -1653,7 +1496,6 @@ export type BusinessCreateWithoutSnapshotsInput = {
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
-  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   aggregates?: Prisma.AggregateCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
@@ -1675,7 +1517,6 @@ export type BusinessUncheckedCreateWithoutSnapshotsInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
   alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
-  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   aggregates?: Prisma.AggregateUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
@@ -1713,7 +1554,6 @@ export type BusinessUpdateWithoutSnapshotsInput = {
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
-  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   aggregates?: Prisma.AggregateUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
@@ -1735,7 +1575,6 @@ export type BusinessUncheckedUpdateWithoutSnapshotsInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
-  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   aggregates?: Prisma.AggregateUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1757,7 +1596,6 @@ export type BusinessCreateWithoutAlertsInput = {
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
-  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
   aggregates?: Prisma.AggregateCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
@@ -1779,7 +1617,6 @@ export type BusinessUncheckedCreateWithoutAlertsInput = {
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
-  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
   aggregates?: Prisma.AggregateUncheckedCreateNestedManyWithoutBusinessInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
@@ -1817,7 +1654,6 @@ export type BusinessUpdateWithoutAlertsInput = {
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
-  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   aggregates?: Prisma.AggregateUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
@@ -1839,7 +1675,6 @@ export type BusinessUncheckedUpdateWithoutAlertsInput = {
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
-  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   aggregates?: Prisma.AggregateUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1873,7 +1708,6 @@ export type BusinessUpdateWithoutOwnerInput = {
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
-  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
   aggregates?: Prisma.AggregateUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
@@ -1895,7 +1729,6 @@ export type BusinessUncheckedUpdateWithoutOwnerInput = {
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
   alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
-  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
   aggregates?: Prisma.AggregateUncheckedUpdateManyWithoutBusinessNestedInput
   subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1925,7 +1758,6 @@ export type BusinessCountOutputType = {
   inventories: number
   snapshots: number
   alerts: number
-  events: number
   ledgerEntries: number
   aggregates: number
   subscriptions: number
@@ -1938,7 +1770,6 @@ export type BusinessCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   inventories?: boolean | BusinessCountOutputTypeCountInventoriesArgs
   snapshots?: boolean | BusinessCountOutputTypeCountSnapshotsArgs
   alerts?: boolean | BusinessCountOutputTypeCountAlertsArgs
-  events?: boolean | BusinessCountOutputTypeCountEventsArgs
   ledgerEntries?: boolean | BusinessCountOutputTypeCountLedgerEntriesArgs
   aggregates?: boolean | BusinessCountOutputTypeCountAggregatesArgs
   subscriptions?: boolean | BusinessCountOutputTypeCountSubscriptionsArgs
@@ -1999,13 +1830,6 @@ export type BusinessCountOutputTypeCountAlertsArgs<ExtArgs extends runtime.Types
 /**
  * BusinessCountOutputType without action
  */
-export type BusinessCountOutputTypeCountEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.EventWhereInput
-}
-
-/**
- * BusinessCountOutputType without action
- */
 export type BusinessCountOutputTypeCountLedgerEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.LedgerEntryWhereInput
 }
@@ -2043,7 +1867,6 @@ export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   inventories?: boolean | Prisma.Business$inventoriesArgs<ExtArgs>
   snapshots?: boolean | Prisma.Business$snapshotsArgs<ExtArgs>
   alerts?: boolean | Prisma.Business$alertsArgs<ExtArgs>
-  events?: boolean | Prisma.Business$eventsArgs<ExtArgs>
   ledgerEntries?: boolean | Prisma.Business$ledgerEntriesArgs<ExtArgs>
   aggregates?: boolean | Prisma.Business$aggregatesArgs<ExtArgs>
   subscriptions?: boolean | Prisma.Business$subscriptionsArgs<ExtArgs>
@@ -2100,7 +1923,6 @@ export type BusinessInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   inventories?: boolean | Prisma.Business$inventoriesArgs<ExtArgs>
   snapshots?: boolean | Prisma.Business$snapshotsArgs<ExtArgs>
   alerts?: boolean | Prisma.Business$alertsArgs<ExtArgs>
-  events?: boolean | Prisma.Business$eventsArgs<ExtArgs>
   ledgerEntries?: boolean | Prisma.Business$ledgerEntriesArgs<ExtArgs>
   aggregates?: boolean | Prisma.Business$aggregatesArgs<ExtArgs>
   subscriptions?: boolean | Prisma.Business$subscriptionsArgs<ExtArgs>
@@ -2123,7 +1945,6 @@ export type $BusinessPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     inventories: Prisma.$InventoryPayload<ExtArgs>[]
     snapshots: Prisma.$SnapshotPayload<ExtArgs>[]
     alerts: Prisma.$AlertPayload<ExtArgs>[]
-    events: Prisma.$EventPayload<ExtArgs>[]
     ledgerEntries: Prisma.$LedgerEntryPayload<ExtArgs>[]
     aggregates: Prisma.$AggregatePayload<ExtArgs>[]
     subscriptions: Prisma.$BusinessSubscriptionPayload<ExtArgs>[]
@@ -2540,7 +2361,6 @@ export interface Prisma__BusinessClient<T, Null = never, ExtArgs extends runtime
   inventories<T extends Prisma.Business$inventoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$inventoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InventoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   snapshots<T extends Prisma.Business$snapshotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$snapshotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SnapshotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   alerts<T extends Prisma.Business$alertsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$alertsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AlertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  events<T extends Prisma.Business$eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   ledgerEntries<T extends Prisma.Business$ledgerEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$ledgerEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LedgerEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   aggregates<T extends Prisma.Business$aggregatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$aggregatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AggregatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   subscriptions<T extends Prisma.Business$subscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BusinessSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3144,30 +2964,6 @@ export type Business$alertsArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.AlertScalarFieldEnum | Prisma.AlertScalarFieldEnum[]
-}
-
-/**
- * Business.events
- */
-export type Business$eventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Event
-   */
-  select?: Prisma.EventSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Event
-   */
-  omit?: Prisma.EventOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.EventInclude<ExtArgs> | null
-  where?: Prisma.EventWhereInput
-  orderBy?: Prisma.EventOrderByWithRelationInput | Prisma.EventOrderByWithRelationInput[]
-  cursor?: Prisma.EventWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.EventScalarFieldEnum | Prisma.EventScalarFieldEnum[]
 }
 
 /**

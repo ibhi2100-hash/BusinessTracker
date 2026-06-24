@@ -26,10 +26,11 @@ export class SyncEngine {
     const pending =
       await this.repository.getPendingEvents();
 
-    if (!pending.length) return;
+    if (pending.length === 0) return;
 
     const groups =
       groupByAggregate(pending);
+      console.log("This are the grouped Event by aggregate: ", groups)
 
     for (const group of groups) {
 

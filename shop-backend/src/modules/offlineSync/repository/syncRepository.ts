@@ -58,13 +58,12 @@ export class SyncRepository {
     tx: Prisma.TransactionClient
   ) {
 
-    const existing =
-      await tx.event.findFirst({
-        where: {
-          deviceId: event.deviceId,
-          logicClock: event.logicClock,
-        },
-      });
+    const where: any = {
+      deviceId: event.deviceId,
+      logicClock: event.logicClock,
+    };
+
+    const existing = await tx.event.findFirst({ where });
 
     // Clock never used
     if (!existing) {

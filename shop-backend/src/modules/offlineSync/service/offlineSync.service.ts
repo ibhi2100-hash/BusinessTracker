@@ -66,7 +66,7 @@ export class OfflineSyncService {
 
       const success: any[] = [];
       const failed: any[] = [];
-
+      const eventPipeline = creatBackendEventEngine(tx) 
       for (const event of events) {
         try {
           
@@ -102,8 +102,7 @@ export class OfflineSyncService {
             aggregateVersion: currentVersion,
           };
         const canonicalevent = toCanonicalEvent(enrichedEvent)
-        const eventPipeline = creatBackendEventEngine(tx)
-        eventPipeline.pipeline.append(canonicalevent)
+        await eventPipeline.pipeline.append(canonicalevent)
           await this.syncRepository.markProcessed(
             canonicalevent,
             tx

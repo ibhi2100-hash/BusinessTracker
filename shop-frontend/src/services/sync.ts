@@ -1,5 +1,3 @@
-import { AppDB } from "../db";
-
 import { LocalSyncRepository } from "../repositories/syncRepo/IndexedDbPendingEventRepo";
 import { HttpSyncApi } from "../sync/HttpSyncApi";
 import { ExponentialRetryPolicy } from "../sync/RetryPolicies/ExponentialRetryPolicy";
@@ -12,9 +10,11 @@ import { AppConflictResolver } from "../conflict/ConflictResolver";
 
 // merge strategies
 import { ProductMergeStrategy } from "../strategies/ProductMergerStrategy";
+import { getDB } from "../offline/sqlite/database/db";
 
 
-export function createSyncManager(db: AppDB) {
+export function createSyncManager() {
+  const db = getDB()
 
   // -------------------------
   // LOCAL REPOSITORY

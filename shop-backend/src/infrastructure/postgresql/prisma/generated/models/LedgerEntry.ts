@@ -40,7 +40,6 @@ export type LedgerEntryMinAggregateOutputType = {
   id: string | null
   businessId: string | null
   branchId: string | null
-  branchBusinessId: string | null
   eventId: string | null
   type: string | null
   account: $Enums.Account | null
@@ -54,7 +53,6 @@ export type LedgerEntryMaxAggregateOutputType = {
   id: string | null
   businessId: string | null
   branchId: string | null
-  branchBusinessId: string | null
   eventId: string | null
   type: string | null
   account: $Enums.Account | null
@@ -68,7 +66,6 @@ export type LedgerEntryCountAggregateOutputType = {
   id: number
   businessId: number
   branchId: number
-  branchBusinessId: number
   eventId: number
   type: number
   account: number
@@ -94,7 +91,6 @@ export type LedgerEntryMinAggregateInputType = {
   id?: true
   businessId?: true
   branchId?: true
-  branchBusinessId?: true
   eventId?: true
   type?: true
   account?: true
@@ -108,7 +104,6 @@ export type LedgerEntryMaxAggregateInputType = {
   id?: true
   businessId?: true
   branchId?: true
-  branchBusinessId?: true
   eventId?: true
   type?: true
   account?: true
@@ -122,7 +117,6 @@ export type LedgerEntryCountAggregateInputType = {
   id?: true
   businessId?: true
   branchId?: true
-  branchBusinessId?: true
   eventId?: true
   type?: true
   account?: true
@@ -223,7 +217,6 @@ export type LedgerEntryGroupByOutputType = {
   id: string
   businessId: string
   branchId: string
-  branchBusinessId: string
   eventId: string
   type: string
   account: $Enums.Account
@@ -260,7 +253,6 @@ export type LedgerEntryWhereInput = {
   id?: Prisma.StringFilter<"LedgerEntry"> | string
   businessId?: Prisma.StringFilter<"LedgerEntry"> | string
   branchId?: Prisma.StringFilter<"LedgerEntry"> | string
-  branchBusinessId?: Prisma.StringFilter<"LedgerEntry"> | string
   eventId?: Prisma.StringFilter<"LedgerEntry"> | string
   type?: Prisma.StringFilter<"LedgerEntry"> | string
   account?: Prisma.EnumAccountFilter<"LedgerEntry"> | $Enums.Account
@@ -277,7 +269,6 @@ export type LedgerEntryOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
-  branchBusinessId?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   account?: Prisma.SortOrder
@@ -298,7 +289,6 @@ export type LedgerEntryWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.LedgerEntryWhereInput | Prisma.LedgerEntryWhereInput[]
   businessId?: Prisma.StringFilter<"LedgerEntry"> | string
   branchId?: Prisma.StringFilter<"LedgerEntry"> | string
-  branchBusinessId?: Prisma.StringFilter<"LedgerEntry"> | string
   eventId?: Prisma.StringFilter<"LedgerEntry"> | string
   type?: Prisma.StringFilter<"LedgerEntry"> | string
   account?: Prisma.EnumAccountFilter<"LedgerEntry"> | $Enums.Account
@@ -315,7 +305,6 @@ export type LedgerEntryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
-  branchBusinessId?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   account?: Prisma.SortOrder
@@ -337,7 +326,6 @@ export type LedgerEntryScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"LedgerEntry"> | string
   businessId?: Prisma.StringWithAggregatesFilter<"LedgerEntry"> | string
   branchId?: Prisma.StringWithAggregatesFilter<"LedgerEntry"> | string
-  branchBusinessId?: Prisma.StringWithAggregatesFilter<"LedgerEntry"> | string
   eventId?: Prisma.StringWithAggregatesFilter<"LedgerEntry"> | string
   type?: Prisma.StringWithAggregatesFilter<"LedgerEntry"> | string
   account?: Prisma.EnumAccountWithAggregatesFilter<"LedgerEntry"> | $Enums.Account
@@ -349,7 +337,6 @@ export type LedgerEntryScalarWhereWithAggregatesInput = {
 
 export type LedgerEntryCreateInput = {
   id?: string
-  branchBusinessId: string
   type: string
   account: $Enums.Account
   direction: $Enums.LedgerDirection
@@ -365,7 +352,6 @@ export type LedgerEntryUncheckedCreateInput = {
   id?: string
   businessId: string
   branchId: string
-  branchBusinessId: string
   eventId: string
   type: string
   account: $Enums.Account
@@ -377,7 +363,6 @@ export type LedgerEntryUncheckedCreateInput = {
 
 export type LedgerEntryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
   account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
   direction?: Prisma.EnumLedgerDirectionFieldUpdateOperationsInput | $Enums.LedgerDirection
@@ -393,7 +378,6 @@ export type LedgerEntryUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   branchId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
   account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
@@ -407,7 +391,6 @@ export type LedgerEntryCreateManyInput = {
   id?: string
   businessId: string
   branchId: string
-  branchBusinessId: string
   eventId: string
   type: string
   account: $Enums.Account
@@ -419,7 +402,6 @@ export type LedgerEntryCreateManyInput = {
 
 export type LedgerEntryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
   account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
   direction?: Prisma.EnumLedgerDirectionFieldUpdateOperationsInput | $Enums.LedgerDirection
@@ -432,7 +414,6 @@ export type LedgerEntryUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   branchId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
   account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
@@ -461,7 +442,6 @@ export type LedgerEntryCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
-  branchBusinessId?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   account?: Prisma.SortOrder
@@ -480,7 +460,6 @@ export type LedgerEntryMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
-  branchBusinessId?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   account?: Prisma.SortOrder
@@ -494,7 +473,6 @@ export type LedgerEntryMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
-  branchBusinessId?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   account?: Prisma.SortOrder
@@ -645,7 +623,6 @@ export type EnumLedgerDirectionFieldUpdateOperationsInput = {
 
 export type LedgerEntryCreateWithoutBusinessInput = {
   id?: string
-  branchBusinessId: string
   type: string
   account: $Enums.Account
   direction: $Enums.LedgerDirection
@@ -659,7 +636,6 @@ export type LedgerEntryCreateWithoutBusinessInput = {
 export type LedgerEntryUncheckedCreateWithoutBusinessInput = {
   id?: string
   branchId: string
-  branchBusinessId: string
   eventId: string
   type: string
   account: $Enums.Account
@@ -702,7 +678,6 @@ export type LedgerEntryScalarWhereInput = {
   id?: Prisma.StringFilter<"LedgerEntry"> | string
   businessId?: Prisma.StringFilter<"LedgerEntry"> | string
   branchId?: Prisma.StringFilter<"LedgerEntry"> | string
-  branchBusinessId?: Prisma.StringFilter<"LedgerEntry"> | string
   eventId?: Prisma.StringFilter<"LedgerEntry"> | string
   type?: Prisma.StringFilter<"LedgerEntry"> | string
   account?: Prisma.EnumAccountFilter<"LedgerEntry"> | $Enums.Account
@@ -714,7 +689,6 @@ export type LedgerEntryScalarWhereInput = {
 
 export type LedgerEntryCreateWithoutBranchInput = {
   id?: string
-  branchBusinessId: string
   type: string
   account: $Enums.Account
   direction: $Enums.LedgerDirection
@@ -728,7 +702,6 @@ export type LedgerEntryCreateWithoutBranchInput = {
 export type LedgerEntryUncheckedCreateWithoutBranchInput = {
   id?: string
   businessId: string
-  branchBusinessId: string
   eventId: string
   type: string
   account: $Enums.Account
@@ -766,7 +739,6 @@ export type LedgerEntryUpdateManyWithWhereWithoutBranchInput = {
 
 export type LedgerEntryCreateWithoutEventInput = {
   id?: string
-  branchBusinessId: string
   type: string
   account: $Enums.Account
   direction: $Enums.LedgerDirection
@@ -781,7 +753,6 @@ export type LedgerEntryUncheckedCreateWithoutEventInput = {
   id?: string
   businessId: string
   branchId: string
-  branchBusinessId: string
   type: string
   account: $Enums.Account
   direction: $Enums.LedgerDirection
@@ -819,7 +790,6 @@ export type LedgerEntryUpdateManyWithWhereWithoutEventInput = {
 export type LedgerEntryCreateManyBusinessInput = {
   id?: string
   branchId: string
-  branchBusinessId: string
   eventId: string
   type: string
   account: $Enums.Account
@@ -831,7 +801,6 @@ export type LedgerEntryCreateManyBusinessInput = {
 
 export type LedgerEntryUpdateWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
   account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
   direction?: Prisma.EnumLedgerDirectionFieldUpdateOperationsInput | $Enums.LedgerDirection
@@ -845,7 +814,6 @@ export type LedgerEntryUpdateWithoutBusinessInput = {
 export type LedgerEntryUncheckedUpdateWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   branchId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
   account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
@@ -858,7 +826,6 @@ export type LedgerEntryUncheckedUpdateWithoutBusinessInput = {
 export type LedgerEntryUncheckedUpdateManyWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   branchId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
   account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
@@ -871,7 +838,6 @@ export type LedgerEntryUncheckedUpdateManyWithoutBusinessInput = {
 export type LedgerEntryCreateManyBranchInput = {
   id?: string
   businessId: string
-  branchBusinessId: string
   eventId: string
   type: string
   account: $Enums.Account
@@ -883,7 +849,6 @@ export type LedgerEntryCreateManyBranchInput = {
 
 export type LedgerEntryUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
   account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
   direction?: Prisma.EnumLedgerDirectionFieldUpdateOperationsInput | $Enums.LedgerDirection
@@ -897,7 +862,6 @@ export type LedgerEntryUpdateWithoutBranchInput = {
 export type LedgerEntryUncheckedUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
   account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
@@ -910,7 +874,6 @@ export type LedgerEntryUncheckedUpdateWithoutBranchInput = {
 export type LedgerEntryUncheckedUpdateManyWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
   account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
@@ -924,7 +887,6 @@ export type LedgerEntryCreateManyEventInput = {
   id?: string
   businessId: string
   branchId: string
-  branchBusinessId: string
   type: string
   account: $Enums.Account
   direction: $Enums.LedgerDirection
@@ -935,7 +897,6 @@ export type LedgerEntryCreateManyEventInput = {
 
 export type LedgerEntryUpdateWithoutEventInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
   account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
   direction?: Prisma.EnumLedgerDirectionFieldUpdateOperationsInput | $Enums.LedgerDirection
@@ -950,7 +911,6 @@ export type LedgerEntryUncheckedUpdateWithoutEventInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   branchId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
   account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
   direction?: Prisma.EnumLedgerDirectionFieldUpdateOperationsInput | $Enums.LedgerDirection
@@ -963,7 +923,6 @@ export type LedgerEntryUncheckedUpdateManyWithoutEventInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   branchId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchBusinessId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
   account?: Prisma.EnumAccountFieldUpdateOperationsInput | $Enums.Account
   direction?: Prisma.EnumLedgerDirectionFieldUpdateOperationsInput | $Enums.LedgerDirection
@@ -978,7 +937,6 @@ export type LedgerEntrySelect<ExtArgs extends runtime.Types.Extensions.InternalA
   id?: boolean
   businessId?: boolean
   branchId?: boolean
-  branchBusinessId?: boolean
   eventId?: boolean
   type?: boolean
   account?: boolean
@@ -995,7 +953,6 @@ export type LedgerEntrySelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   id?: boolean
   businessId?: boolean
   branchId?: boolean
-  branchBusinessId?: boolean
   eventId?: boolean
   type?: boolean
   account?: boolean
@@ -1012,7 +969,6 @@ export type LedgerEntrySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   id?: boolean
   businessId?: boolean
   branchId?: boolean
-  branchBusinessId?: boolean
   eventId?: boolean
   type?: boolean
   account?: boolean
@@ -1029,7 +985,6 @@ export type LedgerEntrySelectScalar = {
   id?: boolean
   businessId?: boolean
   branchId?: boolean
-  branchBusinessId?: boolean
   eventId?: boolean
   type?: boolean
   account?: boolean
@@ -1039,7 +994,7 @@ export type LedgerEntrySelectScalar = {
   createdAt?: boolean
 }
 
-export type LedgerEntryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "branchBusinessId" | "eventId" | "type" | "account" | "direction" | "amount" | "index" | "createdAt", ExtArgs["result"]["ledgerEntry"]>
+export type LedgerEntryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "eventId" | "type" | "account" | "direction" | "amount" | "index" | "createdAt", ExtArgs["result"]["ledgerEntry"]>
 export type LedgerEntryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.BranchDefaultArgs<ExtArgs>
@@ -1067,7 +1022,6 @@ export type $LedgerEntryPayload<ExtArgs extends runtime.Types.Extensions.Interna
     id: string
     businessId: string
     branchId: string
-    branchBusinessId: string
     eventId: string
     type: string
     account: $Enums.Account
@@ -1504,7 +1458,6 @@ export interface LedgerEntryFieldRefs {
   readonly id: Prisma.FieldRef<"LedgerEntry", 'String'>
   readonly businessId: Prisma.FieldRef<"LedgerEntry", 'String'>
   readonly branchId: Prisma.FieldRef<"LedgerEntry", 'String'>
-  readonly branchBusinessId: Prisma.FieldRef<"LedgerEntry", 'String'>
   readonly eventId: Prisma.FieldRef<"LedgerEntry", 'String'>
   readonly type: Prisma.FieldRef<"LedgerEntry", 'String'>
   readonly account: Prisma.FieldRef<"LedgerEntry", 'Account'>

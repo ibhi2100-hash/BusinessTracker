@@ -1,8 +1,8 @@
 // SQLiteProductRepository.ts
 
 import { Product } from "@business/shared-types";
-import { getDB } from "../database/db";
-import { IProjectionEntityRepository } from "./IProjectionEntityRepository";
+import { getDB } from "../../sqlite/database/db";
+import { IProjectionEntityRepository } from "./repositoryContract";
 
 export class SQLiteProductRepository
 implements IProjectionEntityRepository<Product> {
@@ -64,7 +64,7 @@ implements IProjectionEntityRepository<Product> {
         state.businessId,
         state.branchId,
         state.name,
-        state.sellingPrice,
+        state.price,
         state.costPrice
       ]
     );

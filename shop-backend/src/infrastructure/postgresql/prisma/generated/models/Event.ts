@@ -288,9 +288,6 @@ export type EventWhereInput = {
   causationId?: Prisma.StringNullableFilter<"Event"> | string | null
   correlationId?: Prisma.StringNullableFilter<"Event"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
-  business?: Prisma.XOR<Prisma.BusinessNullableScalarRelationFilter, Prisma.BusinessWhereInput> | null
-  branch?: Prisma.XOR<Prisma.BranchNullableScalarRelationFilter, Prisma.BranchWhereInput> | null
-  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   ledgerEntries?: Prisma.LedgerEntryListRelationFilter
 }
 
@@ -309,9 +306,6 @@ export type EventOrderByWithRelationInput = {
   causationId?: Prisma.SortOrderInput | Prisma.SortOrder
   correlationId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  business?: Prisma.BusinessOrderByWithRelationInput
-  branch?: Prisma.BranchOrderByWithRelationInput
-  user?: Prisma.UserOrderByWithRelationInput
   ledgerEntries?: Prisma.LedgerEntryOrderByRelationAggregateInput
 }
 
@@ -334,9 +328,6 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   causationId?: Prisma.StringNullableFilter<"Event"> | string | null
   correlationId?: Prisma.StringNullableFilter<"Event"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
-  business?: Prisma.XOR<Prisma.BusinessNullableScalarRelationFilter, Prisma.BusinessWhereInput> | null
-  branch?: Prisma.XOR<Prisma.BranchNullableScalarRelationFilter, Prisma.BranchWhereInput> | null
-  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   ledgerEntries?: Prisma.LedgerEntryListRelationFilter
 }, "id" | "aggregateType_aggregateId_aggregateVersion">
 
@@ -384,6 +375,8 @@ export type EventScalarWhereWithAggregatesInput = {
 
 export type EventCreateInput = {
   id: string
+  businessId?: string | null
+  branchId?: string | null
   aggregateId: string
   aggregateType: string
   aggregateVersion: number
@@ -391,12 +384,10 @@ export type EventCreateInput = {
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
+  userId?: string | null
   causationId?: string | null
   correlationId?: string | null
   createdAt?: Date | string
-  business?: Prisma.BusinessCreateNestedOneWithoutEventsInput
-  branch?: Prisma.BranchCreateNestedOneWithoutEventsInput
-  user?: Prisma.UserCreateNestedOneWithoutEventsInput
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutEventInput
 }
 
@@ -420,6 +411,8 @@ export type EventUncheckedCreateInput = {
 
 export type EventUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
@@ -427,12 +420,10 @@ export type EventUpdateInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  business?: Prisma.BusinessUpdateOneWithoutEventsNestedInput
-  branch?: Prisma.BranchUpdateOneWithoutEventsNestedInput
-  user?: Prisma.UserUpdateOneWithoutEventsNestedInput
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutEventNestedInput
 }
 
@@ -473,6 +464,8 @@ export type EventCreateManyInput = {
 
 export type EventUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
@@ -480,6 +473,7 @@ export type EventUpdateManyMutationInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -500,16 +494,6 @@ export type EventUncheckedUpdateManyInput = {
   causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type EventListRelationFilter = {
-  every?: Prisma.EventWhereInput
-  some?: Prisma.EventWhereInput
-  none?: Prisma.EventWhereInput
-}
-
-export type EventOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
 }
 
 export type EventAggregateTypeAggregateIdAggregateVersionCompoundUniqueInput = {
@@ -582,132 +566,6 @@ export type EventScalarRelationFilter = {
   isNot?: Prisma.EventWhereInput
 }
 
-export type EventCreateNestedManyWithoutBusinessInput = {
-  create?: Prisma.XOR<Prisma.EventCreateWithoutBusinessInput, Prisma.EventUncheckedCreateWithoutBusinessInput> | Prisma.EventCreateWithoutBusinessInput[] | Prisma.EventUncheckedCreateWithoutBusinessInput[]
-  connectOrCreate?: Prisma.EventCreateOrConnectWithoutBusinessInput | Prisma.EventCreateOrConnectWithoutBusinessInput[]
-  createMany?: Prisma.EventCreateManyBusinessInputEnvelope
-  connect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-}
-
-export type EventUncheckedCreateNestedManyWithoutBusinessInput = {
-  create?: Prisma.XOR<Prisma.EventCreateWithoutBusinessInput, Prisma.EventUncheckedCreateWithoutBusinessInput> | Prisma.EventCreateWithoutBusinessInput[] | Prisma.EventUncheckedCreateWithoutBusinessInput[]
-  connectOrCreate?: Prisma.EventCreateOrConnectWithoutBusinessInput | Prisma.EventCreateOrConnectWithoutBusinessInput[]
-  createMany?: Prisma.EventCreateManyBusinessInputEnvelope
-  connect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-}
-
-export type EventUpdateManyWithoutBusinessNestedInput = {
-  create?: Prisma.XOR<Prisma.EventCreateWithoutBusinessInput, Prisma.EventUncheckedCreateWithoutBusinessInput> | Prisma.EventCreateWithoutBusinessInput[] | Prisma.EventUncheckedCreateWithoutBusinessInput[]
-  connectOrCreate?: Prisma.EventCreateOrConnectWithoutBusinessInput | Prisma.EventCreateOrConnectWithoutBusinessInput[]
-  upsert?: Prisma.EventUpsertWithWhereUniqueWithoutBusinessInput | Prisma.EventUpsertWithWhereUniqueWithoutBusinessInput[]
-  createMany?: Prisma.EventCreateManyBusinessInputEnvelope
-  set?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-  disconnect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-  delete?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-  connect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-  update?: Prisma.EventUpdateWithWhereUniqueWithoutBusinessInput | Prisma.EventUpdateWithWhereUniqueWithoutBusinessInput[]
-  updateMany?: Prisma.EventUpdateManyWithWhereWithoutBusinessInput | Prisma.EventUpdateManyWithWhereWithoutBusinessInput[]
-  deleteMany?: Prisma.EventScalarWhereInput | Prisma.EventScalarWhereInput[]
-}
-
-export type EventUncheckedUpdateManyWithoutBusinessNestedInput = {
-  create?: Prisma.XOR<Prisma.EventCreateWithoutBusinessInput, Prisma.EventUncheckedCreateWithoutBusinessInput> | Prisma.EventCreateWithoutBusinessInput[] | Prisma.EventUncheckedCreateWithoutBusinessInput[]
-  connectOrCreate?: Prisma.EventCreateOrConnectWithoutBusinessInput | Prisma.EventCreateOrConnectWithoutBusinessInput[]
-  upsert?: Prisma.EventUpsertWithWhereUniqueWithoutBusinessInput | Prisma.EventUpsertWithWhereUniqueWithoutBusinessInput[]
-  createMany?: Prisma.EventCreateManyBusinessInputEnvelope
-  set?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-  disconnect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-  delete?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-  connect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-  update?: Prisma.EventUpdateWithWhereUniqueWithoutBusinessInput | Prisma.EventUpdateWithWhereUniqueWithoutBusinessInput[]
-  updateMany?: Prisma.EventUpdateManyWithWhereWithoutBusinessInput | Prisma.EventUpdateManyWithWhereWithoutBusinessInput[]
-  deleteMany?: Prisma.EventScalarWhereInput | Prisma.EventScalarWhereInput[]
-}
-
-export type EventCreateNestedManyWithoutBranchInput = {
-  create?: Prisma.XOR<Prisma.EventCreateWithoutBranchInput, Prisma.EventUncheckedCreateWithoutBranchInput> | Prisma.EventCreateWithoutBranchInput[] | Prisma.EventUncheckedCreateWithoutBranchInput[]
-  connectOrCreate?: Prisma.EventCreateOrConnectWithoutBranchInput | Prisma.EventCreateOrConnectWithoutBranchInput[]
-  createMany?: Prisma.EventCreateManyBranchInputEnvelope
-  connect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-}
-
-export type EventUncheckedCreateNestedManyWithoutBranchInput = {
-  create?: Prisma.XOR<Prisma.EventCreateWithoutBranchInput, Prisma.EventUncheckedCreateWithoutBranchInput> | Prisma.EventCreateWithoutBranchInput[] | Prisma.EventUncheckedCreateWithoutBranchInput[]
-  connectOrCreate?: Prisma.EventCreateOrConnectWithoutBranchInput | Prisma.EventCreateOrConnectWithoutBranchInput[]
-  createMany?: Prisma.EventCreateManyBranchInputEnvelope
-  connect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-}
-
-export type EventUpdateManyWithoutBranchNestedInput = {
-  create?: Prisma.XOR<Prisma.EventCreateWithoutBranchInput, Prisma.EventUncheckedCreateWithoutBranchInput> | Prisma.EventCreateWithoutBranchInput[] | Prisma.EventUncheckedCreateWithoutBranchInput[]
-  connectOrCreate?: Prisma.EventCreateOrConnectWithoutBranchInput | Prisma.EventCreateOrConnectWithoutBranchInput[]
-  upsert?: Prisma.EventUpsertWithWhereUniqueWithoutBranchInput | Prisma.EventUpsertWithWhereUniqueWithoutBranchInput[]
-  createMany?: Prisma.EventCreateManyBranchInputEnvelope
-  set?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-  disconnect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-  delete?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-  connect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-  update?: Prisma.EventUpdateWithWhereUniqueWithoutBranchInput | Prisma.EventUpdateWithWhereUniqueWithoutBranchInput[]
-  updateMany?: Prisma.EventUpdateManyWithWhereWithoutBranchInput | Prisma.EventUpdateManyWithWhereWithoutBranchInput[]
-  deleteMany?: Prisma.EventScalarWhereInput | Prisma.EventScalarWhereInput[]
-}
-
-export type EventUncheckedUpdateManyWithoutBranchNestedInput = {
-  create?: Prisma.XOR<Prisma.EventCreateWithoutBranchInput, Prisma.EventUncheckedCreateWithoutBranchInput> | Prisma.EventCreateWithoutBranchInput[] | Prisma.EventUncheckedCreateWithoutBranchInput[]
-  connectOrCreate?: Prisma.EventCreateOrConnectWithoutBranchInput | Prisma.EventCreateOrConnectWithoutBranchInput[]
-  upsert?: Prisma.EventUpsertWithWhereUniqueWithoutBranchInput | Prisma.EventUpsertWithWhereUniqueWithoutBranchInput[]
-  createMany?: Prisma.EventCreateManyBranchInputEnvelope
-  set?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-  disconnect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-  delete?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-  connect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-  update?: Prisma.EventUpdateWithWhereUniqueWithoutBranchInput | Prisma.EventUpdateWithWhereUniqueWithoutBranchInput[]
-  updateMany?: Prisma.EventUpdateManyWithWhereWithoutBranchInput | Prisma.EventUpdateManyWithWhereWithoutBranchInput[]
-  deleteMany?: Prisma.EventScalarWhereInput | Prisma.EventScalarWhereInput[]
-}
-
-export type EventCreateNestedManyWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.EventCreateWithoutUserInput, Prisma.EventUncheckedCreateWithoutUserInput> | Prisma.EventCreateWithoutUserInput[] | Prisma.EventUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.EventCreateOrConnectWithoutUserInput | Prisma.EventCreateOrConnectWithoutUserInput[]
-  createMany?: Prisma.EventCreateManyUserInputEnvelope
-  connect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-}
-
-export type EventUncheckedCreateNestedManyWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.EventCreateWithoutUserInput, Prisma.EventUncheckedCreateWithoutUserInput> | Prisma.EventCreateWithoutUserInput[] | Prisma.EventUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.EventCreateOrConnectWithoutUserInput | Prisma.EventCreateOrConnectWithoutUserInput[]
-  createMany?: Prisma.EventCreateManyUserInputEnvelope
-  connect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-}
-
-export type EventUpdateManyWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.EventCreateWithoutUserInput, Prisma.EventUncheckedCreateWithoutUserInput> | Prisma.EventCreateWithoutUserInput[] | Prisma.EventUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.EventCreateOrConnectWithoutUserInput | Prisma.EventCreateOrConnectWithoutUserInput[]
-  upsert?: Prisma.EventUpsertWithWhereUniqueWithoutUserInput | Prisma.EventUpsertWithWhereUniqueWithoutUserInput[]
-  createMany?: Prisma.EventCreateManyUserInputEnvelope
-  set?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-  disconnect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-  delete?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-  connect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-  update?: Prisma.EventUpdateWithWhereUniqueWithoutUserInput | Prisma.EventUpdateWithWhereUniqueWithoutUserInput[]
-  updateMany?: Prisma.EventUpdateManyWithWhereWithoutUserInput | Prisma.EventUpdateManyWithWhereWithoutUserInput[]
-  deleteMany?: Prisma.EventScalarWhereInput | Prisma.EventScalarWhereInput[]
-}
-
-export type EventUncheckedUpdateManyWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.EventCreateWithoutUserInput, Prisma.EventUncheckedCreateWithoutUserInput> | Prisma.EventCreateWithoutUserInput[] | Prisma.EventUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.EventCreateOrConnectWithoutUserInput | Prisma.EventCreateOrConnectWithoutUserInput[]
-  upsert?: Prisma.EventUpsertWithWhereUniqueWithoutUserInput | Prisma.EventUpsertWithWhereUniqueWithoutUserInput[]
-  createMany?: Prisma.EventCreateManyUserInputEnvelope
-  set?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-  disconnect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-  delete?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-  connect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
-  update?: Prisma.EventUpdateWithWhereUniqueWithoutUserInput | Prisma.EventUpdateWithWhereUniqueWithoutUserInput[]
-  updateMany?: Prisma.EventUpdateManyWithWhereWithoutUserInput | Prisma.EventUpdateManyWithWhereWithoutUserInput[]
-  deleteMany?: Prisma.EventScalarWhereInput | Prisma.EventScalarWhereInput[]
-}
-
 export type BigIntFieldUpdateOperationsInput = {
   set?: bigint | number
   increment?: bigint | number
@@ -734,208 +592,10 @@ export type EventUpdateOneRequiredWithoutLedgerEntriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.EventUpdateToOneWithWhereWithoutLedgerEntriesInput, Prisma.EventUpdateWithoutLedgerEntriesInput>, Prisma.EventUncheckedUpdateWithoutLedgerEntriesInput>
 }
 
-export type EventCreateWithoutBusinessInput = {
-  id: string
-  aggregateId: string
-  aggregateType: string
-  aggregateVersion: number
-  globalPosition?: bigint | number
-  type: string
-  payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  mode: $Enums.Mode
-  causationId?: string | null
-  correlationId?: string | null
-  createdAt?: Date | string
-  branch?: Prisma.BranchCreateNestedOneWithoutEventsInput
-  user?: Prisma.UserCreateNestedOneWithoutEventsInput
-  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutEventInput
-}
-
-export type EventUncheckedCreateWithoutBusinessInput = {
-  id: string
-  branchId?: string | null
-  aggregateId: string
-  aggregateType: string
-  aggregateVersion: number
-  globalPosition?: bigint | number
-  type: string
-  payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  mode: $Enums.Mode
-  userId?: string | null
-  causationId?: string | null
-  correlationId?: string | null
-  createdAt?: Date | string
-  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutEventInput
-}
-
-export type EventCreateOrConnectWithoutBusinessInput = {
-  where: Prisma.EventWhereUniqueInput
-  create: Prisma.XOR<Prisma.EventCreateWithoutBusinessInput, Prisma.EventUncheckedCreateWithoutBusinessInput>
-}
-
-export type EventCreateManyBusinessInputEnvelope = {
-  data: Prisma.EventCreateManyBusinessInput | Prisma.EventCreateManyBusinessInput[]
-  skipDuplicates?: boolean
-}
-
-export type EventUpsertWithWhereUniqueWithoutBusinessInput = {
-  where: Prisma.EventWhereUniqueInput
-  update: Prisma.XOR<Prisma.EventUpdateWithoutBusinessInput, Prisma.EventUncheckedUpdateWithoutBusinessInput>
-  create: Prisma.XOR<Prisma.EventCreateWithoutBusinessInput, Prisma.EventUncheckedCreateWithoutBusinessInput>
-}
-
-export type EventUpdateWithWhereUniqueWithoutBusinessInput = {
-  where: Prisma.EventWhereUniqueInput
-  data: Prisma.XOR<Prisma.EventUpdateWithoutBusinessInput, Prisma.EventUncheckedUpdateWithoutBusinessInput>
-}
-
-export type EventUpdateManyWithWhereWithoutBusinessInput = {
-  where: Prisma.EventScalarWhereInput
-  data: Prisma.XOR<Prisma.EventUpdateManyMutationInput, Prisma.EventUncheckedUpdateManyWithoutBusinessInput>
-}
-
-export type EventScalarWhereInput = {
-  AND?: Prisma.EventScalarWhereInput | Prisma.EventScalarWhereInput[]
-  OR?: Prisma.EventScalarWhereInput[]
-  NOT?: Prisma.EventScalarWhereInput | Prisma.EventScalarWhereInput[]
-  id?: Prisma.StringFilter<"Event"> | string
-  businessId?: Prisma.StringNullableFilter<"Event"> | string | null
-  branchId?: Prisma.StringNullableFilter<"Event"> | string | null
-  aggregateId?: Prisma.StringFilter<"Event"> | string
-  aggregateType?: Prisma.StringFilter<"Event"> | string
-  aggregateVersion?: Prisma.IntFilter<"Event"> | number
-  globalPosition?: Prisma.BigIntFilter<"Event"> | bigint | number
-  type?: Prisma.StringFilter<"Event"> | string
-  payload?: Prisma.JsonFilter<"Event">
-  mode?: Prisma.EnumModeFilter<"Event"> | $Enums.Mode
-  userId?: Prisma.StringNullableFilter<"Event"> | string | null
-  causationId?: Prisma.StringNullableFilter<"Event"> | string | null
-  correlationId?: Prisma.StringNullableFilter<"Event"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
-}
-
-export type EventCreateWithoutBranchInput = {
-  id: string
-  aggregateId: string
-  aggregateType: string
-  aggregateVersion: number
-  globalPosition?: bigint | number
-  type: string
-  payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  mode: $Enums.Mode
-  causationId?: string | null
-  correlationId?: string | null
-  createdAt?: Date | string
-  business?: Prisma.BusinessCreateNestedOneWithoutEventsInput
-  user?: Prisma.UserCreateNestedOneWithoutEventsInput
-  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutEventInput
-}
-
-export type EventUncheckedCreateWithoutBranchInput = {
-  id: string
-  businessId?: string | null
-  aggregateId: string
-  aggregateType: string
-  aggregateVersion: number
-  globalPosition?: bigint | number
-  type: string
-  payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  mode: $Enums.Mode
-  userId?: string | null
-  causationId?: string | null
-  correlationId?: string | null
-  createdAt?: Date | string
-  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutEventInput
-}
-
-export type EventCreateOrConnectWithoutBranchInput = {
-  where: Prisma.EventWhereUniqueInput
-  create: Prisma.XOR<Prisma.EventCreateWithoutBranchInput, Prisma.EventUncheckedCreateWithoutBranchInput>
-}
-
-export type EventCreateManyBranchInputEnvelope = {
-  data: Prisma.EventCreateManyBranchInput | Prisma.EventCreateManyBranchInput[]
-  skipDuplicates?: boolean
-}
-
-export type EventUpsertWithWhereUniqueWithoutBranchInput = {
-  where: Prisma.EventWhereUniqueInput
-  update: Prisma.XOR<Prisma.EventUpdateWithoutBranchInput, Prisma.EventUncheckedUpdateWithoutBranchInput>
-  create: Prisma.XOR<Prisma.EventCreateWithoutBranchInput, Prisma.EventUncheckedCreateWithoutBranchInput>
-}
-
-export type EventUpdateWithWhereUniqueWithoutBranchInput = {
-  where: Prisma.EventWhereUniqueInput
-  data: Prisma.XOR<Prisma.EventUpdateWithoutBranchInput, Prisma.EventUncheckedUpdateWithoutBranchInput>
-}
-
-export type EventUpdateManyWithWhereWithoutBranchInput = {
-  where: Prisma.EventScalarWhereInput
-  data: Prisma.XOR<Prisma.EventUpdateManyMutationInput, Prisma.EventUncheckedUpdateManyWithoutBranchInput>
-}
-
-export type EventCreateWithoutUserInput = {
-  id: string
-  aggregateId: string
-  aggregateType: string
-  aggregateVersion: number
-  globalPosition?: bigint | number
-  type: string
-  payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  mode: $Enums.Mode
-  causationId?: string | null
-  correlationId?: string | null
-  createdAt?: Date | string
-  business?: Prisma.BusinessCreateNestedOneWithoutEventsInput
-  branch?: Prisma.BranchCreateNestedOneWithoutEventsInput
-  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutEventInput
-}
-
-export type EventUncheckedCreateWithoutUserInput = {
-  id: string
-  businessId?: string | null
-  branchId?: string | null
-  aggregateId: string
-  aggregateType: string
-  aggregateVersion: number
-  globalPosition?: bigint | number
-  type: string
-  payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  mode: $Enums.Mode
-  causationId?: string | null
-  correlationId?: string | null
-  createdAt?: Date | string
-  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutEventInput
-}
-
-export type EventCreateOrConnectWithoutUserInput = {
-  where: Prisma.EventWhereUniqueInput
-  create: Prisma.XOR<Prisma.EventCreateWithoutUserInput, Prisma.EventUncheckedCreateWithoutUserInput>
-}
-
-export type EventCreateManyUserInputEnvelope = {
-  data: Prisma.EventCreateManyUserInput | Prisma.EventCreateManyUserInput[]
-  skipDuplicates?: boolean
-}
-
-export type EventUpsertWithWhereUniqueWithoutUserInput = {
-  where: Prisma.EventWhereUniqueInput
-  update: Prisma.XOR<Prisma.EventUpdateWithoutUserInput, Prisma.EventUncheckedUpdateWithoutUserInput>
-  create: Prisma.XOR<Prisma.EventCreateWithoutUserInput, Prisma.EventUncheckedCreateWithoutUserInput>
-}
-
-export type EventUpdateWithWhereUniqueWithoutUserInput = {
-  where: Prisma.EventWhereUniqueInput
-  data: Prisma.XOR<Prisma.EventUpdateWithoutUserInput, Prisma.EventUncheckedUpdateWithoutUserInput>
-}
-
-export type EventUpdateManyWithWhereWithoutUserInput = {
-  where: Prisma.EventScalarWhereInput
-  data: Prisma.XOR<Prisma.EventUpdateManyMutationInput, Prisma.EventUncheckedUpdateManyWithoutUserInput>
-}
-
 export type EventCreateWithoutLedgerEntriesInput = {
   id: string
+  businessId?: string | null
+  branchId?: string | null
   aggregateId: string
   aggregateType: string
   aggregateVersion: number
@@ -943,12 +603,10 @@ export type EventCreateWithoutLedgerEntriesInput = {
   type: string
   payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode: $Enums.Mode
+  userId?: string | null
   causationId?: string | null
   correlationId?: string | null
   createdAt?: Date | string
-  business?: Prisma.BusinessCreateNestedOneWithoutEventsInput
-  branch?: Prisma.BranchCreateNestedOneWithoutEventsInput
-  user?: Prisma.UserCreateNestedOneWithoutEventsInput
 }
 
 export type EventUncheckedCreateWithoutLedgerEntriesInput = {
@@ -986,6 +644,8 @@ export type EventUpdateToOneWithWhereWithoutLedgerEntriesInput = {
 
 export type EventUpdateWithoutLedgerEntriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
@@ -993,12 +653,10 @@ export type EventUpdateWithoutLedgerEntriesInput = {
   type?: Prisma.StringFieldUpdateOperationsInput | string
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  business?: Prisma.BusinessUpdateOneWithoutEventsNestedInput
-  branch?: Prisma.BranchUpdateOneWithoutEventsNestedInput
-  user?: Prisma.UserUpdateOneWithoutEventsNestedInput
 }
 
 export type EventUncheckedUpdateWithoutLedgerEntriesInput = {
@@ -1013,204 +671,6 @@ export type EventUncheckedUpdateWithoutLedgerEntriesInput = {
   payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type EventCreateManyBusinessInput = {
-  id: string
-  branchId?: string | null
-  aggregateId: string
-  aggregateType: string
-  aggregateVersion: number
-  globalPosition?: bigint | number
-  type: string
-  payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  mode: $Enums.Mode
-  userId?: string | null
-  causationId?: string | null
-  correlationId?: string | null
-  createdAt?: Date | string
-}
-
-export type EventUpdateWithoutBusinessInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
-  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
-  causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  branch?: Prisma.BranchUpdateOneWithoutEventsNestedInput
-  user?: Prisma.UserUpdateOneWithoutEventsNestedInput
-  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutEventNestedInput
-}
-
-export type EventUncheckedUpdateWithoutBusinessInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
-  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutEventNestedInput
-}
-
-export type EventUncheckedUpdateManyWithoutBusinessInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
-  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type EventCreateManyBranchInput = {
-  id: string
-  businessId?: string | null
-  aggregateId: string
-  aggregateType: string
-  aggregateVersion: number
-  globalPosition?: bigint | number
-  type: string
-  payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  mode: $Enums.Mode
-  userId?: string | null
-  causationId?: string | null
-  correlationId?: string | null
-  createdAt?: Date | string
-}
-
-export type EventUpdateWithoutBranchInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
-  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
-  causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  business?: Prisma.BusinessUpdateOneWithoutEventsNestedInput
-  user?: Prisma.UserUpdateOneWithoutEventsNestedInput
-  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutEventNestedInput
-}
-
-export type EventUncheckedUpdateWithoutBranchInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
-  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutEventNestedInput
-}
-
-export type EventUncheckedUpdateManyWithoutBranchInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
-  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type EventCreateManyUserInput = {
-  id: string
-  businessId?: string | null
-  branchId?: string | null
-  aggregateId: string
-  aggregateType: string
-  aggregateVersion: number
-  globalPosition?: bigint | number
-  type: string
-  payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  mode: $Enums.Mode
-  causationId?: string | null
-  correlationId?: string | null
-  createdAt?: Date | string
-}
-
-export type EventUpdateWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
-  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
-  causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  business?: Prisma.BusinessUpdateOneWithoutEventsNestedInput
-  branch?: Prisma.BranchUpdateOneWithoutEventsNestedInput
-  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutEventNestedInput
-}
-
-export type EventUncheckedUpdateWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
-  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
-  causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutEventNestedInput
-}
-
-export type EventUncheckedUpdateManyWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
-  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
   causationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   correlationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1262,9 +722,6 @@ export type EventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   causationId?: boolean
   correlationId?: boolean
   createdAt?: boolean
-  business?: boolean | Prisma.Event$businessArgs<ExtArgs>
-  branch?: boolean | Prisma.Event$branchArgs<ExtArgs>
-  user?: boolean | Prisma.Event$userArgs<ExtArgs>
   ledgerEntries?: boolean | Prisma.Event$ledgerEntriesArgs<ExtArgs>
   _count?: boolean | Prisma.EventCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["event"]>
@@ -1284,9 +741,6 @@ export type EventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   causationId?: boolean
   correlationId?: boolean
   createdAt?: boolean
-  business?: boolean | Prisma.Event$businessArgs<ExtArgs>
-  branch?: boolean | Prisma.Event$branchArgs<ExtArgs>
-  user?: boolean | Prisma.Event$userArgs<ExtArgs>
 }, ExtArgs["result"]["event"]>
 
 export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1304,9 +758,6 @@ export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   causationId?: boolean
   correlationId?: boolean
   createdAt?: boolean
-  business?: boolean | Prisma.Event$businessArgs<ExtArgs>
-  branch?: boolean | Prisma.Event$branchArgs<ExtArgs>
-  user?: boolean | Prisma.Event$userArgs<ExtArgs>
 }, ExtArgs["result"]["event"]>
 
 export type EventSelectScalar = {
@@ -1328,29 +779,15 @@ export type EventSelectScalar = {
 
 export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "aggregateId" | "aggregateType" | "aggregateVersion" | "globalPosition" | "type" | "payload" | "mode" | "userId" | "causationId" | "correlationId" | "createdAt", ExtArgs["result"]["event"]>
 export type EventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  business?: boolean | Prisma.Event$businessArgs<ExtArgs>
-  branch?: boolean | Prisma.Event$branchArgs<ExtArgs>
-  user?: boolean | Prisma.Event$userArgs<ExtArgs>
   ledgerEntries?: boolean | Prisma.Event$ledgerEntriesArgs<ExtArgs>
   _count?: boolean | Prisma.EventCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type EventIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  business?: boolean | Prisma.Event$businessArgs<ExtArgs>
-  branch?: boolean | Prisma.Event$branchArgs<ExtArgs>
-  user?: boolean | Prisma.Event$userArgs<ExtArgs>
-}
-export type EventIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  business?: boolean | Prisma.Event$businessArgs<ExtArgs>
-  branch?: boolean | Prisma.Event$branchArgs<ExtArgs>
-  user?: boolean | Prisma.Event$userArgs<ExtArgs>
-}
+export type EventIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type EventIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Event"
   objects: {
-    business: Prisma.$BusinessPayload<ExtArgs> | null
-    branch: Prisma.$BranchPayload<ExtArgs> | null
-    user: Prisma.$UserPayload<ExtArgs> | null
     ledgerEntries: Prisma.$LedgerEntryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1762,9 +1199,6 @@ readonly fields: EventFieldRefs;
  */
 export interface Prisma__EventClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  business<T extends Prisma.Event$businessArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$businessArgs<ExtArgs>>): Prisma.Prisma__BusinessClient<runtime.Types.Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  branch<T extends Prisma.Event$branchArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$branchArgs<ExtArgs>>): Prisma.Prisma__BranchClient<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  user<T extends Prisma.Event$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   ledgerEntries<T extends Prisma.Event$ledgerEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$ledgerEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LedgerEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2063,10 +1497,6 @@ export type EventCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    */
   data: Prisma.EventCreateManyInput | Prisma.EventCreateManyInput[]
   skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.EventIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -2137,10 +1567,6 @@ export type EventUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many Events to update.
    */
   limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.EventIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -2207,63 +1633,6 @@ export type EventDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Limit how many Events to delete.
    */
   limit?: number
-}
-
-/**
- * Event.business
- */
-export type Event$businessArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Business
-   */
-  select?: Prisma.BusinessSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Business
-   */
-  omit?: Prisma.BusinessOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.BusinessInclude<ExtArgs> | null
-  where?: Prisma.BusinessWhereInput
-}
-
-/**
- * Event.branch
- */
-export type Event$branchArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Branch
-   */
-  select?: Prisma.BranchSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Branch
-   */
-  omit?: Prisma.BranchOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.BranchInclude<ExtArgs> | null
-  where?: Prisma.BranchWhereInput
-}
-
-/**
- * Event.user
- */
-export type Event$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the User
-   */
-  select?: Prisma.UserSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the User
-   */
-  omit?: Prisma.UserOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
 }
 
 /**

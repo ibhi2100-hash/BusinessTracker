@@ -1,8 +1,8 @@
 // SQLiteBranchRepository.ts
 
 import { Branch } from "@business/shared-types";
-import { getDB } from "../database/db";
-import { IProjectionEntityRepository } from "./IProjectionEntityRepository";
+import { getDB } from "../../sqlite/database/db";
+import { IProjectionEntityRepository } from "./repositoryContract";
 
 export class SQLiteBranchRepository
 implements IProjectionEntityRepository<Branch> {

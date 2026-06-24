@@ -22,7 +22,7 @@ export class PrismaProjectionRepository
 
       case "business":
         return this.tx.business.findFirst({
-            where: { id: aggregateId}
+            where: { id: aggregateId},
         });
 
       case "branch":
@@ -49,19 +49,40 @@ export class PrismaProjectionRepository
     switch (projection) {
 
       case "product":
-        await this.tx.product.update({ where: ({ id: aggregateId } as unknown) as Prisma.ProductWhereUniqueInput, data: state });
+        await this.tx.product.upsert({ where: ({ id: aggregateId } as unknown) as Prisma.ProductWhereUniqueInput,
+          update: state,
+
+          create: state
+        
+        });
         return;
 
       case "business":
-        await this.tx.business.update({ where: { id: aggregateId }, data: state });
+        await this.tx.business.upsert({ 
+          where: { id: aggregateId },
+           
+        update: state,
+
+        create: state
+      
+      });
         return;
 
-      case "branch":
-        await this.tx.branch.updateMany({ where: { id: aggregateId }, data: state });
+      case "branches":
+        await this.tx.branch.upsert({ where: { id: aggregateId },
+           update: state,
+
+           create: state
+          
+          });
         return;
 
       case "inventory":
-        await this.tx.inventory.update({ where: { id: aggregateId }, data: state });
+        await this.tx.inventory.upsert({ where: { id: aggregateId }, 
+          update: state,
+
+          create: state
+         });
         return;
 
       default:

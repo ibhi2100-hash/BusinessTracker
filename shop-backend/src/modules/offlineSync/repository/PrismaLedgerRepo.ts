@@ -28,7 +28,6 @@ export class PrismaLedgerRepo
 
         businessId: entry.businessId,
         branchId: entry.branchId,
-        branchBusinessId: entry.businessId,
 
         account: entry.account,
         direction: entry.direction,

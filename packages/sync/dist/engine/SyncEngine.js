@@ -12,7 +12,7 @@ class SyncEngine {
     }
     async sync() {
         const pending = await this.repository.getPendingEvents();
-        if (!pending.length)
+        if (pending.length === 0)
             return;
         const groups = (0, groupEventsByAggregate_1.groupByAggregate)(pending);
         for (const group of groups) {
