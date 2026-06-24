@@ -2,5 +2,5 @@
 import CashflowTable from "@/components/capital/capitalPage";
 
 export default function Page() {
-  return <CashflowTable  action="INJECT" mode="LIVE" />;
+  return <CashflowTable  mode="LIVE"  action= "WITHDRAW" />;
 }

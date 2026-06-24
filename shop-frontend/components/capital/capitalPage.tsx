@@ -24,6 +24,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 
 interface CashflowTableProps {
   mode: "OPENING" | "LIVE";
+  action: "INJECT" | "WITHDRAW";
   onCompleted?: () => void;
 }
 
@@ -40,6 +41,7 @@ type CashEntry = {
 
 export default function CashflowTable({
   mode,
+  action,
   onCompleted,
 }: CashflowTableProps) {
   const [loading, setLoading] = useState(false);
@@ -218,8 +220,7 @@ export default function CashflowTable({
             inputMode="numeric"
           />
         </div>
-
-        <div className="grid grid-cols-3 gap-3">
+      { action === "INJECT"  && (
           <GlassButton
             disabled={
               isDisabled || loading
@@ -231,7 +232,8 @@ export default function CashflowTable({
           >
             Inject
           </GlassButton>
-
+          )}
+        { action   && (
           <GlassButton
             variant="danger"
             disabled={
@@ -248,6 +250,9 @@ export default function CashflowTable({
             Withdraw
           </GlassButton>
 
+        )}
+
+
           <GlassButton
             variant="secondary"
             onClick={() =>
@@ -261,7 +266,7 @@ export default function CashflowTable({
           >
             Refresh
           </GlassButton>
-        </div>
+        
       </GlassCard>
 
       <div className="space-y-3">

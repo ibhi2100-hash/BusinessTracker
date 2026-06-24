@@ -1,0 +1,11 @@
+{
+    "businessId",
+    "snapshotVersion",
+    "lastGlobalPosition",
+    "snapshotChecksum",
+    "eventsChecksum",
+    "projectionVersion",
+    "schemaVersion",
+    "bootstrapTime",
+    "deviceId"
+}
