@@ -2,7 +2,9 @@ import { createEntity } from "@/offline/core/entities/entityFactory";
 import { BaseEvent } from "@business/shared-types";
 import { getDeviceId } from "@/src/utils/deviceIdGenerator";
 import { nextLogicClock } from "@/src/utils/nextLogicClock";
-import { AppDB } from "@/src/db";
+import { StorageClient } from "@/src/offline/sqlite/bus/StorageBus"
+import { AggregateState } from "@business/sync";
+
 
 type CreateEventInput = {
   type: string;
@@ -28,36 +30,61 @@ type CreateEventInput = {
 };
 
 export async function createEvent(
-  db: AppDB,
   input: CreateEventInput
 ): Promise<BaseEvent> {
- const deviceId = await getDeviceId();
 
- const aggregate = await db.aggregates
-  .where("[aggregateType+aggregateId]")
-  .equals([input.aggregateType, input.aggregateId])
-  .first();
+    const deviceId = await getDeviceId();
 
-const currentVersion = aggregate?.version ?? 0;
-const logicClock = await nextLogicClock(db, deviceId);
+    const db = new StorageClient();
 
-  return createEntity({
-    aggregateId: input.aggregateId,
-    aggregateType: input.aggregateType,
-    expectedAggregateVersion: currentVersion,
-    isCreationEvent: !aggregate,
+    const rows = await db.query<AggregateState>(`
+        SELECT version
+        FROM aggregates
+        WHERE aggregateId = ?
+        AND aggregateType = ?
+        LIMIT 1
+    `, [
+        input.aggregateId,
+        input.aggregateType
+    ]);
 
-    type: input.type,
-    payload: input.payload,
+    const aggregate = rows[0];
 
-    mode: input.mode,
-    businessId: input.businessId ?? null,
-    branchId: input.branchId ?? null,
+    const expectedAggregateVersion =
+        aggregate?.version ?? 0;
 
-    scope: input.scope,
-    logicClock,
-    deviceId,
-    userId: input.userId,
-    status: input.status ?? "PENDING",
-  })
+    const logicClock =
+        await nextLogicClock(db, deviceId);
+
+    return createEntity({
+
+        aggregateId: input.aggregateId,
+        aggregateType: input.aggregateType,
+
+        expectedAggregateVersion,
+
+        isCreationEvent: !aggregate,
+
+        type: input.type,
+
+        payload: input.payload,
+
+        mode: input.mode,
+
+        businessId: input.businessId ?? null,
+
+        branchId: input.branchId ?? null,
+
+        userId: input.userId,
+
+        scope: input.scope,
+
+        deviceId,
+
+        logicClock,
+
+        syncStatus: "PENDING"
+
+    });
+
 }

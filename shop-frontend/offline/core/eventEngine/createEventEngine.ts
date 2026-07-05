@@ -1,27 +1,25 @@
-import { AppDB } from "@/src/db";
 import { BaseEventMapper } from "@/src/mappers/BaseEventMapper";
-import { IndexedDbRepository } from "@/src/repositories/EventRepo/IndexedDbEventRepo";
 import { InMemoryEventBus } from "@business/event-bus";
 import { BaseEvent, IntegrationEvent } from "@business/shared-types";
 import { CreateProjectionEngine } from "../events/projectors/projectEngine";
+import { SQLiteEventRepository } from "@/src/offline/repositories/SQLiteEventRepository/eventStore";
 import { LedgerEngine } from "@business/ledger-engine";
 import { createFrontendLedgerEngine } from "../LedgerEngine";
-import { SnapshotScheduler } from "@business/snapshot-engine";
+import { StorageClient } from "@/src/offline/sqlite/bus/StorageBus"
 import { EventPipeline } from "@business/events";
 import { ProjectionSubscriber } from "@business/projection-families";
 import { LedgerSubscriber } from "@business/ledger-engine";
 
 export function createFrontendEventEngine(
-    db: AppDB
 ){
     const bus = new InMemoryEventBus<IntegrationEvent>();
-
-    const repo = new IndexedDbRepository(db);
+    const storage = new StorageClient()
+    const repo = new SQLiteEventRepository(storage);
 
     const mapper = new BaseEventMapper();
 
-    const projectionEngine = CreateProjectionEngine(db);
-    const ledgerEngine = createFrontendLedgerEngine(db);
+    const projectionEngine = CreateProjectionEngine();
+    const ledgerEngine = createFrontendLedgerEngine();
 
     const projectionSubscriber = 
         new ProjectionSubscriber(projectionEngine);

@@ -8,6 +8,8 @@ export type User = {
     branchId?: string;
     onboardingCompleted?: boolean;
     isActive?: boolean;
+    version?: number;
+    lastEventId?: string;
     createdAt?: Date;
     updatedAt?: Date;
 };

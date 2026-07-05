@@ -1,4 +1,4 @@
-import { LocalSyncRepository } from "../repositories/syncRepo/IndexedDbPendingEventRepo";
+import { SQLiteSyncRepository } from "../offline/repositories/SQLiteSyncRepository/SQLiteSyncRepository";
 import { HttpSyncApi } from "../sync/HttpSyncApi";
 import { ExponentialRetryPolicy } from "../sync/RetryPolicies/ExponentialRetryPolicy";
 
@@ -20,7 +20,7 @@ export function createSyncManager() {
   // LOCAL REPOSITORY
   // -------------------------
   const repository =
-    new LocalSyncRepository(db);
+    new SQLiteSyncRepository();
 
   // -------------------------
   // API (server sync layer)

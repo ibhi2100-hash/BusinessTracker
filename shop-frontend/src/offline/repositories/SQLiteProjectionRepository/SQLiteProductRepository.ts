@@ -48,10 +48,19 @@ implements IProjectionEntityRepository<Product> {
         businessId,
         branchId,
         name,
+        imageUrl,
+        description,
+        costPrice,
         sellingPrice,
-        costPrice
+        category,
+        reorderLevel,
+        isActive,
+        isDeleted
+        createdAt,
+        updatedAt,
+        deletedAt
       )
-      VALUES (?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 
       ON CONFLICT(id)
       DO UPDATE SET
@@ -64,8 +73,17 @@ implements IProjectionEntityRepository<Product> {
         state.businessId,
         state.branchId,
         state.name,
+        state.imageUrl ?? "",
+        state.description ?? "",
+        state.costPrice,
         state.price,
-        state.costPrice
+        state.category ?? "",
+        state.reorderLevel,
+        state.isActive,
+        state.isDeleted,
+        state.createdAt,
+        state.updatedAt ?? "",
+        state.deletedAt ?? ""
       ]
     );
   }

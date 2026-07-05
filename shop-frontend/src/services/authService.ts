@@ -1,26 +1,20 @@
-import { AuthRepo } from "../repositories/auth/authRepo";
+import { SQLiteAuthRepository } from "../offline/repositories/SQLiteAuthRepository/SQLiteAuthRepository";
 import { useAuthStore } from "../store/useAuthStore";
 
 export const AuthService = {
   async saveUser(userData: any) {
-    const userId = userData.id;
-    if (!userId) throw new Error("User ID missing");
+    
+    const repo = new SQLiteAuthRepository();
 
-    const repo = new AuthRepo(userId);
-
-    const user = await repo.saveUser(userData);
-
-    useAuthStore.getState().setUser(user);
+    const user = await repo.upsert(userData.id, userData);
 
     return user;
   },
 
-  async getCurrentUser() {
-    const userId = useAuthStore.getState().user?.id;
-    if (!userId) return null;
+  async getCurrentUser(id: string) {
 
-    const repo = new AuthRepo(userId);
+    const repo = new SQLiteAuthRepository();
 
-    return await repo.getUser();
+    return await repo.findById(id);
   },
 };

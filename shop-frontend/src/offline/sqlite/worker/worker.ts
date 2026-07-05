@@ -1,57 +1,25 @@
-import sqlite3InitModule from "@sqlite.org/sqlite-wasm";
-let db: any;
+import { resolveEngine } from "./router/EngineResolver";
+import { resolveHandler } from "./router/HandlerResolver";
+import { WorkerRequest } from "../protocol/WorkerRequest";
+import { WorkerResponse } from "../protocol/WorkerResponse";
 
-export async function initDB() {
-    const sqlite3 = await sqlite3InitModule();
 
-    const oo = sqlite3.oo1;
+export class WorkerRouter {
+  async routeRequest(request: WorkerRequest) {
 
-    db = new oo.DB("biztru.db", "c");
+    const engine = 
+      resolveEngine(request.database);
+    
+    const handler =
+      resolveHandler(request.operation);
 
-    console.log("SQLite initialized");
-}
+    const result =
+      await handler(engine, request.payload);
 
-self.onmessage = async (event) => {
-    const { id, type , payload } = event.data;
+    return {
+      id: request.id,
+      result: result
+    } as WorkerResponse;
 
-    try {
-        if(type === "INIT"){
-            await initDB();
-
-            self.postMessage({
-                id,
-                result: "READY"
-            });
-
-            return;
-        }
-
-        if (type === "RUN") {
-            const { sql, params } = payload;
-
-            const rows: any[] = [];
-
-            db.exec({
-                sql,
-                bind: params,
-                rowMode: "object",
-                callback: (row: any) => {
-                rows.push(row);
-                },
-            });
-
-  self.postMessage({
-    id,
-    result: rows,
-  });
-
-  return;
-}
-        
-    } catch (error) {
-        self.postMessage({
-            id,
-            error: error.message
-        })
-    }
+  }
 }

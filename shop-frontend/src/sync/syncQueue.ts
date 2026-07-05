@@ -1,4 +1,4 @@
-import { getDb } from "../db";
+import { getDB } from "../offline/sqlite/database/db";
 import { useAuthStore } from "../store/useAuthStore";
 import { createSyncManager } from "../services/sync";
 
@@ -10,12 +10,11 @@ export const queueSync = async () => {
     queued = true;
     return;
   }
-  const userId = useAuthStore.getState().user?.id
-  if(!userId) return;
-  const db  = getDb(userId)
+
+  const db  = getDB()
   syncing = true;
   
-  const syncManager = createSyncManager(db)
+  const syncManager = createSyncManager()
   try {
     await syncManager.sync();
   } finally {

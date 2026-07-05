@@ -1,8 +1,6 @@
   "use client";
 
 import { useEffect } from "react";
-import { startBusinessSubscriber, stopBusinessSubscriber } from "@/offline/subscribers/businessSubscriber";
-import { startInventorySubscriber, stopInventorySubscriber } from "@/offline/subscribers/inventorySubscriber";
 import { useAuthStore } from "@/src/store/useAuthStore";
 import { runSync } from "@/lib/syncMonitor";
 
@@ -14,16 +12,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       await runSync()
     })()
     if (!user?.id) return;
-   
-
-    // 🔥 START ALL CORE SUBSCRIBERS ONCE USER EXISTS
-    startBusinessSubscriber();
-    startInventorySubscriber();
-
-    return () => {
-      stopBusinessSubscriber();
-      stopInventorySubscriber();
-    };
+  
   }, [user?.id]);
 
   return children;

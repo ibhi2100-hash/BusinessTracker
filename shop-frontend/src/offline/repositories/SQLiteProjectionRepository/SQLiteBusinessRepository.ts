@@ -45,10 +45,16 @@ export class SQLiteBusinessRepository
       `
       INSERT INTO businesses (
         id,
+        userId,
         name,
-        address
+        address,
+        createdAt,
+        activatedAt,
+        isOnboarding,
+        onboardingCompleted,
+        status
       )
-      VALUES (?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 
       ON CONFLICT(id)
       DO UPDATE SET
@@ -56,9 +62,16 @@ export class SQLiteBusinessRepository
         address = excluded.address
       `,
       [
-        id,
+        id === state.id ?
+        id : state.id,
+        state.userId,
         state.name,
-        state.address ?? ""
+        state.address ?? "",
+        state.createdAt,
+        state.activatedAt ?? "",
+        state.isOnboarding,
+        state.onboardingCompleted,
+        state.status
       ]
     );
   }

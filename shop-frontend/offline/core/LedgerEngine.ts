@@ -1,13 +1,11 @@
 import { LedgerEngine } from "@business/ledger-engine";
 import { generateLedgerEntries } from "@business/ledger-engine";
-import { AppDB } from "@/src/db";
-import { IndexedDbLedgerRepo } from "@/src/repositories/ledgerRepo/ledgerRepo";
+import { SQLiteLedgerRepository } from "@/src/offline/repositories/SQLiteLedgerRepository/SQLiteLedgerRepository";
 
 export function createFrontendLedgerEngine(
-  db: AppDB 
 ) {
 
-  const ledgerRepo = new IndexedDbLedgerRepo(db)
+  const ledgerRepo = new SQLiteLedgerRepository()
 
   
 

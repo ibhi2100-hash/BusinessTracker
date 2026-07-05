@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, RegisterInput } from "@/lib/validations/auth.schema";
-import { AuthRepo } from "@/src/repositories/auth/authRepo"
+import { SQLiteAuthRepository } from "@/src/offline/repositories/SQLiteAuthRepository/SQLiteAuthRepository";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -15,7 +15,6 @@ import {
   BarChart3,
 } from "lucide-react";
 
-import { AuthService } from "@/src/services/authService";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -55,14 +54,19 @@ export default function RegisterPage() {
         throw new Error(result.message || "Registration failed");
       }
       localStorage.setItem("accessToken", result.accessToken);
-      const authRepo = new AuthRepo(result.user.id);
+      const authRepo = new SQLiteAuthRepository();
 
-      await AuthService.saveUser(result.user);
-      await authRepo.saveAuth({
-        user: result.user,
-        business: result.business,
-        branches: result.branches,
-        activeBranch: result.activeBranch,
+      await authRepo.upsert(result.user.id, {
+        id: result.user.id,
+        businessId: result.user.businessId,
+        branchId: result.user.branchId,
+        name: result.user.name,
+        email: result.user.name,
+        role: result.user.role,
+        onboardingCompleted: result.user.onboardingCompleted,
+        isActive: result.user.isActive,
+        createdAt: result.user.createdAt
+
       });
 
       router.push("/step1-business");

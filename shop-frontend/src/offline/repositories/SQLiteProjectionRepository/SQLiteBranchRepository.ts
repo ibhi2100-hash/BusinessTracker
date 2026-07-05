@@ -48,8 +48,10 @@ implements IProjectionEntityRepository<Branch> {
         businessId,
         name,
         phone
+        isActive
+        createdAt
       )
-      VALUES (?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?)
 
       ON CONFLICT(id)
       DO UPDATE SET
@@ -60,7 +62,9 @@ implements IProjectionEntityRepository<Branch> {
         id,
         state.businessId,
         state.name,
-        state.phone ?? ""
+        state.phone ?? "",
+        state.isActive,
+        state.createdAt 
       ]
     );
   }

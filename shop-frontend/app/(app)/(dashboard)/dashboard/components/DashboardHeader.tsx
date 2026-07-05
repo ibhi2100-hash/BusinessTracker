@@ -20,15 +20,14 @@ import { BusinessEventTypes } from "@business/shared-types";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { GlassButton } from "@/components/ui/GlassButton";
 import { GlassIcon } from "@/components/ui/GlassIcon";
+import { useBusiness } from "@/src/offline/queryHooks/businessQueryHooks";
 
 export function DashboardHeader() {
   const router = useRouter();
 
-  const business = useBusinessStore((s) => s.business);
-
-  const role = useAuthStore(
-    (s) => s.user?.role
-  );
+  const business = useBusiness()
+  const role =  useAuth()
+  
 
   const {
     branches,

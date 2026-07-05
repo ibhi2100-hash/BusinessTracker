@@ -81,11 +81,11 @@ ORDER BY name;
         <button
           onClick={() =>
             setSql(`
-SELECT *
-FROM events
-ORDER BY created_at DESC
-LIMIT 100;
-`)
+                SELECT *
+                FROM events
+                ORDER BY createdAt DESC
+                LIMIT 100;
+                `)
           }
           className="border px-4 py-2 rounded"
         >
@@ -95,10 +95,10 @@ LIMIT 100;
         <button
           onClick={() =>
             setSql(`
-SELECT *
-FROM snapshots
-ORDER BY version DESC;
-`)
+                    SELECT *
+                    FROM snapshots
+                    ORDER BY version DESC;
+                    `)
           }
           className="border px-4 py-2 rounded"
         >

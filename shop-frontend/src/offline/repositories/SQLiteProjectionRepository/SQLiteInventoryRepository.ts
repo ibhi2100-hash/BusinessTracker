@@ -43,13 +43,15 @@ implements IProjectionEntityRepository<Inventory> {
 
     await db.query(
       `
-      INSERT INTO inventory (
+      INSERT INTO inventories (
         id,
         productId,
         branchId,
-        quantity
+        quantity,
+        costPrice,
+        createdAt,
       )
-      VALUES (?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?)
 
       ON CONFLICT(id)
       DO UPDATE SET
@@ -59,7 +61,9 @@ implements IProjectionEntityRepository<Inventory> {
         id,
         state.productId,
         state.branchId,
-        state.quantity
+        state.quantity,
+        state.costPrice,
+        state.createdAt
       ]
     );
   }

@@ -1,8 +1,7 @@
-import { getDb, runTx } from "@/src/db";
 import { queueSync } from "@/src/sync/syncQueue";
 import { validateEvent }from "./validationEngine";
 import { BaseEvent } from "@business/shared-types"
-import { createFrontendLedgerEngine } from "../LedgerEngine";
+import { StorageEngine } from "@/src/offline/sqlite/businessDatabase/engine/StorageEngine";
 import { createFrontendEventEngine } from "../eventEngine/createEventEngine";
 
 export const dispatchEvent =
@@ -12,27 +11,17 @@ export const dispatchEvent =
   ) => {
 
     validateEvent(event);
+    console.log("this is the event inside pipeline: ", event)
 
-    const db = getDb(event.userId);
-    if (!db) { return;}
+    const tx =
+      new StorageEngine();
 
-    await runTx(db, async () => {
-      const eventEngine = createFrontendEventEngine(db);
-      await eventEngine.pipeline.append(event)
+      await tx.transaction(async() => {
+        const eventpipeline = createFrontendEventEngine()
+        const pipeline = eventpipeline.pipeline
 
-      },
-      db.events,
-      db.aggregates,
-      db.snapshots,
-      db.replicaMeta,
-      db.products,
-      db.inventory,
-      db.businesses,
-      db.branches,
-      db.users,
-      db.ledgerEntries
-    );
-
+        await pipeline.append(event)
+      })
     /* --------------------------------
        SIDE EFFECTS AFTER COMMIT
     -------------------------------- */

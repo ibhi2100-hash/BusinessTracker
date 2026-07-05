@@ -1,14 +1,14 @@
 import { createEvent } from "@/offline/core/events/eventFactory";
 import { dispatchEvent } from "@/offline/core/events/eventDispatcher";
-import { useAuthStore } from "@/src/store/useAuthStore";
-import { useBusinessStore } from "../store/businessStore";
 import { useBranchStore } from "@/src/store/useBranchStore";
 import { nanoid } from "nanoid";
 import { InventoryEventType, OpeningEventType } from "@business/shared-types";
 import { useInventoryStore } from "../store/inventoryStore";
-import { getDb } from "../db";
+import { getDB } from "../offline/sqlite/database/db";
 import { AggregateType } from "@/offline/domain/aggregate";
 import { inventoryKey } from "../utils/keygenerator";
+import { useBusiness } from "../offline/queryHooks/businessQueryHooks";
+import { SQLiteAuthRepository } from "../offline/repositories/SQLiteAuthRepository/SQLiteAuthRepository";
 
 export const eventService = {
   async create(input: {
@@ -24,29 +24,24 @@ export const eventService = {
     
     }) 
     {
-      const user = useAuthStore.getState().user;
-      if (!user?.id) throw new Error("Not authenticated");
 
-      if (!input.aggregateId) {
+      console.log("This is the Input of the event that reach me: ", input)
+    
+    if (!input.aggregateId) {
     throw new Error("Missing aggregateId");
   }
   // Business Context 
 
-  const storedBusinessId =
-    useBusinessStore.getState().business?.id ?? null;
-  const storeBranchId =
-    useBranchStore.getState().activeBranchId ?? null;
-
+  const business =
+    await useBusiness()
+  
   // explicit overide wins
   const businessId = 
-    input.businessId !== undefined
-      ? input.businessId
-      : storedBusinessId;
+    input.businessId 
+  console.log("business From Backend: ", business)
 
   const branchId = 
-    input.branchId !== undefined
-      ? input.branchId
-      : storeBranchId
+    input.branchId 
 
       const scope =
       !businessId
@@ -54,11 +49,15 @@ export const eventService = {
         : !branchId
         ? "BUSINESS"
         : "BRANCH";
-      const db = await getDb(user.id)
-      const event = await createEvent(db, {
+      const db = getDB()
+      const repo= new SQLiteAuthRepository();
+      const users = await repo.findAll()
+      const userId = users[0]?.id;
+      console.log("this is the user that is return: ", users[0], "this is the array of the users: ", users)
+      const event = await createEvent({
         ...input,
         scope,
-        userId: user.id,
+        userId,
         businessId: businessId,
         branchId: branchId,
       });

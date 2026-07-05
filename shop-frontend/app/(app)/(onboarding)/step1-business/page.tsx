@@ -50,8 +50,8 @@ export default function Step2Business() {
         type: BusinessEventTypes.BUSINESS_CREATED,
         aggregateType: AggregateType.BUSINESS,
         aggregateId: businessId,
-        businessId: null,
-        branchId: null,
+        businessId: businessId,
+        branchId: branchId,
         mode: "OPENING",
         payload: {
           id: businessId,
@@ -65,7 +65,7 @@ export default function Step2Business() {
         aggregateType: AggregateType.BRANCH,
         aggregateId: branchId,
         businessId,
-        branchId: null,
+        branchId: branchId,
         mode: "OPENING",
         payload: {
           id: branchId,

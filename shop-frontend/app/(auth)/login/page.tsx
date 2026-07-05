@@ -17,8 +17,8 @@ import {
 } from "lucide-react";
 
 import { useAuthStore } from "@/src/store/useAuthStore";
-import { AuthRepo } from "@/src/repositories/auth/authRepo" 
-import { AuthService } from "@/src/services/authService";
+import { SQLiteAuthRepository } from "@/src/offline/repositories/SQLiteAuthRepository/SQLiteAuthRepository";
+
 
 export default function LoginPage() {
   const router = useRouter();
@@ -56,14 +56,9 @@ export default function LoginPage() {
         throw new Error(result.message || "Login failed");
       }
       localStorage.setItem("accessToken", result.accessToken);
-      const authRepo = new AuthRepo(result.user.id);
+      const authRepo = new SQLiteAuthRepository();
       useAuthStore.getState().setUser(result.user);
-      await authRepo.saveAuth({
-        user: result.user,
-        business: result.business,
-        branches: result.branches,
-        activeBranch: result.activeBranch,
-      });
+      await authRepo.upsert(result.user.id, result.user);
 
       login(
         result.user,
@@ -73,7 +68,6 @@ export default function LoginPage() {
         result.activeBranch.id
       );
 
-      await AuthService.saveUser(result.user);
 
       if (!result.user.businessId || !result.user.onboardingCompleted) {
         router.push("/onboarding/step1-business");

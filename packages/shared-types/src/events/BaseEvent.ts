@@ -6,8 +6,8 @@ export interface BaseEvent<T extends string = string, p = Record<string, any>> {
 
   aggregateId: string;
   aggregateType: string;
-  aggregateVersion: number;
-  expectedAggregateVersion?: number;
+  aggregateVersion?: number;
+  expectedAggregateVersion: number;
 
   type: T;
 
@@ -22,7 +22,7 @@ export interface BaseEvent<T extends string = string, p = Record<string, any>> {
 
   // sync + ordering
   createdAt: Date;       // device time
-  updatedAt?: Date;      // device time
+  updatedAt?: Date;     // device time
   logicClock: number;    // monotonic per device
   globalPosition?: bigint
 
@@ -31,13 +31,17 @@ export interface BaseEvent<T extends string = string, p = Record<string, any>> {
   userId: string ;
 
   // sync state
-  status: "PENDING" | "SYNCED"| "CONFLICT" | "RETRYING" | "FAILED" | "DEAD";
+  syncStatus: "PENDING" | "SYNCED"| "CONFLICT" | "RETRYING" | "FAILED" | "DEAD";
   synced: boolean;
+  syncedAt?: number;
   retryCount?: number;
   lastRetryAt?: number;
   nextRetryAt?: number;
   lastError?: string;
-  isCreationEvent: boolean;
+  isCreationEvent?: boolean;
   causationId?: string;
   correlationId?: string;
+
+  metadata?: string;
+  checksum?: string;
 }

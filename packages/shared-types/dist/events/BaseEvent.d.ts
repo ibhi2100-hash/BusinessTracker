@@ -3,8 +3,8 @@ export interface BaseEvent<T extends string = string, p = Record<string, any>> {
     id: string;
     aggregateId: string;
     aggregateType: string;
-    aggregateVersion: number;
-    expectedAggregateVersion?: number;
+    aggregateVersion?: number;
+    expectedAggregateVersion: number;
     type: T;
     payload: p;
     businessId?: string | null;
@@ -17,13 +17,16 @@ export interface BaseEvent<T extends string = string, p = Record<string, any>> {
     globalPosition?: bigint;
     deviceId: string;
     userId: string;
-    status: "PENDING" | "SYNCED" | "SYNCING" | "CONFLICT" | "RETRYING" | "FAILED" | "DEAD";
+    syncStatus: "PENDING" | "SYNCED" | "CONFLICT" | "RETRYING" | "FAILED" | "DEAD";
     synced: boolean;
+    syncedAt?: number;
     retryCount?: number;
     lastRetryAt?: number;
     nextRetryAt?: number;
     lastError?: string;
-    isCreationEvent: boolean;
+    isCreationEvent?: boolean;
     causationId?: string;
     correlationId?: string;
+    metadata?: string;
+    checksum?: string;
 }
