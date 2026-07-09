@@ -1,7 +1,21 @@
-import { ExecutionContext } from "../../../BizTru_Karnel/CommandFactory/ExecutionContext";  
 
+export interface ExecutionContextRecord {
+
+    userId: string;
+
+    businessId: string;
+
+    branchId: string;
+
+    deviceId: string;
+
+    sessionId: string;
+
+    logicalClock: number;
+
+}
 export interface ExecutionContextRepositoryContract {
 
-    getCurrentContext(): Promise<ExecutionContext>;
+    getCurrentContext(): Promise<ExecutionContextRecord>;
 
 }

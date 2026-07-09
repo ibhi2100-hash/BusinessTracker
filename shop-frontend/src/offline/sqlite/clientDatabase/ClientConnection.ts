@@ -1,7 +1,7 @@
 // ClientConnection.ts
 
 import sqlite3InitModule from "@sqlite.org/sqlite-wasm";
-import { IConnectionManager } from "../connectionManager/ConnetionContract";
+import { IConnectionManager } from "../types/IStorageContext";
 
 export class ClientConnection implements IConnectionManager{
 
@@ -12,12 +12,14 @@ export class ClientConnection implements IConnectionManager{
     private opened: boolean = false;
 
     async open() {
+        
 
         if (this.db) {
 
             return;
 
         }
+        
 
         this.sqlite3 =
             await sqlite3InitModule();
@@ -47,7 +49,7 @@ export class ClientConnection implements IConnectionManager{
 
     }
 
-    database() {
+    getDatabase() {
         if (!this.db) {
 
             throw new Error(

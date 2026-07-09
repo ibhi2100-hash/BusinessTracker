@@ -1,19 +1,13 @@
 // components/AppBootstrap.tsx
 
-"use client";
+import { StorageBus } from "@/src/offline/sqlite/bus/StorageBus";
 
-import { useEffect } from "react";
-import { initializeClientStorage } from "@/src/offline/sqlite/clientDatabase/ClientStorage";
+export class ClientDatabaseBootstrap {
+    constructor(
+        private readonly storage: StorageBus
+    ){}
 
-export function AppBootstrap() {
-
-    useEffect(() => {
-
-        initializeClientStorage()
-            .catch(console.error);
-
-    }, []);
-
-    return null;
-
+    async initialize(): Promise<void>{
+        await this.storage.openClient();
+    }
 }

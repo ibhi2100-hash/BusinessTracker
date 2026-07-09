@@ -1,17 +1,19 @@
 // SQLiteProductRepository.ts
 
 import { Product } from "@business/shared-types";
-import { getDB } from "../../sqlite/database/db";
+import { StorageBusCreator } from "../../sqlite/bus/StorageBusCreator";
+import { DatabaseTarget } from "../../sqlite/protocol/DatabaseTarget";
 import { IProjectionEntityRepository } from "./repositoryContract";
 
 export class SQLiteProductRepository
 implements IProjectionEntityRepository<Product> {
 
   async findById(id: string) {
-    const db = getDB();
-
+ 
+    const storage = StorageBusCreator()
     const rows =
-      await db.query<Product>(
+      await storage.query<Product>(
+        DatabaseTarget.BUSINESS,
         `
         SELECT *
         FROM products
@@ -25,9 +27,10 @@ implements IProjectionEntityRepository<Product> {
   }
 
   async findAll() {
-    const db = getDB();
+    const storage = StorageBusCreator()
 
-    return db.query<Product>(
+    return storage.query<Product>(
+      DatabaseTarget.BUSINESS,
       `
       SELECT *
       FROM products
@@ -39,9 +42,10 @@ implements IProjectionEntityRepository<Product> {
     id: string,
     state: Product
   ) {
-    const db = getDB();
+    const storage = StorageBusCreator()
 
-    await db.query(
+    await storage.query(
+      DatabaseTarget.BUSINESS,
       `
       INSERT INTO products (
         id,
@@ -89,9 +93,10 @@ implements IProjectionEntityRepository<Product> {
   }
 
   async delete(id: string) {
-    const db = getDB();
+    const storage = StorageBusCreator()
 
-    await db.query(
+    await storage.query(
+      DatabaseTarget.BUSINESS,
       `
       DELETE FROM products
       WHERE id = ?

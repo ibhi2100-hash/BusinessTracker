@@ -1,4 +1,4 @@
-import { ExecutionContext } from "../ExecutionContext";
+import { ExecutionContext } from "../CommandFactory/ExecutionContext/ExecutionContextContract";
 
 export interface CommandMetadata {
 
@@ -9,7 +9,7 @@ export interface CommandMetadata {
     logicalClock: number;
 
 }
-export interface MetadataBuilder {
+export interface MetadataBuilderContract {
     build(
         context: ExecutionContext
     ): CommandMetadata;

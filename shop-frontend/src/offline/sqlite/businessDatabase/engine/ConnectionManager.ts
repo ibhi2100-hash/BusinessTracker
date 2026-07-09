@@ -1,7 +1,7 @@
 // ConnectionManager.ts
 
 import sqlite3InitModule from "@sqlite.org/sqlite-wasm";
-import { IConnectionManager } from "../../connectionManager/ConnetionContract";
+import { IConnectionManager } from "../../types/IStorageContext";
 
 export class BusinessConnection implements IConnectionManager {
 
@@ -66,15 +66,6 @@ constructor(
     );
 
 }
-
-    database() {
-        if(!this.currentDB){
-            throw new Error("BusinessDataBase Has not been Open yes")
-        }
-
-        return this.currentDB
-    }
-
     async close() {
 
     if (!this.currentDB)
@@ -114,13 +105,31 @@ constructor(
 
     }
 
-    async databaseInfo(){
-        const db = await this.currentDB
+    async databaseInfo() {
 
-        return db.query(`
-            SELECT * FROM schema_version
-            `)
-    }
+    const db = this.getDatabase();
+
+    const rows: any[] = [];
+
+    db.exec({
+
+        sql: `
+            SELECT *
+            FROM schema_version
+        `,
+
+        rowMode: "object",
+
+        callback(row) {
+
+            rows.push(row);
+
+        }
+
+    });
+
+    return rows;
+}
 
 
 }

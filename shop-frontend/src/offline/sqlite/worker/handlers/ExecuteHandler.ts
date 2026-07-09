@@ -1,6 +1,8 @@
+import { ClientSessionManagerContract } from "../sessions/ClientSessionManagerContracts";
+
 export async function ExecuteHandler(
 
-    engine,
+    engine: ClientSessionManagerContract,
 
     payload
 

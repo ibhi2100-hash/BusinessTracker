@@ -42,6 +42,8 @@ export class AuthController {
 
       return res.status(201).json({
         user: this.safeUser(user),
+        refreshToken,
+        refreshExpiresIn,
         accessToken: token,
         accessExpiresIn: expiresIn,
       });

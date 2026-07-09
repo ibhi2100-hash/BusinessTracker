@@ -1,10 +1,10 @@
 import { CommandFactory } from "../CommandFactory";
 import { CommandIntent } from "../CommandIntent";
-import { ExecutionContextProvider } from "../ExecutionContext";
+import { ExecutionContextProvider } from "../ExecutionContext/ExecutionContextContract";
 import { CommandValidator } from "./CommandValidator";
 import { Command } from "../../KarnelTypes/types"
-import { CommandRegistry } from "../CommandRegistry";
-import { MetadataBuilder } from "./MetadataBuilder";
+import { CommandRegistry } from "./CommandRegistry";
+import { MetadataBuilder } from "../../MetadataBuilder/MetadataBuilderContract";
 import { IdGenerator } from "./IdGenerator";
 
 export class DefaultCommandFactory implements CommandFactory {

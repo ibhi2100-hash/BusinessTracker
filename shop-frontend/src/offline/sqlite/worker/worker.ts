@@ -1,25 +1,39 @@
-import { resolveEngine } from "./router/EngineResolver";
-import { resolveHandler } from "./router/HandlerResolver";
+/// <reference lib="webworker"/>
+
+import { WorkerRouter } from "./router/Router";
 import { WorkerRequest } from "../protocol/WorkerRequest";
 import { WorkerResponse } from "../protocol/WorkerResponse";
 
+const router =
+    new WorkerRouter();
 
-export class WorkerRouter {
-  async routeRequest(request: WorkerRequest) {
+self.onmessage = async (
+    event: MessageEvent<WorkerRequest>
+) => {
 
-    const engine = 
-      resolveEngine(request.database);
-    
-    const handler =
-      resolveHandler(request.operation);
+    const request =
+        event.data;
 
-    const result =
-      await handler(engine, request.payload);
+    try {
 
-    return {
-      id: request.id,
-      result: result
-    } as WorkerResponse;
+        const response =
+            await router.routeRequest(request);
 
-  }
-}
+        self.postMessage(response);
+
+    } catch (error) {
+
+        self.postMessage({
+
+            id: request.id,
+
+            error:
+                error instanceof Error
+                    ? error.message
+                    : String(error)
+
+        } satisfies WorkerResponse);
+
+    }
+
+};

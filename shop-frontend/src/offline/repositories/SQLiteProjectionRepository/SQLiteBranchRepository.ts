@@ -1,17 +1,19 @@
 // SQLiteBranchRepository.ts
 
 import { Branch } from "@business/shared-types";
-import { getDB } from "../../sqlite/database/db";
+import { StorageBusCreator } from "../../sqlite/bus/StorageBusCreator";
+import { DatabaseTarget } from "../../sqlite/protocol/DatabaseTarget";
 import { IProjectionEntityRepository } from "./repositoryContract";
 
 export class SQLiteBranchRepository
 implements IProjectionEntityRepository<Branch> {
 
   async findById(id: string) {
-    const db = getDB();
+    const storage = StorageBusCreator()
 
     const rows =
-      await db.query<Branch>(
+      await storage.query<Branch>(
+        DatabaseTarget.BUSINESS,
         `
         SELECT *
         FROM branches
@@ -25,9 +27,10 @@ implements IProjectionEntityRepository<Branch> {
   }
 
   async findAll() {
-    const db = getDB();
+   const storage = StorageBusCreator()
 
-    return db.query<Branch>(
+    return storage.query<Branch>(
+      DatabaseTarget.BUSINESS,
       `
       SELECT *
       FROM branches
@@ -39,9 +42,9 @@ implements IProjectionEntityRepository<Branch> {
     id: string,
     state: Branch
   ) {
-    const db = getDB();
-
-    await db.query(
+   const storage = StorageBusCreator()
+    await storage.query(
+      DatabaseTarget.BUSINESS,
       `
       INSERT INTO branches (
         id,
@@ -70,9 +73,10 @@ implements IProjectionEntityRepository<Branch> {
   }
 
   async delete(id: string) {
-    const db = getDB();
+    const storage = StorageBusCreator()
 
-    await db.query(
+    await storage.query(
+      DatabaseTarget.BUSINESS,
       `
       DELETE FROM branches
       WHERE id = ?

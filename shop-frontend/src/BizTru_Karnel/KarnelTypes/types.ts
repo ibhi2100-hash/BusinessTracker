@@ -1,5 +1,6 @@
 import { Snapshot } from "@/src/offline/repositories/SQLiteSnapshotRepository/SnaphotModel";
-import { CommandDescriptor } from "../CommandFactory/CommandDescriptor"
+import { CommandDescriptor } from "../CommandFactory/CommandDescriptor";
+import { CommandMetadata } from "../MetadataBuilder/MetadataBuilderContract";
 
 export interface Command<TPayload = unknown> {
 
@@ -29,8 +30,6 @@ export interface ActorContext {
     branchId?: string;
 
     deviceId: string;
-
-    role: string;
 
     sessionId?: string;
 
@@ -208,3 +207,4 @@ export interface AggregateMaterializer {
     ): Promise<AggregateRuntimeContext<AggregateState, unknown>>;
 
 }
+

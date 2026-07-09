@@ -6,7 +6,9 @@ import {
   LedgerEntry
 } from "@business/shared-types";
 
-import { getDB } from "../../sqlite/database/db";
+import { StorageBusCreator } from "../../sqlite/bus/StorageBusCreator";
+import { DatabaseTarget } from "../../sqlite/protocol/DatabaseTarget";
+
 
 export class SQLiteLedgerRepository
   implements LedgerRepository {
@@ -15,11 +17,12 @@ export class SQLiteLedgerRepository
     entries: LedgerEntry[]
   ): Promise<void> {
 
-    const db = getDB();
+    const storage = StorageBusCreator();
 
     for (const entry of entries) {
 
-      await db.query(
+      await storage.query(
+        DatabaseTarget.BUSINESS,
         `
         INSERT INTO ledger_entries (
           id,

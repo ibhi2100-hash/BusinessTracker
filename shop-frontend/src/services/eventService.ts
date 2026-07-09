@@ -4,11 +4,11 @@ import { useBranchStore } from "@/src/store/useBranchStore";
 import { nanoid } from "nanoid";
 import { InventoryEventType, OpeningEventType } from "@business/shared-types";
 import { useInventoryStore } from "../store/inventoryStore";
-import { getDB } from "../offline/sqlite/database/db";
 import { AggregateType } from "@/offline/domain/aggregate";
 import { inventoryKey } from "../utils/keygenerator";
 import { useBusiness } from "../offline/queryHooks/businessQueryHooks";
 import { SQLiteAuthRepository } from "../offline/repositories/SQLiteAuthRepository/SQLiteAuthRepository";
+import { StorageBusCreator } from "../offline/sqlite/bus/StorageBusCreator";
 
 export const eventService = {
   async create(input: {
@@ -49,9 +49,8 @@ export const eventService = {
         : !branchId
         ? "BUSINESS"
         : "BRANCH";
-      const db = getDB()
-      const repo= new SQLiteAuthRepository();
-      const users = await repo.findAll()
+      const storage = StorageBusCreator()
+      const users = [ {id: "shrek123"}, {id: "shrek234"}]
       const userId = users[0]?.id;
       console.log("this is the user that is return: ", users[0], "this is the array of the users: ", users)
       const event = await createEvent({

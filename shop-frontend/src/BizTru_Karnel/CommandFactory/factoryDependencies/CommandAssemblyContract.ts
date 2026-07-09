@@ -1,7 +1,7 @@
 import { CommandDescriptor } from "../../CommandFactory/CommandDescriptor";
 import { CommandIntent } from "../../CommandFactory/CommandIntent";
-import { CommandMetadata } from "./MetadataBuilder";
-import { ExecutionContext } from "../../CommandFactory/ExecutionContext";
+import { CommandMetadata } from "../../MetadataBuilder/MetadataBuilderContract";
+import { ExecutionContext } from "../ExecutionContext/ExecutionContextContract";
 import { Command } from "../../KarnelTypes/types";
 
 interface CommandAssembler {

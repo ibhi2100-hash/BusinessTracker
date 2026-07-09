@@ -6,8 +6,8 @@ import {
 } from "@business/sync";
 
 import { BaseEvent } from "@business/shared-types";
-
-import { getDB } from "../../sqlite/database/db";
+import { StorageBusCreator } from "../../sqlite/bus/StorageBusCreator";
+import { DatabaseTarget } from "../../sqlite/protocol/DatabaseTarget";
 
 
 export class SQLiteSyncRepository
@@ -16,12 +16,13 @@ implements SyncRepository {
   async getEvent(
     eventId: string
   ): Promise<BaseEvent | null> {
-
+    const storage = StorageBusCreator()
     const rows =
-      await getDB().query(
+      await storage.query(
+        DatabaseTarget.BUSINESS,
         `
         SELECT *
-        FROM events
+        FROM outbox
         WHERE id = ?
         LIMIT 1
         `,
@@ -32,11 +33,12 @@ implements SyncRepository {
   }
 
   async getPendingEvents(): Promise<BaseEvent[]> {
-
-    return getDB().query(
+    const storage = StorageBusCreator()
+    return storage.query(
+      DatabaseTarget.BUSINESS,
       `
       SELECT *
-      FROM events
+      FROM outbox
       WHERE syncStatus = 'PENDING'
       ORDER BY logicClock ASC
       `
@@ -47,11 +49,12 @@ implements SyncRepository {
     now: number
   ): Promise<BaseEvent[]> {
 
-    return getDB().query(
+    return StorageBusCreator().query(
+      DatabaseTarget.BUSINESS,
       `
       SELECT *
-      FROM events
-      WHERE status = 'RETRYING'
+      FROM outbox
+      WHERE status = 'FAILED'
       AND nextRetryAt <= ?
       ORDER BY nextRetryAt ASC
       `,
@@ -64,10 +67,11 @@ implements SyncRepository {
     aggregateType: string
   ): Promise<BaseEvent[]> {
 
-    return getDB().query(
+    return StorageBusCreator().query(
+      DatabaseTarget.BUSINESS,
       `
       SELECT *
-      FROM events
+      FROM outbox
       WHERE aggregateId = ?
       AND aggregateType = ?
       AND syncStatus = 'SYNCED'
@@ -86,7 +90,8 @@ implements SyncRepository {
   ): Promise<AggregateState> {
 
     const rows =
-      await getDB().query(
+      await StorageBusCreator().query(
+        DatabaseTarget.BUSINESS,
         `
         SELECT *
         FROM aggregates
@@ -128,7 +133,8 @@ implements SyncRepository {
     eventId: string
   ): Promise<void> {
 
-    await getDB().query(
+    await StorageBusCreator().query(
+      DatabaseTarget.BUSINESS,
       `
       UPDATE events
       SET status = 'SYNCING'
@@ -142,11 +148,12 @@ implements SyncRepository {
     eventIds: string[]
   ): Promise<void> {
 
-    const db = getDB();
+    const storage = StorageBusCreator();
 
     for (const id of eventIds) {
 
-      await db.query(
+      await storage.query(
+        DatabaseTarget.BUSINESS,
         `
         UPDATE events
         SET status = 'SYNCING'
@@ -163,7 +170,8 @@ implements SyncRepository {
     globalPosition?: bigint
   ): Promise<void> {
 
-    await getDB().query(
+    await StorageBusCreator().query(
+      DatabaseTarget.BUSINESS,
       `
       UPDATE events
       SET
@@ -193,7 +201,8 @@ implements SyncRepository {
     nextRetryAt?: number
   ): Promise<void> {
 
-    await getDB().query(
+    await StorageBusCreator().query(
+      DatabaseTarget.BUSINESS,
       `
       UPDATE events
       SET
@@ -217,7 +226,8 @@ implements SyncRepository {
     error: string
   ): Promise<void> {
 
-    await getDB().query(
+    await StorageBusCreator().query(
+      DatabaseTarget.BUSINESS,
       `
       UPDATE events
       SET
@@ -236,7 +246,8 @@ implements SyncRepository {
     eventId: string
   ): Promise<void> {
 
-    await getDB().query(
+    await StorageBusCreator().query(
+      DatabaseTarget.BUSINESS,
       `
       UPDATE events
       SET
@@ -253,7 +264,8 @@ implements SyncRepository {
     state: AggregateState
   ): Promise<AggregateState> {
 
-    await getDB().query(
+    await StorageBusCreator().query(
+      DatabaseTarget.BUSINESS,
       `
       INSERT INTO aggregates (
         id,
@@ -294,7 +306,8 @@ implements SyncRepository {
     resolution: ConflictResolution
   ): Promise<void> {
 
-    await getDB().query(
+    await StorageBusCreator().query(
+      DatabaseTarget.BUSINESS,
       `
       INSERT INTO conflicts (
         id,
@@ -322,7 +335,8 @@ implements SyncRepository {
     reason: string
   ): Promise<void> {
 
-    await getDB().query(
+    await StorageBusCreator().query(
+      DatabaseTarget.BUSINESS,
       `
       UPDATE events
       SET

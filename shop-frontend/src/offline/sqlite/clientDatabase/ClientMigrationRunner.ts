@@ -1,23 +1,25 @@
 import { migrations } from "./migrations";
 import { ClientConnection } from "./ClientConnection";
-import { ClientStorageContext } from "./ClientStorageContext";
+import { IConnectionManager } from "../types/IStorageContext";
+import { QueryExecutor } from "../queryExecutor/QueryExecutor";
+
 
 export class ClientMigrationRunner {
     constructor(
-        private connection: ClientStorageContext
+        private readonly queryExecutor: QueryExecutor
     ){}
 
     async run() {
-        const db = this.connection.database();
-
-        await db.query(`
+    
+        await this.queryExecutor.execute(`
             CREATE TABLE IF NOT EXISTS schema_version (
                 version INTEGER PRIMARY KEY,
                 applied_at TEXT NOT NULL
             )
         `);
 
-        const result = await db.query(`
+        const result = await this.queryExecutor.query<{
+            version: number}>(`
             SELECT MAX(version) as version
             FROM schema_version
             `);
@@ -36,9 +38,9 @@ export class ClientMigrationRunner {
                 `[Migrationg] Running ${version}`
             );
 
-            await db.query(migrations[i]);
+            await this.queryExecutor.execute(migrations[i]);
 
-            await db.query(
+            await this.queryExecutor.execute(
         `
         INSERT INTO schema_version
         (

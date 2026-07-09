@@ -1,20 +1,84 @@
 import { SQLiteAuthRepository } from "../offline/repositories/SQLiteAuthRepository/SQLiteAuthRepository";
-import { useAuthStore } from "../store/useAuthStore";
+import { User } from "@business/shared-types";
+import { Session } from "../offline/repositories/SQLiteSessionRepository/SessionInterface";
+import { SQLiteSessionRepository } from "../offline/repositories/SQLiteSessionRepository/SQLiteSessionRepository";
+import { uuid } from "zod";
 
-export const AuthService = {
-  async saveUser(userData: any) {
-    
-    const repo = new SQLiteAuthRepository();
+interface RegisterResponse {
+  user: any;
+  accessToken: string;
+  refreshToken: string;
+  accessExpiresIn: number;
+  refreshExpiresIn: number;
+}
+export class AuthService {
 
-    const user = await repo.upsert(userData.id, userData);
+    constructor(
 
-    return user;
-  },
+        private readonly repository: SQLiteAuthRepository,
+        private readonly session: SQLiteSessionRepository
 
-  async getCurrentUser(id: string) {
+    ) {}
 
-    const repo = new SQLiteAuthRepository();
+    async register(result: RegisterResponse): Promise<User> {
 
-    return await repo.findById(id);
-  },
-};
+        const user: User = {
+
+            id: result.user.id,
+
+            businessId: result.user.businessId,
+
+            branchId: result.user.branchId,
+
+            name: result.user.name,
+
+            email: result.user.email,
+
+            role: result.user.role,
+
+            onboardingCompleted: false,
+
+            isActive: true,
+
+            version: 0,
+
+            lastEventId: null,
+
+            createdAt: new Date(Date.now()),
+
+            updatedAt: null
+
+        };
+
+        return this.repository.addUser(user);
+
+    }
+
+    async saveSession(sessionData: any){
+        const id = crypto.randomUUID();
+        const createdAt = Date.now();;
+        const { user, refreshToken, refreshExpiresIn, accessToken } = sessionData;
+        const  expiresAt = createdAt + refreshExpiresIn * 1000
+
+        return this.session.saveSession({
+            id,
+            userId: user.id,
+            refreshToken,
+            accessToken,
+            expiresAt,
+            createdAt
+
+        })
+    }
+
+    async getCurrentSession(){
+        const userSession = await this.session.getCurrentSession();
+        
+        return userSession
+    }
+
+    async clearSession(){
+        await this.session.clearSession()
+    }
+
+}

@@ -1,17 +1,19 @@
 // SQLiteBusinessRepository.ts
 
 import { Business } from "@business/shared-types";
-import { getDB } from "../../sqlite/database/db";
+import { StorageBusCreator } from "../../sqlite/bus/StorageBusCreator";
 import { IProjectionEntityRepository } from "./repositoryContract";
+import { DatabaseTarget } from "../../sqlite/protocol/DatabaseTarget";
 
 export class SQLiteBusinessRepository
   implements IProjectionEntityRepository<Business> {
 
   async findById(id: string) {
-    const db = getDB();
+    const storage = StorageBusCreator()
 
     const rows =
-      await db.query<Business>(
+      await storage.query<Business>(
+        DatabaseTarget.BUSINESS,
         `
         SELECT *
         FROM businesses
@@ -25,9 +27,10 @@ export class SQLiteBusinessRepository
   }
 
   async findAll() {
-    const db = getDB();
+    const storage = StorageBusCreator()
 
-    return db.query<Business>(
+    return storage.query<Business>(
+      DatabaseTarget.BUSINESS,
       `
       SELECT *
       FROM businesses
@@ -39,9 +42,10 @@ export class SQLiteBusinessRepository
     id: string,
     state: Business
   ) {
-    const db = getDB();
+    const storage = StorageBusCreator()
 
-    await db.query(
+    await storage.query(
+      DatabaseTarget.BUSINESS,
       `
       INSERT INTO businesses (
         id,
@@ -77,9 +81,10 @@ export class SQLiteBusinessRepository
   }
 
   async delete(id: string) {
-    const db = getDB();
+    const storage = StorageBusCreator()
 
-    await db.query(
+    await storage.query(
+      DatabaseTarget.BUSINESS,
       `
       DELETE FROM businesses
       WHERE id = ?

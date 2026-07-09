@@ -1,18 +1,15 @@
-import { IStorageContext } from "../types/IStorageContext";
+import { IConnectionManager } from "../types/IStorageContext";
 
 export class TransactionManager {
 
     constructor(
-        private readonly context: IStorageContext
+        private readonly connection: IConnectionManager
     ) {}    
 
     async begin() {
 
     const db =
-        this.context
-            .connectionManager
-            .isOpen() ? this.context.database : null;
-
+        this.connection.getDatabase()
     db.exec(
         "BEGIN IMMEDIATE"
     );
@@ -21,10 +18,7 @@ export class TransactionManager {
     async commit() {
 
     const db =
-        this.context
-            .connectionManager
-            .isOpen() ? this.context.database : null;
-
+        this.connection.getDatabase()
     db.exec(
         "COMMIT"
     );
@@ -33,10 +27,7 @@ export class TransactionManager {
     async rollback() {
 
     const db =
-        this.context
-            .connectionManager
-            .isOpen() ? this.context.database : null;
-
+        this.connection.getDatabase()
     db.exec(
         "ROLLBACK"
     );

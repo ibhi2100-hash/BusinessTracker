@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, RegisterInput } from "@/lib/validations/auth.schema";
-import { SQLiteAuthRepository } from "@/src/offline/repositories/SQLiteAuthRepository/SQLiteAuthRepository";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -14,6 +13,8 @@ import {
   Cloud,
   BarChart3,
 } from "lucide-react";
+import { authServiceBuilder } from "@/offline/InstancesBuilder/authServiceBuilder";
+
 
 
 export default function RegisterPage() {
@@ -53,21 +54,17 @@ export default function RegisterPage() {
       if (!res.ok) {
         throw new Error(result.message || "Registration failed");
       }
+      
       localStorage.setItem("accessToken", result.accessToken);
-      const authRepo = new SQLiteAuthRepository();
+      
+      const authService = authServiceBuilder();
 
-      await authRepo.upsert(result.user.id, {
-        id: result.user.id,
-        businessId: result.user.businessId,
-        branchId: result.user.branchId,
-        name: result.user.name,
-        email: result.user.name,
-        role: result.user.role,
-        onboardingCompleted: result.user.onboardingCompleted,
-        isActive: result.user.isActive,
-        createdAt: result.user.createdAt
+      authService.register(result);
+      
+      authService.saveSession(result);
 
-      });
+      const current= await  authService.getCurrentSession();
+      console.log("This is the actual Current Session", current);
 
       router.push("/step1-business");
     } catch (error: any) {
@@ -94,6 +91,7 @@ export default function RegisterPage() {
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-300 backdrop-blur-xl">
               ✨ BusinessOS
             </div>
+            
 
             <h1 className="text-3xl font-semibold tracking-tight">
               Create your account

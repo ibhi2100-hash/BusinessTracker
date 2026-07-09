@@ -1,4 +1,4 @@
-import { ActorContext } from "../KarnelTypes/types";
+import { ActorContext } from "../../KarnelTypes/types";
 
 export interface ExecutionContext {
 
@@ -20,6 +20,6 @@ export interface ExecutionContext {
 
 }
 
-export interface ExecutionContextProvider {
-    current(): ExecutionContext;
+export interface ExecutionContextProviderContract {
+    current(): Promise<ExecutionContext>;
 }

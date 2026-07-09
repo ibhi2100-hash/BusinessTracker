@@ -2,10 +2,9 @@
 import "./globals.css";
 import { Toaster } from "sonner";
 import { Providers } from "./providers";
-import SyncBootstrap from "@/offline/bootstrap/syncBootstrap";
 import { AppShell } from "@/components/layout/AppShell";
-import { SQLiteProvider } from "@/src/offline/sqlite/SQLiteProvider";
-import { AppBootstrap } from "@offline/bootstrap/ClientDatabaseBootstrap"
+import { SQLiteBootstrap } from "@/offline/bootstrap/SQLiteBootstrap";
+import { StorageBusCreator } from "@/src/offline/sqlite/bus/StorageBusCreator";
 
 export const metadata = {
   title: "BizTru",
@@ -18,18 +17,18 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+ 
   return (
     <html lang="en">
       <body className="bg-black text-white">
         <Providers>
-          <SQLiteProvider>
-          <SyncBootstrap />
-          <AppShell>
-              <AppBootstrap/>
-              {children}
-          </AppShell>
-          <Toaster richColors position="top-right" />
-          </SQLiteProvider>
+          
+              <SQLiteBootstrap/>
+              <AppShell>
+                  
+                  {children}
+              </AppShell>
+              <Toaster richColors position="top-right" />
         </Providers>
       </body>
     </html>

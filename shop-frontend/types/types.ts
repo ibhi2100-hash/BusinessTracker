@@ -27,14 +27,6 @@ export type SalePayload = {
   paymentMethod: PaymentMethod;
 };
 
-// ---------------------------
-// SESSION
-// ---------------------------
-export interface Session {
-  userId: string;
-  accessToken: string;
-  expiresIn?: Date;
-}
 
 export interface BranchData {
   inventoryCount?: number;

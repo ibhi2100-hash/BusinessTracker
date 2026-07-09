@@ -1,5 +1,5 @@
-import { getDB } from "../offline/sqlite/database/db";
-import { useAuthStore } from "../store/useAuthStore";
+import { StorageBusCreator } from "../offline/sqlite/bus/StorageBusCreator";
+import { DatabaseTarget } from "../offline/sqlite/protocol/DatabaseTarget";
 import { createSyncManager } from "../services/sync";
 
 let syncing = false;
@@ -11,7 +11,7 @@ export const queueSync = async () => {
     return;
   }
 
-  const db  = getDB()
+  const storage = StorageBusCreator()
   syncing = true;
   
   const syncManager = createSyncManager()

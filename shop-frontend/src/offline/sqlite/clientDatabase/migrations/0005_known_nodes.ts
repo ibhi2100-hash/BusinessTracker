@@ -1,13 +1,11 @@
 export const migration0005 = `
-    CREATE TABLE known_nodes(
+    CREATE TABLE IF NOT EXISTS known_nodes(
 
     id TEXT PRIMARY KEY,
 
-    createdAt INTEGER NOT NULL,
+    businessId  TEXT,
 
-    appVersion TEXT,
-
-    platform TEXT
+    createdAt INTEGER NOT NULL
 
 );
 `;

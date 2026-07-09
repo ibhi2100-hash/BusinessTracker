@@ -10,6 +10,7 @@ import { CloseNodeHandler } from "../handlers/CloseNodeHandler";
 import { BeginTransactionHandler } from "../handlers/BeginTransactionHandler";
 import { CommitTransactionHandler } from "../handlers/CommitTransactionHandler";
 import { RollbackTransactionHandler } from "../handlers/RollbackTransactionHandler";
+import { OpenClientHandler } from "../handlers/OpenClientHandler";
 
 const handlers = {
 
@@ -24,6 +25,8 @@ const handlers = {
     [WorkerOperation.OPEN_NODE]: OpenNodeHandler,
 
     [WorkerOperation.CLOSE_NODE]: CloseNodeHandler,
+    
+    [WorkerOperation.OPEN_CLIENT]: OpenClientHandler,
 
     [WorkerOperation.BEGIN_TRANSACTION]: BeginTransactionHandler,
 

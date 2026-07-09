@@ -1,12 +1,10 @@
 import { DatabaseInfo } from "../../database/databaseInformation";
-import { StorageSession } from "./StorageSession";
+import { IConnectionManager } from "../../types/IStorageContext";
+import { PreparedStatementManager } from "../../PreparedStatement/PreparedStatement";
 import { QueryExecutor } from "../../queryExecutor/QueryExecutor";
 import { TransactionManager } from "../../transactionManager/TransactionManager";
-import { PreparedStatementManager } from "../../PreparedStatement/PreparedStatement";
-import { IConnectionManager } from "../../connectionManager/ConnetionContract";
 
-export abstract class AbstractStorageSession
-    implements StorageSession {
+export abstract class AbstractStorageSession {
 
     protected ready = false;
 
@@ -23,6 +21,10 @@ export abstract class AbstractStorageSession
     ) {}
 
     abstract initialize(): Promise<void>;
+
+    protected abstract onInitialize(): Promise<void>;
+
+    protected abstract onDispose(): Promise<void>;
 
     async query<T>(
         sql: string,
@@ -74,33 +76,31 @@ export abstract class AbstractStorageSession
 
     transaction<T>(
         callback: () => Promise<T>
-    ): Promise<T> {
+    ) {
 
-        return this.transactionManager.transaction(
-            callback
-        );
+        return this.transactionManager.transaction(callback);
 
     }
 
-    async beginTransaction(): Promise<void> {
+    async beginTransaction() {
 
         await this.transactionManager.begin();
 
     }
 
-    async commitTransaction(): Promise<void> {
+    async commitTransaction() {
 
         await this.transactionManager.commit();
 
     }
 
-    async rollbackTransaction(): Promise<void> {
+    async rollbackTransaction() {
 
         await this.transactionManager.rollback();
 
     }
 
-    databaseInfo(): Promise<DatabaseInfo> {
+    async databaseInfo(): Promise<DatabaseInfo> {
 
         return this.connection.databaseInfo();
 
@@ -118,6 +118,24 @@ export abstract class AbstractStorageSession
 
     }
 
-    abstract dispose(): Promise<void>;
+    async dispose(): Promise<void> {
+
+        try {
+
+            if (this.transactionManager.inTransaction) {
+
+                await this.transactionManager.rollback();
+
+            }
+
+        } catch {}
+
+        this.preparedStatements.clear();
+
+        await this.onDispose();
+
+        this.ready = false;
+
+    }
 
 }

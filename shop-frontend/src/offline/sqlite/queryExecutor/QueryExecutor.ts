@@ -1,9 +1,9 @@
-import { IStorageContext } from "../clientDatabase/ClientPreparedStatement";
+import { IConnectionManager } from "../types/IStorageContext";
 
 export class QueryExecutor {
 
     constructor(
-        private readonly context: IStorageContext
+        private readonly connection: IConnectionManager
     ) {}
 
    async query<T>(
@@ -12,8 +12,7 @@ export class QueryExecutor {
 ): Promise<T[]> {
 
     const db =
-        this.context.connectionManager
-            
+        this.connection.getDatabase()
 
     const rows: T[] = [];
 
@@ -26,13 +25,12 @@ export class QueryExecutor {
         rowMode: "object",
 
         callback(row: T) {
-
             rows.push(row);
 
         }
 
     });
-
+    
     return rows;
 }
 
@@ -42,9 +40,7 @@ export class QueryExecutor {
 ) {
 
     const db =
-        this.context
-            .connectionManager
-            .getDatabase();
+        this.connection.getDatabase()
 
     db.exec({
 

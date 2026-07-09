@@ -1,17 +1,19 @@
 // SQLiteInventoryRepository.ts
 
 import { Inventory } from "@business/shared-types";
-import { getDB } from "../../sqlite/database/db";
+import { StorageBusCreator } from "../../sqlite/bus/StorageBusCreator";
+import { DatabaseTarget } from "../../sqlite/protocol/DatabaseTarget";
 import { IProjectionEntityRepository } from "./repositoryContract";
 
 export class SQLiteInventoryRepository
 implements IProjectionEntityRepository<Inventory> {
 
   async findById(id: string) {
-    const db = getDB();
+    const storage = StorageBusCreator()
 
     const rows =
-      await db.query<Inventory>(
+      await storage.query<Inventory>(
+        DatabaseTarget.BUSINESS,
         `
         SELECT *
         FROM inventory
@@ -25,9 +27,10 @@ implements IProjectionEntityRepository<Inventory> {
   }
 
   async findAll() {
-    const db = getDB();
+    const storage = StorageBusCreator()
 
-    return db.query<Inventory>(
+    return storage.query<Inventory>(
+      DatabaseTarget.BUSINESS,
       `
       SELECT *
       FROM inventory
@@ -39,9 +42,10 @@ implements IProjectionEntityRepository<Inventory> {
     id: string,
     state: Inventory
   ) {
-    const db = getDB();
+    const storage = StorageBusCreator()
 
-    await db.query(
+    await storage.query(
+      DatabaseTarget.BUSINESS,
       `
       INSERT INTO inventories (
         id,
@@ -69,9 +73,10 @@ implements IProjectionEntityRepository<Inventory> {
   }
 
   async delete(id: string) {
-    const db = getDB();
+    const storage = StorageBusCreator()
 
-    await db.query(
+    await storage.query(
+      DatabaseTarget.BUSINESS,
       `
       DELETE FROM inventory
       WHERE id = ?

@@ -1,5 +1,5 @@
 export const migration0007 = `
-    CREATE TABLE sync_metadata (
+    CREATE TABLE IF NOT EXISTS sync_metadata (
 
     id TEXT PRIMARY KEY,
 

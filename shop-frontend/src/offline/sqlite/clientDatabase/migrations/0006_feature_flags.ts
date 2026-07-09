@@ -1,5 +1,5 @@
 export const migration0006 = `
-    CREATE TABLE feature_flags(
+    CREATE TABLE IF NOT EXISTS feature_flags(
 
     id TEXT PRIMARY KEY,
 

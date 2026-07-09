@@ -10,11 +10,13 @@ import { AppConflictResolver } from "../conflict/ConflictResolver";
 
 // merge strategies
 import { ProductMergeStrategy } from "../strategies/ProductMergerStrategy";
-import { getDB } from "../offline/sqlite/database/db";
+import { StorageBusCreator } from "../offline/sqlite/bus/StorageBusCreator";
+import { DatabaseTarget } from "../offline/sqlite/protocol/DatabaseTarget";
+
 
 
 export function createSyncManager() {
-  const db = getDB()
+  const storage = StorageBusCreator()
 
   // -------------------------
   // LOCAL REPOSITORY

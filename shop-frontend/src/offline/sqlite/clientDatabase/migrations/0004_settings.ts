@@ -1,5 +1,5 @@
 export const migration0004 = `
-    CREATE TABLE settings (
+    CREATE TABLE IF NOT EXISTS settings (
 
     id TEXT PRIMARY KEY,
 

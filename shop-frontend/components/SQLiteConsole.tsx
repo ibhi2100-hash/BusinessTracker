@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { getDB } from "@/src/offline/sqlite/database/db";
+import { StorageBusCreator } from "@/src/offline/sqlite/bus/StorageBusCreator";
+import { DatabaseTarget } from "@/src/offline/sqlite/protocol/DatabaseTarget";
+
 
 type Row = Record<string, any>;
 
@@ -22,9 +24,12 @@ ORDER BY name;
       setLoading(true);
       setError("");
 
-      const db = getDB();
+      const storage = StorageBusCreator()
 
-      const rows = await db.query<Row>(sql);
+      const rows = await storage.query(
+        DatabaseTarget.BUSINESS,
+        sql
+      )
 
       setResult(rows);
 

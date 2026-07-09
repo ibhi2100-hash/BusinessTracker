@@ -1,11 +1,9 @@
-import { StorageContext } from "./StorageContext";
-import { QueryExecutor } from "./QueryExecutor";
+import { QueryExecutor } from "../../queryExecutor/QueryExecutor";
 import { migrations } from "../migrations";
 
 export class MigrationManager {
 
     constructor(
-        private readonly context: StorageContext,
         private readonly query: QueryExecutor
     ) {}
     async initialize() {

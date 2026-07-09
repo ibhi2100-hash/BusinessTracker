@@ -1,14 +1,21 @@
 import { DatabaseTarget } from "../../protocol/DatabaseTarget";
 
-import { BusinessSessionManager } from "../../businessDatabase/engine/StorageEngine";
-import { ClientSessionManager } from "../../clientDatabase/ClientStorageEngine";
+import { BusinessSessionManager } from "../sessions/BusinessSessionManager";
+import { ClientSessionManager } from "../sessions/ClientSessionManager";
 
+const clientEngine =
+    // ClientSessionManager uses a private constructor; obtain the shared instance
+    // via its public static accessor.
+    (ClientSessionManager as any).getInstance();
+
+const businessEngine =
+    new BusinessSessionManager()
 
 const engines = {
 
-    [DatabaseTarget.BUSINESS]: BusinessSessionManager,
+    [DatabaseTarget.CLIENT]: clientEngine,
 
-    [DatabaseTarget.CLIENT]: ClientSessionManager,
+    [DatabaseTarget.BUSINESS]: businessEngine,
 
 } as const;
 
