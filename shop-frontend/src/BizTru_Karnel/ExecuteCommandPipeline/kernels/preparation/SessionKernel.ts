@@ -1,4 +1,4 @@
-import { KernelResult, PipelineContext, PipelineKernel, SessionFactory } from "../../../contracts/SubKernelContracts";
+import { PipelineContext, PipelineKernel, SessionFactory } from "../../../contracts/SubKernelContracts";
 
 export class SessionInitializationKarnel
 implements PipelineKernel {

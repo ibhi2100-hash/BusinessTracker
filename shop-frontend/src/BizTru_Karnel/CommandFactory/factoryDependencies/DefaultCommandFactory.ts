@@ -1,30 +1,28 @@
-import { CommandFactory } from "../CommandFactory";
+import { EventFactory } from "../CommandFactory";
 import { CommandIntent } from "../CommandIntent";
-import { ExecutionContextProvider } from "../ExecutionContext/ExecutionContextContract";
-import { CommandValidator } from "./CommandValidator";
-import { Command } from "../../KarnelTypes/types"
 import { CommandRegistry } from "./CommandRegistry";
 import { MetadataBuilder } from "../../MetadataBuilder/MetadataBuilderContract";
-import { IdGenerator } from "./IdGenerator";
+import { IdGenerator } from "./IdGenerators";
+import { BusinessContext, Command } from "@/src/BizTru_Karnel/KarnelTypes/types"
 
-export class DefaultCommandFactory implements CommandFactory {
+
+export class DefaultCommandFactory implements EventFactory {
     constructor(
         private readonly registry: CommandRegistry,
-        private readonly context: ExecutionContextProvider,
+        private readonly context: BusinessContext,
         private readonly metadataBuilder: MetadataBuilder,
-        private readonly validator: CommandValidator,
         private readonly idGenerator: IdGenerator
     ){}
 
-    create<TPayload>(
+     async create<TPayload>(
         intent: CommandIntent<TPayload>
-    ): Command<TPayload> {
+    ): Promise<Command<TPayload>> {
 
         const descriptor = 
             this.registry.resolve(intent.type);
 
         const context = 
-            this.context.current();
+            await this.context.current();
 
         const metadata = 
             this.metadataBuilder.build(context)
@@ -35,15 +33,13 @@ export class DefaultCommandFactory implements CommandFactory {
         const command: Command<TPayload> = Object.freeze({
             id: commandId,
             type: descriptor.type,
-            aggregateId: descriptor.aggregateId,
+            aggregateId: descriptor,
             aggregateType: descriptor.aggregateType,
             payload: intent.payload,
             actor: context.actor,
             metadata: metadata,
-            version: descriptor.version
-        })
 
-        this.validator.validate(command, descriptor.schema);
+        })
 
         return command;
     }

@@ -1,5 +1,7 @@
 import { IntegrationEvent } from "@business/shared-types";
 import { Command } from "../KarnelTypes/types";
+import { CommandMetadata } from "../MetadataBuilder/MetadataBuilderContract";
+import { EventRepository } from "@/src/offline/repositories/SQLiteEventRepository/contracts";
 
 export interface PipelineKernel {
 
@@ -173,23 +175,39 @@ export interface PersistenceContext {
 
 }
 
+export interface DiagnosticContext {
+
+    startedAt: number;
+
+    completedAt?: number;
+
+    duration?: number;
+
+    currentPhase?: string;
+
+    currentKernel?: string;
+
+}
+
 export interface RuntimeContext {
+    nodeId?: string;
 
     session?: BusinessSession;
 
     aggregate?: AggregateRoot;
 
-    events: BaseEvent[];
+    events: IntegrationEvent[];
 
-    nodeId: string;
+    aggregateVersion?: number
+
 
 }
 
 export interface ExecutionRequest {
 
-    command: BusinessCommand;
+    command: Command;
 
-    metadata: CommandMetadata;
+    metadata?: CommandMetadata;
 
 }
 
@@ -199,41 +217,34 @@ export interface ExecutionResult {
 
     aggregateVersion: number;
 
-    events: readonly BaseEvent[];
+    aggregateId: string;
+
+    events: readonly IntegrationEvent[];
 
 }
 
 export interface PipelineContext {
 
-    request: ExecutionRequest;
+    readonly request:
+        ExecutionRequest;
 
-    runtime: RuntimeContext;
+    readonly runtime:
+        RuntimeContext;
 
-    persistence: PersistenceContext;
+    readonly persistence:
+        PersistenceContext;
+
+    readonly diagnostics:
+        DiagnosticContext;
 
     result?: ExecutionResult;
 
 }
-
-export interface KernelResult {
-
-    continue: boolean;
-
-    reason?: string;
-
-}
-
 export interface NodeResolver {
 
     resolve(
         businessId: string
     ): Promise<string>;
-
-}
-
-export interface ConnectionManager {
-
-    open(): Promise<void>;
 
 }
 
@@ -245,10 +256,93 @@ export interface SchemaVerifier {
 
 }
 
-export interface StatementInitializer {
 
-    initialize(
-        session: BusinessSession
+export interface SessionProvider {
+
+    open(
+        nodeId: string
+    ): Promise<BusinessSession>;
+
+    close(): Promise<void>;
+
+    current(): BusinessSession | null;
+
+}
+
+export interface QueryContext {
+
+    query<T>(
+        sql: string,
+        params?: readonly unknown[]
+    ): Promise<T[]>;
+
+    scalar<T>(
+        sql: string,
+        params?: readonly unknown[]
+    ): Promise<T | null>;
+
+    exists(
+        sql: string,
+        params?: readonly unknown[]
+    ): Promise<boolean>;
+
+    execute(
+        sql: string,
+        params?: readonly unknown[]
     ): Promise<void>;
+
+}
+
+export interface TransactionContext {
+
+    begin(): Promise<void>;
+
+    commit(): Promise<void>;
+
+    rollback(): Promise<void>;
+
+    transaction<T>(
+        callback: () => Promise<T>
+    ): Promise<T>;
+
+}
+
+export interface SessionLifecycle {
+
+    initialize(): Promise<void>;
+
+    dispose(): Promise<void>;
+
+    isReady(): boolean;
+
+}
+export interface SessionMetadata {
+
+    readonly nodeId: string;
+
+}
+export interface BusinessSession
+
+extends
+
+    
+    TransactionContext,
+
+    SessionLifecycle,
+
+    SessionMetadata
+
+{
+    readonly events: 
+        EventRepository
+}
+
+export interface PipelineContextFactory {
+
+    create(
+
+        command: Command,
+
+    ): PipelineContext;
 
 }

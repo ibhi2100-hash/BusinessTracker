@@ -1,19 +1,33 @@
-import { Mode } from "../enums/Mode";
+export interface CanonicalEvent<TPayload = unknown> {
 
-export interface CanonicalEvent {
-  id: string;
-  aggregateId: string;
-  aggregateType: string;
-  aggregateVersion: number;
-  type: string;
-  mode: Mode;
-  payload: any;
+    readonly id: string;
 
-  businessId: string | null;
-  branchId: string | null;
+    readonly aggregateId: string;
 
-  createdAt: Date;
-  userId: string;
-  causationId: string | null;
-  correlationId: string | null;
+    readonly aggregateType: string;
+
+    readonly aggregateVersion: number;
+
+    readonly type: string;
+
+    readonly mode: "OPENING" | "LIVE"
+
+    readonly payload: Readonly<TPayload>;
+
+    readonly businessId: string;
+
+    readonly branchId?: string;
+
+    readonly userId: string;
+
+    readonly deviceId: string;
+
+    readonly occurredAt: Date;
+
+    readonly logicClock: number;
+
+    readonly causationId?: string;
+
+    readonly correlationId?: string;
+
 }

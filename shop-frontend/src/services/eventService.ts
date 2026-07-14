@@ -50,9 +50,7 @@ export const eventService = {
         ? "BUSINESS"
         : "BRANCH";
       const storage = StorageBusCreator()
-      const users = [ {id: "shrek123"}, {id: "shrek234"}]
-      const userId = users[0]?.id;
-      console.log("this is the user that is return: ", users[0], "this is the array of the users: ", users)
+      
       const event = await createEvent({
         ...input,
         scope,

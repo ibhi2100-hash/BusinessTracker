@@ -1,21 +1,8 @@
+import { ApplicationContext } from "@/src/BizTru_Karnel/CommandFactory/ExecutionContext/ExecutionContextContract";
 
-export interface ExecutionContextRecord {
 
-    userId: string;
-
-    businessId: string;
-
-    branchId: string;
-
-    deviceId: string;
-
-    sessionId: string;
-
-    logicalClock: number;
-
-}
 export interface ExecutionContextRepositoryContract {
 
-    getCurrentContext(): Promise<ExecutionContextRecord>;
+    getCurrentContext(): Promise<ApplicationContext>;
 
 }

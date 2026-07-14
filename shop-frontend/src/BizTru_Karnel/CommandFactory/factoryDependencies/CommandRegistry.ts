@@ -1,14 +1,14 @@
 import { CommandDescriptor } from "../CommandDescriptor";
 
-
 export interface CommandRegistry {
 
     register(
-        descriptor: CommandDescriptor<any>
+        type: string,
+        descriptor: CommandDescriptor
     ): void;
 
     resolve(
         type: string
-    ): CommandDescriptor<any>;
+    ): CommandDescriptor;
 
 }

@@ -1,14 +1,10 @@
-import { PreparedStatementContract} from "./PreparedStatementContract"
+import { PreparedStatementContract } from "./PreparedStatementContract";
 
-export class PreparedStatementManager {
-
+export class SQLitePreparedStatement
+implements PreparedStatementContract {
     constructor(
-        private readonly stm: any
+        private readonly stmt: any
     ){}
 
-    
-    clear(){
-        
-    }
 
 }

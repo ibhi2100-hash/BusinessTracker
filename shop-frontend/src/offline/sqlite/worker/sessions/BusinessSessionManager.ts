@@ -1,14 +1,16 @@
 
 
+import { BusinessSession } from "@/src/BizTru_Karnel/contracts/SubKernelContracts";
 import { DatabaseInfo } from "../../database/databaseInformation";
-import { BusinessSession } from "../../worker/sessions/BusinessStorageSession"
+import { BusinessStorageSession} from "../../worker/sessions/BusinessStorageSession"
 
 export class BusinessSessionManager {
     private session:
-        BusinessSession | null = null;
+        BusinessStorageSession | null = null;
 
     private currentNodeId: string | null = null
-    async openNode(nodeId: string){
+    async openNode(nodeId: string):
+        Promise<BusinessSession>{
 
         if(
 
@@ -16,7 +18,7 @@ export class BusinessSessionManager {
 
         ){
 
-            return;
+            return this.session
 
         }
 
@@ -27,12 +29,14 @@ export class BusinessSessionManager {
         }
 
         this.session =
-            new BusinessSession(nodeId);
+            new BusinessStorageSession(nodeId);
 
         await this.session.initialize();
 
+        return this.session
+
     }
-    private requireSession(): BusinessSession {
+    private requireSession(): BusinessStorageSession {
 
     if (!this.session) {
 

@@ -1,29 +1,73 @@
-import { PayloadSchema } from "../KarnelTypes/types";   
-import { BusinessOperation } from "../KarnelTypes/types";
-import { AggregateRebuilder } from "../KarnelTypes/types";  
+export interface CommandDescriptor {
 
-export interface CommandDescriptor<
-    TState,
-    TCommand
->{
+    type: string;
 
-    readonly type:string;
+    version: number;
 
-    readonly aggregateType:string;
+    aggregateType: string;
 
-    readonly aggregateId:string;
+    aggregateId: string;
 
-    readonly permission:string;
+    aggregateFactory: AggregateFactory;
 
-    readonly schema:PayloadSchema;
+    commandExecutor: CommandExecutor;
 
-    readonly operation:BusinessOperation<
-        TState,
-        TCommand
-    >;
+    validator: CommandValidator;
 
-    readonly rebuilder:AggregateRebuilder<
-        TState
-    >;
+    reducer: AggregateReducer;
+
+    projectionRunner: ProjectionRunner;
+
+    snapshotPolicy: SnapshotPolicy;
+
+    eventFactory: EventFactory;
+
+}
+
+export interface AggregateDescriptor {
+
+    type: string;
+
+    strategy: AggregateLoadStrategy;
+
+}
+
+export enum AggregateLoadStrategy {
+
+    CREATE,
+
+    LOAD,
+
+    OPTIONAL
+
+}
+
+export interface CommandExecutor {
+
+    transactional: boolean;
+
+    snapshot: boolean;
+
+    projections: boolean;
+
+    outbox: boolean;
+
+    publish: boolean;
+
+}
+
+export interface CommandValidator {
+
+    schema: unknown;
+
+    permissions: Permission[];
+
+}
+
+export interface EventDescriptor {
+
+    type: string;
+
+    required: boolean;
 
 }

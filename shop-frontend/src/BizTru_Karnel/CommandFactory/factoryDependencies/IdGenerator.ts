@@ -1,3 +1,3 @@
-export interface IdGenerator {
+export interface IdGeneratorContract {
     next(): string;
 }

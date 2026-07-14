@@ -1,16 +1,10 @@
-import { DatabaseInitializer, KernelResult, PipelineContext, PipelineKernel } from "../../../contracts/SubKernelContracts";
+import { PipelineContext, PipelineKernel } from "../../../contracts/SubKernelContracts";
+import { ExecutionKernel } from "../ExecutionKernel";
 
 export class MigrationKernel
-implements PipelineKernel {
-    constructor(
-        private readonly initializer:
-        DatabaseInitializer
-    ){}
-
-    async execute(context: PipelineContext): Promise<void> {
-        await this.initializer.initialize(
-            context.runtime.session
-        )
+extends ExecutionKernel {
+    protected async run(context: PipelineContext): Promise<void> {
         
+        await context.runtime.session.initialize()
     }
 }

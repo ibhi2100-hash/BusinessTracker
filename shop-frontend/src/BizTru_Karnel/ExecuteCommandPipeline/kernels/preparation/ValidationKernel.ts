@@ -1,4 +1,4 @@
-import { KernelResult, PipelineContext, PipelineKernel } from "../../../contracts/SubKernelContracts";
+import { PipelineContext, PipelineKernel } from "../../../contracts/SubKernelContracts";
 import { CommandValidator } from "../../../contracts/SubKernelContracts";
 
 export class CommandValidationKernel

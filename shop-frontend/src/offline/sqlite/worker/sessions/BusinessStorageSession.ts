@@ -5,8 +5,10 @@ import { QueryExecutor } from "../../queryExecutor/QueryExecutor";
 import { StorageContext } from "../../clientDatabase/ClientStorageContext";
 import { TransactionManager } from "../../transactionManager/TransactionManager";
 import { AbstractStorageSession } from "./AbstractStorageSession";
+import { BusinessSession } from "@/src/BizTru_Karnel/contracts/SubKernelContracts";
 
-export class BusinessSession extends AbstractStorageSession {
+export class BusinessStorageSession extends AbstractStorageSession
+implements BusinessSession {
 
     readonly nodeId: string;
 

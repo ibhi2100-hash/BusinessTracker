@@ -6,7 +6,6 @@ implements PipelineKernel {
         
         await context.runtime
             .session!
-            .connection
-            .open()
+            .initialize()
     }
 }

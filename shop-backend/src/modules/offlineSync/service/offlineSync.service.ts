@@ -1,7 +1,7 @@
 import { SyncRepository } from "../repository/syncRepository.js";
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
 import { creatBackendEventEngine } from "../EventEngine/eventPipeline.js"
-import { BaseEvent, toCanonicalEvent } from "@business/shared-types";
+import { StoredEvent } from "@business/shared-types";
 
 export class OfflineSyncService {
   constructor(
@@ -17,7 +17,7 @@ export class OfflineSyncService {
     aggregateId: string;
     aggregateType: string;
     baseVersion: number;
-    events: BaseEvent[];
+    events: StoredEvent[];
   }) {
 
     const serverLast =

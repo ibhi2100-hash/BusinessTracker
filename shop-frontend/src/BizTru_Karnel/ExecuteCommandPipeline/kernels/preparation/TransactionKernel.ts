@@ -1,4 +1,4 @@
-import { KernelResult, PipelineContext, PipelineKernel, TransactionScope } from "../../../contracts/SubKernelContracts";
+import { PipelineContext, PipelineKernel, TransactionScope } from "../../../contracts/SubKernelContracts";
 
 export class TransactionBeginKernel 
 implements PipelineKernel   {

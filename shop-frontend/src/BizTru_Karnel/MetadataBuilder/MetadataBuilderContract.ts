@@ -1,4 +1,4 @@
-import { ExecutionContext } from "../CommandFactory/ExecutionContext/ExecutionContextContract";
+import { ApplicationContext } from "../CommandFactory/ExecutionContext/ExecutionContextContract";
 
 export interface CommandMetadata {
 
@@ -11,6 +11,6 @@ export interface CommandMetadata {
 }
 export interface MetadataBuilderContract {
     build(
-        context: ExecutionContext
-    ): CommandMetadata;
+        context: ApplicationContext
+    ): Promise<CommandMetadata>;
 }

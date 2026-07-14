@@ -1,12 +1,13 @@
+import { DomainEvent } from "@business/shared-types";
 import { Command } from "../KarnelTypes/types";
 import { CommandIntent } from "./CommandIntent";
 
-export interface CommandFactory {
+export interface EventFactory {
 
     create<TPayload>(
 
         intent: CommandIntent<TPayload>
 
-    ): Command<TPayload>;
+    ): DomainEvent<TPayload>;
 
 }

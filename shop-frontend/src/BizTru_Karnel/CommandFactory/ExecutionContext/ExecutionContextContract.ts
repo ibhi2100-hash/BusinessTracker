@@ -1,16 +1,16 @@
 import { ActorContext } from "../../KarnelTypes/types";
 
-export interface ExecutionContext {
+export interface ApplicationContext {
 
     readonly actor: ActorContext;
 
-    readonly businessId: string;
+    readonly businessId?: string;
 
-    readonly branchId: string;
+    readonly branchId?: string;
 
     readonly deviceId: string;
 
-    readonly sessionId: string;
+    readonly sessionId?: string;
 
     readonly timestamp: number;
 
@@ -21,5 +21,5 @@ export interface ExecutionContext {
 }
 
 export interface ExecutionContextProviderContract {
-    current(): Promise<ExecutionContext>;
+    current(): Promise<ApplicationContext>;
 }

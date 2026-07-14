@@ -5,11 +5,10 @@ export * from "./entities/Branch";
 export * from "./entities/User"
 
 
-export * from "./events/BaseEvent";
-export * from "./events/IntegrationEvent";
+export * from "./events/DomainEvents";
+export * from "./events/StoredEvent";
+export * from "./events/OutboxEntry"
 export * from "./events/cononicalEvent";
-
-export * from "./transformers/toCononicalEventTransformer"
 
 export * from "./snapshots/Snapshot";
 

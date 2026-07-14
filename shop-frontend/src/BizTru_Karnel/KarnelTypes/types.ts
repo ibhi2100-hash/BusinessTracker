@@ -1,6 +1,7 @@
 import { Snapshot } from "@/src/offline/repositories/SQLiteSnapshotRepository/SnaphotModel";
 import { CommandDescriptor } from "../CommandFactory/CommandDescriptor";
 import { CommandMetadata } from "../MetadataBuilder/MetadataBuilderContract";
+import { DomainEvent } from "@business/shared-types";
 
 export interface Command<TPayload = unknown> {
 
@@ -57,51 +58,6 @@ export interface BusinessWarning {
     code: string;
     message: string;
 }
-
-
-
-
-
-export interface AuthenticationService{
-
-}
-
-export interface AuthorizationService{
-
-}
-
-export interface AggregateResolver{
-
-}
-
-export interface AggregateRepository{
-
-}
-
-export interface AggregateExecutor{
-
-}       
-
-export interface EventStore{
-
-}
-
-export interface TransactionManager{
-
-}
-
-export interface EventPublisher{
-    
-}
-
-export interface ProjectionDispatcher{
-
-}
-
-export interface SyncDispatcher{
-
-}
-
 export interface AggregateState {
     readonly id: string;
     readonly version: number;
@@ -112,7 +68,7 @@ export interface BusinessOperation<
     TCommand,
 > {
     execute(
-        runtime: AggregateRuntimeContext<TState, TCommand>
+        runtime: AggregateRuntimeContext<TState>
     ): ExecutionPlan;
 }
 
@@ -141,15 +97,14 @@ export interface ExecutionPlan {
 export interface AggregateRuntimeContext
 <
     TState,
-    TCommand
 >{
-    readonly command: Command<TCommand>;
+    readonly command: Command;
 
     readonly state: TState;
 
-    readonly descriptor: CommandDescriptor<TCommand>;
+    readonly descriptor: CommandDescriptor;
 
-    readonly operation: BusinessOperation<TState, TCommand>;
+    readonly operation: BusinessOperation<TState, Command>;
 
 
 }
@@ -160,9 +115,9 @@ export interface AggregateRuntimeFactory {
 
         command: Command,
 
-        descriptor: CommandDescriptor<any>
+        descriptor: CommandDescriptor
 
-    ): Promise<AggregateRuntimeContext<AggregateState, unknown>>;
+    ): Promise<AggregateRuntimeContext<AggregateState>>;
 
 }
 
@@ -200,11 +155,11 @@ export interface AggregateMaterializer {
 
     materialize(
 
-        descriptor: CommandDescriptor<unknown, unknown>,
+        descriptor: CommandDescriptor,
 
         command: Command
 
-    ): Promise<AggregateRuntimeContext<AggregateState, unknown>>;
+    ): Promise<AggregateRuntimeContext<AggregateState>>
 
 }
 
