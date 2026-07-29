@@ -1,9 +1,31 @@
-export const migration0009 = `
-    CREATE TABLE IF NOT EXISTS logic_clock(
+import { Migration } from "./migrationContracts";
 
-    id TEXT PRIMARY KEY AUTOINCREMENT,
+export const migration0009: Migration = {
+    version: 9,
+    name: "create logicClock",
+    async up(q){
+        await q.execute(
+            `
+                CREATE TABLE IF NOT EXISTS logic_clock(
 
-    currentClock INTEGER NOT NULL DEFAULT 0
+                id TEXT PRIMARY KEY,
 
-);
-`;
+                currentClock INTEGER NOT NULL
+
+            );
+        `
+        );
+        await q.execute(`
+            
+            INSERT INTO logic_clock(
+                            id,
+                            currentClock
+                        )
+                        VALUES(
+                            'default',
+                            0
+                        );
+            `
+        )
+    }
+}

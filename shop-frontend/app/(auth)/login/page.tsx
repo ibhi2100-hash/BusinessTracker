@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 
 import { useAuthStore } from "@/src/store/useAuthStore";
-import { SQLiteAuthRepository } from "@/src/offline/repositories/SQLiteAuthRepository/SQLiteAuthRepository";
+import { SQLiteAuthRepository } from "@/src/offline/sqlite/clientDatabase/repositories/SQLiteAuthRepository/SQLiteAuthRepository";
 
 
 export default function LoginPage() {

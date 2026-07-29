@@ -1,13 +1,12 @@
 import { DatabaseInfo } from "../../database/databaseInformation";
 import { IConnectionManager } from "../../types/IStorageContext";
-import { PreparedStatementManager } from "../../PreparedStatement/PreparedStatement";
 import { QueryExecutor } from "../../queryExecutor/QueryExecutor";
 import { TransactionManager } from "../../transactionManager/TransactionManager";
+import { PreparedStatementManager } from "../../businessDatabase/statements/PreparedStatementManager";
 
 export abstract class AbstractStorageSession {
-
     protected ready = false;
-
+    protected readonly statements: PreparedStatementManager;
     protected constructor(
 
         protected readonly connection: IConnectionManager,
@@ -16,9 +15,15 @@ export abstract class AbstractStorageSession {
 
         protected readonly transactionManager: TransactionManager,
 
-        protected readonly preparedStatements: PreparedStatementManager
+        statements: PreparedStatementManager
 
-    ) {}
+    ) {
+        this.statements = statements;
+    }
+
+    statementManager(){
+        return this.statements;
+    }
 
     abstract initialize(): Promise<void>;
 
@@ -130,7 +135,6 @@ export abstract class AbstractStorageSession {
 
         } catch {}
 
-        this.preparedStatements.clear();
 
         await this.onDispose();
 

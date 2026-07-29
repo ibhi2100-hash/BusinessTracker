@@ -13,7 +13,7 @@ import {
   Cloud,
   BarChart3,
 } from "lucide-react";
-import { authServiceBuilder } from "@/offline/InstancesBuilder/authServiceBuilder";
+import { useApplication } from "@/hooks/useApplication";
 
 
 
@@ -56,16 +56,14 @@ export default function RegisterPage() {
       }
       
       localStorage.setItem("accessToken", result.accessToken);
-      
-      const authService = authServiceBuilder();
+      const app =  useApplication();
 
-      authService.register(result);
-      
-      authService.saveSession(result);
-
-      const current= await  authService.getCurrentSession();
-      console.log("This is the actual Current Session", current);
-
+      await app.services.registration.register(
+        result
+      )
+      await app.services.registration.saveSession(
+        
+      )
       router.push("/step1-business");
     } catch (error: any) {
       setServerError(error?.message || "Something went wrong");

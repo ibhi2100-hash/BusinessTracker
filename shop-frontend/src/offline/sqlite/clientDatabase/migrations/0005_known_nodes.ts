@@ -1,11 +1,21 @@
-export const migration0005 = `
-    CREATE TABLE IF NOT EXISTS known_nodes(
+import { Migration } from "./migrationContracts";
 
-    id TEXT PRIMARY KEY,
+export const migration0005: Migration =  {
+    version: 5,
+    name: "known nodes",
+    async up(q){
+        await q.execute(
+            `
+                CREATE TABLE IF NOT EXISTS known_nodes(
 
-    businessId  TEXT,
+                id TEXT PRIMARY KEY,
 
-    createdAt INTEGER NOT NULL
+                businessId  TEXT,
 
-);
-`;
+                createdAt INTEGER NOT NULL
+
+            );
+            `
+        )
+    }
+}

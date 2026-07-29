@@ -1,24 +1,19 @@
 import { BusinessKernel } from "./BusinessKernelContract";
-import { PipelineContextFactory, PipelineKernel } from "./contracts/SubKernelContracts";
+import { PipelineKernel } from "./contracts/SubKernelContracts";
 import { Command } from "./KarnelTypes/types";
+
 
 export class DefaultBusinessKernel
 implements BusinessKernel {
-
+  
     constructor(
-        private readonly pipeline: 
-        PipelineKernel,
-
-        private readonly contextFactory:
-        PipelineContextFactory
+          private readonly pipeline: 
+        PipelineKernel
     ){}
+ 
 
-    async execute<TResult>(command: Command): Promise<TResult> {
-        const context =
-            this.contextFactory.create(command)
+    async execute(command: Command): Promise<void> {
 
-        await this.pipeline.execute(context);
-
-        return context.result as TResult
+        await this.pipeline.execute(command);
     }
 }

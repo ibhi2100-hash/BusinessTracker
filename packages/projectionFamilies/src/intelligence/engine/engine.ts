@@ -1,4 +1,4 @@
-import { ProjectionRepository } from "../../contracts/projectionRepository";
+import { ProjectionRepository } from "../../contracts/ProjectionRepository";
 import { intelligenceRegistry } from "../registry";
 
 export class IntelligenceProjectionEngine {

@@ -1,5 +1,6 @@
-import { IntegrationEvent } from "@business/shared-types";
+import { DomainEvent } from "@business/shared-types";
 import { Command } from "../KarnelTypes/types";
+import { BusinessSession } from "../contracts/SubKernelContracts";
 
 
 export interface TransactionKernel {
@@ -53,7 +54,7 @@ export interface CommandDispatcher {
 
         aggregate: AggregateRoot,
 
-        command: BusinessCommand
+        command: Command
 
     ): Promise<BaseEvent[]>;
 
@@ -62,10 +63,7 @@ export interface CommandDispatcher {
 export interface EventStore {
 
     append(
-
-        session: BusinessSession,
-
-        events: readonly IntegrationEvent[]
+        events: readonly DomainEvent[]
 
     ): Promise<void>;
 
@@ -77,7 +75,7 @@ export interface ProjectionEngine {
 
         session: BusinessSession,
 
-        events: readonly BaseEvent[]
+        events: readonly DomainEvent[]
 
     ): Promise<void>;
 
@@ -101,7 +99,7 @@ export interface SyncScheduler {
 
         session: BusinessSession,
 
-        events: readonly BaseEvent[]
+        events: readonly DomainEvent[]
 
     ): Promise<void>;
 
@@ -111,7 +109,7 @@ export interface LocalEventBus {
 
     publish(
 
-        events: readonly BaseEvent[]
+        events: readonly DomainEvent[]
 
     ): Promise<void>;
 
@@ -120,6 +118,14 @@ export interface PipelinePhase {
 
     execute(
         context: PipelineContext
+    ): Promise<void>;
+
+}
+
+export interface BusinessProvisioner {
+
+    provision(
+        event: DomainEvent
     ): Promise<void>;
 
 }

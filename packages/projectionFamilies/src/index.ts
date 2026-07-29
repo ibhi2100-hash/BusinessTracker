@@ -4,7 +4,8 @@ export * from "./intelligence/registry/index"
 export * from "./intelligence/engine/engine";
 export * from "./operational/registry/index";
 export * from "./operational/engine/OperationalProjectionEngine"
-export * from "./contracts/projectionRepository"
+export * from "./contracts/ProjectionRepository"
+export * from "./contracts/projectionEngine"
 
 export * from "./subscriber/projectionSubscriber"
 

@@ -1,12 +1,13 @@
-import { IntegrationEvent } from "@business/shared-types";
+import { DomainEvent } from "@business/shared-types";
 import { Command } from "../KarnelTypes/types";
 import { CommandMetadata } from "../MetadataBuilder/MetadataBuilderContract";
-import { EventRepository } from "@/src/offline/repositories/SQLiteEventRepository/contracts";
+import { EventRepository } from "@/src/offline/sqlite/businessDatabase/repositories/SQLiteEventRepository/contracts";
+
 
 export interface PipelineKernel {
 
     execute(
-        context: PipelineContext
+        command: Command
     ): Promise<void>;
 
 }
@@ -51,20 +52,11 @@ export interface AggregateLoader {
     ): Promise<TAggregate>;
 
 }
-export interface CommandExecutor {
-
-    execute(
-        aggregate: unknown,
-        command: unknown
-    ): Promise<readonly BaseEvent[]>;
-
-}
 
 export interface EventAppender {
 
     append(
-        session: BusinessSession,
-        events: readonly BaseEvent[]
+        events: readonly DomainEvent[]
     ): Promise<void>;
 
 }
@@ -73,7 +65,7 @@ export interface ProjectionRunner {
 
     project(
         session: BusinessSession,
-        events: readonly BaseEvent[]
+        events: readonly DomainEvent[]
     ): Promise<void>;
 
 }
@@ -83,7 +75,7 @@ export interface SnapshotStore {
     save(
         session: BusinessSession,
         aggregate: unknown,
-        events: readonly BaseEvent[]
+        events: readonly DomainEvent[]
     ): Promise<void>;
 
 }
@@ -92,7 +84,7 @@ export interface Outbox {
 
     enqueue(
         session: BusinessSession,
-        events: readonly BaseEvent[]
+        events: readonly DomainEvent[]
     ): Promise<void>;
 
 }
@@ -101,7 +93,7 @@ export interface SyncQueue {
 
     schedule(
         session: BusinessSession,
-        events: readonly BaseEvent[]
+        events: readonly DomainEvent[]
     ): Promise<void>;
 
 }
@@ -109,7 +101,7 @@ export interface SyncQueue {
 export interface EventPublisher {
 
     publish(
-        events: readonly BaseEvent[]
+        events: readonly DomainEvent[]
     ): Promise<void>;
 
 }
@@ -119,14 +111,14 @@ export interface CommandRouter {
     dispatch(
         aggregate: unknown,
         command: unknown
-    ): Promise<readonly BaseEvent[]>;
+    ): Promise<readonly DomainEvent[]>;
 
 }
 
 export interface PipelinePhase {
 
     execute(
-        context: PipelineContext
+        command: Command
     ): Promise<void>;
 
 }
@@ -196,7 +188,7 @@ export interface RuntimeContext {
 
     aggregate?: AggregateRoot;
 
-    events: IntegrationEvent[];
+    events: DomainEvent[];
 
     aggregateVersion?: number
 
@@ -219,27 +211,10 @@ export interface ExecutionResult {
 
     aggregateId: string;
 
-    events: readonly IntegrationEvent[];
+    events: readonly DomainEvent[];
 
 }
 
-export interface PipelineContext {
-
-    readonly request:
-        ExecutionRequest;
-
-    readonly runtime:
-        RuntimeContext;
-
-    readonly persistence:
-        PersistenceContext;
-
-    readonly diagnostics:
-        DiagnosticContext;
-
-    result?: ExecutionResult;
-
-}
 export interface NodeResolver {
 
     resolve(
@@ -335,14 +310,4 @@ extends
 {
     readonly events: 
         EventRepository
-}
-
-export interface PipelineContextFactory {
-
-    create(
-
-        command: Command,
-
-    ): PipelineContext;
-
 }

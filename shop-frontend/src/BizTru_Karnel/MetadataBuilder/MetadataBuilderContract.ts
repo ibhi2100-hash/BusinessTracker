@@ -1,16 +1,8 @@
-import { ApplicationContext } from "../CommandFactory/ExecutionContext/ExecutionContextContract";
+import { ExecutionContext } from "../KarnelTypes/types";
+import { EventMetadata } from "@business/shared-types";
 
-export interface CommandMetadata {
-
-    correlationId: string;
-
-    causationId?: string;
-
-    logicalClock: number;
-
-}
 export interface MetadataBuilderContract {
     build(
-        context: ApplicationContext
-    ): Promise<CommandMetadata>;
+        context: ExecutionContext
+    ): Promise<EventMetadata>;
 }

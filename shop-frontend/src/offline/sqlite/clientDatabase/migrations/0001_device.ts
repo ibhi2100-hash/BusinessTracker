@@ -1,15 +1,30 @@
-export const migration0001 = `
-    CREATE TABLE IF NOT EXISTS device (
+import { Migration } from "./migrationContracts";
 
-    id TEXT PRIMARY KEY,
+export const migration0001: Migration = {
+    version: 1,
+    name: "device",
 
-    publickey TEXT,
+    async up(q) {
 
-    createdAt INTEGER NOT NULL,
+        await q.execute(`
+            CREATE TABLE IF NOT EXISTS device (
+                id TEXT PRIMARY KEY,
+                deviceId TEXT NOT NULL,
+                createdAt INTEGER NOT NULL
+            );
+        `);
 
-    appVersion TEXT,
-
-    platform TEXT
-
-);
-`;
+        await q.execute(`
+            INSERT OR IGNORE INTO device(
+                id,
+                deviceId,
+                createdAt
+            )
+            VALUES(
+                'default',
+                '${crypto.randomUUID()}',
+                ${Date.now()}
+            );
+        `);
+    }
+}

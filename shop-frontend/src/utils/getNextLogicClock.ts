@@ -1,5 +1,5 @@
-import { LogicClockRepository } from "../offline/repositories/LogicClockRepository/LogicClockRepository";
-import { LogicClockStatement } from "../offline/repositories/LogicClockRepository/logicClockStatement";
+import { LogicClockRepository } from "../offline/sqlite/clientDatabase/repositories/LogicClockRepository/LogicClockRepository";
+import { LogicClockStatement } from "../offline/sqlite/clientDatabase/repositories/LogicClockRepository/logicClockStatement";
 import { StorageBusCreator } from "../offline/sqlite/bus/StorageBusCreator";
 
 export async  function getNextLogicClock(){

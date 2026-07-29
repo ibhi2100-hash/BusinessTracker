@@ -7,8 +7,9 @@ import { migration0006 } from "./0006_feature_flags";
 import { migration0007 } from "./0007_sync_metadata";
 import { migration0008 } from "./0008_activeBranch";
 import { migration0009 } from "./0009_LogicalClock";
+import { Migration } from "./migrationContracts";
 
-export const migrations = [
+export const migrations: Migration[] = [
     migration0001,
     migration0002,
     migration0003,

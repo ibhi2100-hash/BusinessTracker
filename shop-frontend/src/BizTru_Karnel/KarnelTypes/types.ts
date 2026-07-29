@@ -1,13 +1,19 @@
-import { Snapshot } from "@/src/offline/repositories/SQLiteSnapshotRepository/SnaphotModel";
-import { CommandDescriptor } from "../CommandFactory/CommandDescriptor";
-import { CommandMetadata } from "../MetadataBuilder/MetadataBuilderContract";
-import { DomainEvent } from "@business/shared-types";
+import { Snapshot } from "@/src/offline/sqlite/businessDatabase/repositories/SQLiteSnapshotRepository/SnaphotModel";
+import { CommandDescriptor } from "../CommandFactory/factoryDependencies/CommandDescriptor";
+import { EventMetadata as CommandMetadata } from "@business/shared-types";
+import { ActorContext, DomainEvent } from "@business/shared-types";
 
 export interface Command<TPayload = unknown> {
 
     readonly id: string;
 
+    businessId?: string;
+
+    branchId?: string;
+
     readonly type: string;
+
+    readonly mode: "OPENING" | "LIVE"
 
     readonly aggregateId: string;
 
@@ -22,18 +28,17 @@ export interface Command<TPayload = unknown> {
     readonly version: number;
 
 }
-export interface ActorContext {
 
-    userId: string;
 
-    businessId: string;
-
-    branchId?: string;
-
+export interface ExecutionContext {
+    actorId: string;
+    email: string;
+    role: string;
+    sessionId: string;
     deviceId: string;
-
-    sessionId?: string;
-
+    businessId?: string;
+    branchId?: string;
+    logicClock: number;
 }
 
 

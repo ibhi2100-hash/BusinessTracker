@@ -1,13 +1,24 @@
-export const migration0004 = `
-    CREATE TABLE IF NOT EXISTS settings (
+import { Migration } from "./migrationContracts";
 
-    id TEXT PRIMARY KEY,
+export const migration0004: Migration = {
+    version: 4,
+    name: "settings",
+    async up(q){
+        await q.execute(
+            `
+                CREATE TABLE IF NOT EXISTS settings (
 
-    createdAt INTEGER NOT NULL,
+                id TEXT PRIMARY KEY,
 
-    appVersion TEXT,
+                createdAt INTEGER NOT NULL,
 
-    platform TEXT
+                appVersion TEXT,
 
-);
-`;
+                platform TEXT
+
+            );
+            `
+        )
+
+    }
+}

@@ -2,7 +2,7 @@ import { BaseEventMapper } from "@/src/mappers/BaseEventMapper";
 import { InMemoryEventBus } from "@business/event-bus";
 import { BaseEvent, IntegrationEvent } from "@business/shared-types";
 import { CreateProjectionEngine } from "../events/projectors/projectEngine";
-import { SQLiteEventRepository } from "@/src/offline/repositories/SQLiteEventRepository/eventStore";
+import { SQLiteEventRepository } from "@/src/offline/sqlite/businessDatabase/repositories/SQLiteEventRepository/eventStore";
 import { LedgerEngine } from "@business/ledger-engine";
 import { createFrontendLedgerEngine } from "../LedgerEngine";
 import { StorageClient } from "@/src/offline/sqlite/bus/StorageBus"

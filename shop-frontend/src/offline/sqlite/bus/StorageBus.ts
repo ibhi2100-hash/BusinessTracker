@@ -225,7 +225,7 @@ export class StorageBus {
 
     }
 
-    openBusiness(
+    async openBusiness(
         nodeId: string
     ) {
 
@@ -242,8 +242,11 @@ export class StorageBus {
         });
 
     }
+    async switchBusinessNode(nodeId: string){
+        return this.openBusiness(nodeId)
+       }
 
-    closeBusiness() {
+    async closeBusiness() {
 
         return this.send<void>({
 
@@ -255,6 +258,18 @@ export class StorageBus {
 
         });
 
+    }
+
+    async listBusinessNodes(){
+        return this.send<{
+            activeNode: string[],
+            current: string | null,
+            stats: any
+        }>({
+            database: DatabaseTarget.BUSINESS,
+            operation: WorkerOperation.LIST_NODES,
+            payload: {}
+        })
     }
 
     async openClient(): Promise<void> {

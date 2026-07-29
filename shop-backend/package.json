@@ -11,10 +11,10 @@
     "prisma:generate": "prisma generate"
   },
   "dependencies": {
-    "@business/shared-types": "*",
-    "@business/events": "*",
-    "@business/snapshot-engine": "*",
     "@business/event-bus": "*",
+    "@business/events": "*",
+    "@business/shared-types": "*",
+    "@business/snapshot-engine": "*",
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
     "axios": "^1.13.5",
@@ -30,8 +30,9 @@
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.0.2",
     "multer-storage-cloudinary": "^4.0.0",
+    "next": "16.2.12",
     "node-cron": "^4.2.1",
-    "sharp": "^0.34.5",
+    "sharp": "^0.35.3",
     "socket.io": "^4.8.3",
     "streamifier": "^0.1.1"
   },

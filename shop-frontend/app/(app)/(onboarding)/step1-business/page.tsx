@@ -47,11 +47,10 @@ export default function Step2Business() {
 
     try {
       await eventService.create({
+
         type: BusinessEventTypes.BUSINESS_CREATED,
         aggregateType: AggregateType.BUSINESS,
         aggregateId: businessId,
-        businessId: businessId,
-        branchId: branchId,
         mode: "OPENING",
         payload: {
           id: businessId,
@@ -64,8 +63,6 @@ export default function Step2Business() {
         type: BusinessEventTypes.BRANCH_CREATED,
         aggregateType: AggregateType.BRANCH,
         aggregateId: branchId,
-        businessId,
-        branchId: branchId,
         mode: "OPENING",
         payload: {
           id: branchId,

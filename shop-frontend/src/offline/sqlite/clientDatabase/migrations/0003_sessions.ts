@@ -1,17 +1,27 @@
-export const migration0003 = `
-    CREATE TABLE IF NOT EXISTS sessions (
+import { Migration } from "./migrationContracts";
 
-    id TEXT PRIMARY KEY,
+export const migration0003: Migration = {
+    version: 3,
+    name: "create session",
+    async up(q){
+        await q.execute(
+            `
+                CREATE TABLE IF NOT EXISTS sessions (
 
-    accessToken  TEXT,
+                id TEXT PRIMARY KEY,
 
-    refreshToken  TEXT,
+                accessToken  TEXT,
 
-    expiresAt INTEGER,
+                refreshToken  TEXT,
 
-    userId  TEXT,
+                expiresAt INTEGER,
 
-    createdAt INTEGER NOT NULL
+                userId  TEXT,
 
-);
-`;
+                createdAt INTEGER NOT NULL
+
+            );
+            `
+        )
+    }
+} 

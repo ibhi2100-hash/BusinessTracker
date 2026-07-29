@@ -1,6 +1,6 @@
 // PreparedStatement.ts
 
-export interface PreparedStatementContract {
+export interface PreparedStatement {
 
     execute(
         params?: readonly unknown[]

@@ -1,5 +1,7 @@
 export interface DomainEvent<TPayload = unknown> {
     readonly id: string;
+    readonly businessId?: string;
+    readonly branchId?: string;
     readonly aggregateId: string;
     readonly aggregateType: string;
     readonly aggregateVersion?: number;
@@ -7,16 +9,17 @@ export interface DomainEvent<TPayload = unknown> {
     readonly type: string;
     readonly mode: "OPENING" | "LIVE";
     readonly payload: Readonly<TPayload>;
-    readonly actor: EventActor;
-    readonly metadata: DomainEventMetadata;
+    readonly actor: ActorContext;
+    readonly metadata: EventMetadata;
 }
-export interface EventActor {
-    readonly userId: string;
-    readonly businessId: string;
-    readonly branchId?: string;
+export interface ActorContext {
+    userId: string;
+    deviceId: string;
+    sessionId?: string;
 }
-export interface DomainEventMetadata {
-    readonly occurredAt: number;
-    readonly causationId?: string;
-    readonly correlationId?: string;
+export interface EventMetadata {
+    occuredAt: number;
+    correlationId: string;
+    causationId?: string;
+    logicalClock: number;
 }

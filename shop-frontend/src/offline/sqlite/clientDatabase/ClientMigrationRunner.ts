@@ -1,24 +1,24 @@
+import { TransactionManager } from "@/src/storage/transaction/TransactionManager";
 import { migrations } from "./migrations";
-import { ClientConnection } from "./ClientConnection";
-import { IConnectionManager } from "../types/IStorageContext";
-import { QueryExecutor } from "../queryExecutor/QueryExecutor";
+import { QueryRunner } from "@/src/storage/queryRunner/QueryRunner";
 
 
 export class ClientMigrationRunner {
     constructor(
-        private readonly queryExecutor: QueryExecutor
+        private readonly queryRunner:QueryRunner,
+        private readonly transactionManager: TransactionManager
     ){}
 
     async run() {
-    
-        await this.queryExecutor.execute(`
+        
+        await this.queryRunner.execute(`
             CREATE TABLE IF NOT EXISTS schema_version (
                 version INTEGER PRIMARY KEY,
                 applied_at TEXT NOT NULL
             )
         `);
 
-        const result = await this.queryExecutor.query<{
+        const result = await this.queryRunner.query<{
             version: number}>(`
             SELECT MAX(version) as version
             FROM schema_version
@@ -27,34 +27,44 @@ export class ClientMigrationRunner {
         const currentVersion = 
             result?.[0]?.version ?? 0;
 
-        for(
-            let i =currentVersion;
-            i < migrations.length;
-            i++
-        ){
-            const version = i + 1;
+       await this.transactionManager.run(async () => {
+         for (const migration of migrations) {
+            if(migration.version <= currentVersion){
+                continue
+            }
+            try {
+                console.log("migration Runing: ", {
+                    migrationName: migration.name,
+                    migrationVersion: migration.version
+                })
+                await migration.up(this.queryRunner);
+                await this.queryRunner.execute(
+                    `
+                    INSERT INTO schema_version (
+                        version,
+                        applied_at
+                    )
+                    VALUES (
+                    ${migration.version},
+                    '${new Date().toISOString()}'
+                    )
+                    `,
+        
+                );
 
-            console.log(
-                `[Migrationg] Running ${version}`
-            );
+            } catch (error) {
+                console.error(`Migration ${migration.version} failed.`);
+                console.error(error);
 
-            await this.queryExecutor.execute(migrations[i]);
+                // Print the exact SQL again
+                console.error("SQL:");
+                console.error(migration);
 
-            await this.queryExecutor.execute(
-        `
-        INSERT INTO schema_version
-        (
-          version,
-          applied_at
-        )
-        VALUES (?, ?)
-      `,
-        [
-          version,
-          new Date().toISOString(),
-        ]
-      );
+                throw error;
+            }
         }
+       
+       })     
     }
 
 }

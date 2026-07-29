@@ -1,14 +1,16 @@
-import { EventSubscriber } from "@business/event-bus"
-import { IntegrationEvent } from "@business/shared-types"
-import { OperationalProjectionEngine } from "../operational/engine/OperationalProjectionEngine"
+import { EventSubscriber } from "@business/event-bus";
+import { DomainEvent } from "@business/shared-types";
+import { ProjectionEngine } from "../contracts/projectionEngine";
 
-export class ProjectionSubscriber implements EventSubscriber<IntegrationEvent> {
+export class ProjectionSubscriber
+implements EventSubscriber<DomainEvent> {
     constructor(
-        private readonly projecionEngine: OperationalProjectionEngine
+        private readonly engine: ProjectionEngine<DomainEvent>
     ){}
-    async handle(events: IntegrationEvent[]): Promise<void> {
-        for (const event of events) {
-            await this.projecionEngine.process(event)
+
+    async handle(events: DomainEvent<unknown>[]): Promise<void> {
+        for(const event of events) {
+            await this.engine.process(event)
         }
     }
 }

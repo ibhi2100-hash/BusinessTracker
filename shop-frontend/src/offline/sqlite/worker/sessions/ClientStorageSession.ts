@@ -1,6 +1,6 @@
 import { ClientConnection } from "../../clientDatabase/ClientConnection";
 import { ClientMigrationRunner } from "../../clientDatabase/ClientMigrationRunner";
-import { PreparedStatementManager } from "../../PreparedStatement/PreparedStatement";
+import { PreparedStatementManager } from "../../businessDatabase/statements/PreparedStatementManager";
 import { QueryExecutor } from "../../queryExecutor/QueryExecutor";
 import { TransactionManager } from "../../transactionManager/TransactionManager";
 import { AbstractStorageSession } from "./AbstractStorageSession";
@@ -11,12 +11,11 @@ export class ClientSession extends AbstractStorageSession {
     private readonly migrations: ClientMigrationRunner;
 
     constructor() {
-
         const connection = new ClientConnection();
-
-
+        
         const statements =
-            new PreparedStatementManager(connection);
+            new PreparedStatementManager(connection)
+
 
         const executor =
             new QueryExecutor(connection);
@@ -46,8 +45,6 @@ export class ClientSession extends AbstractStorageSession {
         if (this.ready) return;
 
         await this.connection.open();
-
-        this.preparedStatements.clear();
 
         await this.onInitialize();
 

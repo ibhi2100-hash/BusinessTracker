@@ -27,7 +27,7 @@ ORDER BY name;
       const storage = StorageBusCreator()
 
       const rows = await storage.query(
-        DatabaseTarget.BUSINESS,
+        DatabaseTarget.CLIENT,
         sql
       )
 

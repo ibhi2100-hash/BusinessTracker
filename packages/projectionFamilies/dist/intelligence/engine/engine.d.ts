@@ -1,4 +1,4 @@
-import { ProjectionRepository } from "../../contracts/projectionRepository";
+import { ProjectionRepository } from "../../contracts/ProjectionRepository";
 export declare class IntelligenceProjectionEngine {
     private repo;
     constructor(repo: ProjectionRepository);

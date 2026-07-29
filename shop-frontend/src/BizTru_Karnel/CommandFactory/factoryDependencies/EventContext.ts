@@ -1,7 +1,7 @@
-import { Actor}
+import { ActorContext } from "@business/shared-types";
 export interface CommandContext {
 
-    actor: ;
+    actor: ActorContext;
 
     businessId: string;
 

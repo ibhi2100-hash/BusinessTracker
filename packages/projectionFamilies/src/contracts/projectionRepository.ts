@@ -1,14 +1,14 @@
 
 export interface ProjectionRepository {
 
-  load(
+  load<T>(
     projection: string,
-    aggregateId: string
-  ): Promise<any>;
+    id: string
+  ): Promise<T | null>;
 
-  save(
+  save<T>(
     projection: string,
-    aggregateId: any,
-    state: any
+    id: string,
+    state: T
   ): Promise<void>;
 }

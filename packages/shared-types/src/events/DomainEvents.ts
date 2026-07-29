@@ -2,6 +2,10 @@ export interface DomainEvent<TPayload = unknown> {
 
     readonly id: string;
 
+    readonly businessId?: string;
+
+    readonly branchId?: string;
+
     readonly aggregateId: string;
 
     readonly aggregateType: string;
@@ -16,28 +20,28 @@ export interface DomainEvent<TPayload = unknown> {
 
     readonly payload: Readonly<TPayload>;
 
-    readonly actor: EventActor;
+    readonly actor: ActorContext,
 
-    readonly metadata: DomainEventMetadata;
-
-}
-
-export interface EventActor {
-
-    readonly userId: string;
-
-    readonly businessId: string;
-
-    readonly branchId?: string;
+    readonly metadata: EventMetadata;
 
 }
 
-export interface DomainEventMetadata {
+export interface ActorContext {
 
-    readonly occurredAt: number;
+    userId: string;
 
-    readonly causationId?: string;
+    deviceId: string;
 
-    readonly correlationId?: string;
+    sessionId?: string;
+
+}
+export interface EventMetadata {
+    occuredAt: number;
+    
+    correlationId: string;
+
+    causationId?: string;
+
+    logicalClock: number;
 
 }

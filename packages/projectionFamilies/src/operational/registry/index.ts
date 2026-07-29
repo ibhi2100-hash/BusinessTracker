@@ -6,11 +6,11 @@ import {
   IntegrationEvent,
 } from "@business/shared-types";
 
-import { ProductReducer } from "../reducers/productReducer";
-import { InventoryReducer } from "../reducers/inventoryReducer";
-import { SaleReducer } from "../reducers/saleReducer";
-import { BusinessReducer } from "../reducers/businessReducer";
-import { BranchReducer } from "../reducers/branchReducer";
+import { ProductReducer } from "../../reducers/productReducer";
+import { InventoryReducer } from "../../reducers/inventoryReducer";
+import { SaleReducer } from "../../reducers/saleReducer";
+import { BusinessReducer } from "../../reducers/businessReducer";
+import { BranchReducer } from "../../reducers/branchReducer";
 import { ProjectionHandler } from "../types/types";
 
 export const operationalRegistry = {

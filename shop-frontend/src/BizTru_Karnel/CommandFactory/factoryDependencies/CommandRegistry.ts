@@ -1,4 +1,4 @@
-import { CommandDescriptor } from "../CommandDescriptor";
+import { CommandDescriptor } from "./CommandDescriptor";
 
 export interface CommandRegistry {
 

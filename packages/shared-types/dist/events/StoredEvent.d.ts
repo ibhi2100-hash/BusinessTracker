@@ -7,7 +7,7 @@ export interface StorageMetadata {
     readonly deviceId: string;
     readonly sessionId?: string;
     readonly logicClock: number;
-    readonly checksum: string;
+    readonly checksum?: string;
     readonly persistedAt: number;
     readonly eventNumber: bigint;
 }

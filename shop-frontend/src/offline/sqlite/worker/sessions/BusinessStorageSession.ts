@@ -1,35 +1,42 @@
-import { BusinessConnection } from "../../businessDatabase/engine/ConnectionManager";
 import { MigrationManager } from "../../businessDatabase/engine/MigrationManager";
-import { PreparedStatementManager } from "../../PreparedStatement/PreparedStatement";
+
 import { QueryExecutor } from "../../queryExecutor/QueryExecutor";
-import { StorageContext } from "../../clientDatabase/ClientStorageContext";
 import { TransactionManager } from "../../transactionManager/TransactionManager";
 import { AbstractStorageSession } from "./AbstractStorageSession";
-import { BusinessSession } from "@/src/BizTru_Karnel/contracts/SubKernelContracts";
+import { BusinessConnection } from "../../businessDatabase/engine/BusinessConnection";
+import { PreparedStatementManager } from "../../businessDatabase/statements/PreparedStatementManager";
+import { StatementRegistry } from "../../businessDatabase/statements/StatementRegistry";
+import { RepositoryRegistry } from "@/src/offline/sqlite/businessDatabase/repositories/RepositoryRegistry";
+import { EventStore } from "@/src/BizTru_Karnel/SubKernel/types";
+import { EventStored } from "@/src/BizTru_Karnel/EventStore/EventStore";
 
 export class BusinessStorageSession extends AbstractStorageSession
-implements BusinessSession {
+{
 
     readonly nodeId: string;
 
     private readonly migration: MigrationManager;
 
-    constructor(nodeId: string) {
+    private statementsRegistry: StatementRegistry;
 
-        const connection =
-            new BusinessConnection(nodeId);
+    repositories: RepositoryRegistry;
 
-        
+    constructor(
+        nodeId: string,
+        connection: BusinessConnection
 
-        const statements =
-            new PreparedStatementManager(connection);
+    ) {
+
+      
+
+        const statements=
+            new PreparedStatementManager(connection)
 
         const executor =
             new QueryExecutor(connection);
 
         const transactions =
             new TransactionManager(connection);
-
         super(
 
             connection,
@@ -56,11 +63,17 @@ implements BusinessSession {
         if (this.ready) return;
 
         await this.connection.open();
-
-        this.preparedStatements.clear();
-
         await this.onInitialize();
+        this.statementsRegistry = 
+            new StatementRegistry(
+                this.statementManager()
+            );
 
+        this.repositories =
+            new RepositoryRegistry(
+                this.statementsRegistry
+            )
+        
         this.ready = true;
 
     }
@@ -74,7 +87,7 @@ implements BusinessSession {
     }
 
     protected async onDispose(): Promise<void> {
-
+        this.statementManager().clear();
         await this.connection.close();
 
     }

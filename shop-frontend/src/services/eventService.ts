@@ -1,65 +1,25 @@
-import { createEvent } from "@/offline/core/events/eventFactory";
-import { dispatchEvent } from "@/offline/core/events/eventDispatcher";
 import { useBranchStore } from "@/src/store/useBranchStore";
 import { nanoid } from "nanoid";
 import { InventoryEventType, OpeningEventType } from "@business/shared-types";
 import { useInventoryStore } from "../store/inventoryStore";
 import { AggregateType } from "@/offline/domain/aggregate";
 import { inventoryKey } from "../utils/keygenerator";
-import { useBusiness } from "../offline/queryHooks/businessQueryHooks";
-import { SQLiteAuthRepository } from "../offline/repositories/SQLiteAuthRepository/SQLiteAuthRepository";
-import { StorageBusCreator } from "../offline/sqlite/bus/StorageBusCreator";
+import { CommandIntent } from "../BizTru_Karnel/CommandFactory/CommandIntent";
+import { composer } from "../Composer/Composer";
 
 export const eventService = {
-  async create(input: {
-    type: string;
-    aggregateType: string;
-    aggregateId: string;
-    payload: any;
-    mode: "OPENING" | "LIVE";
-
-    //optional Overrides
-    businessId?: string | null
-    branchId?: string | null
-    
-    }) 
+  async create(input: CommandIntent<any>
+  ) 
     {
-
+      const app = composer()
       console.log("This is the Input of the event that reach me: ", input)
-    
-    if (!input.aggregateId) {
-    throw new Error("Missing aggregateId");
-  }
-  // Business Context 
+      const commandFactory  = app.commandactory
 
-  const business =
-    await useBusiness()
-  
-  // explicit overide wins
-  const businessId = 
-    input.businessId 
-  console.log("business From Backend: ", business)
+      const command = await commandFactory.create(input);
 
-  const branchId = 
-    input.branchId 
-
-      const scope =
-      !businessId
-        ? "GLOBAL"
-        : !branchId
-        ? "BUSINESS"
-        : "BRANCH";
-      const storage = StorageBusCreator()
-      
-      const event = await createEvent({
-        ...input,
-        scope,
-        userId,
-        businessId: businessId,
-        branchId: branchId,
-      });
-      await dispatchEvent(event);
-      return event;
+      console.log("Command Is created Successifully: ", command)
+      const kernel = app.Kernel
+      await kernel.execute(command)
     },
 
   // ✅ COMPOSITE COMMAND (this is what you need)

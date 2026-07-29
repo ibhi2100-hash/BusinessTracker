@@ -1,168 +1,148 @@
 
-
-import { BusinessSession } from "@/src/BizTru_Karnel/contracts/SubKernelContracts";
-import { DatabaseInfo } from "../../database/databaseInformation";
+import { BusinessSession } from "./BusinessSessionContract";
 import { BusinessStorageSession} from "../../worker/sessions/BusinessStorageSession"
+import { BusinessConnectionPool } from "../../businessDatabase/engine/ConnectionManager";
 
-export class BusinessSessionManager {
-    private session:
-        BusinessStorageSession | null = null;
+export class BusinessSessionManager
+implements BusinessSession {
+    private static instance: BusinessSessionManager;
 
-    private currentNodeId: string | null = null
-    async openNode(nodeId: string):
-        Promise<BusinessSession>{
+    //Map all Active Business Session;
 
-        if(
+    private sessions: Map<string, BusinessStorageSession> = new Map();
 
-            this.session?.nodeId===nodeId
+    private currentSession: BusinessStorageSession | null = null;
 
-        ){
+    private currentNodeId: string | null = null;
 
-            return this.session
+    static getInstance():BusinessSessionManager{
+        if(!BusinessSessionManager.instance){
+            BusinessSessionManager.instance = new BusinessSessionManager()
+        };
+        return BusinessSessionManager.instance
+    };
+    //Get or Create Session for a specific Business
 
-        }
+    async getSession(nodeId: string): Promise<BusinessStorageSession>{
+        //Return Existing Session if available
+        if(this.sessions.has(nodeId)){
+            console.log(`[SessionManager] Reusing session for node-${nodeId}`);
+            return this.sessions.get(nodeId)
+        };
+        console.log(`[SessionManager] Creating Session for node-${nodeId}`);
+        const pool = BusinessConnectionPool.getInstance();
+        console.log("Pool of connection is about to be Connected: ", pool)
+        const connection = await pool.getConnection(nodeId);
+        console.log("Connection is made for this dataBase: ", connection)
+        const session = new BusinessStorageSession(nodeId, connection);
 
-        if(this.session){
-
-            await this.session.dispose();
-
-        }
-
-        this.session =
-            new BusinessStorageSession(nodeId);
-
-        await this.session.initialize();
-
-        return this.session
-
+        await session.initialize();
+        this.sessions.set(nodeId, session);
+        return session;
     }
-    private requireSession(): BusinessStorageSession {
 
-    if (!this.session) {
+    async switchTo(nodeId: string): Promise<BusinessStorageSession>{
+        console.log(`[SessionManager] Switching to node-${nodeId}`);
+
+        const session = await this.getSession(nodeId);
+        this.currentSession = session;
+        this.currentNodeId = nodeId;
+
+        return session
+    }
+
+    getCurrentSession(): BusinessStorageSession | null {
+        return this.currentSession;
+    }
+
+    getCurrentNodeId(): string | null {
+        return this.currentNodeId;
+    }
+
+    async closeSession(nodeId: string):Promise<void> {
+        const session = this.sessions.get(nodeId);
+        if(session){
+            await session.dispose();
+            this.sessions.delete(nodeId);
+
+            if(this.currentNodeId === nodeId)
+            {
+                this.currentSession = null;
+                this.currentNodeId = null
+            }
+        }
+    }
+
+    async closeAll(): Promise<void> {
+        for (const [nodeId, session] of this.sessions){
+            await session.dispose();
+        };
+        this.sessions.clear();
+        this.currentSession = null;
+        this.currentNodeId = null;
+    }
+
+    getActiveNodes(): string[] {
+        return Array.from(this.sessions.keys());
+    }
+
+    hasSession(nodeId: string): boolean {
+        return this.sessions.has(nodeId)
+    }
+    
+    async execute(
+        operation: string,
+        params: any,
+        nodeId?: string
+    ):Promise<any>{
+        const session = nodeId
+            ? await this.getSession(nodeId)
+            : this.currentSession
+
+            if(!session){
+                throw new Error("No active business Session")
+            }
+
+            switch (operation) {
+                case "query":
+                    return session.query(
+                        params.sql, 
+                        params.params
+                    )
+                case "execute":
+                    return session.execute(
+                        params.sql, 
+                        params.params
+                    );
+                case "scalar":
+                    return session.scalar(
+                        params.sql,
+                        params.params
+                    )
+            
+                default:
+                    throw new Error(`Unknown Operation: ${operation}`)
+            }
+    }
+
+    async createBusiness(
+    nodeId: string
+): Promise<BusinessStorageSession> {
+    console.log("Creating Business Session: ", nodeId)
+    if (this.sessions.has(nodeId)) {
 
         throw new Error(
-            "No Business Node is currently open."
+            `Business ${nodeId} already exists.`
         );
 
     }
 
-    return this.session;
+    const session =
+        await this.getSession(nodeId);
 
+    this.currentSession = session;
+    this.currentNodeId = nodeId;
+
+    return session;
 }
-    async close() {
-
-       if(!this.session) return;
-
-       await this.session.dispose();
-
-       this.session = null;
-    }   
-    query<T>(
-        sql: string,
-        params: unknown[] = []
-    ) {
-
-        return this
-            .requireSession()
-            .query<T>(
-                sql,
-                params
-            )
-
-
-    }   
-    execute(
-        sql: string,
-        params: unknown[] = []
-    ) {
-
-        return this
-            .requireSession()
-            .execute(
-                sql,
-                params
-            )
-
-    }   
-    scalar<T>(
-        sql: string,
-        params: unknown[] = []
-    ) {
-
-        return this
-            .requireSession()
-            .scalar<T>(
-                sql,
-                params
-            )
-
-    }   
-    exists(
-        sql: string,
-        params: unknown[] = []
-    ) {
-
-        return this
-            .requireSession()
-            .exists(
-                sql,
-                params
-            )
-
-    }
-    transaction<T>(
-        callback: () => Promise<T>
-    ) {
-
-        return this
-            .requireSession()
-            .transaction(
-                callback
-            )
-
-    }
-    isOpen() {
-
-        return this.session !== null;
-
-    }
-
-    isReady(): boolean {
-        return this.session.isReady() ?? false
-    }
-
-    currentNode() {
-
-        return this.session?.nodeId ?? null;
-
-    }  
-
-        async beginTransaction() {
-        await this
-            .requireSession()
-            .beginTransaction()
-    }
-
-    async commitTransaction() {
-        await this
-            .requireSession()
-            .commitTransaction();
-    }
-
-    async rollbackTransaction() {
-        await this
-            .requireSession()
-            .rollbackTransaction()
-    }
-
-    async dispose(): Promise<void> {
-        await this.close()
-    }
-
-    async databaseInfo(): Promise<DatabaseInfo> {
-        return this
-            .requireSession()
-            .databaseInfo()
-    }
-
 }

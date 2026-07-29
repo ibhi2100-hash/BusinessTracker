@@ -5,6 +5,7 @@ import { Providers } from "./providers";
 import { AppShell } from "@/components/layout/AppShell";
 import { SQLiteBootstrap } from "@/offline/bootstrap/SQLiteBootstrap";
 import { StorageBusCreator } from "@/src/offline/sqlite/bus/StorageBusCreator";
+import { BootstrapProvider } from "@/components/Bootstrap/Bootstrap";
 
 export const metadata = {
   title: "BizTru",
@@ -22,13 +23,13 @@ export default function RootLayout({
     <html lang="en">
       <body className="bg-black text-white">
         <Providers>
-          
-              <SQLiteBootstrap/>
+          <BootstrapProvider>
               <AppShell>
                   
                   {children}
               </AppShell>
               <Toaster richColors position="top-right" />
+          </BootstrapProvider>
         </Providers>
       </body>
     </html>

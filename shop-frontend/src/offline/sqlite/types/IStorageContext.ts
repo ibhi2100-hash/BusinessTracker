@@ -1,4 +1,5 @@
 import { DatabaseInfo } from "../database/databaseInformation";
+import { PreparedStatement } from "../PreparedStatement/PreparedStatementContract";
 
 export interface IConnectionManager {
 
@@ -11,4 +12,8 @@ export interface IConnectionManager {
     isOpen(): boolean;
 
     databaseInfo(): Promise<DatabaseInfo>;
+
+    prepare(
+        sql: string
+    ): PreparedStatement;
 }

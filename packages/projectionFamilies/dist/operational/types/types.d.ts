@@ -1,5 +1,4 @@
-import { IntegrationEvent } from "@business/shared-types";
-export interface OperationalReducer<current = any, Event = IntegrationEvent> {
+export interface OperationalReducer<current = any, Event = > {
     initialState(): current;
     reduce(state: current, event: Event): current;
 }

@@ -10,9 +10,8 @@ export class ClientSessionManager {
     static getInstance() {
         if(!this.instance) {
             this.instance = new ClientSessionManager();
-
-            return this.instance;
         }
+         return this.instance;
     }
 
     private constructor(){}

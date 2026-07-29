@@ -1,7 +1,6 @@
-import { IntegrationEvent } from "@business/shared-types";
-import { ProjectionRepository } from "../../contracts/projectionRepository";
-export declare class OperationalProjectionEngine {
+import { ProjectionRepository } from "../../contracts/ProjectionRepository";
+export declare class OperationalProjectionEngine<TEvent> {
     private repo;
     constructor(repo: ProjectionRepository);
-    process(event: IntegrationEvent): Promise<void>;
+    process(event: TEvent): Promise<void>;
 }

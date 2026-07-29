@@ -1,4 +1,4 @@
-import { SQLiteProjectionRepository } from "@/src/offline/repositories/SQLiteProjectionRepository/SQLiteProjectionRepository";
+import { SQLiteProjectionRepository } from "@/src/offline/sqlite/businessDatabase/repositories/SQLiteProjectionRepository/SQLiteProjectionRepository";
 import { OperationalProjectionEngine } from "@business/projection-families"
 
 export function CreateProjectionEngine() {

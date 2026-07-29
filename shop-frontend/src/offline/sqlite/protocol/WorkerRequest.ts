@@ -14,6 +14,6 @@ export interface WorkerRequest {
 
     readonly operation: WorkerOperation;
 
-    readonly payload?: unknown;
+    readonly payload?: any;
 
 }

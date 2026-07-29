@@ -1,4 +1,4 @@
-import { ProjectionRepository } from "../../contracts/projectionRepository";
+import { ProjectionRepository } from "../../contracts/ProjectionRepository";
 import { analyticsRegistry } from "../registry";
 export declare class AnalyticsProjectionEngine {
     private repo;

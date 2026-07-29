@@ -3,8 +3,8 @@ export type Business = {
     userId: string;
     name: string;
     address?: string;
-    createdAt?: Date;
-    activatedAt?: Date;
+    createdAt?: number;
+    activatedAt?: number;
     isOnboarding?: boolean;
     onboardingCompleted?: boolean;
     status?: "ONBOARDING" | "ACTIVE" | "SUSPENDED";

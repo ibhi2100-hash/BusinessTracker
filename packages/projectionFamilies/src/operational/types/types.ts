@@ -1,9 +1,9 @@
 // operational/types.ts
-import { IntegrationEvent } from "@business/shared-types";
+import { DomainEvent } from "@business/shared-types";
 
 export interface OperationalReducer<
   current = any,
-  Event = IntegrationEvent
+  Event = 
 > {
   initialState(): current;
 

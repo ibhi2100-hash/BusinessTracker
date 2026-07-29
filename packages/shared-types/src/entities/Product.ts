@@ -16,8 +16,8 @@ export type Product = {
   isActive: boolean;
   isDeleted?: boolean;
 
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: number;
+  updatedAt?: number;
 
-  deletedAt?: Date;
+  deletedAt?: number;
 }

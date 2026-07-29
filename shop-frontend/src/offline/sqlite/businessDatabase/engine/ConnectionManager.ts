@@ -1,135 +1,107 @@
-// ConnectionManager.ts
-
 import sqlite3InitModule from "@sqlite.org/sqlite-wasm";
-import { IConnectionManager } from "../../types/IStorageContext";
+import { BusinessConnection } from "./BusinessConnection";
 
-export class BusinessConnection implements IConnectionManager {
+export class BusinessConnectionPool {
+    private static instance: BusinessConnectionPool;
 
-    private sqlite3: any;
+    private sqlite3: any = null;
+    private pool: any = null;
 
-    private pool: any;
+    private readonly connections = new Map<string, BusinessConnection>();
+    private readonly activeNodes = new Set<string>();
 
-    private currentDB: any = null;
+    private constructor() {}
 
-    private currentNodeId: string | null = null;
+    static getInstance(): BusinessConnectionPool {
+        if (!BusinessConnectionPool.instance) {
+            BusinessConnectionPool.instance = new BusinessConnectionPool();
+        }
 
-    private async initializeSQLite() {
+        return BusinessConnectionPool.instance;
+    }
 
-    if (this.sqlite3) return;
+    private async initializeSQLite(): Promise<void> {
+    if (this.pool) return;
 
     this.sqlite3 = await sqlite3InitModule();
 
-    this.pool =
-        await this.sqlite3.installOpfsSAHPoolVfs({
-
-            initialCapacity: 8
-
+    try {
+        this.pool = await this.sqlite3.installOpfsSAHPoolVfs({
+            initialCapacity: 16
         });
 
-    console.log(
-        "[ConnectionManager] SQLite Ready"
-    );
-}  
-constructor(
-    private readonly nodeId: string
-){}
+        console.log("Pool:", this.pool);
+    } catch (e) {
+        console.error("installOpfsSAHPoolVfs failed:", e);
 
-    async open(
-        
-) {
-
-    await this.initializeSQLite();
-
-    if (
-        this.currentNodeId === this.nodeId &&
-        this.currentDB
-    ) {
-        return;
-    }
-
-    await this.close();
-
-    const filename =
-        `/node-${this.nodeId}.db`;
-
-    this.currentDB =
-        new this.pool.OpfsSAHPoolDb(
-            filename,
-            "c"
+        console.log("Secure Context:", self.isSecureContext);
+        console.log("crossOriginIsolated:", self.crossOriginIsolated);
+        console.log(
+            "navigator.storage:",
+            navigator.storage
+        );
+        console.log(
+            "navigator.storage.getDirectory:",
+            typeof navigator.storage?.getDirectory
+        );
+        console.log(
+            "SharedArrayBuffer:",
+            typeof SharedArrayBuffer
         );
 
-    this.currentNodeId =
-        this.nodeId;
-
-    console.log(
-        `[ConnectionManager] Opened ${filename}`
-    );
-
+        throw e;
+    }
 }
-    async close() {
+    async getConnection(nodeId: string): Promise<BusinessConnection> {
+        await this.initializeSQLite();
 
-    if (!this.currentDB)
-        return;
+        const existing = this.connections.get(nodeId);
 
-    this.currentDB.close();
-
-    this.currentDB = null;
-
-    this.currentNodeId = null;
-
-}
-
-    getDatabase() {
-
-        if (!this.currentDB) {
-
-            throw new Error(
-                "No Business Node is open."
-            );
-
+        if (existing) {
+            console.log(`[ConnectionPool] Reusing ${nodeId}`);
+            return existing;
         }
 
-        return this.currentDB;
+        const connection = new BusinessConnection(
+            nodeId,
+            this.pool
+        );
 
+        await connection.open();
+
+        this.connections.set(nodeId, connection);
+        this.activeNodes.add(nodeId);
+
+        return connection;
     }
 
-    isOpen() {
+    async closeConnection(nodeId: string): Promise<void> {
+        const connection = this.connections.get(nodeId);
 
-        return this.currentDB !== null;
-
-    }
-
-    currentNode() {
-
-        return this.currentNodeId;
-
-    }
-
-    async databaseInfo() {
-
-    const db = this.getDatabase();
-
-    const rows: any[] = [];
-
-    db.exec({
-
-        sql: `
-            SELECT *
-            FROM schema_version
-        `,
-
-        rowMode: "object",
-
-        callback(row) {
-
-            rows.push(row);
-
+        if (!connection) {
+            return;
         }
 
-    });
+        await connection.close();
 
-    return rows;
-}
+        this.connections.delete(nodeId);
+        this.activeNodes.delete(nodeId);
+    }
 
+    async closeAll(): Promise<void> {
+        for (const connection of this.connections.values()) {
+            await connection.close();
+        }
 
+        this.connections.clear();
+        this.activeNodes.clear();
+    }
+
+    hasConnection(nodeId: string): boolean {
+        return this.connections.has(nodeId);
+    }
+
+    getActiveNodes(): string[] {
+        return [...this.activeNodes];
+    }
 }

@@ -11,7 +11,7 @@ export type Product = {
     reorderLevel?: number;
     isActive: boolean;
     isDeleted?: boolean;
-    createdAt?: Date;
-    updatedAt?: Date;
-    deletedAt?: Date;
+    createdAt?: number;
+    updatedAt?: number;
+    deletedAt?: number;
 };

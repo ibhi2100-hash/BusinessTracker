@@ -8,6 +8,7 @@ export const WorkerOperation = {
 
     CLOSE_CLIENT: "CLOSE_CLIENT",
     
+    LIST_NODES: "LIST_NODES",
 
     QUERY: "QUERY",
 

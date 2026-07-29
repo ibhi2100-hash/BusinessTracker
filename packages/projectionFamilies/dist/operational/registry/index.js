@@ -2,11 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.operationalRegistry = void 0;
 const shared_types_1 = require("@business/shared-types");
-const productReducer_1 = require("../reducers/productReducer");
-const inventoryReducer_1 = require("../reducers/inventoryReducer");
-const saleReducer_1 = require("../reducers/saleReducer");
-const businessReducer_1 = require("../reducers/businessReducer");
-const branchReducer_1 = require("../reducers/branchReducer");
+const productReducer_1 = require("../../reducers/productReducer");
+const inventoryReducer_1 = require("../../reducers/inventoryReducer");
+const saleReducer_1 = require("../../reducers/saleReducer");
+const businessReducer_1 = require("../../reducers/businessReducer");
+const branchReducer_1 = require("../../reducers/branchReducer");
 exports.operationalRegistry = {
     [shared_types_1.InventoryEventType.PRODUCT_CREATED]: [
         {

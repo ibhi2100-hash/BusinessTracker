@@ -1,17 +1,17 @@
 // operational/engine/OperationalProjectionEngine.ts
 
-import { IntegrationEvent } from "@business/shared-types";
-import { ProjectionRepository } from "../../contracts/projectionRepository";
+
+import { ProjectionRepository } from "../../contracts/ProjectionRepository";
 import { operationalRegistry } from "../registry/index";
 
-export class OperationalProjectionEngine {
+export class OperationalProjectionEngine<TEvent> {
 
   constructor(private repo: ProjectionRepository) {}
 
-  async process(event: IntegrationEvent): Promise<void> {
+  async process(event: TEvent): Promise<void> {
 
     const handlers =
-      operationalRegistry[event.type] ?? [];
+      operationalRegistry[event.type ] ?? [];
       
     for (const handler of handlers) {
       const projectionId =

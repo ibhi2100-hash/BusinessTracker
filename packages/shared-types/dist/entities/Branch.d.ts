@@ -6,5 +6,5 @@ export type Branch = {
     phone?: string;
     isActive?: boolean;
     isDefault?: boolean;
-    createdAt?: Date;
+    createdAt?: number;
 };

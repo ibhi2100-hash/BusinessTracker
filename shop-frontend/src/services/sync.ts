@@ -1,4 +1,4 @@
-import { SQLiteSyncRepository } from "../offline/repositories/SQLiteSyncRepository/SQLiteSyncRepository";
+import { SQLiteSyncRepository } from "../offline/sqlite/businessDatabase/repositories/SQLiteSyncRepository/SQLiteSyncRepository";
 import { HttpSyncApi } from "../sync/HttpSyncApi";
 import { ExponentialRetryPolicy } from "../sync/RetryPolicies/ExponentialRetryPolicy";
 

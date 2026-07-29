@@ -1,44 +1,54 @@
-export const migration0002 = `
-CREATE TABLE IF NOT EXISTS users (
+import { Migration } from "./migrationContracts";
 
-    id TEXT PRIMARY KEY,
+export const migration0002: Migration ={
+    version: 2,
+    name: "create user",
+    async up(q){
+        await q.execute(
+            `
+                CREATE TABLE IF NOT EXISTS users (
 
-    businessId TEXT,
+                    id TEXT PRIMARY KEY,
 
-    branchId TEXT,
+                    businessId TEXT,
 
-    name TEXT NOT NULL,
+                    branchId TEXT,
 
-    email TEXT NOT NULL,
+                    name TEXT NOT NULL,
 
-    role TEXT NOT NULL,
+                    email TEXT NOT NULL,
 
-    onboardingCompleted INTEGER NOT NULL DEFAULT 0,
+                    role TEXT NOT NULL,
 
-    isActive INTEGER NOT NULL DEFAULT 1,
+                    onboardingCompleted INTEGER NOT NULL DEFAULT 0,
 
-    version INTEGER NOT NULL DEFAULT 0,
+                    isActive INTEGER NOT NULL DEFAULT 1,
 
-    lastEventId TEXT,
+                    version INTEGER NOT NULL DEFAULT 0,
 
-    createdAt INTEGER NOT NULL,
+                    lastEventId TEXT,
 
-    updatedAt INTEGER
+                    createdAt INTEGER NOT NULL,
 
-);
+                    updatedAt INTEGER
 
-CREATE INDEX IF NOT EXISTS idx_users_business
-ON users(businessId);
+                );
 
-CREATE INDEX IF NOT EXISTS idx_users_branch
-ON users(branchId);
+                CREATE INDEX IF NOT EXISTS idx_users_business
+                ON users(businessId);
 
-CREATE INDEX IF NOT EXISTS idx_users_business_branch
-ON users(businessId, branchId);
+                CREATE INDEX IF NOT EXISTS idx_users_branch
+                ON users(branchId);
 
-CREATE INDEX IF NOT EXISTS idx_users_role
-ON users(role);
+                CREATE INDEX IF NOT EXISTS idx_users_business_branch
+                ON users(businessId, branchId);
 
-CREATE INDEX IF NOT EXISTS idx_users_active
-ON users(isActive);
-`
+                CREATE INDEX IF NOT EXISTS idx_users_role
+                ON users(role);
+
+                CREATE INDEX IF NOT EXISTS idx_users_active
+                ON users(isActive);
+                `
+        )
+    }
+} 

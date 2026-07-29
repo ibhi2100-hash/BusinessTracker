@@ -1,6 +1,6 @@
 import { LedgerEngine } from "@business/ledger-engine";
 import { generateLedgerEntries } from "@business/ledger-engine";
-import { SQLiteLedgerRepository } from "@/src/offline/repositories/SQLiteLedgerRepository/SQLiteLedgerRepository";
+import { SQLiteLedgerRepository } from "@/src/offline/sqlite/businessDatabase/repositories/SQLiteLedgerRepository/SQLiteLedgerRepository";
 
 export function createFrontendLedgerEngine(
 ) {

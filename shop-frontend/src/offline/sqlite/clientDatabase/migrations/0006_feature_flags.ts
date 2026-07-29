@@ -1,13 +1,21 @@
-export const migration0006 = `
-    CREATE TABLE IF NOT EXISTS feature_flags(
+import { Migration } from "./migrationContracts";
 
-    id TEXT PRIMARY KEY,
+export const migration0006: Migration = {
+    version: 6,
+    name: "feature flag",
+    async up(q){
+        `
+            CREATE TABLE IF NOT EXISTS feature_flags(
 
-    createdAt INTEGER NOT NULL,
+            id TEXT PRIMARY KEY,
 
-    appVersion TEXT,
+            createdAt INTEGER NOT NULL,
 
-    platform TEXT
+            appVersion TEXT,
 
-);
-`;
+            platform TEXT
+
+        );
+        `
+    }
+}
