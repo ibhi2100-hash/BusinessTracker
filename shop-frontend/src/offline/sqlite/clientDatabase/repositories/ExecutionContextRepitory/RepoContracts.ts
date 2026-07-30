@@ -1,8 +1,6 @@
-import { ApplicationContext } from "@/src/BizTru_Karnel/CommandFactory/ExecutionContext/ExecutionContextContract";
-
-
+import { ExecutionContext } from "@/src/BizTru_Karnel/KarnelTypes/types";
 export interface ExecutionContextRepositoryContract {
 
-    getCurrentContext(): Promise<ApplicationContext>;
+    getCurrentContext(): Promise<ExecutionContext>;
 
 }

@@ -2,7 +2,6 @@
 
 import { User } from "@business/shared-types";
 import { UserStatements } from "../../statements/users/UserStatements";
-import { use } from "react";
 
 
 export class SQLiteAuthRepository{
@@ -11,13 +10,29 @@ export class SQLiteAuthRepository{
   ){}
 
   async addUser(user: User): Promise<User> {
-    const databaseUser = UserMapper.toInsert(user);
-    const result =  await this.users.insert.execute
-    const userById = await this.users.findById.execute(databaseUser);
+    await this.users.insert.execute(
+        UserMapper.toInsert(user)
+    );
+    const rows = 
+        await this.users.findById.query<User>([
+            user.id
+        ]);
+    if(rows.length === 0){
+        throw new Error(
+            "User was inserted but could not be loaded"
+        )
+    };
 
-    return userById[1]
-
+    return rows[0]
 }
+
+    async findById(userId: string):Promise <User> {
+        const rows = await this.users.findById.query<User>([
+            userId
+        ])
+
+        return rows[0]
+    }
 }
 
 export class UserMapper {

@@ -44,13 +44,14 @@ export class RegistrationService {
 
             lastEventId: null,
 
-            createdAt: new Date(Date.now()),
+            createdAt: Date.now(),
 
             updatedAt: null
 
         };
-
-        return this.repository.addUser(user);
+        const userRegisterd = await this.repository.addUser(user)
+        console.log("User Registerd: ", userRegisterd)
+        return userRegisterd
 
     }
 

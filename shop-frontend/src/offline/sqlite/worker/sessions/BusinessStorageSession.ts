@@ -4,11 +4,13 @@ import { QueryExecutor } from "../../queryExecutor/QueryExecutor";
 import { TransactionManager } from "../../transactionManager/TransactionManager";
 import { AbstractStorageSession } from "./AbstractStorageSession";
 import { BusinessConnection } from "../../businessDatabase/engine/BusinessConnection";
-import { PreparedStatementManager } from "../../businessDatabase/statements/PreparedStatementManager";
+import { BusinessPreparedStatementManager } from "../../businessDatabase/statements/PreparedStatementManager";
 import { StatementRegistry } from "../../businessDatabase/statements/StatementRegistry";
 import { RepositoryRegistry } from "@/src/offline/sqlite/businessDatabase/repositories/RepositoryRegistry";
 import { EventStore } from "@/src/BizTru_Karnel/SubKernel/types";
 import { EventStored } from "@/src/BizTru_Karnel/EventStore/EventStore";
+import { ClientPreparedStatementManager } from "../../clientDatabase/statements/ClientStatementManager";
+import { QueryRunner } from "@/src/storage/queryRunner/QueryRunner";
 
 export class BusinessStorageSession extends AbstractStorageSession
 {
@@ -18,6 +20,8 @@ export class BusinessStorageSession extends AbstractStorageSession
     private readonly migration: MigrationManager;
 
     private statementsRegistry: StatementRegistry;
+    
+    private queryRunner: QueryRunner
 
     repositories: RepositoryRegistry;
 
@@ -27,10 +31,9 @@ export class BusinessStorageSession extends AbstractStorageSession
 
     ) {
 
-      
 
         const statements=
-            new PreparedStatementManager(connection)
+            new BusinessPreparedStatementManager()
 
         const executor =
             new QueryExecutor(connection);

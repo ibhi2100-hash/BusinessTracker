@@ -10,6 +10,6 @@ export type User = {
     isActive?: boolean;
     version?: number;
     lastEventId?: string;
-    createdAt?: Date;
-    updatedAt?: Date;
+    createdAt?: number;
+    updatedAt?: number;
 };

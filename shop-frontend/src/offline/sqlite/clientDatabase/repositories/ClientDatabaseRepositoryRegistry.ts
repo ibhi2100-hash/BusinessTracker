@@ -1,10 +1,11 @@
 import { ClientStatementRegistry } from "../statements/ClientStatementRegistry";
+import { ExecutionContextRepository } from "./ExecutionContextRepitory/ExecutionContextRepository";
 import { SQLiteAuthRepository } from "./SQLiteAuthRepository/SQLiteAuthRepository";
 import { SQLiteSessionRepository } from "./SQLiteSessionRepository/SQLiteSessionRepository";
 export class ClientRepositoryRegistry {
     readonly users: SQLiteAuthRepository;
     readonly session: SQLiteSessionRepository;
-
+    readonly executionContext: ExecutionContextRepository;
     
 
     constructor(
@@ -18,6 +19,11 @@ export class ClientRepositoryRegistry {
         this.session =
             new SQLiteSessionRepository(
                 statements.session
+            )
+
+        this.executionContext = 
+            new ExecutionContextRepository(
+                statements.executionContext
             )
         
     }

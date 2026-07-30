@@ -1,76 +1,52 @@
-import { StorageBus } from "../../../bus/StorageBus";
-import { StorageBusCreator } from "../../../bus/StorageBusCreator";
-import { DatabaseTarget } from "../../../protocol/DatabaseTarget";
+import { QueryRunner } from "@/src/storage/queryRunner/QueryRunner";
 import { ExecutionContextRepositoryContract } from "./RepoContracts";
+import { ExecutionContextStatements } from "./ExecutionPreparedStatements";
+import { ExecutionContext } from "@/src/BizTru_Karnel/KarnelTypes/types";
 
-export class ExecutionContextRepository implements ExecutionContextRepositoryContract {
+export class ExecutionContextRepository 
+implements ExecutionContextRepositoryContract {
     private static instance: ExecutionContextRepository
     
     constructor(
-        private readonly storage: StorageBus
+        private statements: ExecutionContextStatements
     ){}
 
-    async getCurrentContext(): Promise<any> {
-            // Implement the logic to retrieve the current execution context
-            const sql = `
-                SELECT
+    async getCurrentContext(): Promise<ExecutionContext> {
+            
+    const rows = 
+        await this.statements.current.query<ExecutionContext>();
+        const row  = rows[0]
+        
+        console.log("This is the row that comeback from frontend: ", row)
+    
+     return {
 
-                        u.id            AS actorId,
-                        u.email         AS email,
-                        u.role          AS role,
+            actorId:
+                row?.actorId ?? null,
 
-                        s.id            AS sessionId,
+            email:
+                row?.email ?? null,
 
-                        d.deviceId            AS deviceId,
+            role:
+                row?.role ?? null,
 
-                        n.businessId    AS businessId,
+            sessionId:
+                row?.sessionId ?? null,
 
-                        ab.branchId     AS branchId,
+            deviceId:
+                row?.deviceId ?? "",
 
-                        lc.currentClock AS logicalClock
+            businessId:
+                row?.businessId ?? null,
 
-                    FROM users u
+            branchId:
+                row?.branchId ?? null,
 
-                    CROSS JOIN sessions s
+            logicalClock:
+                row?.logicalClock ?? 0
 
-                    CROSS JOIN device d
-
-                    LEFT JOIN known_nodes n ON TRUE
-
-                    LEFT JOIN active_branch ab ON TRUE
-
-                    LEFT JOIN logic_clock lc ON TRUE
-
-                    LIMIT 1;
-                            `
-
-
-        const rows =await this.storage.query(
-            DatabaseTarget.CLIENT,
-            sql,
-        )
-        console.log("This is the record i gets from client database", rows)
-        const record = rows[0] as any;
-
-        if (!record) {
-        throw new Error(
-            "Execution context not found."
-        );
-    }
-
-    return {
-    actorId: record.actorId,
-    email: record.email,
-    role: record.role,
-
-    sessionId: record.sessionId,
-    deviceId: record.deviceId,
-
-    businessId: record.businessId ?? undefined,
-    branchId: record.branchId ?? undefined,
-
-    logicalClock: record.logicalClock ?? 0,
-};
+        };
+    
 }
    
 }

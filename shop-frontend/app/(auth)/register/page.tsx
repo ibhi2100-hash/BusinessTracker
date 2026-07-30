@@ -19,6 +19,7 @@ import { useApplication } from "@/hooks/useApplication";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const app = useApplication();
   const [serverError, setServerError] = useState<string | null>(null);
 
   const {
@@ -56,16 +57,13 @@ export default function RegisterPage() {
       }
       
       localStorage.setItem("accessToken", result.accessToken);
-      const app =  useApplication();
-
       await app.services.registration.register(
         result
       )
-      await app.services.registration.saveSession(
-        
-      )
+      await app.services.registration.saveSession(result)
       router.push("/step1-business");
     } catch (error: any) {
+      throw error
       setServerError(error?.message || "Something went wrong");
     }
   };

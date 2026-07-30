@@ -6,9 +6,9 @@ import { sessionKeys } from "./SessionKeys";
 
 export class SessionStatements {
 
-    private saveSession: PreparedStatement;
-    private getCurrentSession: PreparedStatement;
-    private clearSession: PreparedStatement
+    readonly saveSession: PreparedStatement;
+    readonly getCurrentSession: PreparedStatement;
+    readonly clearSession: PreparedStatement
     constructor(
         manager: PreparedStatementManager
     ){

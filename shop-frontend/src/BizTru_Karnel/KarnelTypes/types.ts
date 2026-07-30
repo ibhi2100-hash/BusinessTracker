@@ -29,19 +29,6 @@ export interface Command<TPayload = unknown> {
 
 }
 
-
-export interface ExecutionContext {
-    actorId: string;
-    email: string;
-    role: string;
-    sessionId: string;
-    deviceId: string;
-    businessId?: string;
-    branchId?: string;
-    logicClock: number;
-}
-
-
 export interface ExecutionResult {
 
     success: boolean;
@@ -165,6 +152,27 @@ export interface AggregateMaterializer {
         command: Command
 
     ): Promise<AggregateRuntimeContext<AggregateState>>
+
+}
+
+
+export interface ExecutionContext {
+
+    actorId: string | null;
+
+    email: string | null;
+
+    role: string | null;
+
+    sessionId: string | null;
+
+    deviceId: string;
+
+    businessId: string | null;
+
+    branchId: string | null;
+
+    logicalClock: number;
 
 }
 

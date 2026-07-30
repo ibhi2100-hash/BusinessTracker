@@ -1,7 +1,7 @@
 import { DatabaseTarget } from "../../protocol/DatabaseTarget";
 
 import { BusinessSessionManager } from "../sessions/BusinessSessionManager";
-import { ClientSessionManager } from "../sessions/ClientSessionManager";
+
 
 const engines = new Map<DatabaseTarget, any>();
 
@@ -13,9 +13,7 @@ function getEngine(target: DatabaseTarget): any {
     let engine: any;
 
     switch(target){
-        case DatabaseTarget.CLIENT:
-            engine = ClientSessionManager.getInstance();
-            break;
+        
         case DatabaseTarget.BUSINESS:
             engine = BusinessSessionManager.getInstance();
             break;
