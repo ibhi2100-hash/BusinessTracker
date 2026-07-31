@@ -7,68 +7,59 @@ import { IdGenerator } from "../BizTru_Karnel/CommandFactory/factoryDependencies
 import { EventStored } from "../BizTru_Karnel/EventStore/EventStore";
 import { KernelExecutionPipeline } from "../BizTru_Karnel/KernelExecutionPipeline/KernelExecutionPipeline";
 import { MetadataBuilder } from "../BizTru_Karnel/MetadataBuilder/MetadataBuilder";
-import { ExecutionContextRepository } from "../offline/sqlite/clientDatabase/repositories/ExecutionContextRepitory/ExecutionContextRepository";
-import { StorageBusCreator } from "../offline/sqlite/bus/StorageBusCreator";
-import { BusinessSessionManager } from "../offline/sqlite/worker/sessions/BusinessSessionManager";
-import { FrontendExecutionContextBus } from "../eventBus/ExecutionContextSubscriber";
-import { DomainEvent } from "@business/shared-types";
-import { FrontEndEventBus } from "../eventBus/EventBus";
-import { FrontendProjectionBus } from "../eventBus/ProjectionBus";
-import { FrontendLedgerBus } from "../eventBus/LedgerBus";
-import { FrontendAnalyticBus } from "../eventBus/AnalyticBus";
-import { FrontEndNotificationBus } from "../eventBus/NotificationBus";
+import { FrontEndEventBus } from "../offline/sqlite/businessDatabase/BusinessEventBus/EventBus";
+import { FrontendProjectionBus } from "../offline/sqlite/businessDatabase/BusinessEventBus/ProjectionBus";
+import { FrontendLedgerBus } from "../offline/sqlite/businessDatabase/BusinessEventBus/LedgerBus";
+import { FrontendAnalyticBus } from "../offline/sqlite/businessDatabase/BusinessEventBus/AnalyticBus";
+import { FrontEndNotificationBus } from "../offline/sqlite/businessDatabase/BusinessEventBus/NotificationBus";
+import { ApplicationContext } from "./context/ApplicationContexts";
 
-let app: ReturnType<typeof createApplication> | null = null;
-export function createApplication(){
-    // Storage
-    const storage = StorageBusCreator();
+
+export class ApplicationComposer {
+    constructor(
+        private readonly app: 
+    ){}
+    compose(){
+        const executionContext = 
+            new ExecutionContextProvider(
+                this.app.repositories.executionContext
+            )
+
+            const commandValidator = new CommandValidation();
+        const idGenerator = new IdGenerator();
+        const metadataBuilder = new MetadataBuilder();
+        const commandactory = new DefaultCommandFactory(executionContext,metadataBuilder,idGenerator)
+
+        //Buses
     
-    const executionContextRepo = new ExecutionContextRepository(storage);
+        const eventBus = new FrontEndEventBus();
+        const projectionBus = new FrontendProjectionBus();
+        const ledgerBus = new FrontendLedgerBus();
+        const analyticBus = new FrontendAnalyticBus();
+        const notificationBus = new FrontEndNotificationBus();
+        //BusinessKernel
     
+        const eventStore  = new EventStored()
+        
+        
 
-    //Command Factories
-    const executionContext = new ExecutionContextProvider(executionContextRepo);
-    const commandValidator = new CommandValidation();
-    const idGenerator = new IdGenerator();
-    const metadataBuilder = new MetadataBuilder();
-    const commandactory = new DefaultCommandFactory(executionContext,metadataBuilder,idGenerator)
+        const businessKernelExecutor =
+            new KernelExecutionPipeline(
+                commandValidator,
+                eventStore,
+                projectionBus,
+                ledgerBus,
+                eventBus,
+                analyticBus,
+            );
+        const Kernel = new DefaultBusinessKernel(businessKernelExecutor);
 
-    //Buses
-    const contextBus =  new FrontendExecutionContextBus(executionContextRepo, executionContext);
-    const eventBus = new FrontEndEventBus();
-    const projectionBus = new FrontendProjectionBus();
-    const ledgerBus = new FrontendLedgerBus();
-    const analyticBus = new FrontendAnalyticBus();
-    const notificationBus = new FrontEndNotificationBus();
-    //BusinessKernel
-   
-    const eventStore  = new EventStored()
-    
-    
-
-    const businessKernelExecutor =
-        new KernelExecutionPipeline(
-            commandValidator,
-            eventStore,
-            contextBus,
-            projectionBus,
-            ledgerBus,
-            eventBus,
-            analyticBus,
-        );
-    const Kernel = new DefaultBusinessKernel(businessKernelExecutor);
-
-    return {
+        return {
         Kernel,
         commandactory,
         executionContext
 
     }
-}   
-
-export function composer(){
-    if(!app){
-        app = createApplication();
+            
     }
-    return app;
 }

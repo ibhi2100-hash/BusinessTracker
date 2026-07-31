@@ -5,6 +5,7 @@ import { SQLiteRuntime } from "@/src/storage/runtime/SQLiteRuntime";
 import { QueryRunner } from "@/src/storage/queryRunner/QueryRunner";
 import { TransactionManager } from "@/src/storage/transaction/TransactionManager";
 import { ClientStatementRegistry } from "@/src/offline/sqlite/clientDatabase/statements/ClientStatementRegistry";
+import { ExecutionContextProvider } from "@/src/BizTru_Karnel/CommandFactory/ExecutionContext/ExecutionContext";
 
 
 
@@ -17,13 +18,15 @@ implements StorageContext {
     readonly repositories: ClientRepositoryRegistry;
     readonly services: ClientServieRegistry;
     readonly statementRegistry: ClientStatementRegistry;
+    readonly executionContext: ExecutionContextProvider;
     constructor(
         runtime: SQLiteRuntime,
         queryRunner: QueryRunner,
         transactionManager: TransactionManager,
         repositorises: ClientRepositoryRegistry,
         services: ClientServieRegistry,
-        statementRegistry: ClientStatementRegistry
+        statementRegistry: ClientStatementRegistry,
+        executionContext: ExecutionContextProvider
     ){
         this.runtime = runtime
 
@@ -36,6 +39,9 @@ implements StorageContext {
         this.services = services
 
         this.statementRegistry = statementRegistry
+
+        this.executionContext = executionContext
+
     }
 
 }

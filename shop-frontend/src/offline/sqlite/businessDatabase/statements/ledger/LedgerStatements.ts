@@ -1,5 +1,4 @@
-import { PreparedStatement } from "../../engine/PreparedStatement";
-import { PreparedStatementManager } from "../../engine/PreparedStatementManager";
+import { PreparedStatement } from "../../../PreparedStatement/PreparedStatementContract";
 
 export class LedgerStatements {
 

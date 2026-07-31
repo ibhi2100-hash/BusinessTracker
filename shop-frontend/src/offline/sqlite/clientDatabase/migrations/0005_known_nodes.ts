@@ -10,9 +10,15 @@ export const migration0005: Migration =  {
 
                 id TEXT PRIMARY KEY,
 
-                businessId  TEXT,
+                name TEXT NOT NULL,
 
-                createdAt INTEGER NOT NULL
+                address TEXT,
+
+                createdAt INTEGER NOT NULL,
+
+                lastOpenedAt INTEGER,
+
+                icon TEXT
 
             );
             `

@@ -1,19 +1,21 @@
 import { ExecutionContextProviderContract } from "./ExecutionContextContract";
-import { ExecutionContextRepository } from "@/src/offline/sqlite/clientDatabase/repositories/ExecutionContextRepitory/ExecutionContextRepository";
 import { ExecutionContext } from "../../KarnelTypes/types";
+import { ExecutionContextRepositoryContract } from "@/src/offline/sqlite/clientDatabase/repositories/ExecutionContextRepitory/RepoContracts";
 
-export class ExecutionContextProvider implements ExecutionContextProviderContract {
+
+export class ExecutionContextProvider
+ implements ExecutionContextProviderContract {
     
     private currentContext?: ExecutionContext;
-    
     constructor(
-        private readonly repo: ExecutionContextRepository
+        private readonly executionRepository:
+        ExecutionContextRepositoryContract
     ){}
      async initialize() {
 
-        this.currentContext =
-            await this.repo.getCurrentContext();
-
+        this.currentContext = 
+            await this.executionRepository.getCurrentContext()
+        console.log("this is the context required in the factory: ", this.currentContext)
     }
 
    current(): ExecutionContext {
@@ -27,6 +29,6 @@ export class ExecutionContextProvider implements ExecutionContextProviderContrac
     }
 
     async refresh(): Promise<void>{
-        this.currentContext = await this.repo.getCurrentContext();
+        this.currentContext = await this.executionRepository.getCurrentContext()
     }
 }

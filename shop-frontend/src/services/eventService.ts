@@ -5,24 +5,21 @@ import { useInventoryStore } from "../store/inventoryStore";
 import { AggregateType } from "@/offline/domain/aggregate";
 import { inventoryKey } from "../utils/keygenerator";
 import { CommandIntent } from "../BizTru_Karnel/CommandFactory/CommandIntent";
-import { composer } from "../Composer/Composer";
+import { ApplicationContext } from "../Composer/context/ApplicationContexts";
 
-export const eventService = {
-  async create(input: CommandIntent<any>
-  ) 
-    {
-      const app = composer()
-      console.log("This is the Input of the event that reach me: ", input)
-      const commandFactory  = app.commandactory
+export class EventService {
+  constructor(
+    private readonly app: ApplicationContext
+  ){}
 
-      const command = await commandFactory.create(input);
+  async create(input: CommandIntent<any>){
+    const command = 
+      await this.app.commandFactory.create(input);
 
-      console.log("Command Is created Successifully: ", command)
-      const kernel = app.Kernel
-      await kernel.execute(command)
-    },
+    const kernel = 
+      this.app.kernel.execute(command)
+  }
 
-  // ✅ COMPOSITE COMMAND (this is what you need)
   async createProductWithOpeningStock(data: {
     name: string;
     price: number;
@@ -68,9 +65,9 @@ export const eventService = {
     }
 
     return productId;
-  },
+  }
 
- async updateProductSmart(input: ProductUpdateInput) {
+   async updateProductSmart(input: ProductUpdateInput) {
   const db = useInventoryStore.getState().productsById[input.productId];
   if (!db) throw new Error("Product not found");
   const branchId = useBranchStore.getState().activeBranchId;
@@ -142,4 +139,5 @@ console.log(
 
   return true;
 } 
-};
+
+}

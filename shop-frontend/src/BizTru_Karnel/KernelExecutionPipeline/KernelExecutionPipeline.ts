@@ -4,10 +4,10 @@ import { Command } from "../KarnelTypes/types";
 import { DomainEvent } from "@business/shared-types";
 import { domainEventTransformer } from "../Transformers/DomainEventTransformer"
 import { BusinessProvisioner } from "../SubKernel/types";
-import { FrontendProjectionBus } from "@/src/eventBus/ProjectionBus";
-import { FrontEndEventBus } from "@/src/eventBus/EventBus";
-import { FrontendLedgerBus } from "@/src/eventBus/LedgerBus";
-import { FrontendAnalyticBus } from "@/src/eventBus/AnalyticBus";
+import { FrontendProjectionBus } from "@/src/offline/sqlite/businessDatabase/BusinessEventBus/ProjectionBus";
+import { FrontEndEventBus } from "@/src/offline/sqlite/businessDatabase/BusinessEventBus/EventBus";
+import { FrontendLedgerBus } from "@/src/offline/sqlite/businessDatabase/BusinessEventBus/LedgerBus";
+import { FrontendAnalyticBus } from "@/src/offline/sqlite/businessDatabase/BusinessEventBus/AnalyticBus";
 
 export class KernelExecutionPipeline
 implements PipelineKernel {
@@ -17,26 +17,12 @@ implements PipelineKernel {
         
         private readonly validator: CommandValidator,
         private readonly eventStore: EventAppender,
-        private readonly constextBus: ExecutionContextBus<DomainEvent>,
-        private readonly projecitionBus: FrontendProjectionBus<DomainEvent>,
-        private readonly ledgerBus: FrontendLedgerBus<DomainEvent>,
-        private readonly eventBus: FrontEndEventBus<DomainEvent>,
-        private readonly analyticBus: FrontendAnalyticBus<DomainEvent>
     ){}
   
     async execute(command: Command): Promise<void> {
         await this.validator.validate(command);
         const event = await domainEventTransformer(command);
         await this.eventStore.append([event])
-
-        await Promise.all([
-            this.constextBus.publish(event),
-            this.eventBus.publish(event),
-            this.projecitionBus.publish(event),
-            this.ledgerBus.publish(event),
-            this.analyticBus.publish(event),
-            
-        ])
 
     }
 }

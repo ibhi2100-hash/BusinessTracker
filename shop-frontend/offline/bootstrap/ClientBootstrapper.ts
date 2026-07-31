@@ -10,6 +10,7 @@ import { ClientStatementDefinitions } from "@/src/offline/sqlite/clientDatabase/
 import { ClientStatementRegistry } from "@/src/offline/sqlite/clientDatabase/statements/ClientStatementRegistry";
 import { RegistrationService } from "@/src/offline/sqlite/clientDatabase/services/AuthService";
 import { LoginService } from "@/src/offline/sqlite/clientDatabase/services/AuthService";
+import { ExecutionContextProvider } from "@/src/BizTru_Karnel/CommandFactory/ExecutionContext/ExecutionContext";
 
 
 export class ClientBootstrapper {
@@ -44,14 +45,18 @@ export class ClientBootstrapper {
             this.createServices(
                 repositories
             );
+        const executionContextProvider =
+            new ExecutionContextProvider(repositories.executionContext)
 
+        await executionContextProvider.initialize()
         return this.createContext(
             runtime,
             infrastructure.queryRunner,
             infrastructure.transactionManager,
             repositories,
             services,
-            statementRegistry
+            statementRegistry,
+            executionContextProvider
         ) 
             
     }
@@ -61,7 +66,8 @@ export class ClientBootstrapper {
         transactionManager: TransactionManager,
         repositoryRegistry: ClientRepositoryRegistry,
         serviceRegistry: ClientServieRegistry,
-        statementRegistry: ClientStatementRegistry
+        statementRegistry: ClientStatementRegistry,
+        executionContext: ExecutionContextProvider
     ){
         return new ApplicationContext(
             runtime,
@@ -69,13 +75,16 @@ export class ClientBootstrapper {
             transactionManager,
             repositoryRegistry,
             serviceRegistry,
-            statementRegistry
+            statementRegistry,
+            executionContext
         )
     }
    
     private async initializeRuntime(): Promise<SQLiteRuntime> {
 
-        const runtime = new SQLiteRuntime();
+        const runtime = new SQLiteRuntime({
+            filename: "/client.db"
+        });
 
         await runtime.initialize();
 

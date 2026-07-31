@@ -12,88 +12,47 @@ export class SQLiteBusinessRepository
   constructor(
           private readonly statements: BusinessStatements
       ) {}
+  async upsert(id: string, state: Business): Promise<void> {
+    await this.statements.upsertBusiness.execute(
+      BusinessMapper.ToInsert(state)
+    )
+  }
   async findById(id: string) {
-    const storage = StorageBusCreator()
-
+    
     const rows =
-      await storage.query<Business>(
-        DatabaseTarget.BUSINESS,
-        `
-        SELECT *
-        FROM businesses
-        WHERE id = ?
-        LIMIT 1
-        `,
+      await this.statements.findById.query<Business>(
         [id]
-      );
+      )
 
     return rows[0] ?? null;
   }
 
   async findAll() {
-    const storage = StorageBusCreator()
-
-    return storage.query<Business>(
-      DatabaseTarget.BUSINESS,
-      `
-      SELECT *
-      FROM businesses
-      `
-    );
-  }
-
-  async upsert(
-    id: string,
-    state: Business
-  ) {
-    const storage = StorageBusCreator()
-
-    await storage.query(
-      DatabaseTarget.BUSINESS,
-      `
-      INSERT INTO businesses (
-        id,
-        userId,
-        name,
-        address,
-        createdAt,
-        activatedAt,
-        isOnboarding,
-        onboardingCompleted,
-        status
-      )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-
-      ON CONFLICT(id)
-      DO UPDATE SET
-        name = excluded.name,
-        address = excluded.address
-      `,
-      [
-        id === state.id ?
-        id : state.id,
-        state.userId,
-        state.name,
-        state.address ?? "",
-        state.createdAt,
-        state.activatedAt ?? "",
-        state.isOnboarding,
-        state.onboardingCompleted,
-        state.status
-      ]
-    );
+    return await this.statements.update.query<Business>()
   }
 
   async delete(id: string) {
-    const storage = StorageBusCreator()
-
-    await storage.query(
-      DatabaseTarget.BUSINESS,
-      `
-      DELETE FROM businesses
-      WHERE id = ?
-      `,
+    await this.statements.deleteBusiness.query(
       [id]
     );
+  }
+}
+
+export class BusinessMapper {
+  static ToInsert(
+    business: Business
+
+  ): unknown[]{
+   return  [
+            business.id,
+            business.userId,
+            business.name ?? "",
+            business.address ?? "",
+            business.createdAt,
+            business.activatedAt ?? "",
+            business.isOnboarding,
+            business.onboardingCompleted,
+            business.status
+        ]
   }
 }

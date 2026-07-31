@@ -9,8 +9,6 @@ import {
   Sparkles,
   Loader2,
 } from "lucide-react";
-
-import { eventService } from "@/src/services/eventService";
 import { nanoid } from "nanoid";
 import { AggregateType } from "@/offline/domain/aggregate";
 import { BusinessEventTypes } from "@business/shared-types";

@@ -8,7 +8,7 @@ import { ProductStatements } from "./products/ProductStatements";
 import { UserStatements } from "../../clientDatabase/statements/users/UserStatements";
 import { PreparedStatementManager } from "../../PreparedStatement/PreparedStatementManager";
 
-export class StatementRegistry {
+export class BusinessStatementRegistry {
     readonly events: EventStatements;
     readonly inventory: InventoryStatements;
     readonly products: ProductStatements;

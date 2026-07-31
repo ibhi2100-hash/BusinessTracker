@@ -1,14 +1,17 @@
+import { QueryRunner } from "@/src/storage/queryRunner/QueryRunner";
 import { QueryExecutor } from "../../queryExecutor/QueryExecutor";
 import { migrations } from "../migrations";
+import { TransactionManager } from "@/src/storage/transaction/TransactionManager";
 
-export class MigrationManager {
+export class BusinessMigrationRunner {
 
     constructor(
-        private readonly query: QueryExecutor
+        private readonly queryRunner: QueryRunner,
+        private readonly transactionManager: TransactionManager
     ) {}
     async initialize() {
 
-    await this.query.execute(`
+    await this.queryRunner.execute(`
 
         CREATE TABLE IF NOT EXISTS __meta(
 
@@ -23,94 +26,94 @@ export class MigrationManager {
 }   
     async currentVersion() {
 
-    const rows =
-        await this.query.query<{
+        const rows =
+            await this.queryRunner.query<{
 
-            value: string;
+                value: string;
 
-        }>(`
+            }>(`
 
-            SELECT value
+                SELECT value
 
-            FROM __meta
+                FROM __meta
 
-            WHERE key='schemaVersion'
+                WHERE key='schemaVersion'
 
-        `);
+            `);
 
-    if (!rows.length)
-        return 0;
+        if (!rows.length)
+            return 0;
 
-    return Number(rows[0].value);
+        return Number(rows[0].value);
 
-}
+    }
     private async setVersion(
-    version: number
-) {
+        version: number
+    ) {
 
-    await this.query.execute(
+        await this.queryRunner.execute(
 
-        `
-        INSERT INTO __meta(
-            key,
-            value
-        )
-        VALUES(
-            'schemaVersion',
-            ?
-        )
+            `
+            INSERT INTO __meta(
+                key,
+                value
+            )
+            VALUES(
+                'schemaVersion',
+                '${String(version)}'
+            )
 
-        ON CONFLICT(key)
+            ON CONFLICT(key)
 
-        DO UPDATE
+            DO UPDATE
 
-        SET value=excluded.value
-        `,
+            SET value=excluded.value
+            `,
 
-        [
-            String(version)
-        ]
-
-    );
-
-}
-  async migrate() {
-
-    await this.initialize();
-
-    const current =
-        await this.currentVersion();
-
-    for(
-
-        let i=current;
-
-        i<migrations.length;
-
-        i++
-
-    ){
-
-        console.log(
-            `Running migration ${i+1}`
-        );
-
-        await this.query.execute(
-            migrations[i]
-        );
-
-        await this.setVersion(
-            i+1
         );
 
     }
+    async run() {
 
-}  
+        await this.initialize();
+
+        const current =
+            await this.currentVersion();
+
+        await this.transactionManager.run(async () => {
+            for(const migration of migrations){
+                if(migration.version <= current){
+                    continue
+                }
+                try{
+                    console.log("BusinessMigrationRunning:", {
+                        migrantionName: migration.name,
+                        migrationVersion: migration.version
+                    });
+
+                    await migration.up(this.queryRunner);
+                    await this.setVersion(
+                        migration.version
+                    )
+                }catch (error) {
+                console.error(`Migration ${migration.version} failed.`);
+                    console.error(error);
+
+                    // Print the exact SQL again
+                    console.error("SQL:");
+                    console.error(migration);
+
+                    throw error; 
+                }
+
+            }
+        })
+    }  
 
     async verify() {
 
     const rows =
-        await this.query.query<{
+        await this.queryRunner.query<{
 
             integrity_check:string;
 

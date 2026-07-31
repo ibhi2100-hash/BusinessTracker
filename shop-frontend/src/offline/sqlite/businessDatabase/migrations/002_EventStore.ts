@@ -1,4 +1,12 @@
-export const migration002 = `
+import { Migration } from "../../clientDatabase/migrations/migrationContracts";
+
+export const migration002: Migration = {
+    version: 2,
+    name: "Events",
+
+    async up(q) {
+        await q.execute(
+             `
 CREATE TABLE IF NOT EXISTS events (
 
     id TEXT PRIMARY KEY,
@@ -71,4 +79,7 @@ ON events(synced);
 
 CREATE INDEX IF NOT EXISTS idx_event_created
 ON events(createdAt);
-`;
+`
+        )
+    },
+} 

@@ -1,24 +1,27 @@
 
-import { StatementRegistry } from "../statements/StatementRegistry";
+import { BusinessStatementRegistry } from "../statements/StatementRegistry";
 import { SQLiteEventRepository } from "./SQLiteEventRepository/eventStore";
+import { SQLiteLedgerRepository } from "./SQLiteLedgerRepository/SQLiteLedgerRepository";
 import { SQLiteBranchRepository } from "./SQLiteProjectionRepository/SQLiteBranchRepository";
 import { SQLiteBusinessRepository } from "./SQLiteProjectionRepository/SQLiteBusinessRepository";
 import { SQLiteInventoryRepository } from "./SQLiteProjectionRepository/SQLiteInventoryRepository";
 import { SQLiteProductRepository } from "./SQLiteProjectionRepository/SQLiteProductRepository";
 
-export class RepositoryRegistry {
+export class BusinessRepositoryRegistry {
     readonly events: SQLiteEventRepository;
 
     readonly inventory: SQLiteInventoryRepository;
 
     readonly products: SQLiteProductRepository;
 
+    readonly ledger: SQLiteLedgerRepository;
+
     readonly business: SQLiteBusinessRepository;
 
     readonly branches: SQLiteBranchRepository;
 
     constructor(
-        statements: StatementRegistry
+        statements: BusinessStatementRegistry
     ){
         this.events =
             new SQLiteEventRepository(
@@ -44,5 +47,6 @@ export class RepositoryRegistry {
             new SQLiteBranchRepository(
                 statements.branches
             )
+
     }
 }

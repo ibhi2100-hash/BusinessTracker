@@ -1,4 +1,12 @@
-export const migration001 = `
+import { Migration } from "../../clientDatabase/migrations/migrationContracts";
+
+export const migration001: Migration = {
+    version: 1,
+    name: "Necessary tables for Business",
+
+    async up(q){
+        await q.execute(
+            `
 -- Schema Version
 
 CREATE TABLE IF NOT EXISTS schema_version (
@@ -6,15 +14,6 @@ CREATE TABLE IF NOT EXISTS schema_version (
     appliedAt TEXT NOT NULL
 );
 
--- Device
-
-CREATE TABLE IF NOT EXISTS device (
-    id TEXT PRIMARY KEY,
-    name TEXT,
-    platform TEXT,
-    appVersion TEXT,
-    createdAt TEXT NOT NULL
-);
 
 -- Sync State
 
@@ -38,4 +37,7 @@ CREATE TABLE IF NOT EXISTS sync_state (
 
 CREATE INDEX IF NOT EXISTS idx_sync_global_position
 ON sync_state(lastGlobalPosition);
-`;
+`
+        )
+    }
+}

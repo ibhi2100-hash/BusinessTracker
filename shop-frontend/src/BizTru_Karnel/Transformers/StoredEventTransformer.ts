@@ -1,6 +1,6 @@
 import { DomainEvent, StoredEvent } from "@business/shared-types";
 
-export async function StoredEventTransformer(event: DomainEvent): Promise<StoredEvent>{
+export function StoredEventTransformer(event: DomainEvent){
     const storageMetadata = {
         deviceId: event.actor.deviceId,
         sessionId: event.actor.sessionId,
