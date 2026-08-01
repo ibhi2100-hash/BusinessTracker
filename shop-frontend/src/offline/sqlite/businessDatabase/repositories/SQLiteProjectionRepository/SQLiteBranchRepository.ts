@@ -1,40 +1,38 @@
 // SQLiteBranchRepository.ts
 
 import { Branch } from "@business/shared-types";
-import { StorageBusCreator } from "../../../bus/StorageBusCreator";
 import { DatabaseTarget } from "../../../protocol/DatabaseTarget";
 import { IProjectionEntityRepository } from "./repositoryContract";
 import { EventStatements } from "../../statements/events/EventStatements";
 import { BranchStatements } from "../../statements/branch/BranchStatements";
+import { QueryRunner } from "@/src/storage/queryRunner/QueryRunner"
 
 export class SQLiteBranchRepository
 implements IProjectionEntityRepository<Branch> {
   constructor(
+          private queryRunner: QueryRunner,
           private readonly statements: BranchStatements
       ) {}
   async findById(id: string) {
-    const storage = StorageBusCreator()
 
     const rows =
-      await storage.query<Branch>(
-        DatabaseTarget.BUSINESS,
+      await this.queryRunner.query<Branch>(
+
         `
         SELECT *
         FROM branches
-        WHERE id = ?
+        WHERE id = 
         LIMIT 1
         `,
-        [id]
-      );
+      )
 
     return rows[0] ?? null;
   }
 
   async findAll() {
-   const storage = StorageBusCreator()
+   
 
-    return storage.query<Branch>(
-      DatabaseTarget.BUSINESS,
+    return this.queryRunner.query<Branch>(
       `
       SELECT *
       FROM branches
@@ -46,9 +44,8 @@ implements IProjectionEntityRepository<Branch> {
     id: string,
     state: Branch
   ) {
-   const storage = StorageBusCreator()
-    await storage.query(
-      DatabaseTarget.BUSINESS,
+   
+    await this.queryRunner.query(
       `
       INSERT INTO branches (
         id,
@@ -65,27 +62,16 @@ implements IProjectionEntityRepository<Branch> {
         name = excluded.name,
         phone = excluded.phone
       `,
-      [
-        id,
-        state.businessId,
-        state.name,
-        state.phone ?? "",
-        state.isActive,
-        state.createdAt 
-      ]
     );
   }
 
   async delete(id: string) {
-    const storage = StorageBusCreator()
 
-    await storage.query(
-      DatabaseTarget.BUSINESS,
+    await this.queryRunner.query(
       `
       DELETE FROM branches
       WHERE id = ?
       `,
-      [id]
     );
   }
 }

@@ -13,7 +13,7 @@ import {
   Cloud,
   BarChart3,
 } from "lucide-react";
-import { useApplication } from "@/hooks/useApplication";
+import { useApplication } from "@/src/services/ApplicationService/ApplicationContext"
 
 
 
@@ -57,10 +57,10 @@ export default function RegisterPage() {
       }
       
       localStorage.setItem("accessToken", result.accessToken);
-      await app.services.registration.register(
+      await app.client.services.registration.register(
         result
       )
-      await app.services.registration.saveSession(result)
+      await app.client.services.registration.saveSession(result)
       router.push("/step1-business");
     } catch (error: any) {
       throw error

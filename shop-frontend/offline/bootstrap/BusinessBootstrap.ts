@@ -6,13 +6,13 @@ import { EventStored } from "@/src/BizTru_Karnel/EventStore/EventStore";
 import { KernelExecutionPipeline } from "@/src/BizTru_Karnel/KernelExecutionPipeline/KernelExecutionPipeline";
 import { MetadataBuilder } from "@/src/BizTru_Karnel/MetadataBuilder/MetadataBuilder";
 import { BusinessApplication } from "@/src/Composer/BusinessApplicationComposer";
-import { ApplicationContext } from "@/src/Composer/context/ApplicationContexts";
+import { ApplicationContext } from "@/src/Composer/context/ApplicationContext";
 import { BusinessBusesRegistry } from "@/src/offline/sqlite/businessDatabase/BusinessEventBus/BusinessBusesRegistry";
 import { BusinessDomain } from "@/src/offline/sqlite/businessDatabase/domain/BusinessDomain";
 import { BusinessMigrationRunner } from "@/src/offline/sqlite/businessDatabase/engine/MigrationManager";
 import { BusinessRepositoryRegistry } from "@/src/offline/sqlite/businessDatabase/repositories/RepositoryRegistry";
 import { BusinessServiceRegistry } from "@/src/offline/sqlite/businessDatabase/services/BusinessServiceRegistry";
-import { BusinessStatementDefinition } from "@/src/offline/sqlite/businessDatabase/statements/business/BusinessDefiinition";
+import { BusinessStatementsDefinitions } from "@/src/offline/sqlite/businessDatabase/statements/BusinessStatementsDefinition";
 import { BusinessPreparedStatementManager } from "@/src/offline/sqlite/businessDatabase/statements/PreparedStatementManager";
 import { BusinessStatementRegistry } from "@/src/offline/sqlite/businessDatabase/statements/StatementRegistry";
 import { BusinessStorage } from "@/src/offline/sqlite/businessDatabase/storage/BusinessStorage";
@@ -110,10 +110,7 @@ implements Lifecycle {
             new BusinessPreparedStatementManager(
                 runtime.queryRunner
             );
-
-      statementManager.initialize(
-        BusinessStatementDefinition
-      )
+       
       const statements = 
          new BusinessStatementRegistry(
             statementManager
@@ -137,7 +134,7 @@ implements Lifecycle {
         storage: BusinessStorage
     ): Promise<BusinessDomain> {
     const executionContext =
-        client.executionContext;
+        client.ExecutionContext
     const metadataBuilder =
         new MetadataBuilder();
     

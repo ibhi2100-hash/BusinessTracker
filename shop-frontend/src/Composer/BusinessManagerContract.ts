@@ -4,7 +4,7 @@ import { BusinessApplication } from "./BusinessApplicationComposer";
 export interface BusinessManagerContract {
 
     bootstrap(
-        business: Business
+        businessId: string
     ): Promise<BusinessApplication>;
 
     open(

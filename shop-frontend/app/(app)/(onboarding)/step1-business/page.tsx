@@ -9,14 +9,13 @@ import {
   Sparkles,
   Loader2,
 } from "lucide-react";
-import { nanoid } from "nanoid";
-import { AggregateType } from "@/offline/domain/aggregate";
-import { BusinessEventTypes } from "@business/shared-types";
+
 import { GlassButton } from "@/components/ui/GlassButton";
+import { useApplication } from "@/src/services/ApplicationService/ApplicationContext";
 
 export default function Step2Business() {
   const router = useRouter();
-
+  const app = useApplication();
   const [form, setForm] = useState({
     name: "",
     address: "",
@@ -40,42 +39,21 @@ export default function Step2Business() {
     setLoading(true);
     setError(null);
 
-    const businessId = nanoid();
-    const branchId = nanoid();
-
     try {
-      await eventService.create({
-
-        type: BusinessEventTypes.BUSINESS_CREATED,
-        aggregateType: AggregateType.BUSINESS,
-        aggregateId: businessId,
-        mode: "OPENING",
-        payload: {
-          id: businessId,
-          name: form.name.trim(),
-          address: form.address.trim(),
-        },
-      });
-
-      await eventService.create({
-        type: BusinessEventTypes.BRANCH_CREATED,
-        aggregateType: AggregateType.BRANCH,
-        aggregateId: branchId,
-        mode: "OPENING",
-        payload: {
-          id: branchId,
-          businessId,
-          name: "Main Branch",
-          phone: "",
-        },
-      });
+      await app.onboarding.createBusiness({
+        name: form.name,
+        address: form.address
+      })
 
       router.replace("/onboard");
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Failed to create business";
+    console.error(err);
 
-      setError(message);
+    if (err instanceof Error) {
+        throw err;
+    }
+
+    throw new Error(String(err));
     } finally {
       setLoading(false);
     }

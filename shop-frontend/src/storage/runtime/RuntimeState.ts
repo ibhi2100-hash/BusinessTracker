@@ -1,4 +1,4 @@
-enum RuntimeState {
+export enum RuntimeState {
 
     Created,
 

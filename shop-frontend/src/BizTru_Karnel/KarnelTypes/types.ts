@@ -172,7 +172,5 @@ export interface ExecutionContext {
 
     branchId: string | null;
 
-    logicalClock: number;
-
 }
 

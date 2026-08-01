@@ -13,20 +13,33 @@ import { ExecutionContextProvider } from "@/src/BizTru_Karnel/CommandFactory/Exe
 export class ApplicationContext
 implements StorageContext {
     readonly runtime: SQLiteRuntime;
+
     readonly queryRunner: QueryRunner;
+
     readonly transactionManager: TransactionManager;
+
     readonly repositories: ClientRepositoryRegistry;
+
     readonly services: ClientServieRegistry;
+
     readonly statementRegistry: ClientStatementRegistry;
-    readonly executionContext: ExecutionContextProvider;
+
+    readonly ExecutionContext: ExecutionContextProvider;
+
     constructor(
         runtime: SQLiteRuntime,
+
         queryRunner: QueryRunner,
+
         transactionManager: TransactionManager,
+
         repositorises: ClientRepositoryRegistry,
+
         services: ClientServieRegistry,
+
         statementRegistry: ClientStatementRegistry,
-        executionContext: ExecutionContextProvider
+
+        executionContext: ExecutionContextProvider,
     ){
         this.runtime = runtime
 
@@ -40,8 +53,7 @@ implements StorageContext {
 
         this.statementRegistry = statementRegistry
 
-        this.executionContext = executionContext
-
+        this.ExecutionContext = executionContext
     }
 
 }

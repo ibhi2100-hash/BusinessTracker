@@ -13,7 +13,7 @@ export class SQLiteBusinessRepository
           private readonly statements: BusinessStatements
       ) {}
   async upsert(id: string, state: Business): Promise<void> {
-    await this.statements.upsertBusiness.execute(
+    await this.statements.upsert.execute(
       BusinessMapper.ToInsert(state)
     )
   }
@@ -32,7 +32,7 @@ export class SQLiteBusinessRepository
   }
 
   async delete(id: string) {
-    await this.statements.deleteBusiness.query(
+    await this.statements.delete.query(
       [id]
     );
   }

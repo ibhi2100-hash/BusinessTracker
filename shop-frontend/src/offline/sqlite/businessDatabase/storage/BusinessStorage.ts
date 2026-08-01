@@ -4,7 +4,7 @@ import { BusinessRepositoryRegistry } from "../repositories/RepositoryRegistry";
 import { Lifecycle } from "../../lifecycle/LifeCycle";
 import { BusinessStatementRegistry } from "../statements/StatementRegistry";
 import { BusinessMigrationRunner } from "../engine/MigrationManager";
-import { BusinessStatementDefinition } from "../statements/business/BusinessDefiinition";
+import { BusinessStatementsDefinitions } from "../statements/BusinessStatementsDefinition";
 
 export class BusinessStorage
 implements Lifecycle {
@@ -27,10 +27,10 @@ implements Lifecycle {
 
         await this.migrationRunner.run();
 
-        this.statementManager.initialize(
-            BusinessStatementDefinition
+        await this.statementManager.initialize(
+            BusinessStatementsDefinitions
         )
-    }
+    }   
 
     async start(): Promise<void> {
         

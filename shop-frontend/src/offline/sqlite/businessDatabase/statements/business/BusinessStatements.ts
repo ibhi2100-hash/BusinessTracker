@@ -3,30 +3,32 @@ import { PreparedStatementManager } from "../../../PreparedStatement/PreparedSta
 import { businessKeys } from "./businessKeys";
 
 export class BusinessStatements {
-    readonly upsertBusiness: PreparedStatement;
-    readonly findById: PreparedStatement;
-    readonly deleteBusiness: PreparedStatement;
-    readonly update: PreparedStatement;
+   
     constructor(
-        manager: PreparedStatementManager
-    ){
-        this.upsertBusiness = 
-            manager.get(
-                businessKeys.businessUpsert
-            );
-        this.findById = 
-            manager.get(
-                businessKeys.findById
-            )
+      private readonly   manager: PreparedStatementManager
+    ){}
 
-        this.deleteBusiness = 
-            manager.get(
-                businessKeys.businessDelete
-            )
+    get upsert(){
+        return this.manager.get(
+            businessKeys.businessUpsert
+        )
+    }
 
-        this.update =
-            manager.get(
-                businessKeys.businesssUpdate
-            )
+    get findById(){
+        return this.manager.get(
+            businessKeys.findById
+        )
+    }
+
+    get delete(){
+        return this.manager.get(
+            businessKeys.businessDelete
+        )
+    }
+
+    get update(){
+        return this.manager.get(
+            businessKeys.businesssUpdate
+        )
     }
 }

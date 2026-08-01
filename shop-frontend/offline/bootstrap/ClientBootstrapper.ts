@@ -1,4 +1,4 @@
-import { ApplicationContext } from "@/src/Composer/context/ApplicationContexts";
+import { ApplicationContext } from "@/src/Composer/context/ApplicationContext";
 import { SQLiteRuntime } from "@/src/storage/runtime/SQLiteRuntime";
 import { QueryRunner } from "@/src/storage/queryRunner/QueryRunner";
 import { TransactionManager } from "@/src/storage/transaction/TransactionManager";

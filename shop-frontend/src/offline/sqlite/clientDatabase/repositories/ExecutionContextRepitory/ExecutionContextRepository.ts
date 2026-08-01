@@ -42,9 +42,6 @@ implements ExecutionContextRepositoryContract {
             branchId:
                 row?.branchId ?? null,
 
-            logicalClock:
-                row?.logicalClock ?? 0
-
         };
     
 }

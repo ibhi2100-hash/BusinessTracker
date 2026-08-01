@@ -18,6 +18,8 @@ export const migration0005: Migration =  {
 
                 lastOpenedAt INTEGER,
 
+                existsLocally INTEGER NOT NULL DEFAULT 1,
+
                 icon TEXT
 
             );

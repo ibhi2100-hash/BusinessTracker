@@ -1,45 +1,41 @@
 import { StatementDefinition } from "../../../PreparedStatement/StatementRegistry/statementDefinition";
+import { EventStatmentKeys } from "./Keys";
 import * as SQL from "./sql";
 
-export const EventDefinitions: StatementDefinition[] = [
+export const EventStatementsDefinition: StatementDefinition[] = [
 
     {
-        key: "events.insert",
+        key: EventStatmentKeys.insert,
         sql: SQL.INSERT_EVENT
     },
 
     {
-        key: "events.loadAggregate",
+        key: EventStatmentKeys.loadAggregates,
         sql: SQL.LOAD_AGGREGATE
     },
 
     {
-        key: "events.loadEvent",
+        key: EventStatmentKeys.loadEvent,
         sql: SQL.LOAD_EVENT
     },
 
     {
-        key: "events.exists",
+        key: EventStatmentKeys.exist,
         sql: SQL.EXISTS
     },
 
     {
-        key: "events.loadSince",
+        key: EventStatmentKeys.loadSince,
         sql: SQL.LOAD_SINCE
     },
 
     {
-        key: "events.delete",
-        sql: SQL.DELETE_EVENT
-    },
-
-    {
-        key: "events.count",
+        key: EventStatmentKeys.eventCount,
         sql: SQL.COUNT_EVENTS
     },
 
     {
-        key: "events.lastPosition",
+        key: EventStatmentKeys.eventLastposition,
         sql: SQL.LAST_POSITION
     }
 

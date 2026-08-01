@@ -10,6 +10,7 @@ import { migration009 } from "./009_Inventory";
 import { migration010 } from "./010_Ledger";
 import { migration011 } from "./011_CheckPoint";
 import { migration012 } from "./012_Outbox";
+import { migration0013 } from "./0013_logicClock";
 
 
 export const migrations = [
@@ -25,4 +26,5 @@ export const migrations = [
     migration010,
     migration011,
     migration012,
+    migration0013,
 ]

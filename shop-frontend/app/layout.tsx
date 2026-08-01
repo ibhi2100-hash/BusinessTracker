@@ -3,9 +3,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import { Providers } from "./providers";
 import { AppShell } from "@/components/layout/AppShell";
-import { SQLiteBootstrap } from "@/offline/bootstrap/SQLiteBootstrap";
-import { StorageBusCreator } from "@/src/offline/sqlite/bus/StorageBusCreator";
-import { BootstrapProvider } from "@/components/Bootstrap/Bootstrap";
+import { ApplicationProvider } from "@/src/services/ApplicationService/ApplicationProvider";
 
 export const metadata = {
   title: "BizTru",
@@ -23,13 +21,12 @@ export default function RootLayout({
     <html lang="en">
       <body className="bg-black text-white">
         <Providers>
-          <BootstrapProvider>
+          <ApplicationProvider>
               <AppShell>
-                  
                   {children}
               </AppShell>
               <Toaster richColors position="top-right" />
-          </BootstrapProvider>
+          </ApplicationProvider>
         </Providers>
       </body>
     </html>

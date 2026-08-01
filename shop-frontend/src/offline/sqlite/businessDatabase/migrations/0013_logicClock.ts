@@ -1,7 +1,7 @@
-import { Migration } from "./migrationContracts";
+import { Migration } from "../../clientDatabase/migrations/migrationContracts";
 
-export const migration0009: Migration = {
-    version: 9,
+export const migration0013: Migration = {
+    version: 13,
     name: "create logicClock",
     async up(q){
         await q.execute(

@@ -6,7 +6,7 @@ import { migration0005 } from "./0005_known_nodes";
 import { migration0006 } from "./0006_feature_flags";
 import { migration0007 } from "./0007_sync_metadata";
 import { migration0008 } from "./0008_activeBranch";
-import { migration0009 } from "./0009_LogicalClock";
+import { migration0009 } from "./0009_currentBusiness";
 import { Migration } from "./migrationContracts";
 
 export const migrations: Migration[] = [

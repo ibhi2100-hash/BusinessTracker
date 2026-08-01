@@ -10,7 +10,7 @@ export const migration0008: Migration =  {
 
             id TEXT PRIMARY KEY,
 
-            businessId TEXT NOT NULL
+            businessId TEXT NOT NULL,
             branchId    TEXT
 
         );

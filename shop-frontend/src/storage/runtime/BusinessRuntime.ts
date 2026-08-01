@@ -1,4 +1,4 @@
-import { BusinessPreparedStatementManager } from "@/src/offline/sqlite/businessDatabase/statements/PreparedStatementManager";
+import { RuntimeState } from "./RuntimeState"
 import { QueryRunner } from "../queryRunner/QueryRunner";
 import { TransactionManager } from "../transaction/TransactionManager";
 import { SQLiteRuntime } from "./SQLiteRuntime";
@@ -25,9 +25,7 @@ implements Lifecycle {
     };
     
     async initialize(){
-        if(this.state !== RuntimeState.Created){
-            return
-        }
+       
         await this.sqlite.initialize();
     }
    

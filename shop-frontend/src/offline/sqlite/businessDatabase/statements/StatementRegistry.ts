@@ -5,7 +5,6 @@ import { EmployeesStatements } from "./employees/EmployeesStatements";
 import { EventStatements } from "./events/EventStatements";
 import { InventoryStatements } from "./inventory/InventoryStatements";
 import { ProductStatements } from "./products/ProductStatements";
-import { UserStatements } from "../../clientDatabase/statements/users/UserStatements";
 import { PreparedStatementManager } from "../../PreparedStatement/PreparedStatementManager";
 
 export class BusinessStatementRegistry {
@@ -19,7 +18,7 @@ export class BusinessStatementRegistry {
     constructor(
         manager: PreparedStatementManager
     ){
-        this.events 
+        this.events =
             new EventStatements(manager);
 
         this.inventory =

@@ -1,17 +1,16 @@
 import { BusinessBootstrapper } from "@/offline/bootstrap/BusinessBootstrap";
 import { BusinessApplication } from "./BusinessApplicationComposer";
 import { BusinessManagerContract } from "./BusinessManagerContract";
-import { ApplicationContext } from "./context/ApplicationContexts";
+import { ApplicationContext } from "./context/ApplicationContext";
 import { Business } from "@business/shared-types";
 import { Lifecycle } from "../offline/sqlite/lifecycle/LifeCycle";
-import { readonly } from "zod";
 
 export class BusinessManager
 implements BusinessManagerContract, Lifecycle{
     private readonly applications = 
         new Map<string, BusinessApplication>()
 
-    private readonly knownBusinesses = new Map<string, Business>();
+    private readonly knownBusinesses = new Map<string, KnownBusiness>();
 
     
     constructor(
@@ -51,25 +50,23 @@ implements BusinessManagerContract, Lifecycle{
     async stop(): Promise<void> {
         
     }
-    async bootstrap(business: Business): Promise<BusinessApplication> {
+    async bootstrap(businessId: string): Promise<BusinessApplication> {
+        console.log("Thank you am about to Bootstrap this business", businessId)
             const app = 
                 await this.bootstrapper.bootstrap(
                     this.client,
-                    business.id
+                    businessId
                 );
-            
+            console.log("I just Bootstrapped it now am adding it to memory")
             this.applications.set(
-                business.id,
+                businessId,
                 app
             )
 
-            this.knownBusinesses.set(
-                business.id,
-                business
-            )
+            
 
             this.currentBusinessId = 
-                business.id
+                businessId
 
             return app
         }
@@ -156,7 +153,7 @@ implements BusinessManagerContract, Lifecycle{
             )
         }
 
-        known(): readonly Business[]{
+        known(): readonly KnownBusiness[]{
             return [...this.knownBusinesses.values()];
         }
 

@@ -9,9 +9,7 @@ export const GET_CURRENT_CONTEXT = `
 
             d.deviceId            AS deviceId,
 
-            ab.businessId         AS businessId,
-
-            lc.currentClock       AS logicalClock
+            ab.id         AS businessId
 
         FROM device d
 
@@ -22,9 +20,6 @@ export const GET_CURRENT_CONTEXT = `
         ON u.id = s.userId
 
         LEFT JOIN known_nodes ab
-        ON 1 = 1
-
-        LEFT JOIN logic_clock lc
         ON 1 = 1
 
         LIMIT 1;
