@@ -1,8 +1,5 @@
-import { ExecutionContext } from "../KarnelTypes/types";
-import { EventMetadata } from "@business/shared-types";
+import { CommandMetadata } from "./CommandMetadata";
 
 export interface MetadataBuilderContract {
-    build(
-        context: ExecutionContext
-    ): Promise<EventMetadata>;
+    build(): Promise<CommandMetadata>;
 }

@@ -8,9 +8,9 @@ export const migration0013: Migration = {
             `
                 CREATE TABLE IF NOT EXISTS logic_clock(
 
-                id TEXT PRIMARY KEY,
+                id INTEGER PRIMARY KEY CHECK(id = 1),
 
-                currentClock INTEGER NOT NULL
+                value INTEGER NOT NULL
 
             );
         `
@@ -19,10 +19,10 @@ export const migration0013: Migration = {
             
             INSERT INTO logic_clock(
                             id,
-                            currentClock
+                            value
                         )
                         VALUES(
-                            'default',
+                            1,
                             0
                         );
             `

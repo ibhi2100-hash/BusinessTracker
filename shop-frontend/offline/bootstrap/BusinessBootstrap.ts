@@ -22,6 +22,8 @@ import { QueryRunner } from "@/src/storage/queryRunner/QueryRunner";
 import { BusinessRuntime } from "@/src/storage/runtime/BusinessRuntime";
 import { SQLiteRuntime } from "@/src/storage/runtime/SQLiteRuntime";
 import { TransactionManager } from "@/src/storage/transaction/TransactionManager";
+import { SQLiteBusinessClock } from "@/src/BizTru_Karnel/MetadataBuilder/SQLiteBusinessClock"
+import { EventMetadataBuilder } from "@/src/BizTru_Karnel/MetadataBuilder/EventMetadataBuilder"
 
 export class BusinessBootstrapper
 implements Lifecycle {
@@ -147,10 +149,16 @@ implements Lifecycle {
            idGenerator
         )
     const commandValidator =new CommandValidation();
-
+    const clock = 
+        new SQLiteBusinessClock(
+            storage.repositories.logicClock
+        )
+    const eventMetadataBuilder = new EventMetadataBuilder();
     const pipeline = new KernelExecutionPipeline(
         commandValidator,
-        eventbus
+        eventbus,
+        clock,
+        eventMetadataBuilder
     )
     
     const kernel = new DefaultBusinessKernel(

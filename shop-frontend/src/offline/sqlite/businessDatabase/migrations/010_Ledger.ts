@@ -11,21 +11,23 @@ export const migration010: Migration = {
 
             id TEXT PRIMARY KEY,
 
-            userId TEXT,
+            eventId TEXT,
             
-            name TEXT NOT NULL,
+            businessId TEXT NOT NULL,
 
-            address TEXT NULL,
+            branchId TEXT NULL,
 
-            createdAt TEXT NOT NULL,
+            type TEXT NOT NULL,
 
-            activatedAt TEXT,
+            account TEXT NOT NULL,
             
-            isOnboarding INTEGER DEFAULT 0,
+            direction   TEXT NOT NULL,
 
-            onboardingCompleted INTEGER DEFAULT 0,
+            amount INTEGER DEFAULT 0,
 
-            status  TEXT NOT NULL
+            sequence   INTEGER,
+
+            createdAt    INTEGER
         );
 
         CREATE INDEX IF NOT EXISTS idx_ledger_account

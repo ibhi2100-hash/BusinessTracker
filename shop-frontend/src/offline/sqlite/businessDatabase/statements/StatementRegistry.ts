@@ -6,7 +6,7 @@ import { EventStatements } from "./events/EventStatements";
 import { InventoryStatements } from "./inventory/InventoryStatements";
 import { ProductStatements } from "./products/ProductStatements";
 import { PreparedStatementManager } from "../../PreparedStatement/PreparedStatementManager";
-
+import { LogicClockStatements } from "./logicClock/logicClockStatements"
 export class BusinessStatementRegistry {
     readonly events: EventStatements;
     readonly inventory: InventoryStatements;
@@ -14,6 +14,7 @@ export class BusinessStatementRegistry {
     readonly business: BusinessStatements;
     readonly branches: BranchStatements;
     readonly employees: EmployeesStatements;
+    readonly logicClock: LogicClockStatements
 
     constructor(
         manager: PreparedStatementManager
@@ -34,6 +35,9 @@ export class BusinessStatementRegistry {
             new BranchStatements(manager);
 
         this.employees = 
-            new EmployeesStatements(manager)
+            new EmployeesStatements(manager);
+
+        this.logicClock = 
+            new LogicClockStatements(manager)
     }
 }

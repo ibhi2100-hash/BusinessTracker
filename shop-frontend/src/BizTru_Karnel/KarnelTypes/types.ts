@@ -1,6 +1,6 @@
 import { Snapshot } from "@/src/offline/sqlite/businessDatabase/repositories/SQLiteSnapshotRepository/SnaphotModel";
 import { CommandDescriptor } from "../CommandFactory/factoryDependencies/CommandDescriptor";
-import { EventMetadata as CommandMetadata } from "@business/shared-types";
+import { CommandMetadata } from "../MetadataBuilder/CommandMetadata"
 import { ActorContext, DomainEvent } from "@business/shared-types";
 
 export interface Command<TPayload = unknown> {

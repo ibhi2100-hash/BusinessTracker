@@ -4,6 +4,7 @@ import { SQLiteEventRepository } from "./SQLiteEventRepository/eventStore";
 import { SQLiteLedgerRepository } from "./SQLiteLedgerRepository/SQLiteLedgerRepository";
 import { SQLiteBranchRepository } from "./SQLiteProjectionRepository/SQLiteBranchRepository";
 import { SQLiteBusinessRepository } from "./SQLiteProjectionRepository/SQLiteBusinessRepository";
+import { LogicClockRepository } from "./LogicClockRepository/LogicClockRepository";
 
 export class BusinessRepositoryRegistry {
     readonly events: SQLiteEventRepository;
@@ -14,6 +15,8 @@ export class BusinessRepositoryRegistry {
     readonly business: SQLiteBusinessRepository;
 
     readonly branches: SQLiteBranchRepository;
+
+    readonly logicClock: LogicClockRepository;
 
     constructor(
         statements: BusinessStatementRegistry
@@ -26,6 +29,11 @@ export class BusinessRepositoryRegistry {
         this.business = 
             new SQLiteBusinessRepository(
                 statements.business
+            );
+
+        this.logicClock = 
+            new LogicClockRepository(
+                statements.logicClock
             )
 
 

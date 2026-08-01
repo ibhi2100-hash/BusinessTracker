@@ -10,9 +10,6 @@ export class QueryRunner {
     ){}
 
     async execute(sql: string) {
-        console.log(this.runtime);
-        console.log(this.runtime.connection);
-        console.log(typeof this.runtime.connection);
 
           await this.runtime.connection(
             "exec",

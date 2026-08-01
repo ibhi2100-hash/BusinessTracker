@@ -7,15 +7,15 @@ export const migration012: Migration = {
     async up(q){
         await q.execute(
             `
-        CREATE TABLE IF NOT EXISTS outbox (
-
+            CREATE TABLE IF NOT EXISTS outbox (
+        
             id TEXT PRIMARY KEY,
 
             aggregateId TEXT NOT NULL,
 
             aggregateType TEXT NOT NULL,
 
-            version INTEGER
+            version INTEGER,
 
             expectedAggregateVersion INTEGER NOT NULL,
 
@@ -29,15 +29,15 @@ export const migration012: Migration = {
 
             mode TEXT NOT NULL,
 
-            scope   TEXT NOT NULL,
+            scope TEXT NOT NULL,
 
             createdAt INTEGER NOT NULL,
 
             updatedAt INTEGER,
 
-            logicClock  INTEGER,
+            logicClock INTEGER,
 
-            globalPosition  INTEGER,
+            globalPosition INTEGER,
 
             deviceId TEXT,
 
@@ -47,11 +47,11 @@ export const migration012: Migration = {
 
             synced INTEGER DEFAULT 0,
 
-            syncedAt  INTEGER,
+            syncedAt INTEGER,
 
             retryCount INTEGER DEFAULT 0,
 
-            max_retries  INTEGER DEFAULT 10,
+            maxRetries INTEGER DEFAULT 10,
 
             lastRetryAt INTEGER,
 
@@ -59,13 +59,15 @@ export const migration012: Migration = {
 
             lastError TEXT,
 
-            causationId   TEXT,
+            causationId TEXT,
 
-            correlationId   TEXT,
+            correlationId TEXT,
 
             metadata TEXT,
 
-            checksum TEXT
+            checksum TEXT,
+
+            movedAt INTEGER
         );
 
         CREATE INDEX IF NOT EXISTS idx_outbox_aggregate
@@ -78,14 +80,8 @@ export const migration012: Migration = {
         CREATE INDEX IF NOT EXISTS idx_event_created
         ON outbox(createdAt);
 
-        CREATE INDEX IF NOT EXISTS idx_event_created
+        CREATE INDEX IF NOT EXISTS idx_event_syncStatus
         ON outbox(syncStatus);
-
-
-        CREATE TABLE IF NOT EXISTS outboxDeadLaterQueue (
-            LIKE outbox INCLUDING ALL,
-            movedAt    INTEGER
-        )
 
         `
         )
