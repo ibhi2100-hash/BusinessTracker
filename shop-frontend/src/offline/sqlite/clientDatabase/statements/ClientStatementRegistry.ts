@@ -9,6 +9,7 @@ export class ClientStatementRegistry {
     readonly session: SessionStatements;
     readonly executionContext: ExecutionContextStatements;
     readonly knownNodes: KnownNodesStatements;
+    readonly applicationState: ApplicationState
 
     constructor(
         manager: PreparedStatementManager

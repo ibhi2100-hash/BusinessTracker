@@ -2,6 +2,7 @@
 import { User } from "@business/shared-types";
 import { SQLiteSessionRepository } from "../repositories/SQLiteSessionRepository/SQLiteSessionRepository";
 import { SQLiteAuthRepository } from "../repositories/SQLiteAuthRepository/SQLiteAuthRepository";
+import { SQLiteApplicationStateRepository } from "../repositories/ApplicationStateRepository.ts/SQLiteApplicationStateRepository";
 
 
 interface RegisterResponse {
@@ -16,7 +17,8 @@ export class RegistrationService {
     constructor(
 
         private readonly repository: SQLiteAuthRepository,
-        private readonly session: SQLiteSessionRepository
+        private readonly session: SQLiteSessionRepository,
+        private readonly applicationState: SQLiteApplicationStateRepository,
 
     ) {}
 
@@ -82,9 +84,28 @@ export class RegistrationService {
         await this.session.clearSession()
     }
 
+  async saveApplicationState(userId: string) {
+
+    console.log("applicationState =", this.applicationState);
+
+    console.log(
+        "setCurrentUser =",
+        this.applicationState?.setCurrentUser
+    );
+
+    const session = await this.getCurrentSession();
+
+    await this.applicationState.setCurrentUser(
+        userId,
+        session.id
+    );
+}
+
 }
 export class LoginService {
     constructor(
         private readonly repositories: SQLiteAuthRepository
     ){}
+
+
 }

@@ -8,10 +8,14 @@ export class ServiceBuilder {
     ){}
 
     build(){
+         console.log(this.repositories);
+    console.log(this.repositories.applicationState);
+
         return new ClientServieRegistry(
             new RegistrationService(
                 this.repositories.users,
-                this.repositories.session
+                this.repositories.session,
+                this.repositories.applicationState
             ),
             new LoginService(
                 this.repositories.users

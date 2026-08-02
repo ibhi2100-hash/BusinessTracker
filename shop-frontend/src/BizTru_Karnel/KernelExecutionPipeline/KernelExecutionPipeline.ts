@@ -3,6 +3,7 @@ import { Command } from "../KarnelTypes/types";
 import { domainEventTransformer } from "../Transformers/DomainEventTransformer";
 import { BusinessClock } from "../logicClockContract";
 import { EventMetadataBuilder } from "../MetadataBuilder/EventMetadataBuilder";
+import { BusinessContextProvider } from "../../Composer/context/BusinessContextContract"
 
 export class KernelExecutionPipeline
 implements PipelineKernel {
@@ -12,7 +13,10 @@ implements PipelineKernel {
         private readonly eventStore: EventAppender,
         private readonly clock: BusinessClock,
         private readonly metadataBuilder: EventMetadataBuilder,
-    ) {}
+        private readonly businessContext: BusinessContextProvider
+    ) {
+        console.log("this is the Business Context: ", businessContext)
+    }
 
     async execute(command: Command): Promise<void> {
 
@@ -28,10 +32,14 @@ implements PipelineKernel {
             logicalClock
         );
 
+        const context = 
+            await this.businessContext.current();
+
         // 4. Convert command -> event
         const event =await domainEventTransformer(
             command,
-            metadata
+            metadata,
+            context
         );
 
         console.log("this is the event to be appended: ", event)

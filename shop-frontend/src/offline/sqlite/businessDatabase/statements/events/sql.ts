@@ -13,7 +13,6 @@ INSERT INTO events (
     branchId,
     payload,
     metadata,
-    createdAt
 )
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `;

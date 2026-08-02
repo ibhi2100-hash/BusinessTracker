@@ -12,6 +12,10 @@ export const migration0009: Migration =  {
                 
                 currentUserId   TEXT,
 
+                currentBranchId   TEXT,
+
+                currentWorkspaceId   TEXT,
+
                 currentSessionId    TEXT,
 
                 currentWorkspaceVersion INTEGER,
@@ -20,5 +24,29 @@ export const migration0009: Migration =  {
             )
             `
         )
+
+        await q.execute(
+                `
+                INSERT INTO application_state (
+                id,
+                currentBusinessId,
+                currentBranchId,
+                currentUserId,
+                currentSessionId,
+                currentWorkspaceVersion,
+                initializedAt
+            )
+            VALUES (
+                1,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                1,
+                strftime('%s','now')
+            )
+            ON CONFLICT(id) DO NOTHING;
+                            
+            `)
     }
 }

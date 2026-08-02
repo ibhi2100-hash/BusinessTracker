@@ -55,12 +55,14 @@ export default function RegisterPage() {
       if (!res.ok) {
         throw new Error(result.message || "Registration failed");
       }
-      
+      console.log("this is the result from registration: ", result)
       localStorage.setItem("accessToken", result.accessToken);
       await app.client.services.registration.register(
         result
       )
       await app.client.services.registration.saveSession(result)
+
+      await app.client.services.registration.saveApplicationState(result.user.id)
       router.push("/step1-business");
     } catch (error: any) {
       throw error

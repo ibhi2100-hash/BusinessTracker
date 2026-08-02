@@ -1,4 +1,5 @@
 import { ClientStatementRegistry } from "../statements/ClientStatementRegistry";
+import { SQLiteApplicationStateRepository } from "./ApplicationStateRepository.ts/SQLiteApplicationStateRepository";
 import { ExecutionContextRepository } from "./ExecutionContextRepitory/ExecutionContextRepository";
 import { SQLiteKnownNodeRepository } from "./KnownNodes/SQLiteKnownNodeRepository";
 import { SQLiteAuthRepository } from "./SQLiteAuthRepository/SQLiteAuthRepository";
@@ -8,7 +9,7 @@ export class ClientRepositoryRegistry {
     readonly session: SQLiteSessionRepository;
     readonly executionContext: ExecutionContextRepository;
     readonly knownNode: SQLiteKnownNodeRepository;
-
+    readonly applicationState: SQLiteApplicationStateRepository;
     
 
     constructor(
@@ -33,6 +34,12 @@ export class ClientRepositoryRegistry {
             new SQLiteKnownNodeRepository(
                 statements.knownNodes
             )
-        
+
+        this.applicationState = 
+            new SQLiteApplicationStateRepository(
+                statements.applicationState
+            )
+         console.log("Application Repository");
+    console.log(this.applicationState);
     }
 }

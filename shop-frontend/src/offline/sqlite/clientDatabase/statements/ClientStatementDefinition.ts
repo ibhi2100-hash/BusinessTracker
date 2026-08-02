@@ -4,6 +4,7 @@ import { StatementDefinition } from "../../PreparedStatement/StatementRegistry/s
 import { SessionDefinitions } from "./session/SessionDefinition";
 import { ExecutionContextDefinitions } from "../repositories/ExecutionContextRepitory/executionDefinition";
 import { KnownNodesDefinitions } from "./knownNodes/KnownNodeDefinition";
+import { ApplicationStateDefinition } from "./applicationState/applicationStateDefinition";
 
 
 export const ClientStatementDefinitions: StatementDefinition[] = [
@@ -11,5 +12,6 @@ export const ClientStatementDefinitions: StatementDefinition[] = [
     ...UserDefinitions,
     ...SessionDefinitions,
     ...ExecutionContextDefinitions,
-    ...KnownNodesDefinitions
+    ...KnownNodesDefinitions,
+    ...ApplicationStateDefinition,
 ];
