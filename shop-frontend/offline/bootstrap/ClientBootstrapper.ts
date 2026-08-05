@@ -4,13 +4,15 @@ import { QueryRunner } from "@/src/storage/queryRunner/QueryRunner";
 import { TransactionManager } from "@/src/storage/transaction/TransactionManager";
 import { ClientMigrationRunner } from "@/src/offline/sqlite/clientDatabase/ClientMigrationRunner";
 import { ClientPreparedStatementManager } from "@/src/offline/sqlite/clientDatabase/statements/ClientStatementManager";
-import { ClientServieRegistry } from "@/src/offline/sqlite/clientDatabase/services/ClientServiceRegistry";
+import { ClientServiceRegistry } from "@/src/offline/sqlite/clientDatabase/services/ClientServiceRegistry";
 import { ClientRepositoryRegistry } from "@/src/offline/sqlite/clientDatabase/repositories/ClientDatabaseRepositoryRegistry";
 import { ClientStatementDefinitions } from "@/src/offline/sqlite/clientDatabase/statements/ClientStatementDefinition";
 import { ClientStatementRegistry } from "@/src/offline/sqlite/clientDatabase/statements/ClientStatementRegistry";
 import { RegistrationService } from "@/src/offline/sqlite/clientDatabase/services/AuthService";
 import { LoginService } from "@/src/offline/sqlite/clientDatabase/services/AuthService";
 import { ExecutionContextProvider } from "@/src/BizTru_Karnel/CommandFactory/ExecutionContext/ExecutionContext";
+import { ProjectionEventBus } from "@/src/buses/ProjectionBuses";
+import { CurrentBusinessProjection } from "@/src/offline/sqlite/clientDatabase/projections/currentBusinessProjections";
 
 
 export class ClientBootstrapper {
@@ -40,7 +42,12 @@ export class ClientBootstrapper {
             this.createRepositories(
                 statementRegistry
             );
-        
+        const bus = 
+            this.createEventBus();
+        this.registerConsumers(
+            bus,
+            repositories
+        )
         const services = 
             this.createServices(
                 repositories
@@ -56,7 +63,8 @@ export class ClientBootstrapper {
             repositories,
             services,
             statementRegistry,
-            executionContextProvider
+            executionContextProvider,
+            bus
         ) 
             
     }
@@ -65,9 +73,10 @@ export class ClientBootstrapper {
         queryRunner: QueryRunner,
         transactionManager: TransactionManager,
         repositoryRegistry: ClientRepositoryRegistry,
-        serviceRegistry: ClientServieRegistry,
+        serviceRegistry: ClientServiceRegistry,
         statementRegistry: ClientStatementRegistry,
-        executionContext: ExecutionContextProvider
+        executionContext: ExecutionContextProvider,
+        bus: ProjectionEventBus
     ){
         return new ApplicationContext(
             runtime,
@@ -76,7 +85,8 @@ export class ClientBootstrapper {
             repositoryRegistry,
             serviceRegistry,
             statementRegistry,
-            executionContext
+            executionContext,
+            bus
         )
     }
    
@@ -172,7 +182,8 @@ export class ClientBootstrapper {
         const registration =
             new RegistrationService(
                 repositories.users,
-                repositories.session
+                repositories.session,
+                repositories.applicationState
             );
 
         const login =
@@ -180,13 +191,29 @@ export class ClientBootstrapper {
                 repositories.users
             );
 
-        return new ClientServieRegistry(
+        return new ClientServiceRegistry(
 
             registration,
 
             login
 
         );
+
+    }
+    private createEventBus(){
+        return new ProjectionEventBus();
+    }
+
+    private registerConsumers(
+        bus: ProjectionEventBus,
+        repositories: ClientRepositoryRegistry
+    ){
+        bus.subscribe(
+            new CurrentBusinessProjection(
+                repositories.currentBusiness
+            )
+        )
+
 
     }
             

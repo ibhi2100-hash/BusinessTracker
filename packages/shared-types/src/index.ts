@@ -6,7 +6,6 @@ export * from "./entities/User"
 
 
 export * from "./events/DomainEvents";
-export * from "./events/StoredEvent";
 export * from "./events/OutboxEntry"
 export * from "./events/cononicalEvent";
 

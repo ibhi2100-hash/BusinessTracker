@@ -15,7 +15,7 @@ import { GlassButton } from "@/components/ui/GlassButton";
 import { GlassIcon } from "@/components/ui/GlassIcon";
 
 import { useBusinessStore } from "@/src/store/businessStore";
-import { eventService } from "@/src/services/eventService";
+import { OnboardingApi } from "@/src/services/ApplicationService/API/OnboardinApi";
 import { BusinessEventTypes } from "@business/shared-types";
 import { AggregateType } from "@/offline/domain/aggregate";
 
@@ -41,20 +41,7 @@ export function ActivateBusinessButton() {
       setLoading(true);
       setError("");
 
-      await eventService.create({
-        type:
-          BusinessEventTypes.BUSINESS_ACTIVATION,
-
-        aggregateType:
-          AggregateType.BUSINESS,
-
-        aggregateId: business.id,
-
-        payload: {},
-
-        mode: "OPENING",
-      });
-
+     
       toast.success(
         "Business activated successfully"
       );

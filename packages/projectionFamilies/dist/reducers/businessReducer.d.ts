@@ -5,8 +5,13 @@ interface BusinessPayload {
     name: string;
     address: string;
 }
-export declare class BusinessReducer implements ProjectionReducer<Business, DomainEvent> {
-    reduce(state: Business | null, event: DomainEvent<BusinessPayload>): Business;
+export declare class BusinessReducer implements ProjectionReducer<DomainEvent> {
+    reduce(event: DomainEvent<BusinessPayload>): Business | {
+        activatedAt: number;
+        status: string;
+        isOnboarding: boolean;
+        onboardingCompleted: boolean;
+    } | undefined;
     private created;
     private activate;
 }

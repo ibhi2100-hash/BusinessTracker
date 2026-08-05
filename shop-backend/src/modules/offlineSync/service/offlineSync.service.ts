@@ -1,7 +1,6 @@
 import { SyncRepository } from "../repository/syncRepository.js";
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
-import { creatBackendEventEngine } from "../EventEngine/eventPipeline.js"
-import { StoredEvent } from "@business/shared-types";
+
 
 export class OfflineSyncService {
   constructor(
@@ -12,12 +11,12 @@ export class OfflineSyncService {
     aggregateId,
     aggregateType,
     baseVersion,
-    events,
+  
   }: {
     aggregateId: string;
     aggregateType: string;
     baseVersion: number;
-    events: StoredEvent[];
+   
   }) {
 
     const serverLast =
@@ -66,7 +65,8 @@ export class OfflineSyncService {
 
       const success: any[] = [];
       const failed: any[] = [];
-      const eventPipeline = creatBackendEventEngine(tx) 
+      const events: any[] = []
+     
       for (const event of events) {
         try {
           
@@ -101,12 +101,7 @@ export class OfflineSyncService {
             ...event,
             aggregateVersion: currentVersion,
           };
-        const canonicalevent = toCanonicalEvent(enrichedEvent)
-        await eventPipeline.pipeline.append(canonicalevent)
-          await this.syncRepository.markProcessed(
-            canonicalevent,
-            tx
-          );
+        
 
           success.push({
             eventId: enrichedEvent.id,

@@ -1,10 +1,10 @@
-import { BusinessKernel } from "./BusinessKernelContract";
+import { Kernel } from "./BusinessKernelContract";
 import { PipelineKernel } from "./contracts/SubKernelContracts";
 import { Command } from "./KarnelTypes/types";
 
 
 export class DefaultBusinessKernel
-implements BusinessKernel {
+implements Kernel {
   
     constructor(
           private readonly pipeline: 

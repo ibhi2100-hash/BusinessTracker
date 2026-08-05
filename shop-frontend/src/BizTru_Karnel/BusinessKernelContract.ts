@@ -1,5 +1,5 @@
 import { Command } from "./KarnelTypes/types";
-export interface BusinessKernel {
+export interface Kernel {
     execute(command: Command): Promise<void>;
    
 }

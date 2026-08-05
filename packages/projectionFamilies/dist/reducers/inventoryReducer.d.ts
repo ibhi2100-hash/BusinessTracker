@@ -1,4 +1,4 @@
-import { IntegrationEvent } from "@business/shared-types";
+import { DomainEvent } from "@business/shared-types";
 export declare const InventoryReducer: {
     initialState: () => {
         id: string;
@@ -8,5 +8,5 @@ export declare const InventoryReducer: {
         quantity: number;
         costPrice: number;
     };
-    reduce(current: any, event: IntegrationEvent): any;
+    reduce(current: any, event: DomainEvent<any>): any;
 };

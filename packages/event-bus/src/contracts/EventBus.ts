@@ -1,5 +1,4 @@
-import { EventSubscriber } from "./EventSubscriber";
-
+ import{ EventConsumer } from "./EventSubscriber";
 export interface EventBus<TEvent> {
 
     publish(
@@ -7,24 +6,10 @@ export interface EventBus<TEvent> {
     ): Promise<void>;
 
     publishMany(
-        events: TEvent[]
-    ): Promise<void>
+        events: readonly TEvent[]
+    ): Promise<void>;
 
     subscribe(
-        subscriber: EventSubscriber<TEvent>
-    ): void
+        subscription: EventConsumer<TEvent>
+    ): void;
 }
-
-export interface ProjectionBus<TEvent>
-    extends EventBus<TEvent> {}
-export interface ExecutionContextBus<TEvent>
-    extends EventBus<TEvent> {}
-
-export interface LedgerBus<TEvent>
-    extends EventBus<TEvent> {}
-
-export interface AnalyticsBus<TEvent>
-    extends EventBus<TEvent> {}
-
-export interface NotificationBus<TEvent>
-    extends EventBus<TEvent> {}

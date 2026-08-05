@@ -29,7 +29,7 @@ export function ApplicationProvider({
 
             const app =
                 await ApplicationComposer.compose();
-
+            
             if (mounted) {
                 setApplication(app);
             }

@@ -1,4 +1,3 @@
-import { Branch } from "@business/shared-types";
 import { DomainEvent } from "@business/shared-types";
 import { ProjectionReducer } from "../contracts/ProjectionReducer";
 interface BranchPayload {
@@ -7,7 +6,15 @@ interface BranchPayload {
     address: string;
     phone: string;
 }
-export declare class BranchReducer implements ProjectionReducer<Branch, DomainEvent<BranchPayload>> {
-    reduce(state: Branch, event: DomainEvent<BranchPayload>): Branch;
+export declare class BranchReducer implements ProjectionReducer<DomainEvent<BranchPayload>> {
+    reduce(event: DomainEvent<BranchPayload>): {
+        id: string;
+        name: string;
+        phone: string;
+        businessId: string | undefined;
+        isActive: boolean;
+        isDefault: boolean;
+        createdAt: number;
+    } | undefined;
 }
 export {};

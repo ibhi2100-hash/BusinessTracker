@@ -1,6 +1,5 @@
-import { BusinessEventTypes, DomainEvent } from "@business/shared-types";
+import { DomainEvent } from "@business/shared-types";
 import { EventStore } from "../SubKernel/types";
-import { StoredEventTransformer } from "../Transformers/StoredEventTransformer";
 import { SQLiteEventRepository } from "@/src/offline/sqlite/businessDatabase/repositories/SQLiteEventRepository/eventStore";
 
 
@@ -12,10 +11,8 @@ implements EventStore {
     ){}
     
     async append(events: readonly DomainEvent[]): Promise<void> {
-      const stored = 
-       events.map(StoredEventTransformer)
 
-        await this.eventRepository.append(stored)
+        await this.eventRepository.append(events)
         
     }
 }

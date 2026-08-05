@@ -1,15 +1,9 @@
 import { Snapshot } from "@/src/offline/sqlite/businessDatabase/repositories/SQLiteSnapshotRepository/SnaphotModel";
-import { CommandDescriptor } from "../CommandFactory/factoryDependencies/CommandDescriptor";
-import { CommandMetadata } from "../MetadataBuilder/CommandMetadata"
 import { ActorContext, DomainEvent } from "@business/shared-types";
 
 export interface Command<TPayload = unknown> {
 
     readonly id: string;
-
-    businessId?: string;
-
-    branchId?: string;
 
     readonly type: string;
 
@@ -21,11 +15,17 @@ export interface Command<TPayload = unknown> {
 
     readonly payload: Readonly<TPayload>;
 
+    readonly causationId: string;
+
+    readonly correlationId: string;
+
+    readonly status : string;
+
     readonly actor: ActorContext;
 
-    readonly metadata: CommandMetadata;
+    readonly createdAt: number;
 
-    readonly version: number;
+    readonly lastAtemptAt?: number
 
 }
 

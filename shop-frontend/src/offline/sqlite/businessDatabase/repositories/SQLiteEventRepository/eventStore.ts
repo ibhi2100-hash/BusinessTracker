@@ -1,22 +1,36 @@
 // SQLiteEventRepository.ts
-
-import { StoredEvent } from "@business/shared-types";
+import { DomainEvent } from "@business/shared-types";
 import { EventRepository } from "./contracts";
 import { EventStatements } from "../../statements/events/EventStatements";
 interface EventRow {
+
     id: string;
+
     aggregateId: string;
+
     aggregateType: string;
-    aggregateVersion: number;
+
     expectedAggregateVersion: number;
+
     type: string;
-    mode: string;
-    businessId: string;
-    branchId: string;
+
+    mode: "OPENING" | "LIVE";
+
+    businessId: string | null;
+
+    branchId: string | null;
+
     payload: string;
-    metadata: string;
-    createdAt: string;
-    globalPosition: number;
+
+    actor: string;
+
+    causationId: string;
+
+    logicClock: number;
+
+    createdAt : number;
+
+    checksum: string | null;
 }
 export class SQLiteEventRepository
 implements EventRepository {
@@ -26,31 +40,44 @@ implements EventRepository {
     ) {}
 
     async append(
-        events: readonly StoredEvent[]
+        events: readonly DomainEvent[]
     ): Promise<void> {
 
         for (const event of events) {
 
-            await this.statements.insert.execute(
-                this.toInsertParams(event)
-            );
+    const row =
+        EventMapper.toRow(event);
 
-        }
-
+    await this.statements.insert.execute([
+        row.id,
+        row.aggregateId,
+        row.aggregateType,
+        row.expectedAggregateVersion,
+        row.type,
+        row.payload,
+        row.businessId,
+        row.branchId,
+        row.mode,
+        row.actor,
+        row.causationId,
+        row.logicClock,
+        row.createdAt,
+        row.checksum
+    ]);
+}
+    const SQLiteEvents =
+        await this.loadAllEvents();
+    console.log("This are the SQLite Saved Events: ", SQLiteEvents)
     }
 
     async loadAggregate(
         aggregateId: string
-    ): Promise<StoredEvent[]> {
-
-        const rows =
-            await this.statements
-                .loadAggregate
-                .query<any>([
+    ): Promise<DomainEvent[]>{
+        const rows = await this.statements.loadAggregate.query<EventRow>([
                     aggregateId
                 ]);
 
-        return rows
+        return rows.map(EventMapper.fromRow)
 
     }
 
@@ -58,17 +85,16 @@ implements EventRepository {
         eventId: string
     ): Promise<boolean> {
 
-        return this.statements
-            .exists
-            .exists([
-                eventId
-            ]);
+        return this.statements.count
+                .exists([
+                    eventId
+                ]);
 
     }
 
     async loadSince(
         position: bigint
-    ): Promise<StoredEvent[]> {
+    ): Promise<DomainEvent[]> {
 
         const rows =
             await this.statements
@@ -77,13 +103,13 @@ implements EventRepository {
                     Number(position)
                 ]);
 
-        return rows
+        return rows.map(EventMapper.fromRow)
 
     }
 
     async loadById(
         id: string
-    ): Promise<StoredEvent | null> {
+    ): Promise<DomainEvent | null> {
 
         const rows =
             await this.statements
@@ -123,52 +149,91 @@ implements EventRepository {
 
     }
 
-    async delete(
-        id: string
-    ): Promise<void> {
+    async loadAllEvents():Promise<DomainEvent[]>{
+        const rows = 
+            await this.statements.loadAll.query<EventRow>();
 
-        await this.statements
-            .deleteEvent
-            .execute([
-                id
-            ]);
-
+        return rows.map(EventMapper.fromRow)
     }
 
-    private toInsertParams(
-        event: StoredEvent
-    ): unknown[] {
+    
 
-        return [
 
-            event.event.id,
+}
 
-            event.event.aggregateId,
+class EventMapper {
+    static toRow(
+        event: DomainEvent
+    ): EventRow {
+        return {
+            id: event.id,
 
-            event.event.aggregateType,
+            aggregateId: event.aggregateId,
 
-            event.event.aggregateVersion,
+            aggregateType: event.aggregateType,
 
-            event.event.expectedAggregateVersion,
+            expectedAggregateVersion: event.expectedAggregateVersion,
 
-            event.event.type,
+            type: event.type,
 
-            event.event.mode,
+            mode: event.mode,
 
-            event.event.actor.businessId,
+            businessId: event.businessId,
 
-            event.event.actor.branchId,
+            branchId: event.branchId,
 
-            JSON.stringify(event.event.payload),
+            payload: JSON.stringify(
+                event.payload
+            ),
+            actor: JSON.stringify(
+                event.actor,
+            ),
+            causationId: event.causationId,
 
-            JSON.stringify(event.event.metadata),
+            logicClock: event.logicClock,
 
-            event.event.metadata.occuredAt
+            createdAt: event.createdAt,
 
-        ];
-
+            checksum: event.checksum ?? null
+        }
+    
+        
     }
 
+    static fromRow(
+        row: EventRow
+    ): DomainEvent {
+        return {
+           id: row.id,
 
+           aggregateId: row.aggregateId,
+
+           aggregateType: row.aggregateType,
+
+           expectedAggregateVersion: row.expectedAggregateVersion,
+
+           type: row.type,
+
+           payload: row.payload,
+
+           businessId: row.businessId,
+
+           branchId: row.branchId,
+
+           mode: row.mode,
+
+           actor: JSON.parse(
+                row.actor
+            ),
+           causationId: row.causationId,
+
+           logicClock: row.logicClock,
+
+           createdAt: row.createdAt,
+
+           checksum: row.checksum
+        }
+    }
+    
 
 }

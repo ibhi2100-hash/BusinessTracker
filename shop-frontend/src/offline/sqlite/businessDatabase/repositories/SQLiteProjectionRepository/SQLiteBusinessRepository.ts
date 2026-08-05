@@ -1,10 +1,7 @@
 // SQLiteBusinessRepository.ts
 
 import { Business } from "@business/shared-types";
-import { StorageBusCreator } from "../../../bus/StorageBusCreator";
 import { IProjectionEntityRepository } from "./repositoryContract";
-import { DatabaseTarget } from "../../../protocol/DatabaseTarget";
-import { EventStatements } from "../../statements/events/EventStatements";
 import { BusinessStatements } from "../../statements/business/BusinessStatements";
 
 export class SQLiteBusinessRepository
@@ -12,7 +9,7 @@ export class SQLiteBusinessRepository
   constructor(
           private readonly statements: BusinessStatements
       ) {}
-  async upsert(id: string, state: Business): Promise<void> {
+  async upsert(state: Business): Promise<void> {
     await this.statements.upsert.execute(
       BusinessMapper.ToInsert(state)
     )

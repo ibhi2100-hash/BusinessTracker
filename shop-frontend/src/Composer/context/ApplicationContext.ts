@@ -1,11 +1,12 @@
 import { ClientRepositoryRegistry } from "@/src/offline/sqlite/clientDatabase/repositories/ClientDatabaseRepositoryRegistry";
-import { ClientServieRegistry } from "@/src/offline/sqlite/clientDatabase/services/ClientServiceRegistry";
+import { ClientServiceRegistry } from "@/src/offline/sqlite/clientDatabase/services/ClientServiceRegistry";
 import { StorageContext } from "./ApplicationStorageContext";
 import { SQLiteRuntime } from "@/src/storage/runtime/SQLiteRuntime";
 import { QueryRunner } from "@/src/storage/queryRunner/QueryRunner";
 import { TransactionManager } from "@/src/storage/transaction/TransactionManager";
 import { ClientStatementRegistry } from "@/src/offline/sqlite/clientDatabase/statements/ClientStatementRegistry";
 import { ExecutionContextProvider } from "@/src/BizTru_Karnel/CommandFactory/ExecutionContext/ExecutionContext";
+import { ProjectionEventBus } from "@/src/buses/ProjectionBuses";
 
 
 
@@ -20,11 +21,13 @@ implements StorageContext {
 
     readonly repositories: ClientRepositoryRegistry;
 
-    readonly services: ClientServieRegistry;
+    readonly services: ClientServiceRegistry;
 
     readonly statementRegistry: ClientStatementRegistry;
 
     readonly ExecutionContext: ExecutionContextProvider;
+    
+    readonly clientBus: ProjectionEventBus;
 
     constructor(
         runtime: SQLiteRuntime,
@@ -35,11 +38,13 @@ implements StorageContext {
 
         repositorises: ClientRepositoryRegistry,
 
-        services: ClientServieRegistry,
+        services: ClientServiceRegistry,
 
         statementRegistry: ClientStatementRegistry,
 
         executionContext: ExecutionContextProvider,
+
+        clientBus: ProjectionEventBus
     ){
         this.runtime = runtime
 
@@ -53,7 +58,9 @@ implements StorageContext {
 
         this.statementRegistry = statementRegistry
 
-        this.ExecutionContext = executionContext
+        this.ExecutionContext = executionContext;
+
+        this.clientBus = clientBus
     }
 
 }

@@ -1,6 +1,6 @@
 import { DomainEvent } from "@business/shared-types";
 import { Command } from "../KarnelTypes/types";
-import { CommandMetadata } from "../MetadataBuilder/MetadataBuilderContract";
+import { CommandMetadata } from "../BusinessClock/MetadataBuilderContract";
 import { EventRepository } from "@/src/offline/sqlite/businessDatabase/repositories/SQLiteEventRepository/contracts";
 
 

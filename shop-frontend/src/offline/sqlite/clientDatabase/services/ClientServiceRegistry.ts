@@ -1,6 +1,6 @@
 import { LoginService, RegistrationService } from "./AuthService";
 
-export class ClientServieRegistry {
+export class ClientServiceRegistry {
     readonly registration: RegistrationService;
 
     readonly login: LoginService

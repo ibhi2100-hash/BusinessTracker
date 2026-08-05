@@ -1,42 +1,58 @@
 import { StatementDefinition } from "../../../PreparedStatement/StatementRegistry/statementDefinition";
-import { EventStatmentKeys } from "./Keys";
+import { EventStatements } from "./EventStatements";
+import { EventStatementKeys } from "./Keys";
 import * as SQL from "./sql";
 
 export const EventStatementsDefinition: StatementDefinition[] = [
 
     {
-        key: EventStatmentKeys.insert,
+        key: EventStatementKeys.insert,
         sql: SQL.INSERT_EVENT
     },
 
     {
-        key: EventStatmentKeys.loadAggregates,
+        key: EventStatementKeys.loadAggregates,
         sql: SQL.LOAD_AGGREGATE
     },
 
     {
-        key: EventStatmentKeys.loadEvent,
+        key: EventStatementKeys.loadEvent,
         sql: SQL.LOAD_EVENT
     },
 
     {
-        key: EventStatmentKeys.exist,
+        key: EventStatementKeys.exist,
         sql: SQL.EXISTS
     },
 
     {
-        key: EventStatmentKeys.loadSince,
+        key: EventStatementKeys.loadSince,
         sql: SQL.LOAD_SINCE
     },
 
     {
-        key: EventStatmentKeys.eventCount,
+        key: EventStatementKeys.eventCount,
         sql: SQL.COUNT_EVENTS
     },
 
     {
-        key: EventStatmentKeys.eventLastposition,
+        key: EventStatementKeys.eventLastposition,
         sql: SQL.LAST_POSITION
+    },
+
+    {
+        key: EventStatementKeys.loadProjectionEvent,
+        sql: SQL.LOAD_PROJECTION_EVENT
+    },
+    
+    {
+        key: EventStatementKeys.loadAggregates,
+        sql: SQL.LOAD_AGGREGATE
+    },
+
+    {
+        key: EventStatementKeys.loadAll,
+        sql: SQL.LOADALL
     }
 
 ];

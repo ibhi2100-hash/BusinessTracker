@@ -1,4 +1,3 @@
-import { StoredEvent } from "./StoredEvent";
 
 export interface OutboxEntry {
 
@@ -6,11 +5,21 @@ export interface OutboxEntry {
 
     readonly eventId: string;
 
-    readonly payload: StoredEvent;
+    readonly retryCount: number;
+
+    readonly maxAttempts: number;
+
+    readonly nextRetryAt: number;
+
+    readonly lockedUntil: number;
+
+    readonly lastError: string;
+
+    readonly createdAt: number;
+
+    readonly syncedAt: number;
 
     status: OutboxStatus;
-
-    retry: RetryPolicy;
 
 }
 export enum OutboxStatus {
@@ -26,19 +35,5 @@ export enum OutboxStatus {
     DEAD,
 
     SYNCED
-
-}
-
-export interface RetryPolicy {
-
-    retryCount: number;
-
-    maxRetries: number;
-
-    nextRetryAt?: Date;
-
-    lastRetryAt?: Date;
-
-    lastError?: string;
 
 }

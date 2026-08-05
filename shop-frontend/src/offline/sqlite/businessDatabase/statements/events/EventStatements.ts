@@ -1,5 +1,5 @@
 import { PreparedStatementManager } from "../../../PreparedStatement/PreparedStatementManager";
-import { EventStatmentKeys } from "./Keys";
+import { EventStatementKeys } from "./Keys";
 
 
 export class EventStatements {
@@ -8,24 +8,34 @@ export class EventStatements {
         private readonly manager: PreparedStatementManager
     ) {}
     get insert(){
-        return this.manager.get(EventStatmentKeys.insert)
+        return this.manager.get(EventStatementKeys.insert)
         }
     
     get loadEvent(){
-        return this.manager.get(EventStatmentKeys.loadEvent)
+        return this.manager.get(EventStatementKeys.loadEvent)
     }
 
     get loadSince(){
-        return this.manager.get(EventStatmentKeys.loadSince)
+        return this.manager.get(EventStatementKeys.loadSince)
     }
 
     get count(){
-        return this.manager.get(EventStatmentKeys.eventCount)
+        return this.manager.get(EventStatementKeys.eventCount)
     }
     get lastPosition(){
-        return this.manager.get(EventStatmentKeys.eventLastposition)
+        return this.manager.get(EventStatementKeys.eventLastposition)
+    }
+    
+    get loadAggregate(){
+        return this.manager.get(EventStatementKeys.loadAggregates)
     }
 
+    get loadProjectionEvents(){
+        return this.manager.get(EventStatementKeys.loadProjectionEvent)
+    }
 
+    get loadAll(){
+        return this.manager.get(EventStatementKeys.loadAll)
+    }
 
 }

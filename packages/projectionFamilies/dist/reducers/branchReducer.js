@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BranchReducer = void 0;
 const shared_types_1 = require("@business/shared-types");
 class BranchReducer {
-    reduce(state, event) {
+    reduce(event) {
         switch (event.type) {
             case shared_types_1.BusinessEventTypes.BRANCH_CREATED:
                 return {
@@ -13,10 +13,8 @@ class BranchReducer {
                     businessId: event.businessId,
                     isActive: true,
                     isDefault: true,
-                    createdAt: event.metadata.occuredAt,
+                    createdAt: event.createdAt,
                 };
-            default:
-                return state;
         }
     }
 }

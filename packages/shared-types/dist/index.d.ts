@@ -4,7 +4,6 @@ export * from "./entities/Business";
 export * from "./entities/Branch";
 export * from "./entities/User";
 export * from "./events/DomainEvents";
-export * from "./events/StoredEvent";
 export * from "./events/OutboxEntry";
 export * from "./events/cononicalEvent";
 export * from "./snapshots/Snapshot";

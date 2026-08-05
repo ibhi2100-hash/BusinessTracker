@@ -1,4 +1,4 @@
-import { CommandMetadata } from "../../MetadataBuilder/MetadataBuilderContract";
+import { CommandMetadata } from "../../BusinessClock/MetadataBuilderContract";
 import { CommandContext } from "../factoryDependencies/EventContext";
 
 export interface CommandMetadataProvider {

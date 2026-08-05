@@ -6,7 +6,7 @@ import {
     SessionProvider
 } from "../../contracts/SubKernelContracts";
 import { Command } from "../../KarnelTypes/types";
-import { CommandMetadata } from "../../MetadataBuilder/MetadataBuilderContract";
+import { CommandMetadata } from "../../BusinessClock/MetadataBuilderContract";
 
 export abstract class ExecutionKernel
     implements PipelineKernel {

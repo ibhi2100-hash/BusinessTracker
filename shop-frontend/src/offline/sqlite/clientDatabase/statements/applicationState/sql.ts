@@ -10,14 +10,14 @@ export const UPDATE_CURRENT_BUSINESS =
                 UPDATE application_state
                 SET 
                     currentBusinessId = ?,
-                    currentBranchId = NULL,
+                    currentBranchId = NULL
                 WHERE id = 1;
                 `
 export const UPDATE_CURRENT_BRANCH = 
                 `
                 UPDATE application_state
                 SET 
-                    currentBranchId = ?,
+                    currentBranchId = ?
                 WHERE id = 1;
                 `
 

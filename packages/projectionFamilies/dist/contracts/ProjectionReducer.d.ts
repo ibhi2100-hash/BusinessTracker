@@ -1,3 +1,3 @@
-export interface ProjectionReducer<TState, TEvent> {
-    reduce(state: TState | null, event: TEvent): TState;
+export interface ProjectionReducer<TEvent> {
+    reduce(event: TEvent): any;
 }

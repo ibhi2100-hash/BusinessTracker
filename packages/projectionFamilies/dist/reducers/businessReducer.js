@@ -3,14 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BusinessReducer = void 0;
 const shared_types_1 = require("@business/shared-types");
 class BusinessReducer {
-    reduce(state, event) {
+    reduce(event) {
         switch (event.type) {
             case shared_types_1.BusinessEventTypes.BUSINESS_CREATED:
                 return this.created(event);
             case shared_types_1.BusinessEventTypes.BUSINESS_ACTIVATION:
-                return this.activate(state, event);
-            default:
-                return state;
+                return this.activate(event);
         }
     }
     created(event) {
@@ -22,16 +20,12 @@ class BusinessReducer {
             status: "ONBOARDING",
             isOnboarding: true,
             onboardingCompleted: false,
-            createdAt: event.metadata.occuredAt
+            createdAt: event.createdAt
         };
     }
-    activate(current, event) {
-        if (!current) {
-            throw new Error("Business projection not found.");
-        }
+    activate(event) {
         return {
-            ...current,
-            activatedAt: event.metadata.occuredAt,
+            activatedAt: event.createdAt,
             status: "ACTIVE",
             isOnboarding: false,
             onboardingCompleted: true

@@ -6,7 +6,6 @@ export interface IProjectionEntityRepository<T> {
   findAll(): Promise<T[]>;
 
   upsert(
-    id: string,
     state: T
   ): Promise<void>;
 

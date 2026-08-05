@@ -20,9 +20,15 @@ export interface DomainEvent<TPayload = unknown> {
 
     readonly payload: Readonly<TPayload>;
 
-    readonly actor: ActorContext,
+    readonly actor: ActorContext;
 
-    readonly metadata: EventMetadata;
+    readonly causationId: string;
+
+    readonly logicClock: number;
+
+    readonly createdAt: number;
+
+    readonly  checksum?:  string;
 
 }
 
@@ -33,15 +39,5 @@ export interface ActorContext {
     deviceId: string;
 
     sessionId?: string;
-
-}
-export interface EventMetadata {
-    occuredAt: number;
-    
-    correlationId: string;
-
-    causationId?: string;
-
-    logicalClock: number;
 
 }

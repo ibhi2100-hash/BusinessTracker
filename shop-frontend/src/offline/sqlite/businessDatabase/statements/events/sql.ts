@@ -5,16 +5,19 @@ INSERT INTO events (
     id,
     aggregateId,
     aggregateType,
-    aggregateVersion,
     expectedAggregateVersion,
     type,
-    mode,
+    payload,
     businessId,
     branchId,
-    payload,
-    metadata,
+    mode,
+    actor,
+    causationId,
+    logicClock,
+    createdAt,
+    checksum
 )
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `;
 
 export const LOAD_AGGREGATE = `
@@ -60,3 +63,19 @@ export const LAST_POSITION = `
 SELECT MAX(globalPosition) AS position
 FROM events
 `;
+
+export const LOAD_PROJECTION_EVENT = `
+        SELECT *
+        FROM events e
+        LEFT JOIN event_resolution r
+
+        ON e.id = r.eventId
+
+        WHERE
+        r.state IS NULL
+        OR r.state='ACTIVE'
+        `
+
+export const LOADALL = `
+    SELECT * FROM events
+    `

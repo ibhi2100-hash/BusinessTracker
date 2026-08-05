@@ -1,9 +1,8 @@
-import { IntegrationEvent } from "@business/shared-types";
-import { IgnorableStackFrame } from "next/dist/next-devtools/server/shared";
+import { DomainEvent } from "@business/shared-types";
 export interface EventRepository {
 
     append(
-        events: readonly IntegrationEvent[]
+        events: readonly DomainEvent[]
     ): Promise<void>;
 
 }

@@ -1,3 +1,3 @@
-export interface EventSubscriber<TEvent> {
-    handle(events: TEvent[]): Promise<void>;
+export interface EventConsumer<TEvent> {
+    handle(events: readonly TEvent[]): Promise<void>;
 }

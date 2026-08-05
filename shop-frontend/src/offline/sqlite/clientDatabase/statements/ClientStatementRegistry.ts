@@ -3,13 +3,16 @@ import { UserStatements } from "../../clientDatabase/statements/users/UserStatem
 import { ExecutionContextStatements } from "../repositories/ExecutionContextRepitory/ExecutionPreparedStatements";
 import { KnownNodesStatements } from "./knownNodes/KnownNodesStatements";
 import { SessionStatements } from "./session/SessionStatements";
+import { ApplicationStateStatements } from "./applicationState/applicationStateStatements";
+import { CurrentBusinessStatements } from "./currentBusiness/currentBusinessStatements";
 
 export class ClientStatementRegistry {
     readonly users: UserStatements;
     readonly session: SessionStatements;
     readonly executionContext: ExecutionContextStatements;
     readonly knownNodes: KnownNodesStatements;
-    readonly applicationState: ApplicationState
+    readonly applicationState: ApplicationStateStatements;
+    readonly currentBusiness: CurrentBusinessStatements
 
     constructor(
         manager: PreparedStatementManager
@@ -24,5 +27,11 @@ export class ClientStatementRegistry {
 
         this.knownNodes= 
             new KnownNodesStatements(manager)
+
+        this.applicationState  =
+            new ApplicationStateStatements(manager)
+
+        this.currentBusiness = 
+            new CurrentBusinessStatements(manager)
     }
 }

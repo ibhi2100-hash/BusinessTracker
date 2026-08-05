@@ -1,6 +1,6 @@
 import { ClientRepositoryRegistry } from "../repositories/ClientDatabaseRepositoryRegistry";
 import { LoginService, RegistrationService } from "./AuthService";
-import { ClientServieRegistry } from "./ClientServiceRegistry";
+import { ClientServiceRegistry } from "./ClientServiceRegistry";
 
 export class ServiceBuilder {
     constructor(
@@ -8,10 +8,8 @@ export class ServiceBuilder {
     ){}
 
     build(){
-         console.log(this.repositories);
-    console.log(this.repositories.applicationState);
 
-        return new ClientServieRegistry(
+        return new ClientServiceRegistry(
             new RegistrationService(
                 this.repositories.users,
                 this.repositories.session,

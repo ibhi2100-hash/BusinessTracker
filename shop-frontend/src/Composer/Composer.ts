@@ -6,7 +6,7 @@ import { DefaultCommandFactory } from "../BizTru_Karnel/CommandFactory/factoryDe
 import { IdGenerator } from "../BizTru_Karnel/CommandFactory/factoryDependencies/IdGenerators";
 import { EventStored } from "../BizTru_Karnel/EventStore/EventStore";
 import { KernelExecutionPipeline } from "../BizTru_Karnel/KernelExecutionPipeline/KernelExecutionPipeline";
-import { MetadataBuilder } from "../BizTru_Karnel/MetadataBuilder/MetadataBuilder";
+import { MetadataBuilder } from "../BizTru_Karnel/BusinessClock/MetadataBuilder";
 import { FrontEndEventBus } from "../offline/sqlite/businessDatabase/BusinessEventBus/EventBus";
 import { FrontendProjectionBus } from "../offline/sqlite/businessDatabase/BusinessEventBus/ProjectionBus";
 import { FrontendLedgerBus } from "../offline/sqlite/businessDatabase/BusinessEventBus/LedgerBus";

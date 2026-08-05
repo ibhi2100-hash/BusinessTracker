@@ -1,22 +1,26 @@
-import { CommandValidator, EventAppender, PipelineKernel } from "../contracts/SubKernelContracts";
+import { CommandValidator, PipelineKernel } from "../contracts/SubKernelContracts";
+import { SQLiteEventRepository } from "@/src/offline/sqlite/businessDatabase/repositories/SQLiteEventRepository/eventStore";
 import { Command } from "../KarnelTypes/types";
 import { domainEventTransformer } from "../Transformers/DomainEventTransformer";
 import { BusinessClock } from "../logicClockContract";
-import { EventMetadataBuilder } from "../MetadataBuilder/EventMetadataBuilder";
 import { BusinessContextProvider } from "../../Composer/context/BusinessContextContract"
+import { EventStore } from "../SubKernel/types";
+import { ProjectionEventBus } from "@/src/buses/ProjectionBuses";
+import { TransactionManager } from "@/src/storage/transaction/TransactionManager";
 
 export class KernelExecutionPipeline
 implements PipelineKernel {
     
     constructor(
         private readonly validator: CommandValidator,
-        private readonly eventStore: EventAppender,
+        private readonly eventStore: EventStore,
         private readonly clock: BusinessClock,
-        private readonly metadataBuilder: EventMetadataBuilder,
-        private readonly businessContext: BusinessContextProvider
-    ) {
-        console.log("this is the Business Context: ", businessContext)
-    }
+        private readonly businessContext: BusinessContextProvider,
+        private readonly clientBus: ProjectionEventBus,
+        private readonly businessBus: ProjectionEventBus,
+        private readonly transaction: TransactionManager
+
+    ) {}
 
     async execute(command: Command): Promise<void> {
 
@@ -26,25 +30,23 @@ implements PipelineKernel {
         // 2. Reserve the next business-local logical clock
         const logicalClock = await this.clock.next();
 
-        // 3. Build immutable event metadata
-        const metadata = this.metadataBuilder.build(
-            command.metadata,
-            logicalClock
-        );
-
         const context = 
             await this.businessContext.current();
 
         // 4. Convert command -> event
         const event =await domainEventTransformer(
             command,
-            metadata,
-            context
+            context,
+            logicalClock
         );
 
         console.log("this is the event to be appended: ", event)
 
-        // 5. Persist atomically
-        await this.eventStore.append([event]);
+        this.transaction.run(async () => {
+            await this.eventStore.append([event]);
+            await this.clientBus.publish(event),
+            await this.businessBus.publish(event)
+        })
+        
     }
 }

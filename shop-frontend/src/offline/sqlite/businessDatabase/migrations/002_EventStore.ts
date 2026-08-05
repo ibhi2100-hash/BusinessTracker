@@ -15,8 +15,6 @@ CREATE TABLE IF NOT EXISTS events (
 
     aggregateType TEXT NOT NULL,
 
-    aggregateVersion INTEGER
-
     expectedAggregateVersion INTEGER NOT NULL,
 
     type TEXT NOT NULL,
@@ -29,14 +27,13 @@ CREATE TABLE IF NOT EXISTS events (
 
     mode TEXT NOT NULL,
 
-    createdAt INTEGER NOT NULL,
+    actor   TEXT,
 
-    updatedAt INTEGER,
+    causationId TEXT,
 
+    logicClock   INTEGER NOT NULL,
 
-    globalPosition  INTEGER,
-
-    metadata TEXT,
+    createdAt   INTEGER NOT NULL,
 
     checksum TEXT
 );
@@ -44,11 +41,7 @@ CREATE TABLE IF NOT EXISTS events (
 CREATE INDEX IF NOT EXISTS idx_event_aggregate
 ON events(aggregateType, aggregateId);
 
-CREATE INDEX IF NOT EXISTS idx_event_position
-ON events(globalPosition);
 
-CREATE INDEX IF NOT EXISTS idx_event_created
-ON events(createdAt);
 `
         )
     },

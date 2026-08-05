@@ -4,7 +4,6 @@ import { DefaultCommandFactory } from "@/src/BizTru_Karnel/CommandFactory/factor
 import { IdGenerator } from "@/src/BizTru_Karnel/CommandFactory/factoryDependencies/IdGenerators";
 import { EventStored } from "@/src/BizTru_Karnel/EventStore/EventStore";
 import { KernelExecutionPipeline } from "@/src/BizTru_Karnel/KernelExecutionPipeline/KernelExecutionPipeline";
-import { MetadataBuilder } from "@/src/BizTru_Karnel/MetadataBuilder/MetadataBuilder";
 import { BusinessApplication } from "@/src/Composer/BusinessApplicationComposer";
 import { ApplicationContext } from "@/src/Composer/context/ApplicationContext";
 import { BusinessBusesRegistry } from "@/src/offline/sqlite/businessDatabase/BusinessEventBus/BusinessBusesRegistry";
@@ -22,9 +21,10 @@ import { QueryRunner } from "@/src/storage/queryRunner/QueryRunner";
 import { BusinessRuntime } from "@/src/storage/runtime/BusinessRuntime";
 import { SQLiteRuntime } from "@/src/storage/runtime/SQLiteRuntime";
 import { TransactionManager } from "@/src/storage/transaction/TransactionManager";
-import { SQLiteBusinessClock } from "@/src/BizTru_Karnel/MetadataBuilder/SQLiteBusinessClock"
-import { EventMetadataBuilder } from "@/src/BizTru_Karnel/MetadataBuilder/EventMetadataBuilder"
+import { SQLiteBusinessClock } from "@/src/BizTru_Karnel/BusinessClock/SQLiteBusinessClock" 
 import { FrontendBusinessContext } from "@/src/Composer/context/BusinessContext";
+import { ProjectionEventBus } from "@/src/buses/ProjectionBuses";
+import { BusinessConsumer } from "@/src/offline/sqlite/businessDatabase/projections/businesProjection";
 
 export class BusinessBootstrapper
 implements Lifecycle {
@@ -42,11 +42,19 @@ implements Lifecycle {
             await this.createStorage(
                 runtime
             );
+        const buses = 
+            await this.createProjectionBus();
+
+        this.createConsumers(
+            buses,
+            storage.repositories
+        )
 
         const domain = 
             await this.createDomain(
                 client,
-                storage
+                storage,
+                buses
             )
         
         const synchronization = 
@@ -84,7 +92,7 @@ implements Lifecycle {
         
     }
 
-   async createRuntime(businessId: string) : Promise<BusinessRuntime> {
+   private async createRuntime(businessId: string) : Promise<BusinessRuntime> {
         const sqlite = 
             new SQLiteRuntime({
                 filename: 
@@ -103,7 +111,7 @@ implements Lifecycle {
         return runtime
     }
 
-   async createStorage(runtime: BusinessRuntime): Promise<BusinessStorage>{
+   private async createStorage(runtime: BusinessRuntime): Promise<BusinessStorage>{
         const migrationRunner = 
             new BusinessMigrationRunner(
                 runtime.queryRunner,
@@ -132,30 +140,25 @@ implements Lifecycle {
        )
    }
 
-   async createDomain(
+   private async createDomain(
         client: ApplicationContext,
-        storage: BusinessStorage
+        storage: BusinessStorage,
+        bus: ProjectionEventBus
     ): Promise<BusinessDomain> {
     const executionContext =
         client.ExecutionContext
-    const metadataBuilder =
-        new MetadataBuilder();
-    
     const idGenerator = new IdGenerator()
    const eventbus = new EventStored(storage.repositories.events)
     const commandFactory =
         new DefaultCommandFactory(
             executionContext,
-            metadataBuilder,
-           idGenerator
+            idGenerator
         )
     const commandValidator =new CommandValidation();
     const clock = 
         new SQLiteBusinessClock(
             storage.repositories.logicClock
         )
-    const eventMetadataBuilder = new EventMetadataBuilder();
-
     const context = new FrontendBusinessContext(
         client.repositories.applicationState
     )
@@ -163,8 +166,10 @@ implements Lifecycle {
         commandValidator,
         eventbus,
         clock,
-        eventMetadataBuilder,
-        context
+        context,
+        client.clientBus,
+        bus,
+        storage.runtime.transactionManager
     )
     
     const kernel = new DefaultBusinessKernel(
@@ -178,15 +183,31 @@ implements Lifecycle {
         commandFactory,
         kernel,
         eventbus,
-        services
+        services,
+        bus
     )
    }
 
-   async createSynchronization(
+   private async createSynchronization(
         storage: BusinessStorage,
         domain: BusinessDomain
     ): Promise<BusinessSynchronization> {
         const buses = new BusinessBusesRegistry()
         return new BusinessSynchronization(buses)
+   }
+
+   private async createProjectionBus(){
+    return new ProjectionEventBus()
+   }
+
+   private async createConsumers(
+        bus: ProjectionEventBus,
+        repositories: BusinessRepositoryRegistry
+   ){
+        bus.subscribe(
+            new BusinessConsumer(
+                repositories.business
+            )
+        )
    }
 }
