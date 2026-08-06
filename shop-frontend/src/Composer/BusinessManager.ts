@@ -20,23 +20,31 @@ implements BusinessManagerContract, Lifecycle{
 
     private currentBusinessId?: string 
 
-    async initialize(): Promise<void> {
-        const businesses = 
-            await this.client.repositories.knownNode.findAll();
+    async initialize() {
 
-            for(const business of businesses ) {
-                this.knownBusinesses.set(
-                    business.id,
-                    business
-                )
-            }
+        const businesses =
+            await this.client.repositories
+                .knownNode
+                .findAll();
 
-            const active = 
-                await this.client.repositories.knownNode.getCurrent()
+        for (const business of businesses) {
 
-            if(active){
-                this.currentBusinessId = active.id
-            }
+            this.knownBusinesses.set(
+                business.id,
+                business
+            );
+        }
+
+        const current =
+            await this.client.repositories
+                .currentBusiness
+                .find();
+
+        if (current?.businessId) {
+
+            this.currentBusinessId =
+                current.businessId;
+        }
     }
     async start(): Promise<void> {
         if(!this.currentBusinessId){
@@ -80,10 +88,9 @@ implements BusinessManagerContract, Lifecycle{
                     return existing
                 }
                 const app = 
-                    await this.bootstrapper.open(
-                        this.client,
+                    await this.bootstrap(
                         businessId
-                    );
+                    )
 
                     this.applications.set(
                         businessId,

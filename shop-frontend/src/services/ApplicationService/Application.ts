@@ -11,6 +11,7 @@ export class Application {
     constructor(
         client: ApplicationContext,
         private readonly manager: BusinessManager
+        
     ){
         this.client = client;
 
