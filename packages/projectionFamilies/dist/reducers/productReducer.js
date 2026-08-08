@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Producteducer = exports.ProductReducer = void 0;
+exports.ProductReducer = void 0;
 const shared_types_1 = require("@business/shared-types");
 class ProductReducer {
     reduce(state, event) {
@@ -16,8 +16,8 @@ class ProductReducer {
                     branchId: event.branchId ?? undefined,
                     isActive: true,
                     isDeleted: false,
-                    createdAt: new Date(event.metadata.occuredAt),
-                    updatedAt: new Date(event.metadata.occuredAt),
+                    createdAt: event.createdAt,
+                    updatedAt: event.createdAt,
                 };
             case "PRODUCT_UPDATED":
                 if (!state) {
@@ -28,50 +28,35 @@ class ProductReducer {
                     name: event.payload.name,
                     price: event.payload.price,
                     costPrice: event.payload.costPrice,
-                    updatedAt: event.metadata.occuredAt
+                    updatedAt: event.createdAt
                 };
             case "PRODUCT_DELETED":
-                if (!current) {
-                    return current;
+                if (!state) {
+                    return state;
                 }
                 return {
-                    ...current,
+                    ...state,
                     isActive: false,
                     isDeleted: true,
-                    deletedAt: new Date(event.createdAt),
+                    deletedAt: event.createdAt,
                 };
             case shared_types_1.InventoryEventType.INVENTORY_RECEIVED: {
-                if (!current) {
-                    return current;
+                if (!state) {
+                    return state;
                 }
                 const newCost = event.payload.costPrice;
-                if (newCost === current.costPrice) {
-                    return current;
+                if (newCost === state.costPrice) {
+                    return state;
                 }
                 return {
-                    ...current,
+                    ...state,
                     costPrice: newCost,
                     updatedAt: event.createdAt
                 };
             }
             default:
-                return current;
+                return state;
         }
     }
 }
 exports.ProductReducer = ProductReducer;
-exports.Producteducer = {
-    initialState: () => ({
-        id: "",
-        businessId: "",
-        branchId: "",
-        name: "",
-        imageUrl: "",
-        description: "",
-        costPrice: 0,
-        price: 0,
-        isDeleted: false,
-    }),
-    reduce(current, event) {
-    }
-};

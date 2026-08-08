@@ -1,77 +1,71 @@
-// SQLiteBranchRepository.ts
-
 import { Branch } from "@business/shared-types";
-import { DatabaseTarget } from "../../../protocol/DatabaseTarget";
 import { IProjectionEntityRepository } from "./repositoryContract";
-import { EventStatements } from "../../statements/events/EventStatements";
 import { BranchStatements } from "../../statements/branch/BranchStatements";
-import { QueryRunner } from "@/src/storage/queryRunner/QueryRunner"
 
 export class SQLiteBranchRepository
 implements IProjectionEntityRepository<Branch> {
-  constructor(
-          private queryRunner: QueryRunner,
-          private readonly statements: BranchStatements
-      ) {}
-  async findById(id: string) {
 
-    const rows =
-      await this.queryRunner.query<Branch>(
+    constructor(
+        private readonly statements: BranchStatements
+    ) {}
 
-        `
-        SELECT *
-        FROM branches
-        WHERE id = 
-        LIMIT 1
-        `,
-      )
+    async upsert(state: Branch): Promise<void> {
 
-    return rows[0] ?? null;
-  }
+        await this.statements.insert.execute(
+            BranchMapper.ToInsert(state)
+        );
 
-  async findAll() {
-   
+    }
 
-    return this.queryRunner.query<Branch>(
-      `
-      SELECT *
-      FROM branches
-      `
-    );
-  }
+    async findById(id: string) {
 
-  async upsert(
-    id: string,
-    state: Branch
-  ) {
-   
-    await this.queryRunner.query(
-      `
-      INSERT INTO branches (
-        id,
-        businessId,
-        name,
-        phone
-        isActive
-        createdAt
-      )
-      VALUES (?, ?, ?, ?, ?, ?)
+        const rows =
+            await this.statements.findById.query<Branch>(
+                [id]
+            );
 
-      ON CONFLICT(id)
-      DO UPDATE SET
-        name = excluded.name,
-        phone = excluded.phone
-      `,
-    );
-  }
+        return rows[0] ?? null;
 
-  async delete(id: string) {
+    }
 
-    await this.queryRunner.query(
-      `
-      DELETE FROM branches
-      WHERE id = ?
-      `,
-    );
-  }
+    async findAll() {
+
+        return await this.statements.findAll.query<Branch>();
+
+    }
+
+    async delete(id: string) {
+
+        await this.statements.delete.execute(
+            [id]
+        );
+
+    }
+
+}
+
+export class BranchMapper {
+
+    static ToInsert(
+        branch: Branch
+    ): unknown[] {
+
+        return [
+
+            branch.id,
+
+            branch.businessId,
+
+            branch.name,
+
+            branch.phone ?? "",
+
+            branch.isActive,
+
+            branch.createdAt,
+
+        ];
+
+    }
+
 }

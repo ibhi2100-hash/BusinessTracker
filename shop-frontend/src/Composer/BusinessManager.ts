@@ -59,13 +59,13 @@ implements BusinessManagerContract, Lifecycle{
         
     }
     async bootstrap(businessId: string): Promise<BusinessApplication> {
-        console.log("Thank you am about to Bootstrap this business", businessId)
+        
             const app = 
                 await this.bootstrapper.bootstrap(
                     this.client,
                     businessId
                 );
-            console.log("I just Bootstrapped it now am adding it to memory")
+            
             this.applications.set(
                 businessId,
                 app
@@ -122,9 +122,11 @@ implements BusinessManagerContract, Lifecycle{
         }
 
         current(): BusinessApplication | undefined {
+            
             if(!this.currentBusinessId){
                 return undefined
             }
+           
             return this.applications.get(
                 this.currentBusinessId
             )

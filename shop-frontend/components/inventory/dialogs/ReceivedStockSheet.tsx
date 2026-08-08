@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { ArrowDownToLine, Package, DollarSign } from "lucide-react";
 
-import { GlassSheet } from "../ui/GlassSheet";
-import { GlassInput } from "../ui/GlassInput";
-import { GlassButton } from "../ui/GlassButton";
+import { GlassSheet } from "../../ui/GlassSheet";
+import { GlassInput } from "../../ui/GlassInput";
+import { GlassButton } from "../../ui/GlassButton";
 
 interface Props {
   open: boolean;

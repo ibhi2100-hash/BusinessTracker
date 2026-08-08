@@ -15,7 +15,7 @@ import { GlassButton } from "@/components/ui/GlassButton";
 import { GlassIcon } from "@/components/ui/GlassIcon";
 
 import { useBusinessStore } from "@/src/store/businessStore";
-import { OnboardingApi } from "@/src/services/ApplicationService/API/OnboardinApi";
+import { OnboardingApi } from "@/src/services/ApplicationService/API/onboarding/OnboardinApi";
 import { BusinessEventTypes } from "@business/shared-types";
 import { AggregateType } from "@/offline/domain/aggregate";
 

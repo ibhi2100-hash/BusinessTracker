@@ -19,6 +19,7 @@ __exportStar(require("./entities/Inventory"), exports);
 __exportStar(require("./entities/Business"), exports);
 __exportStar(require("./entities/Branch"), exports);
 __exportStar(require("./entities/User"), exports);
+__exportStar(require("./entities/Sales"), exports);
 __exportStar(require("./events/DomainEvents"), exports);
 __exportStar(require("./events/OutboxEntry"), exports);
 __exportStar(require("./events/cononicalEvent"), exports);

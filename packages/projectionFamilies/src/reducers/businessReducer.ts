@@ -6,8 +6,9 @@ interface BusinessPayload {
   address: string;
 }
 export class BusinessReducer 
-implements ProjectionReducer<DomainEvent>{
-  reduce(event: DomainEvent<BusinessPayload>) {
+implements ProjectionReducer<Business, DomainEvent<BusinessPayload>>{
+
+  reduce(state: Business | null, event: DomainEvent<BusinessPayload>): Business {
     switch (event.type) {
 
             case BusinessEventTypes.BUSINESS_CREATED:
@@ -17,8 +18,13 @@ implements ProjectionReducer<DomainEvent>{
             case BusinessEventTypes.BUSINESS_ACTIVATION:
 
                 return this.activate(
+                    state,
                     event
                 );
+
+            default:
+
+                return state!;
 
         }
 
@@ -60,13 +66,25 @@ implements ProjectionReducer<DomainEvent>{
 
 private activate(
 
+    current: Business | null,
+
     event: DomainEvent
 
-) {
+): Business {
 
+    if (!current) {
 
-    
+        throw new Error(
+
+            "Business projection not found."
+
+        );
+
+    }
+
     return {
+
+        ...current,
 
         activatedAt:
             event.createdAt,

@@ -6,7 +6,7 @@ import { DataCard } from "@/components/ui/DataCard";
 import { StockBadge } from "@/components/ui/StockBadge";
 import { useBusinessStore } from "@/src/store/businessStore";
 import { useBranchStore } from "@/src/store/useBranchStore";
-import { GlassButton } from "../ui/GlassButton";
+import { GlassButton } from "../../ui/GlassButton";
 
 interface Props {
   product: inventoryProduct;

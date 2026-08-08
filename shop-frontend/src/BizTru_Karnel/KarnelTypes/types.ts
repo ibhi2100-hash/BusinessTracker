@@ -55,15 +55,6 @@ export interface AggregateState {
     readonly version: number;
 }
 
-export interface BusinessOperation<
-    TState,
-    TCommand,
-> {
-    execute(
-        runtime: AggregateRuntimeContext<TState>
-    ): ExecutionPlan;
-}
-
 export interface AggregateLoader {
 
     load(
@@ -86,32 +77,8 @@ export interface ExecutionPlan {
 
 }
 
-export interface AggregateRuntimeContext
-<
-    TState,
->{
-    readonly command: Command;
-
-    readonly state: TState;
-
-    readonly descriptor: CommandDescriptor;
-
-    readonly operation: BusinessOperation<TState, Command>;
 
 
-}
-
-export interface AggregateRuntimeFactory {
-
-    create(
-
-        command: Command,
-
-        descriptor: CommandDescriptor
-
-    ): Promise<AggregateRuntimeContext<AggregateState>>;
-
-}
 
 export interface AggregateRebuilder<
     TState
@@ -141,18 +108,6 @@ export interface EventLoader {
         aggregateId,
         version
     ): Event[];
-}
-
-export interface AggregateMaterializer {
-
-    materialize(
-
-        descriptor: CommandDescriptor,
-
-        command: Command
-
-    ): Promise<AggregateRuntimeContext<AggregateState>>
-
 }
 
 

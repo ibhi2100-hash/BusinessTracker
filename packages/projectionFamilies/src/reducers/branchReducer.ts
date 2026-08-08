@@ -8,8 +8,8 @@ interface BranchPayload {
   phone: string;
 }
 export class BranchReducer 
-implements ProjectionReducer<DomainEvent<BranchPayload>> {
-  reduce(event: DomainEvent<BranchPayload>){
+implements ProjectionReducer<Branch, DomainEvent<BranchPayload>> {
+  reduce(state: Branch , event: DomainEvent<BranchPayload>): Branch {
     switch (event.type) {
       
 
@@ -35,6 +35,9 @@ implements ProjectionReducer<DomainEvent<BranchPayload>> {
             createdAt:
                 event.createdAt,
         };
+
+      default:
+        return state;
     }
   }
 }

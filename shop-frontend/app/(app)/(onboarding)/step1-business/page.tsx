@@ -38,11 +38,20 @@ export default function Step2Business() {
 
     setLoading(true);
     setError(null);
+    const businessId = crypto.randomUUID();
+    const branchId = crypto.randomUUID();
 
     try {
       await app.onboarding.createBusiness({
+        id: businessId,
         name: form.name,
         address: form.address
+      })
+
+      await app.onboarding.createMainBranch({
+        id: branchId,
+        businessId,
+        name: "MainBranch"
       })
 
       router.replace("/onboard");

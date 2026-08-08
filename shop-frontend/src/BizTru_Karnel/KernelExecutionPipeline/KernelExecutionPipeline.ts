@@ -42,7 +42,7 @@ implements PipelineKernel {
 
         console.log("this is the event to be appended: ", event)
 
-        this.transaction.run(async () => {
+        await this.transaction.run(async () => {
             await this.eventStore.append([event]);
             await this.clientBus.publish(event),
             await this.businessBus.publish(event)

@@ -1,12 +1,14 @@
+import { Inventory } from "@business/shared-types";
 import { DomainEvent } from "@business/shared-types";
-export declare const InventoryReducer: {
-    initialState: () => {
-        id: string;
-        productId: string;
-        branchId: string;
-        businessId: string;
-        quantity: number;
-        costPrice: number;
-    };
-    reduce(current: any, event: DomainEvent<any>): any;
-};
+import { ProjectionReducer } from "../contracts/ProjectionReducer";
+interface InventoryPayload {
+    id: string;
+    productId: string;
+    quantity: number;
+    costPrice: number;
+    direction?: "increase" | "decrease";
+}
+export declare class InventoryReducer implements ProjectionReducer<Inventory, DomainEvent<InventoryPayload>> {
+    reduce(state: Inventory, event: DomainEvent<InventoryPayload>): Inventory;
+}
+export {};

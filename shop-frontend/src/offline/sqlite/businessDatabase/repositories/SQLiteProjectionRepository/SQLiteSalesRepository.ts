@@ -1,77 +1,76 @@
+import { Sales } from "@business/shared-types";
 import { IProjectionEntityRepository } from "./repositoryContract";
-import { getDB } from "../../sqlite/database/db";
+import { SalesStatement } from "../../statements/sales/salesStatements";
+export class SQLiteSalesRepository
+implements IProjectionEntityRepository<Sales> {
 
-export class SQLiteSaleRepository
-implements IProjectionEntityRepository<Sale> {
+    constructor(
+        private readonly statements: SalesStatement
+    ) {}
 
-  async findById(id: string) {
+    async upsert(state: Sales): Promise<void> {
 
-    const rows =
-      await getDB().query<Sale>(
-        `
-        SELECT *
-        FROM sales
-        WHERE id = ?
-        LIMIT 1
-        `,
-        [id]
-      );
+        await this.statements.upsert.execute(
+            SalesMapper.ToInsert(state)
+        );
 
-    return rows[0] ?? null;
-  }
+    }
 
-  async findAll() {
-    return getDB().query<Sale>(
-      `
-      SELECT *
-      FROM sales
-      ORDER BY createdAt DESC
-      `
-    );
-  }
+    async findById(id: string) {
 
-  async upsert(
-    id: string,
-    state: Sale
-  ) {
+        const rows =
+            await this.statements.findById.query<Sales>(
+                [id]
+            );
 
-    await getDB().query(
-      `
-      INSERT INTO sales (
-        id,
-        productId,
-        quantity,
-        amount,
-        businessId,
-        branchId,
-        createdAt
-      )
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+        return rows[0] ?? null;
 
-      ON CONFLICT(id)
-      DO UPDATE SET
-        quantity = excluded.quantity,
-        amount = excluded.amount
-      `,
-      [
-        id,
-        state.productId,
-        state.quantity,
-        state.amount,
-        state.businessId,
-        state.branchId,
-        state.createdAt
-      ]
-    );
-  }
+    }
 
-  async delete(id: string) {
-    await getDB().query(
-      `
-      DELETE FROM sales
-      WHERE id = ?
-      `,
-      [id]
-    );
-  }
+    async findAll(): Promise<Sales[]> {
+        return await this.statements.update.query();
+    }
+
+    async delete(id: string) {
+
+        await this.statements.delete.execute(
+            [id]
+        );
+
+    }
+
+}
+
+export class SalesMapper {
+
+    static ToInsert(
+        sale: Sales
+    ): unknown[] {
+
+        return [
+
+            sale.id,
+
+            sale.businessId ?? "",
+
+            sale.branchId ?? "",
+
+            sale.productId,
+
+            sale.quantity,
+
+            sale.price,
+
+            sale.costPrice,
+
+            sale.total,
+
+            sale.createdAt,
+
+            sale.updatedAt ?? ""
+
+        ];
+
+    }
+
 }

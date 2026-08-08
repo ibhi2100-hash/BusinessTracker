@@ -8,10 +8,10 @@ import {
     DollarSign,
     Boxes
  } from "lucide-react";
-import { GlassSheet } from "../ui/GlassSheet";
-import { GlassButton } from "../ui/GlassButton";
-import { DataCard } from "../ui/DataCard";
-import { StockBadge } from "../ui/StockBadge";
+import { GlassSheet } from "../../ui/GlassSheet";
+import { GlassButton } from "../../ui/GlassButton";
+import { DataCard } from "../../ui/DataCard";
+import { StockBadge } from "../../ui/StockBadge";
 import { Product } from "@business/shared-types";
 
 interface ProductDetailsSheetProps {

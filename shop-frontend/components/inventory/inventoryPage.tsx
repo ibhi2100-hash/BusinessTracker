@@ -2,13 +2,13 @@
 
 import { useMemo, useState } from "react";
 import { inventoryProduct } from "@/src/store/inventoryStore";
-import ProductCard from "./productCard";
-import ProductSheet from "./ProductSheet";
-import AdjustStockSheet from "./AdjustStockSheet";
-import ReceiveStockSheet from "./ReceivedStockSheet";
-import TransferStockSheet from "./TransferStockSheet";
-import ProductHistorySheet from "./ProductHistorySheet";
-import CartBar from "@/components/inventory/CartBar";
+import ProductCard from "./cards/ProductCard";
+import ProductSheet from "./dialogs/ProductSheet";
+import AdjustStockSheet from "./dialogs/AdjustStockSheet";
+import ReceiveStockSheet from "./dialogs/ReceivedStockSheet";
+import TransferStockSheet from "./dialogs/TransferStockSheet";
+import ProductHistorySheet from "./dialogs/ProductHistorySheet";
+import CartBar from "@/components/inventory/dialogs/CartBar";
 import { toast } from "sonner";
 
 import {
@@ -18,17 +18,18 @@ import {
   LayoutGrid,
 } from "lucide-react";
 import { useCartStore } from "@/src/store/useCartStore";
-import { eventService } from "@/src/services/eventService";
+import { useApplication } from "@/src/services/ApplicationService/ApplicationContext";
 import { OpeningEventType } from "@business/shared-types";
 import { InventoryEventType } from "@business/shared-types";
 import { salesEventType } from "@business/shared-types";
 import { AggregateType } from "@/offline/domain/aggregate";
-import SellCard from "./SalesCard";
+import SellCard from "./cards/SellCard";
 import { GlassButton } from "../ui/GlassButton";
-import { useInventoryProducts } from "@/hooks/useProduct";
-import ProductDetailsSheet from "./ProductsManagement";
+
+import ProductDetailsSheet from "./dialogs/ProductsManagement";
 import { useBranchStore } from "@/src/store/useBranchStore";
 import { inventoryKey } from "@/src/utils/keygenerator";
+import { useInventoryDialogs } from "./hooks/dialogsHooks";
 
 interface InventoryPageProps {
   context: "sell" | "admin";
@@ -48,7 +49,9 @@ export default function InventoryPage({
   context,
   mode,
 }: InventoryPageProps) {
-  const products = useInventoryProducts();
+  const products = []
+
+  const app = useApplication()
   // -----------------------------
   // UI STATE
   // -----------------------------
@@ -61,9 +64,7 @@ export default function InventoryPage({
     useState<string>("All");
   const branches = useBranchStore((s) => s.branches);
   const [history, setHistory] = useState<ProductHistoryItem[]>([]);
-  
-
-  type ActiveSheet =
+   type ActiveSheet =
   | null
   | "create"
   | "manage"
@@ -75,6 +76,8 @@ export default function InventoryPage({
 
 const [activeSheet, setActiveSheet] =
   useState<ActiveSheet>(null);
+
+
 
   // -----------------------------
   // 📦 CATEGORIES
@@ -126,7 +129,7 @@ const [activeSheet, setActiveSheet] =
  
  const handleDelete = async (productId: string) => {
   try {
-    await eventService.create({
+    await app.onboarding.createBusiness({
       aggregateType: AggregateType.PRODUCT,
       aggregateId: productId,
       type: mode === "OPENING" ? OpeningEventType.OPENING_INVENTORY_DELETED : InventoryEventType.PRODUCT_DELETED,
@@ -147,7 +150,7 @@ const handleCheckout = async () => {
     setLoading(true);
 
     for (const item of cart) {
-      await eventService.create({
+      await app.onboarding.createBusiness({
         aggregateType: AggregateType.SALE,
         aggregateId: item.productId,
         type: "SALE_ADDED",
@@ -173,7 +176,7 @@ const handleSell = async (productId: string, quantity: number) => {
   const product = products.find(p => p.id === productId);
   if (!product) return;
 
-  await eventService.create({
+  await app.onboarding.createBusiness({
     aggregateType: AggregateType.SALE,
     aggregateId: productId,
     type: salesEventType.SALE_ADDED,
@@ -197,7 +200,7 @@ const handleReceiveStock = async (
 
   const key = inventoryKey(selectedProduct.id, branchId)
 
-  await eventService.create({
+  await app.onboarding.createBusiness({
     aggregateType:
       AggregateType.INVENTORY,
 
@@ -235,7 +238,7 @@ const handleAdjustStock = async (
 ) => {
   if (!selectedProduct || !branchId) return;
   const key = inventoryKey(selectedProduct.id, branchId)
-  await eventService.create({
+  await app.onboarding.createBranch({
     aggregateType:
       AggregateType.INVENTORY,
 
@@ -270,7 +273,7 @@ const handleTransferStock = async (
 ) => {
   if (!selectedProduct || !branchId) return;
   const key = inventoryKey(selectedProduct.id, branchId)
-  await eventService.create({
+  await app.onboarding.createBusiness({
     aggregateType:
       AggregateType.INVENTORY,
 
@@ -308,20 +311,31 @@ const handleTransferStock = async (
 }) => {
   try {
     setLoading(true);
+    const productId = crypto.randomUUID()
+
+    const inventoryId = crypto.randomUUID();
 
        if (activeSheet === "create") {
-        await eventService.createProductWithOpeningStock({
+        await app.product.create({
+          id: productId,
           name: data.name,
           price: data.price,
           costPrice: data.cost,
+          mode
+        })
+
+        await app.inventory.createStock({
+          id: inventoryId,
+          productId,
           quantity: data.quantity,
+          costPrice: data.cost,
           mode
         })
         toast.success("Product created");
       }
 
       if (activeSheet === "manage" && selectedProduct) {
-        await eventService.updateProductSmart({
+        await app.onboarding.createBusiness({
           productId: selectedProduct.id,
           name: data.name,
           price: data.price,
@@ -557,4 +571,13 @@ const handleTransferStock = async (
 
     </div>
   );
+}
+
+export function InventoryPages(props: InventoryPageProps) {
+    return (
+        <InventoryFeature
+            context={props.context}
+            mode={props.mode}
+        />
+    );
 }

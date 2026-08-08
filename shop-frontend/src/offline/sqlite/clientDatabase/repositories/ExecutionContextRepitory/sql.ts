@@ -9,7 +9,7 @@ export const GET_CURRENT_CONTEXT = `
 
             d.deviceId            AS deviceId,
 
-            ab.id         AS businessId
+            cb.businessId         AS businessId
 
         FROM device d
 
@@ -19,7 +19,7 @@ export const GET_CURRENT_CONTEXT = `
         LEFT JOIN users u
         ON u.id = s.userId
 
-        LEFT JOIN known_nodes ab
+        LEFT JOIN current_business cb
         ON 1 = 1
 
         LIMIT 1;

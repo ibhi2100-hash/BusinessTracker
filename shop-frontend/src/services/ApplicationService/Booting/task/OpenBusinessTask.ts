@@ -13,12 +13,10 @@ implements BootTask {
         
         const manager = 
             context.runtime.businessManager;
-
-        const business = 
-            manager.current();
-
-        if(!business){
-            return;
+        if(!manager) {
+            throw new Error(
+                "BusinessManager has not been created"
+            )
         }
 
         await manager.start()

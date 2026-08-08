@@ -2,8 +2,8 @@
 
 import { ClipboardList } from "lucide-react";
 
-import { GlassSheet } from "../ui/GlassSheet";
-import { DataCard } from "../ui/DataCard";
+import { GlassSheet } from "../../ui/GlassSheet";
+import { DataCard } from "../../ui/DataCard";
 
 interface HistoryItem {
   id: string;

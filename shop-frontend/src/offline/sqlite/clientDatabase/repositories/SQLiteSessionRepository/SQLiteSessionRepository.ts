@@ -18,7 +18,6 @@ export class SQLiteSessionRepository implements SessionRepositoryContract {
 
         return rows[0]
     }
-
     async clearSession(): Promise<void> {
         await this.sessionStatement.clearSession.execute()
     }

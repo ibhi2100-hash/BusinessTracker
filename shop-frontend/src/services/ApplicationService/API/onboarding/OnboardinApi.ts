@@ -2,7 +2,8 @@ import { AggregateType } from "@/offline/domain/aggregate";
 import { CommandIntent } from "@/src/BizTru_Karnel/CommandFactory/CommandIntent";
 import { BusinessManager } from "@/src/Composer/BusinessManager";
 import { Business, BusinessEventTypes } from "@business/shared-types";
-import { CreateBusinessRequest } from "./types";
+import { CreateBusinessRequest } from "../types";
+import { BranchCreationRequest, BranchPayload } from "../branch/branchRequest";
 
 
 export class OnboardingApi {
@@ -12,22 +13,21 @@ export class OnboardingApi {
     async createBusiness(
         request: CreateBusinessRequest
     ){
-        const businessId = crypto.randomUUID();
-        const aggregateId = crypto.randomUUID();
+        
 
         const intent: CommandIntent<any> ={ 
-            aggregateId: aggregateId,
+            aggregateId: request.id,
             aggregateType: AggregateType.BUSINESS,
             type: BusinessEventTypes.BUSINESS_CREATED,
             mode:"OPENING",
             payload: {
-                id: businessId,
+                id: request.id,
                 name: request.name,
                 address: request.address
             }
         }
         console.log("this the business request: ", request)
-        const app = await this.manager.bootstrap(businessId);
+        const app = await this.manager.bootstrap(request.id);
 
         const command = await app.domain.commandFactory.create(intent);
 
@@ -35,7 +35,23 @@ export class OnboardingApi {
 
     }
 
-    async createBranch(businessId: string, request: CreateBranchRequest) {
-        // Implementation for creating a branch
+    async createMainBranch(request: BranchCreationRequest) {
+        const branchIntent: CommandIntent<BranchPayload> = {
+            type: BusinessEventTypes.BRANCH_CREATED,
+            aggregateId: request.id,
+            aggregateType: AggregateType.BRANCH,
+            payload: {
+                id: request.id,
+                name: request.name,
+                address: request.address ??  null,
+                phone: request.phone ?? null
+            },
+            mode: "OPENING"   
+        }
+        const app = await this.manager.current();
+
+        const command = await app.domain.commandFactory.create(branchIntent);
+
+        await app.domain.kernel.execute(command)
     }
 }

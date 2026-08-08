@@ -1,148 +1,399 @@
-import { OpeningEventType, DomainEvent } from "@business/shared-types";
-import { InventoryEventType } from "@business/shared-types";
-import { salesEventType } from "@business/shared-types";
+import {
+    Inventory,
+    OpeningEventType,
+    InventoryEventType,
+    salesEventType,
+    DomainEvent
+} from "@business/shared-types";
 
-export const InventoryReducer = {
+import { ProjectionReducer } from "../contracts/ProjectionReducer";
 
-    initialState: () => ({
-    id: "",
-    productId: "",
-    branchId: "",
-    businessId: "",
-    quantity: 0,
-    costPrice: 0,
+interface InventoryPayload {
+    id: string;
+    productId: string;
+    quantity: number;
+    costPrice: number;
+    direction?: "increase" | "decrease";
+}
 
-  }),
+export class InventoryReducer
+implements ProjectionReducer<Inventory, DomainEvent> {
 
-  reduce(current: any, event: DomainEvent<any>) {
-    
-    switch (event.type) {
+    reduce(
+        state: Inventory | null,
+        event: DomainEvent
+    ): Inventory {
 
-      // =========================
-      // OPENING STOCK
-      // =========================
-      case OpeningEventType.OPENING_INVENTORY_CREATED:
+        switch (event.type) {
 
-        return {
-          id: event.aggregateId,
-          aggregateId: event.aggregateId,
-          aggregateType: event.aggregateType,
+            // =========================
+            // OPENING STOCK
+            // =========================
 
-          productId: event.payload.productId,
+            case OpeningEventType.OPENING_INVENTORY_CREATED:
 
-          branchId: event.branchId,
+                return this.created(event);
 
-          quantity: event.payload.quantity,
 
-          costPrice: event.payload.costPrice,
+            // =========================
+            // STOCK ADDED
+            // =========================
 
-          updatedAt: event.createdAt,
-        };
+            case InventoryEventType.INVENTORY_ADDED:
 
-      // =========================
-      // STOCK INCREMENT
-      // =========================
-      case InventoryEventType.INVENTORY_ADDED:
+                return this.add(
+                    state,
+                    event
+                );
 
-        if (!current) return current;
 
-        return {
-          ...current,
+            // =========================
+            // STOCK UPDATED
+            // =========================
 
-          quantity:
-            current.quantity +
-            event.payload.quantityDelta,
+            case InventoryEventType.INVENTORY_UPDATED:
 
-          updatedAt: event.createdAt,
-        };
+                return this.update(
+                    state,
+                    event
+                );
 
-      // =========================
-      // STOCK ADJUSTMENT
-      // =========================
-      case InventoryEventType.INVENTORY_UPDATED:
 
-        if (!current) return current;
+            // =========================
+            // STOCK RECEIVED
+            // =========================
 
-        return {
-          ...current,
+            case InventoryEventType.INVENTORY_RECEIVED:
 
-          quantity:
-            current.quantity +
-            event.payload.quantityDelta,
+                return this.receive(
+                    state,
+                    event
+                );
 
-          updatedAt: event.createdAt,
-        };
 
-      // =========================
-      // STOCK RECEIVED
-      // =========================
-      case InventoryEventType.INVENTORY_RECEIVED:
-        if (!current) return current;
+            // =========================
+            // STOCK ADJUSTED
+            // =========================
 
-        return {
-          ...current,
+            case InventoryEventType.INVENTORY_ADJUSTED:
 
-          quantity:
-            current.quantity +
-            event.payload.quantity,
-            costPrice: event.payload.costPrice,
-            updatedAt: event.createdAt,
-        };
+                return this.adjust(
+                    state,
+                    event
+                );
 
-      // =========================
-      // STOCK ADJUSTMENT
-      // =========================
-      case InventoryEventType.INVENTORY_ADJUSTED:
-        
-        if (!current) return current;
 
-        return {
-          ...current,
+            // =========================
+            // STOCK TRANSFERRED
+            // =========================
 
-          quantity: 
-            event.payload.direction === "increase" 
-              ? current.quantity + event.payload.quantity
-              : current.quantity - event.payload.quantity,
+            case InventoryEventType.INVENTORY_TRANSFER:
 
-          updatedAt: event.createdAt,
-        };
+                return this.transfer(
+                    state,
+                    event
+                );
 
-      // =========================
-      // STOCK TRANSFER
-      // =========================
-      case InventoryEventType.INVENTORY_TRANSFER:
-        
-        if (!current) return current;
 
-        return {
-          ...current,
+            // =========================
+            // SALE
+            // =========================
 
-          quantity:
-            current.quantity -
-            event.payload.quantity,
+            case salesEventType.SALE_ADDED:
 
-          updatedAt: event.createdAt,
-        };
-      // =========================
-      // SALE
-      // =========================
-      case salesEventType.SALE_ADDED:
+                return this.sell(
+                    state,
+                    event
+                );
 
-        if (!current) return current;
 
-        return {
-          ...current,
+            default:
 
-          quantity:
-            current.quantity -
-            event.payload.quantity,
+                return state!;
 
-          updatedAt:
-            event.createdAt,
-        };
+        }
 
-      default:
-        return current;
     }
-  }
-};
+
+
+    // =====================================================
+    // CREATE
+    // =====================================================
+
+    private created(
+        event: DomainEvent
+    ): Inventory {
+
+        const payload =
+            event.payload as InventoryPayload;
+
+        return {
+
+            id:
+                event.aggregateId,
+
+            productId:
+                payload.productId,
+
+            businessId:
+                event.businessId!,
+
+            branchId:
+                event.branchId!,
+
+            quantity:
+                payload.quantity,
+
+            costPrice:
+                payload.costPrice,
+
+            createdAt:
+                event.createdAt,
+
+            updatedAt:
+                event.createdAt
+
+        };
+
+    }
+
+
+    // =====================================================
+    // ADD STOCK
+    // =====================================================
+
+    private add(
+        current: Inventory | null,
+        event: DomainEvent
+    ): Inventory {
+
+        const state =
+            this.requireState(
+                current,
+                event
+            );
+
+        const payload =
+            event.payload as InventoryPayload;
+
+        return {
+
+            ...state,
+
+            quantity:
+                state.quantity +
+                payload.quantity,
+
+            updatedAt:
+                event.createdAt
+
+        };
+
+    }
+
+
+    // =====================================================
+    // UPDATE STOCK
+    // =====================================================
+
+    private update(
+        current: Inventory | null,
+        event: DomainEvent
+    ): Inventory {
+
+        const state =
+            this.requireState(
+                current,
+                event
+            );
+
+        const payload =
+            event.payload as InventoryPayload;
+
+        return {
+
+            ...state,
+
+            quantity:
+                state.quantity +
+                payload.quantity,
+
+            updatedAt:
+                event.createdAt
+
+        };
+
+    }
+
+
+    // =====================================================
+    // RECEIVE STOCK
+    // =====================================================
+
+    private receive(
+        current: Inventory | null,
+        event: DomainEvent
+    ): Inventory {
+
+        const state =
+            this.requireState(
+                current,
+                event
+            );
+
+        const payload =
+            event.payload as InventoryPayload;
+
+        return {
+
+            ...state,
+
+            quantity:
+                state.quantity +
+                payload.quantity,
+
+            costPrice:
+                payload.costPrice,
+
+            updatedAt:
+                event.createdAt
+
+        };
+
+    }
+
+
+    // =====================================================
+    // ADJUST STOCK
+    // =====================================================
+
+    private adjust(
+        current: Inventory | null,
+        event: DomainEvent
+    ): Inventory {
+
+        const state =
+            this.requireState(
+                current,
+                event
+            );
+
+        const payload =
+            event.payload as InventoryPayload;
+
+        const quantity =
+            payload.direction === "increase"
+
+                ? state.quantity +
+                  payload.quantity
+
+                : state.quantity -
+                  payload.quantity;
+
+        return {
+
+            ...state,
+
+            quantity,
+
+            updatedAt:
+                event.createdAt
+
+        };
+
+    }
+
+
+    // =====================================================
+    // TRANSFER STOCK
+    // =====================================================
+
+    private transfer(
+        current: Inventory | null,
+        event: DomainEvent
+    ): Inventory {
+
+        const state =
+            this.requireState(
+                current,
+                event
+            );
+
+        const payload =
+            event.payload as InventoryPayload;
+
+        return {
+
+            ...state,
+
+            quantity:
+                state.quantity -
+                payload.quantity,
+
+            updatedAt:
+                event.createdAt
+
+        };
+
+    }
+
+
+    // =====================================================
+    // SALE
+    // =====================================================
+
+    private sell(
+        current: Inventory | null,
+        event: DomainEvent
+    ): Inventory {
+
+        const state =
+            this.requireState(
+                current,
+                event
+            );
+
+        const payload =
+            event.payload as InventoryPayload;
+
+        return {
+
+            ...state,
+
+            quantity:
+                state.quantity -
+                payload.quantity,
+
+            updatedAt:
+                event.createdAt
+
+        };
+
+    }
+
+
+    // =====================================================
+    // STATE GUARD
+    // =====================================================
+
+    private requireState(
+        state: Inventory | null,
+        event: DomainEvent
+    ): Inventory {
+
+        if (!state) {
+
+            throw new Error(
+
+                `Inventory projection not found for aggregate ${event.aggregateId}. ` +
+                `Cannot apply event ${event.type}.`
+
+            );
+
+        }
+
+        return state;
+
+    }
+
+}

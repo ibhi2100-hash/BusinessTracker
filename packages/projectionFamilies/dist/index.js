@@ -17,3 +17,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./contracts/projectionEngine"), exports);
 __exportStar(require("./reducers/businessReducer"), exports);
 __exportStar(require("./reducers/branchReducer"), exports);
+__exportStar(require("./reducers/inventoryReducer"), exports);
+__exportStar(require("./reducers/productReducer"), exports);
+__exportStar(require("./reducers/salesReducer"), exports);

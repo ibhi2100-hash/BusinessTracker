@@ -13,6 +13,7 @@ import { LoginService } from "@/src/offline/sqlite/clientDatabase/services/AuthS
 import { ExecutionContextProvider } from "@/src/BizTru_Karnel/CommandFactory/ExecutionContext/ExecutionContext";
 import { ProjectionEventBus } from "@/src/buses/ProjectionBuses";
 import { CurrentBusinessProjection } from "@/src/offline/sqlite/clientDatabase/projections/currentBusinessProjections";
+import { ApplicationStateProjection } from "@/src/offline/sqlite/clientDatabase/projections/applicationStateProjections";
 
 
 export class ClientBootstrapper {
@@ -211,6 +212,11 @@ export class ClientBootstrapper {
         bus.subscribe(
             new CurrentBusinessProjection(
                 repositories.currentBusiness
+            )
+        )
+        bus.subscribe(
+            new ApplicationStateProjection(
+                repositories.applicationState
             )
         )
 

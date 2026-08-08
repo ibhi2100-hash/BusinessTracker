@@ -20,6 +20,8 @@ export class DefaultCommandFactory implements CommandFactory {
     ): Promise<Command<TPayload>> {
         
         const context = await this.context.current();
+
+        console.log("This is the context in the command Factory: ", context)
        
         const commandId = 
             this.idGenerator.next();

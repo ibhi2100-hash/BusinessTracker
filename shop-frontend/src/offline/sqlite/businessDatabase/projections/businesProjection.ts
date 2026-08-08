@@ -14,7 +14,7 @@ implements EventConsumer<DomainEvent> {
             switch(event.type){
 
                 case BusinessEventTypes.BUSINESS_CREATED:
-                    const business = new BusinessReducer().reduce(event)
+                    const business = new BusinessReducer().reduce(null, event)
                     await this.repostory.upsert(business)
                     break
             }

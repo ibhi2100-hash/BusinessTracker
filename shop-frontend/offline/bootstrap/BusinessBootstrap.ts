@@ -25,6 +25,10 @@ import { SQLiteBusinessClock } from "@/src/BizTru_Karnel/BusinessClock/SQLiteBus
 import { FrontendBusinessContext } from "@/src/Composer/context/BusinessContext";
 import { ProjectionEventBus } from "@/src/buses/ProjectionBuses";
 import { BusinessConsumer } from "@/src/offline/sqlite/businessDatabase/projections/businesProjection";
+import { BranchConsumer } from "@/src/offline/sqlite/businessDatabase/projections/BranchProjection";
+import { ProductConsumer } from "@/src/offline/sqlite/businessDatabase/projections/ProductProjection";
+import { InventoryConsumer } from "@/src/offline/sqlite/businessDatabase/projections/InventoryProjection";
+import { SalesConsumer } from "@/src/offline/sqlite/businessDatabase/projections/SalesProjection";
 
 export class BusinessBootstrapper
 implements Lifecycle {
@@ -207,6 +211,30 @@ implements Lifecycle {
         bus.subscribe(
             new BusinessConsumer(
                 repositories.business
+            )
+        );
+
+        bus.subscribe(
+            new BranchConsumer(
+                repositories.branches
+            )
+        )
+
+        bus.subscribe(
+            new ProductConsumer(
+                repositories.products
+            )
+        )
+
+        bus.subscribe(
+            new InventoryConsumer(
+                repositories.inventory
+            )
+        )
+
+        bus.subscribe(
+            new SalesConsumer(
+                repositories.sales
             )
         )
    }

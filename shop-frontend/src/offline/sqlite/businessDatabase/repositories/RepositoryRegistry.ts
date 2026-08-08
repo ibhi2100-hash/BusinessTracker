@@ -5,6 +5,10 @@ import { SQLiteLedgerRepository } from "./SQLiteLedgerRepository/SQLiteLedgerRep
 import { SQLiteBranchRepository } from "./SQLiteProjectionRepository/SQLiteBranchRepository";
 import { SQLiteBusinessRepository } from "./SQLiteProjectionRepository/SQLiteBusinessRepository";
 import { LogicClockRepository } from "./LogicClockRepository/LogicClockRepository";
+import { SQLiteProductRepository } from "./SQLiteProjectionRepository/SQLiteProductRepository";
+import { SQLiteInventoryRepository } from "./SQLiteProjectionRepository/SQLiteInventoryRepository";
+import { SQLiteSalesRepository } from "./SQLiteProjectionRepository/SQLiteSalesRepository";
+import { stat } from "fs";
 
 export class BusinessRepositoryRegistry {
     readonly events: SQLiteEventRepository;
@@ -15,6 +19,12 @@ export class BusinessRepositoryRegistry {
     readonly business: SQLiteBusinessRepository;
 
     readonly branches: SQLiteBranchRepository;
+
+    readonly products: SQLiteProductRepository;
+
+    readonly inventory: SQLiteInventoryRepository;
+
+    readonly sales: SQLiteSalesRepository;
 
     readonly logicClock: LogicClockRepository;
 
@@ -31,6 +41,26 @@ export class BusinessRepositoryRegistry {
                 statements.business
             );
 
+        this.branches = 
+            new SQLiteBranchRepository(
+                statements.branches
+            )
+
+        this.products = 
+            new SQLiteProductRepository(
+                statements.products
+            )
+
+        this.inventory = 
+            new SQLiteInventoryRepository(
+                statements.inventory
+            )
+
+        this.sales = 
+            new SQLiteSalesRepository(
+                statements.sales
+            )
+            
         this.logicClock = 
             new LogicClockRepository(
                 statements.logicClock
