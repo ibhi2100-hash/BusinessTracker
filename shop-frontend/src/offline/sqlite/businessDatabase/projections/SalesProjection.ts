@@ -5,6 +5,8 @@ import { SQLiteSalesRepository } from "../repositories/SQLiteProjectionRepositor
 
 export class SalesConsumer
 implements EventConsumer<DomainEvent> {
+
+    readonly name: "sales"
     constructor(
         private readonly repostory: SQLiteSalesRepository
     ){}

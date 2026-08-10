@@ -214,7 +214,9 @@ class EventMapper {
 
            type: row.type,
 
-           payload: row.payload,
+           payload: JSON.parse(
+                row.payload
+           ),
 
            businessId: row.businessId,
 

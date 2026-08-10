@@ -5,6 +5,7 @@ import { SQLiteBranchRepository } from "../repositories/SQLiteProjectionReposito
 
 export class BranchConsumer
 implements EventConsumer<DomainEvent> {
+    readonly name = "branches"
     constructor(
         private readonly repostory: SQLiteBranchRepository
     ){}

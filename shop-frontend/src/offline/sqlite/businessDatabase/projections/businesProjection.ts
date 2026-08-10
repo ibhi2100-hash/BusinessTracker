@@ -5,6 +5,7 @@ import { BusinessReducer } from "@business/projection-families";
 
 export class BusinessConsumer
 implements EventConsumer<DomainEvent> {
+    readonly name = "businesses"
     constructor(
         private readonly repostory: SQLiteBusinessRepository
     ){}
