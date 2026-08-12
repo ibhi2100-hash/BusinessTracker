@@ -31,6 +31,16 @@ export const ApplicationStateDefinition: StatementDefinition[] = [
     {
         key: applicationStateKeys.currentWorkspace,
         sql: SQL.UPDATE_WORKSPACE
+    },
+
+    {
+        key: applicationStateKeys.savedRoute,
+        sql: SQL.SAVED_ROUTE
+    },
+
+    {
+        key: applicationStateKeys.getLastRoute,
+        sql: SQL.GET_LASTROUTE
     }
 
 

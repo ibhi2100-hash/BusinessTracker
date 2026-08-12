@@ -1,38 +1,38 @@
 import { SQLiteApplicationStateRepository } from "@/src/offline/sqlite/clientDatabase/repositories/ApplicationStateRepository.ts/SQLiteApplicationStateRepository";
 import { BusinessContext, BusinessContextProvider } from "./BusinessContextContract";
+// FrontendBusinessContext.ts
+export class FrontendBusinessContext implements BusinessContextProvider {
+  private businessId?: string;
+  private branchId?: string;
 
-export class FrontendBusinessContext 
-implements BusinessContextProvider {
-    private businessId?: string;
+  constructor(
+    private readonly repository: SQLiteApplicationStateRepository
+  ) {}
 
-    private branchId?:  string;
-
-    constructor(
-        private readonly repository: SQLiteApplicationStateRepository
-    ){}
-
-    async current(): Promise<BusinessContext> {
-        if(this.businessId){
-            return {
-                businessId: this.businessId,
-                branchId: this.branchId
-            }   
-        }
-
-        const context = 
-                await this.repository.current();
-
-        const businessId = context.currentBusinessId;
-
-        const branchId = context.currentBranchId;
-
-        this.businessId = businessId;
-
-        this.branchId = branchId;
-
-        return {
-            businessId,
-            branchId
-        }
+  async current(): Promise<BusinessContext> {
+    if (this.businessId && this.branchId) {
+      return { businessId: this.businessId, branchId: this.branchId };
     }
+
+    const state = await this.repository.current();
+    this.businessId = state.currentBusinessId ?? undefined;
+    this.branchId = state.currentBranchId ?? undefined;
+
+    return {
+      businessId: this.businessId,
+      branchId: this.branchId,
+    };
+  }
+
+  /** Call this when the user switches branch */
+  async setActiveBranch(branchId: string): Promise<void> {
+    await this.repository.setActiveBranch(branchId);
+    this.branchId = branchId;
+  }
+
+  /** Optional: clear cache after logout / business switch */
+  clearCache() {
+    this.businessId = undefined;
+    this.branchId = undefined;
+  }
 }

@@ -18,6 +18,8 @@ export const migration0009: Migration =  {
 
                 currentSessionId    TEXT,
 
+                lastRoute           TEXT,
+
                 currentWorkspaceVersion INTEGER,
 
                 initializedAt   INTEGER

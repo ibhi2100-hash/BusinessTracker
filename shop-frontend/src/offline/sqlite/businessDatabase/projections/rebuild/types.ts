@@ -6,7 +6,7 @@ export interface ProjectionRebuildOptions {
 
     toLogicalClock?: number;
 
-    asOf?: number;
+    asOf?: Date
 
     batchSize?: number;
 }
@@ -15,9 +15,9 @@ export interface ProjectionRebuildResult {
 
     eventsProcessed: number;
 
-    fromPosition: number;
+    fromLogicClock: number;
 
-    toPosition: number;
+    toLogicClock: number;
 
     durationMs: number;
 

@@ -18,6 +18,11 @@ export class ApplicationStateStatements {
 
     readonly setWorkspaceVersion: PreparedStatement;
 
+    readonly savedRoute: PreparedStatement;
+
+    readonly getLastRoute: PreparedStatement;
+
+
     constructor(
         manager: PreparedStatementManager
     ) {
@@ -50,6 +55,15 @@ export class ApplicationStateStatements {
         this.setWorkspaceVersion =
             manager.get(
                 applicationStateKeys.currentWorkspace
+            )
+        this.savedRoute = 
+            manager.get(
+                applicationStateKeys.savedRoute
+            )
+        
+        this.getLastRoute = 
+            manager.get(
+                applicationStateKeys.getLastRoute
             )
 
         

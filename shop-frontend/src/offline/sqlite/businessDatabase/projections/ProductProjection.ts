@@ -2,6 +2,7 @@ import { EventConsumer } from "@business/event-bus";
 import { InventoryEventType, DomainEvent } from "@business/shared-types";
 import { ProductReducer } from "@business/projection-families";
 import { SQLiteProductRepository } from "../repositories/SQLiteProjectionRepository/SQLiteProductRepository";
+import { changeNotifier } from "./changeNoifier";
 
 export class ProductConsumer
 implements EventConsumer<DomainEvent> {
@@ -18,6 +19,7 @@ implements EventConsumer<DomainEvent> {
                 case InventoryEventType.PRODUCT_CREATED:
                     const product = new ProductReducer().reduce(null, event)
                     await this.repostory.upsert(product)
+                    changeNotifier.notify(["products"])
                     break
             }
 

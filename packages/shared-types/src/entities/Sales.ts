@@ -20,6 +20,6 @@ export interface Sales {
 
   invoiceId?: string;
 
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: number;
+  updatedAt: number;
 }

@@ -16,7 +16,8 @@ import { BootManager } from "./Booting/BootManager";
 import {
     BootListener,
     BootStage,
-    BootState
+    BootState,
+    StartupDestination
 } from "./Booting/BootStage";
 
 import { ClientBootstrapper } from "@/offline/bootstrap/ClientBootstrapper";
@@ -182,9 +183,11 @@ export function ApplicationProvider({
                     result.application
                 );
 
-                router.replace(
-                    result.destination
-                );
+               const { lastRoute } = await result.application.client.repositories.applicationState.getLastRoute();
+             
+               router.replace(lastRoute)
+
+               
 
             } catch (error) {
 

@@ -79,3 +79,14 @@ export const LOAD_PROJECTION_EVENT = `
 export const LOADALL = `
     SELECT * FROM events
     `
+
+export  const STREAM_EVENTS = 
+`
+    SELECT *
+    FROM events
+    WHERE logicClock > ?
+        AND(? IS NULL OR logicClock <= ?)
+        AND(? IS NULL OR createdAt <= ?)
+    ORDER BY logicClock ASC
+    LIMIT ?;
+`

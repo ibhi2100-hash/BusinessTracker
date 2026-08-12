@@ -30,6 +30,9 @@ import ProductDetailsSheet from "./dialogs/ProductsManagement";
 import { useBranchStore } from "@/src/store/useBranchStore";
 import { inventoryKey } from "@/src/utils/keygenerator";
 import { useInventoryDialogs } from "./hooks/dialogsHooks";
+import { useRouter } from "next/navigation";
+import { useLiveProducts } from "@/hooks/useLiveProducts";
+import { useBusinessContext } from "@/src/context/BusinessContext";
 
 interface InventoryPageProps {
   context: "sell" | "admin";
@@ -49,16 +52,18 @@ export default function InventoryPage({
   context,
   mode,
 }: InventoryPageProps) {
-  const products = []
 
   const app = useApplication()
+  const router = useRouter()
+  const { businessId, branchId, setBranchId } = useBusinessContext()
+  const { products, loading } = useLiveProducts(branchId)
+  console.log("This are the products return from database: ", products)
   // -----------------------------
   // UI STATE
   // -----------------------------
   const [selectedProduct, setSelectedProduct] =
     useState<inventoryProduct | null>(null);
-  const [loading, setLoading] = useState(false);
-
+  const [ loader, setLoading ] = useState(false)
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] =
     useState<string>("All");
@@ -88,8 +93,7 @@ const [activeSheet, setActiveSheet] =
     );
     return ["All", ...Array.from(set)];
   }, [products]);
-  const branchId = useBranchStore((s)=> s.activeBranchId)
-
+ 
   // -----------------------------
   // 🔍 FILTER
   // -----------------------------
@@ -273,9 +277,8 @@ const handleTransferStock = async (
 ) => {
   if (!selectedProduct || !branchId) return;
   const key = inventoryKey(selectedProduct.id, branchId)
-  await app.onboarding.createBusiness({
-    aggregateType:
-      AggregateType.INVENTORY,
+  await app.inventory.createStock({
+    
 
     aggregateId:
       key,
@@ -375,6 +378,9 @@ const handleTransferStock = async (
                 ? "Quick Sell"
                 : "Inventory"}
             </h1>
+            <GlassButton onClick={() => router.replace("/projection")}>
+              Projections
+            </GlassButton>
           </div>
 
           {/* SEARCH */}
@@ -571,13 +577,4 @@ const handleTransferStock = async (
 
     </div>
   );
-}
-
-export function InventoryPages(props: InventoryPageProps) {
-    return (
-        <InventoryFeature
-            context={props.context}
-            mode={props.mode}
-        />
-    );
 }

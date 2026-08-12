@@ -4,6 +4,8 @@ import { Toaster } from "sonner";
 import { Providers } from "./providers";
 import { AppShell } from "@/components/layout/AppShell";
 import { ApplicationProvider } from "@/src/services/ApplicationService/ApplicationProvider";
+import { RoutePersistence } from "@/components/RouterPersistence";
+import { BusinessProvider } from "@/src/context/BusinessContext";
 
 export const metadata = {
   title: "BizTru",
@@ -22,10 +24,13 @@ export default function RootLayout({
       <body className="bg-black text-white">
         <Providers>
           <ApplicationProvider>
-              <AppShell>
-                  {children}
-              </AppShell>
-              <Toaster richColors position="top-right" />
+            <BusinessProvider>
+              <RoutePersistence />
+                <AppShell>
+                    {children}
+                </AppShell>
+                <Toaster richColors position="top-right" />
+            </BusinessProvider>
           </ApplicationProvider>
         </Providers>
       </body>

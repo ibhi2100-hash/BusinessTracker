@@ -42,7 +42,6 @@ implements ProjectionReducer<Inventory, DomainEvent> {
             case InventoryEventType.INVENTORY_ADDED:
 
                 return this.add(
-                    state,
                     event
                 );
 
@@ -163,29 +162,22 @@ implements ProjectionReducer<Inventory, DomainEvent> {
     // =====================================================
 
     private add(
-        current: Inventory | null,
         event: DomainEvent
     ): Inventory {
 
-        const state =
-            this.requireState(
-                current,
-                event
-            );
+        
 
         const payload =
             event.payload as InventoryPayload;
 
         return {
-
-            ...state,
-
-            quantity:
-                state.quantity +
-                payload.quantity,
-
-            updatedAt:
-                event.createdAt
+            id: payload.id,
+            productId: payload.productId,
+            branchId: event.branchId!,
+            businessId: event.businessId!,
+            quantity: payload.quantity,
+            costPrice: payload.costPrice,
+            createdAt: event.createdAt
 
         };
 

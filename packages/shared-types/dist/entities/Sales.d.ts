@@ -10,6 +10,6 @@ export interface Sales {
     userId: string;
     customerId?: string;
     invoiceId?: string;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: number;
+    updatedAt: number;
 }

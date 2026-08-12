@@ -4,6 +4,7 @@ import { BusinessManager } from "@/src/Composer/BusinessManager";
 import { CreateBusinessRequest } from "../types";
 import { ProductPayload, ProductRequest } from "./ProductRequest";
 import { InventoryEventType } from "@business/shared-types";
+import { LiveProduct } from "@/src/offline/sqlite/businessDatabase/repositories/SQLiteProjectionRepository/SQLiteProductRepository";
 
 
 export class ProductApi {
@@ -42,5 +43,10 @@ export class ProductApi {
 
     async delete(productId){
 
+    }
+
+    async getProducts(branchId: string): Promise<LiveProduct[]>{
+        const app = await this.manager.current();
+        return await app.storage.repositories.products.products(branchId)
     }
 }

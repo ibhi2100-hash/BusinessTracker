@@ -1,6 +1,17 @@
 import { Product } from "@business/shared-types";
 import { IProjectionEntityRepository } from "./repositoryContract";
 import { ProductStatements } from "../../statements/products/ProductStatements";
+export interface LiveProduct {
+  id: string;
+  name: string;
+  price: number;
+  costPrice: number;
+  quantity: number;
+  category: string | null;
+  imageUrl: string | null;
+  isActive: number;
+  branchId: string | null;
+}
 
 export class SQLiteProductRepository
 implements IProjectionEntityRepository<Product> {
@@ -33,6 +44,12 @@ implements IProjectionEntityRepository<Product> {
         await this.statements.delete.execute(
             [id]
         );
+    }
+
+    async products(branchId): Promise<LiveProduct[]> {
+        const products =  await this.statements.products.query<LiveProduct>([branchId])
+
+        return products
     }
 
 }

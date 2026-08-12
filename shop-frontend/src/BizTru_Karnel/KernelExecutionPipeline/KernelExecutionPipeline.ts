@@ -7,6 +7,7 @@ import { BusinessContextProvider } from "../../Composer/context/BusinessContextC
 import { EventStore } from "../SubKernel/types";
 import { ProjectionEventBus } from "@/src/buses/ProjectionBuses";
 import { TransactionManager } from "@/src/storage/transaction/TransactionManager";
+import { FrontendBusinessContext } from "@/src/Composer/context/BusinessContext";
 
 export class KernelExecutionPipeline
 implements PipelineKernel {
@@ -15,7 +16,7 @@ implements PipelineKernel {
         private readonly validator: CommandValidator,
         private readonly eventStore: EventStore,
         private readonly clock: BusinessClock,
-        private readonly businessContext: BusinessContextProvider,
+        public businessContext: FrontendBusinessContext,
         private readonly clientBus: ProjectionEventBus,
         private readonly businessBus: ProjectionEventBus,
         private readonly transaction: TransactionManager

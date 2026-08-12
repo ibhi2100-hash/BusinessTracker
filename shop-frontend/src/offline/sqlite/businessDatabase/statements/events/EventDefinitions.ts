@@ -53,6 +53,11 @@ export const EventStatementsDefinition: StatementDefinition[] = [
     {
         key: EventStatementKeys.loadAll,
         sql: SQL.LOADALL
+    },
+
+    {
+        key: EventStatementKeys.eventStream,
+        sql: SQL.STREAM_EVENTS
     }
 
 ];

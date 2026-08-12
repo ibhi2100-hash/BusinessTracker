@@ -46,4 +46,20 @@ export const UPDATE_WORKSPACE =
                     currentWorkspaceId = ?,
                     currentWorkspaceVersion = ?
                 WHERE id = 1;
+       
+       
+         `
+
+export const SAVED_ROUTE = 
                 `
+                UPDATE application_state
+                SET 
+                    lastRoute = ?
+                WHERE id = 1;
+                `
+
+export const GET_LASTROUTE = `
+    SELECT lastRoute
+    FROM application_state
+    WHERE id = 1
+`

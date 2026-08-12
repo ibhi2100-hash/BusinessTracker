@@ -4,97 +4,78 @@ import { ProjectionResetter } from "./ProjectionResetterContract";
 import { TransactionManager } from "@/src/storage/transaction/TransactionManager";
 import { ProjectionRebuildOptions, ProjectionRebuildResult } from "./types";
 import { RebuildObserver } from "@business/event-bus";
+import { DomainEvent } from "@business/shared-types";
+
 
 export class ProjectionRebuilder {
-    constructor(
-        private readonly transaction: TransactionManager,
-        private readonly eventStore: SQLiteEventRepository,
-        private readonly projectionBus: ProjectionEventBus,
-        private readonly projectionResetter: ProjectionResetter
-    ){}
+  constructor(
+    private readonly transaction: TransactionManager,
+    private readonly eventStore: SQLiteEventRepository,
+    private readonly projectionBus: ProjectionEventBus,
+    private readonly projectionResetter: ProjectionResetter,
+    private readonly observer: RebuildObserver<DomainEvent>         // injected
+  ) {}
 
-    async rebuildAll(): Promise<void> {
-        await this.projectionResetter.resetAll()
+  async rebuild(
+    options: ProjectionRebuildOptions = {}
+  ): Promise<ProjectionRebuildResult> {
 
-        const events = await this.eventStore.loadAllEvents();
+    const startedAt = Date.now();
+    let eventsProcessed = 0;
+    let lastLogicClock = options.fromLogicalClock ?? 0;
 
-       for (const event of events) {
-        await this.projectionBus.publish(event)
-       }
-    }
+    try {
+      await this.observer.onStarted?.();
 
-    async rebuild(
-        options: ProjectionRebuildOptions = {},
-        observer: RebuildObserver
-    ): Promise<ProjectionRebuildResult> {
+      await this.transaction.run(async () => {
+        await this.observer.onResetStarted?.();
+        await this.projectionResetter.resetAll();
+        await this.observer.onResetCompleted?.();
 
-        const startedAt = Date.now();
+        for await (const batch of this.eventStore.stream(options)) {
+          for (const event of batch) {
+            await this.observer.onEventStarted?.(event);
 
-        let eventsProcessed = 0;
-        let lastPosition = 0;
+            // Manually drive every consumer so we can observe each one
+            for (const consumer of this.projectionBus.getConsumers()) {
+              const name = consumer.constructor.name;
+              const consumerStarted = Date.now();
 
-        try {
+              await this.observer.onConsumerStarted?.(consumer, event);
 
-            await observer.onStarted();
+              try {
+                await consumer.handle([event]);
+                await this.observer.onConsumerCompleted?.(
+                  consumer,
+                  event,
+                  Date.now() - consumerStarted
+                );
+              } catch (error) {
+                await this.observer.onConsumerFailed?.(consumer, event, error);
+                throw error;
+              }
+            }
 
-            await this.transaction.run(
-                async () => {
-
-                    await observer.onResetStarted();
-
-                    await this.projectionResetter.resetAll();
-
-                    await observer.onResetCompleted();
-
-                    for await (
-                        const batch
-                        of this.eventStore.stream(options)
-                    ) {
-
-                        for (
-                            const event
-                            of batch
-                        ) {
-
-                            await this.projectionBus.replay(
-                                event,
-                                observer
-                            );
-
-                            eventsProcessed++;
-
-                            lastPosition =
-                                event.globalPosition;
-                        }
-                    }
-
-                    await observer.onCommitStarted();
-                }
-            );
-
-            await observer.onCompleted();
-
-            return {
-                eventsProcessed,
-
-                fromPosition:
-                    options.fromPosition ?? 0,
-
-                toPosition:
-                    lastPosition,
-
-                durationMs:
-                    Date.now() - startedAt
-            };
-
-        } catch (error) {
-
-            await observer.onFailed(
-                error
-            );
-
-            throw error;
+            await this.observer.onEventCompleted?.(event);
+            eventsProcessed++;
+            lastLogicClock = event.logicClock;
+          }
         }
+      });
 
+      const result: ProjectionRebuildResult = {
+        eventsProcessed,
+        fromLogicClock: options.fromLogicalClock ?? 0,
+        toLogicClock: lastLogicClock,
+        durationMs: Date.now() - startedAt
+      };
+
+      await this.observer.onCompleted?.();
+      return result;
+
+    } catch (error) {
+      await this.observer.onFailed?.(error);
+      throw error;
     }
+  }
 }

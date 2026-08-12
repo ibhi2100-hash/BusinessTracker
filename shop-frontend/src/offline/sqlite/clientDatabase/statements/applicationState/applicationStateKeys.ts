@@ -10,4 +10,8 @@ export const applicationStateKeys = {
     userLogout: "userLogout",
 
     currentWorkspace: "currentWorkspace",
+
+    savedRoute: "saveRoute",
+
+    getLastRoute: "getLastRoute"
 }

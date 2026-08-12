@@ -2,7 +2,7 @@ import {
     DomainEvent,
     InventoryEventType,
     Product,
-    ProductEventType
+    
 } from "@business/shared-types";
 
 import { ProjectionReducer } from "../contracts/ProjectionReducer";
@@ -41,7 +41,7 @@ implements ProjectionReducer<Product, DomainEvent> {
             // CREATE PRODUCT
             // =====================================================
 
-            case ProductEventType.PRODUCT_CREATED:
+            case InventoryEventType.PRODUCT_CREATED:
 
                 return this.created(
                     event
@@ -52,7 +52,7 @@ implements ProjectionReducer<Product, DomainEvent> {
             // UPDATE PRODUCT
             // =====================================================
 
-            case ProductEventType.PRODUCT_UPDATED:
+            case InventoryEventType.PRODUCT_UPDATED:
 
                 return this.update(
                     state,
@@ -64,7 +64,7 @@ implements ProjectionReducer<Product, DomainEvent> {
             // DELETE PRODUCT
             // =====================================================
 
-            case ProductEventType.PRODUCT_DELETED:
+            case InventoryEventType.PRODUCT_DELETED:
 
                 return this.deleted(
                     state,

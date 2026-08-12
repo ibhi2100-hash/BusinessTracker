@@ -5,11 +5,35 @@ import {
   Loader2,
   RotateCcw,
   XCircle,
+  Activity,
+  AlertCircle,
+  Database,
+  Layers,
+  Radio,
 } from "lucide-react";
 
 import { GlassCard } from "@/components/ui/GlassCard";
 import { GlassIcon } from "@/components/ui/GlassIcon";
 import { cn } from "@/lib/utils";
+
+interface Props {
+  status: RebuildProgressStatus;
+
+  totalEvents: number;
+  processedEvents: number;
+
+  currentEvent?: {
+    id: string;
+    type: string;
+    position: number;
+  } | null;
+
+  currentConsumer?: string | null;
+
+  error?: string | null;
+
+  running: boolean;
+}
 
 export type RebuildProgressStatus =
   | "IDLE"
@@ -97,22 +121,6 @@ export function RebuildProgress({
     </GlassCard>
   );
 }
-
-"use client";
-
-import {
-  CheckCircle2,
-  Loader2,
-  RotateCcw,
-  XCircle,
-} from "lucide-react";
-
-import { GlassIcon } from "@/components/ui/GlassIcon";
-import { cn } from "@/lib/utils";
-
-import type {
-  RebuildProgressStatus,
-} from "./RebuildProgress";
 
 interface Props {
   status: RebuildProgressStatus;
@@ -273,14 +281,6 @@ function getStatusConfig(
   }
 }
 
-"use client";
-
-import { cn } from "@/lib/utils";
-
-import type {
-  RebuildProgressStatus,
-} from "./RebuildProgress";
-
 interface Props {
   percentage: number;
   status: RebuildProgressStatus;
@@ -372,41 +372,6 @@ export function RebuildProgressBar({
   );
 }
 
-"use client";
-
-import {
-  Activity,
-  AlertCircle,
-  CheckCircle2,
-  Database,
-  Layers,
-  Radio,
-} from "lucide-react";
-
-import { cn } from "@/lib/utils";
-
-import type {
-  RebuildProgressStatus,
-} from "./RebuildProgress";
-
-interface Props {
-  status: RebuildProgressStatus;
-
-  totalEvents: number;
-  processedEvents: number;
-
-  currentEvent?: {
-    id: string;
-    type: string;
-    position: number;
-  } | null;
-
-  currentConsumer?: string | null;
-
-  error?: string | null;
-
-  running: boolean;
-}
 
 export function RebuildProgressDetails({
   status,

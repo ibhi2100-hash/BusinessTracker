@@ -38,4 +38,8 @@ export class EventStatements {
         return this.manager.get(EventStatementKeys.loadAll)
     }
 
+    get streamEvent(){
+        return this.manager.get(EventStatementKeys.eventStream)
+    }
+
 }

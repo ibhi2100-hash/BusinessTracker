@@ -31,4 +31,10 @@ export class ProductStatements {
         );
     }
 
+    get products(){
+        return this.manager.get(
+            productKeys.products
+        )
+    }
+
 }

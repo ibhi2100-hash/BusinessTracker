@@ -29,6 +29,10 @@ import { BranchConsumer } from "@/src/offline/sqlite/businessDatabase/projection
 import { ProductConsumer } from "@/src/offline/sqlite/businessDatabase/projections/ProductProjection";
 import { InventoryConsumer } from "@/src/offline/sqlite/businessDatabase/projections/InventoryProjection";
 import { SalesConsumer } from "@/src/offline/sqlite/businessDatabase/projections/SalesProjection";
+import { ProjectionRebuildObserver } from "@/src/offline/sqlite/businessDatabase/projections/rebuild/RebuildObserver";
+import { ProjectionRebuilder } from "@/src/offline/sqlite/businessDatabase/projections/rebuild/ProjectionRebuilder";
+import { ProjectionReset } from "@/src/offline/sqlite/businessDatabase/projections/rebuild/ProjectionResetter";
+import { SQLiteProjectionResetRepository } from "@/src/offline/sqlite/businessDatabase/repositories/ProjectionResetRepository/ProjectionResetRepository";
 
 export class BusinessBootstrapper
 implements Lifecycle {
@@ -46,20 +50,37 @@ implements Lifecycle {
             await this.createStorage(
                 runtime
             );
-        const buses = 
+        const projectionBus = 
             await this.createProjectionBus();
 
         this.createConsumers(
-            buses,
+            projectionBus,
             storage.repositories
         )
 
-        const domain = 
+        const observer = new ProjectionRebuildObserver();
+
+        const resetRepo = new SQLiteProjectionResetRepository(
+            runtime.queryRunner
+        )
+
+        const resetter = new ProjectionReset(
+            resetRepo
+        )
+        const rebuilder = new ProjectionRebuilder(
+            runtime.transactionManager,
+            storage.repositories.events,
+            projectionBus,
+            resetter,
+            observer
+        )
+        const { context, domain } = 
             await this.createDomain(
                 client,
                 storage,
-                buses
+                projectionBus
             )
+        
         
         const synchronization = 
             await this.createSynchronization(
@@ -69,10 +90,12 @@ implements Lifecycle {
         const application = 
             new BusinessApplication(
                 businessId,
+                context,
                 runtime,
                 storage,
                 domain,
-                synchronization
+                synchronization,
+                rebuilder,
             );
         await application.initialize();
 
@@ -148,7 +171,7 @@ implements Lifecycle {
         client: ApplicationContext,
         storage: BusinessStorage,
         bus: ProjectionEventBus
-    ): Promise<BusinessDomain> {
+    ) {
     const executionContext =
         client.ExecutionContext
     const idGenerator = new IdGenerator()
@@ -182,7 +205,7 @@ implements Lifecycle {
     
     const services = new BusinessServiceRegistry()
         
-    return new BusinessDomain(
+    const domain = new BusinessDomain(
         executionContext,
         commandFactory,
         kernel,
@@ -190,6 +213,10 @@ implements Lifecycle {
         services,
         bus
     )
+    return {
+        context,
+        domain
+    }
    }
 
    private async createSynchronization(

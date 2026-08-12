@@ -6,6 +6,8 @@ export const productKeys = {
 
     productDelete: "product_delete",
 
-    productUpdate: "product_update"
+    productUpdate: "product_update",
+
+    products: "products"
 
 }

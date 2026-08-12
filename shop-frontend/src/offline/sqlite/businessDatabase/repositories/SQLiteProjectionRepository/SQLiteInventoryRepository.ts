@@ -10,6 +10,7 @@ implements IProjectionEntityRepository<Inventory> {
     ) {}
 
     async upsert(state: Inventory): Promise<void> {
+        console.log("This are the inventories we get from frontend: ", state)
 
         await this.statements.upsert.execute(
             InventoryMapper.ToInsert(state)
@@ -43,31 +44,20 @@ implements IProjectionEntityRepository<Inventory> {
 }
 
 export class InventoryMapper {
-
-    static ToInsert(
-        inventory: Inventory
-    ): unknown[] {
-
-        return [
-
-            inventory.id,
-
-            inventory.productId,
-
-            inventory.branchId ?? "",
-
-            inventory.businessId ?? "",
-
-            inventory.quantity,
-
-            inventory.costPrice,
-
-            inventory.createdAt,
-
-            inventory.updatedAt ?? ""
-
-        ];
-
+  static ToInsert(inventory: Inventory): unknown[] {
+    if (!inventory) {
+      throw new Error("InventoryMapper.ToInsert received null/undefined");
     }
 
+    return [
+      inventory.id,
+      inventory.productId,
+      inventory.branchId ?? null,
+      inventory.businessId ?? null,
+      inventory.quantity,
+      inventory.costPrice,
+      inventory.createdAt,
+      inventory.updatedAt ?? null,
+    ];
+  }
 }

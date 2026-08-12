@@ -2,6 +2,9 @@ import { ApplicationStateRepository } from "./ApplicationStateContract";
 import { ApplicationState } from "./ApplicationState";
 import { ApplicationStateStatements }  from "../../statements/applicationState/applicationStateStatements";
 
+interface lastRoute {
+    lastRoute: string
+}
 
 export class SQLiteApplicationStateRepository
 implements ApplicationStateRepository {
@@ -44,6 +47,22 @@ implements ApplicationStateRepository {
                 userId,
                 sessionId
             ]);
+    }
+
+    async setLastRoute(route: string){
+        await this.statements
+            .savedRoute
+            .execute([
+                route
+            ])
+    }
+
+    async getLastRoute(): Promise<lastRoute>{
+        const rows = await this.statements
+            .getLastRoute
+            .query<lastRoute>();
+
+        return rows[0]
     }
 
     async clearSession() {

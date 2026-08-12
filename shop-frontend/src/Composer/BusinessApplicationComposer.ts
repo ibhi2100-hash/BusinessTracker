@@ -4,6 +4,9 @@ import { Lifecycle } from "../offline/sqlite/lifecycle/LifeCycle";
 import { BusinessDomain } from "../offline/sqlite/businessDatabase/domain/BusinessDomain";
 import { BusinessSynchronization } from "../offline/sqlite/businessDatabase/synchronization/BusinessSynchronization";
 import { BusinessRuntime } from "../storage/runtime/BusinessRuntime";
+import { ProjectionRebuilder } from "../offline/sqlite/businessDatabase/projections/rebuild/ProjectionRebuilder";
+import { ProjectionRebuildOptions, ProjectionRebuildResult } from "../offline/sqlite/businessDatabase/projections/rebuild/types";
+import { BusinessContextProvider } from "./context/BusinessContextContract";
 
 
 
@@ -16,16 +19,26 @@ implements  BusinessApplicationContract,
 
         readonly businessId: string,
 
+        public context: BusinessContextProvider,
+
         readonly runtime: BusinessRuntime,
 
         readonly storage: BusinessStorage,
 
         readonly domain: BusinessDomain,
 
-        readonly synchronization: BusinessSynchronization
+        readonly synchronization: BusinessSynchronization,
+
+        readonly rebuilder: ProjectionRebuilder
 
 
     ) {}
+
+    async rebuildProjections(
+    options: ProjectionRebuildOptions = {}
+  ): Promise<ProjectionRebuildResult> {
+    return this.rebuilder.rebuild(options);
+  }
 
     async initialize(): Promise<void> {
         await this.runtime.initialize();

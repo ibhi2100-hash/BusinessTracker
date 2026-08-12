@@ -7,5 +7,6 @@ export const   EventStatementKeys = {
     eventCount: "events.counts",
     eventLastposition: "event.lastPosition",
     loadProjectionEvent: "load.projection.event",
-    loadAll: "load.all"
+    loadAll: "load.all",
+    eventStream: "eventStream"
 }

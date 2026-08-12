@@ -1,34 +1,49 @@
 import { GlassCard } from "@/components/ui/GlassCard"
+import { ConsumerActivity } from "../store/ProjectionRebuilderStore";
 
-export function ConsumerActivityPanel(){
-    return <>
-    <GlassCard>
+interface ConsumerActivityPanelProps {
+  consumers: ConsumerActivity[];
+}
 
-  <div className="mb-4">
+export function ConsumerActivityPanel({
+  consumers,
+}: ConsumerActivityPanelProps) {
+  return (
+    <GlassCard className="overflow-hidden">
 
-    <h3 className="font-semibold text-white">
-      Projection Consumers
-    </h3>
+      <div className="p-5">
+        <h3 className="font-semibold text-white">
+          Projection Consumers
+        </h3>
 
-    <p className="text-xs text-gray-500">
-      Consumers processing the current event
-    </p>
+        <p className="text-xs text-gray-500">
+          Consumers processing the current event
+        </p>
+      </div>
 
-  </div>
+      <div className="divide-y divide-white/5">
+        {consumers.map((consumer) => (
+          <ConsumerRow
+            key={consumer.name}
+            consumer={consumer}
+          />
+        ))}
+      </div>
 
-  <div className="space-y-2">
+    </GlassCard>
+  );
+}
 
-    {consumers.map(consumer => (
+interface ConsumerRowProps {
+  consumer: ConsumerActivity;
+}
 
-      <ConsumerRow
-        key={consumer.name}
-        consumer={consumer}
-      />
-
-    ))}
-
-  </div>
-
-</GlassCard>
-    </>
+function ConsumerRow({
+  consumer,
+}: ConsumerRowProps) {
+  // render consumer.status,
+  // consumer.processedEvents,
+  // consumer.eventType,
+  // consumer.lastDuration,
+  // consumer.error
 }

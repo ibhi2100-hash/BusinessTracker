@@ -22,6 +22,11 @@ export const ProductStatementDefinition: StatementDefinition[] = [
     {
         key: productKeys.productUpdate,
         sql: SQL.PRODUCT_UPSERT,
+    },
+
+    {
+        key: productKeys.products,
+        sql: SQL.PRODUCTS
     }
 
 ];

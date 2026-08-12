@@ -1,14 +1,10 @@
 import { DomainEvent, Product } from "@business/shared-types";
 import { ProjectionReducer } from "../contracts/ProjectionReducer";
-interface ProductPayload {
-    id: string;
-    name: string;
-    imageUrl?: string;
-    description?: string;
-    costPrice: number;
-    price: number;
+export declare class ProductReducer implements ProjectionReducer<Product, DomainEvent> {
+    reduce(state: Product | null, event: DomainEvent): Product;
+    private created;
+    private update;
+    private deleted;
+    private inventoryReceived;
+    private requireState;
 }
-export declare class ProductReducer implements ProjectionReducer<Product, DomainEvent<ProductPayload>> {
-    reduce(state: Product, event: DomainEvent<ProductPayload>): Product;
-}
-export {};

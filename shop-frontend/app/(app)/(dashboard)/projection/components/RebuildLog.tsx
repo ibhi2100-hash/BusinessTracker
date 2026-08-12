@@ -10,11 +10,25 @@ import {
   RotateCcw,
   Terminal,
   XCircle,
+  Trash2,
 } from "lucide-react";
 
 import { GlassCard } from "@/components/ui/GlassCard";
 import { GlassIcon } from "@/components/ui/GlassIcon";
 import { cn } from "@/lib/utils";
+import type {
+  RebuildLogEntry as LogEntry,
+} from "./RebuildLog";
+import { GlassButton } from "@/components/ui/GlassButton";
+
+interface Props {
+  count: number;
+  onClear?: () => void;
+}
+
+interface Props {
+  entry: LogEntry;
+}
 
 export type RebuildLogLevel =
   | "INFO"
@@ -113,19 +127,6 @@ export function RebuildLog({
   );
 }
 
-"use client";
-
-import {
-  Activity,
-  Trash2,
-} from "lucide-react";
-
-import { GlassButton } from "@/components/ui/GlassButton";
-
-interface Props {
-  count: number;
-  onClear?: () => void;
-}
 
 export function RebuildLogHeader({
   count,
@@ -222,28 +223,7 @@ export function RebuildLogHeader({
   );
 }
 
-"use client";
 
-import {
-  AlertCircle,
-  CheckCircle2,
-  Database,
-  Layers,
-  Loader2,
-  RotateCcw,
-  Terminal,
-  XCircle,
-} from "lucide-react";
-
-import { cn } from "@/lib/utils";
-
-import type {
-  RebuildLogEntry as LogEntry,
-} from "./RebuildLog";
-
-interface Props {
-  entry: LogEntry;
-}
 
 export function RebuildLogEntry({
   entry,

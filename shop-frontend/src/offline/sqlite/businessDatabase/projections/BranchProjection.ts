@@ -2,6 +2,7 @@ import { EventConsumer } from "@business/event-bus";
 import {  BusinessEventTypes, DomainEvent } from "@business/shared-types";
 import { BranchReducer } from "@business/projection-families";
 import { SQLiteBranchRepository } from "../repositories/SQLiteProjectionRepository/SQLiteBranchRepository";
+import { changeNotifier } from "./changeNoifier";
 
 export class BranchConsumer
 implements EventConsumer<DomainEvent> {
@@ -17,6 +18,7 @@ implements EventConsumer<DomainEvent> {
                 case BusinessEventTypes.BRANCH_CREATED:
                     const branch = new BranchReducer().reduce(null, event)
                     await this.repostory.upsert(branch)
+                    changeNotifier.notify(["branches"])
                     break
             }
 

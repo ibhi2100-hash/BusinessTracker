@@ -9,6 +9,7 @@ import { SQLiteProductRepository } from "./SQLiteProjectionRepository/SQLiteProd
 import { SQLiteInventoryRepository } from "./SQLiteProjectionRepository/SQLiteInventoryRepository";
 import { SQLiteSalesRepository } from "./SQLiteProjectionRepository/SQLiteSalesRepository";
 import { stat } from "fs";
+import { SQLiteProjectionResetRepository } from "./ProjectionResetRepository/ProjectionResetRepository";
 
 export class BusinessRepositoryRegistry {
     readonly events: SQLiteEventRepository;
@@ -27,6 +28,7 @@ export class BusinessRepositoryRegistry {
     readonly sales: SQLiteSalesRepository;
 
     readonly logicClock: LogicClockRepository;
+
 
     constructor(
         statements: BusinessStatementRegistry

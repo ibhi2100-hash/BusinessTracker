@@ -8,7 +8,8 @@ interface SalesPayload {
     quantity: number;
     total: number;
 }
-export declare class SalesReducer implements ProjectionReducer<Sales, DomainEvent<SalesPayload>> {
-    reduce(state: Sales, event: DomainEvent<SalesPayload>): Sales;
+export declare class SalesReducer implements ProjectionReducer<Sales, DomainEvent> {
+    reduce(state: Sales | null, event: DomainEvent<SalesPayload>): Sales;
+    private created;
 }
 export {};

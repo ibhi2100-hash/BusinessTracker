@@ -16,40 +16,42 @@ export interface EventBus<TEvent> {
     ): void;
 }
 
-export interface RebuildObserver {
+export interface RebuildObserver<TEvent> {
 
   onStarted(): void;
+  onRebuildStarted(totalEvents: number): void
 
   onResetStarted(): void;
 
   onResetCompleted(): void;
 
   onEventsLoaded(
-    events: readonly DomainEvent[]
+    events: readonly TEvent[]
   ): void;
 
   onEventStarted(
-    event: DomainEvent
+    event: TEvent
+  ): void;
 
   onConsumerStarted(
-    consumer: string,
-    event: DomainEvent
+    consumer: EventConsumer<TEvent>,
+    event: TEvent
   ): void;
 
   onConsumerCompleted(
-    consumer: string,
-    event: DomainEvent,
+    consumer: EventConsumer<TEvent>,
+    event: TEvent,
     duration: number
   ): void;
 
   onConsumerFailed(
-    consumer:string,
-    event: DomainEvent,
+    consumer: EventConsumer<TEvent>,
+    event: TEvent,
     error: string
   ): void;
 
   onEventCompleted(
-    event: DomainEvent
+    event: TEvent
   ): void;
   
   onProjectionUpdated(

@@ -1,40 +1,54 @@
-export function EventReplayPanel(){
-    <GlassCard>
+import { GlassCard } from "@/components/ui/GlassCard";
+import { ReplayEvent } from "../store/ProjectionRebuilderStore";
+import { RebuildEventView } from "./RebuildStatus";
+import { CheckCircle2, Circle, Loader2, XCircle } from "lucide-react";
 
-  <div className="flex items-center justify-between mb-4">
-
-    <div>
-      <h3 className="font-semibold text-white">
-        Event Replay
-      </h3>
-
-      <p className="text-xs text-gray-500">
-        Immutable events being fed into projections
-      </p>
-    </div>
-
-    <span className="text-sm text-gray-400">
-      {processed} / {total}
-    </span>
-
-  </div>
-
-  <div className="space-y-2">
-    {events.map(event => (
-      <ReplayEventRow
-        key={event.id}
-        event={event}
-      />
-    ))}
-  </div>
-
-</GlassCard>
+interface EventReplayPanelProps {
+  events: ReplayEvent[];
+  processed: number;
+  total: number;
 }
 
+export function EventReplayPanel({
+  events,
+  processed,
+  total,
+}: EventReplayPanelProps) {
+  return (
+    <GlassCard className="overflow-hidden">
+
+      <div className="flex items-center justify-between p-5">
+        <div>
+          <h3 className="font-semibold text-white">
+            Event Replay
+          </h3>
+
+          <p className="text-xs text-gray-500">
+            Immutable events being fed into projections
+          </p>
+        </div>
+
+        <span className="text-sm text-gray-400">
+          {processed} / {total}
+        </span>
+      </div>
+
+      <div className="max-h-[420px] overflow-y-auto">
+        {events.map((event) => (
+          <ReplayEventRow
+            key={event.id}
+            event={event}
+          />
+        ))}
+      </div>
+
+    </GlassCard>
+  );
+}
 function ReplayEventRow({
   event,
 }: {
-  event: RebuildEventView;
+  event: ReplayEvent;
 }) {
 
   const icon =

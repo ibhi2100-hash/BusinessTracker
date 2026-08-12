@@ -2,6 +2,7 @@ import { EventConsumer } from "@business/event-bus";
 import {  DomainEvent, InventoryEventType } from "@business/shared-types";
 import {  InventoryReducer } from "@business/projection-families";
 import { SQLiteInventoryRepository } from "../repositories/SQLiteProjectionRepository/SQLiteInventoryRepository";
+import { changeNotifier } from "./changeNoifier";
 
 export class InventoryConsumer
 implements EventConsumer<DomainEvent> {
@@ -19,6 +20,7 @@ implements EventConsumer<DomainEvent> {
                 case InventoryEventType.INVENTORY_ADDED:
                     const inventory = new InventoryReducer().reduce(null, event)
                     await this.repostory.upsert(inventory)
+                    changeNotifier.notify(["inventories"])
                     break
             }
 

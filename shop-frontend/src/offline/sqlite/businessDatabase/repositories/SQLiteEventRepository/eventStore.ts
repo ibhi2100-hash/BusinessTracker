@@ -2,6 +2,7 @@
 import { DomainEvent } from "@business/shared-types";
 import { EventRepository } from "./contracts";
 import { EventStatements } from "../../statements/events/EventStatements";
+import { ProjectionRebuildOptions } from "../../projections/rebuild/types";
 interface EventRow {
 
     id: string;
@@ -156,7 +157,37 @@ implements EventRepository {
         return rows.map(EventMapper.fromRow)
     }
 
-    
+    async *stream(
+        options: ProjectionRebuildOptions = {}
+    ): AsyncGenerator<readonly DomainEvent[], void, unknown>{
+
+        const batchSize = options.batchSize ?? 500;
+        let cursor = options.fromLogicalClock ?? 0;
+
+        const asOfTimestamp = options.asOf instanceof Date ? options.asOf.getTime(): null;
+
+        const toLogicClock = options.toLogicalClock ?? null;
+
+        while (true){
+            const rows = await this.statements.streamEvent.query<EventRow>([
+                cursor,
+                toLogicClock,
+                toLogicClock,
+                asOfTimestamp,
+                asOfTimestamp,
+                batchSize
+            ]);
+
+            if(rows.length === 0) break;
+
+            const events = rows.map(EventMapper.fromRow);
+            yield events;
+            const last = events[events.length - 1];
+            if(!last) break;
+
+            cursor = last.logicClock;
+        }
+    }
 
 
 }
@@ -236,6 +267,7 @@ class EventMapper {
            checksum: row.checksum
         }
     }
+    
     
 
 }
