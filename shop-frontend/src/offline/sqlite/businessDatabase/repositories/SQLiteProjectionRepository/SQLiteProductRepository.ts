@@ -47,7 +47,7 @@ implements IProjectionEntityRepository<Product> {
     }
 
     async products(branchId): Promise<LiveProduct[]> {
-        const products =  await this.statements.products.query<LiveProduct>([branchId])
+        const products =  await this.statements.products.query<LiveProduct>([branchId, branchId])
 
         return products
     }

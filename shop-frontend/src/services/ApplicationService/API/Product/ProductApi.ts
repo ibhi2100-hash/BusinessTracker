@@ -49,4 +49,14 @@ export class ProductApi {
         const app = await this.manager.current();
         return await app.storage.repositories.products.products(branchId)
     }
+
+    async getAllProducts(){
+        const app = await this.manager.current();
+
+        return await app.storage.repositories.products.allProducts();
+    }
+    async getAllInventories(){
+        const app = await this.manager.current();
+        return await app.storage.repositories.products.allInventories();
+    }
 }

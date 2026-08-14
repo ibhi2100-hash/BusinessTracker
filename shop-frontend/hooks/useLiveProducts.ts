@@ -19,6 +19,11 @@ export function useLiveProducts(branchId: string | null) {
     }
 
     const products = await app.product.getProducts(branchId);
+    const allProducts = await app.product.getAllProducts();
+    const allInventories = await app.product.getAllInventories();
+
+    console.log("Product from  Projection Table: ", allProducts)
+    console.log("Inventories from Projection: ", allInventories)
 
     setProducts(products);
     setLoading(false);
