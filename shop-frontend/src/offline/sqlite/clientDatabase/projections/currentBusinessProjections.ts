@@ -8,6 +8,7 @@ implements EventConsumer<DomainEvent> {
         private readonly repository: CurrentBusinessRepository
     ){}
 
+    name: string = "CurrentBusiness"
     async handle(events: readonly DomainEvent<any>[]): Promise<void> {
         for(const event of events){
             switch(event.type){

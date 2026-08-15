@@ -2,7 +2,7 @@ export const productKeys = {
 
     productUpsert: "product_upsert",
 
-    findById: "find_by_id",
+    findById: "product_find_by_id",
 
     productDelete: "product_delete",
 

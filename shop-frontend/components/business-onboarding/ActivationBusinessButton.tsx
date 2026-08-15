@@ -13,34 +13,30 @@ import { toast } from "sonner";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { GlassButton } from "@/components/ui/GlassButton";
 import { GlassIcon } from "@/components/ui/GlassIcon";
-
-import { useBusinessStore } from "@/src/store/businessStore";
-import { OnboardingApi } from "@/src/services/ApplicationService/API/onboarding/OnboardinApi";
-import { BusinessEventTypes } from "@business/shared-types";
-import { AggregateType } from "@/offline/domain/aggregate";
+import { useBusinessContext } from "@/src/context/BusinessContext";
+import { useApplication } from "@/src/services/ApplicationService/ApplicationContext";
 
 export function ActivateBusinessButton() {
   const router = useRouter();
+  const app = useApplication()
+  const { businessId, branchId } = useBusinessContext();
 
-  const business = useBusinessStore(
-    (s) => s.business
-  );
-  
   const [loading, setLoading] =
     useState(false);
 
   const [error, setError] =
     useState("");
 
-  const canActivate = !!business;
+  const canActivate = !!businessId && !!branchId;
 
   const handleActivate = async () => {
-    if (!business) return;
+    if (!businessId && !branchId) return;
 
     try {
       setLoading(true);
       setError("");
 
+      await app.onboarding.activateBusiness()
      
       toast.success(
         "Business activated successfully"
@@ -53,8 +49,10 @@ export function ActivateBusinessButton() {
         "Failed to activate business";
 
       setError(message);
+      
 
       toast.error(message);
+      throw err
     } finally {
       setLoading(false);
     }

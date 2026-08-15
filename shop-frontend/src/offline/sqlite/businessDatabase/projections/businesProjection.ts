@@ -22,7 +22,11 @@ implements EventConsumer<DomainEvent> {
                     break
                 case BusinessEventTypes.BUSINESS_ACTIVATION:
                     const businessState = await this.repostory.findById(event.businessId);
+                    const allBusiness = await this.repostory.findAll();
+                    console.log("this are all the businesses: ", allBusiness)
+                    console.log("this is The current business State for the reducer: ", businessState)
                     const businessActivation = new BusinessReducer().reduce(businessState, event);
+                    await this.repostory.activateBusiness(businessActivation)
                     changeNotifier.notify(["businesses"])
                     break
             }

@@ -11,8 +11,6 @@ import {
 import { nanoid } from "nanoid";
 import { toast } from "sonner";
 
-import { eventService } from "@/src/services/eventService";
-
 import { financeEventType } from "@business/shared-types";
 import { AggregateType } from "@/offline/domain/aggregate";
 
@@ -21,6 +19,7 @@ import { GlassButton } from "@/components/ui/GlassButton";
 import { GlassInput } from "@/components/ui/GlassInput";
 import { GlassIcon } from "@/components/ui/GlassIcon";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { useApplication } from "@/src/services/ApplicationService/ApplicationContext";
 
 interface CashflowTableProps {
   mode: "OPENING" | "LIVE";
@@ -45,6 +44,8 @@ export default function CashflowTable({
   onCompleted,
 }: CashflowTableProps) {
   const [loading, setLoading] = useState(false);
+
+  const app = useApplication()
 
   const [entries] = useState<CashEntry[]>([]);
 
@@ -95,7 +96,7 @@ export default function CashflowTable({
     try {
       setLoading(true);
 
-      await eventService.create({
+      await app.capital.injectCapital({
         type:
           mode === "OPENING"
             ? financeEventType.OPENING_CAPITAL
@@ -139,6 +140,23 @@ export default function CashflowTable({
     if (!amount || amount <= 0)
       return;
 
+    await app.capital.withdrawCapital({
+        type:
+          mode === "OPENING"
+            ? financeEventType.OPENING_CAPITAL
+            : financeEventType.CASH_ADDED,
+
+        aggregateType:
+          AggregateType.CAPITAL_ACCOUNT,
+
+        aggregateId: nanoid(),
+
+        payload: {
+          amount,
+        },
+
+        mode,
+      });
     clearInput();
 
     toast.success(
@@ -193,7 +211,9 @@ export default function CashflowTable({
         </GlassCard>
       )}
 
-      <GlassCard
+      <div 
+        className="flex  gap-4">
+        <GlassCard
         variant="elevated"
         className="p-5 space-y-4"
       >
@@ -233,7 +253,7 @@ export default function CashflowTable({
             Inject
           </GlassButton>
           )}
-        { action   && (
+        { action === "WITHDRAW"   && (
           <GlassButton
             variant="danger"
             disabled={
@@ -268,6 +288,7 @@ export default function CashflowTable({
           </GlassButton>
         
       </GlassCard>
+      </div>
 
       <div className="space-y-3">
         <h3 className="text-sm text-gray-400">

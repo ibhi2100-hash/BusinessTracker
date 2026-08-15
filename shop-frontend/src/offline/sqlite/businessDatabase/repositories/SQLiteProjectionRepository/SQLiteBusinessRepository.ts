@@ -14,18 +14,22 @@ export class SQLiteBusinessRepository
       BusinessMapper.ToInsert(state)
     )
   }
-  async findById(id: string) {
-    
-    const rows =
-      await this.statements.findById.query<Business>(
-        [id]
-      )
+  async findById(id: string): Promise<Business | null> {
+  console.log("looking for:", id);
 
-    return rows[0] ?? null;
-  }
+  // A) current prepared statement
+  let rows = await this.statements.findById.query<Business>([id]);
+  console.log("prepared [id]:", rows);
+
+
+  return rows[0] ?? null;
+}
 
   async findAll() {
-    return await this.statements.update.query<Business>()
+    const all = await this.statements.findAll.query<Business>();
+    console.log("all businesses IDs:", all.map(b => b.id));
+    
+  return all
   }
 
   async delete(id: string) {
@@ -33,7 +37,15 @@ export class SQLiteBusinessRepository
       [id]
     );
   }
+  async activateBusiness(
+    state: Business
+  ): Promise<void> {
+    await this.statements.activate.execute(
+      BusinessMapper.toActivation(state)
+    );
+  }
 }
+
 
 export class BusinessMapper {
   static ToInsert(
@@ -52,4 +64,13 @@ export class BusinessMapper {
             business.status
         ]
   }
+
+  static toActivation(business: Business): unknown[] {
+  return [
+    business.activatedAt,
+    business.status,
+    business.isOnboarding,
+    business.onboardingCompleted
+  ];
+}
 }

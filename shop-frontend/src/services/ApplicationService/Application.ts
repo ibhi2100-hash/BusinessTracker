@@ -6,8 +6,8 @@ import { ProductApi } from "./API/Product/ProductApi";
 import { InventoryApi } from "./API/Inventory/InventoryApi";
 import { SalesApi } from "./API/Sales/SalesApi";
 import { RebuildApi } from "./API/rebuild/RebuildApi";
-import { FrontendBusinessContext } from "@/src/Composer/context/BusinessContext";
 import { ContextApi } from "./API/context/context";
+import { CapitalApi } from "./API/capital/capitalApi";
 
 export class Application {
     readonly onboarding: OnboardingApi;
@@ -17,7 +17,9 @@ export class Application {
     readonly client: ApplicationContext;
     readonly eventStore: EventStoreApi;
     readonly rebuild: RebuildApi;
-    readonly context:  FrontendBusinessContext
+    readonly context: ContextApi;
+    readonly capital: CapitalApi
+
     
     constructor(
         client: ApplicationContext,
@@ -57,6 +59,11 @@ export class Application {
         
         this.context = 
             new ContextApi(
+                this.manager
+            )
+
+        this.capital = 
+            new CapitalApi(
                 this.manager
             )
         

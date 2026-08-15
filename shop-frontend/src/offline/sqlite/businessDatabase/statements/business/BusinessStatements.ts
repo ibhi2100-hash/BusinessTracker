@@ -1,4 +1,3 @@
-import { PreparedStatement } from "../../../PreparedStatement/PreparedStatementContract";
 import { PreparedStatementManager } from "../../../PreparedStatement/PreparedStatementManager";
 import { businessKeys } from "./businessKeys";
 
@@ -20,6 +19,12 @@ export class BusinessStatements {
         )
     }
 
+    get findAll(){
+        return this.manager.get(
+            businessKeys.findAll
+        )
+    }
+
     get delete(){
         return this.manager.get(
             businessKeys.businessDelete
@@ -29,6 +34,12 @@ export class BusinessStatements {
     get update(){
         return this.manager.get(
             businessKeys.businesssUpdate
+        )
+    }
+
+    get activate(){
+        return this.manager.get(
+            businessKeys.businessActivation
         )
     }
 }

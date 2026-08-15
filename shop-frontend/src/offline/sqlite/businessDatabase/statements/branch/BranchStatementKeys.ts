@@ -1,7 +1,7 @@
 export const BranchStatementKeys = {
     insert: "insert.branch",
     findAll: "findAll.branches",
-    findById: "findById",
+    findById: "branch_find_by_id",
     update: "update.branch",
     switch: "switch.branch",
     delete: "delete.branch",

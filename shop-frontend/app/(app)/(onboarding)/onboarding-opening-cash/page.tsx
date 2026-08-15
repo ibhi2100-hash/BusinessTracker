@@ -20,6 +20,7 @@ export default function OpeningCashPage() {
       <SetupProgressTracker />
       <CashflowTable
         mode="OPENING"
+        action= "INJECT"
         onCompleted={()=> console.log("Am completed")}
       />
       <StepFooter

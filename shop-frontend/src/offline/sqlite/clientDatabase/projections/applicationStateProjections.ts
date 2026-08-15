@@ -7,8 +7,10 @@ implements EventConsumer<DomainEvent> {
     constructor(
         private readonly repository: SQLiteApplicationStateRepository
     ){}
+    name: string = "Application State"
 
     async handle(events: readonly DomainEvent<any>[]): Promise<void> {
+    
         for(const event of events){
             switch(event.type){
 

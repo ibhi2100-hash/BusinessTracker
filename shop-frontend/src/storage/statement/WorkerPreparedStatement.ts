@@ -19,6 +19,7 @@ implements PreparedStatement {
         await this.runtime.connection(
             "exec",
             {
+                dbId: (this.runtime as any).dbId,
                 sql: this.sql,
                 bind: params
             }
@@ -33,15 +34,19 @@ implements PreparedStatement {
         const response =
             await this.runtime.connection(
                 "exec",
-                {
+                {   dbId: (this.runtime as any).dbId,
                     sql: this.sql,
                     bind: params,
                     rowMode: "object",
                     returnValue: "resultRows"
                 }
             );
-
-        return response.result.resultRows;
+        console.log("query response for", this.key, {
+            sql: this.sql,
+            bind: params,
+            result: response.result
+        });
+        return response.result?.resultRows ?? [];
 
     }
 

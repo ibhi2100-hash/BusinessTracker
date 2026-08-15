@@ -21,5 +21,15 @@ export const BusinessStatementDefinition: StatementDefinition[] = [
     {
         key: businessKeys.businesssUpdate,
         sql: SQL.BUSINESS_UPSERT
+    },
+
+    {
+        key: businessKeys.businessActivation,
+        sql: SQL.BUSINESS_ACTIVATION
+    },
+
+    {
+        key: businessKeys.findAll,
+        sql: SQL.FIND_All
     }
 ]

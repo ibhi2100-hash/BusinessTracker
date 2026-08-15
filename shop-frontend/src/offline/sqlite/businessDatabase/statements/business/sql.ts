@@ -24,11 +24,24 @@ export const FIND_BY_ID =
                             SELECT *
                             FROM businesses
                             WHERE id = ?
-                            LIMIT 1
                         `
+export const FIND_All = 
+  `
+    SELECT * FROM businesses
+  `
 export const BUSINESS_DELETE=
                         `
                             DELETE FROM businesses
                             WHERE id = ?
                             
                         `
+
+export const BUSINESS_ACTIVATION = `
+    UPDATE businesses
+    SET
+        activatedAt = ?,
+        status = ?,
+        isOnboarding = ?,
+        onboardingCompleted = ?
+    WHERE id = ?
+`;  
