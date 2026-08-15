@@ -4,7 +4,7 @@ import { OpeningEventType, salesEventType, financeEventType, InventoryEventType,
 type Direction = "DEBIT" | "CREDIT";
 
 function buildEntry(
-  event: IntegrationEvent,
+  event: DomainEvent<any>,
   index: number,
   account: Account,
   direction: Direction,
@@ -30,11 +30,11 @@ function buildEntry(
     direction,
     amount, // ✅ ALWAYS POSITIVE
     index,
-    createdAt: event.createdAt.getTime(), // ✅ timestamp in ms
+    createdAt: event.createdAt, // ✅ timestamp in ms
   };
 }
 
-export function generateLedgerEntries(event: IntegrationEvent): LedgerEntry[] {
+export function generateLedgerEntries(event: DomainEvent<any>): LedgerEntry[] {
   const { payload } = event;
 
   let entries: LedgerEntry[] = [];

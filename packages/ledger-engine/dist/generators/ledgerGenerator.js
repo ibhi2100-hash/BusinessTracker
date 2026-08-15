@@ -20,7 +20,7 @@ function buildEntry(event, index, account, direction, amount) {
         direction,
         amount, // ✅ ALWAYS POSITIVE
         index,
-        createdAt: event.createdAt.getTime(), // ✅ timestamp in ms
+        createdAt: event.createdAt, // ✅ timestamp in ms
     };
 }
 function generateLedgerEntries(event) {

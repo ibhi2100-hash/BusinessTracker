@@ -3,34 +3,21 @@ import { Business, BusinessEventTypes, DomainEvent } from "@business/shared-type
 import { SQLiteBusinessRepository } from "../repositories/SQLiteProjectionRepository/SQLiteBusinessRepository";
 import { BusinessReducer } from "@business/projection-families";
 import { changeNotifier } from "./changeNoifier";
+import { SQLiteLedgerRepository } from "../repositories/SQLiteLedgerRepository/SQLiteLedgerRepository";
+import { generateLedgerEntries } from "@business/ledger-engine";
 
-export class BusinessConsumer
+export class LedgerConsumer
 implements EventConsumer<DomainEvent> {
-    readonly name = "businesses"
+    readonly name = "ledger Projection"
     constructor(
-        private readonly repostory: SQLiteBusinessRepository
+        private readonly repostory: SQLiteLedgerRepository
     ){}
 
    async handle(events: readonly DomainEvent<any>[]): Promise<void> {
         for(const event of events){
-            switch(event.type){
-
-                case BusinessEventTypes.BUSINESS_CREATED:
-                    const business = new BusinessReducer().reduce(null, event)
-                    await this.repostory.upsert(business)
-                    changeNotifier.notify(["businesses"])
-                    break
-                case BusinessEventTypes.BUSINESS_ACTIVATION:
-                    const businessState = await this.repostory.findById(event.businessId);
-                    const allBusiness = await this.repostory.findAll();
-                    console.log("this are all the businesses: ", allBusiness)
-                    console.log("this is The current business State for the reducer: ", businessState)
-                    const businessActivation = new BusinessReducer().reduce(businessState, event);
-                    await this.repostory.activateBusiness(businessActivation)
-                    changeNotifier.notify(["businesses"])
-                    break
-            }
-
+            const entries = generateLedgerEntries(event);
+            await this.repostory.append(entries)
+            changeNotifier.notify(["ledger_entries"])
         }
     }
 }

@@ -33,6 +33,7 @@ import { ProjectionRebuildObserver } from "@/src/offline/sqlite/businessDatabase
 import { ProjectionRebuilder } from "@/src/offline/sqlite/businessDatabase/projections/rebuild/ProjectionRebuilder";
 import { ProjectionReset } from "@/src/offline/sqlite/businessDatabase/projections/rebuild/ProjectionResetter";
 import { SQLiteProjectionResetRepository } from "@/src/offline/sqlite/businessDatabase/repositories/ProjectionResetRepository/ProjectionResetRepository";
+import { LedgerConsumer } from "@/src/offline/sqlite/businessDatabase/projections/LedgerProjection";
 
 export class BusinessBootstrapper
 implements Lifecycle {
@@ -262,6 +263,12 @@ implements Lifecycle {
         bus.subscribe(
             new SalesConsumer(
                 repositories.sales
+            )
+        )
+
+        bus.subscribe(
+            new LedgerConsumer(
+                repositories.ledger
             )
         )
    }
