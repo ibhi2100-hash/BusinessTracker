@@ -8,9 +8,11 @@ import { SalesApi } from "./API/Sales/SalesApi";
 import { RebuildApi } from "./API/rebuild/RebuildApi";
 import { ContextApi } from "./API/context/context";
 import { CapitalApi } from "./API/capital/capitalApi";
+import { BranchApi } from "./API/branch/branchApi";
 
 export class Application {
     readonly onboarding: OnboardingApi;
+    readonly branch: BranchApi;
     readonly product: ProductApi;
     readonly inventory: InventoryApi;
     readonly sales: SalesApi
@@ -32,6 +34,12 @@ export class Application {
             new OnboardingApi(
                 this.manager
             )
+        
+        this.branch = 
+            new BranchApi(
+                this.manager
+            )
+            
         this.eventStore = 
             new EventStoreApi(
                 this.manager

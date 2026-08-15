@@ -11,22 +11,19 @@ import {
 } from "lucide-react";
 
 import { useBranchStore } from "@/src/store/useBranchStore";
-import { useBusinessStore } from "@/src/store/businessStore";
-import { useAuthStore } from "@/src/store/useAuthStore";
-
-import { eventService } from "@/src/services/eventService";
 import { BusinessEventTypes } from "@business/shared-types";
 
 import { GlassCard } from "@/components/ui/GlassCard";
 import { GlassButton } from "@/components/ui/GlassButton";
 import { GlassIcon } from "@/components/ui/GlassIcon";
 import { useBusiness } from "@/src/offline/queryHooks/businessQueryHooks";
+import { useApplication } from "@/src/services/ApplicationService/ApplicationContext";
 
 export function DashboardHeader() {
   const router = useRouter();
 
   const business = useBusiness()
-  const role =  useAuth()
+  const app = useApplication()
   
 
   const {
@@ -57,7 +54,7 @@ export function DashboardHeader() {
     try {
       setIsSwitching(true);
 
-      await eventService.create({
+      await app.branch.switchBranch({
         type:
           BusinessEventTypes.BRANCH_SWITCH,
         aggregateType: "BRANCH_SWITCH",

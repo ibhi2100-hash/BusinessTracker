@@ -8,8 +8,7 @@ import { LogicClockRepository } from "./LogicClockRepository/LogicClockRepositor
 import { SQLiteProductRepository } from "./SQLiteProjectionRepository/SQLiteProductRepository";
 import { SQLiteInventoryRepository } from "./SQLiteProjectionRepository/SQLiteInventoryRepository";
 import { SQLiteSalesRepository } from "./SQLiteProjectionRepository/SQLiteSalesRepository";
-import { stat } from "fs";
-import { SQLiteProjectionResetRepository } from "./ProjectionResetRepository/ProjectionResetRepository";
+
 
 export class BusinessRepositoryRegistry {
     readonly events: SQLiteEventRepository;
@@ -61,6 +60,11 @@ export class BusinessRepositoryRegistry {
         this.sales = 
             new SQLiteSalesRepository(
                 statements.sales
+            )
+
+        this.ledger = 
+            new SQLiteLedgerRepository(
+                statements.ledger
             )
             
         this.logicClock = 

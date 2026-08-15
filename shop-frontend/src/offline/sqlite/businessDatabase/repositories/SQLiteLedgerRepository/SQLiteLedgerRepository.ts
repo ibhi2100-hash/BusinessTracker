@@ -1,108 +1,132 @@
-// SQLiteLedgerRepository.ts
-
-import { LedgerRepository } from "@business/ledger-engine";
 import {
-  Account,
-  LedgerEntry
+  LedgerEntry,
+  Account
 } from "@business/shared-types";
 
-import { StorageBusCreator } from "../../../bus/StorageBusCreator";
-import { DatabaseTarget } from "../../../protocol/DatabaseTarget";
+import {
+  LedgerRepository,
+  LedgerAccountTotals
+} from "./RepositoryContract";
 
+import { LedgerStatements }
+  from "../../statements/ledger/LedgerStatements";
+import { LedgerMapper } from "./LedgerMapper";
 
 export class SQLiteLedgerRepository
   implements LedgerRepository {
+
+  constructor(
+    private readonly statements: LedgerStatements
+  ) {}
+
 
   async append(
     entries: LedgerEntry[]
   ): Promise<void> {
 
-    const storage = StorageBusCreator();
-
     for (const entry of entries) {
 
-      await storage.query(
-        DatabaseTarget.BUSINESS,
-        `
-        INSERT INTO ledger_entries (
-          id,
-          eventId,
-          account,
-          debit,
-          credit,
-          businessId,
-          branchId,
-          description,
-          createdAt
-        )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `,
-        [
-          entry.id,
-          entry.eventId,
-          entry.account,
-          entry.debit,
-          entry.credit,
-          entry.businessId,
-          entry.branchId,
-          entry.description ?? null,
-          entry.createdAt
-        ]
+      await this.statements.append.execute(
+        LedgerMapper.toInsert(entry)
       );
+
     }
+
   }
 
-  async getByAccount(
-    account: Account
-  ): Promise<LedgerEntry[]> {
+
+  async getById(
+    id: string
+  ): Promise<LedgerEntry | null> {
 
     const rows =
-      await getDB().query<LedgerEntry>(
-        `
-        SELECT *
-        FROM ledger_entries
-        WHERE account = ?
-        ORDER BY createdAt ASC
-        `,
-        [account]
+      await this.statements.findById.query<LedgerEntry>(
+        [id]
       );
 
-    return rows;
+    return rows[0] ?? null;
   }
+
+
+  async getByEvent(
+    eventId: string
+  ): Promise<LedgerEntry[]> {
+
+    return this.statements.findByEvent
+      .query<LedgerEntry>(
+        [eventId]
+      );
+  }
+
 
   async getByBusiness(
     businessId: string
   ): Promise<LedgerEntry[]> {
 
-    const rows =
-      await getDB().query<LedgerEntry>(
-        `
-        SELECT *
-        FROM ledger_entries
-        WHERE businessId = ?
-        ORDER BY createdAt ASC
-        `,
+    return this.statements.findByBusiness
+      .query<LedgerEntry>(
         [businessId]
       );
-
-    return rows;
   }
+
 
   async getByBranch(
     branchId: string
   ): Promise<LedgerEntry[]> {
 
-    const rows =
-      await getDB().query<LedgerEntry>(
-        `
-        SELECT *
-        FROM ledger_entries
-        WHERE branchId = ?
-        ORDER BY createdAt ASC
-        `,
+    return this.statements.findByBranch
+      .query<LedgerEntry>(
         [branchId]
       );
-
-    return rows;
   }
+
+
+  async getByAccount(
+    account: Account
+  ): Promise<LedgerEntry[]> {
+
+    return this.statements.findByAccount
+      .query<LedgerEntry>(
+        [account]
+      );
+  }
+
+
+  async getAccountTotals(
+    businessId: string,
+    account: Account
+  ): Promise<LedgerAccountTotals> {
+
+    const result =
+      await this.statements.accountTotals
+        .query<LedgerAccountTotals>([
+          businessId,
+          account
+        ]);
+
+    return result[0] ?? {
+      totalDebits: 0,
+      totalCredits: 0
+    };
+  }
+
+
+async verifyEvent(
+  eventId: string
+): Promise<boolean> {
+
+  const result =
+    await this.statements.verifyEvent
+      .query<LedgerAccountTotals>([
+        eventId
+      ]);
+
+  const totals = result[0];
+
+  if (!totals) {
+    return false;
+  }
+
+  return totals.totalDebits === totals.totalCredits;
+}
 }

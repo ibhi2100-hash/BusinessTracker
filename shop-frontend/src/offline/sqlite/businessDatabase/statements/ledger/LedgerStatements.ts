@@ -1,54 +1,62 @@
-import { PreparedStatement } from "../../../PreparedStatement/PreparedStatementContract";
+import { PreparedStatementManager }
+  from "../../../PreparedStatement/PreparedStatementManager";
+
+import { ledgerKeys }
+  from "./ledgerKeys";
+
 
 export class LedgerStatements {
 
-    readonly append: PreparedStatement;
+  constructor(
+    private readonly manager: PreparedStatementManager
+  ) {}
 
-    readonly balance: PreparedStatement;
+  get append() {
+    return this.manager.get(
+      ledgerKeys.append
+    );
+  }
 
-    readonly entries: PreparedStatement;
+  get findById() {
+    return this.manager.get(
+      ledgerKeys.findById
+    );
+  }
 
-    constructor(
-        manager: PreparedStatementManager
-    ) {
+  get findByEvent() {
+    return this.manager.get(
+      ledgerKeys.findByEvent
+    );
+  }
 
-        this.append =
-            manager.statement(
-                "ledger.append",
-                `
-INSERT INTO ledger_entries(
-    id,
-    accountId,
-    debit,
-    credit,
-    createdAt
-)
-VALUES (?, ?, ?, ?, ?)
-`
-            );
+  get findByBusiness() {
+    return this.manager.get(
+      ledgerKeys.findByBusiness
+    );
+  }
 
-        this.balance =
-            manager.statement(
-                "ledger.balance",
-                `
-SELECT
-COALESCE(SUM(debit-credit),0) AS balance
-FROM ledger_entries
-WHERE accountId = ?
-`
-            );
+  get findByBranch() {
+    return this.manager.get(
+      ledgerKeys.findByBranch
+    );
+  }
 
-        this.entries =
-            manager.statement(
-                "ledger.entries",
-                `
-SELECT *
-FROM ledger_entries
-WHERE accountId = ?
-ORDER BY createdAt
-`
-            );
+  get findByAccount() {
+    return this.manager.get(
+      ledgerKeys.findByAccount
+    );
+  }
 
-    }
+  get accountTotals() {
+    return this.manager.get(
+      ledgerKeys.getAccountTotals
+    );
+  }
+
+  get verifyEvent(){
+    return this.manager.get(
+        ledgerKeys.verfifyEvent
+    )
+  }
 
 }

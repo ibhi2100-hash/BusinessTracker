@@ -1,4 +1,4 @@
-import { Account, LedgerEntry, IntegrationEvent } from "@business/shared-types"
+import { Account, LedgerEntry, DomainEvent } from "@business/shared-types"
 import { OpeningEventType, salesEventType, financeEventType, InventoryEventType,  } from "@business/shared-types"
 
 type Direction = "DEBIT" | "CREDIT";

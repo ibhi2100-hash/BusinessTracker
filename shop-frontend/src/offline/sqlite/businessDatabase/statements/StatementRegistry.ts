@@ -8,12 +8,14 @@ import { ProductStatements } from "./products/ProductStatements";
 import { PreparedStatementManager } from "../../PreparedStatement/PreparedStatementManager";
 import { LogicClockStatements } from "./logicClock/logicClockStatements"
 import { SalesStatement } from "./sales/salesStatements";
+import { LedgerStatements } from "./ledger/LedgerStatements";
 
 export class BusinessStatementRegistry {
     readonly events: EventStatements;
     readonly inventory: InventoryStatements;
     readonly products: ProductStatements;
     readonly sales: SalesStatement;
+    readonly ledger: LedgerStatements;
     readonly business: BusinessStatements;
     readonly branches: BranchStatements;
     readonly employees: EmployeesStatements;
@@ -33,6 +35,9 @@ export class BusinessStatementRegistry {
         
         this.sales =  
             new SalesStatement(manager)
+
+        this.ledger = 
+            new LedgerStatements(manager)
 
         this.business = 
             new BusinessStatements(manager);
