@@ -3,8 +3,8 @@
     /* =========================
        Project Structure
     ========================== */
-      "rootDir": "..",
-      "outDir": "dist",
+    "rootDir": "src",
+    "outDir": "dist",
 
     /* =========================
        Module System (Node ESM)
@@ -20,7 +20,7 @@
     "forceConsistentCasingInFileNames": true,
 
     /* =========================
-       Type Safety (Strict but sane)
+       Type Safety
     ========================== */
     "strict": true,
     "noUncheckedIndexedAccess": true,
@@ -42,7 +42,7 @@
     /* =========================
        Environment / Types
     ========================== */
-    "types": ["node", "express"],
+    "types": ["node"],
 
     /* =========================
        Performance & Tooling
@@ -53,9 +53,6 @@
     "typeRoots": ["./src/types", "./node_modules/@types"]
   },
 
-  /* =========================
-     Compilation Scope
-  ========================== */
-  "include": ["src/**/*", "../shared/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }
