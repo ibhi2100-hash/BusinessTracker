@@ -15,6 +15,7 @@ class SyncEngine {
         if (pending.length === 0)
             return;
         const groups = (0, groupEventsByAggregate_1.groupByAggregate)(pending);
+        console.log("This are the grouped Event by aggregate: ", groups);
         for (const group of groups) {
             const baseState = await this.repository.getAggregateState(group.aggregateId, group.aggregateType);
             const baseVersion = baseState.version ?? 0;

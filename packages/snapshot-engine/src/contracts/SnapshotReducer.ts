@@ -1,9 +1,7 @@
-// packages/snapshot-engine/contracts/SnapshotReducer.ts
-
-import { BaseEvent, IntegrationEvent } from "@business/shared-types";
+import { DomainEvent } from "@business/shared-types";
 
 export interface SnapshotReducer<
-  TState = any
+  TState
 > {
   aggregateType: string;
 
@@ -11,6 +9,6 @@ export interface SnapshotReducer<
 
   reduce(
     current: TState,
-    event: IntegrationEvent
+    event: DomainEvent
   ): TState;
 }

@@ -14,8 +14,8 @@ exports.ProductSnapshotReducer = {
             imageUrl: "",
             isActive: true,
             isDeleted: false,
-            createdAt: new Date(0),
-            updatedAt: new Date(0)
+            createdAt: Date.now(),
+            updatedAt: Date.now()
         };
     },
     reduce(current, event) {

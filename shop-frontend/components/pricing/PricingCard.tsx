@@ -12,7 +12,6 @@ import { GlassButton } from "@/components/ui/GlassButton";
 import { GlassIcon } from "@/components/ui/GlassIcon";
 
 import { useSubscriptionStore } from "@/src/store/useSubscriptionStore";
-import { eventService } from "@/src/services/eventService";
 
 export function PricingCards() {
   const plans = useSubscriptionStore(
@@ -22,13 +21,7 @@ export function PricingCards() {
   const handleSubscribe = async (
     planId: string
   ) => {
-    await eventService.create({
-      aggregateType: "SUBSCRIBE",
-      aggregateId: planId,
-      type: "SUBSCRIBE",
-      mode: "LIVE",
-      payload: { planId },
-    });
+   
   };
 
   if (!plans?.length) {

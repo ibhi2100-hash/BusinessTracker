@@ -1,10 +1,9 @@
 import { Lifecycle } from "../../lifecycle/LifeCycle";
-import { BusinessBusesRegistry } from "../BusinessEventBus/BusinessBusesRegistry";
+
 
 export class BusinessSynchronization
 implements Lifecycle {
     constructor(
-        readonly buses: BusinessBusesRegistry
     ){}
 
     async initialize(): Promise<void> {

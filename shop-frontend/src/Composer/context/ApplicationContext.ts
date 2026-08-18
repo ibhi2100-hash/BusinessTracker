@@ -1,6 +1,5 @@
 import { ClientRepositoryRegistry } from "@/src/offline/sqlite/clientDatabase/repositories/ClientDatabaseRepositoryRegistry";
 import { ClientServiceRegistry } from "@/src/offline/sqlite/clientDatabase/services/ClientServiceRegistry";
-import { StorageContext } from "./ApplicationStorageContext";
 import { SQLiteRuntime } from "@/src/storage/runtime/SQLiteRuntime";
 import { QueryRunner } from "@/src/storage/queryRunner/QueryRunner";
 import { TransactionManager } from "@/src/storage/transaction/TransactionManager";
@@ -12,7 +11,7 @@ import { ProjectionEventBus } from "@/src/buses/ProjectionBuses";
 
 
 export class ApplicationContext
-implements StorageContext {
+ {
     readonly runtime: SQLiteRuntime;
 
     readonly queryRunner: QueryRunner;

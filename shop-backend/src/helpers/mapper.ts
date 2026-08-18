@@ -1,47 +1,34 @@
-import { Event as PrismaEvent } from "../infrastructure/postgresql/prisma/generated/client.js";
-import { BaseEvent as DomainEvent } from "@business/shared-types";
 
-export function toDomainEvent(event: PrismaEvent): DomainEvent {
+import { DomainEvent } from "@business/shared-types";
 
-  const base: DomainEvent = {
+export function toDomainEvent(event: DomainEvent) {
+
+  const base = {
     id: event.id,
 
     aggregateId: event.aggregateId,
     aggregateType: event.aggregateType,
+    expectedAggregateVersion: event.expectedAggregateVersion,
     aggregateVersion: event.aggregateVersion,
 
     type: event.type,
 
     payload: normalizePayload(event.payload),
 
-    businessId: event.businessId ?? null,
-    branchId: event.branchId ?? null,
+    businessId: event.businessId,
+    branchId: event.branchId,
 
     mode: event.mode,
 
-    logicClock: typeof event.logicClock === "bigint" ? Number(event.logicClock) : (event.logicClock as unknown as number),
+    logicClock: event.logicClock,
 
-    scope: event.scope as any,
-
-    deviceId: event.deviceId,
-    userId: event.userId ?? null,
-
-    status: event.status as any,
-    synced: event.synced,
-
-    isCreationEvent: event.isCreationEvent ?? false,
-
+    actor: event.actor,
+    
     createdAt: event.createdAt,
+
+    causationId: event.causationId
   };
 
-  // ONLY SET IF EXISTS
-  if (event.causationId !== null) {
-    base.causationId = event.causationId;
-  }
-
-  if (event.correlationId !== null) {
-    base.correlationId = event.correlationId;
-  }
 
   return base;
 }

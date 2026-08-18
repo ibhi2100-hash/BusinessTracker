@@ -7,12 +7,13 @@ import { StockBadge } from "@/components/ui/StockBadge";
 import { useBusinessStore } from "@/src/store/businessStore";
 import { useBranchStore } from "@/src/store/useBranchStore";
 import { GlassButton } from "../../ui/GlassButton";
+import { LiveProduct } from "@/src/offline/sqlite/businessDatabase/repositories/SQLiteProjectionRepository/SQLiteProductRepository";
 
 interface Props {
-  product: inventoryProduct;
+  product: LiveProduct;
   context: "sell" | "admin";
   onSell?: (productId: string, quantity: number) => void;
-  onManage?: (product: inventoryProduct) => void;
+  onManage?: (product: LiveProduct) => void;
   onDelete?: (productId: string) => void;
   onOpenQuantityModal?: (product: inventoryProduct) => void;
 }
@@ -32,35 +33,6 @@ export default function ProductCard({
   const disabled = !business || !branchId;
   const blockInteraction = context === "sell" && outOfStock || disabled;
 
-  const pressTimer = useRef<NodeJS.Timeout | null>(null);
-  const longPressTriggered = useRef(false);
-
-  const [sheetOpen, setSheetOpen] = useState(false);
-  // ---------------------------
-  // SELL GESTURE
-  // ---------------------------
-  const handlePressStart = () => {
-    if (context !== "sell" || blockInteraction) return;
-
-    longPressTriggered.current = false;
-
-    pressTimer.current = setTimeout(() => {
-      longPressTriggered.current = true;
-      onOpenQuantityModal?.(product);
-    }, 450);
-  };
-
-  const handlePressEnd = () => {
-    if (pressTimer.current) clearTimeout(pressTimer.current);
-
-    if (!longPressTriggered.current && context === "sell" && onSell && !blockInteraction) {
-      onSell(product.id, 1);
-    }
-  };
-
-  const handleCancel = () => {
-    if (pressTimer.current) clearTimeout(pressTimer.current);
-  };
 
   // ---------------------------
   // iOS / FUTURISTIC CARD STYLE

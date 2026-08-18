@@ -1,8 +1,8 @@
-import { BaseEvent } from "@business/shared-types"
+import { DomainEvent } from "@business/shared-types"
 import { BusinessEventTypes, OpeningEventType, InventoryEventType , salesEventType} from "@business/shared-types";
 
 
-export function getEventScope(event: BaseEvent){
+export function getEventScope(event: DomainEvent){
   switch (event.type) {
     case BusinessEventTypes.BUSINESS_CREATED:
       return "GLOBAL";

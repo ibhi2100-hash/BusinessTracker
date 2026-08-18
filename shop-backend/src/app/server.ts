@@ -8,7 +8,7 @@ import { Server } from 'socket.io';
 // Routes
 import authRoutes from '../routes/auth.route.js';
 import subscriptionRoute from '../routes/subscription.route.js';
-import syncRoute from '../routes/sync.route.js'
+
 
 dotenv.config();
 
@@ -67,7 +67,7 @@ io.on("connection", (socket) => {
 // --------------------
 app.use('/auth', authRoutes);
 app.use('/subscription', subscriptionRoute)
-app.use('/sync', syncRoute)
+
 
 // --------------------
 // Start server

@@ -1,6 +1,5 @@
 import { DomainEvent } from "@business/shared-types";
 import { Command } from "../KarnelTypes/types";
-import { CommandMetadata } from "../BusinessClock/MetadataBuilderContract";
 import { EventRepository } from "@/src/offline/sqlite/businessDatabase/repositories/SQLiteEventRepository/contracts";
 
 
@@ -147,25 +146,6 @@ extends PipelinePhase {
 
 }
 
-export interface ExecutionEngine {
-
-    execute(
-        context: PipelineContext
-    ): Promise<void>;
-
-}
-
-export interface PersistenceContext {
-
-    projections: ProjectionResult[];
-
-    snapshots: AggregateSnapshot[];
-
-    outbox: OutboxMessage[];
-
-    syncQueue: SyncTask[];
-
-}
 
 export interface DiagnosticContext {
 
@@ -178,28 +158,6 @@ export interface DiagnosticContext {
     currentPhase?: string;
 
     currentKernel?: string;
-
-}
-
-export interface RuntimeContext {
-    nodeId?: string;
-
-    session?: BusinessSession;
-
-    aggregate?: AggregateRoot;
-
-    events: DomainEvent[];
-
-    aggregateVersion?: number
-
-
-}
-
-export interface ExecutionRequest {
-
-    command: Command;
-
-    metadata?: CommandMetadata;
 
 }
 

@@ -1,6 +1,6 @@
-import { IntegrationEvent } from "@business/shared-types";
-export interface SnapshotReducer<TState = any> {
+import { DomainEvent } from "@business/shared-types";
+export interface SnapshotReducer<TState> {
     aggregateType: string;
     initialState(): TState;
-    reduce(current: TState, event: IntegrationEvent): TState;
+    reduce(current: TState, event: DomainEvent): TState;
 }

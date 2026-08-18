@@ -1,5 +1,3 @@
-// lib/sync/syncMonitor.ts
-import { createSyncManager } from "@/src/services/sync"
 
 let syncInProgress = false
 let intervalId: ReturnType<typeof setInterval> | null = null
@@ -21,7 +19,9 @@ export async function runSync() {
 
   try {
     console.log("Running sync engine...")
-    const synceManager = createSyncManager();
+    const synceManager = { 
+      sync: () => { console.log("fuck syncing")}
+    }
     synceManager.sync()
   } catch (error) {
     console.error("Sync failed:", error)

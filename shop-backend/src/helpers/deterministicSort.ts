@@ -1,6 +1,6 @@
-import { BaseEvent } from '@business/shared-types';
+import { DomainEvent } from '@business/shared-types';
 
-export const deterministicSort = (events: BaseEvent[]) => {
+export const deterministicSort = (events: DomainEvent[]) => {
   return (
     [...events].sort((a, b) => {
       if (a.createdAt < b.createdAt) return -1;

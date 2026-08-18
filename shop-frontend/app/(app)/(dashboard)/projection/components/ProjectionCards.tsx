@@ -73,5 +73,15 @@ export function ProjectionStatusCards({
         </GlassCard>
       ))}
     </div>
-  );
+  )
+}
+
+interface ProjectionStatusIconProp {
+  status: string
+}
+
+export function ProjectionStatusIcon({
+  status
+}: ProjectionStatusIconProp){
+  return <></>
 }

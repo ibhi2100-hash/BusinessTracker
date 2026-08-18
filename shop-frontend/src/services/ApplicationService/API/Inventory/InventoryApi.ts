@@ -30,14 +30,14 @@ export class InventoryApi {
         
         await app.domain.kernel.execute(command)
     }
-    async receiveStock(){
+    async receiveStock(request){
 
     }
 
-    async adjust(){
+    async adjust(request){
 
     }
-    async transfer(){
+    async transfer(reques){
         
     }
 }

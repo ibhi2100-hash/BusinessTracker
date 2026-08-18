@@ -26,7 +26,7 @@ interface Props {
   onClear?: () => void;
 }
 
-interface Props {
+interface EntryProps {
   entry: LogEntry;
 }
 
@@ -227,7 +227,7 @@ export function RebuildLogHeader({
 
 export function RebuildLogEntry({
   entry,
-}: Props) {
+}: EntryProps) {
 
   const config = getLogConfig(entry);
 

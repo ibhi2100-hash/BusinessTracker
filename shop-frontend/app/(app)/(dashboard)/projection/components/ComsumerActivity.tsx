@@ -35,15 +35,13 @@ export function ConsumerActivityPanel({
 }
 
 interface ConsumerRowProps {
+  key: string;
   consumer: ConsumerActivity;
 }
 
 function ConsumerRow({
   consumer,
 }: ConsumerRowProps) {
-  // render consumer.status,
-  // consumer.processedEvents,
-  // consumer.eventType,
-  // consumer.lastDuration,
-  // consumer.error
+  return <>
+  </>
 }

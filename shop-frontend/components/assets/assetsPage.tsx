@@ -22,8 +22,6 @@ import {
 
 import { useDepreciationPreview } from "@/hooks/liveDepreciation";
 import { formatCurrency } from "@/lib/format";
-
-import { eventService } from "@/src/services/eventService";
 import { OpeningEventType } from "@business/shared-types";
 import { financeEventType } from "@business/shared-types";
 import { nanoid } from "nanoid";
@@ -83,27 +81,7 @@ export default function AddAssetPage({
     try {
       setLoading(true);
 
-      await eventService.create({
-        aggregateType:
-          financeEventType.ASSET_ADDED,
-
-        aggregateId: nanoid(),
-
-        type:
-          mode === "OPENING"
-            ? OpeningEventType.OPENING_ASSET
-            : financeEventType.ASSET_ADDED,
-
-        payload: {
-          ...data,
-          assetType:
-            mode === "OPENING"
-              ? "OPENING"
-              : "PURCHASE",
-        },
-
-        mode,
-      });
+      
 
       toast.success(
         "Asset added successfully"

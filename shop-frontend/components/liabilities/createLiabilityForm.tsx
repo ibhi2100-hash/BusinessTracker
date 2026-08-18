@@ -20,7 +20,6 @@ import {
   CreateLiabilityInput,
 } from "@/schemas/liabilities.schema";
 
-import { eventService } from "@/src/services/eventService";
 import { OpeningEventType, financeEventType} from "@business/shared-types"
 import { AggregateType } from "@/offline/domain/aggregate";
 
@@ -60,26 +59,6 @@ export function CreateLiabilityForm({
   ) => {
     try {
       setLoading(true);
-
-      await eventService.create({
-        aggregateType: AggregateType.LIABILITY,
-        aggregateId: nanoid(),
-
-        type:
-          mode === "OPENING"
-            ? OpeningEventType.OPENING_LIABILITIES
-            : financeEventType.LIABILITY_ADDED,
-
-        payload: {
-          ...data,
-          type:
-            mode === "OPENING"
-              ? "OPENING"
-              : "LIVE",
-        },
-
-        mode,
-      });
 
       toast.success(
         "Liability created successfully"

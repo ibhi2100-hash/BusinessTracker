@@ -38,7 +38,7 @@ export function BusinessProvider({ children }: { children: React.ReactNode }) {
   }, [app]);
 
   const setBranchId = async (newBranchId: string) => {
-    await app.context.setActiveBranch(newBranchId);
+    await app.context.setActiveBranch();
     setBranchIdState(newBranchId);
   };
 

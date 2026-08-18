@@ -1,4 +1,4 @@
-import { BaseEvent } from "@business/shared-types";
+import { DomainEvent } from "@business/shared-types";
 export declare const DashboardSnapshotReducer: {
     aggregateType: string;
     initialState(): {
@@ -7,5 +7,5 @@ export declare const DashboardSnapshotReducer: {
         inventoryValue: number;
         profit: number;
     };
-    reduce(current: any, event: BaseEvent): any;
+    reduce(current: any, event: DomainEvent<any>): any;
 };

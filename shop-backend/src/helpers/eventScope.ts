@@ -1,7 +1,6 @@
-import { BaseEvent } from "@business/shared-types";
+import { DomainEvent } from "@business/shared-types";
 
-export function getEventScope(event: BaseEvent) {
-  if (event.scope) return event.scope;
+export function getEventScope(event: DomainEvent) {
 
   if (event.branchId) {
     return "BRANCH";

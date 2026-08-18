@@ -14,8 +14,4 @@ export class SQLiteKnownNodeRepository {
     async setCurrentBusiness(businessId: string){
 
     }
-
-    async getCurrent(): Promise<KnownBusiness | null>  {
-
-    }
 }

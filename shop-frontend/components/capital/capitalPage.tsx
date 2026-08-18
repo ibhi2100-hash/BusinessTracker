@@ -141,10 +141,7 @@ export default function CashflowTable({
       return;
 
     await app.capital.withdrawCapital({
-        type:
-          mode === "OPENING"
-            ? financeEventType.OPENING_CAPITAL
-            : financeEventType.CASH_ADDED,
+        type: financeEventType.CAPITAL_DRAWINGS,
 
         aggregateType:
           AggregateType.CAPITAL_ACCOUNT,

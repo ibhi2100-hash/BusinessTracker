@@ -1,7 +1,6 @@
 import { BusinessPreparedStatementManager } from "./PreparedStatementManager";
 import { BranchStatements } from "./branch/BranchStatements";
 import { BusinessStatements } from "./business/BusinessStatements";
-import { EmployeesStatements } from "./employees/EmployeesStatements";
 import { EventStatements } from "./events/EventStatements";
 import { InventoryStatements } from "./inventory/InventoryStatements";
 import { ProductStatements } from "./products/ProductStatements";
@@ -20,7 +19,6 @@ export class BusinessStatementRegistry {
     readonly ledger: LedgerStatements;
     readonly business: BusinessStatements;
     readonly branches: BranchStatements;
-    readonly employees: EmployeesStatements;
     readonly dashboard: DashboardStatements;
     readonly report: ReportStatements
     readonly logicClock: LogicClockStatements
@@ -48,10 +46,7 @@ export class BusinessStatementRegistry {
         
         this.branches =
             new BranchStatements(manager);
-
-        this.employees = 
-            new EmployeesStatements(manager);
-
+            
         this.dashboard  = 
             new DashboardStatements(manager);
 

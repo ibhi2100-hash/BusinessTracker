@@ -25,8 +25,8 @@ export class FrontendBusinessContext implements BusinessContextProvider {
   }
 
   /** Call this when the user switches branch */
-  async setActiveBranch(branchId: string): Promise<void> {
-    await this.repository.setActiveBranch(branchId);
+  async setActive(branchId: string): Promise<void> {
+    await this.repository.setCurrentBranch(branchId);
     this.branchId = branchId;
   }
 

@@ -122,7 +122,7 @@ export function RebuildProgress({
   );
 }
 
-interface Props {
+interface ProgressHeaderProps {
   status: RebuildProgressStatus;
   percentage: number;
 }
@@ -130,7 +130,7 @@ interface Props {
 export function RebuildProgressHeader({
   status,
   percentage,
-}: Props) {
+}: ProgressHeaderProps) {
 
   const config = getStatusConfig(status);
 
@@ -281,7 +281,7 @@ function getStatusConfig(
   }
 }
 
-interface Props {
+interface ProgressBarProps {
   percentage: number;
   status: RebuildProgressStatus;
 }
@@ -289,7 +289,7 @@ interface Props {
 export function RebuildProgressBar({
   percentage,
   status,
-}: Props) {
+}: ProgressBarProps) {
 
   const completed =
     status === "COMPLETED";

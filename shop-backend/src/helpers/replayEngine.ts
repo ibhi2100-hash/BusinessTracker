@@ -1,7 +1,7 @@
-import { BaseEvent } from "@business/shared-types";
+import { DomainEvent } from "@business/shared-types";
 import { deterministicSort} from "./deterministicSort.js"
 
-export function replay(events: BaseEvent[], reducer: Function) {
+export function replay(events: DomainEvent[], reducer: Function) {
   const sorted = deterministicSort(events);
 
   let state: any = null;

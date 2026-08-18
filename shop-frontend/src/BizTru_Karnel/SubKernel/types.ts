@@ -35,30 +35,9 @@ export interface RollbackKernel {
 
 
 
-export interface AggregateRepository {
-
-    load(
-
-        session: BusinessSession,
-
-        aggregateId: string
-
-    ): Promise<AggregateRoot>;
-
-}
 
 
-export interface CommandDispatcher {
 
-    dispatch(
-
-        aggregate: AggregateRoot,
-
-        command: Command
-
-    ): Promise<BaseEvent[]>;
-
-}
 
 export interface EventStore {
 
@@ -81,17 +60,6 @@ export interface ProjectionEngine {
 
 }
 
-export interface SnapshotRepository {
-
-    save(
-
-        session: BusinessSession,
-
-        aggregate: AggregateRoot
-
-    ): Promise<void>;
-
-}
 
 export interface SyncScheduler {
 
@@ -105,27 +73,3 @@ export interface SyncScheduler {
 
 }
 
-export interface LocalEventBus {
-
-    publish(
-
-        events: readonly DomainEvent[]
-
-    ): Promise<void>;
-
-}
-export interface PipelinePhase {
-
-    execute(
-        context: PipelineContext
-    ): Promise<void>;
-
-}
-
-export interface BusinessProvisioner {
-
-    provision(
-        event: DomainEvent
-    ): Promise<void>;
-
-}

@@ -6,11 +6,12 @@ import { Package, Tag, DollarSign } from "lucide-react";
 import { GlassSheet } from "@/components/ui/GlassSheet";
 import { GlassInput } from "@/components/ui/GlassInput";
 import { GlassButton } from "@/components/ui/GlassButton";
+import { LiveProduct } from "@/src/offline/sqlite/businessDatabase/repositories/SQLiteProjectionRepository/SQLiteProductRepository";
 
 interface Props {
   open: boolean;
   mode: "create" | "edit" | "manage";
-  initialData?: Product | null;
+  initialData?: LiveProduct| null;
   loading?: boolean;
   onClose: () => void;
   onSubmit: (data: {

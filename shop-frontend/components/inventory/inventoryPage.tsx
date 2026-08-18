@@ -29,10 +29,10 @@ import { GlassButton } from "../ui/GlassButton";
 import ProductDetailsSheet from "./dialogs/ProductsManagement";
 import { useBranchStore } from "@/src/store/useBranchStore";
 import { inventoryKey } from "@/src/utils/keygenerator";
-import { useInventoryDialogs } from "./hooks/dialogsHooks";
 import { useRouter } from "next/navigation";
 import { useLiveProducts } from "@/hooks/useLiveProducts";
 import { useBusinessContext } from "@/src/context/BusinessContext";
+import { LiveProduct } from "@/src/offline/sqlite/businessDatabase/repositories/SQLiteProjectionRepository/SQLiteProductRepository";
 
 interface InventoryPageProps {
   context: "sell" | "admin";
@@ -62,7 +62,7 @@ export default function InventoryPage({
   // UI STATE
   // -----------------------------
   const [selectedProduct, setSelectedProduct] =
-    useState<inventoryProduct | null>(null);
+    useState<LiveProduct | null>(null);
   const [ loader, setLoading ] = useState(false)
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] =
@@ -121,19 +121,19 @@ const [activeSheet, setActiveSheet] =
   
   };
 
-  const openEdit = (product: inventoryProduct) => {
+  const openEdit = (product: LiveProduct) => {
     setActiveSheet("edit")
     setSelectedProduct(product)
   }
 
-  const openManage = (product: inventoryProduct) => {
+  const openManage = (product: LiveProduct) => {
     setActiveSheet("manage");
     setSelectedProduct(product);
   };
  
  const handleDelete = async (productId: string) => {
   try {
-    await app.onboarding.createBusiness({
+    await app.product.delete({
       aggregateType: AggregateType.PRODUCT,
       aggregateId: productId,
       type: mode === "OPENING" ? OpeningEventType.OPENING_INVENTORY_DELETED : InventoryEventType.PRODUCT_DELETED,
@@ -154,7 +154,7 @@ const handleCheckout = async () => {
     setLoading(true);
 
     for (const item of cart) {
-      await app.onboarding.createBusiness({
+      await app.sales.createSale({
         aggregateType: AggregateType.SALE,
         aggregateId: item.productId,
         type: "SALE_ADDED",
@@ -180,7 +180,7 @@ const handleSell = async (productId: string, quantity: number) => {
   const product = products.find(p => p.id === productId);
   if (!product) return;
 
-  await app.onboarding.createBusiness({
+  await app.sales.createSale({
     aggregateType: AggregateType.SALE,
     aggregateId: productId,
     type: salesEventType.SALE_ADDED,
@@ -204,7 +204,7 @@ const handleReceiveStock = async (
 
   const key = inventoryKey(selectedProduct.id, branchId)
 
-  await app.onboarding.createBusiness({
+  await app.inventory.receiveStock({
     aggregateType:
       AggregateType.INVENTORY,
 
@@ -242,7 +242,7 @@ const handleAdjustStock = async (
 ) => {
   if (!selectedProduct || !branchId) return;
   const key = inventoryKey(selectedProduct.id, branchId)
-  await app.onboarding.createBranch({
+  await app.inventory.adjust({
     aggregateType:
       AggregateType.INVENTORY,
 
@@ -277,7 +277,7 @@ const handleTransferStock = async (
 ) => {
   if (!selectedProduct || !branchId) return;
   const key = inventoryKey(selectedProduct.id, branchId)
-  await app.inventory.createStock({
+  await app.inventory.transfer({
     
 
     aggregateId:
@@ -336,19 +336,6 @@ const handleTransferStock = async (
         })
         toast.success("Product created");
       }
-
-      if (activeSheet === "manage" && selectedProduct) {
-        await app.onboarding.createBusiness({
-          productId: selectedProduct.id,
-          name: data.name,
-          price: data.price,
-          costPrice: data.cost,
-          quantity: data.quantity,
-        })
-
-        toast.success("Product updated");
-      }
-
       setActiveSheet(null)
   } catch (e) {
     console.error(e);
@@ -358,7 +345,7 @@ const handleTransferStock = async (
   }
 };
 
-  function openQuantityModal(product: inventoryProduct): void {
+  function openQuantityModal(product: LiveProduct): void {
     throw new Error("Function not implemented.");
   }
 

@@ -10,9 +10,10 @@ import {
 import { GlassCard } from "@/components/ui/GlassCard";
 import { inventoryProduct } from "@/src/store/inventoryStore";
 import { cn } from "@/lib/utils";
+import { LiveProduct } from "@/src/offline/sqlite/businessDatabase/repositories/SQLiteProjectionRepository/SQLiteProductRepository";
 
 interface SellCardProps {
-  product: inventoryProduct;
+  product: LiveProduct;
 
   disabled?: boolean;
 
@@ -22,7 +23,7 @@ interface SellCardProps {
   ) => void;
 
   onOpenQuantityModal?: (
-    product: inventoryProduct
+    product: LiveProduct
   ) => void;
 }
 

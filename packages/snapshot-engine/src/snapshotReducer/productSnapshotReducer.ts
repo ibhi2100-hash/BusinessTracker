@@ -1,6 +1,6 @@
 import {
   Product,
-  BaseEvent
+  DomainEvent
 } from "@business/shared-types";
 
 import { SnapshotReducer }from "../contracts/SnapshotReducer";
@@ -21,12 +21,12 @@ SnapshotReducer<Product | null> = {
       imageUrl: "",
       isActive: true,
       isDeleted: false,
-      createdAt: new Date(0),
-      updatedAt: new Date(0)
+      createdAt: Date.now(),
+      updatedAt: Date.now()
     };
   },
 
-  reduce(current: any, event: BaseEvent) {
+  reduce(current: any, event: DomainEvent<any>) {
 
     switch (event.type) {
 

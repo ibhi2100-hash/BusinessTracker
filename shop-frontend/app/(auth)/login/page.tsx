@@ -56,9 +56,7 @@ export default function LoginPage() {
         throw new Error(result.message || "Login failed");
       }
       localStorage.setItem("accessToken", result.accessToken);
-      const authRepo = new SQLiteAuthRepository();
-      useAuthStore.getState().setUser(result.user);
-      await authRepo.upsert(result.user.id, result.user);
+
 
       login(
         result.user,

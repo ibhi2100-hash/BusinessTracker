@@ -13,7 +13,6 @@ import {
   RepayLiabilityInput,
 } from "@/schemas/repayliability.schema";
 
-import { eventService } from "@/src/services/eventService";
 import { financeEventType } from "@business/shared-types"
 import { AggregateType } from "@/offline/domain/aggregate";
 
@@ -60,28 +59,7 @@ export function RepayLiabilityModal({
     try {
       setPending(true);
 
-      await eventService.create({
-        aggregateType:
-          AggregateType.LIABILITY,
-
-        aggregateId: liabilityId,
-
-        type:
-          financeEventType.LIABILITY_REPAYMENT,
-
-        mode: "LIVE",
-
-        payload: {
-          amount: data.amount,
-
-          paymentDate:
-            data.paymentDate
-              ? new Date(
-                  data.paymentDate
-                )
-              : new Date(),
-        },
-      });
+  
 
       toast.success(
         "Liability repayment recorded"

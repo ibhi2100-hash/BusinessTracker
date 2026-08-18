@@ -1,5 +1,4 @@
 import { QueryRunner } from "@/src/storage/queryRunner/QueryRunner";
-import { QueryExecutor } from "../../queryExecutor/QueryExecutor";
 import { migrations } from "../migrations";
 import { TransactionManager } from "@/src/storage/transaction/TransactionManager";
 

@@ -1,6 +1,6 @@
 import {
   Inventory,
-  BaseEvent
+  DomainEvent
 } from "@business/shared-types";
 
 import { SnapshotReducer } from "../contracts/SnapshotReducer";
@@ -14,7 +14,7 @@ SnapshotReducer<Inventory | null> = {
     return null;
   },
 
-  reduce(current: any, event: BaseEvent) {
+  reduce(current: any, event: DomainEvent<any>) {
 
     switch (event.type) {
 

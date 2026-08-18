@@ -6,12 +6,9 @@ import { EventStored } from "@/src/BizTru_Karnel/EventStore/EventStore";
 import { KernelExecutionPipeline } from "@/src/BizTru_Karnel/KernelExecutionPipeline/KernelExecutionPipeline";
 import { BusinessApplication } from "@/src/Composer/BusinessApplicationComposer";
 import { ApplicationContext } from "@/src/Composer/context/ApplicationContext";
-import { BusinessBusesRegistry } from "@/src/offline/sqlite/businessDatabase/BusinessEventBus/BusinessBusesRegistry";
 import { BusinessDomain } from "@/src/offline/sqlite/businessDatabase/domain/BusinessDomain";
 import { BusinessMigrationRunner } from "@/src/offline/sqlite/businessDatabase/engine/MigrationManager";
 import { BusinessRepositoryRegistry } from "@/src/offline/sqlite/businessDatabase/repositories/RepositoryRegistry";
-import { BusinessServiceRegistry } from "@/src/offline/sqlite/businessDatabase/services/BusinessServiceRegistry";
-import { BusinessStatementsDefinitions } from "@/src/offline/sqlite/businessDatabase/statements/BusinessStatementsDefinition";
 import { BusinessPreparedStatementManager } from "@/src/offline/sqlite/businessDatabase/statements/PreparedStatementManager";
 import { BusinessStatementRegistry } from "@/src/offline/sqlite/businessDatabase/statements/StatementRegistry";
 import { BusinessStorage } from "@/src/offline/sqlite/businessDatabase/storage/BusinessStorage";
@@ -203,16 +200,12 @@ implements Lifecycle {
     const kernel = new DefaultBusinessKernel(
         pipeline
     )
-    
-    const services = new BusinessServiceRegistry()
-        
+
     const domain = new BusinessDomain(
         executionContext,
         commandFactory,
         kernel,
         eventbus,
-        services,
-        bus
     )
     return {
         context,
@@ -224,8 +217,7 @@ implements Lifecycle {
         storage: BusinessStorage,
         domain: BusinessDomain
     ): Promise<BusinessSynchronization> {
-        const buses = new BusinessBusesRegistry()
-        return new BusinessSynchronization(buses)
+        return new BusinessSynchronization()
    }
 
    private async createProjectionBus(){
