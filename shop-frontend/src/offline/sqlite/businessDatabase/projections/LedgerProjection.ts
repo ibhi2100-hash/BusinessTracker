@@ -16,8 +16,9 @@ implements EventConsumer<DomainEvent> {
    async handle(events: readonly DomainEvent<any>[]): Promise<void> {
         for(const event of events){
             const entries = generateLedgerEntries(event);
+            console.log("This are the entries to be added to ledger table: ",entries)
             await this.repostory.append(entries)
-            changeNotifier.notify(["ledger_entries"])
+            changeNotifier.notify(["ledger"])
         }
     }
 }

@@ -47,6 +47,11 @@ export const LedgerStatementDefinition: StatementDefinition[] = [
   {
     key: ledgerKeys.verfifyEvent,
     sql: SQL.VERIFY_EVENT
+  },
+
+  {
+    key: ledgerKeys.getDashboard,
+    sql: SQL.GET_DASHBOARD
   }
 
 ];

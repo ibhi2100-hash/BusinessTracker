@@ -31,7 +31,6 @@ export class ProductApi {
        }
 
        const app = await this.manager.current()
-       console.log("This is the Current Business Runtime: ", app)
        const command = await app.domain.commandFactory.create(productIntent);
 
        await app.domain.kernel.execute(command)

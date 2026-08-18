@@ -59,4 +59,10 @@ export class LedgerStatements {
     )
   }
 
+  get dashboard(){
+    return this.manager.get(
+      ledgerKeys.getDashboard
+    )
+  }
+
 }

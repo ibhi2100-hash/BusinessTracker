@@ -45,7 +45,7 @@ function generateLedgerEntries(event) {
         /**
          * INVENTORY (Opening or Purchase)
          */
-        case shared_types_2.OpeningEventType.OPENING_INVENTORY_CREATED: {
+        case shared_types_2.InventoryEventType.INVENTORY_ADDED: {
             const value = payload.costPrice * payload.quantity;
             if (event.mode === "OPENING") {
                 // ✅ Opening balance — no cash movement

@@ -41,11 +41,6 @@ implements PreparedStatement {
                     returnValue: "resultRows"
                 }
             );
-        console.log("query response for", this.key, {
-            sql: this.sql,
-            bind: params,
-            result: response.result
-        });
         return response.result?.resultRows ?? [];
 
     }

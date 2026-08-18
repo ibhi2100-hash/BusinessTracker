@@ -9,6 +9,8 @@ import { PreparedStatementManager } from "../../PreparedStatement/PreparedStatem
 import { LogicClockStatements } from "./logicClock/logicClockStatements"
 import { SalesStatement } from "./sales/salesStatements";
 import { LedgerStatements } from "./ledger/LedgerStatements";
+import { DashboardStatements } from "./dashboard/dashboardStatements";
+import { ReportStatements } from "./report/reportStatements";
 
 export class BusinessStatementRegistry {
     readonly events: EventStatements;
@@ -19,6 +21,8 @@ export class BusinessStatementRegistry {
     readonly business: BusinessStatements;
     readonly branches: BranchStatements;
     readonly employees: EmployeesStatements;
+    readonly dashboard: DashboardStatements;
+    readonly report: ReportStatements
     readonly logicClock: LogicClockStatements
 
     constructor(
@@ -47,6 +51,12 @@ export class BusinessStatementRegistry {
 
         this.employees = 
             new EmployeesStatements(manager);
+
+        this.dashboard  = 
+            new DashboardStatements(manager);
+
+        this.report = 
+            new ReportStatements(manager)
 
         this.logicClock = 
             new LogicClockStatements(manager)

@@ -129,4 +129,7 @@ async verifyEvent(
 
   return totals.totalDebits === totals.totalCredits;
 }
+  async getDashboard(branchId: string): Promise<any> {
+    return await this.statements.dashboard.query([branchId])
+  }
 }

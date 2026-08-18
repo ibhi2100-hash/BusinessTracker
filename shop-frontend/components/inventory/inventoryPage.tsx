@@ -56,9 +56,8 @@ export default function InventoryPage({
   const app = useApplication()
   const router = useRouter()
   const { businessId, branchId, setBranchId, loading: ctxLoading } = useBusinessContext()
-  console.log("This is the busines and branchId i get from business Conexts BusinessId: ", businessId, "BranchId: ", branchId)
-  const { products, loading } = useLiveProducts(branchId)
-  console.log("This are the products return from database: ", products)
+  const { data, loading } = useLiveProducts(branchId)
+  const products = data
   // -----------------------------
   // UI STATE
   // -----------------------------

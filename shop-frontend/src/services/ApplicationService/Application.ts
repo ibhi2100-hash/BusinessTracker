@@ -9,9 +9,13 @@ import { RebuildApi } from "./API/rebuild/RebuildApi";
 import { ContextApi } from "./API/context/context";
 import { CapitalApi } from "./API/capital/capitalApi";
 import { BranchApi } from "./API/branch/branchApi";
+import { DashboardApi } from "./API/dashboard/DashboradApi";
+import { ReportApi } from "./API/report/ReportApi";
+import { BusinessApi } from "./API/business/BusinessApi";
 
 export class Application {
     readonly onboarding: OnboardingApi;
+    readonly business: BusinessApi;
     readonly branch: BranchApi;
     readonly product: ProductApi;
     readonly inventory: InventoryApi;
@@ -20,7 +24,10 @@ export class Application {
     readonly eventStore: EventStoreApi;
     readonly rebuild: RebuildApi;
     readonly context: ContextApi;
-    readonly capital: CapitalApi
+    readonly capital: CapitalApi;
+    readonly dashboard: DashboardApi;
+    readonly report: ReportApi;
+
 
     
     constructor(
@@ -74,6 +81,19 @@ export class Application {
             new CapitalApi(
                 this.manager
             )
-        
+
+        this.dashboard = 
+            new DashboardApi(
+                this.manager
+            )
+
+        this.report = 
+            new ReportApi(
+                this.manager
+            )
+        this.business = 
+            new BusinessApi(
+                this.manager
+            )
     }
 }

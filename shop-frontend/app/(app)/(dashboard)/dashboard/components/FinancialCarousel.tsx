@@ -10,9 +10,15 @@ import {
 
 import { MetricCard } from "@/components/ui/MetricCard";
 import { useDashboardStore } from "@/src/store/DashboardStore";
+import { useLiveDashboard } from "@/hooks/useLiveDashboard";
+import { useBusinessContext } from "@/src/context/BusinessContext";
 
 export function FinancialCarousel() {
-  const summary = useDashboardStore((s) => s.summary);
+   const { businessId, branchId, setBranchId, loading: ctxLoading } = useBusinessContext()
+  const  { data } =  useLiveDashboard(branchId)
+  const summary = data
+
+
 
   if (!summary) {
     return (
@@ -57,7 +63,7 @@ export function FinancialCarousel() {
     {
       id: "cashAtHand",
       title: "Cash at Hand",
-      value: `₦${summary.cashAtHand.toLocaleString()}`,
+      value: `₦${summary.cash.toLocaleString()}`,
       trend: "Available balance",
       icon: (
         <CreditCard className="w-5 h-5" />
@@ -79,7 +85,7 @@ export function FinancialCarousel() {
     {
       id: "liabilities",
       title: "Liabilities",
-      value: `₦${summary.outstandingLiabilities.toLocaleString()}`,
+      value: `₦${summary.liabilities.toLocaleString()}`,
       trend: "Outstanding obligations",
       icon: (
         <DollarSign className="w-5 h-5" />

@@ -211,8 +211,6 @@ export default function CashflowTable({
         </GlassCard>
       )}
 
-      <div 
-        className="flex  gap-4">
         <GlassCard
         variant="elevated"
         className="p-5 space-y-4"
@@ -288,7 +286,6 @@ export default function CashflowTable({
           </GlassButton>
         
       </GlassCard>
-      </div>
 
       <div className="space-y-3">
         <h3 className="text-sm text-gray-400">

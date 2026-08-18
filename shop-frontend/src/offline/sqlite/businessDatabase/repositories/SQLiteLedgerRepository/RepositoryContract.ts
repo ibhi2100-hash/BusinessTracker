@@ -44,5 +44,7 @@ export interface LedgerRepository {
   verifyEvent(
     eventId: string
   ): Promise<boolean>;
-
+  getDashboard(
+    branchId: string
+  ): Promise<any>
 }

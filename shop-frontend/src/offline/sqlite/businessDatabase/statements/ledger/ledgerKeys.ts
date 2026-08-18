@@ -14,6 +14,8 @@ export const ledgerKeys = {
 
   getAccountTotals: "ledger_get_account_totals",
 
-  verfifyEvent: "verify_event"
+  verfifyEvent: "verify_event",
+
+  getDashboard: "get_dashboard"
 
 };

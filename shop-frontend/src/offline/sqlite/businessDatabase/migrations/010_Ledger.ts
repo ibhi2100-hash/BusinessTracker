@@ -6,7 +6,7 @@ export const migration010: Migration = {
 
   async up(q) {
     await q.execute(`
-      CREATE TABLE IF NOT EXISTS ledger_entries (
+      CREATE TABLE IF NOT EXISTS ledger (
         id          TEXT PRIMARY KEY,
         eventId     TEXT NOT NULL,
         businessId  TEXT NOT NULL,
@@ -15,30 +15,30 @@ export const migration010: Migration = {
         account     TEXT NOT NULL,
         direction   TEXT NOT NULL CHECK (direction IN ('DEBIT', 'CREDIT')),
         amount      INTEGER NOT NULL DEFAULT 0,
-        "index"     INTEGER NOT NULL,
+        entryIndex     INTEGER NOT NULL,
         createdAt   INTEGER NOT NULL
       );
 
       CREATE INDEX IF NOT EXISTS idx_ledger_account
-        ON ledger_entries(account);
+        ON ledger(account);
 
       CREATE INDEX IF NOT EXISTS idx_ledger_business
-        ON ledger_entries(businessId);
+        ON ledger(businessId);
 
       CREATE INDEX IF NOT EXISTS idx_ledger_branch
-        ON ledger_entries(branchId);
+        ON ledger(branchId);
 
       CREATE INDEX IF NOT EXISTS idx_ledger_event
-        ON ledger_entries(eventId);
+        ON ledger(eventId);
 
       CREATE INDEX IF NOT EXISTS idx_ledger_created
-        ON ledger_entries(createdAt);
+        ON ledger(createdAt);
 
       CREATE INDEX IF NOT EXISTS idx_ledger_account_created
-        ON ledger_entries(account, createdAt);
+        ON ledger(account, createdAt);
 
       CREATE INDEX IF NOT EXISTS idx_ledger_business_created
-        ON ledger_entries(businessId, createdAt);
+        ON ledger(businessId, createdAt);
     `);
   }
 };

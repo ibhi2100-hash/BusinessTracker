@@ -8,7 +8,7 @@ export const LEDGER_APPEND = `
     account,
     direction,
     amount,
-    index,
+    entryIndex,
     createdAt
   )
   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -24,28 +24,28 @@ export const FIND_BY_EVENT = `
   SELECT *
   FROM ledger
   WHERE eventId = ?
-  ORDER BY index ASC
+  ORDER BY entryIndex ASC
 `;
 
 export const FIND_BY_BUSINESS = `
   SELECT *
   FROM ledger
   WHERE businessId = ?
-  ORDER BY createdAt ASC, index ASC
+  ORDER BY createdAt ASC, entryIndex ASC
 `;
 
 export const FIND_BY_BRANCH = `
   SELECT *
   FROM ledger
   WHERE branchId = ?
-  ORDER BY createdAt ASC, index ASC
+  ORDER BY createdAt ASC, entryIndex ASC
 `;
 
 export const FIND_BY_ACCOUNT = `
   SELECT *
   FROM ledger
   WHERE account = ?
-  ORDER BY createdAt ASC, index ASC
+  ORDER BY createdAt ASC, entryIndex ASC
 `; 
 
 export const GET_ACCOUNT_BALANCE = `
@@ -120,3 +120,39 @@ export const VERIFY_EVENT = `
 
   WHERE eventId = ?
 `;
+
+export const GET_DASHBOARD = `
+  SELECT
+    COALESCE(SUM(
+        CASE
+            WHEN account = 'REVENUE'
+             AND direction = 'CREDIT'
+            THEN amount
+            ELSE 0
+        END
+    ), 0) AS revenue,
+
+    COALESCE(SUM(
+        CASE
+            WHEN account = 'COGS'
+             AND direction = 'DEBIT'
+            THEN amount
+            ELSE 0
+        END
+    ), 0) AS expenses,
+
+    COALESCE(SUM(
+        CASE
+            WHEN account = 'CASH'
+             AND direction = 'DEBIT'
+            THEN amount
+            WHEN account = 'CASH'
+             AND direction = 'CREDIT'
+            THEN -amount
+            ELSE 0
+        END
+    ), 0) AS cashAtHand
+
+FROM ledger
+WHERE branchId = ?;
+`

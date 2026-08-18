@@ -16,13 +16,18 @@ import { BusinessEventTypes } from "@business/shared-types";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { GlassButton } from "@/components/ui/GlassButton";
 import { GlassIcon } from "@/components/ui/GlassIcon";
-import { useBusiness } from "@/src/offline/queryHooks/businessQueryHooks";
 import { useApplication } from "@/src/services/ApplicationService/ApplicationContext";
+import { useBusinessContext } from "@/src/context/BusinessContext";
+import { useBusinessLiveQuery } from "@/hooks/useBusinessLiveQuery";
 
 export function DashboardHeader() {
   const router = useRouter();
 
-  const business = useBusiness()
+  const { businessId, branchId, setBranchId, loading: ctxLoading } = useBusinessContext()
+
+  const { data } = useBusinessLiveQuery(businessId)
+  const business = data
+  const role = "ADMIN"
   const app = useApplication()
   
 
