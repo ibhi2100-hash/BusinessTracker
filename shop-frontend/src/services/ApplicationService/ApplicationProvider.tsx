@@ -34,7 +34,7 @@ export function ApplicationProvider({
 }: Props) {
 
     const router = useRouter();
-
+    const [ ready, setReady ] = useState(false)
     const [application, setApplication] =
         useState<Application | null>(null);
 
@@ -179,15 +179,15 @@ export function ApplicationProvider({
                     return;
                 }
 
+                const { lastRoute } = await result.application.client.repositories.applicationState.getLastRoute();
+
+                router.replace(lastRoute)
+
                 setApplication(
                     result.application
                 );
 
-               const { lastRoute } = await result.application.client.repositories.applicationState.getLastRoute();
-             
-               router.replace(lastRoute)
-
-               
+               setReady(true);
 
             } catch (error) {
 
@@ -207,7 +207,7 @@ export function ApplicationProvider({
 
     }, [router]);
 
-    if (!application) {
+    if (!ready) {
 
         return (
             <BootSplash
