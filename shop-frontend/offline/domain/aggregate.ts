@@ -24,17 +24,21 @@ export interface AggregateRecord {
 
   aggregateType: string;
 
-  version: number;
+  localVersion: number;
+
+  version?: number;
 
   lastEventId?: string;
 
   lastLogicClock?: number;
 
-  lastGlobalPosition: bigint;
+  lastGlobalPosition?: bigint;
 
   lastSnapshotVersion?: number;
 
-  updatedAt: Date;
+  isDeleted?: boolean
+
+  updatedAt: number;
 }
 
 export interface ReplicaMeta {

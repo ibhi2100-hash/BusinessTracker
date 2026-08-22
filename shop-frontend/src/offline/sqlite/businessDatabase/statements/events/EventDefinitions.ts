@@ -1,5 +1,4 @@
 import { StatementDefinition } from "../../../PreparedStatement/StatementRegistry/statementDefinition";
-import { EventStatements } from "./EventStatements";
 import { EventStatementKeys } from "./Keys";
 import * as SQL from "./sql";
 

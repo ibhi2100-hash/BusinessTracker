@@ -14,6 +14,7 @@ import { migration0013 } from "./0013_logicClock";
 import { migration016 } from "./016_Sales";
 
 
+
 export const migrations = [
     migration001,
     migration002,

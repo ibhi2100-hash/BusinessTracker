@@ -10,6 +10,8 @@ import { SQLiteInventoryRepository } from "./SQLiteProjectionRepository/SQLiteIn
 import { SQLiteSalesRepository } from "./SQLiteProjectionRepository/SQLiteSalesRepository";
 import { SQLiteDashboardRepository } from "./DashboardRepository/DashboardRepository";
 import { SQLiteReportRepository } from "./ReportRepository/ReportRepository";
+import { SQLiteOutboxRepository } from "./SQLiteOutboxRepository/SQLiteOutboxRepository";
+import { SQLiteAggregateRepository } from "./SQLiteAggregateRepository/SQLiteAggregateRepository";
 
 
 export class BusinessRepositoryRegistry {
@@ -31,6 +33,10 @@ export class BusinessRepositoryRegistry {
     readonly dashboard: SQLiteDashboardRepository;
 
     readonly report: SQLiteReportRepository;
+
+    readonly outbox: SQLiteOutboxRepository;
+
+    readonly aggregates: SQLiteAggregateRepository;
 
     readonly logicClock: LogicClockRepository;
 
@@ -82,7 +88,16 @@ export class BusinessRepositoryRegistry {
             new SQLiteReportRepository(
                 statements.report
             )
-            
+        
+        this.outbox = 
+            new SQLiteOutboxRepository(
+                statements.outbox
+            )
+
+        this.aggregates = 
+            new SQLiteAggregateRepository(
+                statements.aggregates
+            )
         this.logicClock = 
             new LogicClockRepository(
                 statements.logicClock

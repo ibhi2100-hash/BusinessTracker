@@ -32,6 +32,7 @@ import { ProjectionReset } from "@/src/offline/sqlite/businessDatabase/projectio
 import { SQLiteProjectionResetRepository } from "@/src/offline/sqlite/businessDatabase/repositories/ProjectionResetRepository/ProjectionResetRepository";
 import { LedgerConsumer } from "@/src/offline/sqlite/businessDatabase/projections/LedgerProjection";
 
+
 export class BusinessBootstrapper
 implements Lifecycle {
 
@@ -194,7 +195,8 @@ implements Lifecycle {
         context,
         client.clientBus,
         bus,
-        storage.runtime.transactionManager
+        storage.runtime.transactionManager,
+        storage.repositories
     )
     
     const kernel = new DefaultBusinessKernel(

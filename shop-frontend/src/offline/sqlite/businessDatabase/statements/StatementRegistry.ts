@@ -10,6 +10,9 @@ import { SalesStatement } from "./sales/salesStatements";
 import { LedgerStatements } from "./ledger/LedgerStatements";
 import { DashboardStatements } from "./dashboard/dashboardStatements";
 import { ReportStatements } from "./report/reportStatements";
+import { OutboxStatments } from "./outbox/outboxStatements";
+import { AggregateStatements } from "./aggregates/aggregateStatements";
+
 
 export class BusinessStatementRegistry {
     readonly events: EventStatements;
@@ -20,7 +23,9 @@ export class BusinessStatementRegistry {
     readonly business: BusinessStatements;
     readonly branches: BranchStatements;
     readonly dashboard: DashboardStatements;
-    readonly report: ReportStatements
+    readonly report: ReportStatements;
+    readonly outbox: OutboxStatments;
+    readonly aggregates: AggregateStatements;
     readonly logicClock: LogicClockStatements
 
     constructor(
@@ -53,7 +58,15 @@ export class BusinessStatementRegistry {
         this.report = 
             new ReportStatements(manager)
 
+        this.outbox = 
+            new OutboxStatments(manager)
+
+        this.aggregates = 
+            new AggregateStatements(manager)
+
         this.logicClock = 
             new LogicClockStatements(manager)
+
+        
     }
 }

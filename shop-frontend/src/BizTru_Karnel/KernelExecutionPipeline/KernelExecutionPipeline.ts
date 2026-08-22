@@ -1,13 +1,12 @@
 import { CommandValidator, PipelineKernel } from "../contracts/SubKernelContracts";
-import { SQLiteEventRepository } from "@/src/offline/sqlite/businessDatabase/repositories/SQLiteEventRepository/eventStore";
 import { Command } from "../KarnelTypes/types";
 import { domainEventTransformer } from "../Transformers/DomainEventTransformer";
 import { BusinessClock } from "../logicClockContract";
-import { BusinessContextProvider } from "../../Composer/context/BusinessContextContract"
 import { EventStore } from "../SubKernel/types";
 import { ProjectionEventBus } from "@/src/buses/ProjectionBuses";
 import { TransactionManager } from "@/src/storage/transaction/TransactionManager";
 import { FrontendBusinessContext } from "@/src/Composer/context/BusinessContext";
+import { BusinessRepositoryRegistry } from "@/src/offline/sqlite/businessDatabase/repositories/RepositoryRegistry";
 
 export class KernelExecutionPipeline
 implements PipelineKernel {
@@ -19,35 +18,58 @@ implements PipelineKernel {
         public businessContext: FrontendBusinessContext,
         private readonly clientBus: ProjectionEventBus,
         private readonly businessBus: ProjectionEventBus,
-        private readonly transaction: TransactionManager
+        private readonly transaction: TransactionManager,
+        private readonly repository: BusinessRepositoryRegistry
 
     ) {}
 
     async execute(command: Command): Promise<void> {
 
-        // 1. Validate command
-        await this.validator.validate(command);
+    await this.validator.validate(command);
 
-        // 2. Reserve the next business-local logical clock
-        const logicalClock = await this.clock.next();
+    const logicalClock =
+        await this.clock.next();
 
-        const context = 
-            await this.businessContext.current();
+    const context =
+        await this.businessContext.current();
 
-        // 4. Convert command -> event
-        const event =await domainEventTransformer(
-            command,
-            context,
-            logicalClock
+    const aggregateVersion =
+        await this.repository.aggregates.getVersion(
+            command.aggregateType,
+            command.aggregateId
         );
 
-        console.log("this is the event to be appended: ", event)
+    const expectedAggregateVersion =
+        aggregateVersion.localVersion;
 
-        await this.transaction.run(async () => {
-            await this.eventStore.append([event]);
-            await this.clientBus.publish(event),
-            await this.businessBus.publish(event)
-        })
-        
-    }
+    const event =
+        await domainEventTransformer(
+            command,
+            context,
+            logicalClock,
+            expectedAggregateVersion
+        );
+
+    await this.transaction.run(async () => {
+
+        await this.eventStore.append([event]);
+
+        await this.repository.aggregates.advanceLocal(
+            event.aggregateType,
+            event.aggregateId,
+            event.expectedAggregateVersion,
+            event.id,
+            event.createdAt
+        );
+
+        await this.repository.outbox.insert({
+            id: crypto.randomUUID(),
+            eventId: event.id,
+            createdAt: event.createdAt
+        });
+    });
+
+    await this.clientBus.publish(event);
+    await this.businessBus.publish(event);
+}
 }

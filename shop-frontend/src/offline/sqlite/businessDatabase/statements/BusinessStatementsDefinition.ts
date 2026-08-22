@@ -1,4 +1,5 @@
 import { StatementDefinition } from "../../PreparedStatement/StatementRegistry/statementDefinition";
+import { AggregateStatementDefinition } from "./aggregates/aggregateStatementDefinition";
 import { BranchStatementDefinition } from "./branch/BranchStatementDefintion";
 import { BusinessStatementDefinition } from "./business/BusinessDefiinition";
 import { DashboardStatementDefinition } from "./dashboard/dashboardStatementsDefinition";
@@ -6,6 +7,7 @@ import { EventStatementsDefinition } from "./events/EventDefinitions";
 import { InventoryStatementDefinition } from "./inventory/InventoryStatementDefinition";
 import { LedgerStatementDefinition } from "./ledger/ledgerStatementDefinition";
 import { LogicClockDefinition } from "./logicClock/logicClockDefinition"
+import { OutboxStatementsDefinition } from "./outbox/outboxStatementDefinition";
 import { ProductStatementDefinition } from "./products/productStatementsDefinition";
 import { ReportStatementDefinition } from "./report/reportStatementDefinition";
 import { SalesStatementDefinition } from "./sales/salesStatementDefinition";
@@ -20,5 +22,7 @@ export const BusinessStatementsDefinitions: StatementDefinition[] = [
     ...SalesStatementDefinition,
     ...LedgerStatementDefinition,
     ...DashboardStatementDefinition,
-    ...ReportStatementDefinition
+    ...ReportStatementDefinition,
+    ...OutboxStatementsDefinition,
+    ...AggregateStatementDefinition
 ]

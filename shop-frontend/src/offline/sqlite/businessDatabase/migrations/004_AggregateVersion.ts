@@ -9,11 +9,13 @@ export const migration004: Migration = {
             `
     CREATE TABLE IF NOT EXISTS aggregates (
 
-    id TEXT PRIMARY KEY,
+    id TEXT P bqRIMARY KEY,
 
     aggregateId TEXT NOT NULL,
 
     aggregateType TEXT NOT NULL,
+
+    localVersion INTEGER NOT NULL,
 
     version INTEGER NOT NULL,
 

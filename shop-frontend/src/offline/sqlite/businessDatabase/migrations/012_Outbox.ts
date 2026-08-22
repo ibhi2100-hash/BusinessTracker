@@ -12,7 +12,7 @@ export const migration012: Migration = {
             id TEXT PRIMARY KEY,
 
             eventId              TEXT NOT NULL UNIQUE REFERENCES events(id),
-            status                TEXT NOT NULL DEFAULT 'PENDING',  -- PENDING | IN_FLIGHT | SYNCED | REJECTED
+            status                TEXT NOT NULL DEFAULT 'PENDING',  -- PENDING | IN_FLIGHT | SYNCED | CONFLICT | REJECTED
             retryCount         INTEGER NOT NULL DEFAULT 0,
             maxAttempts          INTEGER NOT NULL DEFAULT 10,
             nextRetryAt         INTEGER,

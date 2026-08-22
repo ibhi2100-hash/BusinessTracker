@@ -1,10 +1,8 @@
 import { Command } from "../KarnelTypes/types";
 import { BusinessEventTypes, DomainEvent } from "@business/shared-types";
 import { BusinessContext } from "../../Composer/context/BusinessContextContract"
-import { getExpectedAggregateVersion } from "../VersionManager/ExpectedAggregationVersion";
 
-export async function domainEventTransformer(command: Command,  context: BusinessContext, logicClock: number):Promise<DomainEvent>{
-const expectedAggregateVersion = await getExpectedAggregateVersion(command.aggregateId)
+export async function domainEventTransformer(command: Command,  context: BusinessContext, logicClock: number, expectedAggregateVersion: number):Promise<DomainEvent>{
     return {
         id: command.id,
         aggregateId: command.aggregateId,
