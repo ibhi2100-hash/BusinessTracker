@@ -5,6 +5,7 @@ import { EventConsumer } from "@business/event-bus";
 import { DomainEvent, salesEventType } from "@business/shared-types";
 import { SalesReducer } from "@business/projection-families";
 import { SQLiteSalesRepository } from "../repositories/SQLiteProjectionRepository/SQLiteSalesRepository";
+import { changeNotifier } from "./changeNoifier";
 
 export class SalesConsumer implements EventConsumer<DomainEvent> {
   readonly name = "sales";
@@ -17,6 +18,7 @@ export class SalesConsumer implements EventConsumer<DomainEvent> {
         case salesEventType.SALE_ADDED: {
           const sale = new SalesReducer().reduce(null, event);
           await this.repository.upsert(sale);
+          changeNotifier.notify(["sales"])
           break;
         }
 

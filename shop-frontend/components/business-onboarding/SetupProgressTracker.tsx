@@ -1,110 +1,58 @@
-// components/business-onboarding/SetupProgressTracker.tsx
 "use client";
 
-import clsx from "clsx";
+import { cn } from "@/lib/utils";
+import { GlassCard } from "@/components/ui/GlassCard";
 
-export const SetupProgressTracker = () => {
-  const percentage = 100;
-  const isComplete = percentage === 100;
+interface Props {
+  percentage?: number;
+}
+
+export function SetupProgressTracker({ percentage = 100 }: Props) {
+  const clamped = Math.min(100, Math.max(0, percentage));
+  const isComplete = clamped === 100;
 
   return (
-    <div
-      className="
-        relative
-        overflow-hidden
-        rounded-[32px]
-        border
-        border-white/10
-        bg-white/[0.08]
-        p-5
-        backdrop-blur-2xl
-        shadow-[0_8px_40px_rgba(0,0,0,0.35)]
-      "
+    <GlassCard
+      variant="elevated"
+      className="relative overflow-hidden border-white/10 p-4 sm:p-5"
     >
+      {/* Reflection */}
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.12),transparent_42%)]" />
 
-      {/* GLASS REFLECTION */}
-      <div
-        className="
-          pointer-events-none
-          absolute
-          inset-0
-          bg-[linear-gradient(120deg,rgba(255,255,255,0.16),transparent_40%)]
-        "
-      />
-
-      {/* CONTENT */}
       <div className="relative z-10">
-
-        <div className="mb-5 flex items-center justify-between">
-
-          <div>
-            <p className="text-sm font-medium text-white">
-              Business Setup
-            </p>
-
-            <p className="mt-1 text-xs text-white/40">
-              Almost ready
+        <div className="mb-4 flex items-center justify-between gap-3 sm:mb-5">
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-white">Business Setup</p>
+            <p className="mt-0.5 text-xs text-white/40">
+              {isComplete ? "Ready to activate" : "Almost ready"}
             </p>
           </div>
 
-          {/* PERCENT */}
           <div
             className="
-              flex
-              h-12
-              w-12
-              items-center
-              justify-center
-              rounded-2xl
-              border
-              border-white/10
-              bg-white/[0.05]
-              backdrop-blur-xl
+              flex h-11 w-11 shrink-0 items-center justify-center
+              rounded-2xl border border-white/10 bg-white/[0.05]
+              sm:h-12 sm:w-12
             "
           >
             <span className="text-sm font-semibold text-white">
-              {percentage}%
+              {clamped}%
             </span>
           </div>
         </div>
 
-        {/* TRACK */}
-        <div
-          className="
-            h-3
-            overflow-hidden
-            rounded-full
-            bg-white/[0.05]
-          "
-        >
+        <div className="h-2.5 overflow-hidden rounded-full bg-white/[0.06] sm:h-3">
           <div
-            style={{ width: `${percentage}%` }}
-            className={clsx(
-              `
-              relative
-              h-full
-              rounded-full
-              bg-white
-              transition-all
-              duration-700
-              `,
-              isComplete &&
-                "shadow-[0_0_20px_rgba(255,255,255,0.8)]"
+            style={{ width: `${clamped}%` }}
+            className={cn(
+              "relative h-full rounded-full bg-white transition-all duration-700",
+              isComplete && "shadow-[0_0_20px_rgba(255,255,255,0.55)]"
             )}
           >
-
-            {/* LIQUID SHINE */}
-            <div
-              className="
-                absolute
-                inset-0
-                bg-[linear-gradient(to_right,transparent,rgba(255,255,255,0.8),transparent)]
-                opacity-60
-              "
-            />
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent,rgba(255,255,255,0.75),transparent)] opacity-50" />
           </div>
         </div>
       </div>
-    </div>
+    </GlassCard>
   );
-};
+}

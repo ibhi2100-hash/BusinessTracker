@@ -29,6 +29,17 @@ implements IProjectionEntityRepository<Inventory> {
 
     }
 
+       async findProductId(productId: string) {
+
+        const rows =
+            await this.statements.findByProductId.query<Inventory>(
+                [productId]
+            );
+
+        return rows[0] ?? null;
+
+    }
+
     async findAll(): Promise<Inventory[]> {
         return await this.statements.update.query();
     }

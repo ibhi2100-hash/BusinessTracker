@@ -17,6 +17,11 @@ export const InventoryStatementDefinition: StatementDefinition[] = [
     {
         key: inventoryKeys.inventoryUpdate,
         sql: SQL.INVENTORY_UPSERT,
+    },
+
+    {
+        key: inventoryKeys.findByProductId,
+        sql: SQL.FIND_BY_PRODUCTID
     }
 
 ];

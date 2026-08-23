@@ -11,11 +11,15 @@ import {
 } from "lucide-react";
 
 import { GlassButton } from "@/components/ui/GlassButton";
+import { GlassCard } from "@/components/ui/GlassCard";
+import { GlassIcon } from "@/components/ui/GlassIcon";
+import { GlassInput } from "@/components/ui/GlassInput";
 import { useApplication } from "@/src/services/ApplicationService/ApplicationContext";
 
 export default function Step2Business() {
   const router = useRouter();
   const app = useApplication();
+
   const [form, setForm] = useState({
     name: "",
     address: "",
@@ -26,6 +30,7 @@ export default function Step2Business() {
 
   const updateField = (key: keyof typeof form, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }));
+    if (error) setError(null);
   };
 
   const handleNext = async () => {
@@ -38,132 +43,152 @@ export default function Step2Business() {
 
     setLoading(true);
     setError(null);
+
     const businessId = crypto.randomUUID();
     const branchId = crypto.randomUUID();
 
     try {
       await app.onboarding.createBusiness({
         id: businessId,
-        name: form.name,
-        address: form.address
-      })
+        name: form.name.trim(),
+        address: form.address.trim(),
+      });
 
       await app.onboarding.createMainBranch({
         id: branchId,
         businessId,
-        name: "MainBranch"
-      })
+        name: "Main Branch",
+      });
 
       router.replace("/onboard");
     } catch (err) {
-    console.error(err);
-
-    if (err instanceof Error) {
-        throw err;
-    }
-
-    throw new Error(String(err));
+      console.error(err);
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Could not create business. Try again."
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="px-4 py-4 max-w-md mx-auto flex flex-col justify-between h-screen">
-      {/* TOP SECTION */}
-      <div>
-        {/* ICON */}
-        <div className="mb-10">
-          <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center backdrop-blur">
-            <Sparkles className="text-white" size={22} />
-          </div>
-        </div>
+    <div className="min-h-[100dvh] bg-neutral-950 text-white">
+      {/* Centered shell: full width on mobile, card on desktop */}
+      <div
+        className="
+          mx-auto flex min-h-[100dvh] w-full max-w-lg flex-col
+          px-4 pt-6
+          pb-[max(1.5rem,env(safe-area-inset-bottom))]
+          sm:px-6
+          sm:pt-10
+          lg:max-w-xl
+          lg:justify-center
+          lg:py-12
+        "
+      >
+        <GlassCard
+          variant="default"
+          className="
+            flex flex-1 flex-col
+            border-white/10
+            p-5
+            sm:p-8
+            lg:flex-none
+            lg:p-10
+          "
+        >
+          {/* TOP */}
+          <div className="flex-1">
+            <GlassIcon size="md" variant="primary">
+              <Sparkles className="w-5 h-5" />
+            </GlassIcon>
 
-        {/* HERO */}
-        <div className="space-y-4 mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
-            <div className="w-2 h-2 bg-green-400 rounded-full" />
-            <span className="text-white/60 text-sm">
-              Business onboarding
-            </span>
-          </div>
+            <div className="mt-8 space-y-4 sm:mt-10">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
+                <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                <span className="text-sm text-white/60">
+                  Business onboarding
+                </span>
+              </div>
 
-          <h1 className="text-[40px] leading-[1.05] font-semibold tracking-tight">
-            Create your
-            <br />
-            business
-          </h1>
+              <h1
+                className="
+                  text-[2rem] font-semibold leading-[1.1] tracking-tight
+                  sm:text-[2.5rem]
+                  lg:text-[2.75rem]
+                "
+              >
+                Create your
+                <br />
+                business
+              </h1>
 
-          <p className="text-white/50 text-[16px] max-w-sm">
-            Set up your workspace to manage inventory, sales and financial
-            activity in one system.
-          </p>
-        </div>
-
-        {/* FORM */}
-        <div className="space-y-4">
-          {/* ERROR */}
-          {error && (
-            <div className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 p-3 rounded-xl">
-              {error}
+              <p className="max-w-md text-[15px] leading-relaxed text-white/50 sm:text-base">
+                Set up your workspace to manage inventory, sales and financial
+                activity in one system.
+              </p>
             </div>
-          )}
 
-          {/* BUSINESS NAME */}
-          <div className="flex items-center gap-3 px-4 py-4 rounded-2xl bg-white/5 border border-white/10">
-            <Building2 size={18} className="text-white/40" />
+            {/* FORM */}
+            <div className="mt-8 space-y-3 sm:mt-10 sm:space-y-4">
+              {error && (
+                <div className="rounded-xl border border-red-500/20 bg-red-500/10 px-3 py-3 text-sm text-red-400">
+                  {error}
+                </div>
+              )}
 
-            <input
-              value={form.name}
-              onChange={(e) => updateField("name", e.target.value)}
-              placeholder="Business name"
-              className="w-full bg-transparent outline-none text-white placeholder:text-white/30"
-            />
+              <GlassInput
+                icon={<Building2 className="w-4 h-4" />}
+                value={form.name}
+                onChange={(e) => updateField("name", e.target.value)}
+                placeholder="Business name"
+                autoComplete="organization"
+                disabled={loading}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleNext();
+                }}
+              />
+
+              <GlassInput
+                icon={<MapPin className="w-4 h-4" />}
+                value={form.address}
+                onChange={(e) => updateField("address", e.target.value)}
+                placeholder="Business address (optional)"
+                autoComplete="street-address"
+                disabled={loading}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleNext();
+                }}
+              />
+            </div>
           </div>
 
-          {/* ADDRESS */}
-          <div className="flex items-center gap-3 px-4 py-4 rounded-2xl bg-white/5 border border-white/10">
-            <MapPin size={18} className="text-white/40" />
+          {/* CTA — sticky feel on mobile, natural on desktop */}
+          <div className="mt-10 space-y-3 sm:mt-12">
+            <GlassButton
+              variant="primary"
+              disabled={loading}
+              onClick={handleNext}
+              className="h-14 w-full rounded-2xl text-base font-medium"
+              icon={
+                loading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <ArrowRight className="w-4 h-4" />
+                )
+              }
+            >
+              {loading ? "Creating..." : "Continue"}
+            </GlassButton>
 
-            <input
-              value={form.address}
-              onChange={(e) => updateField("address", e.target.value)}
-              placeholder="Business address (optional)"
-              className="w-full bg-transparent outline-none text-white placeholder:text-white/30"
-            />
+            <p className="text-center text-sm text-white/30">
+              Secure local-first business setup
+            </p>
           </div>
-        </div>
+        </GlassCard>
       </div>
-
-      {/* BOTTOM CTA */}
-      <div className="space-y-4">
-        <GlassButton 
-          variant="primary"
-          disabled={loading}
-          onClick={handleNext}
-          className="w-full h-14 rounded-2xl font-medium flex items-center justify-center gap-2 disabled:opacity-60 active:scale-[0.98]"
-          >
-            {loading ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Creating...
-              </>
-            ) : (
-              <>
-                Continue 
-                <ArrowRight size={18} />
-              </>
-            )}
-        </GlassButton>
-        
-      
-
-        <p className="text-center text-white/30 text-sm">
-          Secure local-first business setup
-        </p>
-        </div>
-      <div/>
     </div>
-    
   );
 }

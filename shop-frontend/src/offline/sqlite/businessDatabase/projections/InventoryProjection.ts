@@ -1,5 +1,5 @@
 import { EventConsumer } from "@business/event-bus";
-import {  DomainEvent, InventoryEventType } from "@business/shared-types";
+import {  DomainEvent, InventoryEventType, salesEventType } from "@business/shared-types";
 import {  InventoryReducer } from "@business/projection-families";
 import { SQLiteInventoryRepository } from "../repositories/SQLiteProjectionRepository/SQLiteInventoryRepository";
 import { changeNotifier } from "./changeNoifier";
@@ -22,7 +22,17 @@ implements EventConsumer<DomainEvent> {
                     await this.repostory.upsert(inventory)
                     changeNotifier.notify(["inventories"])
                     break
+
+                case salesEventType.SALE_ADDED:
+                    const currentInventory = await this.repostory.findProductId(event.payload.productId);
+
+                    const saleInventory = new InventoryReducer().reduce(currentInventory, event);
+
+                    await this.repostory.upsert(saleInventory);
+
+                    changeNotifier.notify(["inventories", "sales"])
             }
+
 
         }
     }

@@ -19,6 +19,10 @@ export class InventoryStatements {
         );
     }
 
+    get findByProductId(){
+        return this.manager.get(inventoryKeys.findByProductId)
+    }
+
     get delete() {
         return this.manager.get(
             inventoryKeys.inventoryDelete

@@ -30,3 +30,9 @@ WHERE id = ?
 LIMIT 1
 `;
 
+export const FIND_BY_PRODUCTID = `
+SELECT *
+FROM inventories
+WHERE productId = ?
+LIMIT 1
+`;
