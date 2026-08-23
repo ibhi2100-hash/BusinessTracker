@@ -38,6 +38,8 @@ export declare const OpeningEventType: {
 };
 export declare const salesEventType: {
     SALE_ADDED: string;
+    SALE_VOIDED: string;
+    SALE_REFUNDED: string;
 };
 export declare const userEventTypes: {
     CREATE_USER: string;

@@ -7,40 +7,39 @@ export const migration016 : Migration = {
 
         await q.execute(`
             CREATE TABLE IF NOT EXISTS sales (
+  id            TEXT PRIMARY KEY NOT NULL,
+  businessId    TEXT,
+  branchId      TEXT,
+  productId     TEXT NOT NULL,
+  productName   TEXT,
+  quantity      INTEGER NOT NULL DEFAULT 0,
+  price         REAL NOT NULL DEFAULT 0,
+  costPrice     REAL NOT NULL DEFAULT 0,
+  total         REAL NOT NULL DEFAULT 0,
+  profit        REAL NOT NULL DEFAULT 0,
+  paymentMethod TEXT,
+  customerRef   TEXT,
+  note          TEXT,
+  status        TEXT NOT NULL DEFAULT 'completed', -- completed | voided | refunded
+  saleGroupId   TEXT,
+  mode          TEXT NOT NULL DEFAULT 'LIVE',
+  createdAt     TEXT NOT NULL,
+  updatedAt     TEXT
+);
 
-                id TEXT PRIMARY KEY,
+CREATE INDEX IF NOT EXISTS idx_sales_branch_created
+  ON sales (branchId, createdAt);
 
-                businessId TEXT,
+CREATE INDEX IF NOT EXISTS idx_sales_product
+  ON sales (productId);
 
-                branchId TEXT,
+CREATE INDEX IF NOT EXISTS idx_sales_group
+  ON sales (saleGroupId);
 
-                productId TEXT,
-
-                quantity INTEGER DEFAULT 0,
-
-                price INTEGER DEFAULT 0,
-
-                costPrice INTEGER DEFAULT 0,
-
-                total INTEGER DEFAULT 0,
-
-                createdAt TEXT NOT NULL,
-
-                updatedAt TEXT
-            );
-
-            CREATE INDEX IF NOT EXISTS idx_sales_business_branch
-            ON sales(businessId, branchId);
-
-            CREATE INDEX IF NOT EXISTS idx_sales_product
-            ON sales(productId);
-
-            CREATE INDEX IF NOT EXISTS idx_sales_created
-            ON sales(createdAt);
-
-            CREATE INDEX IF NOT EXISTS idx_sales_product_created
-            ON sales(productId, createdAt);
-        `);
+CREATE INDEX IF NOT EXISTS idx_sales_status
+  ON sales (status);
+    `
+    );
 
     }
 

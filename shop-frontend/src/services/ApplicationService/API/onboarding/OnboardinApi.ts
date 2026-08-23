@@ -55,9 +55,9 @@ export class OnboardingApi {
         await app.domain.kernel.execute(command)
     }
 
-    async activateBusiness(){
+    async activateBusiness(businessId: string){
         const intent: CommandIntent<any> ={ 
-            aggregateId: crypto.randomUUID(),
+            aggregateId: businessId,
             aggregateType: AggregateType.BUSINESS,
             type: BusinessEventTypes.BUSINESS_ACTIVATION,
             mode:"OPENING",

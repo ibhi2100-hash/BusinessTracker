@@ -1,34 +1,49 @@
+// ============================================================
+// salesStatements.ts
+// ============================================================
 import { PreparedStatementManager } from "../../../PreparedStatement/PreparedStatementManager";
 import { salesKeys } from "./salesStatementKeys";
 
 export class SalesStatement {
+  constructor(private readonly manager: PreparedStatementManager) {}
 
-    constructor(
-        private readonly manager: PreparedStatementManager
-    ) {}
+  get upsert() {
+    return this.manager.get(salesKeys.salesUpsert);
+  }
 
-    get upsert() {
-        return this.manager.get(
-            salesKeys.salesUpsert
-        );
-    }
+  get findById() {
+    return this.manager.get(salesKeys.findById);
+  }
 
-    get findById() {
-        return this.manager.get(
-            salesKeys.findById
-        );
-    }
+  get delete() {
+    return this.manager.get(salesKeys.salesDelete);
+  }
 
-    get delete() {
-        return this.manager.get(
-            salesKeys.salesDelete
-        );
-    }
+  get update() {
+    return this.manager.get(salesKeys.salesUpdate);
+  }
 
-    get update() {
-        return this.manager.get(
-            salesKeys.salesUpdate
-        );
-    }
+  get findAll() {
+    return this.manager.get(salesKeys.findAll);
+  }
 
+  get findByBranch() {
+    return this.manager.get(salesKeys.findByBranch);
+  }
+
+  get findByProduct() {
+    return this.manager.get(salesKeys.findByProduct);
+  }
+
+  get findByDateRange() {
+    return this.manager.get(salesKeys.findByDateRange);
+  }
+
+  get findByGroup() {
+    return this.manager.get(salesKeys.findByGroup);
+  }
+
+  get summaryByDateRange() {
+    return this.manager.get(salesKeys.summaryByDateRange);
+  }
 }

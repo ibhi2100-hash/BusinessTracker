@@ -1,5 +1,6 @@
 // statements/report/sql.ts
 
+/** Balances (point-in-time) + period P&L */
 export const REPORT_PERIOD_SUMMARY = `
   WITH balances AS (
     SELECT
@@ -7,7 +8,14 @@ export const REPORT_PERIOD_SUMMARY = `
       SUM(CASE WHEN direction = 'DEBIT' THEN amount ELSE -amount END) AS balance
     FROM ledger
     WHERE branchId = ?
-      AND account IN ('CASH','BANK','INVENTORY','LIABILITIES','OWNER_CAPITAL','OWNER_DRAWINGS')
+      AND account IN (
+        'CASH',
+        'BANK',
+        'INVENTORY',
+        'LIABILITIES',
+        'OWNER_CAPITAL',
+        'OWNER_DRAWINGS'
+      )
     GROUP BY account
   ),
   period AS (
@@ -58,4 +66,72 @@ export const REPORT_YEARLY_BREAKDOWN = `
     AND createdAt <= ?
   GROUP BY year
   ORDER BY year ASC
+`;
+
+/** Single metric helpers */
+export const REPORT_PERIOD_REVENUE = `
+  SELECT COALESCE(SUM(amount), 0) AS value
+  FROM ledger
+  WHERE branchId = ?
+    AND account = 'REVENUE'
+    AND direction = 'CREDIT'
+    AND createdAt >= ?
+    AND createdAt <= ?
+`;
+
+export const REPORT_PERIOD_COGS = `
+  SELECT COALESCE(SUM(amount), 0) AS value
+  FROM ledger
+  WHERE branchId = ?
+    AND account = 'COGS'
+    AND direction = 'DEBIT'
+    AND createdAt >= ?
+    AND createdAt <= ?
+`;
+
+export const REPORT_PERIOD_EXPENSES = `
+  SELECT COALESCE(SUM(amount), 0) AS value
+  FROM ledger
+  WHERE branchId = ?
+    AND account = 'EXPENSE'
+    AND direction = 'DEBIT'
+    AND createdAt >= ?
+    AND createdAt <= ?
+`;
+
+/** Today from sales projection (optional parallel source) */
+export const REPORT_TODAY_SALES = `
+  SELECT COALESCE(SUM(total), 0) AS value
+  FROM sales
+  WHERE branchId = ?
+    AND status = 'completed'
+    AND createdAt >= ?
+    AND createdAt <= ?
+`;
+
+export const REPORT_TODAY_PROFIT = `
+  SELECT COALESCE(SUM(profit), 0) AS value
+  FROM sales
+  WHERE branchId = ?
+    AND status = 'completed'
+    AND createdAt >= ?
+    AND createdAt <= ?
+`;
+
+/** Point-in-time balances only */
+export const REPORT_BALANCES = `
+  SELECT
+    account,
+    SUM(CASE WHEN direction = 'DEBIT' THEN amount ELSE -amount END) AS balance
+  FROM ledger
+  WHERE branchId = ?
+    AND account IN (
+      'CASH',
+      'BANK',
+      'INVENTORY',
+      'LIABILITIES',
+      'OWNER_CAPITAL',
+      'OWNER_DRAWINGS'
+    )
+  GROUP BY account
 `;

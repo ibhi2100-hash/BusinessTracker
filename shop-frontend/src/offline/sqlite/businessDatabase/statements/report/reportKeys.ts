@@ -8,8 +8,15 @@ export const reportKeys = {
   monthlyBreakdown: "report_monthly_breakdown",
   yearlyBreakdown: "report_yearly_breakdown",
 
-  // Individual helpers (optional, if you want finer control)
+  // Individual helpers
   periodRevenue: "report_period_revenue",
   periodCogs: "report_period_cogs",
   periodExpenses: "report_period_expenses",
+
+  // Today (dashboard)
+  todaySales: "report_today_sales",
+  todayProfit: "report_today_profit",
+
+  // Balances only (no period filter)
+  balances: "report_balances",
 } as const;

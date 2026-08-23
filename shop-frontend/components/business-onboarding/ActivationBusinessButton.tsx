@@ -36,7 +36,7 @@ export function ActivateBusinessButton() {
       setLoading(true);
       setError("");
 
-      await app.onboarding.activateBusiness()
+      await app.onboarding.activateBusiness(businessId)
      
       toast.success(
         "Business activated successfully"

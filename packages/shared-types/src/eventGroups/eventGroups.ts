@@ -48,7 +48,9 @@ export const OpeningEventType = {
 
 
 export const salesEventType = {
-        SALE_ADDED: "SALE_ADDED"
+        SALE_ADDED: "SALE_ADDED",
+        SALE_VOIDED: "SALE_VOIDED",
+        SALE_REFUNDED: "SALE_REFUNDED"
 }
 
 export const userEventTypes = {

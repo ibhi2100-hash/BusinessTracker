@@ -1,7 +1,6 @@
 import { EventConsumer } from "@business/event-bus";
-import { Business, BusinessEventTypes, DomainEvent } from "@business/shared-types";
-import { SQLiteBusinessRepository } from "../repositories/SQLiteProjectionRepository/SQLiteBusinessRepository";
-import { BusinessReducer } from "@business/projection-families";
+import { DomainEvent } from "@business/shared-types";
+
 import { changeNotifier } from "./changeNoifier";
 import { SQLiteLedgerRepository } from "../repositories/SQLiteLedgerRepository/SQLiteLedgerRepository";
 import { generateLedgerEntries } from "@business/ledger-engine";

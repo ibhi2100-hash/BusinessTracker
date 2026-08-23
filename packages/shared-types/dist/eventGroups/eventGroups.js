@@ -41,7 +41,9 @@ exports.OpeningEventType = {
     OPENING_CASH_ADDED: "OPENING_CASH"
 };
 exports.salesEventType = {
-    SALE_ADDED: "SALE_ADDED"
+    SALE_ADDED: "SALE_ADDED",
+    SALE_VOIDED: "SALE_VOIDED",
+    SALE_REFUNDED: "SALE_REFUNDED"
 };
 exports.userEventTypes = {
     CREATE_USER: "CREATE_USER",
