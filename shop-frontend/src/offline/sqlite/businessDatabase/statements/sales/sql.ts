@@ -12,6 +12,8 @@ INSERT INTO sales (
     quantity,
     price,
     costPrice,
+    unitCostPrice,
+    unitPrice,     
     total,
     profit,
     paymentMethod,
@@ -24,7 +26,7 @@ INSERT INTO sales (
     updatedAt
 )
 VALUES (
-    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
 )
 ON CONFLICT(id)
 DO UPDATE SET
@@ -35,6 +37,8 @@ DO UPDATE SET
     quantity       = excluded.quantity,
     price          = excluded.price,
     costPrice      = excluded.costPrice,
+    unitCostPrice  = excluded.unitCostPrice,
+    unitPrice      = excluded.unitPrice,
     total          = excluded.total,
     profit         = excluded.profit,
     paymentMethod  = excluded.paymentMethod,
@@ -125,3 +129,7 @@ WHERE createdAt >= ?
   AND createdAt <= ?
   AND (? IS NULL OR branchId = ?)
 `;
+
+export const GET_ALL_SALES =   `
+SELECT * FROM sales
+`

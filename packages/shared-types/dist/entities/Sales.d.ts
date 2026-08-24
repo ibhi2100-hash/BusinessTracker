@@ -17,6 +17,8 @@ export interface Sales {
     productName?: string;
     /** Units sold on this line */
     quantity: number;
+    unitCostPrice: number;
+    unitPrice: number;
     /**
      * Unit selling price (₦ per unit).
      * Line revenue = price × quantity  →  stored in `total`

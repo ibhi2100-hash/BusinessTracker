@@ -17,16 +17,15 @@ interface SaleAddedPayload {
   productId: string;
   productName?: string;
   /** Unit sell price */
-  price: number;
-  /**
-   * Either unit cost or line cost — reducer normalises to line cost.
-   * Prefer sending unit cost + quantity; total cost = unitCost * quantity.
-   */
+ 
+  unitCostPrice: number;
+  unitPrice: number;
+
   costPrice: number;
   quantity: number;
   /** Optional precomputed line total (price × quantity) */
-  amount?: number;
-  total?: number;
+  amount : number;
+  total : number;
   paymentMethod?: PaymentMethod;
   customerId?: string;
   customerRef?: string;
@@ -103,22 +102,14 @@ export class SalesReducer
   private onSaleAdded(event: DomainEvent<SaleAddedPayload>): Sales {
     const p = event.payload;
     const quantity = Math.max(0, Math.floor(Number(p.quantity) || 0));
-    const unitPrice = Number(p.price) || 0;
+    const unitPrice = Number(p.unitPrice) || 0;
 
     // Normalise cost to line total
     const rawCost = Number(p.costPrice) || 0;
-    const lineCost = p.costIsLineTotal
-      ? rawCost
-      : rawCost * quantity;
 
-    const total =
-      p.total != null
-        ? Number(p.total)
-        : p.amount != null
-          ? Number(p.amount)
-          : unitPrice * quantity;
+    const total = p.amount
 
-    const profit = total - lineCost;
+    const profit = total - rawCost;
     const now = event.createdAt ?? Date.now();
 
     return {
@@ -130,8 +121,13 @@ export class SalesReducer
       productName: p.productName,
 
       quantity,
-      price: unitPrice,
-      costPrice: lineCost,
+
+      unitCostPrice: p.unitCostPrice,
+      unitPrice: p.unitPrice,
+
+      price: total,
+      costPrice: rawCost,
+      
       total,
       profit,
 

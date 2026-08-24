@@ -12,4 +12,5 @@ export const salesKeys = {
   findByDateRange: "sales_find_by_date_range",
   findByGroup: "sales_find_by_group",
   summaryByDateRange: "sales_summary_by_date_range",
+  getAllSales: "get_all_sales"
 } as const;

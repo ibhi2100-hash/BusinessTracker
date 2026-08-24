@@ -46,4 +46,8 @@ export class SalesStatement {
   get summaryByDateRange() {
     return this.manager.get(salesKeys.summaryByDateRange);
   }
+
+  get allSales() {
+    return this.manager.get(salesKeys.getAllSales)
+  }
 }

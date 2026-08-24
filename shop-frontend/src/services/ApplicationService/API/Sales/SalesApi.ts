@@ -311,6 +311,10 @@ export class SalesApi {
       offset: filters.offset ?? 0,
     });
 
+    const allSales = await app.storage.repositories.sales.getAllSales();
+
+    console.log("This are all the sales that actually happen in the business: ", allSales)
+
     return list
   }
 
@@ -455,4 +459,5 @@ export class SalesApi {
 
     return { marginPercent, summary };
   }
+
 }

@@ -15,6 +15,8 @@ export const migration016 : Migration = {
   quantity      INTEGER NOT NULL DEFAULT 0,
   price         REAL NOT NULL DEFAULT 0,
   costPrice     REAL NOT NULL DEFAULT 0,
+  unitCostPrice     REAL NOT NULL DEFAULT 0,
+  unitPrice     REAL NOT NULL DEFAULT 0,
   total         REAL NOT NULL DEFAULT 0,
   profit        REAL NOT NULL DEFAULT 0,
   paymentMethod TEXT,

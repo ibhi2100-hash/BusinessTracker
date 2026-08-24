@@ -114,6 +114,10 @@ export class SQLiteSalesRepository
   async update(state: Sales): Promise<void> {
     await this.statements.update.execute(SalesMapper.toUpdate(state));
   }
+
+  async getAllSales(): Promise<any> {
+    return await this.statements.allSales.query();
+  }
 }
 
 export class SalesMapper {
@@ -127,6 +131,8 @@ export class SalesMapper {
       sale.quantity,
       sale.price,
       sale.costPrice,
+      sale.unitCostPrice,
+      sale.unitPrice,
       sale.total,
       sale.profit ?? sale.total - sale.costPrice,
       sale.paymentMethod ?? "",
@@ -153,4 +159,6 @@ export class SalesMapper {
       sale.id,
     ];
   }
+
+
 }

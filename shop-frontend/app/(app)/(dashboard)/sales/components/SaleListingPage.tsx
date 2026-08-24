@@ -61,7 +61,7 @@ function StatusPill({ status }: { status: string }) {
 
 export default function SalesListPage() {
   const app = useApplication();
-  const { branchId } = useBusinessContext();
+  const { businessId, branchId } = useBusinessContext();
 
   const [sales, setSales] = useState<Sales[]>([]);
   const [loading, setLoading] = useState(true);
@@ -78,6 +78,7 @@ export default function SalesListPage() {
 
       const filters: SaleFilters = {
         branchId: branchId ?? undefined,
+        businessId,
         status,
         from: from || undefined,
         to: to || undefined,

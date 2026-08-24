@@ -4,16 +4,13 @@ interface SaleAddedPayload {
     productId: string;
     productName?: string;
     /** Unit sell price */
-    price: number;
-    /**
-     * Either unit cost or line cost — reducer normalises to line cost.
-     * Prefer sending unit cost + quantity; total cost = unitCost * quantity.
-     */
+    unitCostPrice: number;
+    unitPrice: number;
     costPrice: number;
     quantity: number;
     /** Optional precomputed line total (price × quantity) */
-    amount?: number;
-    total?: number;
+    amount: number;
+    total: number;
     paymentMethod?: PaymentMethod;
     customerId?: string;
     customerRef?: string;

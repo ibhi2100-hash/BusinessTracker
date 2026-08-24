@@ -46,4 +46,8 @@ export const SalesStatementDefinition: StatementDefinition[] = [
     key: salesKeys.summaryByDateRange,
     sql: SQL.SUMMARY_BY_DATE_RANGE,
   },
+  {
+    key: salesKeys.getAllSales,
+    sql: SQL.GET_ALL_SALES
+  }
 ];

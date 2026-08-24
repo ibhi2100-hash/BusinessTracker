@@ -27,18 +27,11 @@ class SalesReducer {
     onSaleAdded(event) {
         const p = event.payload;
         const quantity = Math.max(0, Math.floor(Number(p.quantity) || 0));
-        const unitPrice = Number(p.price) || 0;
+        const unitPrice = Number(p.unitPrice) || 0;
         // Normalise cost to line total
         const rawCost = Number(p.costPrice) || 0;
-        const lineCost = p.costIsLineTotal
-            ? rawCost
-            : rawCost * quantity;
-        const total = p.total != null
-            ? Number(p.total)
-            : p.amount != null
-                ? Number(p.amount)
-                : unitPrice * quantity;
-        const profit = total - lineCost;
+        const total = p.amount;
+        const profit = total - rawCost;
         const now = event.createdAt ?? Date.now();
         return {
             id: event.aggregateId,
@@ -47,8 +40,10 @@ class SalesReducer {
             productId: p.productId,
             productName: p.productName,
             quantity,
-            price: unitPrice,
-            costPrice: lineCost,
+            unitCostPrice: p.unitCostPrice,
+            unitPrice: p.unitPrice,
+            price: total,
+            costPrice: rawCost,
             total,
             profit,
             userId: event.actor?.userId,
