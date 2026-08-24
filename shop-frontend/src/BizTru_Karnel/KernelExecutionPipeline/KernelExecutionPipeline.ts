@@ -35,12 +35,12 @@ implements PipelineKernel {
 
     const aggregateVersion =
         await this.repository.aggregates.getVersion(
-            command.aggregateType,
-            command.aggregateId
+            command.aggregateId,
+            command.aggregateType
         );
 
     const expectedAggregateVersion =
-        aggregateVersion.localVersion;
+        aggregateVersion.localVersion ?? 0;
 
     const event =
         await domainEventTransformer(
@@ -54,7 +54,7 @@ implements PipelineKernel {
 
         await this.eventStore.append([event]);
 
-        await this.repository.aggregates.advanceLocal(
+        await this.repository.aggregates.commitLocalEvent(
             event.aggregateType,
             event.aggregateId,
             event.expectedAggregateVersion,
