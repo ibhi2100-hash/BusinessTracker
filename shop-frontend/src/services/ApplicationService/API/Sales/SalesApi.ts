@@ -19,7 +19,7 @@ export interface SaleLinePayload {
   /** Cost price × quantity */
   costPrice: number;
   unitPrice?: number;
-  unitCost?: number;
+  unitCostPrice?: number;
 }
 
 export interface CreateSaleRequest {
@@ -164,8 +164,8 @@ export class SalesApi {
         unitPrice:
           request.payload.unitPrice ??
           (quantity > 0 ? amount / quantity : 0),
-        unitCost:
-          request.payload.unitCost ??
+        unitCostPrice:
+          request.payload.unitCostPrice ??
           (quantity > 0 ? costPrice / quantity : 0),
         profit: amount - costPrice,
         status: "completed",

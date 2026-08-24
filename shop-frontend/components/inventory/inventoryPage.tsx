@@ -277,7 +277,7 @@ export default function InventoryPage({
           quantity,
           amount: product.price * quantity,
           costPrice: product.costPrice * quantity,
-          unitCost: product.costPrice,
+          unitCostPrice: product.costPrice,
           unitPrice: product.price
         },
       });
