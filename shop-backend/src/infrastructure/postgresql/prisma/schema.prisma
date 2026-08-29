@@ -99,7 +99,6 @@ model Business {
   snapshots     Snapshot[]
   alerts        Alert[]
   ledgerEntries LedgerEntry[]
-  aggregates    Aggregate[]
 
   subscriptions BusinessSubscription[]
 
@@ -318,21 +317,32 @@ model Product {
   @@index([category])
 }
 model Aggregate {
-  id    String  @id
-  aggregateId   String
-  aggregateType   String
-  businessId      String?
-  branchId        String?
-  version       Int
-  lastEventId   String?
-  lastLogicClock    Decimal?
-  lastGlobalPosition    BigInt?
-  lastSnaphotVersion     Decimal?
-  createdAt               DateTime
-  updatedAt                 DateTime?
 
-  business Business? @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  id String @id @default(uuid())
 
+  aggregateId String
+  aggregateType String
+
+  businessId String?
+  branchId String?
+
+  version Int
+
+  lastEventId String?
+
+  lastLogicClock BigInt?
+
+  lastGlobalPosition BigInt?
+
+  lastSnapshotVersion Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([aggregateType, aggregateId])
+
+  @@index([businessId])
+  @@index([branchId])
 }
 
 model Inventory {
@@ -416,9 +426,14 @@ model Event {
   mode Mode
 
   userId String?
+  deviceId String?
 
   causationId  String?
   correlationId String?
+
+  logicClock BigInt?
+
+  checksum  String?
 
   createdAt DateTime @default(now())
 
@@ -434,7 +449,7 @@ model Event {
 
   @@index([createdAt])
 
-  @@index([userId])
+  @@index([globalPosition])
 }
 model DeviceClock {
   deviceId   String @id

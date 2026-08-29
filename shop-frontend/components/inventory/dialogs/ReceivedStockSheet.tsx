@@ -6,17 +6,14 @@ import { ArrowDownToLine, Package, DollarSign } from "lucide-react";
 import { GlassSheet } from "../../ui/GlassSheet";
 import { GlassInput } from "../../ui/GlassInput";
 import { GlassButton } from "../../ui/GlassButton";
+import { LiveProduct } from "@/src/offline/sqlite/businessDatabase/repositories/SQLiteProjectionRepository/SQLiteProductRepository";
 
 interface Props {
   open: boolean;
   onClose: () => void;
   loading?: boolean;
 
-  product: {
-    id: string;
-    name: string;
-    quantity: number;
-  } | null;
+  product: LiveProduct | null;
 
   onSubmit: (
     quantity: number,

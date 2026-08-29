@@ -11,5 +11,35 @@ export const OutboxStatementsDefinition: StatementDefinition[] = [
     {
         key: OutboxKeys.getPending,
         sql: SQL.GET_PENDING
+    },
+
+    {
+        key: OutboxKeys.lockBatch,
+        sql: SQL.LOCK_BATCH
+    },
+
+    {
+        key: OutboxKeys.markSynced,
+        sql: SQL.MARK_SYNCED
+    },
+
+    {
+        key: OutboxKeys.markConflict,
+        sql: SQL.MARK_CONFLICT
+    },
+
+    {
+        key: OutboxKeys.markRejected,
+        sql: SQL.MARK_REJECTED
+    },
+
+    {
+        key: OutboxKeys.scheduleRetry,
+        sql: SQL.SCHEDULE_RETRY
+    },
+
+    {
+        key: OutboxKeys.resetInFlight,
+        sql: SQL.RESET_IN_FLIGHT
     }
 ]

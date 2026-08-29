@@ -86,6 +86,7 @@ export function generateLedgerEntries(event: DomainEvent<any>): LedgerEntry[] {
      */
     case InventoryEventType.INVENTORY_RECEIVED: {
       const value = payload.costPrice * payload.quantity;
+      console.log("This is the value of the Inventory being adjusted: ", value)
 
       if (event.mode === "OPENING") {
         // ✅ Opening balance — no cash movement
@@ -109,20 +110,12 @@ export function generateLedgerEntries(event: DomainEvent<any>): LedgerEntry[] {
      */
     case InventoryEventType.INVENTORY_ADJUSTED: {
       const value = payload.costPrice * payload.quantity;
-
-      if (event.mode === "OPENING") {
-        // ✅ Opening balance — no cash movement
+      
         entries = [
           buildEntry(event, 0, Account.INVENTORY, "DEBIT", value),
           buildEntry(event, 1, Account.OWNER_CAPITAL, "CREDIT", value),
         ];
-      } else {
-        // ✅ Live purchase
-        entries = [
-          buildEntry(event, 0, Account.INVENTORY, "DEBIT", value),
-          buildEntry(event, 1, Account.CASH, "CREDIT", value),
-        ];
-      }
+      
 
       break;
     }

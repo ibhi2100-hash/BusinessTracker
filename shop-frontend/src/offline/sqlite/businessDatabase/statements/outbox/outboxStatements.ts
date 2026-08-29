@@ -14,4 +14,28 @@ export class OutboxStatments {
     get pendingEvents(){
         return this.manager.get(OutboxKeys.getPending)
     }
+
+    get lockBatch(){
+        return this.manager.get(OutboxKeys.lockBatch)
+    }
+
+    get markSynced(){
+        return this.manager.get(OutboxKeys.markSynced)
+    }
+
+    get markConflict(){
+        return this.manager.get(OutboxKeys.markConflict)
+    }
+
+    get markRejected(){
+        return this.manager.get(OutboxKeys.markRejected)
+    }
+
+    get scheduleRetry(){
+        return this.manager.get(OutboxKeys.scheduleRetry)
+    }
+
+    get resetInFlight(){
+        return this.manager.get(OutboxKeys.resetInFlight)
+    }
 }

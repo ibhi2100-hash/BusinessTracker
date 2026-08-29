@@ -9,11 +9,24 @@ import {
 import { ProjectionReducer } from "../contracts/ProjectionReducer";
 
 interface InventoryPayload {
-    id: string;
     productId: string;
     quantity: number;
+
+}
+interface CreateInventoryPayload extends
+InventoryPayload {
+    id: string;
     costPrice: number;
-    direction?: "increase" | "decrease";
+}
+
+interface ReceivePayload extends
+InventoryPayload {
+    costPrice: number;
+    note?: string
+}
+interface AdjustPayload
+extends InventoryPayload {
+    direction: "increase" | "decrease"
 }
 
 export class InventoryReducer
@@ -124,7 +137,7 @@ implements ProjectionReducer<Inventory, DomainEvent> {
     ): Inventory {
 
         const payload =
-            event.payload as InventoryPayload;
+            event.payload as CreateInventoryPayload;
 
         return {
 
@@ -168,7 +181,7 @@ implements ProjectionReducer<Inventory, DomainEvent> {
         
 
         const payload =
-            event.payload as InventoryPayload;
+            event.payload as CreateInventoryPayload;
 
         return {
             id: payload.id,
@@ -200,7 +213,7 @@ implements ProjectionReducer<Inventory, DomainEvent> {
             );
 
         const payload =
-            event.payload as InventoryPayload;
+            event.payload as ReceivePayload;
 
         return {
 
@@ -234,7 +247,7 @@ implements ProjectionReducer<Inventory, DomainEvent> {
             );
 
         const payload =
-            event.payload as InventoryPayload;
+            event.payload as ReceivePayload;
 
         return {
 
@@ -271,7 +284,7 @@ implements ProjectionReducer<Inventory, DomainEvent> {
             );
 
         const payload =
-            event.payload as InventoryPayload;
+            event.payload as AdjustPayload;
 
         const quantity =
             payload.direction === "increase"

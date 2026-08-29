@@ -50,6 +50,8 @@ implements PipelineKernel {
             expectedAggregateVersion
         );
 
+    console.log("This is the created Event in the Pipeline: ", event)
+
     await this.transaction.run(async () => {
 
         await this.eventStore.append([event]);

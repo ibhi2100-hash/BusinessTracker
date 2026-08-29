@@ -1,85 +1,120 @@
 import { OutboxStatments } from "../../statements/outbox/outboxStatements";
 
-interface NewOutboxEntry {
-    id: string;
-    eventId: string;
-    createdAt: number;
+export type OutboxStatus =
+  | "PENDING"
+  | "IN_FLIGHT"
+  | "SYNCED"
+  | "CONFLICT"
+  | "REJECTED";
+
+export interface OutboxRow {
+  outboxId: string;
+  eventId: string;
+  status: OutboxStatus;
+  retryCount: number;
+  maxAttempts: number;
+  nextRetryAt: number | null;
+  lockedUntil: number | null;
+  lastError: string | null;
+  createdAt: number;
+  syncedAt: number | null;
+  globalPosition: number | null;
+  aggregateVersion: number | null;
+  server_commit_time: number | null;
+  // + all event columns from the JOIN (you already have them on `e.*`)
+  [key: string]: any;
 }
-interface OutBoxRow {
-    id: string,
-    eventId: string;
-    status: string;
-    retryCount: number;
-    maxAttempts: number;
-    nextRetryAt: number | null;
-    lockedUntil: number | null;
-    lastError: string | null;
-    createdAt: number;
-    syncedAt: number;
 
-    globalPosition: number | null;
-    aggregateVersion: number | null;
-    server_commit_time: number | null;
-}
-
-interface OutBoxtData {
-     id: string,
-    eventId: string;
-    status?: string;
-    retryCount?: number;
-    maxAttempts?: number;
-    nextRetryAt?: number;
-    lockedUntil?: number;
-    lastError?: string;
-    createdAt: number;
-    syncedAt?: number;
-
-    globalPosition?: number ;
-    aggregateVersion?: number;
-    server_commit_time?: number;
-
+export interface NewOutboxEntry {
+  id: string;
+  eventId: string;
+  createdAt: number;
+  status?: OutboxStatus;
+  retryCount?: number;
+  maxAttempts?: number;
+  nextRetryAt?: number | null;
+  lockedUntil?: number | null;
+  lastError?: string | null;
+  syncedAt?: number | null;
+  globalPosition?: number | null;
+  aggregateVersion?: number | null;
+  server_commit_time?: number | null;
 }
 
 export class SQLiteOutboxRepository {
-    constructor(
-        private readonly statements: OutboxStatments
-    ){}
+  constructor(private readonly statements: OutboxStatments) {}
 
-    async insert(outboxData: OutBoxtData){
-        await this.statements.insert.execute(
-            OutboxMapper.toInsert(outboxData)
-        )
-    }
+  async insert(data: NewOutboxEntry): Promise<void> {
+    await this.statements.insert.execute(OutboxMapper.toInsert(data));
+  }
 
-    async getPending(): Promise<any>{
-        const rows = await this.statements.pendingEvents.query()
+  async getPending(
+    now: number,
+    limit = 100
+  ): Promise<OutboxRow[]> {
+    return this.statements.pendingEvents.query([now, now, limit]);
+  }
 
-        return rows
-    }
+  async lockBatch(ids: string[], lockedUntil: number): Promise<void> {
+    if (ids.length === 0) return;
+    // Build dynamic IN clause or use a prepared statement that accepts a JSON array
+    // depending on your SQLite wrapper. Example with dynamic placeholders:
+    await this.statements.lockBatch.execute([lockedUntil, ...ids]);
+  }
+
+  async markSynced(
+    outboxId: string,
+    syncedAt: number,
+    globalPosition: number,
+    aggregateVersion: number,
+    serverCommitTime: number
+  ): Promise<void> {
+    await this.statements.markSynced.execute([
+        syncedAt,
+        globalPosition,
+        aggregateVersion,
+        serverCommitTime,
+        outboxId
+    ]);
+  }
+
+  async markConflict(outboxId: string, error: string): Promise<void> {
+    await this.statements.markConflict.execute([error, outboxId]);
+  }
+
+  async markRejected(outboxId: string, error: string): Promise<void> {
+    await this.statements.markRejected.execute([error, outboxId]);
+  }
+
+  async scheduleRetry(
+    outboxId: string,
+    nextRetryAt: number,
+    error: string
+  ): Promise<void> {
+    await this.statements.scheduleRetry.execute([nextRetryAt, error, outboxId]);
+  }
+
+  async resetStaleInFlight(now: number): Promise<void> {
+    await this.statements.resetInFlight.execute([now]);
+  }
 }
 
 class OutboxMapper {
-    static toInsert(
-        outboxData: OutBoxtData
-    ): unknown[] {
-        return [
-            outboxData.id,
-            outboxData.eventId,
-
-            outboxData.status ?? "PENDING",
-            outboxData.retryCount ?? 0,
-            outboxData.maxAttempts ?? 10,
-
-            outboxData.nextRetryAt ?? null,
-            outboxData.lockedUntil ?? null,
-            outboxData.lastError ?? null,
-
-            outboxData.createdAt,
-
-            outboxData.syncedAt ?? null,
-            outboxData.globalPosition ?? null,
-            outboxData.aggregateVersion ?? null,
-            outboxData.server_commit_time ?? null
-        ];
-    }
+  static toInsert(data: NewOutboxEntry): unknown[] {
+    return [
+      data.id,
+      data.eventId,
+      data.status ?? "PENDING",
+      data.retryCount ?? 0,
+      data.maxAttempts ?? 10,
+      data.nextRetryAt ?? null,
+      data.lockedUntil ?? null,
+      data.lastError ?? null,
+      data.createdAt,
+      data.syncedAt ?? null,
+      data.globalPosition ?? null,
+      data.aggregateVersion ?? null,
+      data.server_commit_time ?? null,
+    ];
+  }
 }

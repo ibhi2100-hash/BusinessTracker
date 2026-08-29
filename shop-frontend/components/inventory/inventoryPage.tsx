@@ -340,14 +340,10 @@ export default function InventoryPage({
     costPrice?: number,
     note?: string
   ) => {
-    if (!selectedProduct || !branchId) return;
-
-    const key = inventoryKey(selectedProduct.id, branchId);
-
+    
+    const key = inventoryKey(selectedProduct.id, branchId)
     await app.inventory.receiveStock({
-      aggregateType: AggregateType.INVENTORY,
       aggregateId: key,
-      type: InventoryEventType.INVENTORY_RECEIVED,
       mode,
       payload: {
         productId: selectedProduct.id,
@@ -371,12 +367,11 @@ export default function InventoryPage({
     const key = inventoryKey(selectedProduct.id, branchId);
 
     await app.inventory.adjust({
-      aggregateType: AggregateType.INVENTORY,
       aggregateId: key,
-      type: InventoryEventType.INVENTORY_ADJUSTED,
       mode,
       payload: {
         productId: selectedProduct.id,
+        costPrice: selectedProduct.costPrice,
         direction,
         quantity,
         reason,
@@ -398,7 +393,6 @@ export default function InventoryPage({
 
     await app.inventory.transfer({
       aggregateId: key,
-      type: InventoryEventType.INVENTORY_TRANSFER,
       mode,
       payload: {
         productId: selectedProduct.id,
@@ -428,7 +422,7 @@ export default function InventoryPage({
       setLoading(true);
 
       const productId = crypto.randomUUID();
-      const inventoryId = crypto.randomUUID();
+      const inventoryId = inventoryKey(productId, branchId);
 
       if (activeSheet === "create") {
         await app.product.create({

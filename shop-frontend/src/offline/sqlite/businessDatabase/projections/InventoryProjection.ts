@@ -23,6 +23,38 @@ implements EventConsumer<DomainEvent> {
                     changeNotifier.notify(["inventories"])
                     break
 
+                case InventoryEventType.INVENTORY_RECEIVED: 
+                    const currentReceivedInventory = await this.repostory.findProductId(event.payload.productId);
+                    console.log("This is the current Recieved Inventory: ", currentReceivedInventory)
+                    const receivedInventory = new InventoryReducer().reduce(currentReceivedInventory, event);
+                    console.log("This is the reduced Received Inventory: ", receivedInventory)
+                    await this.repostory.upsert(receivedInventory);
+
+                    changeNotifier.notify(["inventories"])
+
+                    break
+
+                case InventoryEventType.INVENTORY_ADJUSTED: 
+                    const currentAdjustedInventory = await this.repostory.findProductId(event.payload.productId);
+
+                    const adjustedInventory = new InventoryReducer().reduce(currentAdjustedInventory, event);
+
+                    await this.repostory.upsert(adjustedInventory);
+
+                    changeNotifier.notify(["inventories"])
+
+                    break
+                
+                case InventoryEventType.INVENTORY_TRANSFER: 
+                    const currentTransferInventory = await this.repostory.findProductId(event.payload.productId);
+
+                    const transferInventory = new InventoryReducer().reduce(currentTransferInventory, event);
+
+                    await this.repostory.upsert(transferInventory);
+
+                    changeNotifier.notify(["inventories"])
+
+                    break
                 case salesEventType.SALE_ADDED:
                     const currentInventory = await this.repostory.findProductId(event.payload.productId);
 
@@ -32,7 +64,7 @@ implements EventConsumer<DomainEvent> {
 
                     changeNotifier.notify(["inventories", "sales"])
             }
-
+            break
 
         }
     }

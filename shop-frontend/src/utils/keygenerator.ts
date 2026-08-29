@@ -17,7 +17,7 @@ export function inventoryKey(
     throw new Error("inventoryKey requires productId and branchId");
   }
 
-  return `${productId}_${branchId}`;
+  return `${branchId}:${productId}`;
 }
 
 /**
@@ -35,7 +35,7 @@ export function inventoryKeyFromObject({
  * Useful in reducers/debugging.
  */
 export function parseInventoryKey(key: string): InventoryKeyParts {
-  const [productId, branchId] = key.split("_");
+  const [productId, branchId] = key.split(":");
 
   if (!productId || !branchId) {
     throw new Error(`Invalid inventory key: ${key}`);

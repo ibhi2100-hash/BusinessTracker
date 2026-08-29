@@ -15,3 +15,4 @@ export * from "./enums/Mode";
 export * from "./enums/Role";
 export * from "./enums/Scope";
 export * from "./eventGroups/eventGroups";
+export * from "./assetFinancing/types";

@@ -31,3 +31,4 @@ __exportStar(require("./enums/Mode"), exports);
 __exportStar(require("./enums/Role"), exports);
 __exportStar(require("./enums/Scope"), exports);
 __exportStar(require("./eventGroups/eventGroups"), exports);
+__exportStar(require("./assetFinancing/types"), exports);
