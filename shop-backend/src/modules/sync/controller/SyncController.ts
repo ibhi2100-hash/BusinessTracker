@@ -7,6 +7,7 @@ export class OfflineSyncController {
 
   async pushEvent(req: Request, res: Response) {
     try {
+      console.log("This is the BackEndEvents that is pushed: ", req.body)
       const { events } = req.body;
       if(!Array.isArray(events)) {
         return res.status(400).json({

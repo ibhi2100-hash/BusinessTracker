@@ -6,6 +6,7 @@ import { AppShell } from "@/components/layout/AppShell";
 import { ApplicationProvider } from "@/src/services/ApplicationService/ApplicationProvider";
 import { RoutePersistence } from "@/components/RouterPersistence";
 import { BusinessProvider } from "@/src/context/BusinessContext";
+import { useApplication } from "@/src/services/ApplicationService/ApplicationContext";
 
 export const metadata = {
   title: "BizTru",
@@ -18,7 +19,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
- 
   return (
     <html lang="en">
       <body className="bg-black text-white">

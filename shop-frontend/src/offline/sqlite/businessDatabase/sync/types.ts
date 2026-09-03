@@ -1,4 +1,6 @@
 import { DomainEvent } from "@business/shared-types";
+import { SyncTrigger } from "./SyncCoordinator/SyncCoordinator";
+import { SyncResult } from "./syncEngine";
 
 /**
  * Event sent from the local client to the backend.
@@ -234,3 +236,14 @@ export class SyncEventMapper {
     }
 }
 
+export interface SyncRunResult {
+    trigger: SyncTrigger;
+
+    cycles: SyncResult[];
+
+    startedAt: number;
+
+    completedAt: number;
+
+    finalCursor: number;
+}

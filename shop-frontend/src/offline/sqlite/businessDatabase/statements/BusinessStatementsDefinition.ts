@@ -11,6 +11,7 @@ import { OutboxStatementsDefinition } from "./outbox/outboxStatementDefinition";
 import { ProductStatementDefinition } from "./products/productStatementsDefinition";
 import { ReportStatementDefinition } from "./report/reportStatementDefinition";
 import { SalesStatementDefinition } from "./sales/salesStatementDefinition";
+import { SyncStateStatementDefinition } from "./syncState/syncStateDefinition";
 
 export const BusinessStatementsDefinitions: StatementDefinition[] = [
     ...BusinessStatementDefinition,
@@ -24,5 +25,6 @@ export const BusinessStatementsDefinitions: StatementDefinition[] = [
     ...DashboardStatementDefinition,
     ...ReportStatementDefinition,
     ...OutboxStatementsDefinition,
-    ...AggregateStatementDefinition
+    ...AggregateStatementDefinition,
+    ...SyncStateStatementDefinition
 ]

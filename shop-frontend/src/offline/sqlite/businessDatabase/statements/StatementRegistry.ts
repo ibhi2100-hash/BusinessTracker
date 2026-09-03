@@ -12,6 +12,7 @@ import { DashboardStatements } from "./dashboard/dashboardStatements";
 import { ReportStatements } from "./report/reportStatements";
 import { OutboxStatments } from "./outbox/outboxStatements";
 import { AggregateStatements } from "./aggregates/aggregateStatements";
+import { SyncStateStatements } from "./syncState/syncStateStatements";
 
 
 export class BusinessStatementRegistry {
@@ -26,7 +27,8 @@ export class BusinessStatementRegistry {
     readonly report: ReportStatements;
     readonly outbox: OutboxStatments;
     readonly aggregates: AggregateStatements;
-    readonly logicClock: LogicClockStatements
+    readonly logicClock: LogicClockStatements;
+    readonly syncState: SyncStateStatements;
 
     constructor(
         manager: PreparedStatementManager
@@ -67,6 +69,7 @@ export class BusinessStatementRegistry {
         this.logicClock = 
             new LogicClockStatements(manager)
 
-        
+        this.syncState = 
+            new SyncStateStatements(manager)
     }
 }

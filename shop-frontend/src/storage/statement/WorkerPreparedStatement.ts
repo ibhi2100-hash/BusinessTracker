@@ -7,10 +7,16 @@ export class WorkerPreparedStatement
 implements PreparedStatement {
 
     constructor(
-        private readonly runtime: SQLiteRuntime,
-        readonly key: string,
-        readonly sql: string
+        private readonly runtime:
+            SQLiteRuntime,
+
+        readonly key:
+            string,
+
+        readonly sql:
+            string
     ) {}
+
 
     async execute(
         params: readonly unknown[] = []
@@ -19,13 +25,18 @@ implements PreparedStatement {
         await this.runtime.connection(
             "exec",
             {
-                dbId: (this.runtime as any).dbId,
-                sql: this.sql,
-                bind: params
+                dbId:
+                    this.runtime.databaseId,
+
+                sql:
+                    this.sql,
+
+                bind:
+                    params,
             }
         );
-
     }
+
 
     async query<T>(
         params: readonly unknown[] = []
@@ -34,49 +45,75 @@ implements PreparedStatement {
         const response =
             await this.runtime.connection(
                 "exec",
-                {   dbId: (this.runtime as any).dbId,
-                    sql: this.sql,
-                    bind: params,
-                    rowMode: "object",
-                    returnValue: "resultRows"
+                {
+                    dbId:
+                        this.runtime.databaseId,
+
+                    sql:
+                        this.sql,
+
+                    bind:
+                        params,
+
+                    rowMode:
+                        "object",
+
+                    returnValue:
+                        "resultRows",
                 }
             );
-        return response.result?.resultRows ?? [];
 
+        return (
+            response.result?.resultRows ??
+            []
+        );
     }
+
 
     async scalar<T>(
         params: readonly unknown[] = []
     ): Promise<T | null> {
 
         const rows =
-            await this.query<T>(params);
+            await this.query<T>(
+                params
+            );
 
-        if(rows.length===0)
+        if (
+            rows.length === 0
+        ) {
+
             return null;
+        }
 
-        const row = rows[0];
-        const rowValues = Object.values(row as any);
+        const row =
+            rows[0];
 
-        return rowValues[0] as T;
+        const values =
+            Object.values(
+                row as any
+            );
 
+        return values[0] as T;
     }
+
 
     async exists(
         params: readonly unknown[] = []
-    ): Promise<boolean>{
+    ): Promise<boolean> {
 
         const rows =
-            await this.query(params);
+            await this.query(
+                params
+            );
 
-        return rows.length>0;
-
+        return rows.length > 0;
     }
 
-    dispose(): void{
 
-        // Worker1 has nothing to dispose.
+    dispose(): void {
 
+        // Worker-backed statements have
+        // nothing persistent to dispose.
     }
-
 }

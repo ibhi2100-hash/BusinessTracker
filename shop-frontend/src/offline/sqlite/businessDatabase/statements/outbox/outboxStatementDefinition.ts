@@ -14,11 +14,6 @@ export const OutboxStatementsDefinition: StatementDefinition[] = [
     },
 
     {
-        key: OutboxKeys.lockBatch,
-        sql: SQL.LOCK_BATCH
-    },
-
-    {
         key: OutboxKeys.markSynced,
         sql: SQL.MARK_SYNCED
     },

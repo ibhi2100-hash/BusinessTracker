@@ -31,6 +31,10 @@ import { ProjectionRebuilder } from "@/src/offline/sqlite/businessDatabase/proje
 import { ProjectionReset } from "@/src/offline/sqlite/businessDatabase/projections/rebuild/ProjectionResetter";
 import { SQLiteProjectionResetRepository } from "@/src/offline/sqlite/businessDatabase/repositories/ProjectionResetRepository/ProjectionResetRepository";
 import { LedgerConsumer } from "@/src/offline/sqlite/businessDatabase/projections/LedgerProjection";
+import { HttpSyncTransport } from "@/src/offline/sqlite/businessDatabase/sync/SyncTransport";
+import { SyncEngine } from "@/src/offline/sqlite/businessDatabase/sync/syncEngine";
+import { SyncCoordinator } from "@/src/offline/sqlite/businessDatabase/sync/SyncCoordinator/SyncCoordinator";
+import { NetworkSyncConnector } from "@/src/offline/sqlite/businessDatabase/sync/NetworkSyncConnector";
 
 
 export class BusinessBootstrapper
@@ -83,8 +87,7 @@ implements Lifecycle {
         
         const synchronization = 
             await this.createSynchronization(
-                storage,
-                domain
+                storage
             )
         const application = 
             new BusinessApplication(
@@ -154,7 +157,8 @@ implements Lifecycle {
          );
         const repositories = 
          new BusinessRepositoryRegistry(
-            statements
+            statements,
+            runtime.queryRunner
          )
 
        return new BusinessStorage(
@@ -215,13 +219,71 @@ implements Lifecycle {
     }
    }
 
-   private async createSynchronization(
-        storage: BusinessStorage,
-        domain: BusinessDomain
-    ): Promise<BusinessSynchronization> {
-        return new BusinessSynchronization()
-   }
+private async createSynchronization(
+    storage: BusinessStorage,
+): Promise<BusinessSynchronization> {
 
+    const transport =
+        new HttpSyncTransport(
+            process.env.NEXT_PUBLIC_API_URL!,
+            async (): Promise<string> => {
+
+                return getAccessToken();
+            }
+        );
+
+
+    const engine =
+        new SyncEngine(
+
+            storage.repositories.outbox,
+
+            transport,
+
+            storage.repositories.syncState,
+
+            storage.repositories.events,
+
+            {
+                pushBatchSize: 50,
+
+                pullBatchSize: 100,
+
+                lockDurationMs: 30_000,
+
+                baseBackoffMs: 1_000,
+            }
+        );
+
+
+    const coordinator =
+        new SyncCoordinator(
+            engine
+        );
+
+
+    const network =
+        new NetworkSyncConnector(
+            coordinator,
+            {
+                intervalMs:
+                    30_000,
+
+                syncOnStart:
+                    true,
+            }
+        );
+
+
+    return new BusinessSynchronization(
+
+        engine,
+
+        coordinator,
+
+        network
+    );
+}
    private async createProjectionBus(){
     return new ProjectionEventBus()
    }
@@ -266,4 +328,8 @@ implements Lifecycle {
             )
         )
    }
+}
+
+function getAccessToken(){
+    return "this is access code"
 }

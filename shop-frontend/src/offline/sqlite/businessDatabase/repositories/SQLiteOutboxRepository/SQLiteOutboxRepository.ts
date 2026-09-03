@@ -1,3 +1,4 @@
+import { QueryRunner } from "@/src/storage/queryRunner/QueryRunner";
 import { OutboxStatments } from "../../statements/outbox/outboxStatements";
 
 export type OutboxStatus =
@@ -42,7 +43,13 @@ export interface NewOutboxEntry {
 }
 
 export class SQLiteOutboxRepository {
-  constructor(private readonly statements: OutboxStatments) {}
+  constructor(
+    private readonly statements: 
+      OutboxStatments,
+    
+    private readonly queryRunner:
+      QueryRunner
+    ) {}
 
   async insert(data: NewOutboxEntry): Promise<void> {
     await this.statements.insert.execute(OutboxMapper.toInsert(data));
@@ -55,13 +62,43 @@ export class SQLiteOutboxRepository {
     return this.statements.pendingEvents.query([now, now, limit]);
   }
 
-  async lockBatch(ids: string[], lockedUntil: number): Promise<void> {
-    if (ids.length === 0) return;
-    // Build dynamic IN clause or use a prepared statement that accepts a JSON array
-    // depending on your SQLite wrapper. Example with dynamic placeholders:
-    await this.statements.lockBatch.execute([lockedUntil, ...ids]);
+  async lockBatch(
+  ids: string[],
+  lockedUntil: number,
+  now: number
+): Promise<void> {
+
+  if (ids.length === 0) {
+    return;
   }
 
+  const placeholders =
+    ids.map(() => "?").join(", ");
+
+  const sql = `
+    UPDATE outbox
+    SET
+      lockedUntil = ?,
+      status = 'IN_FLIGHT'
+    WHERE id IN (${placeholders})
+
+    AND status = 'PENDING'
+
+    AND (
+          lockedUntil IS NULL
+          OR lockedUntil <= ?
+    )
+  `;
+
+  await this.queryRunner.execute(
+    sql,
+    [
+      lockedUntil,
+      ...ids,
+      now
+    ]
+  );
+}
   async markSynced(
     outboxId: string,
     syncedAt: number,

@@ -8,7 +8,7 @@ import {
 
 import { useRouter } from "next/navigation";
 
-import Context from "./ApplicationContext";
+import Context, { useApplication } from "./ApplicationContext";
 import type { Application } from "./Application";
 
 import { BootManager } from "./Booting/BootManager";
@@ -17,13 +17,14 @@ import {
     BootListener,
     BootStage,
     BootState,
-    StartupDestination
 } from "./Booting/BootStage";
 
 import { ClientBootstrapper } from "@/offline/bootstrap/ClientBootstrapper";
 import { BusinessBootstrapper } from "@/offline/bootstrap/BusinessBootstrap";
 
 import { BootSplash } from "./Booting/components/BootSplash";
+import { SyncProvider } from "@/components/providers/SyncProvider";
+import { BusinessSynchronization } from "@/src/offline/sqlite/businessDatabase/synchronization/BusinessSynchronization";
 
 interface Props {
     children: ReactNode;
@@ -37,6 +38,12 @@ export function ApplicationProvider({
     const [ ready, setReady ] = useState(false)
     const [application, setApplication] =
         useState<Application | null>(null);
+    const [
+        synchronization,
+        setSynchronization
+            ] =
+        useState<BusinessSynchronization | null>(null);
+
 
     const [boot, setBoot] =
         useState<BootState>({
@@ -179,19 +186,83 @@ export function ApplicationProvider({
                     return;
                 }
 
-                const { lastRoute } = await result.application.client.repositories.applicationState.getLastRoute();
+                /*
+                 * ----------------------------------------------
+                 * Obtain the already constructed synchronization
+                 * subsystem from the application.
+                 * ----------------------------------------------
+                 */
 
-                router.replace(lastRoute)
+                const app = result.application;
 
                 setApplication(
-                    result.application
+                    app
                 );
 
-               setReady(true);
+                try {
+
+                    const sync =
+                        await app.sync.Sync();
+
+                    if (mounted) {
+
+                        setSynchronization(
+                            sync
+                        );
+                    }
+
+                } catch (error) {
+
+                    /*
+                     * Synchronization must never prevent the
+                     * application from starting.
+                     */
+
+                    console.warn(
+                        "Business synchronization unavailable during startup.",
+                        error
+                    );
+
+                    if (mounted) {
+
+                        setSynchronization(
+                            null
+                        );
+                    }
+                }
+
+                                /*
+                 * ------------------------------------------------
+                 * Restore navigation AFTER client boot.
+                 * ------------------------------------------------
+                 */
+
+                const {
+                    lastRoute
+                } =
+                    await app
+                        .client
+                        .repositories
+                        .applicationState
+                        .getLastRoute();
+
+
+                if (mounted) {
+
+                    setReady(
+                        true
+                    );
+
+                router.replace(
+                        lastRoute
+                    );
+                }
 
             } catch (error) {
-
-                console.error(error);
+                console.error(
+                        "Application bootstrap failed:",
+                        error
+                    );
 
             }
 
@@ -217,11 +288,44 @@ export function ApplicationProvider({
 
     }
 
+     if (
+        !application
+    ) {
+
+        return null;
+    }
+
+    /* This is the onboarding state.
+     * ----------------------------------------------------------
+     */
+
+    if (!synchronization) {
+
+        return (
+            <Context.Provider
+                value={application}
+            >
+                {children}
+            </Context.Provider>
+        );
+    }
     return (
 
-        <Context.Provider value={application}>
+        <Context.Provider
+            value={
+                application
+            }
+        >
 
-            {children}
+            <SyncProvider
+                synchronization={
+                    synchronization
+                }
+            >
+
+                {children}
+
+            </SyncProvider>
 
         </Context.Provider>
 

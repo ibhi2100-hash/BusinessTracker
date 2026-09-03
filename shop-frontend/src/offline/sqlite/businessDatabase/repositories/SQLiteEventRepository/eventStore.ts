@@ -3,6 +3,7 @@ import { DomainEvent } from "@business/shared-types";
 import { EventRepository } from "./contracts";
 import { EventStatements } from "../../statements/events/EventStatements";
 import { ProjectionRebuildOptions } from "../../projections/rebuild/types";
+import { BackendAcceptedEvent } from "../../sync/types";
 interface EventRow {
 
     id: string;
@@ -189,6 +190,10 @@ implements EventRepository {
         }
     }
 
+    async applyRemoteEvents(events: BackendAcceptedEvent[]): Promise<void> {
+        
+    }
+
 
 }
 
@@ -267,7 +272,6 @@ class EventMapper {
            checksum: row.checksum
         }
     }
-    
     
 
 }

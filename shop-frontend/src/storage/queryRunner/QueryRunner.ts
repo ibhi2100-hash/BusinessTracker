@@ -3,66 +3,104 @@ import { SQLiteRuntime } from "../runtime/SQLiteRuntime";
 import { WorkerPreparedStatement } from "../statement/WorkerPreparedStatement";
 import { StatementDefinition } from "@/src/offline/sqlite/PreparedStatement/StatementRegistry/statementDefinition";
 
-
 export class QueryRunner {
+
     constructor(
-        private runtime: SQLiteRuntime,
-    ){}
+        private readonly runtime:
+            SQLiteRuntime,
+    ) {}
 
-    async execute(sql: string) {
 
-          await this.runtime.connection(
+    async execute(
+        sql: string,
+        params: readonly unknown[] = []
+    ): Promise<void> {
+
+        await this.runtime.connection(
             "exec",
             {
-                sql
+                dbId:
+                    this.runtime.databaseId,
+
+                sql,
+
+                bind:
+                    params,
             }
         );
-
     }
-    async query<T>(sql: string): Promise<T[]> {
+
+
+    async query<T>(
+        sql: string,
+        params: readonly unknown[] = []
+    ): Promise<T[]> {
 
         const response =
             await this.runtime.connection(
                 "exec",
                 {
+                    dbId:
+                        this.runtime.databaseId,
+
                     sql,
-                    rowMode: "object",
-                    returnValue: "resultRows"
+
+                    bind:
+                        params,
+
+                    rowMode:
+                        "object",
+
+                    returnValue:
+                        "resultRows",
                 }
             );
 
-        return response.result.resultRows;
-
+        return (
+            response.result?.resultRows ??
+            []
+        );
     }
+
+
     async transaction<T>(
         action: () => Promise<T>
-    ) {
+    ): Promise<T> {
 
-        await this.execute("BEGIN IMMEDIATE");
+        await this.execute(
+            "BEGIN IMMEDIATE"
+        );
 
         try {
 
             const result =
                 await action();
 
-            await this.execute("COMMIT");
+            await this.execute(
+                "COMMIT"
+            );
 
             return result;
 
-        } catch (e) {
+        } catch (error) {
 
-            await this.execute("ROLLBACK");
+            await this.execute(
+                "ROLLBACK"
+            );
 
-            throw e;
-
+            throw error;
         }
-
     }
+
+
     prepare(
         def: StatementDefinition
-    ): PreparedStatement{
-        const stm = new WorkerPreparedStatement(this.runtime, def.key, def.sql);
+    ): PreparedStatement {
 
-        return stm
+        return new WorkerPreparedStatement(
+            this.runtime,
+            def.key,
+            def.sql
+        );
     }
 }

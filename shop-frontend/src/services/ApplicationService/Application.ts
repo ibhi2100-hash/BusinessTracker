@@ -11,6 +11,7 @@ import { BranchApi } from "./API/branch/branchApi";
 import { DashboardApi } from "./API/dashboard/DashboradApi";
 import { ReportApi } from "./API/report/ReportApi";
 import { BusinessApi } from "./API/business/BusinessApi";
+import { SyncApi } from "./API/sync/syncApi";
 
 export class Application {
     readonly onboarding: OnboardingApi;
@@ -25,6 +26,7 @@ export class Application {
     readonly capital: CapitalApi;
     readonly dashboard: DashboardApi;
     readonly report: ReportApi;
+    readonly sync: SyncApi
 
 
     
@@ -86,6 +88,11 @@ export class Application {
             )
         this.business = 
             new BusinessApi(
+                this.manager
+            )
+
+        this.sync = 
+            new SyncApi(
                 this.manager
             )
     }

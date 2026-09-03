@@ -12,6 +12,9 @@ import { SQLiteDashboardRepository } from "./DashboardRepository/DashboardReposi
 import { SQLiteReportRepository } from "./ReportRepository/ReportRepository";
 import { SQLiteOutboxRepository } from "./SQLiteOutboxRepository/SQLiteOutboxRepository";
 import { SQLiteAggregateRepository } from "./SQLiteAggregateRepository/SQLiteAggregateRepository";
+import { SyncStateRepository } from "../sync/syncEngine";
+import { SQLiteSyncStateRepository } from "./SQLiteSyncRepository/SQLiteSyncRepository";
+import { QueryRunner } from "@/src/storage/queryRunner/QueryRunner";
 
 
 export class BusinessRepositoryRegistry {
@@ -40,9 +43,12 @@ export class BusinessRepositoryRegistry {
 
     readonly logicClock: LogicClockRepository;
 
+    readonly syncState: SQLiteSyncStateRepository
+
 
     constructor(
-        statements: BusinessStatementRegistry
+        statements: BusinessStatementRegistry,
+        private readonly queryRunner: QueryRunner
     ){
         this.events =
             new SQLiteEventRepository(
@@ -88,12 +94,11 @@ export class BusinessRepositoryRegistry {
             new SQLiteReportRepository(
                 statements.report
             )
-        
         this.outbox = 
             new SQLiteOutboxRepository(
-                statements.outbox
+                statements.outbox,
+                this.queryRunner
             )
-
         this.aggregates = 
             new SQLiteAggregateRepository(
                 statements.aggregates
@@ -103,6 +108,9 @@ export class BusinessRepositoryRegistry {
                 statements.logicClock
             )
 
-
+        this.syncState = 
+            new SQLiteSyncStateRepository(
+                statements.syncState
+            )
     }
 }

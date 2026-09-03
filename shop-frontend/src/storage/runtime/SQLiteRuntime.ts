@@ -19,6 +19,16 @@ implements Lifecycle {
     get connection(){
         return this.promiser;
     }
+
+    get databaseId(): string {
+        if(!this.initialized){
+            throw new Error(
+                "SQLite Runtime is not initialized."
+            )
+        }
+
+        return this.dbId
+    }
     async initialize(){
         if(this.initialized){
             return;
@@ -78,7 +88,7 @@ implements Lifecycle {
     }
 
     async dispose(): Promise<void> {
-        await this.stop;
+        await this.stop();
 
         this.worker?.terminate();
         

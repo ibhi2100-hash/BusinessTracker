@@ -32,12 +32,6 @@ export const GET_PENDING = `
   LIMIT ?
 `;
 
-export const LOCK_BATCH = `
-  UPDATE outbox
-  SET lockedUntil = ?, status = 'IN_FLIGHT'
-  WHERE id IN (/* placeholders */)
-`;
-
 export const MARK_SYNCED = `
   UPDATE outbox
   SET

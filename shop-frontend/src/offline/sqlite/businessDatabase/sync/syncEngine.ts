@@ -11,6 +11,8 @@ import {
     OutboxRow,
     SQLiteOutboxRepository,
 } from "../repositories/SQLiteOutboxRepository/SQLiteOutboxRepository";
+import { SQLiteEventRepository } from "../repositories/SQLiteEventRepository/eventStore";
+import { ProjectionEventBus } from "@/src/buses/ProjectionBuses";
 
 
 export interface SyncStateRepository {
@@ -23,9 +25,7 @@ export interface SyncStateRepository {
 
 export interface LocalEventStore {
 
-    applyRemoteEvents(
-        events: BackendAcceptedEvent[]
-    ): Promise<void>;
+    
 }
 
 
@@ -138,7 +138,7 @@ export class SyncEngine {
             SyncStateRepository,
 
         private readonly eventStore:
-            LocalEventStore,
+            SQLiteEventRepository,
 
         options: SyncEngineOptions = {}
     ) {
@@ -230,7 +230,8 @@ export class SyncEngine {
 
             await this.outbox.lockBatch(
                 outboxIds,
-                lockUntil
+                lockUntil,
+                now
             );
 
 
@@ -412,6 +413,7 @@ export class SyncEngine {
             await this.eventStore.applyRemoteEvents(
                 pullResult.events
             );
+
         }
 
 
@@ -531,6 +533,10 @@ export class SyncEngine {
             hasMore:
                 pullResult.hasMore,
         };
+    }
+
+    async getCurrentCursor(): Promise<number> {
+        return await this.syncState.getCursor();
     }
 
 
