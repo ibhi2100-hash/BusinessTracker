@@ -1858,7 +1858,7 @@ export const AggregateScalarFieldEnum = {
   lastEventId: 'lastEventId',
   lastLogicClock: 'lastLogicClock',
   lastGlobalPosition: 'lastGlobalPosition',
-  lastSnaphotVersion: 'lastSnaphotVersion',
+  lastSnapshotVersion: 'lastSnapshotVersion',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1909,8 +1909,11 @@ export const EventScalarFieldEnum = {
   payload: 'payload',
   mode: 'mode',
   userId: 'userId',
+  deviceId: 'deviceId',
   causationId: 'causationId',
   correlationId: 'correlationId',
+  logicClock: 'logicClock',
+  checksum: 'checksum',
   createdAt: 'createdAt'
 } as const
 

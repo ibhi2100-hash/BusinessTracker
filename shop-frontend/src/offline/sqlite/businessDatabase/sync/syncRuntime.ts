@@ -20,9 +20,6 @@ export interface SyncRuntimeOptions {
 
     apiBaseUrl: string;
 
-    getToken:
-        () => Promise<string>;
-
     pushBatchSize?: number;
 
     pullBatchSize?: number;
@@ -55,8 +52,7 @@ export class SyncRuntime {
 
         this.transport =
             new HttpSyncTransport(
-                options.apiBaseUrl,
-                options.getToken
+                options.apiBaseUrl
             );
 
 

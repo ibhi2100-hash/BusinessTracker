@@ -28,16 +28,16 @@ export type AggregateAggregate = {
 
 export type AggregateAvgAggregateOutputType = {
   version: number | null
-  lastLogicClock: runtime.Decimal | null
+  lastLogicClock: number | null
   lastGlobalPosition: number | null
-  lastSnaphotVersion: runtime.Decimal | null
+  lastSnapshotVersion: number | null
 }
 
 export type AggregateSumAggregateOutputType = {
   version: number | null
-  lastLogicClock: runtime.Decimal | null
+  lastLogicClock: bigint | null
   lastGlobalPosition: bigint | null
-  lastSnaphotVersion: runtime.Decimal | null
+  lastSnapshotVersion: number | null
 }
 
 export type AggregateMinAggregateOutputType = {
@@ -48,9 +48,9 @@ export type AggregateMinAggregateOutputType = {
   branchId: string | null
   version: number | null
   lastEventId: string | null
-  lastLogicClock: runtime.Decimal | null
+  lastLogicClock: bigint | null
   lastGlobalPosition: bigint | null
-  lastSnaphotVersion: runtime.Decimal | null
+  lastSnapshotVersion: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -63,9 +63,9 @@ export type AggregateMaxAggregateOutputType = {
   branchId: string | null
   version: number | null
   lastEventId: string | null
-  lastLogicClock: runtime.Decimal | null
+  lastLogicClock: bigint | null
   lastGlobalPosition: bigint | null
-  lastSnaphotVersion: runtime.Decimal | null
+  lastSnapshotVersion: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -80,7 +80,7 @@ export type AggregateCountAggregateOutputType = {
   lastEventId: number
   lastLogicClock: number
   lastGlobalPosition: number
-  lastSnaphotVersion: number
+  lastSnapshotVersion: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -91,14 +91,14 @@ export type AggregateAvgAggregateInputType = {
   version?: true
   lastLogicClock?: true
   lastGlobalPosition?: true
-  lastSnaphotVersion?: true
+  lastSnapshotVersion?: true
 }
 
 export type AggregateSumAggregateInputType = {
   version?: true
   lastLogicClock?: true
   lastGlobalPosition?: true
-  lastSnaphotVersion?: true
+  lastSnapshotVersion?: true
 }
 
 export type AggregateMinAggregateInputType = {
@@ -111,7 +111,7 @@ export type AggregateMinAggregateInputType = {
   lastEventId?: true
   lastLogicClock?: true
   lastGlobalPosition?: true
-  lastSnaphotVersion?: true
+  lastSnapshotVersion?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -126,7 +126,7 @@ export type AggregateMaxAggregateInputType = {
   lastEventId?: true
   lastLogicClock?: true
   lastGlobalPosition?: true
-  lastSnaphotVersion?: true
+  lastSnapshotVersion?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -141,7 +141,7 @@ export type AggregateCountAggregateInputType = {
   lastEventId?: true
   lastLogicClock?: true
   lastGlobalPosition?: true
-  lastSnaphotVersion?: true
+  lastSnapshotVersion?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -241,11 +241,11 @@ export type AggregateGroupByOutputType = {
   branchId: string | null
   version: number
   lastEventId: string | null
-  lastLogicClock: runtime.Decimal | null
+  lastLogicClock: bigint | null
   lastGlobalPosition: bigint | null
-  lastSnaphotVersion: runtime.Decimal | null
+  lastSnapshotVersion: number | null
   createdAt: Date
-  updatedAt: Date | null
+  updatedAt: Date
   _count: AggregateCountAggregateOutputType | null
   _avg: AggregateAvgAggregateOutputType | null
   _sum: AggregateSumAggregateOutputType | null
@@ -279,12 +279,11 @@ export type AggregateWhereInput = {
   branchId?: Prisma.StringNullableFilter<"Aggregate"> | string | null
   version?: Prisma.IntFilter<"Aggregate"> | number
   lastEventId?: Prisma.StringNullableFilter<"Aggregate"> | string | null
-  lastLogicClock?: Prisma.DecimalNullableFilter<"Aggregate"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lastLogicClock?: Prisma.BigIntNullableFilter<"Aggregate"> | bigint | number | null
   lastGlobalPosition?: Prisma.BigIntNullableFilter<"Aggregate"> | bigint | number | null
-  lastSnaphotVersion?: Prisma.DecimalNullableFilter<"Aggregate"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lastSnapshotVersion?: Prisma.IntNullableFilter<"Aggregate"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Aggregate"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableFilter<"Aggregate"> | Date | string | null
-  business?: Prisma.XOR<Prisma.BusinessNullableScalarRelationFilter, Prisma.BusinessWhereInput> | null
+  updatedAt?: Prisma.DateTimeFilter<"Aggregate"> | Date | string
 }
 
 export type AggregateOrderByWithRelationInput = {
@@ -297,14 +296,14 @@ export type AggregateOrderByWithRelationInput = {
   lastEventId?: Prisma.SortOrderInput | Prisma.SortOrder
   lastLogicClock?: Prisma.SortOrderInput | Prisma.SortOrder
   lastGlobalPosition?: Prisma.SortOrderInput | Prisma.SortOrder
-  lastSnaphotVersion?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastSnapshotVersion?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  business?: Prisma.BusinessOrderByWithRelationInput
+  updatedAt?: Prisma.SortOrder
 }
 
 export type AggregateWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  aggregateType_aggregateId?: Prisma.AggregateAggregateTypeAggregateIdCompoundUniqueInput
   AND?: Prisma.AggregateWhereInput | Prisma.AggregateWhereInput[]
   OR?: Prisma.AggregateWhereInput[]
   NOT?: Prisma.AggregateWhereInput | Prisma.AggregateWhereInput[]
@@ -314,13 +313,12 @@ export type AggregateWhereUniqueInput = Prisma.AtLeast<{
   branchId?: Prisma.StringNullableFilter<"Aggregate"> | string | null
   version?: Prisma.IntFilter<"Aggregate"> | number
   lastEventId?: Prisma.StringNullableFilter<"Aggregate"> | string | null
-  lastLogicClock?: Prisma.DecimalNullableFilter<"Aggregate"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lastLogicClock?: Prisma.BigIntNullableFilter<"Aggregate"> | bigint | number | null
   lastGlobalPosition?: Prisma.BigIntNullableFilter<"Aggregate"> | bigint | number | null
-  lastSnaphotVersion?: Prisma.DecimalNullableFilter<"Aggregate"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lastSnapshotVersion?: Prisma.IntNullableFilter<"Aggregate"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Aggregate"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableFilter<"Aggregate"> | Date | string | null
-  business?: Prisma.XOR<Prisma.BusinessNullableScalarRelationFilter, Prisma.BusinessWhereInput> | null
-}, "id">
+  updatedAt?: Prisma.DateTimeFilter<"Aggregate"> | Date | string
+}, "id" | "aggregateType_aggregateId">
 
 export type AggregateOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -332,9 +330,9 @@ export type AggregateOrderByWithAggregationInput = {
   lastEventId?: Prisma.SortOrderInput | Prisma.SortOrder
   lastLogicClock?: Prisma.SortOrderInput | Prisma.SortOrder
   lastGlobalPosition?: Prisma.SortOrderInput | Prisma.SortOrder
-  lastSnaphotVersion?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastSnapshotVersion?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.AggregateCountOrderByAggregateInput
   _avg?: Prisma.AggregateAvgOrderByAggregateInput
   _max?: Prisma.AggregateMaxOrderByAggregateInput
@@ -353,56 +351,56 @@ export type AggregateScalarWhereWithAggregatesInput = {
   branchId?: Prisma.StringNullableWithAggregatesFilter<"Aggregate"> | string | null
   version?: Prisma.IntWithAggregatesFilter<"Aggregate"> | number
   lastEventId?: Prisma.StringNullableWithAggregatesFilter<"Aggregate"> | string | null
-  lastLogicClock?: Prisma.DecimalNullableWithAggregatesFilter<"Aggregate"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lastLogicClock?: Prisma.BigIntNullableWithAggregatesFilter<"Aggregate"> | bigint | number | null
   lastGlobalPosition?: Prisma.BigIntNullableWithAggregatesFilter<"Aggregate"> | bigint | number | null
-  lastSnaphotVersion?: Prisma.DecimalNullableWithAggregatesFilter<"Aggregate"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lastSnapshotVersion?: Prisma.IntNullableWithAggregatesFilter<"Aggregate"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Aggregate"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Aggregate"> | Date | string | null
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Aggregate"> | Date | string
 }
 
 export type AggregateCreateInput = {
-  id: string
-  aggregateId: string
-  aggregateType: string
-  branchId?: string | null
-  version: number
-  lastEventId?: string | null
-  lastLogicClock?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  lastGlobalPosition?: bigint | number | null
-  lastSnaphotVersion?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  createdAt: Date | string
-  updatedAt?: Date | string | null
-  business?: Prisma.BusinessCreateNestedOneWithoutAggregatesInput
-}
-
-export type AggregateUncheckedCreateInput = {
-  id: string
+  id?: string
   aggregateId: string
   aggregateType: string
   businessId?: string | null
   branchId?: string | null
   version: number
   lastEventId?: string | null
-  lastLogicClock?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lastLogicClock?: bigint | number | null
   lastGlobalPosition?: bigint | number | null
-  lastSnaphotVersion?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  createdAt: Date | string
-  updatedAt?: Date | string | null
+  lastSnapshotVersion?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type AggregateUncheckedCreateInput = {
+  id?: string
+  aggregateId: string
+  aggregateType: string
+  businessId?: string | null
+  branchId?: string | null
+  version: number
+  lastEventId?: string | null
+  lastLogicClock?: bigint | number | null
+  lastGlobalPosition?: bigint | number | null
+  lastSnapshotVersion?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type AggregateUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   lastEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastLogicClock?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lastLogicClock?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   lastGlobalPosition?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  lastSnaphotVersion?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lastSnapshotVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  business?: Prisma.BusinessUpdateOneWithoutAggregatesNestedInput
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type AggregateUncheckedUpdateInput = {
@@ -413,40 +411,41 @@ export type AggregateUncheckedUpdateInput = {
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   lastEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastLogicClock?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lastLogicClock?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   lastGlobalPosition?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  lastSnaphotVersion?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lastSnapshotVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type AggregateCreateManyInput = {
-  id: string
+  id?: string
   aggregateId: string
   aggregateType: string
   businessId?: string | null
   branchId?: string | null
   version: number
   lastEventId?: string | null
-  lastLogicClock?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lastLogicClock?: bigint | number | null
   lastGlobalPosition?: bigint | number | null
-  lastSnaphotVersion?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  createdAt: Date | string
-  updatedAt?: Date | string | null
+  lastSnapshotVersion?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type AggregateUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   lastEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastLogicClock?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lastLogicClock?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   lastGlobalPosition?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  lastSnaphotVersion?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lastSnapshotVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type AggregateUncheckedUpdateManyInput = {
@@ -457,21 +456,16 @@ export type AggregateUncheckedUpdateManyInput = {
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   lastEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastLogicClock?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lastLogicClock?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   lastGlobalPosition?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  lastSnaphotVersion?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lastSnapshotVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type AggregateListRelationFilter = {
-  every?: Prisma.AggregateWhereInput
-  some?: Prisma.AggregateWhereInput
-  none?: Prisma.AggregateWhereInput
-}
-
-export type AggregateOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
+export type AggregateAggregateTypeAggregateIdCompoundUniqueInput = {
+  aggregateType: string
+  aggregateId: string
 }
 
 export type AggregateCountOrderByAggregateInput = {
@@ -484,7 +478,7 @@ export type AggregateCountOrderByAggregateInput = {
   lastEventId?: Prisma.SortOrder
   lastLogicClock?: Prisma.SortOrder
   lastGlobalPosition?: Prisma.SortOrder
-  lastSnaphotVersion?: Prisma.SortOrder
+  lastSnapshotVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -493,7 +487,7 @@ export type AggregateAvgOrderByAggregateInput = {
   version?: Prisma.SortOrder
   lastLogicClock?: Prisma.SortOrder
   lastGlobalPosition?: Prisma.SortOrder
-  lastSnaphotVersion?: Prisma.SortOrder
+  lastSnapshotVersion?: Prisma.SortOrder
 }
 
 export type AggregateMaxOrderByAggregateInput = {
@@ -506,7 +500,7 @@ export type AggregateMaxOrderByAggregateInput = {
   lastEventId?: Prisma.SortOrder
   lastLogicClock?: Prisma.SortOrder
   lastGlobalPosition?: Prisma.SortOrder
-  lastSnaphotVersion?: Prisma.SortOrder
+  lastSnapshotVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -521,7 +515,7 @@ export type AggregateMinOrderByAggregateInput = {
   lastEventId?: Prisma.SortOrder
   lastLogicClock?: Prisma.SortOrder
   lastGlobalPosition?: Prisma.SortOrder
-  lastSnaphotVersion?: Prisma.SortOrder
+  lastSnapshotVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -530,49 +524,7 @@ export type AggregateSumOrderByAggregateInput = {
   version?: Prisma.SortOrder
   lastLogicClock?: Prisma.SortOrder
   lastGlobalPosition?: Prisma.SortOrder
-  lastSnaphotVersion?: Prisma.SortOrder
-}
-
-export type AggregateCreateNestedManyWithoutBusinessInput = {
-  create?: Prisma.XOR<Prisma.AggregateCreateWithoutBusinessInput, Prisma.AggregateUncheckedCreateWithoutBusinessInput> | Prisma.AggregateCreateWithoutBusinessInput[] | Prisma.AggregateUncheckedCreateWithoutBusinessInput[]
-  connectOrCreate?: Prisma.AggregateCreateOrConnectWithoutBusinessInput | Prisma.AggregateCreateOrConnectWithoutBusinessInput[]
-  createMany?: Prisma.AggregateCreateManyBusinessInputEnvelope
-  connect?: Prisma.AggregateWhereUniqueInput | Prisma.AggregateWhereUniqueInput[]
-}
-
-export type AggregateUncheckedCreateNestedManyWithoutBusinessInput = {
-  create?: Prisma.XOR<Prisma.AggregateCreateWithoutBusinessInput, Prisma.AggregateUncheckedCreateWithoutBusinessInput> | Prisma.AggregateCreateWithoutBusinessInput[] | Prisma.AggregateUncheckedCreateWithoutBusinessInput[]
-  connectOrCreate?: Prisma.AggregateCreateOrConnectWithoutBusinessInput | Prisma.AggregateCreateOrConnectWithoutBusinessInput[]
-  createMany?: Prisma.AggregateCreateManyBusinessInputEnvelope
-  connect?: Prisma.AggregateWhereUniqueInput | Prisma.AggregateWhereUniqueInput[]
-}
-
-export type AggregateUpdateManyWithoutBusinessNestedInput = {
-  create?: Prisma.XOR<Prisma.AggregateCreateWithoutBusinessInput, Prisma.AggregateUncheckedCreateWithoutBusinessInput> | Prisma.AggregateCreateWithoutBusinessInput[] | Prisma.AggregateUncheckedCreateWithoutBusinessInput[]
-  connectOrCreate?: Prisma.AggregateCreateOrConnectWithoutBusinessInput | Prisma.AggregateCreateOrConnectWithoutBusinessInput[]
-  upsert?: Prisma.AggregateUpsertWithWhereUniqueWithoutBusinessInput | Prisma.AggregateUpsertWithWhereUniqueWithoutBusinessInput[]
-  createMany?: Prisma.AggregateCreateManyBusinessInputEnvelope
-  set?: Prisma.AggregateWhereUniqueInput | Prisma.AggregateWhereUniqueInput[]
-  disconnect?: Prisma.AggregateWhereUniqueInput | Prisma.AggregateWhereUniqueInput[]
-  delete?: Prisma.AggregateWhereUniqueInput | Prisma.AggregateWhereUniqueInput[]
-  connect?: Prisma.AggregateWhereUniqueInput | Prisma.AggregateWhereUniqueInput[]
-  update?: Prisma.AggregateUpdateWithWhereUniqueWithoutBusinessInput | Prisma.AggregateUpdateWithWhereUniqueWithoutBusinessInput[]
-  updateMany?: Prisma.AggregateUpdateManyWithWhereWithoutBusinessInput | Prisma.AggregateUpdateManyWithWhereWithoutBusinessInput[]
-  deleteMany?: Prisma.AggregateScalarWhereInput | Prisma.AggregateScalarWhereInput[]
-}
-
-export type AggregateUncheckedUpdateManyWithoutBusinessNestedInput = {
-  create?: Prisma.XOR<Prisma.AggregateCreateWithoutBusinessInput, Prisma.AggregateUncheckedCreateWithoutBusinessInput> | Prisma.AggregateCreateWithoutBusinessInput[] | Prisma.AggregateUncheckedCreateWithoutBusinessInput[]
-  connectOrCreate?: Prisma.AggregateCreateOrConnectWithoutBusinessInput | Prisma.AggregateCreateOrConnectWithoutBusinessInput[]
-  upsert?: Prisma.AggregateUpsertWithWhereUniqueWithoutBusinessInput | Prisma.AggregateUpsertWithWhereUniqueWithoutBusinessInput[]
-  createMany?: Prisma.AggregateCreateManyBusinessInputEnvelope
-  set?: Prisma.AggregateWhereUniqueInput | Prisma.AggregateWhereUniqueInput[]
-  disconnect?: Prisma.AggregateWhereUniqueInput | Prisma.AggregateWhereUniqueInput[]
-  delete?: Prisma.AggregateWhereUniqueInput | Prisma.AggregateWhereUniqueInput[]
-  connect?: Prisma.AggregateWhereUniqueInput | Prisma.AggregateWhereUniqueInput[]
-  update?: Prisma.AggregateUpdateWithWhereUniqueWithoutBusinessInput | Prisma.AggregateUpdateWithWhereUniqueWithoutBusinessInput[]
-  updateMany?: Prisma.AggregateUpdateManyWithWhereWithoutBusinessInput | Prisma.AggregateUpdateManyWithWhereWithoutBusinessInput[]
-  deleteMany?: Prisma.AggregateScalarWhereInput | Prisma.AggregateScalarWhereInput[]
+  lastSnapshotVersion?: Prisma.SortOrder
 }
 
 export type NullableBigIntFieldUpdateOperationsInput = {
@@ -583,132 +535,12 @@ export type NullableBigIntFieldUpdateOperationsInput = {
   divide?: bigint | number
 }
 
-export type AggregateCreateWithoutBusinessInput = {
-  id: string
-  aggregateId: string
-  aggregateType: string
-  branchId?: string | null
-  version: number
-  lastEventId?: string | null
-  lastLogicClock?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  lastGlobalPosition?: bigint | number | null
-  lastSnaphotVersion?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  createdAt: Date | string
-  updatedAt?: Date | string | null
-}
-
-export type AggregateUncheckedCreateWithoutBusinessInput = {
-  id: string
-  aggregateId: string
-  aggregateType: string
-  branchId?: string | null
-  version: number
-  lastEventId?: string | null
-  lastLogicClock?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  lastGlobalPosition?: bigint | number | null
-  lastSnaphotVersion?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  createdAt: Date | string
-  updatedAt?: Date | string | null
-}
-
-export type AggregateCreateOrConnectWithoutBusinessInput = {
-  where: Prisma.AggregateWhereUniqueInput
-  create: Prisma.XOR<Prisma.AggregateCreateWithoutBusinessInput, Prisma.AggregateUncheckedCreateWithoutBusinessInput>
-}
-
-export type AggregateCreateManyBusinessInputEnvelope = {
-  data: Prisma.AggregateCreateManyBusinessInput | Prisma.AggregateCreateManyBusinessInput[]
-  skipDuplicates?: boolean
-}
-
-export type AggregateUpsertWithWhereUniqueWithoutBusinessInput = {
-  where: Prisma.AggregateWhereUniqueInput
-  update: Prisma.XOR<Prisma.AggregateUpdateWithoutBusinessInput, Prisma.AggregateUncheckedUpdateWithoutBusinessInput>
-  create: Prisma.XOR<Prisma.AggregateCreateWithoutBusinessInput, Prisma.AggregateUncheckedCreateWithoutBusinessInput>
-}
-
-export type AggregateUpdateWithWhereUniqueWithoutBusinessInput = {
-  where: Prisma.AggregateWhereUniqueInput
-  data: Prisma.XOR<Prisma.AggregateUpdateWithoutBusinessInput, Prisma.AggregateUncheckedUpdateWithoutBusinessInput>
-}
-
-export type AggregateUpdateManyWithWhereWithoutBusinessInput = {
-  where: Prisma.AggregateScalarWhereInput
-  data: Prisma.XOR<Prisma.AggregateUpdateManyMutationInput, Prisma.AggregateUncheckedUpdateManyWithoutBusinessInput>
-}
-
-export type AggregateScalarWhereInput = {
-  AND?: Prisma.AggregateScalarWhereInput | Prisma.AggregateScalarWhereInput[]
-  OR?: Prisma.AggregateScalarWhereInput[]
-  NOT?: Prisma.AggregateScalarWhereInput | Prisma.AggregateScalarWhereInput[]
-  id?: Prisma.StringFilter<"Aggregate"> | string
-  aggregateId?: Prisma.StringFilter<"Aggregate"> | string
-  aggregateType?: Prisma.StringFilter<"Aggregate"> | string
-  businessId?: Prisma.StringNullableFilter<"Aggregate"> | string | null
-  branchId?: Prisma.StringNullableFilter<"Aggregate"> | string | null
-  version?: Prisma.IntFilter<"Aggregate"> | number
-  lastEventId?: Prisma.StringNullableFilter<"Aggregate"> | string | null
-  lastLogicClock?: Prisma.DecimalNullableFilter<"Aggregate"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  lastGlobalPosition?: Prisma.BigIntNullableFilter<"Aggregate"> | bigint | number | null
-  lastSnaphotVersion?: Prisma.DecimalNullableFilter<"Aggregate"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  createdAt?: Prisma.DateTimeFilter<"Aggregate"> | Date | string
-  updatedAt?: Prisma.DateTimeNullableFilter<"Aggregate"> | Date | string | null
-}
-
-export type AggregateCreateManyBusinessInput = {
-  id: string
-  aggregateId: string
-  aggregateType: string
-  branchId?: string | null
-  version: number
-  lastEventId?: string | null
-  lastLogicClock?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  lastGlobalPosition?: bigint | number | null
-  lastSnaphotVersion?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  createdAt: Date | string
-  updatedAt?: Date | string | null
-}
-
-export type AggregateUpdateWithoutBusinessInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  lastEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastLogicClock?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  lastGlobalPosition?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  lastSnaphotVersion?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-}
-
-export type AggregateUncheckedUpdateWithoutBusinessInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  lastEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastLogicClock?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  lastGlobalPosition?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  lastSnaphotVersion?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-}
-
-export type AggregateUncheckedUpdateManyWithoutBusinessInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  lastEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastLogicClock?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  lastGlobalPosition?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  lastSnaphotVersion?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 
@@ -723,10 +555,9 @@ export type AggregateSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   lastEventId?: boolean
   lastLogicClock?: boolean
   lastGlobalPosition?: boolean
-  lastSnaphotVersion?: boolean
+  lastSnapshotVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  business?: boolean | Prisma.Aggregate$businessArgs<ExtArgs>
 }, ExtArgs["result"]["aggregate"]>
 
 export type AggregateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -739,10 +570,9 @@ export type AggregateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   lastEventId?: boolean
   lastLogicClock?: boolean
   lastGlobalPosition?: boolean
-  lastSnaphotVersion?: boolean
+  lastSnapshotVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  business?: boolean | Prisma.Aggregate$businessArgs<ExtArgs>
 }, ExtArgs["result"]["aggregate"]>
 
 export type AggregateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -755,10 +585,9 @@ export type AggregateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   lastEventId?: boolean
   lastLogicClock?: boolean
   lastGlobalPosition?: boolean
-  lastSnaphotVersion?: boolean
+  lastSnapshotVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  business?: boolean | Prisma.Aggregate$businessArgs<ExtArgs>
 }, ExtArgs["result"]["aggregate"]>
 
 export type AggregateSelectScalar = {
@@ -771,27 +600,16 @@ export type AggregateSelectScalar = {
   lastEventId?: boolean
   lastLogicClock?: boolean
   lastGlobalPosition?: boolean
-  lastSnaphotVersion?: boolean
+  lastSnapshotVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type AggregateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "aggregateId" | "aggregateType" | "businessId" | "branchId" | "version" | "lastEventId" | "lastLogicClock" | "lastGlobalPosition" | "lastSnaphotVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["aggregate"]>
-export type AggregateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  business?: boolean | Prisma.Aggregate$businessArgs<ExtArgs>
-}
-export type AggregateIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  business?: boolean | Prisma.Aggregate$businessArgs<ExtArgs>
-}
-export type AggregateIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  business?: boolean | Prisma.Aggregate$businessArgs<ExtArgs>
-}
+export type AggregateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "aggregateId" | "aggregateType" | "businessId" | "branchId" | "version" | "lastEventId" | "lastLogicClock" | "lastGlobalPosition" | "lastSnapshotVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["aggregate"]>
 
 export type $AggregatePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Aggregate"
-  objects: {
-    business: Prisma.$BusinessPayload<ExtArgs> | null
-  }
+  objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     aggregateId: string
@@ -800,11 +618,11 @@ export type $AggregatePayload<ExtArgs extends runtime.Types.Extensions.InternalA
     branchId: string | null
     version: number
     lastEventId: string | null
-    lastLogicClock: runtime.Decimal | null
+    lastLogicClock: bigint | null
     lastGlobalPosition: bigint | null
-    lastSnaphotVersion: runtime.Decimal | null
+    lastSnapshotVersion: number | null
     createdAt: Date
-    updatedAt: Date | null
+    updatedAt: Date
   }, ExtArgs["result"]["aggregate"]>
   composites: {}
 }
@@ -1199,7 +1017,6 @@ readonly fields: AggregateFieldRefs;
  */
 export interface Prisma__AggregateClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  business<T extends Prisma.Aggregate$businessArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Aggregate$businessArgs<ExtArgs>>): Prisma.Prisma__BusinessClient<runtime.Types.Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1236,9 +1053,9 @@ export interface AggregateFieldRefs {
   readonly branchId: Prisma.FieldRef<"Aggregate", 'String'>
   readonly version: Prisma.FieldRef<"Aggregate", 'Int'>
   readonly lastEventId: Prisma.FieldRef<"Aggregate", 'String'>
-  readonly lastLogicClock: Prisma.FieldRef<"Aggregate", 'Decimal'>
+  readonly lastLogicClock: Prisma.FieldRef<"Aggregate", 'BigInt'>
   readonly lastGlobalPosition: Prisma.FieldRef<"Aggregate", 'BigInt'>
-  readonly lastSnaphotVersion: Prisma.FieldRef<"Aggregate", 'Decimal'>
+  readonly lastSnapshotVersion: Prisma.FieldRef<"Aggregate", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Aggregate", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Aggregate", 'DateTime'>
 }
@@ -1258,10 +1075,6 @@ export type AggregateFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   omit?: Prisma.AggregateOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AggregateInclude<ExtArgs> | null
-  /**
    * Filter, which Aggregate to fetch.
    */
   where: Prisma.AggregateWhereUniqueInput
@@ -1280,10 +1093,6 @@ export type AggregateFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensi
    */
   omit?: Prisma.AggregateOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AggregateInclude<ExtArgs> | null
-  /**
    * Filter, which Aggregate to fetch.
    */
   where: Prisma.AggregateWhereUniqueInput
@@ -1301,10 +1110,6 @@ export type AggregateFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Omit specific fields from the Aggregate
    */
   omit?: Prisma.AggregateOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AggregateInclude<ExtArgs> | null
   /**
    * Filter, which Aggregate to fetch.
    */
@@ -1354,10 +1159,6 @@ export type AggregateFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensio
    */
   omit?: Prisma.AggregateOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AggregateInclude<ExtArgs> | null
-  /**
    * Filter, which Aggregate to fetch.
    */
   where?: Prisma.AggregateWhereInput
@@ -1405,10 +1206,6 @@ export type AggregateFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the Aggregate
    */
   omit?: Prisma.AggregateOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AggregateInclude<ExtArgs> | null
   /**
    * Filter, which Aggregates to fetch.
    */
@@ -1458,10 +1255,6 @@ export type AggregateCreateArgs<ExtArgs extends runtime.Types.Extensions.Interna
    */
   omit?: Prisma.AggregateOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AggregateInclude<ExtArgs> | null
-  /**
    * The data needed to create a Aggregate.
    */
   data: Prisma.XOR<Prisma.AggregateCreateInput, Prisma.AggregateUncheckedCreateInput>
@@ -1495,10 +1288,6 @@ export type AggregateCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exten
    */
   data: Prisma.AggregateCreateManyInput | Prisma.AggregateCreateManyInput[]
   skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AggregateIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1513,10 +1302,6 @@ export type AggregateUpdateArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the Aggregate
    */
   omit?: Prisma.AggregateOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AggregateInclude<ExtArgs> | null
   /**
    * The data needed to update a Aggregate.
    */
@@ -1569,10 +1354,6 @@ export type AggregateUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Exten
    * Limit how many Aggregates to update.
    */
   limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AggregateIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1587,10 +1368,6 @@ export type AggregateUpsertArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the Aggregate
    */
   omit?: Prisma.AggregateOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AggregateInclude<ExtArgs> | null
   /**
    * The filter to search for the Aggregate to update in case it exists.
    */
@@ -1618,10 +1395,6 @@ export type AggregateDeleteArgs<ExtArgs extends runtime.Types.Extensions.Interna
    */
   omit?: Prisma.AggregateOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AggregateInclude<ExtArgs> | null
-  /**
    * Filter which Aggregate to delete.
    */
   where: Prisma.AggregateWhereUniqueInput
@@ -1642,25 +1415,6 @@ export type AggregateDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
- * Aggregate.business
- */
-export type Aggregate$businessArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Business
-   */
-  select?: Prisma.BusinessSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Business
-   */
-  omit?: Prisma.BusinessOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.BusinessInclude<ExtArgs> | null
-  where?: Prisma.BusinessWhereInput
-}
-
-/**
  * Aggregate without action
  */
 export type AggregateDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1672,8 +1426,4 @@ export type AggregateDefaultArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the Aggregate
    */
   omit?: Prisma.AggregateOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AggregateInclude<ExtArgs> | null
 }

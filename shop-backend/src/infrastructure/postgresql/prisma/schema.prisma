@@ -425,13 +425,13 @@ model Event {
 
   mode Mode
 
-  userId String?
-  deviceId String?
+  userId String
+  deviceId String
 
   causationId  String?
   correlationId String?
 
-  logicClock BigInt?
+  logicClock BigInt
 
   checksum  String?
 

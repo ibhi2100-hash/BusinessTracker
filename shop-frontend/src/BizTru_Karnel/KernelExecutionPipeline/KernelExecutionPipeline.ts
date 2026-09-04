@@ -3,7 +3,7 @@ import { Command } from "../KarnelTypes/types";
 import { domainEventTransformer } from "../Transformers/DomainEventTransformer";
 import { BusinessClock } from "../logicClockContract";
 import { EventStore } from "../SubKernel/types";
-import { ProjectionEventBus } from "@/src/buses/ProjectionBuses";
+import { ProjectionEventBus } from "@business/event-bus";
 import { TransactionManager } from "@/src/storage/transaction/TransactionManager";
 import { FrontendBusinessContext } from "@/src/Composer/context/BusinessContext";
 import { BusinessRepositoryRegistry } from "@/src/offline/sqlite/businessDatabase/repositories/RepositoryRegistry";

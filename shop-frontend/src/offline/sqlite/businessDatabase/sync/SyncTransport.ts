@@ -5,13 +5,13 @@ import {
     SyncTransport,
 } from "./types";
 
+import { apiFetch } from "@/lib/api";
 
 export class HttpSyncTransport
     implements SyncTransport {
 
     constructor(
-        private readonly baseUrl: string,
-        private readonly getToken: () => Promise<string>
+        private readonly baseUrl: string
     ) {}
 
     async push(
@@ -25,21 +25,16 @@ export class HttpSyncTransport
             };
         }
 
-        const token =
-            await this.getToken();
+        const response = await apiFetch(
+                    `${this.baseUrl}/sync/push`,
+                    {
+                        method: "POST",
 
-        const response =
-            await fetch(
-                `${this.baseUrl}/sync/push`,
-                {
-                    method: "POST",
-                    credentials: "include",
-
-                    body: JSON.stringify({
-                        events,
-                    }),
-                }
-            );
+                        body: JSON.stringify({
+                            events,
+                        }),
+                    }
+                );
 
         if (!response.ok) {
             throw new Error(
@@ -55,20 +50,11 @@ export class HttpSyncTransport
         cursor: number,
         limit = 100
     ): Promise<SyncPullResult> {
-
-        const token =
-            await this.getToken();
-
         const response =
-            await fetch(
+            await apiFetch(
                 `${this.baseUrl}/sync/pull?cursor=${cursor}&limit=${limit}`,
                 {
-                    method: "GET",
-
-                    headers: {
-                        "Authorization":
-                            `Bearer ${token}`,
-                    },
+                    method: "GET"
                 }
             );
 

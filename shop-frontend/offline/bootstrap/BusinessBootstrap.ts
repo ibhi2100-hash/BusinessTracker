@@ -20,7 +20,7 @@ import { SQLiteRuntime } from "@/src/storage/runtime/SQLiteRuntime";
 import { TransactionManager } from "@/src/storage/transaction/TransactionManager";
 import { SQLiteBusinessClock } from "@/src/BizTru_Karnel/BusinessClock/SQLiteBusinessClock" 
 import { FrontendBusinessContext } from "@/src/Composer/context/BusinessContext";
-import { ProjectionEventBus } from "@/src/buses/ProjectionBuses";
+import { ProjectionEventBus } from "@business/event-bus";
 import { BusinessConsumer } from "@/src/offline/sqlite/businessDatabase/projections/businesProjection";
 import { BranchConsumer } from "@/src/offline/sqlite/businessDatabase/projections/BranchProjection";
 import { ProductConsumer } from "@/src/offline/sqlite/businessDatabase/projections/ProductProjection";
@@ -225,11 +225,7 @@ private async createSynchronization(
 
     const transport =
         new HttpSyncTransport(
-            process.env.NEXT_PUBLIC_API_URL!,
-            async (): Promise<string> => {
-
-                return getAccessToken();
-            }
+            process.env.NEXT_PUBLIC_API_URL!
         );
 
 

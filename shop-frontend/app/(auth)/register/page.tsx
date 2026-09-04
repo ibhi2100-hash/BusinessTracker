@@ -55,8 +55,7 @@ export default function RegisterPage() {
       if (!res.ok) {
         throw new Error(result.message || "Registration failed");
       }
-      console.log("this is the result from registration: ", result)
-      localStorage.setItem("accessToken", result.accessToken);
+
       await app.client.services.registration.register(
         result
       )

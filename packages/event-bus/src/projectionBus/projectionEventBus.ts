@@ -1,7 +1,7 @@
 import {
-    EventBus,
-    EventConsumer
-} from "@business/event-bus";
+    EventBus
+} from "../contracts/EventBus";
+import { EventConsumer } from "../contracts/EventSubscriber";
 
 import { DomainEvent } from "@business/shared-types";
 

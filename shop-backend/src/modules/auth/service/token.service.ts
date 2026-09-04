@@ -2,6 +2,8 @@
 
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import crypto from "crypto";
+
 
 dotenv.config();
 
@@ -18,7 +20,7 @@ export interface JwtPayload {
 
 export class TokenService {
   generateAccessToken(payload: JwtPayload) {
-    const expiresIn = 15 * 60;
+    const expiresIn = 30 * 60;
 
     const token = jwt.sign(
       payload,
@@ -36,10 +38,15 @@ export class TokenService {
 
   generateRefreshToken(payload: JwtPayload) {
     const expiresIn =
-      30 * 24 * 60 * 60;
+      360 * 24 * 60 * 60;
+
+    const jti = crypto.randomUUID();
 
     const token = jwt.sign(
-      payload,
+      {
+        ...payload,
+        jti
+      },
       REFRESH_SECRET,
       {
         expiresIn,
@@ -49,6 +56,7 @@ export class TokenService {
     return {
       token,
       expiresIn,
+      jti
     };
   }
 
