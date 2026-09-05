@@ -9,14 +9,12 @@ import { EventValidator } from "../modules/sync/service/EventValidator.js";
 
 export function createSyncRouter(
     repositories: RepositoryRegistry,
-    projectionBus: ProjectionEventBus,
     eventValidator: EventValidator
 ) {
     const offlineSyncService =
         new OfflineSyncService(
             repositories,
-            eventValidator,
-            projectionBus
+            eventValidator
         );
 
     const offlineSyncController =

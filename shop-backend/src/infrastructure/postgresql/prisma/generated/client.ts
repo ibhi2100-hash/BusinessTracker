@@ -131,3 +131,8 @@ export type Snapshot = Prisma.SnapshotModel
  * 
  */
 export type Alert = Prisma.AlertModel
+/**
+ * Model Outbox
+ * 
+ */
+export type Outbox = Prisma.OutboxModel

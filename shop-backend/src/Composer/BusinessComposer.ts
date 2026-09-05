@@ -72,7 +72,6 @@ export class BusinessComposer {
         const router =
             createSyncRouter(
                 repositories,
-                projectionBus,
                 eventValidator
             );
 

@@ -6,6 +6,7 @@ import { EmployeesRepository } from "./EmployeesRepository.js";
 import { EventRepository } from "./eventRepository.js";
 import { InventoryRepository } from "./InventoryRepository.js";
 import { LedgerRepositoryImpl } from "./LedgerRepository.js";
+import { OutboxRepository } from "./OutboxRepository.js";
 import { ProductRepository } from "./ProductRepository.js";
 import { SalesRepository } from "./SalesRepsotory.js";
 
@@ -17,6 +18,8 @@ export class RepositoryRegistry {
     readonly branch: BranchRepository;
 
     readonly events: EventRepository;
+
+    readonly outbox: OutboxRepository;
 
     readonly products: ProductRepository;
 
@@ -38,7 +41,9 @@ export class RepositoryRegistry {
 
         this.branch = new BranchRepository();
 
-        this.events = new EventRepository()
+        this.events = new EventRepository();
+
+        this.outbox = new OutboxRepository();
 
         this.products = new ProductRepository();
 

@@ -401,7 +401,8 @@ export const ModelName = {
   Sale: 'Sale',
   OutboxEvent: 'OutboxEvent',
   Snapshot: 'Snapshot',
-  Alert: 'Alert'
+  Alert: 'Alert',
+  Outbox: 'Outbox'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -417,7 +418,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "business" | "branch" | "user" | "session" | "passwordResetToken" | "subscriptionPlan" | "businessSubscription" | "product" | "aggregate" | "inventory" | "processedSyncEvent" | "event" | "deviceClock" | "ledgerEntry" | "sale" | "outboxEvent" | "snapshot" | "alert"
+    modelProps: "business" | "branch" | "user" | "session" | "passwordResetToken" | "subscriptionPlan" | "businessSubscription" | "product" | "aggregate" | "inventory" | "processedSyncEvent" | "event" | "deviceClock" | "ledgerEntry" | "sale" | "outboxEvent" | "snapshot" | "alert" | "outbox"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1753,6 +1754,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Outbox: {
+      payload: Prisma.$OutboxPayload<ExtArgs>
+      fields: Prisma.OutboxFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OutboxFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OutboxPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OutboxFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OutboxPayload>
+        }
+        findFirst: {
+          args: Prisma.OutboxFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OutboxPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OutboxFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OutboxPayload>
+        }
+        findMany: {
+          args: Prisma.OutboxFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OutboxPayload>[]
+        }
+        create: {
+          args: Prisma.OutboxCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OutboxPayload>
+        }
+        createMany: {
+          args: Prisma.OutboxCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OutboxCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OutboxPayload>[]
+        }
+        delete: {
+          args: Prisma.OutboxDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OutboxPayload>
+        }
+        update: {
+          args: Prisma.OutboxUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OutboxPayload>
+        }
+        deleteMany: {
+          args: Prisma.OutboxDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OutboxUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OutboxUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OutboxPayload>[]
+        }
+        upsert: {
+          args: Prisma.OutboxUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OutboxPayload>
+        }
+        aggregate: {
+          args: Prisma.OutboxAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOutbox>
+        }
+        groupBy: {
+          args: Prisma.OutboxGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OutboxGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OutboxCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OutboxCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2104,6 +2179,20 @@ export const AlertScalarFieldEnum = {
 } as const
 
 export type AlertScalarFieldEnum = (typeof AlertScalarFieldEnum)[keyof typeof AlertScalarFieldEnum]
+
+
+export const OutboxScalarFieldEnum = {
+  eventId: 'eventId',
+  aggregateId: 'aggregateId',
+  aggregateType: 'aggregateType',
+  aggregateVersion: 'aggregateVersion',
+  globalPosition: 'globalPosition',
+  status: 'status',
+  attempts: 'attempts',
+  createdAt: 'createdAt'
+} as const
+
+export type OutboxScalarFieldEnum = (typeof OutboxScalarFieldEnum)[keyof typeof OutboxScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2532,6 +2621,7 @@ export type GlobalOmitConfig = {
   outboxEvent?: Prisma.OutboxEventOmit
   snapshot?: Prisma.SnapshotOmit
   alert?: Prisma.AlertOmit
+  outbox?: Prisma.OutboxOmit
 }
 
 /* Types for Logging */

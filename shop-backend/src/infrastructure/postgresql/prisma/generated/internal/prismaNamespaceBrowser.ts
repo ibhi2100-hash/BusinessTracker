@@ -68,7 +68,8 @@ export const ModelName = {
   Sale: 'Sale',
   OutboxEvent: 'OutboxEvent',
   Snapshot: 'Snapshot',
-  Alert: 'Alert'
+  Alert: 'Alert',
+  Outbox: 'Outbox'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -399,6 +400,20 @@ export const AlertScalarFieldEnum = {
 } as const
 
 export type AlertScalarFieldEnum = (typeof AlertScalarFieldEnum)[keyof typeof AlertScalarFieldEnum]
+
+
+export const OutboxScalarFieldEnum = {
+  eventId: 'eventId',
+  aggregateId: 'aggregateId',
+  aggregateType: 'aggregateType',
+  aggregateVersion: 'aggregateVersion',
+  globalPosition: 'globalPosition',
+  status: 'status',
+  attempts: 'attempts',
+  createdAt: 'createdAt'
+} as const
+
+export type OutboxScalarFieldEnum = (typeof OutboxScalarFieldEnum)[keyof typeof OutboxScalarFieldEnum]
 
 
 export const SortOrder = {

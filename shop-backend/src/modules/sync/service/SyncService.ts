@@ -1,95 +1,387 @@
 import { DomainEvent } from "@business/shared-types";
 import { RepositoryRegistry } from "../repositories/RepositoryRegistry.js";
 import { EventValidator } from "./EventValidator.js";
-import { ProjectionEventBus } from "@business/event-bus";
-import { BackendEvent } from "../repositories/eventRepository.js";
+import {
+    PushEventsResponse,
+    AcceptedEventResult,
+    ConflictEventResult,
+    RejectedEventResult,
+} from "./SyncProtocol.js";
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
+import { AggregateVersionConflictError } from "../conflict/conflictError.js";
 
-export interface SyncConflict {
-  eventId: string;
 
-  aggregateId: string;
-  aggregateType: string;
-
-  expectedAggregateVersion: number;
-  serverAggregateVersion: number;
-
-  serverEvents: BackendEvent[];
-}
 export class OfflineSyncService {
-  constructor(
-    private readonly repositories: RepositoryRegistry,
-    private readonly eventValidator: EventValidator,
-    private readonly projectionBus: ProjectionEventBus
-  ) {}
 
-  async push(events: DomainEvent[]) {
-    const accepted: string[] = [];
-    const rejected: any[] = [];
-    const conflicts: SyncConflict[] = [];
+    constructor(
+        private readonly repositories: RepositoryRegistry,
+        private readonly eventValidator: EventValidator
+    ) {}
 
-    for (const event of events) {
-      const serverVersion =
-        await this.repositories.aggregates.getAggregateVersion(
-          event.aggregateId,
-          event.aggregateType
-        );
 
-      if (
-        event.expectedAggregateVersion !== serverVersion
-      ) {
-        const serverEvents =
-          await this.repositories.events.loadAggregateTail(
-            event.aggregateId,
-            event.aggregateType,
-            event.expectedAggregateVersion
-          );
+    async push(
+        events: DomainEvent[]
+    ): Promise<PushEventsResponse> {
 
-        conflicts.push({
-          eventId: event.id,
+        const accepted:
+            AcceptedEventResult[] = [];
 
-          aggregateId: event.aggregateId,
-          aggregateType: event.aggregateType,
+        const conflicts:
+            ConflictEventResult[] = [];
 
-          expectedAggregateVersion:
-            event.expectedAggregateVersion,
+        const rejected:
+            RejectedEventResult[] = [];
 
-          serverAggregateVersion: serverVersion!,
 
-          serverEvents,
-        });
+        /*
+         * ---------------------------------------------------------
+         * EMPTY BATCH
+         * ---------------------------------------------------------
+         */
 
-        continue;
-      }
+        if (events.length === 0) {
 
-      return prisma.$transaction(async (tx) => {
-        let version = serverVersion
+            return {
+                accepted: [],
+                conflicts: [],
+                rejected: [],
 
-        try {
-            version++;
-            console.log("This is the Event in the Service Layer: ", event)
-
-            const saved = 
-                await this.repositories.events.append(
-                    event,
-                    version,
-                    tx
-                );
-            console.log("This is the saved the Event in the repository:  ", saved)
-
-            await this.projectionBus.publish(event)
-            
-        } catch (error) {
-            console.log(error)
-            
+                summary: {
+                    total: 0,
+                    accepted: 0,
+                    alreadyAccepted: 0,
+                    conflicts: 0,
+                    rejected: 0,
+                },
+            };
         }
-      })
-    }
 
-    return {
-      accepted,
-      rejected,
-      conflicts,
-    };
-  }
+
+        /*
+         * ---------------------------------------------------------
+         * PROCESS EVENTS SEQUENTIALLY
+         *
+         * This is intentional.
+         *
+         * Events from the same aggregate may depend on the
+         * immediately preceding event.
+         * ---------------------------------------------------------
+         */
+
+        for (const event of events) {
+
+            /*
+             * =====================================================
+             * 1. VALIDATE EVENT ENVELOPE
+             * =====================================================
+             */
+
+            try {
+
+                await this.eventValidator.validate(
+                    event
+                );
+
+            } catch (error) {
+
+                rejected.push({
+                    eventId:
+                        event.id,
+
+                    aggregateId:
+                        event.aggregateId,
+
+                    aggregateType:
+                        event.aggregateType,
+
+                    status:
+                        "REJECTED",
+
+                    reason:
+                        error instanceof Error
+                            ? error.message
+                            : String(error),
+                });
+
+                continue;
+            }
+
+
+            /*
+             * =====================================================
+             * 2. IDEMPOTENCY CHECK
+             *
+             * Has this exact event already been accepted?
+             * =====================================================
+             */
+
+            const existing =
+                await this.repositories.events.findById(
+                    event.id
+                );
+
+
+            if (existing) {
+
+                accepted.push({
+
+                    eventId:
+                        existing.id,
+
+                    aggregateId:
+                        existing.aggregateId,
+
+                    aggregateType:
+                        existing.aggregateType,
+
+                    aggregateVersion:
+                        existing.aggregateVersion,
+
+                    globalPosition:
+                        existing.globalPosition,
+
+                    status:
+                        "ALREADY_ACCEPTED",
+                });
+
+                continue;
+            }
+
+
+            /*
+             * =====================================================
+             * 3. ATOMIC PERSISTENCE
+             * =====================================================
+             */
+
+            try {
+                
+                const saved =
+                    await prisma.$transaction(
+                        async (tx) => {
+
+                            /*
+                            * =====================================================
+                            * ADVANCE / CREATE AGGREGATE STREAM HEAD
+                            *
+                            * expectedVersion = 0:
+                            *     creates aggregate at version 1
+                            *
+                            * expectedVersion > 0:
+                            *     atomically increments existing aggregate
+                            *
+                            * Any mismatch throws AggregateVersionConflictError.
+                            * =====================================================
+                            */
+
+                            const aggregateVersion =
+                                await this.repositories
+                                    .aggregates
+                                    .advanceVersion(
+                                        event.aggregateId,
+                                        event.aggregateType,
+                                        event.expectedAggregateVersion,
+                                        tx,
+                                    );
+
+
+                            /*
+                            * =====================================================
+                            * APPEND EVENT
+                            * =====================================================
+                            */
+
+                            const savedEvent =
+                                await this.repositories
+                                    .events
+                                    .append(
+                                        event,
+                                        aggregateVersion,
+                                        tx,
+                                    );
+
+
+                            /*
+                            * =====================================================
+                            * APPEND OUTBOX
+                            * =====================================================
+                            */
+
+                            await this.repositories
+                                .outbox
+                                .append(
+                                    savedEvent,
+                                    tx,
+                                );
+
+
+                            return savedEvent;
+                        }
+                    );
+
+                /*
+                 * ================================================
+                 * TRANSACTION SUCCESS
+                 * ================================================
+                 */
+
+                accepted.push({
+
+                    eventId:
+                        saved.eventId,
+
+                    aggregateId:
+                        saved.aggregateId,
+
+                    aggregateType:
+                        saved.aggregateType,
+
+                    aggregateVersion:
+                        saved.aggregateVersion,
+
+                    globalPosition:
+                        saved.globalPosition,
+
+                    status:
+                        "ACCEPTED",
+                });
+
+
+            } catch (error) {
+
+
+                /*
+                 * =================================================
+                 * 4. CONFLICT
+                 * =================================================
+                 */
+
+                if (
+                    error
+                    instanceof AggregateVersionConflictError
+                ) {
+
+                    /*
+                     * The transaction rolled back.
+                     *
+                     * Now read the authoritative server state
+                     * outside the transaction.
+                     */
+
+                    const serverVersion =
+                        await this.repositories
+                            .aggregates
+                            .getAggregateVersion(
+                                event.aggregateId,
+                                event.aggregateType,
+                            );
+
+
+                    const serverEvents =
+                        await this.repositories
+                            .events
+                            .loadAggregateTail(
+                                event.aggregateId,
+                                event.aggregateType,
+                                event.expectedAggregateVersion
+                            );
+
+
+                    conflicts.push({
+
+                        eventId:
+                            event.id,
+
+                        aggregateId:
+                            event.aggregateId,
+
+                        aggregateType:
+                            event.aggregateType,
+
+                        expectedAggregateVersion:
+                            event.expectedAggregateVersion,
+
+                        serverAggregateVersion:
+                            serverVersion!,
+
+                        serverEvents,
+
+                        status:
+                            "CONFLICT",
+                    });
+
+
+                    continue;
+                }
+
+
+                /*
+                 * =================================================
+                 * 5. OTHER FAILURE
+                 * =================================================
+                 */
+
+                rejected.push({
+
+                    eventId:
+                        event.id,
+
+                    aggregateId:
+                        event.aggregateId,
+
+                    aggregateType:
+                        event.aggregateType,
+
+                    status:
+                        "REJECTED",
+
+                    reason:
+                        error instanceof Error
+                            ? error.message
+                            : String(error),
+                });
+            }
+        }
+
+
+        /*
+         * =========================================================
+         * FINAL RESPONSE
+         * =========================================================
+         */
+
+        return {
+
+            accepted,
+
+            conflicts,
+
+            rejected,
+
+            summary: {
+
+                total:
+                    events.length,
+
+                accepted:
+                    accepted.filter(
+                        event =>
+                            event.status === "ACCEPTED"
+                    ).length,
+
+                alreadyAccepted:
+                    accepted.filter(
+                        event =>
+                            event.status ===
+                            "ALREADY_ACCEPTED"
+                    ).length,
+
+                conflicts:
+                    conflicts.length,
+
+                rejected:
+                    rejected.length,
+            },
+        };
+    }
 }

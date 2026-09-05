@@ -664,3 +664,23 @@ model Alert {
 
   @@index([createdAt])
 }
+
+
+model Outbox {
+  eventId String @id
+
+  aggregateId String
+
+  aggregateType String
+
+  aggregateVersion Decimal
+
+  globalPosition  BigInt
+
+  status String
+
+  attempts  Decimal
+
+  createdAt DateTime
+
+}

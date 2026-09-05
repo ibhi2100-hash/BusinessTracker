@@ -21,13 +21,6 @@ export class OfflineSyncController {
             });
         }
 
-
-        console.log(
-            "this is the data that hit the backend",
-            events
-        );
-
-
         const result =
             await this.syncService.push(
                 events

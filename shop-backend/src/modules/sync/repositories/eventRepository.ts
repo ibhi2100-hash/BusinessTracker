@@ -35,16 +35,101 @@ export interface BackendEvent {
   createdAt: Date;
 }
 
+export interface AppendEventResult {
+    eventId: string;
+
+    aggregateId: string;
+    aggregateType: string;
+
+    aggregateVersion: number;
+    globalPosition: number;
+}
+
+export interface ExistingEvent {
+    id: string;
+
+    aggregateId: string;
+    aggregateType: string;
+
+    aggregateVersion: number;
+    globalPosition: number;
+}
+
 export class EventRepository {
   async append(
-    event: DomainEvent,
-    aggregateVersion: number,
-    tx: Prisma.TransactionClient
-  ): Promise<void> {
-    await tx.event.upsert(
-      EventMapper.toUpsertArgs(event, aggregateVersion)
-    );
-  }
+        event: DomainEvent,
+        aggregateVersion: number,
+        tx: Prisma.TransactionClient
+    ): Promise<AppendEventResult> {
+
+        const saved = await tx.event.create({
+            data: {
+                id: event.id,
+
+                aggregateId:
+                    event.aggregateId,
+
+                aggregateType:
+                    event.aggregateType,
+
+                aggregateVersion,
+
+                type:
+                    event.type,
+
+                mode:
+                    event.mode,
+
+                payload:
+                    event.payload,
+
+                businessId:
+                    event.businessId,
+
+                branchId:
+                    event.branchId,
+
+                causationId:
+                    event.causationId,
+
+                correlationId:
+                    event.correlationId,
+
+                logicClock:
+                    event.logicClock,
+
+                createdAt:
+                    new Date(event.createdAt),
+
+                checksum:
+                    event.checksum,
+            },
+
+            select: {
+                id: true,
+                aggregateId: true,
+                aggregateType: true,
+                aggregateVersion: true,
+                globalPosition: true,
+            },
+        });
+
+        return {
+            eventId: saved.id,
+
+            aggregateId:
+                saved.aggregateId,
+
+            aggregateType:
+                saved.aggregateType,
+
+            aggregateVersion:
+                saved.aggregateVersion,
+
+            globalPosition:
+                saved.globalPosition,
+        };
+    }
 
   /**
    * Returns the authoritative server events that occurred
@@ -78,6 +163,23 @@ export class EventRepository {
     });
 
     return rows.map(EventMapper.fromRow);
+  }
+
+  async findById(
+    eventId: string,
+  ): Promise<ExistingEvent | null> {
+    return prisma.event.findUnique({
+      where: {
+        id: eventId
+      },
+      select: {
+        id: true,
+        aggregateId: true,
+        aggregateType: true,
+        aggregateVersion: true,
+        globalPosition: true
+      }
+    })
   }
 }
 
