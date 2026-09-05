@@ -22,7 +22,8 @@ class BusinessReducer {
             status: "ONBOARDING",
             isOnboarding: true,
             onboardingCompleted: false,
-            createdAt: event.createdAt
+            createdAt: event.createdAt,
+            activatedAt: event.createdAt,
         };
     }
     activate(current, event) {

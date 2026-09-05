@@ -14,11 +14,19 @@ interface ProductPayload {
 
     name: string;
 
-    imageUrl?: string;
+    imageUrl: string | null;
 
-    description?: string;
+    description: string | null;
+
+    sku: string | null;
+
+    barcode: string | null;
+
+    category: string | null;
 
     costPrice: number;
+
+    reorderLevel: number  | null;
 
     price: number;
 
@@ -128,16 +136,22 @@ implements ProjectionReducer<Product, DomainEvent> {
             description:
                 payload.description,
 
+            sku: payload.sku ?? null,
+
+            barcode: payload.barcode ?? null,
+
             businessId:
-                event.businessId ??
-                undefined,
+                event.businessId,
 
             branchId:
-                event.branchId ??
-                undefined,
+                event.branchId!,
+
+            category: payload.category ?? null,
 
             isActive:
                 true,
+
+            reorderLevel: payload.reorderLevel ?? null,
 
             isDeleted:
                 false,
@@ -146,7 +160,10 @@ implements ProjectionReducer<Product, DomainEvent> {
                 event.createdAt,
 
             updatedAt:
-                event.createdAt
+                event.createdAt,
+            deletedAt: event.type === InventoryEventType.PRODUCT_DELETED 
+                            ? event.createdAt
+                            : null
 
         };
 

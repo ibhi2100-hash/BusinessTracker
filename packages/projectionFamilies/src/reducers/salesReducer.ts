@@ -15,7 +15,7 @@ import { ProjectionReducer } from "../contracts/ProjectionReducer";
 
 interface SaleAddedPayload {
   productId: string;
-  productName?: string;
+  productName: string ;
   /** Unit sell price */
  
   unitCostPrice: number;
@@ -26,12 +26,12 @@ interface SaleAddedPayload {
   /** Optional precomputed line total (price × quantity) */
   amount : number;
   total : number;
-  paymentMethod?: PaymentMethod;
-  customerId?: string;
-  customerRef?: string;
-  invoiceId?: string;
-  note?: string;
-  saleGroupId?: string;
+  paymentMethod: PaymentMethod;
+  customerId: string | null;
+  customerRef: string | null;
+  invoiceId: string | null;
+  note: string | null;
+  saleGroupId: string | null;
   mode?: Mode;
   /** If true, costPrice is already line total (unit × qty) */
   costIsLineTotal?: boolean;
@@ -115,7 +115,7 @@ export class SalesReducer
     return {
       id: event.aggregateId,
       businessId: event.businessId,
-      branchId: event.branchId,
+      branchId: event.branchId!,
 
       productId: p.productId,
       productName: p.productName,

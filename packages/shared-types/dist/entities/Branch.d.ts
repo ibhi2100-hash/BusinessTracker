@@ -1,10 +1,10 @@
 export type Branch = {
     id: string;
-    businessId?: string;
+    businessId: string;
     name: string;
-    address?: string;
-    phone?: string;
-    isActive?: boolean;
-    isDefault?: boolean;
-    createdAt?: number;
+    address: string | null;
+    phone: string | null;
+    isActive: boolean;
+    isDefault: boolean;
+    createdAt: number;
 };

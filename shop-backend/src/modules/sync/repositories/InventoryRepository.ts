@@ -297,14 +297,7 @@ export class InventoryMapper {
                 createdAt:
                     new Date(
                         inventory.createdAt
-                    ),
-
-                updatedAt:
-                    inventory.updatedAt
-                        ? new Date(
-                            inventory.updatedAt
-                        )
-                        : undefined,
+                    )
 
             },
 

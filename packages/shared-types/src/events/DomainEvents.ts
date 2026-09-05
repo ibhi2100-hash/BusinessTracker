@@ -2,15 +2,13 @@ export interface DomainEvent<TPayload = unknown> {
 
     readonly id: string;
 
-    readonly businessId?: string;
+    readonly businessId: string;
 
-    readonly branchId?: string;
+    readonly branchId: string | null;
 
     readonly aggregateId: string;
 
     readonly aggregateType: string;
-
-    readonly aggregateVersion?: number;
     
     readonly expectedAggregateVersion: number;
 
@@ -24,13 +22,13 @@ export interface DomainEvent<TPayload = unknown> {
 
     readonly causationId: string;
 
-    readonly correlationId?: string;
+    readonly correlationId: string;
 
     readonly logicClock: number;
 
     readonly createdAt: number;
 
-    readonly  checksum?:  string;
+    readonly  checksum:  string;
 
 }
 

@@ -72,7 +72,8 @@ class InventoryReducer {
             businessId: event.businessId,
             quantity: payload.quantity,
             costPrice: payload.costPrice,
-            createdAt: event.createdAt
+            createdAt: event.createdAt,
+            updatedAt: event.createdAt,
         };
     }
     // =====================================================

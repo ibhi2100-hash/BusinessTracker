@@ -198,7 +198,6 @@ export const ProductScalarFieldEnum = {
   id: 'id',
   businessId: 'businessId',
   branchId: 'branchId',
-  branchBusinessId: 'branchBusinessId',
   sku: 'sku',
   barcode: 'barcode',
   name: 'name',

@@ -1,11 +1,11 @@
 export type Business = {
     id: string;
-    userId: string;
+    userId: string | null;
     name: string;
-    address?: string;
-    createdAt?: number;
-    activatedAt?: number;
-    isOnboarding?: boolean;
-    onboardingCompleted?: boolean;
-    status?: "ONBOARDING" | "ACTIVE" | "SUSPENDED";
+    address: string | null;
+    createdAt: number;
+    activatedAt: number | null;
+    isOnboarding: boolean;
+    onboardingCompleted: boolean;
+    status: "ONBOARDING" | "ACTIVE" | "SUSPENDED";
 };

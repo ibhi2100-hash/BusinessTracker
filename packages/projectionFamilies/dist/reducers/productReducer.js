@@ -44,14 +44,19 @@ class ProductReducer {
             costPrice: payload.costPrice,
             imageUrl: payload.imageUrl,
             description: payload.description,
-            businessId: event.businessId ??
-                undefined,
-            branchId: event.branchId ??
-                undefined,
+            sku: payload.sku ?? null,
+            barcode: payload.barcode ?? null,
+            businessId: event.businessId,
+            branchId: event.branchId,
+            category: payload.category ?? null,
             isActive: true,
+            reorderLevel: payload.reorderLevel ?? null,
             isDeleted: false,
             createdAt: event.createdAt,
-            updatedAt: event.createdAt
+            updatedAt: event.createdAt,
+            deletedAt: event.type === shared_types_1.InventoryEventType.PRODUCT_DELETED
+                ? event.createdAt
+                : null
         };
     }
     // =========================================================

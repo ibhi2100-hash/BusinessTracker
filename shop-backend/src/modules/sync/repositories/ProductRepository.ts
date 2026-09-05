@@ -255,28 +255,25 @@ export class ProductMapper {
                     product.businessId,
 
                 branchId:
-                    product.branchId ?? null,
-
-                branchBusinessId:
-                    product.branchBusinessId ?? null,
+                    product.branchId,
 
                 sku:
-                    product.sku ?? null,
+                    product.sku,
 
                 barcode:
-                    product.barcode ?? null,
+                    product.barcode,
 
                 name:
                     product.name,
 
                 imageUrl:
-                    product.imageUrl ?? null,
+                    product.imageUrl,
 
                 description:
-                    product.description ?? null,
+                    product.description,
 
                 category:
-                    product.category ?? null,
+                    product.category,
 
                 costPrice:
                     new Prisma.Decimal(
@@ -305,14 +302,6 @@ export class ProductMapper {
                     new Date(
                         product.createdAt
                     ),
-
-                updatedAt:
-                    product.updatedAt
-                        ? new Date(
-                            product.updatedAt
-                        )
-                        : undefined,
-
                 deletedAt:
                     product.deletedAt
                         ? new Date(
@@ -327,8 +316,6 @@ export class ProductMapper {
                 branchId:
                     product.branchId ?? null,
 
-                branchBusinessId:
-                    product.branchBusinessId ?? null,
 
                 sku:
                     product.sku ?? null,
@@ -415,28 +402,25 @@ export class ProductMapper {
                 row.businessId,
 
             branchId:
-                row.branchId ?? undefined,
-
-            branchBusinessId:
-                row.branchBusinessId ?? undefined,
+                row.branchId,
 
             sku:
-                row.sku ?? undefined,
+                row.sku,
 
             barcode:
-                row.barcode ?? undefined,
+                row.barcode,
 
             name:
                 row.name,
 
             imageUrl:
-                row.imageUrl ?? undefined,
+                row.imageUrl,
 
             description:
-                row.description ?? undefined,
+                row.description,
 
             category:
-                row.category ?? undefined,
+                row.category,
 
             costPrice:
                 Number(row.costPrice),
@@ -447,7 +431,7 @@ export class ProductMapper {
             reorderLevel:
                 row.reorderLevel != null
                     ? Number(row.reorderLevel)
-                    : undefined,
+                    : null,
 
             isActive:
                 row.isActive,
@@ -464,7 +448,7 @@ export class ProductMapper {
             deletedAt:
                 row.deletedAt
                     ? row.deletedAt.getTime()
-                    : undefined,
+                    : null,
         };
 
     }

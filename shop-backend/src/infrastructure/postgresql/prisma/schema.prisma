@@ -283,8 +283,7 @@ model Product {
 
   businessId String
 
-  branchId         String?
-  branchBusinessId String?
+  branchId         String
 
   sku     String?
   barcode String?
@@ -325,8 +324,6 @@ model Product {
   @@unique([businessId, barcode])
 
   @@index([businessId])
-
-  @@index([branchId, branchBusinessId])
 
   @@index([name])
 
@@ -427,7 +424,7 @@ model ProcessedSyncEvent {
 model Event {
   id String   @id
 
-  businessId String?
+  businessId String
 
   branchId         String?
 
@@ -446,12 +443,12 @@ model Event {
   userId String
   deviceId String
 
-  causationId  String?
-  correlationId String?
+  causationId  String
+  correlationId String
 
   logicClock BigInt
 
-  checksum  String?
+  checksum  String
 
   createdAt DateTime @default(now())
 

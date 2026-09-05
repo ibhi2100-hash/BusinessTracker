@@ -9,7 +9,8 @@ class BranchReducer {
                 return {
                     id: event.payload.id,
                     name: event.payload.name,
-                    phone: event.payload.phone,
+                    address: event.payload.address ?? null,
+                    phone: event.payload.phone ?? null,
                     businessId: event.businessId,
                     isActive: true,
                     isDefault: true,

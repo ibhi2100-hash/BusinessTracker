@@ -8,8 +8,8 @@ import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
 export interface BackendEvent {
   id: string;
 
-  businessId?: string;
-  branchId?: string;
+  businessId: string | null;
+  branchId: string | null;
 
   aggregateId: string;
   aggregateType: string;
@@ -25,12 +25,12 @@ export interface BackendEvent {
   userId: string;
   deviceId: string;
 
-  causationId?: string;
-  correlationId?: string;
+  causationId: string | null;
+  correlationId: string | null;
 
   logicClock: bigint;
 
-  checksum?: string;
+  checksum: string | null;
 
   createdAt: Date;
 }
@@ -108,7 +108,7 @@ class EventMapper {
 
       causationId: event.causationId,
 
-      correlationId: event.causationId,
+      correlationId: event.correlationId,
 
       logicClock: BigInt(event.logicClock),
 
@@ -132,8 +132,8 @@ class EventMapper {
     return {
       id: row.id,
 
-      businessId: row.businessId ?? undefined,
-      branchId: row.branchId ?? undefined,
+      businessId: row.businessId,
+      branchId: row.branchId,
 
       aggregateId: row.aggregateId,
       aggregateType: row.aggregateType,
@@ -149,12 +149,12 @@ class EventMapper {
       userId: row.userId,
       deviceId: row.deviceId,
 
-      causationId: row.causationId ?? undefined,
-      correlationId: row.correlationId ?? undefined,
+      causationId: row.causationId,
+      correlationId: row.correlationId,
 
       logicClock: row.logicClock,
 
-      checksum: row.checksum ?? undefined,
+      checksum: row.checksum,
 
       createdAt: row.createdAt,
     };

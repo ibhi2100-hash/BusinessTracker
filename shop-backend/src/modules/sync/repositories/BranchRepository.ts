@@ -159,7 +159,7 @@ export class BranchRepository {
             data: {
 
                 isActive:
-                    state.isActive,
+                    state.isActive ?? true,
             },
         });
     }
@@ -196,7 +196,12 @@ export class BranchMapper {
                     branch.id,
 
                 businessId:
-                    branch.businessId,
+                    branch.businessId
+                        ?? (()=> {
+                            throw new Error(
+                                `Cannot project branch ${branch.id}: businessId Is missing`
+                            )
+                        })(),
 
                 name:
                     branch.name,
@@ -210,15 +215,20 @@ export class BranchMapper {
                     null,
 
                 isActive:
-                    branch.isActive,
+                    branch.isActive ?? true,
 
                 isDefault:
-                    branch.isDefault,
+                    branch.isDefault ?? false,
 
-                createdAt:
-                    new Date(
+                createdAt: branch.createdAt !== undefined
+                   ? new Date(
                         branch.createdAt
-                    ),
+                    )
+                    : (()=> {
+                        throw new Error(
+                            `Cannot project branch ${branch.id}: createdAt is missing`
+                        )
+                    })(),
             },
 
             update: {
@@ -238,10 +248,10 @@ export class BranchMapper {
                     null,
 
                 isActive:
-                    branch.isActive,
+                    branch.isActive ?? true,
 
                 isDefault:
-                    branch.isDefault,
+                    branch.isDefault ?? false,
             },
         };
     }
@@ -254,36 +264,20 @@ export class BranchMapper {
      */
 
     static fromRow(
-        row: PrismaBranch
-    ): Branch {
+    row: PrismaBranch
+): Branch {
+    return {
+        id: row.id,
+        businessId: row.businessId,
+        name: row.name,
 
-        return {
+        address: row.address ,
+        phone: row.phone,
 
-            id:
-                row.id,
+        isActive: row.isActive,
+        isDefault: row.isDefault,
 
-            businessId:
-                row.businessId,
-
-            name:
-                row.name,
-
-            address:
-                row.address ??
-                undefined,
-
-            phone:
-                row.phone ??
-                undefined,
-
-            isActive:
-                row.isActive,
-
-            isDefault:
-                row.isDefault,
-
-            createdAt:
-                row.createdAt.getTime(),
-        };
-    }
+        createdAt: row.createdAt.getTime(),
+    };
+}
 }

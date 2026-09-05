@@ -24,6 +24,7 @@ export async function domainEventTransformer(command: Command,  context: Busines
         correlationId: command.correlationId,
         logicClock,
         createdAt: command.createdAt,
+        checksum: crypto.randomUUID(),
     }
 
 }

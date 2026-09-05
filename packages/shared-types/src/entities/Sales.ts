@@ -12,12 +12,12 @@ export interface Sales {
   /** Unique id for this sale line */
   id: string;
 
-  businessId?: string;
-  branchId?: string;
+  businessId: string;
+  branchId: string;
 
   /** Product that was sold */
   productId: string;
-  productName?: string;
+  productName: string | null;
 
   /** Units sold on this line */
   quantity: number;
@@ -49,17 +49,17 @@ export interface Sales {
   profit: number;
 
   /** Who recorded the sale */
-  userId?: string;
+  userId: string;
 
   /** Optional customer / walk-in reference */
-  customerId?: string;
-  customerRef?: string;
+  customerId: string | null;
+  customerRef: string | null;
 
   /** Optional invoice / receipt number */
-  invoiceId?: string;
+  invoiceId: string | null;
 
-  paymentMethod?: PaymentMethod;
-  note?: string;
+  paymentMethod: PaymentMethod;
+  note: string | null;
 
   /**
    * Lifecycle for financial control:
@@ -73,11 +73,11 @@ export interface Sales {
    * Shared id for every line in the same cart checkout.
    * Empty / undefined for single quick-sell.
    */
-  saleGroupId?: string;
+  saleGroupId: string | null;
 
   mode: Mode;
 
   /** Unix ms or ISO — keep one convention app-wide. Prefer number (ms). */
   createdAt: number;
-  updatedAt: number;
+  updatedAt: number | null;
 }

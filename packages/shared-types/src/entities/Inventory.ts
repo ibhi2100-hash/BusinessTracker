@@ -5,6 +5,6 @@ export type Inventory ={
   businessId: string;
   quantity: number;
   costPrice: number;
-  updatedAt?: number;
-  createdAt?: number;
+  updatedAt: number | null;
+  createdAt: number;
 }

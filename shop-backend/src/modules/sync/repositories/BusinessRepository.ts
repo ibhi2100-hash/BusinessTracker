@@ -160,76 +160,40 @@ export class BusinessMapper {
     ): Prisma.BusinessUpsertArgs {
 
         return {
-
             where: {
                 id: business.id,
             },
 
             create: {
+                id: business.id,
+                name: business.name,
+                userId: business.userId,
+                address: business.address,
 
-                id:
-                    business.id,
+                isOnboarding: business.isOnboarding,
+                onboardingCompleted: business.onboardingCompleted,
+                status: business.status,
 
-                name:
-                    business.name,
-
-                userId:
-                    business.userId ??
-                    null,
-
-                address:
-                    business.address ??
-                    null,
-
-                isOnboarding:
-                    business.isOnboarding,
-
-                onboardingCompleted:
-                    business.onboardingCompleted,
-
-                status:
-                    business.status,
-
-                createdAt:
-                    new Date(
-                        business.createdAt
-                    ),
+                createdAt: new Date(business.createdAt),
 
                 activatedAt:
-                    business.activatedAt
-                        ? new Date(
-                            business.activatedAt
-                        )
+                    business.activatedAt !== null
+                        ? new Date(business.activatedAt)
                         : null,
             },
 
             update: {
+                name: business.name,
+                userId: business.userId,
+                address: business.address,
 
-                name:
-                    business.name,
-
-                userId:
-                    business.userId ??
-                    null,
-
-                address:
-                    business.address ??
-                    null,
-
-                isOnboarding:
-                    business.isOnboarding,
-
-                onboardingCompleted:
-                    business.onboardingCompleted,
-
-                status:
-                    business.status,
+                isOnboarding: business.isOnboarding,
+                onboardingCompleted: business.onboardingCompleted,
+                status: business.status,
 
                 activatedAt:
-                    business.activatedAt
-                        ? new Date(
-                            business.activatedAt
-                        )
+                    business.activatedAt !== null
+                        ? new Date(business.activatedAt)
                         : null,
             },
         };
@@ -255,12 +219,10 @@ export class BusinessMapper {
                 row.name,
 
             userId:
-                row.userId ??
-                undefined,
+                row.userId,
 
             address:
-                row.address ??
-                undefined,
+                row.address,
 
             isOnboarding:
                 row.isOnboarding,
@@ -274,10 +236,7 @@ export class BusinessMapper {
             createdAt:
                 row.createdAt.getTime(),
 
-            activatedAt:
-                row.activatedAt
-                    ? row.activatedAt.getTime()
-                    : undefined,
+            activatedAt: row.activatedAt?.getTime() ?? null,
         };
     }
 
@@ -293,22 +252,14 @@ export class BusinessMapper {
     ): Prisma.BusinessUpdateInput {
 
         return {
+            activatedAt: new Date(business.activatedAt!),
 
-            activatedAt:
-                business.activatedAt
-                    ? new Date(
-                        business.activatedAt
-                    )
-                    : null,
+            status: business.status,
 
-            status:
-                business.status,
-
-            isOnboarding:
-                business.isOnboarding,
+            isOnboarding: business.isOnboarding ?? false,
 
             onboardingCompleted:
-                business.onboardingCompleted,
+                business.onboardingCompleted ?? false,
         };
     }
 }

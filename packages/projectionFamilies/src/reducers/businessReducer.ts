@@ -58,7 +58,10 @@ implements ProjectionReducer<Business, DomainEvent<BusinessPayload>>{
             false,
 
         createdAt:
-            event.createdAt
+            event.createdAt,
+
+        activatedAt: 
+            event.createdAt,
 
     };
 

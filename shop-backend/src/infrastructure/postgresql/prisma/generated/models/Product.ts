@@ -42,7 +42,6 @@ export type ProductMinAggregateOutputType = {
   id: string | null
   businessId: string | null
   branchId: string | null
-  branchBusinessId: string | null
   sku: string | null
   barcode: string | null
   name: string | null
@@ -63,7 +62,6 @@ export type ProductMaxAggregateOutputType = {
   id: string | null
   businessId: string | null
   branchId: string | null
-  branchBusinessId: string | null
   sku: string | null
   barcode: string | null
   name: string | null
@@ -84,7 +82,6 @@ export type ProductCountAggregateOutputType = {
   id: number
   businessId: number
   branchId: number
-  branchBusinessId: number
   sku: number
   barcode: number
   name: number
@@ -119,7 +116,6 @@ export type ProductMinAggregateInputType = {
   id?: true
   businessId?: true
   branchId?: true
-  branchBusinessId?: true
   sku?: true
   barcode?: true
   name?: true
@@ -140,7 +136,6 @@ export type ProductMaxAggregateInputType = {
   id?: true
   businessId?: true
   branchId?: true
-  branchBusinessId?: true
   sku?: true
   barcode?: true
   name?: true
@@ -161,7 +156,6 @@ export type ProductCountAggregateInputType = {
   id?: true
   businessId?: true
   branchId?: true
-  branchBusinessId?: true
   sku?: true
   barcode?: true
   name?: true
@@ -268,8 +262,7 @@ export type ProductGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 export type ProductGroupByOutputType = {
   id: string
   businessId: string
-  branchId: string | null
-  branchBusinessId: string | null
+  branchId: string
   sku: string | null
   barcode: string | null
   name: string
@@ -312,8 +305,7 @@ export type ProductWhereInput = {
   NOT?: Prisma.ProductWhereInput | Prisma.ProductWhereInput[]
   id?: Prisma.StringFilter<"Product"> | string
   businessId?: Prisma.StringFilter<"Product"> | string
-  branchId?: Prisma.StringNullableFilter<"Product"> | string | null
-  branchBusinessId?: Prisma.StringNullableFilter<"Product"> | string | null
+  branchId?: Prisma.StringFilter<"Product"> | string
   sku?: Prisma.StringNullableFilter<"Product"> | string | null
   barcode?: Prisma.StringNullableFilter<"Product"> | string | null
   name?: Prisma.StringFilter<"Product"> | string
@@ -337,8 +329,7 @@ export type ProductWhereInput = {
 export type ProductOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
-  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
-  branchBusinessId?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchId?: Prisma.SortOrder
   sku?: Prisma.SortOrderInput | Prisma.SortOrder
   barcode?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -368,8 +359,7 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ProductWhereInput | Prisma.ProductWhereInput[]
   id?: Prisma.StringFilter<"Product"> | string
   businessId?: Prisma.StringFilter<"Product"> | string
-  branchId?: Prisma.StringNullableFilter<"Product"> | string | null
-  branchBusinessId?: Prisma.StringNullableFilter<"Product"> | string | null
+  branchId?: Prisma.StringFilter<"Product"> | string
   sku?: Prisma.StringNullableFilter<"Product"> | string | null
   barcode?: Prisma.StringNullableFilter<"Product"> | string | null
   name?: Prisma.StringFilter<"Product"> | string
@@ -393,8 +383,7 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
 export type ProductOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
-  branchId?: Prisma.SortOrderInput | Prisma.SortOrder
-  branchBusinessId?: Prisma.SortOrderInput | Prisma.SortOrder
+  branchId?: Prisma.SortOrder
   sku?: Prisma.SortOrderInput | Prisma.SortOrder
   barcode?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -422,8 +411,7 @@ export type ProductScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ProductScalarWhereWithAggregatesInput | Prisma.ProductScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Product"> | string
   businessId?: Prisma.StringWithAggregatesFilter<"Product"> | string
-  branchId?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
-  branchBusinessId?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
+  branchId?: Prisma.StringWithAggregatesFilter<"Product"> | string
   sku?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
   barcode?: Prisma.StringNullableWithAggregatesFilter<"Product"> | string | null
   name?: Prisma.StringWithAggregatesFilter<"Product"> | string
@@ -442,7 +430,6 @@ export type ProductScalarWhereWithAggregatesInput = {
 
 export type ProductCreateInput = {
   id: string
-  branchBusinessId?: string | null
   sku?: string | null
   barcode?: string | null
   name: string
@@ -466,8 +453,7 @@ export type ProductCreateInput = {
 export type ProductUncheckedCreateInput = {
   id: string
   businessId: string
-  branchId?: string | null
-  branchBusinessId?: string | null
+  branchId: string
   sku?: string | null
   barcode?: string | null
   name: string
@@ -488,7 +474,6 @@ export type ProductUncheckedCreateInput = {
 
 export type ProductUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -512,8 +497,7 @@ export type ProductUpdateInput = {
 export type ProductUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -535,8 +519,7 @@ export type ProductUncheckedUpdateInput = {
 export type ProductCreateManyInput = {
   id: string
   businessId: string
-  branchId?: string | null
-  branchBusinessId?: string | null
+  branchId: string
   sku?: string | null
   barcode?: string | null
   name: string
@@ -555,7 +538,6 @@ export type ProductCreateManyInput = {
 
 export type ProductUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -575,8 +557,7 @@ export type ProductUpdateManyMutationInput = {
 export type ProductUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -622,7 +603,6 @@ export type ProductCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
-  branchBusinessId?: Prisma.SortOrder
   sku?: Prisma.SortOrder
   barcode?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -649,7 +629,6 @@ export type ProductMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
-  branchBusinessId?: Prisma.SortOrder
   sku?: Prisma.SortOrder
   barcode?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -670,7 +649,6 @@ export type ProductMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
-  branchBusinessId?: Prisma.SortOrder
   sku?: Prisma.SortOrder
   barcode?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -820,7 +798,6 @@ export type ProductUpdateOneRequiredWithoutSaleNestedInput = {
 
 export type ProductCreateWithoutBusinessInput = {
   id: string
-  branchBusinessId?: string | null
   sku?: string | null
   barcode?: string | null
   name: string
@@ -842,8 +819,7 @@ export type ProductCreateWithoutBusinessInput = {
 
 export type ProductUncheckedCreateWithoutBusinessInput = {
   id: string
-  branchId?: string | null
-  branchBusinessId?: string | null
+  branchId: string
   sku?: string | null
   barcode?: string | null
   name: string
@@ -894,8 +870,7 @@ export type ProductScalarWhereInput = {
   NOT?: Prisma.ProductScalarWhereInput | Prisma.ProductScalarWhereInput[]
   id?: Prisma.StringFilter<"Product"> | string
   businessId?: Prisma.StringFilter<"Product"> | string
-  branchId?: Prisma.StringNullableFilter<"Product"> | string | null
-  branchBusinessId?: Prisma.StringNullableFilter<"Product"> | string | null
+  branchId?: Prisma.StringFilter<"Product"> | string
   sku?: Prisma.StringNullableFilter<"Product"> | string | null
   barcode?: Prisma.StringNullableFilter<"Product"> | string | null
   name?: Prisma.StringFilter<"Product"> | string
@@ -914,7 +889,6 @@ export type ProductScalarWhereInput = {
 
 export type ProductCreateWithoutBranchInput = {
   id: string
-  branchBusinessId?: string | null
   sku?: string | null
   barcode?: string | null
   name: string
@@ -937,7 +911,6 @@ export type ProductCreateWithoutBranchInput = {
 export type ProductUncheckedCreateWithoutBranchInput = {
   id: string
   businessId: string
-  branchBusinessId?: string | null
   sku?: string | null
   barcode?: string | null
   name: string
@@ -984,7 +957,6 @@ export type ProductUpdateManyWithWhereWithoutBranchInput = {
 
 export type ProductCreateWithoutInventoriesInput = {
   id: string
-  branchBusinessId?: string | null
   sku?: string | null
   barcode?: string | null
   name: string
@@ -1007,8 +979,7 @@ export type ProductCreateWithoutInventoriesInput = {
 export type ProductUncheckedCreateWithoutInventoriesInput = {
   id: string
   businessId: string
-  branchId?: string | null
-  branchBusinessId?: string | null
+  branchId: string
   sku?: string | null
   barcode?: string | null
   name: string
@@ -1044,7 +1015,6 @@ export type ProductUpdateToOneWithWhereWithoutInventoriesInput = {
 
 export type ProductUpdateWithoutInventoriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1067,8 +1037,7 @@ export type ProductUpdateWithoutInventoriesInput = {
 export type ProductUncheckedUpdateWithoutInventoriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1088,7 +1057,6 @@ export type ProductUncheckedUpdateWithoutInventoriesInput = {
 
 export type ProductCreateWithoutSaleInput = {
   id: string
-  branchBusinessId?: string | null
   sku?: string | null
   barcode?: string | null
   name: string
@@ -1111,8 +1079,7 @@ export type ProductCreateWithoutSaleInput = {
 export type ProductUncheckedCreateWithoutSaleInput = {
   id: string
   businessId: string
-  branchId?: string | null
-  branchBusinessId?: string | null
+  branchId: string
   sku?: string | null
   barcode?: string | null
   name: string
@@ -1148,7 +1115,6 @@ export type ProductUpdateToOneWithWhereWithoutSaleInput = {
 
 export type ProductUpdateWithoutSaleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1171,8 +1137,7 @@ export type ProductUpdateWithoutSaleInput = {
 export type ProductUncheckedUpdateWithoutSaleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1192,8 +1157,7 @@ export type ProductUncheckedUpdateWithoutSaleInput = {
 
 export type ProductCreateManyBusinessInput = {
   id: string
-  branchId?: string | null
-  branchBusinessId?: string | null
+  branchId: string
   sku?: string | null
   barcode?: string | null
   name: string
@@ -1212,7 +1176,6 @@ export type ProductCreateManyBusinessInput = {
 
 export type ProductUpdateWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1234,8 +1197,7 @@ export type ProductUpdateWithoutBusinessInput = {
 
 export type ProductUncheckedUpdateWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1256,8 +1218,7 @@ export type ProductUncheckedUpdateWithoutBusinessInput = {
 
 export type ProductUncheckedUpdateManyWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  branchId?: Prisma.StringFieldUpdateOperationsInput | string
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1277,7 +1238,6 @@ export type ProductUncheckedUpdateManyWithoutBusinessInput = {
 export type ProductCreateManyBranchInput = {
   id: string
   businessId: string
-  branchBusinessId?: string | null
   sku?: string | null
   barcode?: string | null
   name: string
@@ -1296,7 +1256,6 @@ export type ProductCreateManyBranchInput = {
 
 export type ProductUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1319,7 +1278,6 @@ export type ProductUpdateWithoutBranchInput = {
 export type ProductUncheckedUpdateWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1341,7 +1299,6 @@ export type ProductUncheckedUpdateWithoutBranchInput = {
 export type ProductUncheckedUpdateManyWithoutBranchInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
-  branchBusinessId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1402,7 +1359,6 @@ export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   id?: boolean
   businessId?: boolean
   branchId?: boolean
-  branchBusinessId?: boolean
   sku?: boolean
   barcode?: boolean
   name?: boolean
@@ -1428,7 +1384,6 @@ export type ProductSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   businessId?: boolean
   branchId?: boolean
-  branchBusinessId?: boolean
   sku?: boolean
   barcode?: boolean
   name?: boolean
@@ -1451,7 +1406,6 @@ export type ProductSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   businessId?: boolean
   branchId?: boolean
-  branchBusinessId?: boolean
   sku?: boolean
   barcode?: boolean
   name?: boolean
@@ -1474,7 +1428,6 @@ export type ProductSelectScalar = {
   id?: boolean
   businessId?: boolean
   branchId?: boolean
-  branchBusinessId?: boolean
   sku?: boolean
   barcode?: boolean
   name?: boolean
@@ -1491,7 +1444,7 @@ export type ProductSelectScalar = {
   deletedAt?: boolean
 }
 
-export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "branchBusinessId" | "sku" | "barcode" | "name" | "imageUrl" | "description" | "category" | "costPrice" | "price" | "reorderLevel" | "isActive" | "isDeleted" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["product"]>
+export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "sku" | "barcode" | "name" | "imageUrl" | "description" | "category" | "costPrice" | "price" | "reorderLevel" | "isActive" | "isDeleted" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["product"]>
 export type ProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.Product$branchArgs<ExtArgs>
@@ -1519,8 +1472,7 @@ export type $ProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     businessId: string
-    branchId: string | null
-    branchBusinessId: string | null
+    branchId: string
     sku: string | null
     barcode: string | null
     name: string
@@ -1965,7 +1917,6 @@ export interface ProductFieldRefs {
   readonly id: Prisma.FieldRef<"Product", 'String'>
   readonly businessId: Prisma.FieldRef<"Product", 'String'>
   readonly branchId: Prisma.FieldRef<"Product", 'String'>
-  readonly branchBusinessId: Prisma.FieldRef<"Product", 'String'>
   readonly sku: Prisma.FieldRef<"Product", 'String'>
   readonly barcode: Prisma.FieldRef<"Product", 'String'>
   readonly name: Prisma.FieldRef<"Product", 'String'>

@@ -23,10 +23,12 @@ implements ProjectionReducer<Branch, DomainEvent<BranchPayload>> {
             name:
                 event.payload.name,
 
-            phone:
-                event.payload.phone,
+            address: event.payload.address ?? null,
 
-            businessId: event.businessId,
+            phone:
+                event.payload.phone ?? null,
+
+            businessId: event.businessId!,
             
             isActive: true,
             

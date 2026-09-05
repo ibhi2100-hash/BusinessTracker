@@ -522,14 +522,11 @@ export class SalesMapper {
         },
       },
 
-      branch:
-        sale.branchId
-          ? {
-              connect: {
-                id: sale.branchId,
-              },
-            }
-          : undefined,
+      branch: {
+        connect: {
+          id: sale.branchId!,
+        },
+      },
 
       product: {
         connect: {
@@ -608,11 +605,6 @@ export class SalesMapper {
       createdAt:
         new Date(
           sale.createdAt
-        ),
-
-      updatedAt:
-        new Date(
-          sale.updatedAt
         ),
     };
   }
@@ -726,11 +718,6 @@ export class SalesMapper {
       mode:
         sale.mode,
 
-      updatedAt:
-        new Date(
-          sale.updatedAt
-        ),
-
     };
 
   }
@@ -755,13 +742,13 @@ export class SalesMapper {
         row.businessId,
 
       branchId:
-        row.branchId ?? undefined,
+        row.branchId ?? "",
 
       productId:
         row.productId,
 
       productName:
-        row.productName ?? undefined,
+        row.productName,
 
       quantity:
         Number(row.quantity),
@@ -785,29 +772,28 @@ export class SalesMapper {
         Number(row.profit),
 
       userId:
-        row.userId ?? undefined,
+        row.userId ?? "",
 
       customerId:
-        row.customerId ?? undefined,
+        row.customerId,
 
       customerRef:
-        row.customerRef ?? undefined,
+        row.customerRef,
 
       invoiceId:
-        row.invoiceId ?? undefined,
+        row.invoiceId,
 
       paymentMethod:
-        row.paymentMethod as PaymentMethod
-          | undefined,
+        row.paymentMethod as PaymentMethod,
 
       note:
-        row.note ?? undefined,
+        row.note,
 
       status:
         row.status as SaleStatus,
 
       saleGroupId:
-        row.saleGroupId ?? undefined,
+        row.saleGroupId,
 
       mode:
         row.mode as Mode,
