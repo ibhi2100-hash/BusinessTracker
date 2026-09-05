@@ -89,6 +89,9 @@ export class EventRepository {
                 branchId:
                     event.branchId,
 
+                userId: event.actor.userId,
+                deviceId: event.actor.deviceId,
+
                 causationId:
                     event.causationId,
 
@@ -127,7 +130,7 @@ export class EventRepository {
                 saved.aggregateVersion,
 
             globalPosition:
-                saved.globalPosition,
+              Number(saved.globalPosition),
         };
     }
 
@@ -168,7 +171,7 @@ export class EventRepository {
   async findById(
     eventId: string,
   ): Promise<ExistingEvent | null> {
-    return prisma.event.findUnique({
+    const event = await prisma.event.findUnique({
       where: {
         id: eventId
       },
@@ -179,7 +182,14 @@ export class EventRepository {
         aggregateVersion: true,
         globalPosition: true
       }
-    })
+    });
+
+    return event
+      ? {
+          ...event,
+          globalPosition: Number(event.globalPosition),
+        }
+      : null;
   }
 }
 

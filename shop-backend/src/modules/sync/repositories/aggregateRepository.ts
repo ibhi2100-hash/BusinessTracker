@@ -101,6 +101,11 @@ export class AggregateRepository {
 
             try {
 
+                console.log(
+                    "Creating new aggregate:",
+                    aggregateId,
+                    aggregateType,
+                );
                 const aggregate =
                     await tx.aggregate.create({
                         data: {

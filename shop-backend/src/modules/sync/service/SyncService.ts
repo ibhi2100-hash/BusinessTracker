@@ -155,24 +155,34 @@ export class OfflineSyncService {
              */
 
             try {
+
+              
                 
-                const saved =
-                    await prisma.$transaction(
-                        async (tx) => {
+                const saved = await prisma.$transaction(
+                    async (tx) => {
+
+                        try {
+
+                            console.log(
+                                "[TX] Starting transaction for event:",
+                                event.id
+                            );
 
                             /*
                             * =====================================================
-                            * ADVANCE / CREATE AGGREGATE STREAM HEAD
-                            *
-                            * expectedVersion = 0:
-                            *     creates aggregate at version 1
-                            *
-                            * expectedVersion > 0:
-                            *     atomically increments existing aggregate
-                            *
-                            * Any mismatch throws AggregateVersionConflictError.
+                            * 1. ADVANCE / CREATE AGGREGATE
                             * =====================================================
                             */
+
+                            console.log(
+                                "[TX] Advancing aggregate:",
+                                {
+                                    aggregateId: event.aggregateId,
+                                    aggregateType: event.aggregateType,
+                                    expectedVersion:
+                                        event.expectedAggregateVersion,
+                                }
+                            );
 
                             const aggregateVersion =
                                 await this.repositories
@@ -184,12 +194,21 @@ export class OfflineSyncService {
                                         tx,
                                     );
 
+                            console.log(
+                                "[TX] Aggregate version:",
+                                aggregateVersion
+                            );
+
 
                             /*
                             * =====================================================
-                            * APPEND EVENT
+                            * 2. APPEND EVENT
                             * =====================================================
                             */
+
+                            console.log(
+                                "[TX] Appending event..."
+                            );
 
                             const savedEvent =
                                 await this.repositories
@@ -200,12 +219,21 @@ export class OfflineSyncService {
                                         tx,
                                     );
 
+                            console.log(
+                                "[TX] Event appended:",
+                                savedEvent
+                            );
+
 
                             /*
                             * =====================================================
-                            * APPEND OUTBOX
+                            * 3. APPEND OUTBOX
                             * =====================================================
                             */
+
+                            console.log(
+                                "[TX] Appending outbox..."
+                            );
 
                             await this.repositories
                                 .outbox
@@ -214,10 +242,42 @@ export class OfflineSyncService {
                                     tx,
                                 );
 
+                            console.log(
+                                "[TX] Outbox appended"
+                            );
+
+
+                            console.log(
+                                "[TX] Transaction callback completed successfully"
+                            );
 
                             return savedEvent;
+
+
+                        } catch (error) {
+
+                            console.error(
+                                "[TX] ERROR INSIDE TRANSACTION",
+                                {
+                                    eventId: event.id,
+                                    aggregateId: event.aggregateId,
+                                    aggregateType: event.aggregateType,
+                                    error,
+                                }
+                            );
+
+                            /*
+                            * VERY IMPORTANT:
+                            *
+                            * Rethrow the error.
+                            *
+                            * This tells Prisma:
+                            * "The transaction failed — rollback everything."
+                            */
+                            throw error;
                         }
-                    );
+                    }
+                );
 
                 /*
                  * ================================================
