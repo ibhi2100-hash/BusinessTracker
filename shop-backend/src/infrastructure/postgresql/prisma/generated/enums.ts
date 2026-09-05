@@ -96,3 +96,22 @@ export const SyncEventStatus = {
 } as const
 
 export type SyncEventStatus = (typeof SyncEventStatus)[keyof typeof SyncEventStatus]
+
+
+export const SaleStatus = {
+  completed: 'completed',
+  voided: 'voided',
+  refunded: 'refunded'
+} as const
+
+export type SaleStatus = (typeof SaleStatus)[keyof typeof SaleStatus]
+
+
+export const PaymentMethod = {
+  cash: 'cash',
+  transfer: 'transfer',
+  card: 'card',
+  other: 'other'
+} as const
+
+export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]

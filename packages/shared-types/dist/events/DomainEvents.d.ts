@@ -11,6 +11,7 @@ export interface DomainEvent<TPayload = unknown> {
     readonly payload: Readonly<TPayload>;
     readonly actor: ActorContext;
     readonly causationId: string;
+    readonly correlationId?: string;
     readonly logicClock: number;
     readonly createdAt: number;
     readonly checksum?: string;

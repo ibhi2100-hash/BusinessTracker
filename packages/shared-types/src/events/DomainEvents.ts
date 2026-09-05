@@ -24,6 +24,8 @@ export interface DomainEvent<TPayload = unknown> {
 
     readonly causationId: string;
 
+    readonly correlationId?: string;
+
     readonly logicClock: number;
 
     readonly createdAt: number;

@@ -5,7 +5,7 @@ import { CustomersRepository } from "./CustomersRepository.js";
 import { EmployeesRepository } from "./EmployeesRepository.js";
 import { EventRepository } from "./eventRepository.js";
 import { InventoryRepository } from "./InventoryRepository.js";
-import { LedgerRepository } from "./LedgerRepository.js";
+import { LedgerRepositoryImpl } from "./LedgerRepository.js";
 import { ProductRepository } from "./ProductRepository.js";
 import { SalesRepository } from "./SalesRepsotory.js";
 
@@ -28,7 +28,7 @@ export class RepositoryRegistry {
 
     readonly sales: SalesRepository;
 
-    readonly ledger: LedgerRepository;
+    readonly ledger: LedgerRepositoryImpl;
 
 
     constructor(){
@@ -50,6 +50,6 @@ export class RepositoryRegistry {
 
         this.sales = new SalesRepository();
 
-        this.ledger = new LedgerRepository();
+        this.ledger = new LedgerRepositoryImpl();
     }
 }

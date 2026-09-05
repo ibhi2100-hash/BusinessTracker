@@ -7,6 +7,6 @@ export interface ProjectionReducer
     reduce(
         state: TState,
         event: TEvent
-    ): TState
+    ): TState | null
 
 }

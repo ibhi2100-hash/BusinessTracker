@@ -29,35 +29,12 @@ export function toBackendPayload<TPayload>(
 
         causationId: event.causationId,
 
+        correlationId: event.correlationId,
+
         logicClock: event.logicClock,
 
         createdAt: event.createdAt,
 
         checksum: event.checksum,
     };
-}
-
-
-function rowToDomainEvent(row: OutboxRow): DomainEvent {
-  return {
-    id: row.id as string,                    // events.id
-    businessId: row.businessId as string | undefined,
-    branchId: row.branchId as string | undefined,
-    aggregateId: row.aggregateId as string,
-    aggregateType: row.aggregateType as string,
-    aggregateVersion: row.aggregateVersion as number | undefined,
-    expectedAggregateVersion: row.expectedAggregateVersion as number,
-    type: row.type as string,
-    mode: row.mode as "OPENING" | "LIVE",
-    payload: row.payload as unknown,
-    actor: {
-      userId: row.userId as string,          // or however you store actor
-      deviceId: row.deviceId as string,
-      sessionId: row.sessionId as string | undefined,
-    },
-    causationId: row.causationId as string,
-    logicClock: row.logicClock as number,
-    createdAt: row.createdAt as number,
-    checksum: row.checksum as string | undefined,
-  };
 }

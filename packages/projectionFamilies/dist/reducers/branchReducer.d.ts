@@ -8,6 +8,6 @@ interface BranchPayload {
     phone: string;
 }
 export declare class BranchReducer implements ProjectionReducer<Branch, DomainEvent<BranchPayload>> {
-    reduce(state: Branch, event: DomainEvent<BranchPayload>): Branch;
+    reduce(state: Branch | null, event: DomainEvent<BranchPayload>): Branch | null;
 }
 export {};

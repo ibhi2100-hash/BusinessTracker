@@ -65,6 +65,7 @@ export const ModelName = {
   Event: 'Event',
   DeviceClock: 'DeviceClock',
   LedgerEntry: 'LedgerEntry',
+  Sale: 'Sale',
   OutboxEvent: 'OutboxEvent',
   Snapshot: 'Snapshot',
   Alert: 'Alert'
@@ -312,6 +313,35 @@ export const LedgerEntryScalarFieldEnum = {
 } as const
 
 export type LedgerEntryScalarFieldEnum = (typeof LedgerEntryScalarFieldEnum)[keyof typeof LedgerEntryScalarFieldEnum]
+
+
+export const SaleScalarFieldEnum = {
+  id: 'id',
+  businessId: 'businessId',
+  branchId: 'branchId',
+  productId: 'productId',
+  productName: 'productName',
+  quantity: 'quantity',
+  unitCostPrice: 'unitCostPrice',
+  unitPrice: 'unitPrice',
+  price: 'price',
+  costPrice: 'costPrice',
+  total: 'total',
+  profit: 'profit',
+  userId: 'userId',
+  customerId: 'customerId',
+  customerRef: 'customerRef',
+  invoiceId: 'invoiceId',
+  paymentMethod: 'paymentMethod',
+  note: 'note',
+  status: 'status',
+  saleGroupId: 'saleGroupId',
+  mode: 'mode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SaleScalarFieldEnum = (typeof SaleScalarFieldEnum)[keyof typeof SaleScalarFieldEnum]
 
 
 export const OutboxEventScalarFieldEnum = {

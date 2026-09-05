@@ -14,6 +14,7 @@
     "@business/event-bus": "*",
     "@business/events": "*",
     "@business/shared-types": "*",
+    "@business/ledger-engine": "*",
     "@business/snapshot-engine": "*",
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",

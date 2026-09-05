@@ -28,6 +28,8 @@ interface EventRow {
 
     causationId: string;
 
+    correlationId: string;
+
     logicClock: number;
 
     createdAt : number;
@@ -62,6 +64,7 @@ implements EventRepository {
         row.mode,
         row.actor,
         row.causationId,
+        row.correlationId,
         row.logicClock,
         row.createdAt,
         row.checksum
@@ -226,6 +229,8 @@ class EventMapper {
             ),
             causationId: event.causationId,
 
+            correlationId: event.correlationId,
+
             logicClock: event.logicClock,
 
             createdAt: event.createdAt,
@@ -263,6 +268,9 @@ class EventMapper {
            actor: JSON.parse(
                 row.actor
             ),
+
+            correlationId: row.correlationId,
+            
            causationId: row.causationId,
 
            logicClock: row.logicClock,

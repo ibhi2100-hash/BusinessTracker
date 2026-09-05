@@ -9,10 +9,12 @@ import {
 
 import {
     OutboxRow,
+    PendingOutboxEvent,
     SQLiteOutboxRepository,
 } from "../repositories/SQLiteOutboxRepository/SQLiteOutboxRepository";
 import { SQLiteEventRepository } from "../repositories/SQLiteEventRepository/eventStore";
-import { ProjectionEventBus } from "@/src/buses/ProjectionBuses";
+import { DomainEvent } from "@business/shared-types";
+
 
 
 export interface SyncStateRepository {
@@ -225,7 +227,7 @@ export class SyncEngine {
 
             const outboxIds =
                 pending.map(
-                    row => row.outboxId
+                    item => item.outboxId
                 );
 
             await this.outbox.lockBatch(
@@ -238,8 +240,8 @@ export class SyncEngine {
             const payloads:
                 BackendEventPayload[] =
                 pending.map(
-                    row =>
-                        this.toBackendPayload(row)
+                    item =>
+                        this.toBackendPayload(item.event)
                 );
 
 
@@ -297,7 +299,7 @@ export class SyncEngine {
                 const row =
                     pending.find(
                         r =>
-                            r.eventId ===
+                            r.event.id ===
                             accepted.id
                     );
 
@@ -335,7 +337,7 @@ export class SyncEngine {
                 const row =
                     pending.find(
                         r =>
-                            r.eventId ===
+                            r.event.id ===
                             rejected.eventId
                     );
 
@@ -544,104 +546,104 @@ export class SyncEngine {
      * Convert the local outbox row into the exact
      * backend wire representation.
      */
-    private toBackendPayload(
-        row: OutboxRow
+   private toBackendPayload(
+        event: DomainEvent
     ): BackendEventPayload {
 
         return {
             id:
-                row.eventId,
+                event.id,
 
             aggregateId:
-                row.aggregateId,
+                event.aggregateId,
 
             aggregateType:
-                row.aggregateType,
+                event.aggregateType,
 
             expectedAggregateVersion:
-                row.expectedAggregateVersion,
+                event.expectedAggregateVersion,
 
             type:
-                row.type,
+                event.type,
 
             mode:
-                row.mode,
+                event.mode,
 
             payload:
-                row.payload,
+                event.payload,
 
             actor:
-                row.actor,
+                event.actor,
+
+            businessId:
+                event.businessId,
+
+            branchId:
+                event.branchId,
 
             causationId:
-                row.causationId,
+                event.causationId,
+
+            correlationId:
+                event.correlationId,
 
             logicClock:
-                row.logicClock,
+                event.logicClock,
 
             createdAt:
-                row.createdAt,
+                event.createdAt,
 
             checksum:
-                row.checksum,
+                event.checksum,
         };
     }
-
 
     /**
      * Exponential retry with jitter.
      */
     private async scheduleRetries(
-        rows: OutboxRow[],
-        error: string,
-        now: number
-    ): Promise<void> {
+            items: PendingOutboxEvent[],
+            error: string,
+            now: number
+        ): Promise<void> {
 
-        for (
-            const row
-            of rows
-        ) {
+            for (const item of items) {
 
-            const attempt =
-                row.retryCount + 1;
+                const attempt =
+                    item.retryCount + 1;
 
+                if (
+                    attempt >=
+                    item.maxAttempts
+                ) {
 
-            if (
-                attempt >=
-                row.maxAttempts
-            ) {
+                    await this.outbox.markRejected(
+                        item.outboxId,
+                        `max attempts exceeded: ${error}`
+                    );
 
-                await this.outbox.markRejected(
-                    row.outboxId,
-                    `max attempts exceeded: ${error}`
+                    continue;
+                }
+
+                const backoff =
+                    this.baseBackoffMs *
+                    Math.pow(2, attempt - 1);
+
+                const jitter =
+                    Math.floor(
+                        Math.random() * 500
+                    );
+
+                const nextRetryAt =
+                    now +
+                    backoff +
+                    jitter;
+
+                await this.outbox.scheduleRetry(
+                    item.outboxId,
+                    nextRetryAt,
+                    error
                 );
-
-                continue;
             }
-
-
-            const backoff =
-                this.baseBackoffMs *
-                Math.pow(2, attempt);
-
-
-            const jitter =
-                Math.floor(
-                    Math.random() * 500
-                );
-
-
-            const nextRetryAt =
-                now +
-                backoff +
-                jitter;
-
-
-            await this.outbox.scheduleRetry(
-                row.outboxId,
-                nextRetryAt,
-                error
-            );
         }
-    }
 }

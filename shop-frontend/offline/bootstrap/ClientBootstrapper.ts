@@ -11,7 +11,7 @@ import { ClientStatementRegistry } from "@/src/offline/sqlite/clientDatabase/sta
 import { RegistrationService } from "@/src/offline/sqlite/clientDatabase/services/AuthService";
 import { LoginService } from "@/src/offline/sqlite/clientDatabase/services/AuthService";
 import { ExecutionContextProvider } from "@/src/BizTru_Karnel/CommandFactory/ExecutionContext/ExecutionContext";
-import { ProjectionEventBus } from "@/src/buses/ProjectionBuses";
+import { ProjectionEventBus } from "@business/event-bus";
 import { CurrentBusinessProjection } from "@/src/offline/sqlite/clientDatabase/projections/currentBusinessProjections";
 import { ApplicationStateProjection } from "@/src/offline/sqlite/clientDatabase/projections/applicationStateProjections";
 

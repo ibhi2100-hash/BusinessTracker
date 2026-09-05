@@ -6,7 +6,7 @@ import {
 import {
   LedgerRepository,
   LedgerAccountTotals
-} from "./RepositoryContract";
+} from "@business/ledger-engine";
 
 import { LedgerStatements }
   from "../../statements/ledger/LedgerStatements";

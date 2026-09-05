@@ -67,6 +67,7 @@ export class OfflineSyncService {
 
         try {
             version++;
+            console.log("This is the Event in the Service Layer: ", event)
 
             const saved = 
                 await this.repositories.events.append(
@@ -74,10 +75,12 @@ export class OfflineSyncService {
                     version,
                     tx
                 );
+            console.log("This is the saved the Event in the repository:  ", saved)
 
             await this.projectionBus.publish(event)
             
         } catch (error) {
+            console.log(error)
             
         }
       })

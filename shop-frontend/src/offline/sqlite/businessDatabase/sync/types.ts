@@ -41,6 +41,8 @@ export interface BackendEventPayload<TPayload = any> {
 
     causationId: string;
 
+    correlationId: string;
+
     logicClock: number;
 
     createdAt: number;
@@ -89,6 +91,8 @@ export interface BackendAcceptedEvent<TPayload = unknown> {
     };
 
     causationId: string;
+
+    correlationId: string;
 
     logicClock: number;
 
@@ -223,6 +227,9 @@ export class SyncEventMapper {
 
             causationId:
                 event.causationId,
+
+            correlationId: 
+                event.correlationId,
 
             logicClock:
                 event.logicClock,

@@ -13,11 +13,12 @@ INSERT INTO events (
     mode,
     actor,
     causationId,
+    correlationId,
     logicClock,
     createdAt,
     checksum
 )
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `;
 
 export const LOAD_AGGREGATE = `

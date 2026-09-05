@@ -71,6 +71,19 @@ enum SyncEventStatus {
   DEAD
 }
 
+enum SaleStatus {
+  completed
+  voided
+  refunded
+}
+
+enum PaymentMethod {
+  cash
+  transfer
+  card
+  other
+}
+
 /////**** MODELS ****/////
 
 model Business {
@@ -99,6 +112,7 @@ model Business {
   snapshots     Snapshot[]
   alerts        Alert[]
   ledgerEntries LedgerEntry[]
+  sale          Sale[]
 
   subscriptions BusinessSubscription[]
 
@@ -129,6 +143,7 @@ model Branch {
   snapshots     Snapshot[]
   alerts        Alert[]
   ledgerEntries LedgerEntry[]
+  sale          Sale[]
 
   
 
@@ -301,6 +316,7 @@ model Product {
   branch Branch? @relation(fields: [branchId], references: [id], onDelete: Restrict)
 
   inventories Inventory[]
+  sale          Sale[]
 
   @@id([id, businessId])
 
@@ -338,6 +354,8 @@ model Aggregate {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+
 
   @@unique([aggregateType, aggregateId])
 
@@ -491,6 +509,63 @@ model LedgerEntry {
   @@index([account])
 
   @@index([createdAt])
+}
+
+model Sale {
+  id String @id
+
+  businessId String
+  branchId String?
+
+  productId String
+  productName String?
+
+  quantity Decimal @db.Decimal(18, 6)
+
+  unitCostPrice Decimal @db.Decimal(18, 6)
+  unitPrice Decimal @db.Decimal(18, 6)
+
+  price Decimal @db.Decimal(18, 6)
+  costPrice Decimal @db.Decimal(18, 6)
+
+  total Decimal @db.Decimal(18, 6)
+  profit Decimal @db.Decimal(18, 6)
+
+  userId String?
+
+  customerId String?
+  customerRef String?
+
+  invoiceId String?
+
+  paymentMethod PaymentMethod?
+  note String?
+
+  status SaleStatus @default(completed)
+
+  saleGroupId String?
+
+  mode Mode
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  business Business @relation(fields: [businessId], references: [id],onDelete: Cascade)
+
+  branch Branch? @relation(fields: [branchId], references: [id], onDelete: Restrict)
+
+  product Product @relation(fields: [productId, businessId], references: [id, businessId], onDelete: Restrict)
+
+  @@index([businessId])
+  @@index([branchId])
+  @@index([productId])
+  @@index([saleGroupId])
+  @@index([invoiceId])
+  @@index([userId])
+  @@index([customerId])
+  @@index([createdAt])
+  @@index([status])
+  @@index([businessId, branchId, createdAt])
 }
 
 model OutboxEvent {

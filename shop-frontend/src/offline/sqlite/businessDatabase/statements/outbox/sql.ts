@@ -9,29 +9,121 @@ export const INSERT_INTO_OUTBOX = `
 
 export const GET_PENDING = `
   SELECT
-    o.id            AS outboxId,
-    o.eventId,
-    o.status,
-    o.retryCount,
-    o.maxAttempts,
-    o.nextRetryAt,
-    o.lockedUntil,
-    o.lastError,
-    o.createdAt,
-    o.syncedAt,
-    o.globalPosition,
-    o.aggregateVersion,
-    o.server_commit_time,
-    e.*
+
+    -- =========================
+    -- OUTBOX FIELDS
+    -- =========================
+
+    o.id
+      AS outboxId,
+
+    o.eventId
+      AS eventId,
+
+    o.status
+      AS status,
+
+    o.retryCount
+      AS retryCount,
+
+    o.maxAttempts
+      AS maxAttempts,
+
+    o.nextRetryAt
+      AS nextRetryAt,
+
+    o.lockedUntil
+      AS lockedUntil,
+
+    o.lastError
+      AS lastError,
+
+    o.createdAt
+      AS outboxCreatedAt,
+
+    o.syncedAt
+      AS syncedAt,
+
+    o.globalPosition
+      AS globalPosition,
+
+    o.aggregateVersion
+      AS outboxAggregateVersion,
+
+    o.server_commit_time
+      AS server_commit_time,
+
+
+    -- =========================
+    -- EVENT FIELDS
+    -- =========================
+
+    e.id
+      AS id,
+
+    e.aggregateId
+      AS aggregateId,
+
+    e.aggregateType
+      AS aggregateType,
+
+    e.expectedAggregateVersion
+      AS expectedAggregateVersion,
+
+    e.type
+      AS type,
+
+    e.mode
+      AS mode,
+
+    e.businessId
+      AS businessId,
+
+    e.branchId
+      AS branchId,
+
+    e.payload
+      AS payload,
+
+    e.actor
+      AS actor,
+
+    e.causationId
+      AS causationId,
+
+    e.correlationId
+      AS correlationId,
+
+    e.logicClock
+      AS logicClock,
+
+    e.createdAt
+      AS eventCreatedAt,
+
+    e.checksum
+      AS checksum
+
   FROM outbox o
-  JOIN events e ON e.id = o.eventId
+
+  INNER JOIN events e
+    ON e.id = o.eventId
+
   WHERE o.status = 'PENDING'
-    AND (o.nextRetryAt IS NULL OR o.nextRetryAt <= ?)
-    AND (o.lockedUntil IS NULL OR o.lockedUntil <= ?)
+
+    AND (
+      o.nextRetryAt IS NULL
+      OR o.nextRetryAt <= ?
+    )
+
+    AND (
+      o.lockedUntil IS NULL
+      OR o.lockedUntil <= ?
+    )
+
   ORDER BY o.createdAt ASC
+
   LIMIT ?
 `;
-
 export const MARK_SYNCED = `
   UPDATE outbox
   SET

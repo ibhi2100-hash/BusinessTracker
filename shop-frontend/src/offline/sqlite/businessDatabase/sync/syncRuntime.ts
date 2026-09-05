@@ -13,7 +13,6 @@ import {
 import {
     HttpSyncTransport,
 } from "./SyncTransport";
-import { ProjectionEventBus } from "@/src/buses/ProjectionBuses";
 
 
 export interface SyncRuntimeOptions {

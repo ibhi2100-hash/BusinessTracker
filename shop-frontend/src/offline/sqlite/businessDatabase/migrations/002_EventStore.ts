@@ -31,6 +31,8 @@ CREATE TABLE IF NOT EXISTS events (
 
     causationId TEXT,
 
+    correlationId TEXT,
+
     logicClock   INTEGER NOT NULL,
 
     createdAt   INTEGER NOT NULL,
