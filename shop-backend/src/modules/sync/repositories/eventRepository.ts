@@ -191,6 +191,24 @@ export class EventRepository {
         }
       : null;
   }
+
+  async getById(
+    eventId: string,
+    tx: Prisma.TransactionClient = prisma
+): Promise<BackendEvent | null> {
+
+    const row = await tx.event.findUnique({
+        where: {
+            id: eventId,
+        },
+    });
+
+    if (!row) {
+        return null;
+    }
+
+    return EventMapper.fromRow(row);
+}
 }
 
 class EventMapper {

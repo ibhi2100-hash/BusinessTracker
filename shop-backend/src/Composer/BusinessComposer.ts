@@ -11,11 +11,13 @@ import { BusinessConsumer } from "../modules/sync/projection/businessConsumer.js
 import { ProductConsumer } from "../modules/sync/projection/productConsumer.js";
 import { InventoryConsumer } from "../modules/sync/projection/inventoryConsumer.js";
 import { LedgerConsumer } from "../modules/sync/projection/ledgerConsumer.js";
+import { ProjectionWorker } from "../modules/sync/projection/ProjectionWorker.js"
 
 export interface SyncModule {
     router: Router;
     repositories: RepositoryRegistry;
     projectionBus: ProjectionEventBus;
+    projectionWorker: ProjectionWorker;
 }
 
 export class BusinessComposer {
@@ -68,6 +70,13 @@ export class BusinessComposer {
             )
         );
 
+
+        const projectionWorker = 
+            new ProjectionWorker(
+                repositories,
+                projectionBus
+            )
+
         // Compose Sync module
         const router =
             createSyncRouter(
@@ -78,7 +87,8 @@ export class BusinessComposer {
         return {
             router,
             repositories,
-            projectionBus
+            projectionBus,
+            projectionWorker
         }
     }
 }

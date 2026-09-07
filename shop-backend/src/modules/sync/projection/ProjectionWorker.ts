@@ -1,5 +1,6 @@
 import { ProjectionEventBus } from "@business/event-bus";
 import { RepositoryRegistry } from "../repositories/RepositoryRegistry.js";
+import { BackendToDomainEventTransformer } from "../../../lib/BackendEventTransformer.js";
 
 export class ProjectionWorker {
 
@@ -12,56 +13,113 @@ export class ProjectionWorker {
     async processPending(): Promise<void> {
 
         const pending =
-            await this.repositories.outbox
+            await this.repositories
+                .outbox
                 .getPending(100);
+
+        console.log(
+            "[PROJECTION WORKER] Processing pending events...",
+            pending.length
+        );
 
 
         for (const item of pending) {
 
             try {
 
+                console.log(
+                    "[PROJECTION] Processing outbox:",
+                    {
+                        eventId: item.eventId,
+                        aggregateId: item.aggregateId,
+                        aggregateType: item.aggregateType,
+                        aggregateVersion:
+                            item.aggregateVersion,
+                        globalPosition:
+                            item.globalPosition,
+                    }
+                );
+
+
                 /*
-                 * Load the authoritative event.
+                 * =================================================
+                 * LOAD AUTHORITATIVE EVENT
+                 * =================================================
                  */
 
                 const event =
-                    await this.repositories.events
-                        .findById(item.eventId);
+                    await this.repositories
+                        .events
+                        .getById(item.eventId);
 
 
                 if (!event) {
 
                     throw new Error(
-                        `Event ${item.eventId} ` +
-                        `does not exist`
+                        `Event ${item.eventId} does not exist`
                     );
                 }
 
 
                 /*
-                 * Projection handlers should themselves be
-                 * idempotent.
+                 * =================================================
+                 * PUBLISH TO PROJECTIONS
+                 * =================================================
                  */
 
+                const domainEvent = BackendToDomainEventTransformer(event);
+
                 await this.projectionBus.publish(
-                    event
+                    domainEvent
                 );
 
 
-                await this.repositories.outbox
+                /*
+                 * =================================================
+                 * MARK OUTBOX PROCESSED
+                 * =================================================
+                 */
+
+                await this.repositories
+                    .outbox
                     .markProcessed(
-                        item.id
+                        item.eventId
                     );
+
+
+                console.log(
+                    "[PROJECTION] Processed:",
+                    {
+                        eventId: event.id,
+                        globalPosition:
+                            event.globalPosition,
+                    }
+                );
 
 
             } catch (error) {
 
-                await this.repositories.outbox
+                const message =
+                    error instanceof Error
+                        ? error.message
+                        : String(error);
+
+
+                console.error(
+                    "[PROJECTION] Failed:",
+                    {
+                        outboxId: item.eventId,
+                        eventId: item.eventId,
+                        error: message,
+                    }
+                );
+
+
+                await this.repositories
+                    .outbox
                     .markFailed(
-                        item.id,
-                        error instanceof Error
-                            ? error.message
-                            : String(error)
+                        item.eventId,
+                        message
                     );
             }
         }

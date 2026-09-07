@@ -410,7 +410,10 @@ export const OutboxScalarFieldEnum = {
   globalPosition: 'globalPosition',
   status: 'status',
   attempts: 'attempts',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  processedAt: 'processedAt',
+  failedAt: 'failedAt',
+  lastError: 'lastError'
 } as const
 
 export type OutboxScalarFieldEnum = (typeof OutboxScalarFieldEnum)[keyof typeof OutboxScalarFieldEnum]

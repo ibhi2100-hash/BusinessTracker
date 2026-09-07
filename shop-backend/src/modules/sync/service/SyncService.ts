@@ -174,16 +174,6 @@ export class OfflineSyncService {
                             * =====================================================
                             */
 
-                            console.log(
-                                "[TX] Advancing aggregate:",
-                                {
-                                    aggregateId: event.aggregateId,
-                                    aggregateType: event.aggregateType,
-                                    expectedVersion:
-                                        event.expectedAggregateVersion,
-                                }
-                            );
-
                             const aggregateVersion =
                                 await this.repositories
                                     .aggregates
@@ -194,22 +184,12 @@ export class OfflineSyncService {
                                         tx,
                                     );
 
-                            console.log(
-                                "[TX] Aggregate version:",
-                                aggregateVersion
-                            );
-
 
                             /*
                             * =====================================================
                             * 2. APPEND EVENT
                             * =====================================================
                             */
-
-                            console.log(
-                                "[TX] Appending event..."
-                            );
-
                             const savedEvent =
                                 await this.repositories
                                     .events
@@ -219,22 +199,11 @@ export class OfflineSyncService {
                                         tx,
                                     );
 
-                            console.log(
-                                "[TX] Event appended:",
-                                savedEvent
-                            );
-
-
                             /*
                             * =====================================================
                             * 3. APPEND OUTBOX
                             * =====================================================
                             */
-
-                            console.log(
-                                "[TX] Appending outbox..."
-                            );
-
                             await this.repositories
                                 .outbox
                                 .append(
@@ -242,14 +211,6 @@ export class OfflineSyncService {
                                     tx,
                                 );
 
-                            console.log(
-                                "[TX] Outbox appended"
-                            );
-
-
-                            console.log(
-                                "[TX] Transaction callback completed successfully"
-                            );
 
                             return savedEvent;
 

@@ -27,37 +27,43 @@ export type AggregateOutbox = {
 }
 
 export type OutboxAvgAggregateOutputType = {
-  aggregateVersion: runtime.Decimal | null
+  aggregateVersion: number | null
   globalPosition: number | null
-  attempts: runtime.Decimal | null
+  attempts: number | null
 }
 
 export type OutboxSumAggregateOutputType = {
-  aggregateVersion: runtime.Decimal | null
+  aggregateVersion: number | null
   globalPosition: bigint | null
-  attempts: runtime.Decimal | null
+  attempts: number | null
 }
 
 export type OutboxMinAggregateOutputType = {
   eventId: string | null
   aggregateId: string | null
   aggregateType: string | null
-  aggregateVersion: runtime.Decimal | null
+  aggregateVersion: number | null
   globalPosition: bigint | null
   status: string | null
-  attempts: runtime.Decimal | null
+  attempts: number | null
   createdAt: Date | null
+  processedAt: Date | null
+  failedAt: Date | null
+  lastError: string | null
 }
 
 export type OutboxMaxAggregateOutputType = {
   eventId: string | null
   aggregateId: string | null
   aggregateType: string | null
-  aggregateVersion: runtime.Decimal | null
+  aggregateVersion: number | null
   globalPosition: bigint | null
   status: string | null
-  attempts: runtime.Decimal | null
+  attempts: number | null
   createdAt: Date | null
+  processedAt: Date | null
+  failedAt: Date | null
+  lastError: string | null
 }
 
 export type OutboxCountAggregateOutputType = {
@@ -69,6 +75,9 @@ export type OutboxCountAggregateOutputType = {
   status: number
   attempts: number
   createdAt: number
+  processedAt: number
+  failedAt: number
+  lastError: number
   _all: number
 }
 
@@ -94,6 +103,9 @@ export type OutboxMinAggregateInputType = {
   status?: true
   attempts?: true
   createdAt?: true
+  processedAt?: true
+  failedAt?: true
+  lastError?: true
 }
 
 export type OutboxMaxAggregateInputType = {
@@ -105,6 +117,9 @@ export type OutboxMaxAggregateInputType = {
   status?: true
   attempts?: true
   createdAt?: true
+  processedAt?: true
+  failedAt?: true
+  lastError?: true
 }
 
 export type OutboxCountAggregateInputType = {
@@ -116,6 +131,9 @@ export type OutboxCountAggregateInputType = {
   status?: true
   attempts?: true
   createdAt?: true
+  processedAt?: true
+  failedAt?: true
+  lastError?: true
   _all?: true
 }
 
@@ -209,11 +227,14 @@ export type OutboxGroupByOutputType = {
   eventId: string
   aggregateId: string
   aggregateType: string
-  aggregateVersion: runtime.Decimal
+  aggregateVersion: number
   globalPosition: bigint
   status: string
-  attempts: runtime.Decimal
+  attempts: number
   createdAt: Date
+  processedAt: Date | null
+  failedAt: Date | null
+  lastError: string | null
   _count: OutboxCountAggregateOutputType | null
   _avg: OutboxAvgAggregateOutputType | null
   _sum: OutboxSumAggregateOutputType | null
@@ -243,11 +264,14 @@ export type OutboxWhereInput = {
   eventId?: Prisma.StringFilter<"Outbox"> | string
   aggregateId?: Prisma.StringFilter<"Outbox"> | string
   aggregateType?: Prisma.StringFilter<"Outbox"> | string
-  aggregateVersion?: Prisma.DecimalFilter<"Outbox"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  aggregateVersion?: Prisma.IntFilter<"Outbox"> | number
   globalPosition?: Prisma.BigIntFilter<"Outbox"> | bigint | number
   status?: Prisma.StringFilter<"Outbox"> | string
-  attempts?: Prisma.DecimalFilter<"Outbox"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  attempts?: Prisma.IntFilter<"Outbox"> | number
   createdAt?: Prisma.DateTimeFilter<"Outbox"> | Date | string
+  processedAt?: Prisma.DateTimeNullableFilter<"Outbox"> | Date | string | null
+  failedAt?: Prisma.DateTimeNullableFilter<"Outbox"> | Date | string | null
+  lastError?: Prisma.StringNullableFilter<"Outbox"> | string | null
 }
 
 export type OutboxOrderByWithRelationInput = {
@@ -259,6 +283,9 @@ export type OutboxOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   attempts?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  processedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  failedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastError?: Prisma.SortOrderInput | Prisma.SortOrder
 }
 
 export type OutboxWhereUniqueInput = Prisma.AtLeast<{
@@ -268,11 +295,14 @@ export type OutboxWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.OutboxWhereInput | Prisma.OutboxWhereInput[]
   aggregateId?: Prisma.StringFilter<"Outbox"> | string
   aggregateType?: Prisma.StringFilter<"Outbox"> | string
-  aggregateVersion?: Prisma.DecimalFilter<"Outbox"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  aggregateVersion?: Prisma.IntFilter<"Outbox"> | number
   globalPosition?: Prisma.BigIntFilter<"Outbox"> | bigint | number
   status?: Prisma.StringFilter<"Outbox"> | string
-  attempts?: Prisma.DecimalFilter<"Outbox"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  attempts?: Prisma.IntFilter<"Outbox"> | number
   createdAt?: Prisma.DateTimeFilter<"Outbox"> | Date | string
+  processedAt?: Prisma.DateTimeNullableFilter<"Outbox"> | Date | string | null
+  failedAt?: Prisma.DateTimeNullableFilter<"Outbox"> | Date | string | null
+  lastError?: Prisma.StringNullableFilter<"Outbox"> | string | null
 }, "eventId">
 
 export type OutboxOrderByWithAggregationInput = {
@@ -284,6 +314,9 @@ export type OutboxOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   attempts?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  processedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  failedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastError?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.OutboxCountOrderByAggregateInput
   _avg?: Prisma.OutboxAvgOrderByAggregateInput
   _max?: Prisma.OutboxMaxOrderByAggregateInput
@@ -298,88 +331,112 @@ export type OutboxScalarWhereWithAggregatesInput = {
   eventId?: Prisma.StringWithAggregatesFilter<"Outbox"> | string
   aggregateId?: Prisma.StringWithAggregatesFilter<"Outbox"> | string
   aggregateType?: Prisma.StringWithAggregatesFilter<"Outbox"> | string
-  aggregateVersion?: Prisma.DecimalWithAggregatesFilter<"Outbox"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  aggregateVersion?: Prisma.IntWithAggregatesFilter<"Outbox"> | number
   globalPosition?: Prisma.BigIntWithAggregatesFilter<"Outbox"> | bigint | number
   status?: Prisma.StringWithAggregatesFilter<"Outbox"> | string
-  attempts?: Prisma.DecimalWithAggregatesFilter<"Outbox"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  attempts?: Prisma.IntWithAggregatesFilter<"Outbox"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Outbox"> | Date | string
+  processedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Outbox"> | Date | string | null
+  failedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Outbox"> | Date | string | null
+  lastError?: Prisma.StringNullableWithAggregatesFilter<"Outbox"> | string | null
 }
 
 export type OutboxCreateInput = {
   eventId: string
   aggregateId: string
   aggregateType: string
-  aggregateVersion: runtime.Decimal | runtime.DecimalJsLike | number | string
+  aggregateVersion: number
   globalPosition: bigint | number
   status: string
-  attempts: runtime.Decimal | runtime.DecimalJsLike | number | string
-  createdAt: Date | string
+  attempts?: number
+  createdAt?: Date | string
+  processedAt?: Date | string | null
+  failedAt?: Date | string | null
+  lastError?: string | null
 }
 
 export type OutboxUncheckedCreateInput = {
   eventId: string
   aggregateId: string
   aggregateType: string
-  aggregateVersion: runtime.Decimal | runtime.DecimalJsLike | number | string
+  aggregateVersion: number
   globalPosition: bigint | number
   status: string
-  attempts: runtime.Decimal | runtime.DecimalJsLike | number | string
-  createdAt: Date | string
+  attempts?: number
+  createdAt?: Date | string
+  processedAt?: Date | string | null
+  failedAt?: Date | string | null
+  lastError?: string | null
 }
 
 export type OutboxUpdateInput = {
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateVersion?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
   globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  attempts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  attempts?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type OutboxUncheckedUpdateInput = {
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateVersion?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
   globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  attempts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  attempts?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type OutboxCreateManyInput = {
   eventId: string
   aggregateId: string
   aggregateType: string
-  aggregateVersion: runtime.Decimal | runtime.DecimalJsLike | number | string
+  aggregateVersion: number
   globalPosition: bigint | number
   status: string
-  attempts: runtime.Decimal | runtime.DecimalJsLike | number | string
-  createdAt: Date | string
+  attempts?: number
+  createdAt?: Date | string
+  processedAt?: Date | string | null
+  failedAt?: Date | string | null
+  lastError?: string | null
 }
 
 export type OutboxUpdateManyMutationInput = {
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateVersion?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
   globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  attempts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  attempts?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type OutboxUncheckedUpdateManyInput = {
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
-  aggregateVersion?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
   globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   status?: Prisma.StringFieldUpdateOperationsInput | string
-  attempts?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  attempts?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type OutboxCountOrderByAggregateInput = {
@@ -391,6 +448,9 @@ export type OutboxCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   attempts?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  processedAt?: Prisma.SortOrder
+  failedAt?: Prisma.SortOrder
+  lastError?: Prisma.SortOrder
 }
 
 export type OutboxAvgOrderByAggregateInput = {
@@ -408,6 +468,9 @@ export type OutboxMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   attempts?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  processedAt?: Prisma.SortOrder
+  failedAt?: Prisma.SortOrder
+  lastError?: Prisma.SortOrder
 }
 
 export type OutboxMinOrderByAggregateInput = {
@@ -419,6 +482,9 @@ export type OutboxMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   attempts?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  processedAt?: Prisma.SortOrder
+  failedAt?: Prisma.SortOrder
+  lastError?: Prisma.SortOrder
 }
 
 export type OutboxSumOrderByAggregateInput = {
@@ -438,6 +504,9 @@ export type OutboxSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   status?: boolean
   attempts?: boolean
   createdAt?: boolean
+  processedAt?: boolean
+  failedAt?: boolean
+  lastError?: boolean
 }, ExtArgs["result"]["outbox"]>
 
 export type OutboxSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -449,6 +518,9 @@ export type OutboxSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   status?: boolean
   attempts?: boolean
   createdAt?: boolean
+  processedAt?: boolean
+  failedAt?: boolean
+  lastError?: boolean
 }, ExtArgs["result"]["outbox"]>
 
 export type OutboxSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -460,6 +532,9 @@ export type OutboxSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   status?: boolean
   attempts?: boolean
   createdAt?: boolean
+  processedAt?: boolean
+  failedAt?: boolean
+  lastError?: boolean
 }, ExtArgs["result"]["outbox"]>
 
 export type OutboxSelectScalar = {
@@ -471,9 +546,12 @@ export type OutboxSelectScalar = {
   status?: boolean
   attempts?: boolean
   createdAt?: boolean
+  processedAt?: boolean
+  failedAt?: boolean
+  lastError?: boolean
 }
 
-export type OutboxOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"eventId" | "aggregateId" | "aggregateType" | "aggregateVersion" | "globalPosition" | "status" | "attempts" | "createdAt", ExtArgs["result"]["outbox"]>
+export type OutboxOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"eventId" | "aggregateId" | "aggregateType" | "aggregateVersion" | "globalPosition" | "status" | "attempts" | "createdAt" | "processedAt" | "failedAt" | "lastError", ExtArgs["result"]["outbox"]>
 
 export type $OutboxPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Outbox"
@@ -482,11 +560,14 @@ export type $OutboxPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     eventId: string
     aggregateId: string
     aggregateType: string
-    aggregateVersion: runtime.Decimal
+    aggregateVersion: number
     globalPosition: bigint
     status: string
-    attempts: runtime.Decimal
+    attempts: number
     createdAt: Date
+    processedAt: Date | null
+    failedAt: Date | null
+    lastError: string | null
   }, ExtArgs["result"]["outbox"]>
   composites: {}
 }
@@ -913,11 +994,14 @@ export interface OutboxFieldRefs {
   readonly eventId: Prisma.FieldRef<"Outbox", 'String'>
   readonly aggregateId: Prisma.FieldRef<"Outbox", 'String'>
   readonly aggregateType: Prisma.FieldRef<"Outbox", 'String'>
-  readonly aggregateVersion: Prisma.FieldRef<"Outbox", 'Decimal'>
+  readonly aggregateVersion: Prisma.FieldRef<"Outbox", 'Int'>
   readonly globalPosition: Prisma.FieldRef<"Outbox", 'BigInt'>
   readonly status: Prisma.FieldRef<"Outbox", 'String'>
-  readonly attempts: Prisma.FieldRef<"Outbox", 'Decimal'>
+  readonly attempts: Prisma.FieldRef<"Outbox", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Outbox", 'DateTime'>
+  readonly processedAt: Prisma.FieldRef<"Outbox", 'DateTime'>
+  readonly failedAt: Prisma.FieldRef<"Outbox", 'DateTime'>
+  readonly lastError: Prisma.FieldRef<"Outbox", 'String'>
 }
     
 

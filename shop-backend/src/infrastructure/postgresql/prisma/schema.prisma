@@ -673,14 +673,20 @@ model Outbox {
 
   aggregateType String
 
-  aggregateVersion Decimal
+  aggregateVersion Int
 
   globalPosition  BigInt
 
   status String
 
-  attempts  Decimal
+  attempts  Int @default(0)
 
-  createdAt DateTime
+  createdAt DateTime @default(now())
 
+  processedAt DateTime?
+  failedAt DateTime?
+  lastError String?
+
+  @@index([status, globalPosition])
+  @@index([status, createdAt])
 }

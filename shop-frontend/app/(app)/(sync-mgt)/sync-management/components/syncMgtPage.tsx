@@ -23,6 +23,7 @@ import { GlassIcon } from "@/components/ui/GlassIcon";
 import { StatCard } from "@/components/ui/StatCard";
 import { DataCard } from "@/components/ui/DataCard";
 import { GlassSheet } from "@/components/ui/GlassSheet";
+import { useApplication } from "@/src/services/ApplicationService/ApplicationContext";
 
 
 type SyncStatus =
@@ -297,10 +298,14 @@ export default function SyncManagementPage() {
   const conflicts = 2;
   const rejectedEvents = 0;
 
-  const handleSync = () => {
+  const app = useApplication();
+
+  const handleSync = async () => {
     /*
      * Connect this to your SyncApplicationService / SyncEngine.
      */
+
+    await app.sync.Sync()
     console.log("Manual synchronization requested");
   };
 

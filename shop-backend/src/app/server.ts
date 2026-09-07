@@ -124,6 +124,35 @@ async function startServer() {
         sync.router
     );
 
+        setInterval(
+            async () => {
+
+                try {
+
+                    console.log(
+                        "[PROJECTION WORKER] Processing pending events..."
+                    );
+
+                    await sync
+                        .projectionWorker
+                        .processPending();
+
+                    console.log(
+                        "[PROJECTION WORKER] Done processing pending events."
+                    );
+                    
+
+                } catch (error) {
+
+                    console.error(
+                        "[PROJECTION WORKER]",
+                        error
+                    );
+                }
+
+            },
+            10000
+        );
     // --------------------
     // Start server
     // --------------------
