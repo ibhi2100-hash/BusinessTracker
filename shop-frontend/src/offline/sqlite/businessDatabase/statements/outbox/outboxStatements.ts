@@ -33,4 +33,8 @@ export class OutboxStatments {
     get resetInFlight(){
         return this.manager.get(OutboxKeys.resetInFlight)
     }
+
+    get pendingCount(){
+        return this.manager.get(OutboxKeys.getPendingCount)
+    }
 }

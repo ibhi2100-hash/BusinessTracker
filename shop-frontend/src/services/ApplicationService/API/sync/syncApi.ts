@@ -1,6 +1,8 @@
 
 import { BusinessManager } from "@/src/Composer/BusinessManager";
 import { BusinessSynchronization } from "@/src/offline/sqlite/businessDatabase/synchronization/BusinessSynchronization";
+import { SyncApplicationService } from "./SyncTypes";
+import { SyncManagementState } from "@/app/(app)/(sync-mgt)/sync-management/components/syncMgtPage";
 
 
 
@@ -20,5 +22,7 @@ export class SyncApi {
         }
         return app.synchronization;
     }
+
+  
 
 }

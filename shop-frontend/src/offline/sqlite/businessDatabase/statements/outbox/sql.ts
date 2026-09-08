@@ -171,3 +171,17 @@ export const RESET_IN_FLIGHT = `
   SET status = 'PENDING', lockedUntil = NULL
   WHERE status = 'IN_FLIGHT' AND lockedUntil <= ?
 `;
+
+export const GET_PENDING_COUNT = `
+  SELECT COUNT(*) AS count
+  FROM outbox
+  WHERE status = 'PENDING'
+    AND (
+      nextRetryAt IS NULL
+      OR nextRetryAt <= ?
+    )
+    AND (
+      lockedUntil IS NULL
+      OR lockedUntil <= ?
+    )
+`;

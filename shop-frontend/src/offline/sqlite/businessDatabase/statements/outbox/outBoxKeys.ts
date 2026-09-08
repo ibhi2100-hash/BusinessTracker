@@ -1,3 +1,5 @@
+import { GET_PENDING_COUNT } from "./sql";
+
 export const OutboxKeys = {
   insert: "insert.outbox",
   getPending: "getPending.outbox",
@@ -6,4 +8,5 @@ export const OutboxKeys = {
   markRejected: "markRejected.outbox",
   scheduleRetry: "scheduleRetry.outbox",
   resetInFlight: "resetInFlight.outbox",
+  getPendingCount: "getPendingCount.outbox",
 } as const;

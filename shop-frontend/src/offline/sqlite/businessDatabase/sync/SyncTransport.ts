@@ -21,7 +21,15 @@ export class HttpSyncTransport
         if (events.length === 0) {
             return {
                 accepted: [],
+                conflicts: [],
                 rejected: [],
+                summary: {
+                    accepted: 0,
+                    alreadyAccepted: 0,
+                    conflicts: 0,
+                    rejected: 0,
+                    total: 0,
+                },
             };
         }
 
@@ -41,6 +49,8 @@ export class HttpSyncTransport
                 `Sync push failed: ${response.status}`
             );
         }
+
+        console.log("this is the Response for Pushing Events: ",await response.json())
 
         return await response.json();
     }

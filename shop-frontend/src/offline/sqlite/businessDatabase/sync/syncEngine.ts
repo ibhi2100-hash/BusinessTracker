@@ -5,10 +5,11 @@ import {
     SyncPullResult,
     SyncRejectedEvent,
     SyncTransport,
+    SyncRejected,
+    SyncConflict,
 } from "./types";
 
 import {
-    OutboxRow,
     PendingOutboxEvent,
     SQLiteOutboxRepository,
 } from "../repositories/SQLiteOutboxRepository/SQLiteOutboxRepository";
@@ -82,9 +83,9 @@ export type SyncResult =
 
         accepted: BackendAcceptedEvent[];
 
-        rejected: SyncRejectedEvent[];
+        rejected: SyncRejected[];
 
-        conflicts: SyncRejectedEvent[];
+        conflicts: SyncConflict[];
 
         pulled: number;
 
@@ -98,7 +99,7 @@ export type SyncResult =
 
         accepted: BackendAcceptedEvent[];
 
-        rejected: SyncRejectedEvent[];
+        rejected: SyncRejected[];
 
         pulled: number;
 
@@ -216,7 +217,9 @@ export class SyncEngine {
             BackendAcceptedEvent[] = [];
 
         let pushedRejected:
-            SyncRejectedEvent[] = [];
+            SyncRejected[] = [];
+        let pushedConflicts:
+            SyncConflict[] = [];
 
 
         if (pending.length > 0) {
@@ -284,6 +287,8 @@ export class SyncEngine {
             pushedRejected =
                 pushResult.rejected;
 
+            pushedConflicts =
+                pushResult.conflicts;
 
             /*
              * ---------------------------------------------------
@@ -300,7 +305,7 @@ export class SyncEngine {
                     pending.find(
                         r =>
                             r.event.id ===
-                            accepted.id
+                            accepted.eventId
                     );
 
                 if (!row) {
@@ -318,11 +323,30 @@ export class SyncEngine {
 
                     accepted.aggregateVersion,
 
-                    accepted.createdAt
+                    Date.now()
                 );
             }
 
 
+            for (
+                const conflict
+                of pushResult.conflicts
+            ) {
+                const row =
+                    pending.find(
+                        r =>
+                            r.event.id ===
+                            conflict.eventId
+                    );
+                if (!row) {
+                    continue;
+                }
+
+                await this.outbox.markConflict(
+                    row.outboxId,
+                    conflict.status
+                );
+            }
             /*
              * ---------------------------------------------------
              * 5. Apply rejected events
@@ -345,24 +369,9 @@ export class SyncEngine {
                     continue;
                 }
 
-
-                if (
-                    rejected.reason ===
-                    "CONFLICT"
-                ) {
-
-                    await this.outbox.markConflict(
-                        row.outboxId,
-                        rejected.message
-                    );
-
-                    continue;
-                }
-
-
                 await this.outbox.markRejected(
                     row.outboxId,
-                    rejected.message
+                    rejected.reason
                 );
             }
         }
@@ -446,11 +455,8 @@ export class SyncEngine {
          */
 
         const conflicts =
-            pushedRejected.filter(
-                rejection =>
-                    rejection.reason ===
-                    "CONFLICT"
-            );
+            pushedConflicts;
+
 
 
         if (conflicts.length > 0) {

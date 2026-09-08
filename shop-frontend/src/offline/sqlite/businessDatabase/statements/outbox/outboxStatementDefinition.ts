@@ -36,5 +36,10 @@ export const OutboxStatementsDefinition: StatementDefinition[] = [
     {
         key: OutboxKeys.resetInFlight,
         sql: SQL.RESET_IN_FLIGHT
+    },
+
+    {
+        key: OutboxKeys.getPendingCount,
+        sql: SQL.GET_PENDING_COUNT
     }
 ]

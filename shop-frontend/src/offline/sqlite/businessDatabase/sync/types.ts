@@ -50,55 +50,27 @@ export interface BackendEventPayload<TPayload = any> {
     checksum?: string;
 }
 
+export interface SyncSummary {
+    accepted: number;
+    alreadyAccepted: number;
+    conflicts: number;
+    rejected: number;
+    total: number;
+}
+
 
 /**
  * Canonical event returned by the backend after acceptance.
  *
  * This is the server-authoritative representation of the event.
  */
-export interface BackendAcceptedEvent<TPayload = unknown> {
-
-    id: string;
-
-    businessId?: string | null;
-    branchId?: string | null;
-
+export interface BackendAcceptedEvent {
+    eventId: string;
     aggregateId: string;
     aggregateType: string;
-
-    expectedAggregateVersion: number;
-
-    /**
-     * Actual version assigned by the server.
-     */
     aggregateVersion: number;
-
-    /**
-     * Global ordering assigned by the server.
-     */
     globalPosition: number;
-
-    type: string;
-
-    mode: "OPENING" | "LIVE";
-
-    payload: Readonly<TPayload>;
-
-    actor: {
-        userId: string;
-        deviceId: string;
-        sessionId?: string;
-    };
-
-    causationId: string;
-
-    correlationId: string;
-
-    logicClock: number;
-
-    createdAt: number;
-
-    checksum?: string;
+    status: "ACCEPTED";
 }
 
 
@@ -127,6 +99,25 @@ export interface SyncRejectedEvent {
     actualVersion?: number;
 }
 
+export interface SyncConflict {
+    eventId: string;
+    aggregateId: string;
+    aggregateType: string;
+    expectedAggregateVersion: number;
+    serverAggregateVersion: number;
+    serverEvents: any[];
+    status: "CONFLICT";
+}
+
+export interface SyncRejected {
+    eventId: string;
+    aggregateId: string;
+    aggregateType: string;
+    status: "REJECTED";
+    reason: string
+
+}
+
 
 /**
  * Result of pushing local events.
@@ -135,7 +126,11 @@ export interface SyncPushResult {
 
     accepted: BackendAcceptedEvent[];
 
-    rejected: SyncRejectedEvent[];
+    conflicts: SyncConflict[];
+
+    rejected: SyncRejected[];
+
+    summary: SyncSummary;
 }
 
 

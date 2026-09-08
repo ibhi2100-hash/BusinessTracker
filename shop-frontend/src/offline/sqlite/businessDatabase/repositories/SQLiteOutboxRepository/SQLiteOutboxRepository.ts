@@ -239,6 +239,16 @@ export class SQLiteOutboxRepository {
       now
     ]);
   }
+
+  async getPendingCount(
+    now: number
+  ): Promise<number> {
+    const result = await this.statements.pendingCount.query<{ count: number }>([
+      now,
+      now
+    ]);
+    return result[0].count;
+  }
 }
 
 class OutboxMapper {
@@ -356,4 +366,6 @@ class OutboxMapper {
         row.checksum
     };
   }
+
+
 }

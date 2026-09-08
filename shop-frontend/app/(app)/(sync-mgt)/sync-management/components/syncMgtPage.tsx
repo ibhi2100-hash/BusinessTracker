@@ -15,6 +15,7 @@ import {
   Clock3,
   Wifi,
   ChevronRight,
+  WifiOff,
 } from "lucide-react";
 
 import { GlassCard } from "@/components/ui/GlassCard";
@@ -24,6 +25,13 @@ import { StatCard } from "@/components/ui/StatCard";
 import { DataCard } from "@/components/ui/DataCard";
 import { GlassSheet } from "@/components/ui/GlassSheet";
 import { useApplication } from "@/src/services/ApplicationService/ApplicationContext";
+import { SyncConflict } from "@/src/offline/sqlite/businessDatabase/sync/types";
+import { SyncResult } from "@/src/offline/sqlite/businessDatabase/sync/syncEngine";
+import {
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 
 
 type SyncStatus =
@@ -60,103 +68,42 @@ interface SyncActivity {
 
   globalPosition?: number;
 }
+export interface SyncManagementState {
 
+    status:
+        | "SYNCED"
+        | "PENDING"
+        | "SYNCING"
+        | "CONFLICT"
+        | "ERROR"
+        | "OFFLINE";
 
-interface SyncConflict {
-  id: string;
+    pendingEvents: number;
 
-  aggregateType: string;
+    uploadedEvents: number;
 
-  aggregateId: string;
+    acceptedEvents: number;
 
-  eventType: string;
+    rejectedEvents: number;
 
-  expectedVersion: number;
+    conflictEvents: number;
 
-  serverVersion: number;
+    deviceCursor: number;
+
+    serverCursor: number;
+
+    lastSyncAt: number | null;
+
+    lastSyncDurationMs: number | null;
+
+    lastResult: SyncResult | null;
+
+    activities: SyncActivity[];
+
+    conflicts: SyncConflict[];
+
+    error: string | null;
 }
-
-
-const mockActivities: SyncActivity[] = [
-  {
-    id: "evt-001",
-    eventType: "ProductCreated",
-    aggregateType: "PRODUCT",
-    aggregateId: "prod-103",
-    status: "accepted",
-    message: "Product accepted by server",
-    time: "9:48:19 PM",
-    aggregateVersion: 1,
-    globalPosition: 18420,
-  },
-
-  {
-    id: "evt-002",
-    eventType: "InventoryAdjusted",
-    aggregateType: "INVENTORY",
-    aggregateId: "inv-103",
-    status: "accepted",
-    message: "Inventory adjustment accepted",
-    time: "9:48:19 PM",
-    aggregateVersion: 4,
-    globalPosition: 18421,
-  },
-
-  {
-    id: "evt-003",
-    eventType: "SaleCreated",
-    aggregateType: "SALE",
-    aggregateId: "sale-8291",
-    status: "accepted",
-    message: "Sale accepted by server",
-    time: "9:48:20 PM",
-    aggregateVersion: 1,
-    globalPosition: 18422,
-  },
-
-  {
-    id: "evt-004",
-    eventType: "ProductUpdated",
-    aggregateType: "PRODUCT",
-    aggregateId: "prod-098",
-    status: "conflict",
-    message: "Aggregate version conflict",
-    time: "9:48:20 PM",
-    aggregateVersion: 4,
-  },
-
-  {
-    id: "evt-005",
-    eventType: "BusinessUpdated",
-    aggregateType: "BUSINESS",
-    aggregateId: "business-001",
-    status: "conflict",
-    message: "Aggregate version conflict",
-    time: "9:48:21 PM",
-    aggregateVersion: 7,
-  },
-];
-
-
-const mockConflicts: SyncConflict[] = [
-  {
-    id: "evt-004",
-    aggregateType: "PRODUCT",
-    aggregateId: "prod-098",
-    eventType: "ProductUpdated",
-    expectedVersion: 4,
-    serverVersion: 5,
-  },
-
-  {
-    id: "evt-005",
-    aggregateType: "BUSINESS",
-    aggregateId: "business-001",
-    eventType: "BusinessUpdated",
-    expectedVersion: 7,
-    serverVersion: 8,
-  },
-];
 
 
 function StatusBadge({
@@ -288,27 +235,133 @@ function ActivityItem({
 }
 
 
+function SyncStatusContent({
+    status,
+}: {
+    status: SyncStatus;
+}) {
+
+    switch (status) {
+
+        case "SYNCING":
+            return {
+                title: "Synchronizing",
+                description:
+                    "Uploading and downloading events...",
+                icon: <RefreshCw size={26} />,
+                variant: "primary" as const,
+            };
+
+        case "PENDING":
+            return {
+                title: "Pending synchronization",
+                description:
+                    "Local events are waiting to be uploaded.",
+                icon: <Upload size={26} />,
+                variant: "primary" as const,
+            };
+
+        case "CONFLICT":
+            return {
+                title: "Synchronization conflicts",
+                description:
+                    "Some events require attention.",
+                icon: <AlertTriangle size={26} />,
+                variant: "primary" as const,
+            };
+
+        case "ERROR":
+            return {
+                title: "Synchronization error",
+                description:
+                    "The latest synchronization failed.",
+                icon: <XCircle size={26} />,
+                variant: "danger" as const,
+            };
+
+        case "OFFLINE":
+            return {
+                title: "Offline",
+                description:
+                    "Changes will synchronize when connection is restored.",
+                icon: <CloudOff size={26} />,
+                variant: "primary" as const,
+            };
+
+        default:
+            return {
+                title: "Synchronized",
+                description:
+                    "Everything is up to date.",
+                icon: <Cloud size={26} />,
+                variant: "success" as const,
+            };
+    }
+}
+
+
 export default function SyncManagementPage() {
-
-  const syncStatus: SyncStatus = "SYNCED";
-
-  const pendingEvents = 0;
-  const uploadedEvents = 148;
-  const acceptedEvents = 146;
-  const conflicts = 2;
-  const rejectedEvents = 0;
-
   const app = useApplication();
 
-  const handleSync = async () => {
-    /*
-     * Connect this to your SyncApplicationService / SyncEngine.
-     */
+  const [syncState, setSyncState] = 
+      useState(() => app.syncService.getState())
 
-    await app.sync.Sync()
-    console.log("Manual synchronization requested");
-  };
+  const [online, setOnline] = useState(true);
 
+  useEffect(() => {
+    const update =
+      () => setOnline(
+        navigator.onLine
+      );
+      update();
+
+      window.addEventListener(
+        "online",
+        update
+      );
+
+      window.addEventListener(
+        "offline",
+        update
+      );
+
+      return () => {
+        window.removeEventListener(
+          "online",
+          update
+        );
+
+        window.removeEventListener(
+          "offline",
+          update
+        );
+      }
+  },[])
+
+  useEffect(()=> {
+    return app.syncService.subscribe(
+      setSyncState
+    )
+  },[app]);
+
+  const handleSync = 
+      useCallback(async () => {
+        await app.sync.Sync()
+      }, [app])
+
+  const syncStatus = syncState.status;
+
+  const pendingEvents = syncState.pendingEvents;
+
+  const uploadedEvents = syncState.uploadedEvents;
+
+  const acceptedEvents = syncState.acceptedEvents;
+
+  const conflicts = syncState.conflictEvents;
+
+  const rejectedEvents = syncState.rejectedEvents;
+
+  const statusContent = SyncStatusContent({ status: syncStatus });
 
   return (
     <div className="w-full space-y-6 pb-10">
@@ -382,7 +435,7 @@ export default function SyncManagementPage() {
 
             <GlassIcon
               size="lg"
-              variant="success"
+              variant={statusContent.variant}
             >
               <Cloud size={26} />
             </GlassIcon>
@@ -394,17 +447,17 @@ export default function SyncManagementPage() {
                 <span className="h-2 w-2 rounded-full bg-emerald-400" />
 
                 <h2 className="text-lg font-semibold text-white">
-                  Synchronized
+                  {statusContent.title}
                 </h2>
 
               </div>
 
               <p className="mt-1 text-sm text-gray-400">
-                Everything is up to date.
+                {statusContent.description}
               </p>
 
               <p className="mt-2 text-xs text-gray-500">
-                Last synced today at 9:48 PM
+                last sync: `{new Date(syncState.lastSyncAt ?? 0).toLocaleString()}`
               </p>
 
             </div>
@@ -426,7 +479,7 @@ export default function SyncManagementPage() {
             </span>
 
             <span className="text-lg font-semibold text-white">
-              18,429
+              {syncState.serverCursor.toLocaleString()}
             </span>
 
           </div>
@@ -561,14 +614,28 @@ export default function SyncManagementPage() {
           </div>
 
 
-          <div>
-            {mockActivities.map((activity) => (
-              <ActivityItem
-                key={activity.id}
-                activity={activity}
-              />
-            ))}
-          </div>
+          {syncState.activities.length === 0 ? (
+
+            <div className="py-10 text-center">
+
+                <p className="text-sm text-gray-400">
+                    No synchronization activity yet.
+                </p>
+
+            </div>
+
+        ) : (
+
+            syncState.activities.map(
+                activity => (
+                    <ActivityItem
+                        key={activity.id}
+                        activity={activity}
+                    />
+                )
+            )
+
+        )}
 
         </GlassCard>
 
@@ -601,7 +668,7 @@ export default function SyncManagementPage() {
 
             <GlassIcon
               size="sm"
-              variant="danger"
+              variant={statusContent.variant}
             >
               <AlertTriangle size={17} />
             </GlassIcon>
@@ -609,52 +676,90 @@ export default function SyncManagementPage() {
           </div>
 
 
-          <div className="space-y-3">
+          {syncState.conflicts.length === 0 ? (
 
-            {mockConflicts.map((conflict) => (
+            <div className="py-10 text-center">
 
-              <DataCard
-                key={conflict.id}
-                title={conflict.eventType}
-                subtitle={`${conflict.aggregateType} · ${conflict.aggregateId}`}
-                badge={
-                  <span
-                    className="
-                      rounded-full
-                      bg-amber-500/10
-                      px-2
-                      py-1
-                      text-[10px]
-                      text-amber-400
-                    "
-                  >
-                    Conflict
-                  </span>
-                }
-                metrics={[
-                  {
-                    label: "Expected",
-                    value: conflict.expectedVersion,
-                  },
-                  {
-                    label: "Server",
-                    value: conflict.serverVersion,
-                  },
-                ]}
-                actions={
-                  <GlassButton
-                    variant="secondary"
-                    className="w-full"
-                    icon={<ChevronRight size={15} />}
-                  >
-                    Review
-                  </GlassButton>
-                }
-              />
+                <CheckCircle2
+                    className="mx-auto text-emerald-400"
+                    size={24}
+                />
 
-            ))}
+                <p className="mt-2 text-sm text-gray-400">
+                    No conflicts
+                </p>
 
-          </div>
+                <p className="mt-1 text-xs text-gray-500">
+                    All synchronized events are consistent.
+                </p>
+
+            </div>
+
+        ) : (
+
+            <div className="space-y-3">
+
+                {syncState.conflicts.map(
+                    conflict => (
+
+                        <DataCard
+                            key={conflict.eventId}
+
+                            title={
+                                conflict.aggregateType
+                            }
+
+                            subtitle={
+                                `${conflict.aggregateType} · ` +
+                                conflict.aggregateId
+                            }
+
+                            badge={
+                                <span className="
+                                    rounded-full
+                                    bg-amber-500/10
+                                    px-2
+                                    py-1
+                                    text-[10px]
+                                    text-amber-400
+                                ">
+                                    Conflict
+                                </span>
+                            }
+
+                            metrics={[
+                                {
+                                    label: "Expected",
+                                    value:
+                                        conflict.expectedAggregateVersion,
+                                },
+                                {
+                                    label: "Server",
+                                    value:
+                                        conflict.serverAggregateVersion,
+                                },
+                            ]}
+
+                            actions={
+                                <GlassButton
+                                    variant="secondary"
+                                    className="w-full"
+                                    icon={
+                                        <ChevronRight
+                                            size={15}
+                                        />
+                                    }
+                                >
+                                    Review
+                                </GlassButton>
+                            }
+                        />
+
+                    )
+                )}
+
+            </div>
+        )}
 
         </GlassCard>
 
@@ -701,14 +806,21 @@ export default function SyncManagementPage() {
             metrics={[
               {
                 label: "Status",
-                value: "Online",
+                value: online 
+                          ? "Online"
+                          : "Offline",
               },
             ]}
             badge={
-              <Wifi
-                size={16}
-                className="text-emerald-400"
-              />
+              online
+                ? <Wifi
+                    size={16}
+                    className="text-emerald-400"
+                />
+                : <WifiOff
+                    size={16}
+                    className="text-gray-400"
+                />
             }
           />
 
@@ -716,20 +828,22 @@ export default function SyncManagementPage() {
             title="Device"
             subtitle="Local event store"
             metrics={[
-              {
-                label: "Position",
-                value: "18,429",
-              },
-              {
-                label: "Pending",
-                value: pendingEvents,
-              },
+                {
+                    label: "Cursor",
+                    value:
+                        syncState.deviceCursor.toLocaleString(),
+                },
+                {
+                    label: "Pending",
+                    value:
+                        syncState.pendingEvents,
+                },
             ]}
             badge={
-              <Database
-                size={16}
-                className="text-teal-400"
-              />
+                <Database
+                    size={16}
+                    className="text-teal-400"
+                />
             }
           />
 
@@ -737,19 +851,19 @@ export default function SyncManagementPage() {
             title="Server"
             subtitle="Event store"
             metrics={[
-              {
-                label: "Position",
-                value: "18,429",
-              },
+                {
+                    label: "Position",
+                    value:
+                        syncState.serverCursor.toLocaleString(),
+                },
             ]}
             badge={
-              <Server
-                size={16}
-                className="text-teal-400"
-              />
+                <Server
+                    size={16}
+                    className="text-teal-400"
+                />
             }
-          />
-
+        />
           <DataCard
             title="Last Sync"
             subtitle="Synchronization"
