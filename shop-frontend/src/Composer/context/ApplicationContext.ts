@@ -5,8 +5,7 @@ import { QueryRunner } from "@/src/storage/queryRunner/QueryRunner";
 import { TransactionManager } from "@/src/storage/transaction/TransactionManager";
 import { ClientStatementRegistry } from "@/src/offline/sqlite/clientDatabase/statements/ClientStatementRegistry";
 import { ExecutionContextProvider } from "@/src/BizTru_Karnel/CommandFactory/ExecutionContext/ExecutionContext";
-import { ProjectionEventBus } from "@/src/buses/ProjectionBuses";
-
+import { ProjectionEventBus } from "@business/event-bus";
 
 
 

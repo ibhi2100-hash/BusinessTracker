@@ -10,33 +10,77 @@ import {
     useState,
 } from "react";
 
-import {
-    useRouter,
-} from "next/navigation";
+import { useRouter } from "next/navigation";
+
+import { toast } from "sonner";
 
 import {
-    toast,
-} from "sonner";
+    SyncResult,
+} from "@/src/offline/sqlite/businessDatabase/sync/syncEngine";
 
 import {
-    SyncCoordinatorEvent,
     SyncTrigger,
 } from "@/src/offline/sqlite/businessDatabase/sync/SyncCoordinator/SyncCoordinator";
 
-import { BusinessSynchronization } from "@/src/offline/sqlite/businessDatabase/synchronization/BusinessSynchronization";
-import { SyncResult } from "@/src/offline/sqlite/businessDatabase/sync/syncEngine";
+import {
+    SyncApplicationService,
+    SyncApplicationEvent,
+} from "@/src/services/ApplicationService/API/sync/SyncApplicationService";
 
-interface SyncContextValue {
+import {
+    SyncApplicationState,
+} from "@/src/services/ApplicationService/API/sync/SyncApplicationState";
 
-    isSyncing: boolean;
 
-    isOnline: boolean;
+/*
+ * ============================================================
+ * Context
+ * ============================================================
+ */
+
+export interface SyncContextValue {
+
+    status:
+        SyncApplicationState["status"];
+
+    isSyncing:
+        boolean;
+
+    isOnline:
+        boolean;
+
+    pendingEvents:
+        number;
+
+    uploadedEvents:
+        number;
+
+    acceptedEvents:
+        number;
+
+    rejectedEvents:
+        number;
+
+    conflictEvents:
+        number;
+
+    lastPulledGlobalPosition:
+        number;
 
     lastSyncAt:
         number | null;
 
+    lastSyncDurationMs:
+        number | null;
+
     lastResult:
         SyncResult | null;
+
+    conflicts:
+        SyncApplicationState["conflicts"];
+
+    error:
+        string | null;
 
     syncNow():
         Promise<SyncResult>;
@@ -51,9 +95,11 @@ const SyncContext =
 
 interface SyncProviderProps {
 
-    children: ReactNode;
+    children:
+        ReactNode;
 
-    synchronization: BusinessSynchronization;
+    syncService:
+        SyncApplicationService;
 }
 
 
@@ -63,7 +109,7 @@ const SYNC_TOAST_ID =
 
 export function SyncProvider({
     children,
-    synchronization,
+    syncService,
 }: SyncProviderProps) {
 
     const router =
@@ -71,214 +117,100 @@ export function SyncProvider({
 
 
     /*
-     * ---------------------------------------------------------
-     * Synchronization state
-     * ---------------------------------------------------------
+     * ========================================================
+     * Application synchronization state
+     * ========================================================
+     *
+     * SyncApplicationService is the single source of truth.
      */
 
     const [
-        isSyncing,
-        setIsSyncing
-    ] = useState(false);
-
-
-    const [
-        isOnline,
-        setIsOnline
-    ] = useState(
-        typeof navigator === "undefined"
-            ? true
-            : navigator.onLine
+        syncState,
+        setSyncState,
+    ] = useState<SyncApplicationState>(
+        () =>
+            syncService.getState()
     );
 
 
-    const [
-        lastSyncAt,
-        setLastSyncAt
-    ] =
-        useState<number | null>(
-            null
-        );
-
-
-    const [
-        lastResult,
-        setLastResult
-    ] =
-        useState<
-            SyncResult | null
-        >(null);
-
-
     /*
-     * ---------------------------------------------------------
-     * Coordinator notifications
-     *
-     * The provider does NOT start synchronization.
-     *
-     * It only observes the coordinator.
-     * ---------------------------------------------------------
+     * ========================================================
+     * Synchronization state subscription
+     * ========================================================
      */
 
     useEffect(() => {
 
-        const unsubscribe =
-            synchronization.subscribe({
-
-                /*
-                 * -------------------------------------------------
-                 * Synchronization started
-                 * -------------------------------------------------
-                 */
-
-                onSyncStarted(
-                    trigger
-                ) {
-
-                    setIsSyncing(true);
-
-
-                    /*
-                     * Interval synchronization is intentionally
-                     * quiet. We only notify the user if something
-                     * important happens.
-                     */
-                    if (
-                        trigger ===
-                        "INTERVAL"
-                    ) {
-                        return;
-                    }
-
-
-                    toast.loading(
-                        getSyncingMessage(
-                            trigger
-                        ),
-                        {
-                            id:
-                                SYNC_TOAST_ID,
-
-                            description:
-                                "Sending local changes and checking for remote updates.",
-                        }
-                    );
-                },
-
-
-                /*
-                 * -------------------------------------------------
-                 * Synchronization completed
-                 * -------------------------------------------------
-                 */
-
-                onSyncCompleted(event: SyncCoordinatorEvent) {
-
-                    setIsSyncing(false);
-
-                    setLastSyncAt(
-                        event.completedAt
-                    );
-
-                    setLastResult(
-                        event.result
-                    );
-
-                    handleSyncResult(
-                        event.trigger,
-                        event.result
-                    );
-                },
-
-
-
-                /*
-                 * -------------------------------------------------
-                 * Synchronization failed outside the normal
-                 * SyncEngine result flow.
-                 * -------------------------------------------------
-                 */
-
-                onSyncFailed(
-                    error
-                ) {
-
-                    setIsSyncing(false);
-
-
-                    toast.error(
-                        "Synchronization failed",
-                        {
-                            id:
-                                SYNC_TOAST_ID,
-
-                            description:
-                                error.message,
-
-                            duration:
-                                10_000,
-
-                            action: {
-                                label:
-                                    "View sync",
-
-                                onClick:
-                                    () =>
-                                        router.push(
-                                            "/sync-management"
-                                        ),
-                            },
-                        }
-                    );
-                },
-            });
-
-
-        return unsubscribe;
+        return syncService.subscribe(
+            setSyncState
+        );
 
     }, [
-        synchronization,
+        syncService,
+    ]);
+
+
+    /*
+     * ========================================================
+     * Synchronization event subscription
+     *
+     * Used only for presentation concerns such as toast
+     * notifications.
+     * ========================================================
+     */
+
+    useEffect(() => {
+
+        return syncService.subscribeEvents(
+            handleSynchronizationEvent
+        );
+
+    }, [
+        syncService,
         router,
     ]);
 
 
     /*
-     * ---------------------------------------------------------
-     * Browser connectivity state
+     * ========================================================
+     * Browser connectivity
      *
-     * IMPORTANT:
-     *
-     * This listener does NOT trigger synchronization.
-     *
-     * NetworkSyncConnector owns that responsibility.
-     *
-     * This listener only updates React UI state and informs
-     * the user when the browser goes offline.
-     * ---------------------------------------------------------
+     * This does NOT initiate synchronization.
+     * ========================================================
      */
+
+    const [
+        isOnline,
+        setIsOnline,
+    ] = useState(
+        () =>
+            typeof navigator === "undefined"
+                ? true
+                : navigator.onLine
+    );
+
 
     useEffect(() => {
 
         const handleOnline =
-            () => {
+            (): void => {
 
-                setIsOnline(
-                    true
-                );
+                setIsOnline(true);
             };
 
 
         const handleOffline =
-            () => {
+            (): void => {
 
-                setIsOnline(
-                    false
-                );
+                setIsOnline(false);
 
 
                 toast.warning(
                     "You're offline",
                     {
+                        id:
+                            SYNC_TOAST_ID,
+
                         description:
                             "Changes will remain on this device and synchronize when the connection returns.",
 
@@ -305,10 +237,8 @@ export function SyncProvider({
             handleOnline
         );
 
-
         window.addEventListener(
             "offline",
-
             handleOffline
         );
 
@@ -319,7 +249,6 @@ export function SyncProvider({
                 "online",
                 handleOnline
             );
-
 
             window.removeEventListener(
                 "offline",
@@ -333,291 +262,91 @@ export function SyncProvider({
 
 
     /*
-     * ---------------------------------------------------------
-     * Manual synchronization
-     *
-     * This is the UI's explicit synchronization command.
-     *
-     * The coordinator remains responsible for single-flight
-     * protection, cycles, and engine execution.
-     * ---------------------------------------------------------
+     * ========================================================
+     * Manual synchronization command
+     * ========================================================
      */
 
     const syncNow =
         useCallback(
-            async () => {
-
-                return synchronization.syncNow();
-
-            },
+            () =>
+                syncService.syncNow(),
             [
-                synchronization,
+                syncService,
             ]
         );
 
 
     /*
-     * ---------------------------------------------------------
-     * Interpret synchronization results
-     * ---------------------------------------------------------
-     */
-
-    const handleSyncResult =
-        useCallback(
-            (   trigger: SyncTrigger,
-                result: SyncResult
-            ): void => {
-
-                const summary =
-                    summarizeResult(
-                        result
-                    );
-
-
-                /*
-                 * -----------------------------------------------
-                 * Conflict has highest priority.
-                 * -----------------------------------------------
-                 */
-
-                if (
-                    summary.conflicts > 0
-                ) {
-
-                    toast.warning(
-                        `${summary.conflicts} synchronization conflict${
-                            summary.conflicts === 1
-                                ? ""
-                                : "s"
-                        }`,
-                        {
-                            id:
-                                SYNC_TOAST_ID,
-
-                            description:
-                                "Some local changes conflict with newer server data and need your attention.",
-
-                            duration:
-                                10_000,
-
-                            action: {
-                                label:
-                                    "Resolve",
-
-                                onClick:
-                                    () =>
-                                        router.push(
-                                            "/sync-management"
-                                        ),
-                            },
-                        }
-                    );
-
-                    return;
-                }
-
-
-                /*
-                 * -----------------------------------------------
-                 * Permanent rejections.
-                 * -----------------------------------------------
-                 */
-
-                if (
-                    summary.rejected > 0
-                ) {
-
-                    toast.error(
-                        `${summary.rejected} event${
-                            summary.rejected === 1
-                                ? ""
-                                : "s"
-                        } could not be synchronized`,
-                        {
-                            id:
-                                SYNC_TOAST_ID,
-
-                            description:
-                                "Open Sync Management to inspect the rejected events.",
-
-                            duration:
-                                10_000,
-
-                            action: {
-                                label:
-                                    "View",
-
-                                onClick:
-                                    () =>
-                                        router.push(
-                                            "/sync-management"
-                                        ),
-                            },
-                        }
-                    );
-
-                    return;
-                }
-
-
-                /*
-                 * -----------------------------------------------
-                 * Transient/network/backend error.
-                 * -----------------------------------------------
-                 */
-
-                if (
-                    summary.transientError
-                ) {
-
-                    toast.error(
-                        "Synchronization interrupted",
-                        {
-                            id:
-                                SYNC_TOAST_ID,
-
-                            description:
-                                summary.transientError,
-
-                            duration:
-                                10_000,
-
-                            action: {
-                                label:
-                                    "View sync",
-
-                                onClick:
-                                    () =>
-                                        router.push(
-                                            "/sync-management"
-                                        ),
-                            },
-                        }
-                    );
-
-                    return;
-                }
-
-
-                /*
-                 * -----------------------------------------------
-                 * Nothing changed.
-                 *
-                 * Interval synchronization stays silent.
-                 *
-                 * Manual synchronization explicitly tells the
-                 * user that everything is current.
-                 * -----------------------------------------------
-                 */
-
-                if (
-                    summary.pushed === 0 &&
-                    summary.pulled === 0
-                ) {
-
-                    toast.dismiss(
-                        SYNC_TOAST_ID
-                    );
-
-
-                    if (
-                        trigger === "MANUAL"
-                    ) {
-
-                        toast.success(
-                            "Everything is up to date"
-                        );
-                    }
-
-
-                    return;
-                }
-
-
-                /*
-                 * -----------------------------------------------
-                 * Successful useful synchronization.
-                 * -----------------------------------------------
-                 */
-
-                /*
-                 * Interval synchronization should remain quiet
-                 * even when it successfully synchronized data.
-                 */
-                if (
-                    trigger === "INTERVAL"
-                ) {
-
-                    toast.dismiss(
-                        SYNC_TOAST_ID
-                    );
-
-                    return;
-                }
-
-
-                toast.success(
-                    "Synchronization complete",
-                    {
-                        id:
-                            SYNC_TOAST_ID,
-
-                        description:
-                            buildSuccessDescription(
-                                summary.pushed,
-                                summary.pulled
-                            ),
-                    }
-                );
-            },
-            [
-                router,
-            ]
-        );
-
-
-    /*
-     * ---------------------------------------------------------
+     * ========================================================
      * Context value
-     * ---------------------------------------------------------
+     * ========================================================
      */
 
     const value =
-        useMemo<
-            SyncContextValue
-        >(
+        useMemo<SyncContextValue>(
             () => ({
 
-                isSyncing,
+                status:
+                    syncState.status,
+
+                isSyncing:
+                    syncState.status ===
+                    "SYNCING",
 
                 isOnline,
 
-                lastSyncAt,
+                pendingEvents:
+                    syncState.pendingEvents,
 
-                lastResult,
+                uploadedEvents:
+                    syncState.uploadedEvents,
+
+                acceptedEvents:
+                    syncState.acceptedEvents,
+
+                rejectedEvents:
+                    syncState.rejectedEvents,
+
+                conflictEvents:
+                    syncState.conflictEvents,
+
+                lastPulledGlobalPosition:
+                    syncState.lastPulledGlobalPosition,
+
+                lastSyncAt:
+                    syncState.lastSyncAt,
+
+                lastSyncDurationMs:
+                    syncState.lastSyncDurationMs,
+
+                lastResult:
+                    syncState.lastResult,
+
+                conflicts:
+                    syncState.conflicts,
+
+                error:
+                    syncState.error,
 
                 syncNow,
-
             }),
             [
-                isSyncing,
+                syncState,
                 isOnline,
-                lastSyncAt,
-                lastResult,
                 syncNow,
             ]
         );
 
 
     return (
+
         <SyncContext.Provider
-            value={
-                value
-            }
+            value={value}
         >
-            {
-                children
-            }
+
+            {children}
+
         </SyncContext.Provider>
     );
 }
@@ -638,7 +367,7 @@ export function useSync():
         );
 
 
-    if (!context) {
+    if (context === null) {
 
         throw new Error(
             "useSync must be used inside SyncProvider"
@@ -652,148 +381,518 @@ export function useSync():
 
 /*
  * ============================================================
- * Helpers
+ * Synchronization event presentation
  * ============================================================
  */
 
-function getSyncingMessage(
-    trigger: SyncTrigger
-): string {
+function handleSynchronizationEvent(
+    event: SyncApplicationEvent
+): void {
 
-    switch (
-        trigger
-    ) {
+    switch (event.type) {
 
-        case "NETWORK":
+        case "STARTED":
 
-            return (
-                "Connection restored — syncing"
+            handleSyncStarted(
+                event.trigger
             );
 
+            return;
 
-        case "MANUAL":
 
-            return (
-                "Synchronizing"
+        case "COMPLETED":
+
+            if (
+                event.result !== null
+            ) {
+
+                handleSyncCompleted(
+                    event.trigger,
+                    event.result
+                );
+            }
+
+            return;
+
+
+        case "FAILED":
+
+            handleSyncFailed(
+                event.error
             );
 
-        case "STARTUP":
-
-            return (
-                "Checking synchronization"
-            );
-
-
-        case "INTERVAL":
-
-            return (
-                "Synchronizing"
-            );
-
-
-        default:
-
-            return (
-                "Synchronizing"
-            );
+            return;
     }
 }
 
 
 /*
  * ============================================================
- * Sync Summary
+ * Started
+ * ============================================================
+ */
+
+function handleSyncStarted(
+    trigger: SyncTrigger
+): void {
+
+    /*
+     * Interval synchronization should remain silent.
+     */
+
+    if (
+        trigger === "INTERVAL"
+    ) {
+        return;
+    }
+
+
+    toast.loading(
+        getSyncingMessage(
+            trigger
+        ),
+        {
+            id:
+                SYNC_TOAST_ID,
+
+            description:
+                "Sending local changes and checking for remote updates.",
+        }
+    );
+}
+
+
+/*
+ * ============================================================
+ * Completed
+ * ============================================================
+ */
+
+function handleSyncCompleted(
+    trigger: SyncTrigger,
+    result: SyncResult
+): void {
+
+    const summary =
+        summarizeResult(
+            result
+        );
+
+
+    /*
+     * --------------------------------------------------------
+     * Conflicts
+     * --------------------------------------------------------
+     */
+
+    if (
+        summary.conflicts > 0
+    ) {
+
+        toast.warning(
+            `${summary.conflicts} synchronization conflict${
+                summary.conflicts === 1
+                    ? ""
+                    : "s"
+            }`,
+            {
+
+                id:
+                    SYNC_TOAST_ID,
+
+                description:
+                    "Some local changes conflict with newer server data and need your attention.",
+
+                duration:
+                    10_000,
+
+                action: {
+                    label:
+                        "Resolve",
+
+                    onClick:
+                        () =>
+                            window.location.assign(
+                                "/sync-management"
+                            ),
+                },
+            }
+        );
+
+        return;
+    }
+
+
+    /*
+     * --------------------------------------------------------
+     * Permanent rejection
+     * --------------------------------------------------------
+     */
+
+    if (
+        summary.rejected > 0
+    ) {
+
+        toast.error(
+            `${summary.rejected} event${
+                summary.rejected === 1
+                    ? ""
+                    : "s"
+            } could not be synchronized`,
+            {
+
+                id:
+                    SYNC_TOAST_ID,
+
+                description:
+                    "Open Sync Management to inspect the rejected events.",
+
+                duration:
+                    10_000,
+
+                action: {
+                    label:
+                        "View",
+
+                    onClick:
+                        () =>
+                            window.location.assign(
+                                "/sync-management"
+                            ),
+                },
+            }
+        );
+
+        return;
+    }
+
+
+    /*
+     * --------------------------------------------------------
+     * Transient error
+     * --------------------------------------------------------
+     */
+
+    if (
+        summary.transientError !== null
+    ) {
+
+        toast.error(
+            "Synchronization interrupted",
+            {
+
+                id:
+                    SYNC_TOAST_ID,
+
+                description:
+                    summary.transientError,
+
+                duration:
+                    10_000,
+
+                action: {
+                    label:
+                        "View sync",
+
+                    onClick:
+                        () =>
+                            window.location.assign(
+                                "/sync-management"
+                            ),
+                },
+            }
+        );
+
+        return;
+    }
+
+
+    /*
+     * --------------------------------------------------------
+     * Nothing changed
+     * --------------------------------------------------------
+     */
+
+    if (
+        summary.pushed === 0 &&
+        summary.pulled === 0
+    ) {
+
+        toast.dismiss(
+            SYNC_TOAST_ID
+        );
+
+
+        if (
+            trigger === "MANUAL"
+        ) {
+
+            toast.success(
+                "Everything is up to date"
+            );
+        }
+
+
+        return;
+    }
+
+
+    /*
+     * --------------------------------------------------------
+     * Interval synchronization remains silent.
+     * --------------------------------------------------------
+     */
+
+    if (
+        trigger === "INTERVAL"
+    ) {
+
+        toast.dismiss(
+            SYNC_TOAST_ID
+        );
+
+        return;
+    }
+
+
+    /*
+     * --------------------------------------------------------
+     * Useful synchronization
+     * --------------------------------------------------------
+     */
+
+    toast.success(
+        "Synchronization complete",
+        {
+
+            id:
+                SYNC_TOAST_ID,
+
+            description:
+                buildSuccessDescription(
+                    summary.pushed,
+                    summary.pulled
+                ),
+        }
+    );
+}
+
+
+/*
+ * ============================================================
+ * Failed
+ * ============================================================
+ */
+
+function handleSyncFailed(
+    error: string | null
+): void {
+
+    toast.error(
+        "Synchronization failed",
+        {
+
+            id:
+                SYNC_TOAST_ID,
+
+            description:
+                error ??
+                "An unexpected synchronization error occurred.",
+
+            duration:
+                10_000,
+
+            action: {
+                label:
+                    "View sync",
+
+                onClick:
+                    () =>
+                        window.location.assign(
+                            "/sync-management"
+                        ),
+            },
+        }
+    );
+}
+
+
+/*
+ * ============================================================
+ * Helpers
  * ============================================================
  */
 
 interface SyncSummary {
 
-    pushed: number;
+    pushed:
+        number;
 
-    pulled: number;
+    pulled:
+        number;
 
-    rejected: number;
+    accepted:
+        number;
 
-    conflicts: number;
+    rejected:
+        number;
+
+    conflicts:
+        number;
 
     transientError:
         string | null;
 }
 
 
-function summarizeResult( result: SyncResult ): SyncSummary { 
-    let pushed = 0; 
-    
-    let pulled = 0; 
-    
-    let rejected = 0; 
-    
-    let conflicts = 0; 
-    
-    let transientError: string | null = null; 
-    
-    switch ( 
-        result.kind 
-    ) { 
-        case "idle": 
-        
-            pulled = result.pulled; 
-            break;
+function summarizeResult(
+    result: SyncResult
+): SyncSummary {
+
+    switch (result.kind) {
+
+        case "idle":
+
+            return {
+
+                pushed:
+                    0,
+
+                pulled:
+                    result.pulled,
+
+                accepted:
+                    0,
+
+                rejected:
+                    0,
+
+                conflicts:
+                    0,
+
+                transientError:
+                    null,
+            };
+
 
         case "synced":
 
-            pushed = result.pushed; 
-            
-            pulled = result.pulled; 
-            
-            rejected = result.rejected; 
-            
-            break; 
-            
-        case "conflict": 
-            
-            pushed = result.accepted.length; 
-                
-            pulled = result.pulled; 
-            
-            rejected = result.rejected.length; 
-            
-            conflicts = result.conflicts.length; 
-            
-            break; 
-            
+            return {
+
+                pushed:
+                    result.pushed,
+
+                pulled:
+                    result.pulled,
+
+                accepted:
+                    result.pushed,
+
+                rejected:
+                    result.rejected,
+
+                conflicts:
+                    0,
+
+                transientError:
+                    null,
+            };
+
+
+        case "conflict":
+
+            return {
+
+                pushed:
+                    result.accepted.length,
+
+                pulled:
+                    result.pulled,
+
+                accepted:
+                    result.accepted.length,
+
+                rejected:
+                    result.rejected.length,
+
+                conflicts:
+                    result.conflicts.length,
+
+                transientError:
+                    null,
+            };
+
+
         case "rejected":
-            
-            pushed = result.accepted.length; 
-            
-            pulled = result.pulled; 
-            
-            rejected = result.rejected.length; 
-            
-            break; 
-            
+
+            return {
+
+                pushed:
+                    result.accepted.length,
+
+                pulled:
+                    result.pulled,
+
+                accepted:
+                    result.accepted.length,
+
+                rejected:
+                    result.rejected.length,
+
+                conflicts:
+                    0,
+
+                transientError:
+                    null,
+            };
+
+
         case "transient":
-            
-            transientError = result.error;
-            
-            break; 
-    } 
-    
-    
-    return { 
-        pushed, 
-        pulled, 
-        rejected, 
-        conflicts, 
-        transientError,
-     };
+
+            return {
+
+                pushed:
+                    0,
+
+                pulled:
+                    0,
+
+                accepted:
+                    0,
+
+                rejected:
+                    0,
+
+                conflicts:
+                    0,
+
+                transientError:
+                    result.error,
+            };
+    }
 }
 
-/*
- * ============================================================
- * Success Description
- * ============================================================
- */
+
+function getSyncingMessage(
+    trigger: SyncTrigger
+): string {
+
+    switch (trigger) {
+
+        case "NETWORK":
+            return "Connection restored — syncing";
+
+        case "MANUAL":
+            return "Synchronizing";
+
+        case "STARTUP":
+            return "Checking synchronization";
+
+        case "INTERVAL":
+            return "Synchronizing";
+    }
+}
+
 
 function buildSuccessDescription(
     pushed: number,
@@ -837,4 +936,3 @@ function buildSuccessDescription(
         "Everything is up to date."
     );
 }
-

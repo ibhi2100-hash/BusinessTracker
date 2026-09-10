@@ -29,57 +29,6 @@ export interface Command<TPayload = unknown> {
 
 }
 
-export interface ExecutionResult {
-
-    success: boolean;
-
-    aggregateId: string;
-
-    aggregateVersion: number;
-
-    events: readonly Event[];
-
-    warnings: readonly BusinessWarning[];
-
-    executionTime: number;
-
-}
-
-export interface BusinessWarning {
-
-    code: string;
-    message: string;
-}
-export interface AggregateState {
-    readonly id: string;
-    readonly version: number;
-}
-
-export interface AggregateLoader {
-
-    load(
-        aggregateId
-    ): AggregateState;
-
-}
-
-export interface ExecutionPlan {
-
-    events;
-
-    ledgerEntries;
-
-    workflows;
-
-    notifications;
-
-    projections;
-
-}
-
-
-
-
 export interface AggregateRebuilder<
     TState
 >{
@@ -101,15 +50,6 @@ export interface SnapshotLoader {
     ): Snapshot | null;
 
 }
-
-export interface EventLoader {
-
-    load(
-        aggregateId,
-        version
-    ): Event[];
-}
-
 
 export interface ExecutionContext {
 

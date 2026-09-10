@@ -4,21 +4,26 @@ export class ContextApi {
 
     constructor(
         private readonly manager: BusinessManager
-    ){}
+    ) {}
 
-    async current(){
+    async current() {
         const app = await this.manager.current();
-        const context = await app.context.current();
-
-        return context
+        return await app.context.current();
     }
 
-    async setActiveBranch(){
+    async setActiveBusiness(businessId: string) {
+        const app = await this.manager.current();
 
+        await app.context.setActiveBusiness(businessId);
     }
 
-    clearCache(){
-        
+    async setActiveBranch(branchId: string) {
+        const app = await this.manager.current();
+
+        await app.context.setActiveBranch(branchId);
     }
 
+    clearCache() {
+        // If appropriate, delegate this to the application context.
+    }
 }

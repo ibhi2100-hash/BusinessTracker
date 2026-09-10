@@ -1,172 +1,459 @@
-import { SyncManagementState } from "@/app/(app)/(sync-mgt)/sync-management/components/syncMgtPage";
-import { BusinessManager } from "@/src/Composer/BusinessManager";
-import { SyncEngine, SyncResult } from "@/src/offline/sqlite/businessDatabase/sync/syncEngine";
+import {
+    BusinessManager,
+} from "@/src/Composer/BusinessManager";
+
+import {
+    SyncResult,
+} from "@/src/offline/sqlite/businessDatabase/sync/syncEngine";
+import  { SyncConflict } from "@/src/offline/sqlite/businessDatabase/sync/types"
+import {
+    SyncTrigger,
+    SyncCoordinatorEvent,
+} from "@/src/offline/sqlite/businessDatabase/sync/SyncCoordinator/SyncCoordinator";
+
+import {
+    SyncApplicationState,
+} from "./SyncApplicationState";
+
+
+export interface SyncApplicationEvent {
+
+    type:
+        | "STARTED"
+        | "COMPLETED"
+        | "FAILED";
+
+    trigger:
+        SyncTrigger;
+
+    result:
+        SyncResult | null;
+
+    error:
+        string | null;
+
+    startedAt:
+        number;
+
+    completedAt:
+        number | null;
+}
+
+
+type StateListener =
+    (
+        state: SyncApplicationState
+    ) => void;
+
+
+type EventListener =
+    (
+        event: SyncApplicationEvent
+    ) => void;
+
 
 export class SyncApplicationService {
 
-    private state: SyncManagementState = {
-        status: "SYNCED",
+    private state:
+        SyncApplicationState = {
 
-        pendingEvents: 0,
+        status:
+            "SYNCED",
 
-        uploadedEvents: 0,
+        pendingEvents:
+            0,
 
-        acceptedEvents: 0,
+        uploadedEvents:
+            0,
 
-        rejectedEvents: 0,
+        acceptedEvents:
+            0,
 
-        conflictEvents: 0,
+        rejectedEvents:
+            0,
 
-        deviceCursor: 0,
+        conflictEvents:
+            0,
+        activities:
+            [],
+        
+        deviceCursor:
+            0,
 
-        serverCursor: 0,
+        
 
-        lastSyncAt: null,
+        lastPulledGlobalPosition:
+            0,
 
-        lastSyncDurationMs: null,
+        lastSyncAt:
+            null,
 
-        lastResult: null,
+        lastSyncDurationMs:
+            null,
 
-        activities: [],
+        lastResult:
+            null,
 
-        conflicts: [],
+        conflicts:
+            [],
 
-        error: null,
+        error:
+            null,
     };
 
 
-    private listeners =
-        new Set<
-            (
-                state: SyncManagementState
-            ) => void
-        >();
+    private readonly stateListeners =
+        new Set<StateListener>();
+
+
+    private readonly eventListeners =
+        new Set<EventListener>();
+
+
+    private unsubscribeSynchronization:
+        (() => void) | null = null;
+
+
+    private initialized =
+        false;
+
+
+    private disposed =
+        false;
 
 
     constructor(
-        private readonly manager: BusinessManager
+        private readonly manager:
+            BusinessManager
     ) {}
 
 
-    getState(): SyncManagementState {
+    /*
+     * ========================================================
+     * Lifecycle
+     * ========================================================
+     */
+
+    async initialize(): Promise<void> {
+
+        if (this.disposed) {
+            throw new Error(
+                "SyncApplicationService has been disposed."
+            );
+        }
+
+
+        if (this.initialized) {
+            return;
+        }
+
+
+        const app =
+            await this.manager.current();
+
+
+        this.unsubscribeSynchronization =
+            app.synchronization.subscribe({
+
+                onSyncStarted:
+                    trigger => {
+
+                        this.state = {
+                            ...this.state,
+
+                            status:
+                                "SYNCING",
+
+                            error:
+                                null,
+                        };
+
+
+                        this.emitState();
+
+
+                        this.emitEvent({
+
+                            type:
+                                "STARTED",
+
+                            trigger,
+
+                            result:
+                                null,
+
+                            error:
+                                null,
+
+                            startedAt:
+                                Date.now(),
+
+                            completedAt:
+                                null,
+                        });
+                    },
+
+
+                onSyncCompleted:
+                    event => {
+
+                        this.applyCompletedResult(
+                            event
+                        );
+
+
+                        this.emitState();
+
+
+                        this.emitEvent({
+
+                            type:
+                                "COMPLETED",
+
+                            trigger:
+                                event.trigger,
+
+                            result:
+                                event.result,
+
+                            error:
+                                null,
+
+                            startedAt:
+                                event.startedAt,
+
+                            completedAt:
+                                event.completedAt,
+                        });
+                    },
+
+
+                onSyncFailed:
+                    error => {
+
+                        const message =
+                            normalizeError(
+                                error
+                            ).message;
+
+
+                        this.state = {
+                            ...this.state,
+
+                            status:
+                                "ERROR",
+
+                            error:
+                                message,
+                        };
+
+
+                        this.emitState();
+
+
+                        this.emitEvent({
+
+                            type:
+                                "FAILED",
+
+                            trigger:
+                                "MANUAL",
+
+                            result:
+                                null,
+
+                            error:
+                                message,
+
+                            startedAt:
+                                Date.now(),
+
+                            completedAt:
+                                null,
+                        });
+                    },
+            });
+
+
+        this.initialized =
+            true;
+    }
+
+
+    async dispose(): Promise<void> {
+
+        if (this.disposed) {
+            return;
+        }
+
+
+        this.disposed =
+            true;
+
+
+        this.unsubscribeSynchronization?.();
+
+        this.unsubscribeSynchronization =
+            null;
+
+
+        this.stateListeners.clear();
+
+        this.eventListeners.clear();
+    }
+
+
+    /*
+     * ========================================================
+     * State
+     * ========================================================
+     */
+
+    getState():
+        SyncApplicationState {
+
         return this.state;
     }
 
 
     subscribe(
-        listener: (
-            state: SyncManagementState
-        ) => void
+        listener: StateListener
     ): () => void {
 
-        this.listeners.add(listener);
+        if (this.disposed) {
+            return () => {};
+        }
 
-        listener(this.state);
+
+        this.stateListeners.add(
+            listener
+        );
+
+
+        listener(
+            this.state
+        );
+
 
         return () => {
-            this.listeners.delete(listener);
+
+            this.stateListeners.delete(
+                listener
+            );
         };
     }
 
 
-    private emit(): void {
+    subscribeEvents(
+        listener: EventListener
+    ): () => void {
 
-        for (
-            const listener
-            of this.listeners
-        ) {
-            listener(this.state);
+        if (this.disposed) {
+            return () => {};
         }
+
+
+        this.eventListeners.add(
+            listener
+        );
+
+
+        return () => {
+
+            this.eventListeners.delete(
+                listener
+            );
+        };
     }
 
 
-    async Sync(): Promise<SyncResult> {
+    /*
+     * ========================================================
+     * Commands
+     * ========================================================
+     */
 
-        const startedAt =
-            Date.now();
+    async syncNow(): Promise<SyncResult> {
+
+        this.assertUsable();
+
+
+        const app =
+            await this.manager.current();
+
+
+        return app.synchronization.syncNow();
+    }
+
+
+    /*
+     * ========================================================
+     * Internal state projection
+     * ========================================================
+     */
+
+    private applyCompletedResult(
+        event: SyncCoordinatorEvent
+    ): void {
+
+        const result =
+            event.result;
+
+
+        const summary =
+            summarizeResult(
+                result
+            );
+
 
         this.state = {
+
             ...this.state,
-            status: "SYNCING",
-            error: null,
+
+            status:
+                this.statusFromResult(
+                    result
+                ),
+
+            uploadedEvents:
+                summary.pushed,
+
+            acceptedEvents:
+                summary.accepted,
+
+            rejectedEvents:
+                summary.rejected,
+
+            conflictEvents:
+                summary.conflicts,
+
+            lastResult:
+                result,
+
+            lastSyncAt:
+                event.completedAt,
+
+            lastSyncDurationMs:
+                event.completedAt -
+                event.startedAt,
+
+            lastPulledGlobalPosition:
+                result.cursor,
+
+            conflicts:
+                summary.conflictItems,
+
+            error:
+                result.kind === "transient"
+                    ? result.error
+                    : null,
         };
-
-        this.emit();
-
-
-        try {
-
-            const app = await this.manager.current();
-
-            const result = await app.synchronization.syncNow();
-
-
-            const completedAt =
-                Date.now();
-
-
-            this.state = {
-                ...this.state,
-
-                status:
-                    this.statusFromResult(result),
-
-                lastResult:
-                    result,
-
-                lastSyncAt:
-                    completedAt,
-
-                lastSyncDurationMs:
-                    completedAt - startedAt,
-
-                deviceCursor:
-                    result.cursor,
-
-                serverCursor:
-                    result.cursor,
-
-                error:
-                    result.kind === "transient"
-                        ? result.error
-                        : null,
-            };
-
-
-            this.emit();
-
-            return result;
-
-        } catch (error) {
-
-            const message =
-                error instanceof Error
-                    ? error.message
-                    : String(error);
-
-
-            this.state = {
-                ...this.state,
-
-                status: "ERROR",
-
-                error: message,
-
-                lastSyncDurationMs:
-                    Date.now() - startedAt,
-            };
-
-
-            this.emit();
-
-            throw error;
-        }
     }
 
 
     private statusFromResult(
         result: SyncResult
-    ): SyncManagementState["status"] {
+    ): SyncApplicationState["status"] {
 
         switch (result.kind) {
 
@@ -183,5 +470,245 @@ export class SyncApplicationService {
             case "synced":
                 return "SYNCED";
         }
+    }
+
+
+    private emitState(): void {
+
+        for (
+            const listener
+            of this.stateListeners
+        ) {
+
+            listener(
+                this.state
+            );
+        }
+    }
+
+
+    private emitEvent(
+        event: SyncApplicationEvent
+    ): void {
+
+        for (
+            const listener
+            of this.eventListeners
+        ) {
+
+            listener(
+                event
+            );
+        }
+    }
+
+
+    private assertUsable(): void {
+
+        if (this.disposed) {
+
+            throw new Error(
+                "SyncApplicationService has been disposed."
+            );
+        }
+
+
+        if (!this.initialized) {
+
+            throw new Error(
+                "SyncApplicationService has not been initialized."
+            );
+        }
+    }
+
+    async start(): Promise<void> {
+        const app = await this.manager.current();
+
+        await app.synchronization.start();
+    }
+}
+
+
+/*
+ * ============================================================
+ * Result projection
+ * ============================================================
+ */
+
+interface SyncSummary {
+
+    pushed:
+        number;
+
+    accepted:
+        number;
+
+    pulled:
+        number;
+
+    rejected:
+        number;
+
+    conflicts:
+        number;
+
+    conflictItems:
+        SyncConflict[];
+}
+
+
+function summarizeResult(
+    result: SyncResult
+): SyncSummary {
+
+    switch (result.kind) {
+
+        case "idle":
+
+            return {
+
+                pushed:
+                    0,
+
+                accepted:
+                    0,
+
+                pulled:
+                    result.pulled,
+
+                rejected:
+                    0,
+
+                conflicts:
+                    0,
+
+                conflictItems:
+                    [],
+            };
+
+
+        case "synced":
+
+            return {
+
+                pushed:
+                    result.pushed,
+
+                accepted:
+                    result.pushed,
+
+                pulled:
+                    result.pulled,
+
+                rejected:
+                    result.rejected,
+
+                conflicts:
+                    0,
+
+                conflictItems:
+                    [],
+            };
+
+
+        case "conflict":
+
+            return {
+
+                pushed:
+                    result.accepted.length,
+
+                accepted:
+                    result.accepted.length,
+
+                pulled:
+                    result.pulled,
+
+                rejected:
+                    result.rejected.length,
+
+                conflicts:
+                    result.conflicts.length,
+
+                conflictItems:
+                    result.conflicts,
+            };
+
+
+        case "rejected":
+
+            return {
+
+                pushed:
+                    result.accepted.length,
+
+                accepted:
+                    result.accepted.length,
+
+                pulled:
+                    result.pulled,
+
+                rejected:
+                    result.rejected.length,
+
+                conflicts:
+                    0,
+
+                conflictItems:
+                    [],
+            };
+
+
+        case "transient":
+
+            return {
+
+                pushed:
+                    0,
+
+                accepted:
+                    0,
+
+                pulled:
+                    0,
+
+                rejected:
+                    0,
+
+                conflicts:
+                    0,
+
+                conflictItems:
+                    [],
+            };
+    }
+}
+
+
+function normalizeError(
+    error: unknown
+): Error {
+
+    if (error instanceof Error) {
+        return error;
+    }
+
+
+    if (typeof error === "string") {
+        return new Error(error);
+    }
+
+
+    try {
+
+        return new Error(
+            JSON.stringify(error)
+        );
+
+    } catch {
+
+        return new Error(
+            "Unknown synchronization error"
+        );
     }
 }

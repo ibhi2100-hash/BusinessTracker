@@ -363,6 +363,8 @@ export default function SyncManagementPage() {
 
   const statusContent = SyncStatusContent({ status: syncStatus });
 
+  console.log("This is The SyncState Currently: ", syncState)
+
   return (
     <div className="w-full space-y-6 pb-10">
 
@@ -479,7 +481,7 @@ export default function SyncManagementPage() {
             </span>
 
             <span className="text-lg font-semibold text-white">
-              {syncState.serverCursor.toLocaleString()}
+              {syncState.lastPulledGlobalPosition.toLocaleString()}
             </span>
 
           </div>
@@ -614,7 +616,7 @@ export default function SyncManagementPage() {
           </div>
 
 
-          {syncState.activities.length === 0 ? (
+          {syncState.activities?.length === 0 ? (
 
             <div className="py-10 text-center">
 
@@ -854,7 +856,7 @@ export default function SyncManagementPage() {
                 {
                     label: "Position",
                     value:
-                        syncState.serverCursor.toLocaleString(),
+                        syncState.lastPulledGlobalPosition.toLocaleString(),
                 },
             ]}
             badge={

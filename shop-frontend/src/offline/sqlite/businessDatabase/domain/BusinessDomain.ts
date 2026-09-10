@@ -1,10 +1,10 @@
 import { Kernel } from "@/src/BizTru_Karnel/BusinessKernelContract";
 import { CommandFactory } from "@/src/BizTru_Karnel/CommandFactory/factoryDependencies/CommandFactoryContract";
 import { ExecutionContext } from "@/src/BizTru_Karnel/KarnelTypes/types";
-import { EventStore } from "@/src/BizTru_Karnel/SubKernel/types";
+import { EventStore } from "@/src/BizTru_Karnel/EventStore/EventStore";
 import { Lifecycle } from "../../lifecycle/LifeCycle";
 import { ExecutionContextProvider } from "@/src/BizTru_Karnel/CommandFactory/ExecutionContext/ExecutionContext";
-import { ProjectionEventBus } from "@/src/buses/ProjectionBuses";
+import { ProjectionEventBus } from "@business/event-bus";
 
 export class BusinessDomain
 implements Lifecycle {

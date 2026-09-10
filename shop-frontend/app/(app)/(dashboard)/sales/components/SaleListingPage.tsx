@@ -86,6 +86,8 @@ export default function SalesListPage() {
       };
 
       const rows = await app.sales.listSales(filters);
+
+      console.log("This is the Sales i Get for the whole Business: ", rows)
       setSales(rows);
     } catch (e) {
       console.error(e);

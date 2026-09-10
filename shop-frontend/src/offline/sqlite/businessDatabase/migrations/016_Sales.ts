@@ -21,6 +21,9 @@ export const migration016 : Migration = {
   profit        REAL NOT NULL DEFAULT 0,
   paymentMethod TEXT,
   customerRef   TEXT,
+  customerId    TEXT,
+  userId        TEXT,
+  invoiceId     TEXT,
   note          TEXT,
   status        TEXT NOT NULL DEFAULT 'completed', -- completed | voided | refunded
   saleGroupId   TEXT,

@@ -8,6 +8,7 @@ export * from "./entities/dashboard";
 export * from "./events/DomainEvents";
 export * from "./events/OutboxEntry";
 export * from "./events/cononicalEvent";
+export * from "./events/BackendEvent";
 export * from "./snapshots/Snapshot";
 export * from "./ledger/LedgerEntry";
 export * from "./enums/Account";

@@ -424,6 +424,8 @@ export default function InventoryPage({
       const productId = crypto.randomUUID();
       const inventoryId = inventoryKey(productId, branchId);
 
+      console.log("This is inventoryId to be used: ", inventoryId)
+
       if (activeSheet === "create") {
         await app.product.create({
           id: productId,

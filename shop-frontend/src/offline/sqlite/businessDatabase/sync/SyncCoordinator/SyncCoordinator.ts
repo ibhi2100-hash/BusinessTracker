@@ -8,6 +8,37 @@ export type SyncTrigger =
     | "INTERVAL"
     | "MANUAL"
     | "STARTUP";
+
+export interface SyncCoordinatorListener {
+
+    onSyncStarted(
+        trigger: SyncTrigger
+    ): void;
+
+    onSyncCompleted(
+        event: SyncCoordinatorEvent
+    ): void;
+
+    onSyncFailed(
+        event: SyncCoordinatorFailedEvent
+    ): void;
+}
+
+
+export interface SyncCoordinatorFailedEvent {
+
+    trigger:
+        SyncTrigger;
+
+    error:
+        Error;
+
+    startedAt:
+        number;
+
+    failedAt:
+        number;
+}
 export interface SyncCoordinatorEvent {
 
     trigger:
@@ -22,6 +53,15 @@ export interface SyncCoordinatorEvent {
     completedAt:
         number;
 }
+
+export type SyncCoordinatorResult =
+    | {
+        kind: "completed";
+        result: SyncResult;
+      }
+    | {
+        kind: "already-running";
+      };
 
 export interface SyncCoordinatorListener {
 
@@ -39,7 +79,9 @@ export interface SyncCoordinatorListener {
 }
 export class SyncCoordinator {
 
-    private syncing = false;
+    private isSyncing = false;
+
+    private activeSync: Promise<SyncResult> | null = null;
 
     private _lastResult:
         SyncResult | null = null;
@@ -64,75 +106,69 @@ export class SyncCoordinator {
         trigger: SyncTrigger
     ): Promise<SyncResult> {
 
-        if (this.syncing) {
-
-            return {
-                kind: "idle",
-                pushed: 0,
-                pulled: 0,
-                cursor:
-                    await this.engine
-                        .getCurrentCursor()
-            };
+        if( this.isSyncing) {
+            return this.activeSync ??
+                Promise.reject(new Error("Synchronization is already in progress"));
         }
 
+        if (this.activeSync) {
+            return this.activeSync;
+        }
 
-        this.syncing = true;
-
-        const startedAt =
-            Date.now();
-
-
-        this.emitStarted(
+        this.activeSync = this.execute(
             trigger
         );
 
+        this.isSyncing = true;
+
+        try {
+            return await this.activeSync;
+        } finally {
+            this.activeSync = null;
+            this.isSyncing = false;
+        }
+    }
+
+    private async execute(
+        trigger: SyncTrigger
+    ): Promise<SyncResult> {
+
+        const startedAt = Date.now();
+
+        this.emitStarted(trigger);
 
         try {
 
             const result =
                 await this.engine.sync();
 
-
-            this._lastResult =
-                result;
-
-
             const completedAt =
                 Date.now();
 
+            this._lastResult =
+                result;
 
             this.emitCompleted({
                 trigger,
                 result,
                 startedAt,
-                completedAt
+                completedAt,
             });
 
-
             return result;
-
 
         } catch (error) {
 
             const normalized =
-                normalizeError(error)
+                normalizeError(error);
 
             this.emitFailed(
                 normalized
             );
 
-
             throw normalized;
-
-
-        } finally {
-
-            this.syncing =
-                false;
         }
     }
-
     private emitStarted(
         trigger: SyncTrigger
     ): void {
@@ -177,9 +213,14 @@ export class SyncCoordinator {
             );
         }
     }
-        get isSyncing(): boolean {
+    get activeSyncResult(): Promise<SyncResult> | null {
 
-        return this.syncing;
+        return this.activeSync;
+    }
+
+    get IsSyncing(): boolean {
+
+        return this.isSyncing;
     }
 
 

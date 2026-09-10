@@ -60,6 +60,9 @@ export default function Step2Business() {
         name: "Main Branch",
       });
 
+      await app.context.setActiveBusiness(businessId);
+      await app.context.setActiveBranch(branchId);
+
       router.replace("/onboard");
     } catch (err) {
       console.error(err);

@@ -19,7 +19,6 @@ export class SQLiteBusinessRepository
 
   // A) current prepared statement
   let rows = await this.statements.findById.query<Business>([id]);
-  console.log("prepared [id]:", rows);
 
 
   return rows[0] ?? null;
@@ -27,7 +26,6 @@ export class SQLiteBusinessRepository
 
   async findAll() {
     const all = await this.statements.findAll.query<Business>();
-    console.log("all businesses IDs:", all.map(b => b.id));
     
   return all
   }

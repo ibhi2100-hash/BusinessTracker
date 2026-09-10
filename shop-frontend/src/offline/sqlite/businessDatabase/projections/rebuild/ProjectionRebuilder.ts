@@ -1,5 +1,5 @@
 import { SQLiteEventRepository } from "../../repositories/SQLiteEventRepository/eventStore";
-import { ProjectionEventBus } from "@/src/buses/ProjectionBuses";
+import { ProjectionEventBus } from "@business/event-bus";
 import { ProjectionResetter } from "./ProjectionResetterContract";
 import { TransactionManager } from "@/src/storage/transaction/TransactionManager";
 import { ProjectionRebuildOptions, ProjectionRebuildResult } from "./types";

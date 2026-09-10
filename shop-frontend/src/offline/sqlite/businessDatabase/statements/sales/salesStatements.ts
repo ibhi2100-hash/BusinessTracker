@@ -1,11 +1,17 @@
 // ============================================================
 // salesStatements.ts
 // ============================================================
+
 import { PreparedStatementManager } from "../../../PreparedStatement/PreparedStatementManager";
+
 import { salesKeys } from "./salesStatementKeys";
 
+
 export class SalesStatement {
-  constructor(private readonly manager: PreparedStatementManager) {}
+
+  constructor(
+    private readonly manager: PreparedStatementManager
+  ) {}
 
   get upsert() {
     return this.manager.get(salesKeys.salesUpsert);
@@ -35,12 +41,16 @@ export class SalesStatement {
     return this.manager.get(salesKeys.findByProduct);
   }
 
-  get findByDateRange() {
-    return this.manager.get(salesKeys.findByDateRange);
-  }
-
   get findByGroup() {
     return this.manager.get(salesKeys.findByGroup);
+  }
+
+  get listSales() {
+    return this.manager.get(salesKeys.listSales);
+  }
+
+  get countSales() {
+    return this.manager.get(salesKeys.countSales);
   }
 
   get summaryByDateRange() {
@@ -48,6 +58,7 @@ export class SalesStatement {
   }
 
   get allSales() {
-    return this.manager.get(salesKeys.getAllSales)
+    return this.manager.get(salesKeys.getAllSales);
   }
+
 }

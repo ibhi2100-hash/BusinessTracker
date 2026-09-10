@@ -13,44 +13,76 @@ interface BusinessContextValue {
 
 const BusinessContext = createContext<BusinessContextValue | null>(null);
 
-export function BusinessProvider({ children }: { children: React.ReactNode }) {
-  const app = useApplication();
-  const [businessId, setBusinessId] = useState<string | null>(null);
-  const [branchId, setBranchIdState] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+export function BusinessProvider({
+    children
+}: {
+    children: React.ReactNode
+}) {
 
-  useEffect(() => {
-    let mounted = true;
+    const app = useApplication();
 
-    (async () => {
-      try {
-        const ctx = await app.context.current()
-        if (mounted) {
-          setBusinessId(ctx.businessId ?? null);
-          setBranchIdState(ctx.branchId ?? null);
+    const [businessId, setBusinessId] =
+        useState<string | null>(null);
+
+    const [branchId, setBranchIdState] =
+        useState<string | null>(null);
+
+    const [loading, setLoading] =
+        useState(true);
+
+    useEffect(() => {
+
+        let mounted = true;
+
+        async function loadContext() {
+
+            try {
+
+                const ctx = await app.context.current();
+
+                if (!mounted) return;
+
+                setBusinessId(ctx.businessId ?? null);
+                setBranchIdState(ctx.branchId ?? null);
+
+            } finally {
+
+                if (mounted) {
+                    setLoading(false);
+                }
+            }
         }
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    })();
 
-    return () => { mounted = false; };
-  }, [app]);
+        loadContext();
 
-  const setBranchId = async (newBranchId: string) => {
-    await app.context.setActiveBranch();
-    setBranchIdState(newBranchId);
-  };
+        return () => {
+            mounted = false;
+        };
 
-  return (
-    <BusinessContext.Provider
-      value={{ businessId, branchId, setBranchId, loading }}
-    >
-      {children}
-    </BusinessContext.Provider>
-  );
+    }, [app]);
+
+    const setBranchId = async (
+        newBranchId: string
+    ) => {
+
+        await app.context.setActiveBranch(newBranchId);
+
+        setBranchIdState(newBranchId);
+    };
+
+    return (
+        <BusinessContext.Provider
+            value={{
+                businessId,
+                branchId,
+                setBranchId,
+                loading
+            }}
+        >
+            {children}
+        </BusinessContext.Provider>
+    );
 }
-
 export function useBusinessContext() {
   const ctx = useContext(BusinessContext);
   if (!ctx) {

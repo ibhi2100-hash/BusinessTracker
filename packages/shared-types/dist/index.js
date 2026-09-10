@@ -24,6 +24,7 @@ __exportStar(require("./entities/dashboard"), exports);
 __exportStar(require("./events/DomainEvents"), exports);
 __exportStar(require("./events/OutboxEntry"), exports);
 __exportStar(require("./events/cononicalEvent"), exports);
+__exportStar(require("./events/BackendEvent"), exports);
 __exportStar(require("./snapshots/Snapshot"), exports);
 __exportStar(require("./ledger/LedgerEntry"), exports);
 __exportStar(require("./enums/Account"), exports);

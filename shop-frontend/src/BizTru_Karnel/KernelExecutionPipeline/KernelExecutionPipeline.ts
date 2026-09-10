@@ -2,7 +2,7 @@ import { CommandValidator, PipelineKernel } from "../contracts/SubKernelContract
 import { Command } from "../KarnelTypes/types";
 import { domainEventTransformer } from "../Transformers/DomainEventTransformer";
 import { BusinessClock } from "../logicClockContract";
-import { EventStore } from "../SubKernel/types";
+import { EventStore } from "../EventStore/EventStore"
 import { ProjectionEventBus } from "@business/event-bus";
 import { TransactionManager } from "@/src/storage/transaction/TransactionManager";
 import { FrontendBusinessContext } from "@/src/Composer/context/BusinessContext";

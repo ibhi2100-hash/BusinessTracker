@@ -20,6 +20,7 @@ import { useBusinessContext } from "@/src/context/BusinessContext";
 import type {
   SalesSummary,
   ProductSalesSummary,
+  SaleFilters,
 } from "@/src/services/ApplicationService/API/Sales/SalesApi"; // adjust path
 
 function formatNaira(n: number) {
@@ -48,7 +49,7 @@ type RangeKey = "today" | "7d" | "30d" | "all";
 
 export default function SalesAnalysisPage() {
   const app = useApplication();
-  const { branchId } = useBusinessContext();
+  const { businessId, branchId } = useBusinessContext();
 
   const [range, setRange] = useState<RangeKey>("today");
   const [summary, setSummary] = useState<SalesSummary | null>(null);
@@ -70,14 +71,18 @@ export default function SalesAnalysisPage() {
       setLoading(true);
       const { from, to } = getRange(range);
 
+      const filters: SaleFilters = {
+        branchId: branchId ?? undefined,
+        businessId,
+        from: from ?? undefined,
+        to: to ?? undefined
+      }
+
       const [sum, products, margin] = await Promise.all([
-        app.sales.getSalesSummary({ branchId: branchId ?? undefined, from, to }),
-        app.sales.getProductSalesSummary({
-          branchId: branchId ?? undefined,
-          from,
-          to,
-        }),
+        app.sales.getSalesSummary({  branchId: branchId ?? undefined, businessId, from, to }),
+        app.sales.getProductSalesSummary(filters),
         app.sales.getGrossMargin({
+          businessId,
           branchId: branchId ?? undefined,
           from,
           to,

@@ -4,36 +4,8 @@ import {
   Prisma,
 } from "../../../infrastructure/postgresql/prisma/generated/client.js";
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
+import { BackendEvent } from "@business/shared-types";
 
-export interface BackendEvent {
-  id: string;
-
-  businessId: string | null;
-  branchId: string | null;
-
-  aggregateId: string;
-  aggregateType: string;
-
-  aggregateVersion: number;
-  globalPosition: bigint;
-
-  type: string;
-  payload: unknown;
-
-  mode: Mode;
-
-  userId: string;
-  deviceId: string;
-
-  causationId: string | null;
-  correlationId: string | null;
-
-  logicClock: bigint;
-
-  checksum: string | null;
-
-  createdAt: Date;
-}
 
 export interface AppendEventResult {
     eventId: string;

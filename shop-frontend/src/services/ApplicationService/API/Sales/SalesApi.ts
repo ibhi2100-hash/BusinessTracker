@@ -71,7 +71,7 @@ export interface RefundSaleRequest {
 
 export interface SaleFilters {
   branchId?: string;
-  businessId?: string;
+  businessId: string;
   productId?: string;
   from?: string; // ISO date
   to?: string;   // ISO date
@@ -136,7 +136,7 @@ export class SalesApi {
    * Emits SALE_ADDED and updates inventory + financial projections.
    */
   async createSale(request: CreateSaleRequest): Promise<{ saleId: string }> {
-    const saleId = request.aggregateId || crypto.randomUUID();
+    const saleId = crypto.randomUUID();
 
     const quantity = Math.max(0, Math.floor(request.payload.quantity));
     const amount = Number(request.payload.amount) || 0;
@@ -298,26 +298,32 @@ export class SalesApi {
    * List sales with filters (branch, date range, product, status).
    * Reads from the local projection – fast, offline-capable.
    */
-  async listSales(filters: SaleFilters = {}): Promise<Sales[]> {
+  async listSales(filters: SaleFilters): Promise<Sales[]> {
+
     const app = await this.manager.current();
-    const list = await app.storage.repositories.sales.list({
-      branchId: filters.branchId,
-      businessId: filters.businessId,
-      productId: filters.productId,
-      from: filters.from,
-      to: filters.to,
-      status: filters.status ?? "all",
-      limit: filters.limit ?? 100,
-      offset: filters.offset ?? 0,
-    });
 
-    const allSales = await app.storage.repositories.sales.getAllSales();
+    const list =
+        await app.storage.repositories.sales.list({
+            businessId: filters.businessId,
+            branchId: filters.branchId,
+            productId: filters.productId,
+            from: filters.from,
+            to: filters.to,
+            status: filters.status ?? "all",
+            limit: filters.limit ?? 100,
+            offset: filters.offset ?? 0,
+        });
 
-    console.log("This are all the sales that actually happen in the business: ", allSales)
+    console.log(
+        "[SalesApi] listSales",
+        {
+            filters,
+            count: list.length,
+        }
+    );
 
-    return list
-  }
-
+    return list;
+}
   /**
    * All sales that belong to one checkout / cart (saleGroupId).
    */
@@ -333,12 +339,7 @@ export class SalesApi {
    * Financial summary for a period (revenue, cost, profit, counts).
    * Primary control panel / end-of-day number.
    */
-  async getSalesSummary(filters: {
-    branchId?: string;
-    businessId?: string;
-    from?: string;
-    to?: string;
-  } = {}): Promise<SalesSummary> {
+  async getSalesSummary(filters: SaleFilters): Promise<SalesSummary> {
     const rows = await this.listSales({
       ...filters,
       status: "all",
@@ -391,10 +392,11 @@ export class SalesApi {
    * Useful for ranking products and stock decisions.
    */
   async getProductSalesSummary(filters: {
+    businessId: string;
     branchId?: string;
     from?: string;
     to?: string;
-  } = {}): Promise<ProductSalesSummary[]> {
+  } ): Promise<ProductSalesSummary[]> {
     const rows = await this.listSales({
       ...filters,
       status: "completed",
@@ -429,7 +431,7 @@ export class SalesApi {
   /**
    * Today’s live numbers for the active branch (dashboard widgets).
    */
-  async getTodaySummary(branchId?: string): Promise<SalesSummary> {
+  async getTodaySummary(businessId: string, branchId?: string): Promise<SalesSummary> {
     const start = new Date();
     start.setHours(0, 0, 0, 0);
 
@@ -437,6 +439,7 @@ export class SalesApi {
     end.setHours(23, 59, 59, 999);
 
     return this.getSalesSummary({
+      businessId,
       branchId,
       from: start.toISOString(),
       to: end.toISOString(),
@@ -447,10 +450,11 @@ export class SalesApi {
    * Gross margin % for a period (financial control KPI).
    */
   async getGrossMargin(filters: {
+    businessId: string;
     branchId?: string;
     from?: string;
     to?: string;
-  } = {}): Promise<{ marginPercent: number; summary: SalesSummary }> {
+  } ): Promise<{ marginPercent: number; summary: SalesSummary }> {
     const summary = await this.getSalesSummary(filters);
     const marginPercent =
       summary.totalSales > 0

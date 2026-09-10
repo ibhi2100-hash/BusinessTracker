@@ -19,10 +19,16 @@ SnapshotReducer<Product | null> = {
       price: 0,
       costPrice: 0,
       imageUrl: "",
+      description: "",
+      sku: "",
+      barcode: "",
+      category: "",
+      reorderLevel: 0,
       isActive: true,
       isDeleted: false,
       createdAt: Date.now(),
-      updatedAt: Date.now()
+      updatedAt: Date.now(),
+      deletedAt: null
     };
   },
 

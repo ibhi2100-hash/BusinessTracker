@@ -13,6 +13,7 @@ import {
 import {
     HttpSyncTransport,
 } from "./SyncTransport";
+import { NetworkSyncConnector } from "./NetworkSyncConnector";
 
 
 export interface SyncRuntimeOptions {
@@ -39,6 +40,8 @@ export class SyncRuntime {
 
     readonly coordinator:
         SyncCoordinator;
+
+    readonly triggerSource: NetworkSyncConnector
 
 
     constructor(
@@ -90,5 +93,14 @@ export class SyncRuntime {
             new SyncCoordinator(
                 this.engine
             );
+
+        this.triggerSource = 
+            new NetworkSyncConnector(
+                this.coordinator,
+                {
+                    intervalMs: 
+                        30_000
+                }
+            )
     }
 }

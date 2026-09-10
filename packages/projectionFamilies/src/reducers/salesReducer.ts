@@ -113,7 +113,7 @@ export class SalesReducer
     const now = event.createdAt ?? Date.now();
 
     return {
-      id: event.aggregateId,
+      id: crypto.randomUUID(),
       businessId: event.businessId,
       branchId: event.branchId!,
 

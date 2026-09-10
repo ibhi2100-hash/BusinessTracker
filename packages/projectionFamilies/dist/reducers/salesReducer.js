@@ -34,7 +34,7 @@ class SalesReducer {
         const profit = total - rawCost;
         const now = event.createdAt ?? Date.now();
         return {
-            id: event.aggregateId,
+            id: crypto.randomUUID(),
             businessId: event.businessId,
             branchId: event.branchId,
             productId: p.productId,

@@ -1,17 +1,24 @@
 "use client";
 
 import {
+    ReactNode,
     useEffect,
     useState,
-    ReactNode
 } from "react";
 
-import { useRouter } from "next/navigation";
+import {
+    useRouter,
+} from "next/navigation";
 
-import Context, { useApplication } from "./ApplicationContext";
-import type { Application } from "./Application";
+import Context from "./ApplicationContext";
 
-import { BootManager } from "./Booting/BootManager";
+import type {
+    Application,
+} from "./Application";
+
+import {
+    BootManager,
+} from "./Booting/BootManager";
 
 import {
     BootListener,
@@ -19,159 +26,329 @@ import {
     BootState,
 } from "./Booting/BootStage";
 
-import { ClientBootstrapper } from "@/offline/bootstrap/ClientBootstrapper";
-import { BusinessBootstrapper } from "@/offline/bootstrap/BusinessBootstrap";
+import {
+    ClientBootstrapper,
+} from "@/offline/bootstrap/ClientBootstrapper";
 
-import { BootSplash } from "./Booting/components/BootSplash";
-import { SyncProvider } from "@/components/providers/SyncProvider";
-import { BusinessSynchronization } from "@/src/offline/sqlite/businessDatabase/synchronization/BusinessSynchronization";
+import {
+    BusinessBootstrapper,
+} from "@/offline/bootstrap/BusinessBootstrap";
+
+import {
+    BootSplash,
+} from "./Booting/components/BootSplash";
+
+import {
+    SyncProvider,
+} from "@/components/providers/SyncProvider";
+
+
+/*
+ * ============================================================
+ * Props
+ * ============================================================
+ */
 
 interface Props {
-    children: ReactNode;
+
+    children:
+        ReactNode;
 }
 
+
+/*
+ * ============================================================
+ * ApplicationProvider
+ * ============================================================
+ */
+
 export function ApplicationProvider({
-    children
+    children,
 }: Props) {
 
-    const router = useRouter();
-    const [ ready, setReady ] = useState(false)
-    const [application, setApplication] =
-        useState<Application | null>(null);
+    const router =
+        useRouter();
+
+
+    /*
+     * ========================================================
+     * Application state
+     * ========================================================
+     */
+
     const [
-        synchronization,
-        setSynchronization
-            ] =
-        useState<BusinessSynchronization | null>(null);
+        application,
+        setApplication,
+    ] = useState<Application | null>(
+        null
+    );
 
 
-    const [boot, setBoot] =
-        useState<BootState>({
+    const [
+        ready,
+        setReady,
+    ] = useState(false);
 
-            stage: BootStage.STARTING,
 
-            progress: 0,
+    /*
+     * ========================================================
+     * Boot state
+     * ========================================================
+     */
 
-            title: "Starting BizTru...",
+    const [
+        boot,
+        setBoot,
+    ] = useState<BootState>({
 
-            completed: false,
+        stage:
+            BootStage.STARTING,
 
-            totalTasks: 0,
+        progress:
+            0,
 
-            completedTasks: 0
+        title:
+            "Starting BizTru...",
 
-        });
+        completed:
+            false,
+
+        totalTasks:
+            0,
+
+        completedTasks:
+            0,
+
+    });
+
+
+    /*
+     * ========================================================
+     * Bootstrap lifecycle
+     * ========================================================
+     */
 
     useEffect(() => {
 
-        let mounted = true;
+        let mounted =
+            true;
 
-        const listener: BootListener = {
 
-            onStarted(totalTasks) {
+        const listener:
+            BootListener = {
 
-                if (!mounted) return;
+            /*
+             * ------------------------------------------------
+             * Boot started
+             * ------------------------------------------------
+             */
 
-                setBoot(previous => ({
-                    ...previous,
+            onStarted(
+                totalTasks
+            ) {
 
-                    stage: BootStage.STARTING,
+                if (!mounted) {
+                    return;
+                }
 
-                    totalTasks,
 
-                    completedTasks: 0,
+                setBoot(
+                    previous => ({
 
-                    progress: 0,
+                        ...previous,
 
-                    title: "Starting BizTru..."
+                        stage:
+                            BootStage.STARTING,
 
-                }));
+                        totalTasks,
 
+                        completedTasks:
+                            0,
+
+                        progress:
+                            0,
+
+                        title:
+                            "Starting BizTru...",
+
+                        completed:
+                            false,
+
+                        error:
+                            undefined,
+                    })
+                );
             },
 
-            onTaskStarted(task, progress) {
 
-                if (!mounted) return;
+            /*
+             * ------------------------------------------------
+             * Task started
+             * ------------------------------------------------
+             */
 
-                setBoot(previous => ({
+            onTaskStarted(
+                task,
+                progress
+            ) {
 
-                    ...previous,
+                if (!mounted) {
+                    return;
+                }
 
-                    stage: progress.stage,
 
-                    title: task.title,
+                setBoot(
+                    previous => ({
 
-                    progress: progress.percentage,
+                        ...previous,
 
-                    completedTasks: Math.round(progress.completed),
+                        stage:
+                            progress.stage,
 
-                    totalTasks: Math.round(progress.total)
+                        title:
+                            task.title,
 
-                }));
+                        progress:
+                            progress.percentage,
 
+                        completedTasks:
+                            Math.round(
+                                progress.completed
+                            ),
+
+                        totalTasks:
+                            Math.round(
+                                progress.total
+                            ),
+                    })
+                );
             },
 
-            onTaskCompleted(task, progress) {
 
-                if (!mounted) return;
+            /*
+             * ------------------------------------------------
+             * Task completed
+             * ------------------------------------------------
+             */
 
-                setBoot(previous => ({
+            onTaskCompleted(
+                task,
+                progress
+            ) {
 
-                    ...previous,
+                if (!mounted) {
+                    return;
+                }
 
-                    stage: progress.stage,
 
-                    title: task.title,
+                setBoot(
+                    previous => ({
 
-                    progress: progress.percentage,
+                        ...previous,
 
-                    completedTasks: Math.round(progress.completed),
+                        stage:
+                            progress.stage,
 
-                    totalTasks: Math.round(progress.total)
+                        title:
+                            task.title,
 
-                }));
+                        progress:
+                            progress.percentage,
 
+                        completedTasks:
+                            Math.round(
+                                progress.completed
+                            ),
+
+                        totalTasks:
+                            Math.round(
+                                progress.total
+                            ),
+                    })
+                );
             },
 
-            onCompleted(result) {
 
-                if (!mounted) return;
+            /*
+             * ------------------------------------------------
+             * Boot completed
+             * ------------------------------------------------
+             */
 
-                setBoot(previous => ({
+            onCompleted() {
 
-                    ...previous,
+                if (!mounted) {
+                    return;
+                }
 
-                    stage: BootStage.COMPLETED,
 
-                    progress: 100,
+                setBoot(
+                    previous => ({
 
-                    completed: true
+                        ...previous,
 
-                }));
+                        stage:
+                            BootStage.COMPLETED,
 
+                        progress:
+                            100,
+
+                        completed:
+                            true,
+                    })
+                );
             },
 
-            onFailed(error) {
 
-                if (!mounted) return;
+            /*
+             * ------------------------------------------------
+             * Boot failed
+             * ------------------------------------------------
+             */
 
-                setBoot(previous => ({
+            onFailed(
+                error
+            ) {
 
-                    ...previous,
+                if (!mounted) {
+                    return;
+                }
 
-                    stage: BootStage.FAILED,
 
-                    error: String(error)
+                setBoot(
+                    previous => ({
 
-                }));
+                        ...previous,
 
-            }
+                        stage:
+                            BootStage.FAILED,
 
+                        error:
+                            error instanceof Error
+                                ? error.message
+                                : String(error),
+                    })
+                );
+            },
         };
 
-        async function bootstrap() {
+
+        /*
+         * ====================================================
+         * Bootstrap
+         * ====================================================
+         */
+
+        async function bootstrap():
+            Promise<void> {
 
             try {
+
+                /*
+                 * ------------------------------------------------
+                 * Construct boot manager.
+                 * ------------------------------------------------
+                 */
 
                 const manager =
                     new BootManager(
@@ -179,66 +356,64 @@ export function ApplicationProvider({
                         new BusinessBootstrapper()
                     );
 
+
+                /*
+                 * ------------------------------------------------
+                 * Boot application.
+                 * ------------------------------------------------
+                 */
+
                 const result =
-                    await manager.boot(listener);
+                    await manager.boot(
+                        listener
+                    );
+
 
                 if (!mounted) {
                     return;
                 }
 
-                /*
-                 * ----------------------------------------------
-                 * Obtain the already constructed synchronization
-                 * subsystem from the application.
-                 * ----------------------------------------------
-                 */
 
-                const app = result.application;
+                const app =
+                    result.application;
+
+
+                /*
+                 * ------------------------------------------------
+                 * Store application.
+                 * ------------------------------------------------
+                 */
 
                 setApplication(
                     app
                 );
 
-                try {
 
-                    const sync =
-                        await app.sync.Sync();
+                /*
+                 * ------------------------------------------------
+                 * Application services should already be
+                 * constructed by BusinessBootstrapper.
+                 *
+                 * Initialize synchronization application state
+                 * before the UI begins consuming it.
+                 * ------------------------------------------------
+                 */
 
-                    if (mounted) {
 
-                        setSynchronization(
-                            sync
-                        );
-                    }
-
-                } catch (error) {
-
-                    /*
-                     * Synchronization must never prevent the
-                     * application from starting.
-                     */
-
-                    console.warn(
-                        "Business synchronization unavailable during startup.",
-                        error
-                    );
-
-                    if (mounted) {
-
-                        setSynchronization(
-                            null
-                        );
-                    }
+                
+                if (!mounted) {
+                    return;
                 }
 
-                                /*
+
+                /*
                  * ------------------------------------------------
-                 * Restore navigation AFTER client boot.
+                 * Restore persisted route.
                  * ------------------------------------------------
                  */
 
                 const {
-                    lastRoute
+                    lastRoute,
                 } =
                     await app
                         .client
@@ -247,36 +422,83 @@ export function ApplicationProvider({
                         .getLastRoute();
 
 
-                if (mounted) {
-
-                    setReady(
-                        true
-                    );
-
-                router.replace(
-                        lastRoute
-                    );
+                if (!mounted) {
+                    return;
                 }
 
+
+                /*
+                 * ------------------------------------------------
+                 * Application is ready.
+                 * ------------------------------------------------
+                 */
+
+                setReady(
+                    true
+                );
+
+
+                router.replace(
+                    lastRoute
+                );
+
+
             } catch (error) {
+
                 console.error(
-                        "Application bootstrap failed:",
-                        error
-                    );
+                    "Application bootstrap failed:",
+                    error
+                );
 
+
+                if (!mounted) {
+                    return;
+                }
+
+
+                setBoot(
+                    previous => ({
+
+                        ...previous,
+
+                        stage:
+                            BootStage.FAILED,
+
+                        error:
+                            error instanceof Error
+                                ? error.message
+                                : String(error),
+                    })
+                );
             }
-
         }
 
-        bootstrap();
+
+        void bootstrap();
+
+
+        /*
+         * ====================================================
+         * React cleanup
+         * ====================================================
+         */
 
         return () => {
 
-            mounted = false;
-
+            mounted =
+                false;
         };
 
-    }, [router]);
+    }, [
+        router,
+    ]);
+
+
+    /*
+     * ========================================================
+     * Boot screen
+     * ========================================================
+     */
 
     if (!ready) {
 
@@ -285,30 +507,29 @@ export function ApplicationProvider({
                 state={boot}
             />
         );
-
     }
 
-     if (
-        !application
+
+    /*
+     * ========================================================
+     * Defensive guard
+     * ========================================================
+     */
+
+    if (
+        application === null
     ) {
 
         return null;
     }
 
-    /* This is the onboarding state.
-     * ----------------------------------------------------------
+
+    /*
+     * ========================================================
+     * Application tree
+     * ========================================================
      */
 
-    if (!synchronization) {
-
-        return (
-            <Context.Provider
-                value={application}
-            >
-                {children}
-            </Context.Provider>
-        );
-    }
     return (
 
         <Context.Provider
@@ -318,8 +539,8 @@ export function ApplicationProvider({
         >
 
             <SyncProvider
-                synchronization={
-                    synchronization
+                syncService={
+                    application.syncService
                 }
             >
 
@@ -328,7 +549,5 @@ export function ApplicationProvider({
             </SyncProvider>
 
         </Context.Provider>
-
     );
-
 }
