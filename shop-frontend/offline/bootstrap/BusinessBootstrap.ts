@@ -2,7 +2,7 @@ import { DefaultBusinessKernel } from "@/src/BizTru_Karnel/BusinessKernel";
 import { CommandValidation } from "@/src/BizTru_Karnel/CommandFactory/factoryDependencies/CommandValidator";
 import { DefaultCommandFactory } from "@/src/BizTru_Karnel/CommandFactory/factoryDependencies/DefaultCommandFactory";
 import { IdGenerator } from "@/src/BizTru_Karnel/CommandFactory/factoryDependencies/IdGenerators";
-import { EventStored } from "@/src/BizTru_Karnel/EventStore/EventStore";
+import { EventStore } from "@/src/BizTru_Karnel/EventStore/EventStore";
 import { KernelExecutionPipeline } from "@/src/BizTru_Karnel/KernelExecutionPipeline/KernelExecutionPipeline";
 import { BusinessApplication } from "@/src/Composer/BusinessApplicationComposer";
 import { ApplicationContext } from "@/src/Composer/context/ApplicationContext";
@@ -178,7 +178,7 @@ implements Lifecycle {
     const executionContext =
         client.ExecutionContext
     const idGenerator = new IdGenerator()
-   const eventbus = new EventStored(storage.repositories.events)
+   const eventbus = new EventStore(storage.repositories.events)
     const commandFactory =
         new DefaultCommandFactory(
             executionContext,
