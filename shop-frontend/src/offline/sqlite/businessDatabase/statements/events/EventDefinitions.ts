@@ -25,18 +25,8 @@ export const EventStatementsDefinition: StatementDefinition[] = [
     },
 
     {
-        key: EventStatementKeys.loadSince,
-        sql: SQL.LOAD_SINCE
-    },
-
-    {
         key: EventStatementKeys.eventCount,
         sql: SQL.COUNT_EVENTS
-    },
-
-    {
-        key: EventStatementKeys.eventLastposition,
-        sql: SQL.LAST_POSITION
     },
 
     {
@@ -44,11 +34,6 @@ export const EventStatementsDefinition: StatementDefinition[] = [
         sql: SQL.LOAD_PROJECTION_EVENT
     },
     
-    {
-        key: EventStatementKeys.loadAggregates,
-        sql: SQL.LOAD_AGGREGATE
-    },
-
     {
         key: EventStatementKeys.loadAll,
         sql: SQL.LOADALL

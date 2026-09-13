@@ -97,21 +97,6 @@ implements EventRepository {
 
     }
 
-    async loadSince(
-        position: bigint
-    ): Promise<DomainEvent[]> {
-
-        const rows =
-            await this.statements
-                .loadSince
-                .query<any>([
-                    Number(position)
-                ]);
-
-        return rows.map(EventMapper.fromRow)
-
-    }
-
     async loadById(
         id: string
     ): Promise<DomainEvent | null> {
@@ -142,18 +127,6 @@ implements EventRepository {
         return rows[0]?.count ?? 0;
 
     }
-
-    async lastPosition(): Promise<bigint> {
-
-        const rows =
-            await this.statements
-                .lastPosition
-                .query<{ position: number | null }>([]);
-
-        return BigInt(rows[0]?.position ?? 0);
-
-    }
-
     async loadAllEvents():Promise<DomainEvent[]>{
         const rows = 
             await this.statements.loadAll.query<EventRow>();

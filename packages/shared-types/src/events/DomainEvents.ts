@@ -16,7 +16,7 @@ export interface DomainEvent<TPayload = unknown> {
 
     readonly mode: "OPENING" | "LIVE"
 
-    readonly payload: Readonly<TPayload>;
+    readonly payload: TPayload;
 
     readonly actor: ActorContext;
 

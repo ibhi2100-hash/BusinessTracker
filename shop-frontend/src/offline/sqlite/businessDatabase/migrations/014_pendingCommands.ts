@@ -1,6 +1,6 @@
 import { Migration } from "../../clientDatabase/migrations/migrationContracts";
 
-export const migration012: Migration = {
+export const migration014: Migration = {
     version: 14,
     name: "Pending Commands",
 

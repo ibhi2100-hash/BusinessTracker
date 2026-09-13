@@ -1,11 +1,10 @@
-export interface StatementDefinition<T = unknown>{
+export interface StatementDefinition<T = unknown> {
 
-    key:string;
+    readonly key: string;
 
-    sql:string;
+    readonly sql: string;
 
-    mapper?(
-        entity:T
-    ): readonly unknown[];
-
+    readonly mapper?: (
+        entity: T
+    ) => readonly unknown[];
 }

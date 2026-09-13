@@ -29,82 +29,46 @@ export interface ExistingEvent {
 
 export class EventRepository {
   async append(
-        event: DomainEvent,
-        aggregateVersion: number,
-        tx: Prisma.TransactionClient
-    ): Promise<AppendEventResult> {
+  event: DomainEvent,
+  aggregateVersion: number,
+  tx: Prisma.TransactionClient
+): Promise<AppendEventResult> {
 
-        const saved = await tx.event.create({
-            data: {
-                id: event.id,
+  const data =
+    EventMapper.toCreateInput(
+      event,
+      aggregateVersion
+    );
 
-                aggregateId:
-                    event.aggregateId,
+  const saved =
+    await tx.event.create({
+      data,
 
-                aggregateType:
-                    event.aggregateType,
+      select: {
+        id: true,
+        aggregateId: true,
+        aggregateType: true,
+        aggregateVersion: true,
+        globalPosition: true,
+      },
+    });
 
-                aggregateVersion,
+  return {
+    eventId: saved.id,
 
-                type:
-                    event.type,
+    aggregateId:
+      saved.aggregateId,
 
-                mode:
-                    event.mode,
+    aggregateType:
+      saved.aggregateType,
 
-                payload:
-                    event.payload,
+    aggregateVersion:
+      saved.aggregateVersion,
 
-                businessId:
-                    event.businessId,
-
-                branchId:
-                    event.branchId,
-
-                userId: event.actor.userId,
-                deviceId: event.actor.deviceId,
-
-                causationId:
-                    event.causationId,
-
-                correlationId:
-                    event.correlationId,
-
-                logicClock:
-                    event.logicClock,
-
-                createdAt:
-                    new Date(event.createdAt),
-
-                checksum:
-                    event.checksum,
-            },
-
-            select: {
-                id: true,
-                aggregateId: true,
-                aggregateType: true,
-                aggregateVersion: true,
-                globalPosition: true,
-            },
-        });
-
-        return {
-            eventId: saved.id,
-
-            aggregateId:
-                saved.aggregateId,
-
-            aggregateType:
-                saved.aggregateType,
-
-            aggregateVersion:
-                saved.aggregateVersion,
-
-            globalPosition:
-              Number(saved.globalPosition),
-        };
-    }
+    globalPosition:
+      Number(saved.globalPosition),
+  };
+}
 
   /**
    * Returns the authoritative server events that occurred
@@ -182,83 +146,229 @@ export class EventRepository {
     return EventMapper.fromRow(row);
 }
 }
+type JsonPrimitive =
+    | string
+    | number
+    | boolean
+    | null;
 
-class EventMapper {
-  static toUpsertArgs(
-    event: DomainEvent,
-    aggregateVersion: number
-  ): Prisma.EventUpsertArgs {
-    const data: Prisma.EventCreateInput = {
-      id: event.id,
-
-      businessId: event.businessId,
-      branchId: event.branchId,
-
-      aggregateId: event.aggregateId,
-      aggregateType: event.aggregateType,
-
-      aggregateVersion,
-
-      type: event.type,
-
-      payload: event.payload as Prisma.InputJsonValue,
-
-      mode: event.mode,
-
-      userId: event.actor.userId,
-      deviceId: event.actor.deviceId,
-
-      causationId: event.causationId,
-
-      correlationId: event.correlationId,
-
-      logicClock: BigInt(event.logicClock),
-
-      checksum: event.checksum,
-
-      createdAt: new Date(event.createdAt),
+type JsonValue =
+    | JsonPrimitive
+    | JsonValue[]
+    | {
+        [key: string]: JsonValue;
     };
 
-    return {
-      where: {
-        id: event.id,
-      },
 
-      create: data,
+export class EventMapper {
 
-      update: {},
-    };
-  }
+    private static toJsonValue(
+        value: unknown
+    ): JsonValue {
 
-  static fromRow(row: Event): BackendEvent {
-    return {
-      id: row.id,
+        if (
+            value === null ||
+            typeof value === "string" ||
+            typeof value === "number" ||
+            typeof value === "boolean"
+        ) {
+            return value;
+        }
 
-      businessId: row.businessId,
-      branchId: row.branchId,
+        if (typeof value === "bigint") {
+            throw new Error(
+                "BigInt cannot be stored inside an event payload"
+            );
+        }
 
-      aggregateId: row.aggregateId,
-      aggregateType: row.aggregateType,
+        if (value instanceof Date) {
+            return value.toISOString();
+        }
 
-      aggregateVersion: row.aggregateVersion,
-      globalPosition: row.globalPosition,
+        if (Array.isArray(value)) {
+            return value.map(
+                EventMapper.toJsonValue
+            );
+        }
 
-      type: row.type,
-      payload: row.payload,
+        if (typeof value === "object") {
 
-      mode: row.mode as Mode,
+            const result: {
+                [key: string]: JsonValue;
+            } = {};
 
-      userId: row.userId,
-      deviceId: row.deviceId,
+            for (
+                const [key, child] of Object.entries(value)
+            ) {
+                result[key] =
+                    EventMapper.toJsonValue(child);
+            }
 
-      causationId: row.causationId,
-      correlationId: row.correlationId,
+            return result;
+        }
 
-      logicClock: row.logicClock,
+        throw new Error(
+            `Unsupported event payload value: ${typeof value}`
+        );
+    }
 
-      checksum: row.checksum,
 
-      createdAt: row.createdAt,
-    };
-  }
+    private static toPayload(
+        payload: unknown
+    ): Prisma.InputJsonValue {
+
+        const value =
+            EventMapper.toJsonValue(payload);
+
+        if (
+            typeof value !== "object" ||
+            value === null ||
+            Array.isArray(value)
+        ) {
+            throw new Error(
+                "Event payload must be a JSON object"
+            );
+        }
+
+        return value as Prisma.InputJsonValue;
+    }
+
+
+    static toCreateInput(
+        event: DomainEvent,
+        aggregateVersion: number
+    ): Prisma.EventCreateInput {
+
+        return {
+
+            id: event.id,
+
+            businessId:
+                event.businessId,
+
+            branchId:
+                event.branchId,
+
+            aggregateId:
+                event.aggregateId,
+
+            aggregateType:
+                event.aggregateType,
+
+            aggregateVersion,
+
+            type:
+                event.type,
+
+            payload:
+                EventMapper.toPayload(
+                    event.payload
+                ),
+
+            mode:
+                event.mode,
+
+            userId:
+                event.actor.userId,
+
+            deviceId:
+                event.actor.deviceId,
+
+            causationId:
+                event.causationId,
+
+            correlationId:
+                event.correlationId,
+
+            logicClock:
+                BigInt(event.logicClock),
+
+            checksum:
+                event.checksum,
+
+            createdAt:
+                new Date(event.createdAt),
+        };
+    }
+
+
+    static toUpsertArgs(
+        event: DomainEvent,
+        aggregateVersion: number
+    ): Prisma.EventUpsertArgs {
+
+        return {
+
+            where: {
+                id: event.id,
+            },
+
+            create:
+                EventMapper.toCreateInput(
+                    event,
+                    aggregateVersion
+                ),
+
+            update: {},
+        };
+    }
+
+
+    static fromRow(
+        row: Event
+    ): BackendEvent {
+
+        return {
+
+            id: row.id,
+
+            businessId:
+                row.businessId,
+
+            branchId:
+                row.branchId,
+
+            aggregateId:
+                row.aggregateId,
+
+            aggregateType:
+                row.aggregateType,
+
+            aggregateVersion:
+                row.aggregateVersion,
+
+            globalPosition:
+                row.globalPosition,
+
+            type:
+                row.type,
+
+            payload:
+                row.payload,
+
+            mode:
+                row.mode as Mode,
+
+            userId:
+                row.userId,
+
+            deviceId:
+                row.deviceId,
+
+            causationId:
+                row.causationId,
+
+            correlationId:
+                row.correlationId,
+
+            logicClock:
+                row.logicClock,
+
+            checksum:
+                row.checksum,
+
+            createdAt:
+                row.createdAt,
+        };
+    }
 }

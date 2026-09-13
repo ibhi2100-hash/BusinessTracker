@@ -52,18 +52,19 @@ export class InventoryRepository {
      * ============================================================
      */
 
-    async findById(
+   async findById(
         id: string
-    ): Promise<PrismaInventory | null> {
+    ): Promise<Inventory | null> {
 
-        return await this.db.inventory.findUnique({
-
+        const row = await this.db.inventory.findUnique({
             where: {
                 id,
             },
-
         });
 
+        return row
+            ? InventoryMapper.fromRow(row)
+            : null;
     }
 
 
@@ -86,26 +87,21 @@ export class InventoryRepository {
         businessId: string,
         branchId: string,
         productId: string
-    ): Promise<PrismaInventory | null> {
+    ): Promise<Inventory | null> {
 
-        return await this.db.inventory.findUnique({
-
+        const row = await this.db.inventory.findUnique({
             where: {
-
                 businessId_branchId_productId: {
-
                     businessId,
-
                     branchId,
-
                     productId,
-
                 },
-
             },
-
         });
 
+        return row
+            ? InventoryMapper.fromRow(row)
+            : null;
     }
 
 
@@ -117,20 +113,20 @@ export class InventoryRepository {
 
     async findAll(
         businessId: string
-    ): Promise<PrismaInventory[]> {
+    ): Promise<Inventory[]> {
 
-        return await this.db.inventory.findMany({
-
+        const rows = await this.db.inventory.findMany({
             where: {
                 businessId,
             },
-
             orderBy: {
                 createdAt: "asc",
             },
-
         });
 
+        return rows.map(
+            InventoryMapper.fromRow
+        );
     }
 
 
@@ -143,26 +139,21 @@ export class InventoryRepository {
     async findByBranch(
         businessId: string,
         branchId: string
-    ): Promise<PrismaInventory[]> {
+    ): Promise<Inventory[]> {
 
-        return await this.db.inventory.findMany({
-
+        const rows = await this.db.inventory.findMany({
             where: {
-
                 businessId,
-
                 branchId,
-
             },
-
             orderBy: {
-
                 createdAt: "asc",
-
             },
-
         });
 
+        return rows.map(
+            InventoryMapper.fromRow
+        );
     }
 
 
@@ -175,28 +166,22 @@ export class InventoryRepository {
     async findByProduct(
         businessId: string,
         productId: string
-    ): Promise<PrismaInventory[]> {
+    ): Promise<Inventory[]> {
 
-        return await this.db.inventory.findMany({
-
+        const rows = await this.db.inventory.findMany({
             where: {
-
                 businessId,
-
                 productId,
-
             },
-
             orderBy: {
-
                 branchId: "asc",
-
             },
-
         });
 
+        return rows.map(
+            InventoryMapper.fromRow
+        );
     }
-
 
     /*
      * ============================================================

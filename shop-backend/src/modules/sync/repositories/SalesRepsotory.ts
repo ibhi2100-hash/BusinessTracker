@@ -1,811 +1,998 @@
 import {
-  Sales,
-  SaleStatus,
-  PaymentMethod,
-  Mode,
+    Sales,
+    SaleStatus,
+    PaymentMethod,
+    Mode,
 } from "@business/shared-types";
 
 import {
-  Prisma,
-  Sale,
+    Prisma,
+    Sale as PrismaSale,
 } from "../../../infrastructure/postgresql/prisma/generated/client.js";
 
 import {
-  prisma,
+    prisma,
 } from "../../../infrastructure/postgresql/prismaClient.js";
 
 
 export interface SalesListFilters {
-  branchId?: string | null;
-  businessId?: string | null;
-  productId?: string;
-  from?: Date;
-  to?: Date;
-  status?: SaleStatus | null;
-  limit?: number;
-  offset?: number;
+
+    branchId?: string | null;
+
+    businessId?: string | null;
+
+    productId?: string;
+
+    from?: Date;
+
+    to?: Date;
+
+    status?: SaleStatus | null;
+
+    limit?: number;
+
+    offset?: number;
 }
 
 
 export interface SalesSummaryRow {
-  totalSales: number;
-  totalCost: number;
-  totalProfit: number;
-  totalQuantity: number;
-  transactionCount: number;
-  voidedCount: number;
-  refundedAmount: number;
+
+    totalSales: number;
+
+    totalCost: number;
+
+    totalProfit: number;
+
+    totalQuantity: number;
+
+    transactionCount: number;
+
+    voidedCount: number;
+
+    refundedAmount: number;
 }
 
 
 export class SalesRepository {
 
-  constructor(
-    private readonly db = prisma
-  ) {}
+    constructor(
+        private readonly db = prisma
+    ) {}
 
 
-  /*
-   * ---------------------------------------------------------
-   * Create / Upsert
-   * ---------------------------------------------------------
-   */
+    /*
+     * ============================================================
+     * UPSERT
+     * ============================================================
+     *
+     * DOMAIN → DATABASE
+     * ============================================================
+     */
 
-  async upsert(
-    state: Sales
-  ): Promise<void> {
+    async upsert(
+        state: Sales,
+        tx: Prisma.TransactionClient = this.db
+    ): Promise<void> {
 
-    await this.db.sale.upsert(
-      SalesMapper.toUpsertArgs(state)
-    );
-
-  }
-
-
-  /*
-   * ---------------------------------------------------------
-   * Find by ID
-   * ---------------------------------------------------------
-   */
-
-  async findById(
-    id: string
-  ): Promise<Sales | null> {
-
-    const row =
-      await this.db.sale.findUnique({
-        where: {
-          id,
-        },
-      });
-
-    return row
-      ? SalesMapper.fromRow(row)
-      : null;
-
-  }
-
-
-  /*
-   * ---------------------------------------------------------
-   * Find all
-   * ---------------------------------------------------------
-   */
-
-  async findAll(): Promise<Sales[]> {
-
-    const rows =
-      await this.db.sale.findMany({
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
-
-    return rows.map(
-      SalesMapper.fromRow
-    );
-
-  }
-
-
-  /*
-   * ---------------------------------------------------------
-   * Find by branch
-   * ---------------------------------------------------------
-   */
-
-  async findByBranch(
-    branchId: string
-  ): Promise<Sales[]> {
-
-    const rows =
-      await this.db.sale.findMany({
-        where: {
-          branchId,
-        },
-
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
-
-    return rows.map(
-      SalesMapper.fromRow
-    );
-
-  }
-
-
-  /*
-   * ---------------------------------------------------------
-   * Find by product
-   * ---------------------------------------------------------
-   */
-
-  async findByProduct(
-    productId: string
-  ): Promise<Sales[]> {
-
-    const rows =
-      await this.db.sale.findMany({
-        where: {
-          productId,
-        },
-
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
-
-    return rows.map(
-      SalesMapper.fromRow
-    );
-
-  }
-
-
-  /*
-   * ---------------------------------------------------------
-   * Find checkout group
-   * ---------------------------------------------------------
-   */
-
-  async findByGroup(
-    saleGroupId: string
-  ): Promise<Sales[]> {
-
-    const rows =
-      await this.db.sale.findMany({
-        where: {
-          saleGroupId,
-        },
-
-        orderBy: {
-          createdAt: "asc",
-        },
-      });
-
-    return rows.map(
-      SalesMapper.fromRow
-    );
-
-  }
-
-
-  /*
-   * ---------------------------------------------------------
-   * Find by invoice
-   * ---------------------------------------------------------
-   */
-
-  async findByInvoice(
-    invoiceId: string
-  ): Promise<Sales[]> {
-
-    const rows =
-      await this.db.sale.findMany({
-        where: {
-          invoiceId,
-        },
-
-        orderBy: {
-          createdAt: "asc",
-        },
-      });
-
-    return rows.map(
-      SalesMapper.fromRow
-    );
-
-  }
-
-
-  /*
-   * ---------------------------------------------------------
-   * Date-range listing
-   * ---------------------------------------------------------
-   */
-
-  async list(
-    filters: SalesListFilters = {}
-  ): Promise<Sales[]> {
-
-    const where:
-      Prisma.SaleWhereInput = {};
-
-    if (filters.businessId) {
-
-      where.businessId =
-        filters.businessId;
+        await tx.sale.upsert(
+            SalesMapper.toUpsertArgs(state)
+        );
 
     }
 
-    if (filters.branchId) {
 
-      where.branchId =
-        filters.branchId;
+    /*
+     * ============================================================
+     * FIND BY ID
+     * ============================================================
+     *
+     * DATABASE → DOMAIN
+     * ============================================================
+     */
 
-    }
+    async findById(
+        id: string
+    ): Promise<Sales | null> {
 
-    if (filters.productId) {
+        const row =
+            await this.db.sale.findUnique({
 
-      where.productId =
-        filters.productId;
+                where: {
+                    id,
+                },
 
-    }
+            });
 
-    if (filters.status) {
-
-      where.status =
-        filters.status;
-
-    }
-
-    if (
-      filters.from ||
-      filters.to
-    ) {
-
-      where.createdAt = {};
-
-      if (filters.from) {
-
-        where.createdAt.gte =
-          filters.from;
-
-      }
-
-      if (filters.to) {
-
-        where.createdAt.lte =
-          filters.to;
-
-      }
-
-    }
-
-    const rows =
-      await this.db.sale.findMany({
-
-        where,
-
-        orderBy: {
-          createdAt: "desc",
-        },
-
-        take:
-          filters.limit ?? 100,
-
-        skip:
-          filters.offset ?? 0,
-
-      });
-
-    return rows.map(
-      SalesMapper.fromRow
-    );
-
-  }
-
-
-  /*
-   * ---------------------------------------------------------
-   * Summary
-   * ---------------------------------------------------------
-   */
-
-  async summary(
-    filters: {
-      businessId?: string;
-      branchId?: string;
-      from?: Date;
-      to?: Date;
-    } = {}
-  ): Promise<SalesSummaryRow> {
-
-    const where:
-      Prisma.SaleWhereInput = {};
-
-    if (filters.businessId) {
-
-      where.businessId =
-        filters.businessId;
-
-    }
-
-    if (filters.branchId) {
-
-      where.branchId =
-        filters.branchId;
-
-    }
-
-    if (
-      filters.from ||
-      filters.to
-    ) {
-
-      where.createdAt = {};
-
-      if (filters.from) {
-
-        where.createdAt.gte =
-          filters.from;
-
-      }
-
-      if (filters.to) {
-
-        where.createdAt.lte =
-          filters.to;
-
-      }
+        return row
+            ? SalesMapper.fromRow(row)
+            : null;
 
     }
 
 
-    const rows =
-      await this.db.sale.findMany({
-        where,
-      });
+    /*
+     * ============================================================
+     * FIND ALL
+     * ============================================================
+     */
 
+    async findAll(): Promise<Sales[]> {
 
-    let totalSales = 0;
-    let totalCost = 0;
-    let totalProfit = 0;
-    let totalQuantity = 0;
+        const rows =
+            await this.db.sale.findMany({
 
-    let transactionCount = 0;
-    let voidedCount = 0;
-    let refundedAmount = 0;
+                orderBy: {
+                    createdAt: "desc",
+                },
 
+            });
 
-    for (const sale of rows) {
-
-      if (
-        sale.status === "voided"
-      ) {
-
-        voidedCount++;
-
-        continue;
-
-      }
-
-
-      totalSales +=
-        Number(sale.total);
-
-      totalCost +=
-        Number(sale.costPrice);
-
-      totalProfit +=
-        Number(sale.profit);
-
-      totalQuantity +=
-        Number(sale.quantity);
-
-      transactionCount++;
-
-
-      if (
-        sale.status === "refunded"
-      ) {
-
-        refundedAmount +=
-          Number(sale.total);
-
-      }
+        return rows.map(
+            SalesMapper.fromRow
+        );
 
     }
 
 
-    return {
-      totalSales,
-      totalCost,
-      totalProfit,
-      totalQuantity,
-      transactionCount,
-      voidedCount,
-      refundedAmount,
-    };
+    /*
+     * ============================================================
+     * FIND BY BRANCH
+     * ============================================================
+     */
 
-  }
+    async findByBranch(
+        branchId: string
+    ): Promise<Sales[]> {
 
+        const rows =
+            await this.db.sale.findMany({
 
-  /*
-   * ---------------------------------------------------------
-   * Update
-   * ---------------------------------------------------------
-   */
+                where: {
+                    branchId,
+                },
 
-  async update(
-    state: Sales
-  ): Promise<void> {
+                orderBy: {
+                    createdAt: "desc",
+                },
 
-    await this.db.sale.update({
-      where: {
-        id: state.id,
-      },
+            });
 
-      data:
-        SalesMapper.toUpdate(state),
-    });
+        return rows.map(
+            SalesMapper.fromRow
+        );
 
-  }
+    }
 
 
-  /*
-   * ---------------------------------------------------------
-   * Delete
-   * ---------------------------------------------------------
-   */
+    /*
+     * ============================================================
+     * FIND BY PRODUCT
+     * ============================================================
+     */
 
-  async delete(
-    id: string
-  ): Promise<void> {
+    async findByProduct(
+        productId: string
+    ): Promise<Sales[]> {
 
-    await this.db.sale.delete({
-      where: {
-        id,
-      },
-    });
+        const rows =
+            await this.db.sale.findMany({
 
-  }
+                where: {
+                    productId,
+                },
+
+                orderBy: {
+                    createdAt: "desc",
+                },
+
+            });
+
+        return rows.map(
+            SalesMapper.fromRow
+        );
+
+    }
 
 
-  /*
-   * ---------------------------------------------------------
-   * Get all sales
-   * ---------------------------------------------------------
-   */
+    /*
+     * ============================================================
+     * FIND CHECKOUT GROUP
+     * ============================================================
+     */
 
-  async getAllSales(): Promise<Sales[]> {
+    async findByGroup(
+        saleGroupId: string
+    ): Promise<Sales[]> {
 
-    const rows =
-      await this.db.sale.findMany({
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
+        const rows =
+            await this.db.sale.findMany({
 
-    return rows.map(
-      SalesMapper.fromRow
-    );
+                where: {
+                    saleGroupId,
+                },
 
-  }
+                orderBy: {
+                    createdAt: "asc",
+                },
+
+            });
+
+        return rows.map(
+            SalesMapper.fromRow
+        );
+
+    }
+
+
+    /*
+     * ============================================================
+     * FIND BY INVOICE
+     * ============================================================
+     */
+
+    async findByInvoice(
+        invoiceId: string
+    ): Promise<Sales[]> {
+
+        const rows =
+            await this.db.sale.findMany({
+
+                where: {
+                    invoiceId,
+                },
+
+                orderBy: {
+                    createdAt: "asc",
+                },
+
+            });
+
+        return rows.map(
+            SalesMapper.fromRow
+        );
+
+    }
+
+
+    /*
+     * ============================================================
+     * DATE-RANGE LISTING
+     * ============================================================
+     */
+
+    async list(
+        filters: SalesListFilters = {}
+    ): Promise<Sales[]> {
+
+        const where:
+            Prisma.SaleWhereInput = {};
+
+
+        if (filters.businessId) {
+
+            where.businessId =
+                filters.businessId;
+
+        }
+
+
+        if (filters.branchId) {
+
+            where.branchId =
+                filters.branchId;
+
+        }
+
+
+        if (filters.productId) {
+
+            where.productId =
+                filters.productId;
+
+        }
+
+
+        if (filters.status) {
+
+            where.status =
+                filters.status;
+
+        }
+
+
+        if (
+            filters.from ||
+            filters.to
+        ) {
+
+            where.createdAt = {};
+
+            if (filters.from) {
+
+                where.createdAt.gte =
+                    filters.from;
+
+            }
+
+            if (filters.to) {
+
+                where.createdAt.lte =
+                    filters.to;
+
+            }
+
+        }
+
+
+        const rows =
+            await this.db.sale.findMany({
+
+                where,
+
+                orderBy: {
+                    createdAt: "desc",
+                },
+
+                take:
+                    filters.limit ?? 100,
+
+                skip:
+                    filters.offset ?? 0,
+
+            });
+
+
+        return rows.map(
+            SalesMapper.fromRow
+        );
+
+    }
+
+
+    /*
+     * ============================================================
+     * SUMMARY
+     * ============================================================
+     */
+
+    async summary(
+        filters: {
+            businessId?: string;
+            branchId?: string;
+            from?: Date;
+            to?: Date;
+        } = {}
+    ): Promise<SalesSummaryRow> {
+
+        const where:
+            Prisma.SaleWhereInput = {};
+
+
+        if (filters.businessId) {
+
+            where.businessId =
+                filters.businessId;
+
+        }
+
+
+        if (filters.branchId) {
+
+            where.branchId =
+                filters.branchId;
+
+        }
+
+
+        if (
+            filters.from ||
+            filters.to
+        ) {
+
+            where.createdAt = {};
+
+            if (filters.from) {
+
+                where.createdAt.gte =
+                    filters.from;
+
+            }
+
+            if (filters.to) {
+
+                where.createdAt.lte =
+                    filters.to;
+
+            }
+
+        }
+
+
+        const rows =
+            await this.db.sale.findMany({
+                where,
+            });
+
+
+        let totalSales = 0;
+
+        let totalCost = 0;
+
+        let totalProfit = 0;
+
+        let totalQuantity = 0;
+
+        let transactionCount = 0;
+
+        let voidedCount = 0;
+
+        let refundedAmount = 0;
+
+
+        for (const sale of rows) {
+
+            /*
+             * Voided sales do not contribute to
+             * revenue, cost, profit, or quantity.
+             */
+
+            if (
+                sale.status === "voided"
+            ) {
+
+                voidedCount++;
+
+                continue;
+
+            }
+
+
+            totalSales +=
+                Number(sale.total);
+
+
+            totalCost +=
+                Number(sale.costPrice);
+
+
+            totalProfit +=
+                Number(sale.profit);
+
+
+            totalQuantity +=
+                Number(sale.quantity);
+
+
+            transactionCount++;
+
+
+            /*
+             * Refunded sales are included in the
+             * transaction count but tracked separately.
+             */
+
+            if (
+                sale.status === "refunded"
+            ) {
+
+                refundedAmount +=
+                    Number(sale.total);
+
+            }
+
+        }
+
+
+        return {
+
+            totalSales,
+
+            totalCost,
+
+            totalProfit,
+
+            totalQuantity,
+
+            transactionCount,
+
+            voidedCount,
+
+            refundedAmount,
+
+        };
+
+    }
+
+
+    /*
+     * ============================================================
+     * UPDATE
+     * ============================================================
+     */
+
+    async update(
+        state: Sales,
+        tx: Prisma.TransactionClient = this.db
+    ): Promise<void> {
+
+        await tx.sale.update({
+
+            where: {
+                id: state.id,
+            },
+
+            data:
+                SalesMapper.toUpdate(state),
+
+        });
+
+    }
+
+
+    /*
+     * ============================================================
+     * DELETE
+     * ============================================================
+     *
+     * This is a physical delete.
+     *
+     * In an event-sourced architecture, this should normally
+     * happen only as a projection consequence, not as the
+     * mechanism for voiding/refunding a sale.
+     * ============================================================
+     */
+
+    async delete(
+        id: string,
+        tx: Prisma.TransactionClient = this.db
+    ): Promise<void> {
+
+        await tx.sale.delete({
+
+            where: {
+                id,
+            },
+
+        });
+
+    }
+
+
+    /*
+     * ============================================================
+     * GET ALL SALES
+     * ============================================================
+     */
+
+    async getAllSales(): Promise<Sales[]> {
+
+        const rows =
+            await this.db.sale.findMany({
+
+                orderBy: {
+                    createdAt: "desc",
+                },
+
+            });
+
+        return rows.map(
+            SalesMapper.fromRow
+        );
+
+    }
 
 }
 
 
 /*
- * ============================================================
- * Mapper
- * ============================================================
+ * ================================================================
+ * SALES MAPPER
+ * ================================================================
+ *
+ * DOMAIN
+ *
+ * number
+ * number
+ * Unix milliseconds
+ *
+ *             ↕
+ *
+ * DATABASE
+ *
+ * Prisma.Decimal
+ * Date
+ *
+ * ================================================================
  */
 
 export class SalesMapper {
 
 
-  static toCreateInput(
-    sale: Sales
-  ): Prisma.SaleCreateInput {
-
-    return {
-
-      id:
-        sale.id,
-
-      business: {
-        connect: {
-          id: sale.businessId!,
-        },
-      },
-
-      branch: {
-        connect: {
-          id: sale.branchId!,
-        },
-      },
-
-      product: {
-        connect: {
-          id_businessId: {
-            id: sale.productId,
-            businessId: sale.businessId!,
-          },
-        },
-      },
-
-      productName:
-        sale.productName ?? null,
-
-      quantity:
-        new Prisma.Decimal(
-          sale.quantity
-        ),
-
-      unitCostPrice:
-        new Prisma.Decimal(
-          sale.unitCostPrice
-        ),
-
-      unitPrice:
-        new Prisma.Decimal(
-          sale.unitPrice
-        ),
+    /*
+     * ============================================================
+     * DOMAIN → PRISMA CREATE INPUT
+     * ============================================================
+     */
+
+    static toCreateInput(
+        sale: Sales
+    ): Prisma.SaleCreateInput {
+
+        const input: Prisma.SaleCreateInput = {
+
+            id: sale.id,
+
+            business: {
+                connect: {
+                    id: sale.businessId,
+                },
+            },
+
+            product: {
+                connect: {
+                    id_businessId: {
+                        id: sale.productId,
+                        businessId: sale.businessId,
+                    },
+                },
+            },
+
+            productName:
+                sale.productName,
+
+            quantity:
+                new Prisma.Decimal(
+                    sale.quantity
+                ),
+
+            unitCostPrice:
+                new Prisma.Decimal(
+                    sale.unitCostPrice
+                ),
+
+            unitPrice:
+                new Prisma.Decimal(
+                    sale.unitPrice
+                ),
+
+            price:
+                new Prisma.Decimal(
+                    sale.price
+                ),
+
+            costPrice:
+                new Prisma.Decimal(
+                    sale.costPrice
+                ),
+
+            total:
+                new Prisma.Decimal(
+                    sale.total
+                ),
+
+            profit:
+                new Prisma.Decimal(
+                    sale.profit
+                ),
+
+            userId:
+                sale.userId,
+
+            customerId:
+                sale.customerId,
+
+            customerRef:
+                sale.customerRef,
+
+            invoiceId:
+                sale.invoiceId,
+
+            paymentMethod:
+                sale.paymentMethod,
+
+            note:
+                sale.note,
 
-      price:
-        new Prisma.Decimal(
-          sale.price
-        ),
+            status:
+                sale.status,
 
-      costPrice:
-        new Prisma.Decimal(
-          sale.costPrice
-        ),
-
-      total:
-        new Prisma.Decimal(
-          sale.total
-        ),
-
-      profit:
-        new Prisma.Decimal(
-          sale.profit
-        ),
-
-      userId:
-        sale.userId ?? null,
-
-      customerId:
-        sale.customerId ?? null,
-
-      customerRef:
-        sale.customerRef ?? null,
-
-      invoiceId:
-        sale.invoiceId ?? null,
-
-      paymentMethod:
-        sale.paymentMethod ?? null,
-
-      note:
-        sale.note ?? null,
-
-      status:
-        sale.status,
-
-      saleGroupId:
-        sale.saleGroupId ?? null,
-
-      mode:
-        sale.mode,
-
-      createdAt:
-        new Date(
-          sale.createdAt
-        ),
-    };
-  }
+            saleGroupId:
+                sale.saleGroupId,
 
+            mode:
+                sale.mode,
 
-  /*
-   * ---------------------------------------------------------
-   * Upsert
-   * ---------------------------------------------------------
-   */
+            createdAt:
+                new Date(
+                    sale.createdAt
+                ),
+        };
 
-  static toUpsertArgs(
-    sale: Sales
-  ): Prisma.SaleUpsertArgs {
+        if (sale.branchId != null) {
+            input.branch = {
+                connect: {
+                    id: sale.branchId,
+                },
+            };
+        }
 
-    return {
+        return input;
+    }
 
-      where: {
-        id: sale.id,
-      },
+    /*
+     * ============================================================
+     * DOMAIN → PRISMA UPSERT
+     * ============================================================
+     */
 
-      create:
-        this.toCreateInput(
-          sale
-        ),
+    static toUpsertArgs(
+        sale: Sales
+    ): Prisma.SaleUpsertArgs {
 
-      update:
-        this.toUpdate(
-          sale
-        ),
+        return {
 
-    };
+            where: {
+                id: sale.id,
+            },
 
-  }
+            create:
+                this.toCreateInput(
+                    sale
+                ),
 
+            update:
+                this.toUpdate(
+                    sale
+                ),
 
-  /*
-   * ---------------------------------------------------------
-   * Update
-   * ---------------------------------------------------------
-   */
+        };
 
-  static toUpdate(
-    sale: Sales
-  ): Prisma.SaleUpdateInput {
+    }
 
-    return {
 
-      productName:
-        sale.productName ?? null,
+    /*
+     * ============================================================
+     * DOMAIN → PRISMA UPDATE
+     * ============================================================
+     */
 
-      quantity:
-        new Prisma.Decimal(
-          sale.quantity
-        ),
+    static toUpdate(
+        sale: Sales
+    ): Prisma.SaleUpdateInput {
 
-      unitCostPrice:
-        new Prisma.Decimal(
-          sale.unitCostPrice
-        ),
+        return {
 
-      unitPrice:
-        new Prisma.Decimal(
-          sale.unitPrice
-        ),
+            branch:
+                sale.branchId != null
+                    ? {
+                        connect: {
+                            id: sale.branchId,
+                        },
+                    }
+                    : {
+                        disconnect: true,
+                    },
 
-      price:
-        new Prisma.Decimal(
-          sale.price
-        ),
 
-      costPrice:
-        new Prisma.Decimal(
-          sale.costPrice
-        ),
+            productName:
+                sale.productName,
 
-      total:
-        new Prisma.Decimal(
-          sale.total
-        ),
 
-      profit:
-        new Prisma.Decimal(
-          sale.profit
-        ),
+            quantity:
+                new Prisma.Decimal(
+                    sale.quantity
+                ),
 
-      userId:
-        sale.userId ?? null,
 
-      customerId:
-        sale.customerId ?? null,
+            unitCostPrice:
+                new Prisma.Decimal(
+                    sale.unitCostPrice
+                ),
 
-      customerRef:
-        sale.customerRef ?? null,
 
-      invoiceId:
-        sale.invoiceId ?? null,
+            unitPrice:
+                new Prisma.Decimal(
+                    sale.unitPrice
+                ),
 
-      paymentMethod:
-        sale.paymentMethod ?? null,
 
-      note:
-        sale.note ?? null,
+            price:
+                new Prisma.Decimal(
+                    sale.price
+                ),
 
-      status:
-        sale.status,
 
-      saleGroupId:
-        sale.saleGroupId ?? null,
+            costPrice:
+                new Prisma.Decimal(
+                    sale.costPrice
+                ),
 
-      mode:
-        sale.mode,
 
-    };
+            total:
+                new Prisma.Decimal(
+                    sale.total
+                ),
 
-  }
 
+            profit:
+                new Prisma.Decimal(
+                    sale.profit
+                ),
 
-  /*
-   * ---------------------------------------------------------
-   * Prisma -> Shared Domain
-   * ---------------------------------------------------------
-   */
 
-  static fromRow(
-    row: Sale
-  ): Sales {
+            userId:
+                sale.userId,
 
-    return {
 
-      id:
-        row.id,
+            customerId:
+                sale.customerId,
 
-      businessId:
-        row.businessId,
 
-      branchId:
-        row.branchId ?? "",
+            customerRef:
+                sale.customerRef,
 
-      productId:
-        row.productId,
 
-      productName:
-        row.productName,
+            invoiceId:
+                sale.invoiceId,
 
-      quantity:
-        Number(row.quantity),
 
-      unitCostPrice:
-        Number(row.unitCostPrice),
+            paymentMethod:
+                sale.paymentMethod,
 
-      unitPrice:
-        Number(row.unitPrice),
 
-      price:
-        Number(row.price),
+            note:
+                sale.note,
 
-      costPrice:
-        Number(row.costPrice),
 
-      total:
-        Number(row.total),
+            status:
+                sale.status,
 
-      profit:
-        Number(row.profit),
 
-      userId:
-        row.userId ?? "",
+            saleGroupId:
+                sale.saleGroupId,
 
-      customerId:
-        row.customerId,
 
-      customerRef:
-        row.customerRef,
+            mode:
+                sale.mode,
 
-      invoiceId:
-        row.invoiceId,
 
-      paymentMethod:
-        row.paymentMethod as PaymentMethod,
+            updatedAt:
+                sale.updatedAt != null
+                    ? new Date(
+                        sale.updatedAt
+                    )
+                    : new Date(),
 
-      note:
-        row.note,
+        };
 
-      status:
-        row.status as SaleStatus,
+    }
 
-      saleGroupId:
-        row.saleGroupId,
 
-      mode:
-        row.mode as Mode,
+    /*
+     * ============================================================
+     * PRISMA → DOMAIN
+     * ============================================================
+     *
+     * Decimal → number
+     * Date    → Unix milliseconds
+     * ============================================================
+     */
 
-      createdAt:
-        row.createdAt.getTime(),
+    static fromRow(
+        row: PrismaSale
+    ): Sales {
 
-      updatedAt:
-        row.updatedAt.getTime(),
+        return {
 
-    };
+            id:
+                row.id,
 
-  }
+
+            businessId:
+                row.businessId,
+
+
+            branchId:
+                row.branchId,
+
+
+            productId:
+                row.productId,
+
+
+            productName:
+                row.productName,
+
+
+            quantity:
+                Number(
+                    row.quantity
+                ),
+
+
+            unitCostPrice:
+                Number(
+                    row.unitCostPrice
+                ),
+
+
+            unitPrice:
+                Number(
+                    row.unitPrice
+                ),
+
+
+            price:
+                Number(
+                    row.price
+                ),
+
+
+            costPrice:
+                Number(
+                    row.costPrice
+                ),
+
+
+            total:
+                Number(
+                    row.total
+                ),
+
+
+            profit:
+                Number(
+                    row.profit
+                ),
+
+
+            userId:
+                row.userId,
+
+
+            customerId:
+                row.customerId,
+
+
+            customerRef:
+                row.customerRef,
+
+
+            invoiceId:
+                row.invoiceId,
+
+
+            paymentMethod:
+                row.paymentMethod as PaymentMethod | null,
+
+
+            note:
+                row.note,
+
+
+            status:
+                row.status as SaleStatus,
+
+
+            saleGroupId:
+                row.saleGroupId,
+
+
+            mode:
+                row.mode as Mode,
+
+
+            createdAt:
+                row.createdAt.getTime(),
+
+
+            updatedAt:
+                row.updatedAt != null
+                    ? row.updatedAt.getTime()
+                    : null,
+
+        };
+
+    }
 
 }

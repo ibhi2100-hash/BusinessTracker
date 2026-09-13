@@ -1,4 +1,5 @@
-import { BackendEvent } from "../modules/sync/repositories/eventRepository.js";
+import { BackendEvent } from "@business/shared-types";
+
 import { DomainEvent } from "@business/shared-types";
 export function BackendToDomainEventTransformer(
     event: BackendEvent
@@ -16,7 +17,7 @@ export function BackendToDomainEventTransformer(
         actor: {
             userId: event.userId,
             deviceId: event.deviceId,
-            sessionId: undefined,
+            sessionId: "",
         },
         correlationId: event.correlationId!,
         logicClock: Number(event.logicClock),

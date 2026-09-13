@@ -8,7 +8,7 @@ export const migration015: Migration = {
         await q.execute(
             `
             CREATE TABLE event_resolution (
-                id,               TEXT PRIMARY KEY,
+                id       TEXT PRIMARY KEY,
                 
                 eventId  TEXT,
 

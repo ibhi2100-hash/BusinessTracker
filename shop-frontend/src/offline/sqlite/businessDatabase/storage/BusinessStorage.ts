@@ -27,6 +27,11 @@ implements Lifecycle {
 
         await this.migrationRunner.run();
 
+        await this.runtime.sqlite.registerStatements(
+            this.runtime.database,
+            BusinessStatementsDefinitions
+        )
+
         await this.statementManager.initialize(
             BusinessStatementsDefinitions
         )

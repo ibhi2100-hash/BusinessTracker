@@ -1,106 +1,157 @@
-import { PreparedStatement } from "@/src/offline/sqlite/PreparedStatement/PreparedStatementContract";
-import { SQLiteRuntime } from "../runtime/SQLiteRuntime";
-import { WorkerPreparedStatement } from "../statement/WorkerPreparedStatement";
-import { StatementDefinition } from "@/src/offline/sqlite/PreparedStatement/StatementRegistry/statementDefinition";
+import type {
+    SQLiteRuntime,
+} from "../runtime/SQLiteRuntime";
+
+import type {
+    PreparedStatement,
+} from "@/src/offline/sqlite/PreparedStatement/PreparedStatementContract";
+
+import {
+    WorkerPreparedStatement,
+} from "../runtime/SQLiteWorkerClient";
+
+import type {
+    StatementDefinition,
+} from "@/src/offline/sqlite/PreparedStatement/StatementRegistry/statementDefinition";
+
+import type {
+    DatabaseId,
+} from "../statement/worker/DatabaseId";
+
+import type {
+    SQLiteStatementOperation,
+} from "../statement/worker/WorkerProtocol";
+
 
 export class QueryRunner {
 
     constructor(
-        private readonly runtime:
-            SQLiteRuntime,
+        private readonly runtime: SQLiteRuntime,
+        private readonly database: DatabaseId
     ) {}
 
 
+    /**
+     * RAW SQL
+     *
+     * Primarily for:
+     * - migrations
+     * - schema maintenance
+     * - infrastructure queries
+     */
     async execute(
         sql: string,
         params: readonly unknown[] = []
     ): Promise<void> {
 
-        await this.runtime.connection(
-            "exec",
-            {
-                dbId:
-                    this.runtime.databaseId,
-
-                sql,
-
-                bind:
-                    params,
-            }
+        await this.runtime.rawExec(
+            this.database,
+            sql,
+            params
         );
     }
 
 
-    async query<T>(
+    /**
+     * RAW SELECT
+     *
+     * Primarily for:
+     * - migrations
+     * - schema inspection
+     * - infrastructure queries
+     */
+    async query<T = Record<string, unknown>>(
         sql: string,
         params: readonly unknown[] = []
     ): Promise<T[]> {
 
-        const response =
-            await this.runtime.connection(
-                "exec",
-                {
-                    dbId:
-                        this.runtime.databaseId,
-
-                    sql,
-
-                    bind:
-                        params,
-
-                    rowMode:
-                        "object",
-
-                    returnValue:
-                        "resultRows",
-                }
-            );
-
-        return (
-            response.result?.resultRows ??
-            []
+        return this.runtime.rawQuery<T>(
+            this.database,
+            sql,
+            params
         );
     }
 
 
-    async transaction<T>(
-        action: () => Promise<T>
-    ): Promise<T> {
+    /**
+     * Prepared statement execution.
+     */
+    async executePrepared(
+        statementKey: string,
+        params: readonly unknown[] = []
+    ): Promise<void> {
 
-        await this.execute(
-            "BEGIN IMMEDIATE"
+        await this.runtime.execute(
+            this.database,
+            statementKey,
+            params
         );
-
-        try {
-
-            const result =
-                await action();
-
-            await this.execute(
-                "COMMIT"
-            );
-
-            return result;
-
-        } catch (error) {
-
-            await this.execute(
-                "ROLLBACK"
-            );
-
-            throw error;
-        }
     }
 
 
+    /**
+     * Prepared statement SELECT.
+     */
+    async queryPrepared<
+        T = Record<string, unknown>
+    >(
+        statementKey: string,
+        params: readonly unknown[] = []
+    ): Promise<T[]> {
+
+        return this.runtime.query<T>(
+            this.database,
+            statementKey,
+            params
+        );
+    }
+
+
+    /**
+     * Main-thread remote statement handle.
+     *
+     * IMPORTANT:
+     * This does NOT create a SQLite Stmt here.
+     *
+     * The actual SQLite prepared statement lives
+     * inside the worker and belongs to this database.
+     */
     prepare(
-        def: StatementDefinition
+        definition: StatementDefinition
     ): PreparedStatement {
 
         return new WorkerPreparedStatement(
             this.runtime,
-            def.key,
-            def.sql
+            this.database,
+            definition.key
         );
+    }
+
+
+    /**
+     * Domain transaction.
+     *
+     * ONE RPC
+     * ONE SQLite transaction
+     *
+     * All operations execute against this QueryRunner's database.
+     */
+    async transaction(
+        operations: SQLiteStatementOperation[]
+    ): Promise<void> {
+
+        await this.runtime.transaction(
+            this.database,
+            operations
+        );
+    }
+
+
+    /**
+     * Database this QueryRunner is bound to.
+     */
+    getDatabase(): DatabaseId {
+
+        return this.database;
     }
 }

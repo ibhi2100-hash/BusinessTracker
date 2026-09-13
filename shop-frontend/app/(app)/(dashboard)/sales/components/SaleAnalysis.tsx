@@ -79,14 +79,9 @@ export default function SalesAnalysisPage() {
       }
 
       const [sum, products, margin] = await Promise.all([
-        app.sales.getSalesSummary({  branchId: branchId ?? undefined, businessId, from, to }),
+        app.sales.getSalesSummary(filters),
         app.sales.getProductSalesSummary(filters),
-        app.sales.getGrossMargin({
-          businessId,
-          branchId: branchId ?? undefined,
-          from,
-          to,
-        }),
+        app.sales.getGrossMargin(filters),
       ]);
 
       setSummary(sum);

@@ -10,110 +10,88 @@ implements PreparedStatement {
         private readonly runtime:
             SQLiteRuntime,
 
-        readonly key:
-            string,
-
-        readonly sql:
+        private readonly key:
             string
     ) {}
-
 
     async execute(
         params: readonly unknown[] = []
     ): Promise<void> {
 
-        await this.runtime.connection(
-            "exec",
-            {
-                dbId:
-                    this.runtime.databaseId,
+        await this.runtime.request({
+            type: "statement.execute",
+            requestId: crypto.randomUUID(),
 
-                sql:
-                    this.sql,
+            database: {
+                type: "client"
+            },
+            statementKey:
+                this.key,
 
-                bind:
-                    params,
-            }
-        );
+            params,
+        });
     }
-
 
     async query<T>(
         params: readonly unknown[] = []
     ): Promise<T[]> {
 
-        const response =
-            await this.runtime.connection(
-                "exec",
-                {
-                    dbId:
-                        this.runtime.databaseId,
+        const result =
+            await this.runtime.request({
+                type: "statement.query",
 
-                    sql:
-                        this.sql,
+                requestId: crypto.randomUUID(),
 
-                    bind:
-                        params,
+                database: {
+                    type: "client"
+                },
 
-                    rowMode:
-                        "object",
+                statementKey:
+                    this.key,
 
-                    returnValue:
-                        "resultRows",
-                }
-            );
+                params,
+            });
 
-        return (
-            response.result?.resultRows ??
-            []
-        );
+        return result as T[];
     }
-
 
     async scalar<T>(
         params: readonly unknown[] = []
     ): Promise<T | null> {
 
         const rows =
-            await this.query<T>(
+            await this.query<Record<string, unknown>>(
                 params
             );
 
         if (
             rows.length === 0
         ) {
-
             return null;
         }
 
-        const row =
-            rows[0];
-
-        const values =
-            Object.values(
-                row as any
-            );
-
-        return values[0] as T;
+        return Object.values(
+            rows[0]
+        )[0] as T;
     }
-
 
     async exists(
         params: readonly unknown[] = []
     ): Promise<boolean> {
 
-        const rows =
-            await this.query(
+        const value =
+            await this.scalar<number>(
                 params
             );
 
-        return rows.length > 0;
+        return value === 1;
     }
-
 
     dispose(): void {
 
-        // Worker-backed statements have
-        // nothing persistent to dispose.
+        // The actual SQLite statement
+        // belongs to the Worker.
+
+        // No local resource exists here.
     }
 }

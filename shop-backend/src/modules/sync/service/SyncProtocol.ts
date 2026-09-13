@@ -1,4 +1,4 @@
-import { BackendEvent } from "../repositories/eventRepository.js";
+import { BackendEvent } from "@business/shared-types";
 
 export type PushEventStatus =
     | "ACCEPTED"

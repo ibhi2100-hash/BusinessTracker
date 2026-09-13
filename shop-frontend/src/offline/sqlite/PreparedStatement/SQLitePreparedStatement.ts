@@ -1,75 +1,65 @@
+import { SQLiteRuntime } from "@/src/storage/runtime/SQLiteRuntime";
 import { PreparedStatement } from "./PreparedStatementContract";
+import { PreparedStatementManager } from "./PreparedStatementManager";
+import { StatementDefinition } from "./StatementRegistry/statementDefinition";
+import { WorkerPreparedStatement } from "@/src/storage/statement/WorkerPreparedStatement";
 
+export class SQLitePreparedStatementManager
+implements PreparedStatementManager {
 
-export class SQLitePreparedStatement
-implements PreparedStatement {
+    private readonly statements =
+        new Map<string, PreparedStatement>();
 
     constructor(
-        private readonly stmt: any
+        private readonly runtime: SQLiteRuntime
     ) {}
 
-    async execute(
-        params: readonly unknown[] = []
-    ): Promise<void> {
+    initialize(
+        defs: StatementDefinition[]
+    ): void {
 
-        this.stmt.bind(params);
+        this.clear();
 
-        this.stmt.step();
+        for (const def of defs) {
 
-        this.stmt.reset();
+            const statement =
+                new WorkerPreparedStatement(
+                    this.runtime,
+                    def.key
+                );
 
+            this.statements.set(
+                def.key,
+                statement
+            );
+        }
     }
 
-    async query<T>(
-        params: readonly unknown[] = []
-    ): Promise<T[]> {
+    get(
+        key: string
+    ): PreparedStatement {
 
-        this.stmt.bind(params);
+        const statement =
+            this.statements.get(key);
 
-        const rows: T[] = [];
-
-        while (this.stmt.step()) {
-
-            rows.push(
-                this.stmt.getAsObject()
+        if (!statement) {
+            throw new Error(
+                `Prepared statement not registered: ${key}`
             );
-
         }
 
-        this.stmt.reset();
-
-        return rows;
-
+        return statement;
     }
 
-    async scalar<T>(
-        params: readonly unknown[] = []
-    ): Promise<T | null> {
+    clear(): void {
 
-        const rows =
-            await this.query<any>(params);
+        for (
+            const statement
+            of this.statements.values()
+        ) {
+            statement.dispose();
+        }
 
-        if (!rows.length)
-            return null;
-
-        return Object.values(rows[0])[0] as T;
-
+        this.statements.clear();
     }
-
-    async exists(
-        params: readonly unknown[] = []
-    ): Promise<boolean> {
-
-        return (
-            await this.scalar<number>(params)
-        ) === 1;
-
-    }
-
-    dispose() {
-
-        this.stmt.free();
-
-    }
-
 }

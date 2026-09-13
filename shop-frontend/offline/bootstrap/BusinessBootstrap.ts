@@ -35,6 +35,7 @@ import { HttpSyncTransport } from "@/src/offline/sqlite/businessDatabase/sync/Sy
 import { SyncEngine } from "@/src/offline/sqlite/businessDatabase/sync/syncEngine";
 import { SyncCoordinator } from "@/src/offline/sqlite/businessDatabase/sync/SyncCoordinator/SyncCoordinator";
 import { NetworkSyncConnector } from "@/src/offline/sqlite/businessDatabase/sync/NetworkSyncConnector";
+import { DatabaseId } from "@/src/storage/statement/worker/DatabaseId";
 
 
 export class BusinessBootstrapper
@@ -46,6 +47,7 @@ implements Lifecycle {
     ){
         const runtime = 
             await this.createRuntime(
+                client,
                 businessId
             )
 
@@ -121,25 +123,48 @@ implements Lifecycle {
         
     }
 
-   private async createRuntime(businessId: string) : Promise<BusinessRuntime> {
-        const sqlite = 
-            new SQLiteRuntime({
-                filename: 
-                    `/business/${businessId}.db`
-            });
-        const queryRunner = new QueryRunner(sqlite);
+   private async createRuntime(
+        client: ApplicationContext,
+        businessId: string
+    ): Promise<BusinessRuntime> {
 
-        const transactionManager =  new TransactionManager(queryRunner);
+        const sqlite =
+            client.runtime;
 
-        const runtime = new BusinessRuntime(
+
+        const database: DatabaseId = {
+            type: "business",
             businessId,
-            sqlite,
+        };
+
+
+        await sqlite.openDatabase(
+            database,
+            `/business/${businessId}.db`
+        );
+
+
+        const queryRunner =
+            new QueryRunner(
+                sqlite,
+                database
+            );
+
+
+        const transactionManager =
+            new TransactionManager(
+                queryRunner
+            );
+
+
+        return new BusinessRuntime(
+            businessId,
+            database,
+            client.runtime,
             queryRunner,
             transactionManager
-        )
-        return runtime
+        );
     }
-
    private async createStorage(runtime: BusinessRuntime): Promise<BusinessStorage>{
         const migrationRunner = 
             new BusinessMigrationRunner(

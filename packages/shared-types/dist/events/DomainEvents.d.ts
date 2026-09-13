@@ -7,7 +7,7 @@ export interface DomainEvent<TPayload = unknown> {
     readonly expectedAggregateVersion: number;
     readonly type: string;
     readonly mode: "OPENING" | "LIVE";
-    readonly payload: Readonly<TPayload>;
+    readonly payload: TPayload;
     readonly actor: ActorContext;
     readonly causationId: string;
     readonly correlationId: string;

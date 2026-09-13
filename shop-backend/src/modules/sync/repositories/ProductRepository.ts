@@ -1,4 +1,5 @@
 import { Product } from "@business/shared-types";
+
 import {
     Prisma,
     Product as PrismaProduct,
@@ -26,9 +27,7 @@ export class ProductRepository {
     ): Promise<void> {
 
         await tx.product.upsert(
-            ProductMapper.toUpsertArgs(
-                product
-            )
+            ProductMapper.toUpsertArgs(product)
         );
 
     }
@@ -38,20 +37,22 @@ export class ProductRepository {
      * ============================================================
      * FIND BY ID
      *
-     * Because Product has a composite primary key:
+     * Product has a composite primary key:
      *
      * @@id([id, businessId])
      *
-     * businessId is required.
+     * Therefore businessId is required.
+     *
+     * DATABASE → DOMAIN
      * ============================================================
      */
 
     async findById(
         id: string,
         businessId: string
-    ): Promise<PrismaProduct | null> {
+    ): Promise<Product | null> {
 
-        return await this.db.product.findUnique({
+        const row = await this.db.product.findUnique({
 
             where: {
                 id_businessId: {
@@ -62,20 +63,26 @@ export class ProductRepository {
 
         });
 
+        return row
+            ? ProductMapper.fromRow(row)
+            : null;
+
     }
 
 
     /*
      * ============================================================
      * FIND ALL FOR BUSINESS
+     *
+     * DATABASE → DOMAIN
      * ============================================================
      */
 
     async findAll(
         businessId: string
-    ): Promise<PrismaProduct[]> {
+    ): Promise<Product[]> {
 
-        return await this.db.product.findMany({
+        const rows = await this.db.product.findMany({
 
             where: {
                 businessId,
@@ -87,6 +94,10 @@ export class ProductRepository {
 
         });
 
+        return rows.map(
+            ProductMapper.fromRow
+        );
+
     }
 
 
@@ -94,17 +105,19 @@ export class ProductRepository {
      * ============================================================
      * FIND PRODUCTS FOR BRANCH
      *
-     * branchId is nullable because your Product model allows
-     * business-level products that are not assigned to a branch.
+     * branchId is nullable in the Prisma model, but this method
+     * specifically asks for products assigned to a branch.
+     *
+     * DATABASE → DOMAIN
      * ============================================================
      */
 
     async findByBranch(
         businessId: string,
         branchId: string
-    ): Promise<PrismaProduct[]> {
+    ): Promise<Product[]> {
 
-        return await this.db.product.findMany({
+        const rows = await this.db.product.findMany({
 
             where: {
                 businessId,
@@ -117,21 +130,27 @@ export class ProductRepository {
 
         });
 
+        return rows.map(
+            ProductMapper.fromRow
+        );
+
     }
 
 
     /*
      * ============================================================
      * FIND ACTIVE PRODUCTS FOR BRANCH
+     *
+     * DATABASE → DOMAIN
      * ============================================================
      */
 
     async findActiveByBranch(
         businessId: string,
         branchId: string
-    ): Promise<PrismaProduct[]> {
+    ): Promise<Product[]> {
 
-        return await this.db.product.findMany({
+        const rows = await this.db.product.findMany({
 
             where: {
                 businessId,
@@ -149,6 +168,10 @@ export class ProductRepository {
 
         });
 
+        return rows.map(
+            ProductMapper.fromRow
+        );
+
     }
 
 
@@ -156,9 +179,9 @@ export class ProductRepository {
      * ============================================================
      * DELETE
      *
-     * Since the domain uses soft deletion fields, this method
-     * should normally perform a soft delete rather than actually
-     * deleting the database row.
+     * Product uses soft deletion.
+     *
+     * This therefore does NOT physically remove the row.
      * ============================================================
      */
 
@@ -178,7 +201,9 @@ export class ProductRepository {
 
             data: {
                 isDeleted: true,
+
                 isActive: false,
+
                 deletedAt: new Date(),
             },
 
@@ -209,7 +234,9 @@ export class ProductRepository {
 
             data: {
                 isDeleted: false,
+
                 isActive: true,
+
                 deletedAt: null,
             },
 
@@ -224,10 +251,34 @@ export class ProductRepository {
  * ================================================================
  * PRODUCT MAPPER
  * ================================================================
+ *
+ * DOMAIN
+ *
+ * Product
+ *   number
+ *   number
+ *   number timestamps
+ *
+ *          ↕
+ *
+ * DATABASE
+ *
+ * PrismaProduct
+ *   Decimal
+ *   Decimal
+ *   Date
+ *
+ * ================================================================
  */
 
 export class ProductMapper {
 
+
+    /*
+     * ============================================================
+     * DOMAIN → PRISMA
+     * ============================================================
+     */
 
     static toUpsertArgs(
         product: Product
@@ -245,6 +296,12 @@ export class ProductMapper {
                 },
             },
 
+
+            /*
+             * ----------------------------------------------------
+             * CREATE
+             * ----------------------------------------------------
+             */
 
             create: {
 
@@ -302,38 +359,45 @@ export class ProductMapper {
                     new Date(
                         product.createdAt
                     ),
+
                 deletedAt:
-                    product.deletedAt
+                    product.deletedAt != null
                         ? new Date(
                             product.deletedAt
                         )
                         : null,
+
             },
 
+
+            /*
+             * ----------------------------------------------------
+             * UPDATE
+             * ----------------------------------------------------
+             */
 
             update: {
 
                 branchId:
-                    product.branchId ?? null,
-
+                    product.branchId,
 
                 sku:
-                    product.sku ?? null,
+                    product.sku,
 
                 barcode:
-                    product.barcode ?? null,
+                    product.barcode,
 
                 name:
                     product.name,
 
                 imageUrl:
-                    product.imageUrl ?? null,
+                    product.imageUrl,
 
                 description:
-                    product.description ?? null,
+                    product.description,
 
                 category:
-                    product.category ?? null,
+                    product.category,
 
                 costPrice:
                     new Prisma.Decimal(
@@ -359,18 +423,19 @@ export class ProductMapper {
                     product.isDeleted,
 
                 updatedAt:
-                    product.updatedAt
+                    product.updatedAt != null
                         ? new Date(
                             product.updatedAt
                         )
                         : new Date(),
 
                 deletedAt:
-                    product.deletedAt
+                    product.deletedAt != null
                         ? new Date(
                             product.deletedAt
                         )
                         : null,
+
             },
 
         };
@@ -380,12 +445,11 @@ export class ProductMapper {
 
     /*
      * ============================================================
-     * DATABASE → DOMAIN
+     * PRISMA → DOMAIN
      * ============================================================
      *
-     * Prisma Decimal is not a JavaScript number.
-     *
-     * Convert it explicitly when returning a shared domain Product.
+     * Decimal → number
+     * Date    → Unix milliseconds
      * ============================================================
      */
 
@@ -404,12 +468,6 @@ export class ProductMapper {
             branchId:
                 row.branchId,
 
-            sku:
-                row.sku,
-
-            barcode:
-                row.barcode,
-
             name:
                 row.name,
 
@@ -419,18 +477,30 @@ export class ProductMapper {
             description:
                 row.description,
 
+            costPrice:
+                Number(
+                    row.costPrice
+                ),
+
+            price:
+                Number(
+                    row.price
+                ),
+
             category:
                 row.category,
 
-            costPrice:
-                Number(row.costPrice),
+            sku:
+                row.sku,
 
-            price:
-                Number(row.price),
+            barcode:
+                row.barcode,
 
             reorderLevel:
                 row.reorderLevel != null
-                    ? Number(row.reorderLevel)
+                    ? Number(
+                        row.reorderLevel
+                    )
                     : null,
 
             isActive:
@@ -443,12 +513,15 @@ export class ProductMapper {
                 row.createdAt.getTime(),
 
             updatedAt:
-                row.updatedAt.getTime(),
+                row.updatedAt != null
+                    ? row.updatedAt.getTime()
+                    : null,
 
             deletedAt:
-                row.deletedAt
+                row.deletedAt != null
                     ? row.deletedAt.getTime()
                     : null,
+
         };
 
     }

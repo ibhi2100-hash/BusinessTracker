@@ -9,75 +9,41 @@ export type SaleStatus = "completed" | "voided" | "refunded";
 export type PaymentMethod = "cash" | "transfer" | "card" | "other";
 
 export interface Sales {
-  /** Unique id for this sale line */
-  id: string;
+    id: string;
 
-  businessId: string;
-  branchId: string;
+    businessId: string;
+    branchId: string | null;
 
-  /** Product that was sold */
-  productId: string;
-  productName: string | null;
+    productId: string;
+    productName: string | null;
 
-  /** Units sold on this line */
-  quantity: number;
+    quantity: number;
 
-  unitCostPrice: number;
+    unitCostPrice: number;
+    unitPrice: number;
 
-  unitPrice: number;
+    price: number;
+    costPrice: number;
+    total: number;
+    profit: number;
 
-  /**
-   * Unit selling price (₦ per unit).
-   * Line revenue = price × quantity  →  stored in `total`
-   */
-  price: number;
+    userId: string | null;
 
-  /**
-   * Unit cost (₦ per unit) × quantity, i.e. total cost for this line.
-   * Kept as a line total so profit is simply total - costPrice.
-   */
-  costPrice: number;
+    customerId: string | null;
+    customerRef: string | null;
 
-  /**
-   * Line revenue = price × quantity
-   */
-  total: number;
+    invoiceId: string | null;
 
-  /**
-   * Line profit = total - costPrice
-   */
-  profit: number;
+    paymentMethod: PaymentMethod | null;
 
-  /** Who recorded the sale */
-  userId: string;
+    note: string | null;
 
-  /** Optional customer / walk-in reference */
-  customerId: string | null;
-  customerRef: string | null;
+    status: SaleStatus;
 
-  /** Optional invoice / receipt number */
-  invoiceId: string | null;
+    saleGroupId: string | null;
 
-  paymentMethod: PaymentMethod;
-  note: string | null;
+    mode: Mode;
 
-  /**
-   * Lifecycle for financial control:
-   * - completed → counts toward revenue
-   * - voided    → reversed, excluded from totals
-   * - refunded  → money returned, reduces net revenue
-   */
-  status: SaleStatus;
-
-  /**
-   * Shared id for every line in the same cart checkout.
-   * Empty / undefined for single quick-sell.
-   */
-  saleGroupId: string | null;
-
-  mode: Mode;
-
-  /** Unix ms or ISO — keep one convention app-wide. Prefer number (ms). */
-  createdAt: number;
-  updatedAt: number | null;
+    createdAt: number;
+    updatedAt: number | null;
 }

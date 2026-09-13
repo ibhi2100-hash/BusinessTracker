@@ -26,7 +26,7 @@ export class OnboardingApi {
                 address: request.address
             }
         }
-        console.log("this the business request: ", request)
+        
         const app = await this.manager.bootstrap(request.id);
 
         const command = await app.domain.commandFactory.create(intent);

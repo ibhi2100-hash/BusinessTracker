@@ -20,12 +20,11 @@ INSERT INTO events (
 )
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `;
-
 export const LOAD_AGGREGATE = `
 SELECT *
 FROM events
 WHERE aggregateId = ?
-ORDER BY aggregateVersion ASC
+ORDER BY expectedAggregateVersion ASC
 `;
 
 export const LOAD_EVENT = `
@@ -42,13 +41,6 @@ WHERE id = ?
 LIMIT 1
 `;
 
-export const LOAD_SINCE = `
-SELECT *
-FROM events
-WHERE globalPosition > ?
-ORDER BY globalPosition ASC
-`;
-
 export const DELETE_EVENT = `
 DELETE
 FROM events
@@ -60,10 +52,6 @@ SELECT COUNT(*) AS count
 FROM events
 `;
 
-export const LAST_POSITION = `
-SELECT MAX(globalPosition) AS position
-FROM events
-`;
 
 export const LOAD_PROJECTION_EVENT = `
         SELECT *

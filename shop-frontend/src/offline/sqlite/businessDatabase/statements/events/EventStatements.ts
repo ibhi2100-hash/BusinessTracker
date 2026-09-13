@@ -15,15 +15,8 @@ export class EventStatements {
         return this.manager.get(EventStatementKeys.loadEvent)
     }
 
-    get loadSince(){
-        return this.manager.get(EventStatementKeys.loadSince)
-    }
-
     get count(){
         return this.manager.get(EventStatementKeys.eventCount)
-    }
-    get lastPosition(){
-        return this.manager.get(EventStatementKeys.eventLastposition)
     }
     
     get loadAggregate(){
