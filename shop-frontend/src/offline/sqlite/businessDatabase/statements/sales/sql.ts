@@ -403,10 +403,15 @@ params AS (
     SELECT
         ? AS businessId,
         ? AS branchId,
+
         ? AS currentStart,
         ? AS currentEnd,
+
         ? AS previousStart,
-        ? AS previousEnd
+        ? AS previousEnd,
+
+        ? AS currentDays,
+        ? AS previousDays
 ),
 
 /* ============================================================
@@ -434,6 +439,7 @@ current_sales AS (
         ) AS grossProfit
 
     FROM sales s
+
     JOIN params p
       ON s.businessId = p.businessId
 
@@ -474,6 +480,7 @@ previous_sales AS (
         ) AS grossProfit
 
     FROM sales s
+
     JOIN params p
       ON s.businessId = p.businessId
 
@@ -500,6 +507,7 @@ inventory AS (
         SUM(i.quantity) AS currentStock
 
     FROM inventories i
+
     JOIN params p
       ON i.businessId = p.businessId
 
@@ -562,53 +570,32 @@ product_base AS (
 
 raw_metrics AS (
     SELECT
-        *,
+        pb.*,
 
-        unitsSold /
-            MAX(
-                1,
-                julianday(currentEnd) -
-                julianday(currentStart) + 1
-            )
+        /*
+         * Units sold per calendar day.
+         */
+        pb.unitsSold
+            / CAST(MAX(p.currentDays, 1) AS REAL)
             AS salesVelocity,
 
-        grossProfit /
-            MAX(
-                1,
-                julianday(currentEnd) -
-                julianday(currentStart) + 1
-            )
+        /*
+         * Gross profit generated per calendar day.
+         */
+        pb.grossProfit
+            / CAST(MAX(p.currentDays, 1) AS REAL)
             AS grossProfitVelocity,
 
-        previousUnitsSold /
-            MAX(
-                1,
-                julianday(previousEnd) -
-                julianday(previousStart) + 1
-            )
+        /*
+         * Previous-period units sold per calendar day.
+         */
+        pb.previousUnitsSold
+            / CAST(MAX(p.previousDays, 1) AS REAL)
             AS previousSalesVelocity
 
-    FROM (
-        SELECT
-            *,
-            (
-                SELECT currentStart
-                FROM params
-            ) AS currentStart,
-            (
-                SELECT currentEnd
-                FROM params
-            ) AS currentEnd,
-            (
-                SELECT previousStart
-                FROM params
-            ) AS previousStart,
-            (
-                SELECT previousEnd
-                FROM params
-            ) AS previousEnd
-        FROM product_base
-    )
+    FROM product_base pb
+
+    CROSS JOIN params p
 ),
 
 /* ============================================================
@@ -621,14 +608,25 @@ trend_metrics AS (
 
         CASE
 
+            /*
+             * No previous demand, but current demand exists.
+             *
+             * This is treated as strong positive demand emergence.
+             */
             WHEN previousSalesVelocity <= 0
                  AND salesVelocity > 0
             THEN 1.0
 
+            /*
+             * No demand in either period.
+             */
             WHEN previousSalesVelocity <= 0
                  AND salesVelocity <= 0
             THEN 0.0
 
+            /*
+             * Normal percentage growth.
+             */
             ELSE
                 (
                     salesVelocity
@@ -667,10 +665,12 @@ scores AS (
     SELECT
         *,
 
+        /*
+         * Sales velocity score.
+         */
         CASE
-            WHEN MAX(salesVelocity)
-                 OVER () = MIN(salesVelocity)
-                 OVER ()
+            WHEN MAX(salesVelocity) OVER ()
+                 = MIN(salesVelocity) OVER ()
             THEN 50
 
             ELSE
@@ -678,10 +678,12 @@ scores AS (
 
         END AS salesVelocityScore,
 
+        /*
+         * Gross profit velocity score.
+         */
         CASE
-            WHEN MAX(grossProfitVelocity)
-                 OVER () = MIN(grossProfitVelocity)
-                 OVER ()
+            WHEN MAX(grossProfitVelocity) OVER ()
+                 = MIN(grossProfitVelocity) OVER ()
             THEN 50
 
             ELSE
@@ -689,6 +691,13 @@ scores AS (
 
         END AS grossProfitVelocityScore,
 
+        /*
+         * Demand trend score.
+         *
+         * 0% growth      -> 50
+         * +100% growth   -> 100
+         * -100% growth   -> 0
+         */
         MIN(
             100,
             MAX(
@@ -697,24 +706,42 @@ scores AS (
             )
         ) AS demandTrendScore,
 
-       CASE
-        WHEN COALESCE(reorderLevel, 0) <= 0
-        THEN 0
+        /*
+         * Inventory pressure.
+         *
+         * Stock above reorder level -> 0
+         * Stock at reorder level     -> 0
+         * Stock below reorder level  -> increasing pressure
+         */
+        CASE
 
-        ELSE
-            MIN(
-                100,
-                MAX(
-                    0,
-                    (
-                        (COALESCE(reorderLevel, 0) - COALESCE(currentStock, 0))
-                        * 100.0
-                        / COALESCE(reorderLevel, 1)
+            WHEN COALESCE(reorderLevel, 0) <= 0
+            THEN 0
+
+            ELSE
+                MIN(
+                    100,
+                    MAX(
+                        0,
+                        (
+                            (
+                                COALESCE(reorderLevel, 0)
+                                - COALESCE(currentStock, 0)
+                            )
+                            * 100.0
+                            / COALESCE(reorderLevel, 1)
+                        )
                     )
                 )
-            )
-    END AS inventoryPressureScore,
 
+        END AS inventoryPressureScore,
+
+        /*
+         * Confidence.
+         *
+         * More observed sales across both periods
+         * means more confidence in the signal.
+         */
         MIN(
             100,
             (
@@ -733,6 +760,7 @@ scores AS (
    ============================================================ */
 
 SELECT
+
     productId,
     productName,
 
@@ -757,19 +785,20 @@ SELECT
     confidenceScore,
 
     ROUND(
-    (
-        COALESCE(salesVelocityScore, 0) * 0.25
-        +
-        COALESCE(grossProfitVelocityScore, 0) * 0.20
-        +
-        COALESCE(demandTrendScore, 0) * 0.15
-        +
-        COALESCE(inventoryPressureScore, 0) * 0.20
-        +
-        COALESCE(confidenceScore, 0) * 0.20
-    ),
-    2
-) AS buyingScore
+        (
+            COALESCE(salesVelocityScore, 0) * 0.25
+            +
+            COALESCE(grossProfitVelocityScore, 0) * 0.20
+            +
+            COALESCE(demandTrendScore, 0) * 0.15
+            +
+            COALESCE(inventoryPressureScore, 0) * 0.20
+            +
+            COALESCE(confidenceScore, 0) * 0.20
+        ),
+        2
+    ) AS buyingScore
+
 FROM scores
 
 ORDER BY buyingScore DESC
