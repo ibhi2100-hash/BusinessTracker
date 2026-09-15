@@ -62,7 +62,7 @@ function startOfDay(date = new Date()) {
 
   x.setHours(0, 0, 0, 0);
 
-  return x.toISOString();
+  return x.getTime();
 }
 
 function endOfDay(date = new Date()) {
@@ -70,7 +70,7 @@ function endOfDay(date = new Date()) {
 
   x.setHours(23, 59, 59, 999);
 
-  return x.toISOString();
+  return x.getTime();
 }
 
 function daysAgo(days: number) {
