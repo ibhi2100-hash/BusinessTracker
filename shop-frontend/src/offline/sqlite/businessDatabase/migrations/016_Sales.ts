@@ -28,8 +28,8 @@ export const migration016 : Migration = {
   status        TEXT NOT NULL DEFAULT 'completed', -- completed | voided | refunded
   saleGroupId   TEXT,
   mode          TEXT NOT NULL DEFAULT 'LIVE',
-  createdAt     TEXT NOT NULL,
-  updatedAt     TEXT
+  createdAt INTEGER NOT NULL,
+  updatedAt. INTEGER
 );
 
 CREATE INDEX IF NOT EXISTS idx_sales_branch_created
