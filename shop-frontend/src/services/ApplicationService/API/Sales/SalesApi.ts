@@ -25,10 +25,10 @@ export interface SaleLinePayload {
 export interface BuyAnalysisPayload {
   businessId: string,
   branchId: string,
-  currentStart: string,
-  currentEnd: string,
-  previousStart: string,
-  previousEnd: string
+  currentStart: number,
+  currentEnd: number,
+  previousStart: number,
+  previousEnd: number
 }
 
 
