@@ -437,6 +437,17 @@ current_sales AS (
                 ELSE 0
             END
         ) AS grossProfit
+         COUNT(
+
+            CASE
+
+                WHEN s.status = 'completed'
+
+                THEN 1
+
+            END
+
+        ) AS transactionCount
 
     FROM sales s
 
@@ -478,6 +489,18 @@ previous_sales AS (
                 ELSE 0
             END
         ) AS grossProfit
+
+         COUNT(
+
+            CASE
+
+                WHEN s.status = 'completed'
+
+                THEN 1
+
+            END
+
+        ) AS transactionCount
 
     FROM sales s
 
@@ -525,281 +548,467 @@ inventory AS (
    ============================================================ */
 
 product_base AS (
+
     SELECT
-        pr.id AS productId,
-        pr.name AS productName,
-        pr.reorderLevel,
-        pr.costPrice,
-        pr.price,
 
-        COALESCE(i.currentStock, 0) AS currentStock,
+        p.id AS productId,
 
-        COALESCE(cs.unitsSold, 0) AS unitsSold,
-        COALESCE(cs.grossProfit, 0) AS grossProfit,
+        p.name AS productName,
 
-        COALESCE(ps.unitsSold, 0) AS previousUnitsSold,
-        COALESCE(ps.grossProfit, 0) AS previousGrossProfit
+        p.reorderLevel,
 
-    FROM products pr
+        p.costPrice,
 
-    JOIN params p
-      ON pr.businessId = p.businessId
+        p.price,
+
+        COALESCE(i.currentStock, 0)
+
+            AS currentStock,
+
+        COALESCE(cs.unitsSold, 0)
+
+            AS unitsSold,
+
+        COALESCE(cs.grossProfit, 0)
+
+            AS grossProfit,
+
+        COALESCE(cs.transactionCount, 0)
+
+            AS transactionCount,
+
+        COALESCE(ps.unitsSold, 0)
+
+            AS previousUnitsSold,
+
+        COALESCE(ps.grossProfit, 0)
+
+            AS previousGrossProfit,
+
+        COALESCE(ps.transactionCount, 0)
+
+            AS previousTransactionCount
+
+    FROM products p
+
+    CROSS JOIN params x
 
     LEFT JOIN current_sales cs
-      ON cs.productId = pr.id
+
+        ON cs.productId = p.id
 
     LEFT JOIN previous_sales ps
-      ON ps.productId = pr.id
+
+        ON ps.productId = p.id
 
     LEFT JOIN inventory i
-      ON i.productId = pr.id
+
+        ON i.productId = p.id
 
     WHERE
-        pr.isDeleted = 0
-        AND pr.isActive = 1
+
+        p.businessId = x.businessId
+
+        AND p.isDeleted = 0
+
+        AND p.isActive = 1
 
         AND (
-            p.branchId IS NULL
-            OR pr.branchId = p.branchId
+
+            x.branchId IS NULL
+
+            OR p.branchId = x.branchId
+
         )
+
 ),
 
 /* ============================================================
-   RAW VELOCITIES
+
+   VELOCITY METRICS
+
    ============================================================ */
 
-raw_metrics AS (
+velocity_metrics AS (
+
     SELECT
+
         pb.*,
 
-        /*
-         * Units sold per calendar day.
-         */
         pb.unitsSold
-            / CAST(MAX(p.currentDays, 1) AS REAL)
-            AS salesVelocity,
 
-        /*
-         * Gross profit generated per calendar day.
-         */
+            / NULLIF(
+
+                (SELECT currentDays FROM params),
+
+                0
+
+            ) AS salesVelocity,
+
         pb.grossProfit
-            / CAST(MAX(p.currentDays, 1) AS REAL)
-            AS grossProfitVelocity,
 
-        /*
-         * Previous-period units sold per calendar day.
-         */
+            / NULLIF(
+
+                (SELECT currentDays FROM params),
+
+                0
+
+            ) AS grossProfitVelocity,
+
         pb.previousUnitsSold
-            / CAST(MAX(p.previousDays, 1) AS REAL)
-            AS previousSalesVelocity
+
+            / NULLIF(
+
+                (SELECT previousDays FROM params),
+
+                0
+
+            ) AS previousSalesVelocity,
+
+        pb.previousGrossProfit
+
+            / NULLIF(
+
+                (SELECT previousDays FROM params),
+
+                0
+
+            ) AS previousGrossProfitVelocity
 
     FROM product_base pb
 
-    CROSS JOIN params p
 ),
 
 /* ============================================================
+
    DEMAND TREND
+
    ============================================================ */
 
 trend_metrics AS (
+
     SELECT
-        *,
+
+        vm.*,
 
         CASE
 
-            /*
-             * No previous demand, but current demand exists.
-             *
-             * This is treated as strong positive demand emergence.
-             */
-            WHEN previousSalesVelocity <= 0
-                 AND salesVelocity > 0
+            /* New demand */
+
+            WHEN vm.previousSalesVelocity <= 0
+
+                 AND vm.salesVelocity > 0
+
             THEN 1.0
 
-            /*
-             * No demand in either period.
-             */
-            WHEN previousSalesVelocity <= 0
-                 AND salesVelocity <= 0
+            /* No demand */
+
+            WHEN vm.previousSalesVelocity <= 0
+
+                 AND vm.salesVelocity <= 0
+
             THEN 0.0
 
-            /*
-             * Normal percentage growth.
-             */
+            /* Normal growth/decline */
+
             ELSE
+
                 (
-                    salesVelocity
-                    / previousSalesVelocity
+
+                    vm.salesVelocity
+
+                    / vm.previousSalesVelocity
+
                 ) - 1.0
 
         END AS demandGrowth
 
-    FROM raw_metrics
+    FROM velocity_metrics vm
+
 ),
 
 /* ============================================================
-   VELOCITY RANKING
+
+   VELOCITY PERCENTILES
+
    ============================================================ */
 
-ranked AS (
+ranked_metrics AS (
+
     SELECT
-        *,
+
+        tm.*,
 
         PERCENT_RANK() OVER (
-            ORDER BY salesVelocity
+
+            ORDER BY tm.salesVelocity
+
         ) AS salesVelocityPercentile,
 
         PERCENT_RANK() OVER (
-            ORDER BY grossProfitVelocity
+
+            ORDER BY tm.grossProfitVelocity
+
         ) AS grossProfitVelocityPercentile
 
-    FROM trend_metrics
+    FROM trend_metrics tm
+
 ),
 
 /* ============================================================
+
    NORMALIZED SCORES
+
    ============================================================ */
 
-scores AS (
+normalized_scores AS (
+
     SELECT
-        *,
 
-        /*
-         * Sales velocity score.
-         */
-        CASE
-            WHEN MAX(salesVelocity) OVER ()
-                 = MIN(salesVelocity) OVER ()
-            THEN 50
+        rm.*,
 
-            ELSE
-                salesVelocityPercentile * 100
+        /* ----------------------------------------------------
 
-        END AS salesVelocityScore,
+           SALES VELOCITY SCORE
 
-        /*
-         * Gross profit velocity score.
-         */
-        CASE
-            WHEN MAX(grossProfitVelocity) OVER ()
-                 = MIN(grossProfitVelocity) OVER ()
-            THEN 50
+           ---------------------------------------------------- */
 
-            ELSE
-                grossProfitVelocityPercentile * 100
+        ROUND(
 
-        END AS grossProfitVelocityScore,
+            rm.salesVelocityPercentile * 100,
 
-        /*
-         * Demand trend score.
-         *
-         * 0% growth      -> 50
-         * +100% growth   -> 100
-         * -100% growth   -> 0
-         */
-        MIN(
-            100,
-            MAX(
-                0,
-                50 + (demandGrowth * 50)
-            )
+            2
+
+        ) AS salesVelocityScore,
+
+        /* ----------------------------------------------------
+
+           GROSS PROFIT VELOCITY SCORE
+
+           ---------------------------------------------------- */
+
+        ROUND(
+
+            rm.grossProfitVelocityPercentile * 100,
+
+            2
+
+        ) AS grossProfitVelocityScore,
+
+        /* ----------------------------------------------------
+
+           DEMAND TREND SCORE
+
+           
+
+           0% growth     = 50
+
+           +100% growth  = 100
+
+           -100% growth  = 0
+
+           ---------------------------------------------------- */
+
+        ROUND(
+
+            MIN(
+
+                100,
+
+                MAX(
+
+                    0,
+
+                    50 + (rm.demandGrowth * 50)
+
+                )
+
+            ),
+
+            2
+
         ) AS demandTrendScore,
 
-        /*
-         * Inventory pressure.
-         *
-         * Stock above reorder level -> 0
-         * Stock at reorder level     -> 0
-         * Stock below reorder level  -> increasing pressure
-         */
+        /* ----------------------------------------------------
+
+           INVENTORY PRESSURE
+
+           
+
+           Stock >= reorder level = 0
+
+           Stock = 0              = 100
+
+           ---------------------------------------------------- */
+
         CASE
 
-            WHEN COALESCE(reorderLevel, 0) <= 0
+            WHEN rm.reorderLevel <= 0
+
             THEN 0
 
-            ELSE
+            ELSE ROUND(
+
                 MIN(
+
                     100,
+
                     MAX(
+
                         0,
+
                         (
+
                             (
-                                COALESCE(reorderLevel, 0)
-                                - COALESCE(currentStock, 0)
-                            )
-                            * 100.0
-                            / COALESCE(reorderLevel, 1)
+
+                                rm.reorderLevel
+
+                                - rm.currentStock
+
+                            ) * 100.0
+
+                            / rm.reorderLevel
+
                         )
+
                     )
-                )
+
+                ),
+
+                2
+
+            )
 
         END AS inventoryPressureScore,
 
-        /*
-         * Confidence.
-         *
-         * More observed sales across both periods
-         * means more confidence in the signal.
-         */
-        MIN(
-            100,
-            (
+        /* ----------------------------------------------------
+
+           CONFIDENCE
+
+           
+
+           0 transactions  = 0
+
+           20 transactions = 100
+
+           
+
+           This threshold can later become configurable.
+
+           ---------------------------------------------------- */
+
+        ROUND(
+
+            MIN(
+
+                100,
+
                 (
-                    unitsSold
-                    + previousUnitsSold
-                ) * 100.0 / 20
-            )
+
+                    (
+
+                        rm.transactionCount
+
+                        + rm.previousTransactionCount
+
+                    ) * 100.0 / 20
+
+                )
+
+            ),
+
+            2
+
         ) AS confidenceScore
 
-    FROM ranked
+    FROM ranked_metrics rm
+
 )
 
 /* ============================================================
+
    FINAL BUYING SCORE
+
    ============================================================ */
 
 SELECT
 
     productId,
+
     productName,
 
     currentStock,
+
     reorderLevel,
 
     unitsSold,
+
     salesVelocity,
 
     grossProfit,
+
     grossProfitVelocity,
 
     previousUnitsSold,
+
     previousSalesVelocity,
+
+    previousGrossProfit,
+
+    previousGrossProfitVelocity,
 
     demandGrowth,
 
+    transactionCount,
+
+    previousTransactionCount,
+
     salesVelocityScore,
+
     grossProfitVelocityScore,
+
     demandTrendScore,
+
     inventoryPressureScore,
+
     confidenceScore,
 
+    /* --------------------------------------------------------
+
+       BUYING SCORE
+
+       -------------------------------------------------------- */
+
     ROUND(
+
         (
-            COALESCE(salesVelocityScore, 0) * 0.25
+
+            salesVelocityScore * 0.25
+
             +
-            COALESCE(grossProfitVelocityScore, 0) * 0.20
+
+            grossProfitVelocityScore * 0.20
+
             +
-            COALESCE(demandTrendScore, 0) * 0.15
+
+            demandTrendScore * 0.15
+
             +
-            COALESCE(inventoryPressureScore, 0) * 0.20
+
+            inventoryPressureScore * 0.20
+
             +
-            COALESCE(confidenceScore, 0) * 0.20
+
+            confidenceScore * 0.10
+
         ),
+
         2
+
     ) AS buyingScore
 
-FROM scores
+FROM normalized_scores
 
 ORDER BY buyingScore DESC
+
 `;
