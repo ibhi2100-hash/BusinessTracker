@@ -987,7 +987,7 @@ function ScoreReason({
       </span>
 
       <span className="text-[10px] font-semibold text-gray-300">
-        {score.toFixed(0)}
+        {score?.toFixed(0)}
       </span>
     </div>
   );
