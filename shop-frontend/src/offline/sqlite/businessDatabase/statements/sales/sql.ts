@@ -395,3 +395,347 @@ SELECT *
 FROM sales
 ORDER BY createdAt DESC
 `;
+
+export const BUYING_ANALYSIS = `
+WITH
+
+params AS (
+    SELECT
+        ? AS businessId,
+        ? AS branchId,
+        ? AS currentStart,
+        ? AS currentEnd,
+        ? AS previousStart,
+        ? AS previousEnd
+),
+
+/* ============================================================
+   CURRENT SALES
+   ============================================================ */
+
+current_sales AS (
+    SELECT
+        s.productId,
+
+        SUM(
+            CASE
+                WHEN s.status = 'completed'
+                THEN s.quantity
+                ELSE 0
+            END
+        ) AS unitsSold,
+
+        SUM(
+            CASE
+                WHEN s.status = 'completed'
+                THEN s.profit
+                ELSE 0
+            END
+        ) AS grossProfit
+
+    FROM sales s
+    JOIN params p
+      ON s.businessId = p.businessId
+
+    WHERE
+        (
+            p.branchId IS NULL
+            OR s.branchId = p.branchId
+        )
+
+        AND s.createdAt >= p.currentStart
+        AND s.createdAt <= p.currentEnd
+
+    GROUP BY s.productId
+),
+
+/* ============================================================
+   PREVIOUS PERIOD SALES
+   ============================================================ */
+
+previous_sales AS (
+    SELECT
+        s.productId,
+
+        SUM(
+            CASE
+                WHEN s.status = 'completed'
+                THEN s.quantity
+                ELSE 0
+            END
+        ) AS unitsSold,
+
+        SUM(
+            CASE
+                WHEN s.status = 'completed'
+                THEN s.profit
+                ELSE 0
+            END
+        ) AS grossProfit
+
+    FROM sales s
+    JOIN params p
+      ON s.businessId = p.businessId
+
+    WHERE
+        (
+            p.branchId IS NULL
+            OR s.branchId = p.branchId
+        )
+
+        AND s.createdAt >= p.previousStart
+        AND s.createdAt <= p.previousEnd
+
+    GROUP BY s.productId
+),
+
+/* ============================================================
+   INVENTORY
+   ============================================================ */
+
+inventory AS (
+    SELECT
+        i.productId,
+
+        SUM(i.quantity) AS currentStock
+
+    FROM inventories i
+    JOIN params p
+      ON i.businessId = p.businessId
+
+    WHERE
+        (
+            p.branchId IS NULL
+            OR i.branchId = p.branchId
+        )
+
+    GROUP BY i.productId
+),
+
+/* ============================================================
+   PRODUCT BASE
+   ============================================================ */
+
+product_base AS (
+    SELECT
+        pr.id AS productId,
+        pr.name AS productName,
+        pr.reorderLevel,
+        pr.costPrice,
+        pr.price,
+
+        COALESCE(i.currentStock, 0) AS currentStock,
+
+        COALESCE(cs.unitsSold, 0) AS unitsSold,
+        COALESCE(cs.grossProfit, 0) AS grossProfit,
+
+        COALESCE(ps.unitsSold, 0) AS previousUnitsSold,
+        COALESCE(ps.grossProfit, 0) AS previousGrossProfit
+
+    FROM products pr
+
+    JOIN params p
+      ON pr.businessId = p.businessId
+
+    LEFT JOIN current_sales cs
+      ON cs.productId = pr.id
+
+    LEFT JOIN previous_sales ps
+      ON ps.productId = pr.id
+
+    LEFT JOIN inventory i
+      ON i.productId = pr.id
+
+    WHERE
+        pr.isDeleted = 0
+        AND pr.isActive = 1
+
+        AND (
+            p.branchId IS NULL
+            OR pr.branchId = p.branchId
+        )
+),
+
+/* ============================================================
+   RAW VELOCITIES
+   ============================================================ */
+
+raw_metrics AS (
+    SELECT
+        *,
+
+        unitsSold / 30.0
+            AS salesVelocity,
+
+        grossProfit / 30.0
+            AS grossProfitVelocity,
+
+        previousUnitsSold / 30.0
+            AS previousSalesVelocity
+
+    FROM product_base
+),
+
+/* ============================================================
+   DEMAND TREND
+   ============================================================ */
+
+trend_metrics AS (
+    SELECT
+        *,
+
+        CASE
+
+            WHEN previousSalesVelocity <= 0
+                 AND salesVelocity > 0
+            THEN 1.0
+
+            WHEN previousSalesVelocity <= 0
+                 AND salesVelocity <= 0
+            THEN 0.0
+
+            ELSE
+                (
+                    salesVelocity
+                    / previousSalesVelocity
+                ) - 1.0
+
+        END AS demandGrowth
+
+    FROM raw_metrics
+),
+
+/* ============================================================
+   VELOCITY RANKING
+   ============================================================ */
+
+ranked AS (
+    SELECT
+        *,
+
+        PERCENT_RANK() OVER (
+            ORDER BY salesVelocity
+        ) AS salesVelocityPercentile,
+
+        PERCENT_RANK() OVER (
+            ORDER BY grossProfitVelocity
+        ) AS grossProfitVelocityPercentile
+
+    FROM trend_metrics
+),
+
+/* ============================================================
+   NORMALIZED SCORES
+   ============================================================ */
+
+scores AS (
+    SELECT
+        *,
+
+        CASE
+            WHEN MAX(salesVelocity)
+                 OVER () = MIN(salesVelocity)
+                 OVER ()
+            THEN 50
+
+            ELSE
+                salesVelocityPercentile * 100
+
+        END AS salesVelocityScore,
+
+        CASE
+            WHEN MAX(grossProfitVelocity)
+                 OVER () = MIN(grossProfitVelocity)
+                 OVER ()
+            THEN 50
+
+            ELSE
+                grossProfitVelocityPercentile * 100
+
+        END AS grossProfitVelocityScore,
+
+        MIN(
+            100,
+            MAX(
+                0,
+                50 + (demandGrowth * 50)
+            )
+        ) AS demandTrendScore,
+
+       CASE
+        WHEN COALESCE(reorderLevel, 0) <= 0
+        THEN 0
+
+        ELSE
+            MIN(
+                100,
+                MAX(
+                    0,
+                    (
+                        (COALESCE(reorderLevel, 0) - COALESCE(currentStock, 0))
+                        * 100.0
+                        / COALESCE(reorderLevel, 1)
+                    )
+                )
+            )
+    END AS inventoryPressureScore,
+
+        MIN(
+            100,
+            (
+                (
+                    unitsSold
+                    + previousUnitsSold
+                ) * 100.0 / 20
+            )
+        ) AS confidenceScore
+
+    FROM ranked
+)
+
+/* ============================================================
+   FINAL BUYING SCORE
+   ============================================================ */
+
+SELECT
+    productId,
+    productName,
+
+    currentStock,
+    reorderLevel,
+
+    unitsSold,
+    salesVelocity,
+
+    grossProfit,
+    grossProfitVelocity,
+
+    previousUnitsSold,
+    previousSalesVelocity,
+
+    demandGrowth,
+
+    salesVelocityScore,
+    grossProfitVelocityScore,
+    demandTrendScore,
+    inventoryPressureScore,
+    confidenceScore,
+
+    ROUND(
+    (
+        COALESCE(salesVelocityScore, 0) * 0.25
+        +
+        COALESCE(grossProfitVelocityScore, 0) * 0.20
+        +
+        COALESCE(demandTrendScore, 0) * 0.15
+        +
+        COALESCE(inventoryPressureScore, 0) * 0.20
+        +
+        COALESCE(confidenceScore, 0) * 0.20
+    ),
+    2
+) AS buyingScore
+FROM scores
+
+ORDER BY buyingScore DESC
+`;

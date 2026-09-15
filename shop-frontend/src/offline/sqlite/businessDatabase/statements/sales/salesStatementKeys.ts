@@ -28,4 +28,6 @@ export const salesKeys = {
 
   getAllSales: "get_all_sales",
 
+  buyingAnalysis: "buying_analysis",
+
 } as const;

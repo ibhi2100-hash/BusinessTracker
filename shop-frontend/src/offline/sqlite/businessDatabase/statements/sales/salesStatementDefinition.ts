@@ -71,4 +71,9 @@ export const SalesStatementDefinition: StatementDefinition[] = [
     sql: SQL.GET_ALL_SALES,
   },
 
+  {
+    key: salesKeys.buyingAnalysis,
+    sql: SQL.BUYING_ANALYSIS
+  }
+
 ];

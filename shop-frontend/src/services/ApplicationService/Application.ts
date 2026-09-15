@@ -13,6 +13,7 @@ import { ReportApi } from "./API/report/ReportApi";
 import { BusinessApi } from "./API/business/BusinessApi";
 import { SyncApi } from "./API/sync/syncApi";
 import { SyncApplicationService } from "./API/sync/SyncApplicationService";
+import { ExpenseApi } from "./API/expenses/expensesApi";
 
 export class Application {
     readonly onboarding: OnboardingApi;
@@ -25,6 +26,7 @@ export class Application {
     readonly rebuild: RebuildApi;
     readonly context: ContextApi;
     readonly capital: CapitalApi;
+    readonly expense: ExpenseApi;
     readonly dashboard: DashboardApi;
     readonly report: ReportApi;
     readonly sync: SyncApi;
@@ -88,6 +90,13 @@ export class Application {
             new ReportApi(
                 this.manager
             )
+
+        this.expense = 
+            new ExpenseApi(
+                this.manager
+            )
+
+            
         this.business = 
             new BusinessApi(
                 this.manager

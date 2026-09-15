@@ -47,3 +47,30 @@ export interface Sales {
     createdAt: number;
     updatedAt: number | null;
 }
+
+export interface BuyingAnalysisRow {
+    productId: string;
+    productName: string;
+
+    currentStock: number;
+    reorderLevel: number;
+
+    unitsSold: number;
+    salesVelocity: number;
+
+    grossProfit: number;
+    grossProfitVelocity: number;
+
+    previousUnitsSold: number;
+    previousSalesVelocity: number;
+
+    demandGrowth: number;
+
+    salesVelocityScore: number;
+    grossProfitVelocityScore: number;
+    demandTrendScore: number;
+    inventoryPressureScore: number;
+    confidenceScore: number;
+
+    buyingScore: number;
+}

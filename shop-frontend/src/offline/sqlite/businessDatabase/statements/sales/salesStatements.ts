@@ -61,4 +61,7 @@ export class SalesStatement {
     return this.manager.get(salesKeys.getAllSales);
   }
 
+  get buyingAnalysis(){
+    return this.manager.get(salesKeys.buyingAnalysis)
+  }
 }

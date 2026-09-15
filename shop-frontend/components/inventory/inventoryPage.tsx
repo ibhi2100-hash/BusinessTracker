@@ -274,6 +274,7 @@ export default function InventoryPage({
         mode,
         payload: {
           productId,
+          productName: product.name,
           quantity,
           amount: product.price * quantity,
           costPrice: product.costPrice * quantity,
@@ -311,6 +312,7 @@ export default function InventoryPage({
           mode: "LIVE",
           payload: {
             productId: item.productId,
+            productName: item.name,
             quantity: item.quantity,
             amount: item.price * item.quantity,
             costPrice: item.costPrice * item.quantity,

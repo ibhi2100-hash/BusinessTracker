@@ -2,11 +2,13 @@
 // SQLiteSalesRepository.ts
 // ============================================================
 
-import { Sales } from "@business/shared-types";
+import { BuyingAnalysisRow, Sales } from "@business/shared-types";
 
 import { IProjectionEntityRepository } from "./repositoryContract";
 
 import { SalesStatement } from "../../statements/sales/salesStatements";
+import { Rows } from "lucide-react";
+import { BuyAnalysisPayload } from "@/src/services/ApplicationService/API/Sales/SalesApi";
 
 
 export interface SalesListFilters {
@@ -401,6 +403,21 @@ export class SQLiteSalesRepository
     return this.statements.allSales.query<Sales>([]);
 
   }
+
+  async getBuyingAnalysis(buyAnalysis: BuyAnalysisPayload){
+    return await this.statements.buyingAnalysis.query<BuyingAnalysisRow>(
+        [
+            buyAnalysis.businessId,
+            buyAnalysis.branchId,
+            buyAnalysis.currentStart,
+            buyAnalysis.currentEnd,
+            buyAnalysis.previousStart,
+            buyAnalysis.previousEnd,
+        ]
+    );
+
+  
+}
 
 }
 

@@ -1,6 +1,6 @@
 import { BusinessManager } from "@/src/Composer/BusinessManager";
 import { AggregateType } from "@/offline/domain/aggregate";
-import { Sales, salesEventType } from "@business/shared-types";
+import { BuyingAnalysisRow, Sales, salesEventType } from "@business/shared-types";
 import { CommandIntent } from "@/src/BizTru_Karnel/CommandFactory/CommandIntent";
 import { Command } from "lucide-react";
 
@@ -21,6 +21,16 @@ export interface SaleLinePayload {
   unitPrice?: number;
   unitCostPrice?: number;
 }
+
+export interface BuyAnalysisPayload {
+  businessId: string,
+  branchId: string,
+  currentStart: string,
+  currentEnd: string,
+  previousStart: string,
+  previousEnd: string
+}
+
 
 export interface CreateSaleRequest {
   aggregateType?: AggregateType;
@@ -462,6 +472,13 @@ export class SalesApi {
         : 0;
 
     return { marginPercent, summary };
+  }
+
+  async buyAnalysis(buyAnalysis: BuyAnalysisPayload): Promise<BuyingAnalysisRow[] | null>{
+    const app = await this.manager.current();
+
+    return await app.storage.repositories.sales.getBuyingAnalysis(buyAnalysis)
+
   }
 
 }
