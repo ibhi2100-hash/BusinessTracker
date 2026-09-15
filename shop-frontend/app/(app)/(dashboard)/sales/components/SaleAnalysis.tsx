@@ -223,51 +223,83 @@ export default function BuyingAnalysisPage() {
        * comparison.
        */
 
-      let currentStart: string;
-      let currentEnd: string;
-      let previousStart: string;
-      let previousEnd: string;
+      let currentStart: number;
 
-      if (range === "all") {
-        /*
-         * For all-time mode, we still need a bounded comparison.
-         *
-         * Using a large historical window is preferable to
-         * passing undefined into a query that expects dates.
-         */
+let currentEnd: number;
 
-        const now = new Date();
+let previousStart: number;
 
-        currentStart = new Date(2000, 0, 1).toISOString();
-        currentEnd = now.toISOString();
+let previousEnd: number;
 
-        previousStart = new Date(1990, 0, 1).toISOString();
-        previousEnd = currentStart;
-      } else {
-        const days = current.days;
+if (range === "all") {
 
-        const currentStartDate = new Date(current.from!);
+  const now = Date.now();
 
-        const previousEndDate = new Date(currentStartDate);
+  currentStart = new Date(
 
-        previousEndDate.setMilliseconds(
-          previousEndDate.getMilliseconds() - 1
-        );
+    2000,
 
-        const previousStartDate = new Date(
-          previousEndDate
-        );
+    0,
 
-        previousStartDate.setDate(
-          previousStartDate.getDate() - days + 1
-        );
+    1
 
-        currentStart = current.from!;
-        currentEnd = current.to!;
+  ).getTime();
 
-        previousStart = startOfDay(previousStartDate);
-        previousEnd = previousEndDate.toISOString();
-      }
+  currentEnd = now;
+
+  previousStart = new Date(
+
+    1990,
+
+    0,
+
+    1
+
+  ).getTime();
+
+  previousEnd = currentStart;
+
+} else {
+
+  const days = current.days;
+
+  const currentStartDate =
+
+    new Date(current.from!);
+
+  const previousEndDate =
+
+    new Date(currentStartDate);
+
+  previousEndDate.setMilliseconds(
+
+    previousEndDate.getMilliseconds() - 1
+
+  );
+
+  const previousStartDate =
+
+    new Date(previousEndDate);
+
+  previousStartDate.setDate(
+
+    previousStartDate.getDate() - days + 1
+
+  );
+
+  currentStart = current.from!;
+
+  currentEnd = current.to!;
+
+  previousStart =
+
+    startOfDay(previousStartDate);
+
+  previousEnd =
+
+    previousEndDate.getTime();
+
+}
 
       const result =
         await app.sales.buyAnalysis({
