@@ -17,9 +17,9 @@ CREATE TABLE IF NOT EXISTS businesses (
 
     address TEXT,
 
-    createdAt TEXT NOT NULL,
+    createdAt INTEGER NOT NULL,
 
-    activatedAt TEXT,
+    activatedAt INTEGER,
     
     isOnboarding INTEGER DEFAULT 0,
 
