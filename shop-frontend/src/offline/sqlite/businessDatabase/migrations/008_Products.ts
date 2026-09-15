@@ -33,11 +33,11 @@ CREATE TABLE IF NOT EXISTS products (
 
     isDeleted INTEGER DEFAULT 0,
 
-    createdAt TEXT NOT NULL,
+    createdAt INTEGER NOT NULL,
 
-    updatedAt TEXT,
+    updatedAt INTEGER,
 
-    deletedAt TEXT
+    deletedAt INTEGER
 
 );
 
