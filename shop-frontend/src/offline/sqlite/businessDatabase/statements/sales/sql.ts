@@ -564,16 +564,51 @@ raw_metrics AS (
     SELECT
         *,
 
-        unitsSold / 30.0
+        unitsSold /
+            MAX(
+                1,
+                julianday(currentEnd) -
+                julianday(currentStart) + 1
+            )
             AS salesVelocity,
 
-        grossProfit / 30.0
+        grossProfit /
+            MAX(
+                1,
+                julianday(currentEnd) -
+                julianday(currentStart) + 1
+            )
             AS grossProfitVelocity,
 
-        previousUnitsSold / 30.0
+        previousUnitsSold /
+            MAX(
+                1,
+                julianday(previousEnd) -
+                julianday(previousStart) + 1
+            )
             AS previousSalesVelocity
 
-    FROM product_base
+    FROM (
+        SELECT
+            *,
+            (
+                SELECT currentStart
+                FROM params
+            ) AS currentStart,
+            (
+                SELECT currentEnd
+                FROM params
+            ) AS currentEnd,
+            (
+                SELECT previousStart
+                FROM params
+            ) AS previousStart,
+            (
+                SELECT previousEnd
+                FROM params
+            ) AS previousEnd
+        FROM product_base
+    )
 ),
 
 /* ============================================================
