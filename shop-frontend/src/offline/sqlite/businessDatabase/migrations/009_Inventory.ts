@@ -21,8 +21,8 @@ export const migration009: Migration = {
 
             costPrice  INTEGER DEFAULT 0,
 
-            createdAt TEXT NOT NULL,
-            updatedAt TEXT
+            createdAt INTEGER NOT NULL,
+            updatedAt INTEGER
         );
 
         CREATE INDEX IF NOT EXISTS idx_inventory
