@@ -21,7 +21,7 @@ export const migration007: Migration = {
 
         isActive INTEGER DEFAULT 0,
 
-        createdAt TEXT NOT NULL,
+        createdAt INTEGER NOT NULL,
 
         isDefault INTEGER DEFAULT 0
 
