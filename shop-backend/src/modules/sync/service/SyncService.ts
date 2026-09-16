@@ -1,14 +1,39 @@
 import { DomainEvent } from "@business/shared-types";
+
 import { RepositoryRegistry } from "../repositories/RepositoryRegistry.js";
 import { EventValidator } from "./EventValidator.js";
+
 import {
     PushEventsResponse,
     AcceptedEventResult,
     ConflictEventResult,
     RejectedEventResult,
 } from "./SyncProtocol.js";
+
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
-import { AggregateVersionConflictError } from "../conflict/conflictError.js";
+
+import {
+    AggregateVersionConflictError,
+} from "../conflict/conflictError.js";
+
+
+export interface BootstrapSnapshot {
+    business: unknown;
+    branches: unknown[];
+    products: unknown[];
+    inventories: unknown[];
+    sales: unknown[];
+    expenses: unknown[];
+    ledgerEntries: unknown[];
+
+    /**
+     * Global event position represented by this snapshot.
+     *
+     * The client must treat this as the starting point for
+     * subsequent event synchronization.
+     */
+    snapshotPosition: bigint;
+}
 
 
 export class OfflineSyncService {
@@ -110,8 +135,6 @@ export class OfflineSyncService {
             /*
              * =====================================================
              * 2. IDEMPOTENCY CHECK
-             *
-             * Has this exact event already been accepted?
              * =====================================================
              */
 
@@ -156,89 +179,91 @@ export class OfflineSyncService {
 
             try {
 
-              
-                
-                const saved = await prisma.$transaction(
-                    async (tx) => {
+                const saved =
+                    await prisma.$transaction(
+                        async (tx) => {
 
-                        try {
+                            try {
 
-                            console.log(
-                                "[TX] Starting transaction for event:",
-                                event.id
-                            );
-
-                            /*
-                            * =====================================================
-                            * 1. ADVANCE / CREATE AGGREGATE
-                            * =====================================================
-                            */
-
-                            const aggregateVersion =
-                                await this.repositories
-                                    .aggregates
-                                    .advanceVersion(
-                                        event.aggregateId,
-                                        event.aggregateType,
-                                        event.expectedAggregateVersion,
-                                        tx,
-                                    );
-
-
-                            /*
-                            * =====================================================
-                            * 2. APPEND EVENT
-                            * =====================================================
-                            */
-                            const savedEvent =
-                                await this.repositories
-                                    .events
-                                    .append(
-                                        event,
-                                        aggregateVersion,
-                                        tx,
-                                    );
-
-                            /*
-                            * =====================================================
-                            * 3. APPEND OUTBOX
-                            * =====================================================
-                            */
-                            await this.repositories
-                                .outbox
-                                .append(
-                                    savedEvent,
-                                    tx,
+                                console.log(
+                                    "[TX] Starting transaction for event:",
+                                    event.id
                                 );
 
 
-                            return savedEvent;
+                                /*
+                                 * =================================================
+                                 * 1. ADVANCE / CREATE AGGREGATE
+                                 * =================================================
+                                 */
+
+                                const aggregateVersion =
+                                    await this.repositories
+                                        .aggregates
+                                        .advanceVersion(
+                                            event.aggregateId,
+                                            event.aggregateType,
+                                            event.expectedAggregateVersion,
+                                            tx,
+                                        );
 
 
-                        } catch (error) {
+                                /*
+                                 * =================================================
+                                 * 2. APPEND EVENT
+                                 * =================================================
+                                 */
 
-                            console.error(
-                                "[TX] ERROR INSIDE TRANSACTION",
-                                {
-                                    eventId: event.id,
-                                    aggregateId: event.aggregateId,
-                                    aggregateType: event.aggregateType,
-                                    error,
-                                }
-                            );
+                                const savedEvent =
+                                    await this.repositories
+                                        .events
+                                        .append(
+                                            event,
+                                            aggregateVersion,
+                                            tx,
+                                        );
 
-                            /*
-                            * VERY IMPORTANT:
-                            *
-                            * Rethrow the error.
-                            *
-                            * This tells Prisma:
-                            * "The transaction failed — rollback everything."
-                            */
-                            throw error;
+
+                                /*
+                                 * =================================================
+                                 * 3. APPEND OUTBOX
+                                 * =================================================
+                                 */
+
+                                await this.repositories
+                                    .outbox
+                                    .append(
+                                        savedEvent,
+                                        tx,
+                                    );
+
+
+                                return savedEvent;
+
+
+                            } catch (error) {
+
+                                console.error(
+                                    "[TX] ERROR INSIDE TRANSACTION",
+                                    {
+                                        eventId:
+                                            event.id,
+
+                                        aggregateId:
+                                            event.aggregateId,
+
+                                        aggregateType:
+                                            event.aggregateType,
+
+                                        error,
+                                    }
+                                );
+
+                                throw error;
+                            }
                         }
-                    }
-                );
+                    );
+
 
                 /*
                  * ================================================
@@ -283,10 +308,10 @@ export class OfflineSyncService {
                 ) {
 
                     /*
-                     * The transaction rolled back.
+                     * The transaction has already rolled back.
                      *
-                     * Now read the authoritative server state
-                     * outside the transaction.
+                     * Read authoritative server state outside
+                     * the failed transaction.
                      */
 
                     const serverVersion =
@@ -404,5 +429,243 @@ export class OfflineSyncService {
                     rejected.length,
             },
         };
+    }
+
+
+    /*
+     * =========================================================
+     * PULL
+     * =========================================================
+     */
+
+    async pull() {
+
+        /*
+         * Implement after bootstrap.
+         *
+         * Expected semantics:
+         *
+         *     events where globalPosition > clientPosition
+         *
+         * ordered by globalPosition ASC.
+         */
+    }
+
+
+    /*
+     * =========================================================
+     * BOOTSTRAP
+     * =========================================================
+     *
+     * Creates the initial read-model snapshot for a new device.
+     *
+     * The snapshot is scoped to one business + branch context.
+     *
+     * Business-wide projections are loaded by businessId.
+     * Branch-operational projections are loaded by
+     * businessId + branchId.
+     * =========================================================
+     */
+
+    async bootstrap(
+        businessId: string,
+        branchId: string
+    ): Promise<BootstrapSnapshot> {
+
+        return prisma.$transaction(
+            async (tx) => {
+
+                /*
+                * ---------------------------------------------------------
+                * LOAD BUSINESS
+                * ---------------------------------------------------------
+                */
+
+                const business =
+                    await this.repositories
+                        .business
+                        .findByBusinessId(
+                            businessId,
+                            tx
+                        );
+
+
+                if (!business) {
+
+                    throw new Error(
+                        `Business not found: ${businessId}`
+                    );
+                }
+
+
+                /*
+                * ---------------------------------------------------------
+                * LOAD + VALIDATE BRANCHES
+                * ---------------------------------------------------------
+                *
+                * The branch must belong to the requested business.
+                * ---------------------------------------------------------
+                */
+
+                const branches =
+                    await this.repositories
+                        .branch
+                        .findByBusinessId(
+                            businessId,
+                            tx
+                        );
+
+
+                const branch =
+                    branches.find(
+                        item =>
+                            item.id === branchId
+                    );
+
+
+                if (!branch) {
+
+                    throw new Error(
+                        `Branch ${branchId} does not belong to business ${businessId}`
+                    );
+                }
+
+
+                /*
+                * ---------------------------------------------------------
+                * CAPTURE SNAPSHOT POSITION
+                * ---------------------------------------------------------
+                *
+                * IMPORTANT:
+                *
+                * This MUST use the same transaction.
+                *
+                * The position becomes the synchronization boundary
+                * represented by the snapshot.
+                *
+                * The client will subsequently pull:
+                *
+                *     globalPosition > snapshotPosition
+                * ---------------------------------------------------------
+                */
+
+                const snapshotPosition =
+                    await this.repositories
+                        .events
+                        .getGlobalPosition(
+                            tx
+                        );
+
+
+                /*
+                * ---------------------------------------------------------
+                * LOAD PROJECTIONS
+                * ---------------------------------------------------------
+                *
+                * All reads use the same transaction.
+                * ---------------------------------------------------------
+                */
+
+                const [
+                    products,
+                    inventories,
+                    sales,
+                    expenses,
+                    ledgerEntries,
+                ] = await Promise.all([
+
+                    /*
+                    * Product is business-scoped.
+                    *
+                    * branchId may be nullable, therefore we must not
+                    * restrict products to the selected branch.
+                    */
+                    this.repositories
+                        .products
+                        .findByBusinessId(
+                            businessId,
+                            tx
+                        ),
+
+
+                    /*
+                    * Inventory is business + branch scoped.
+                    */
+                    this.repositories
+                        .inventory
+                        .findByBusinessAndBranch(
+                            businessId,
+                            branchId,
+                            tx
+                        ),
+
+
+                    /*
+                    * Sales are business + branch scoped.
+                    */
+                    this.repositories
+                        .sales
+                        .findByBusinessIdAndBranchId(
+                            businessId,
+                            branchId,
+                            tx
+                        ),
+
+
+                    /*
+                    * Expenses are business + branch scoped.
+                    */
+                    this.repositories
+                        .expense
+                        .findByBusinessIdAndBranchId(
+                            businessId,
+                            branchId,
+                            tx
+                        ),
+
+
+                    /*
+                    * Ledger is business + branch scoped.
+                    */
+                    this.repositories
+                        .ledger
+                        .getByBusinessAndBranch(
+                            businessId,
+                            branchId,
+                            tx
+                        ),
+                ]);
+
+
+                /*
+                * ---------------------------------------------------------
+                * RETURN SNAPSHOT
+                * ---------------------------------------------------------
+                */
+
+                return {
+
+                    businessId,
+
+                    branchId,
+
+                    business,
+
+                    branches,
+
+                    products,
+
+                    inventories,
+
+                    sales,
+
+                    expenses,
+
+                    ledgerEntries,
+
+                    snapshotPosition,
+                };
+            }
+        );
     }
 }

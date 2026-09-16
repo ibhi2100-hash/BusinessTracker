@@ -138,6 +138,25 @@ export class BusinessRepository {
                 ),
         });
     }
+
+    async findByBusinessId(
+        businessId: string,
+        tx: Prisma.TransactionClient = prisma
+    ): Promise<Business | null> {
+
+        const row =
+            await tx.business.findUnique({
+                where: {
+                    id: businessId,
+                },
+            });
+
+        if (!row) {
+            return null;
+        }
+
+        return BusinessMapper.fromRow(row);
+    }
 }
 
 

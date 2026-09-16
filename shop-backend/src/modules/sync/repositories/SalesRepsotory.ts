@@ -146,21 +146,17 @@ export class SalesRepository {
 
         const rows =
             await this.db.sale.findMany({
-
                 where: {
                     branchId,
                 },
-
                 orderBy: {
                     createdAt: "desc",
                 },
-
             });
 
         return rows.map(
             SalesMapper.fromRow
         );
-
     }
 
 
@@ -579,6 +575,47 @@ export class SalesRepository {
             SalesMapper.fromRow
         );
 
+    }
+
+    async findByBusinessId(
+        businessId: string
+    ): Promise<Sales[]> {
+
+        const rows =
+            await this.db.sale.findMany({
+                where: {
+                    businessId,
+                },
+                orderBy: {
+                    createdAt: "desc",
+                },
+            });
+
+        return rows.map(
+            SalesMapper.fromRow
+        );
+    }
+
+    async findByBusinessIdAndBranchId(
+        businessId: string,
+        branchId: string,
+        tx: Prisma.TransactionClient
+    ): Promise<Sales[]> {
+
+        const rows =
+            await tx.sale.findMany({
+                where: {
+                    businessId,
+                    branchId,
+                },
+                orderBy: {
+                    createdAt: "desc",
+                },
+            });
+
+        return rows.map(
+            SalesMapper.fromRow
+        );
     }
 
 }

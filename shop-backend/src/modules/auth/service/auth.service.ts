@@ -10,13 +10,7 @@ type AuthResult = {
   user: User;
   accessToken: string;
   accessExpiresIn: number;
-
   refreshToken: string;
-  refreshExpiresIn: number;
-
-  activeBranch: any;
-  branches: any[];
-  business: any;
 };
 
 export class AuthService {
@@ -25,7 +19,7 @@ export class AuthService {
     private tokenService: TokenService,
     private sessionService: SessionService
   ) {}
-async registerUser(dto: RegisterDto) {
+async registerBusinessOwner(dto: RegisterDto) {
 
   if (!dto.email) {
     throw new Error("Email is required");
@@ -46,7 +40,7 @@ async registerUser(dto: RegisterDto) {
     await bcrypt.hash(dto.password, 12);
 
   const user =
-    await this.authRepo.createUser({
+    await this.authRepo.createOwner({
       ...dto,
       password: hashedPassword,
     });
@@ -85,6 +79,8 @@ async registerUser(dto: RegisterDto) {
   const user =
     await this.authRepo.findByEmail(dto.email);
 
+    console.log("This is the user that is trying to login: ", user)
+
   if (!user) {
     throw new Error("Invalid credentials");
   }
@@ -107,9 +103,6 @@ async registerUser(dto: RegisterDto) {
     throw new Error("Invalid credentials");
   }
 
-  const business =
-    await this.authRepo.findBusiness(user.id);
-
   const access =
     this.tokenService.generateAccessToken({
       userId: user.id,
@@ -126,25 +119,6 @@ async registerUser(dto: RegisterDto) {
       metadata?.userAgent
     );
 
-  let branches: any[] = [];
-  let activeBranch: any = null;
-
-  if (user.businessId) {
-    branches =
-      await this.authRepo.getBusinessBranches(
-        user.businessId
-      );
-
-    activeBranch =
-      branches.find(
-        (x) => x.id === user.branchId
-      ) ??
-      branches.find(
-        (x) => x.isDefault
-      ) ??
-      branches[0] ??
-      null;
-  }
 
   return {
     user,
@@ -155,15 +129,7 @@ async registerUser(dto: RegisterDto) {
     accessExpiresIn:
       access.expiresIn,
 
-    refreshToken:
-      refresh.token,
-
-    refreshExpiresIn:
-      refresh.expiresIn,
-
-    activeBranch,
-    branches,
-    business,
+    refreshToken: refresh.token
   };
 }
   async getCurrentUser(userId: string) {

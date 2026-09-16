@@ -28,13 +28,42 @@ export class AuthRepository {
     return prisma.user.create({
          data: {
             ...data,
-            role: Role.ADMIN
+            role: data.role
         }
     }
        
     );
 
   }
+
+  async createOwner(data: {
+    name: string;
+    email: string;
+    password: string;
+    phone?: string;
+}) {
+
+    return prisma.user.create({
+
+        data: {
+
+            name: data.name,
+
+            email: data.email,
+
+            password: data.password,
+
+            role: Role.ADMIN,
+
+            isActive: true,
+
+            onboardingCompleted: false,
+
+        },
+
+    });
+
+}
 
   /**
    * Create staff for a business.
@@ -112,5 +141,51 @@ export class AuthRepository {
     })
 
   }
+
+  async assignBusiness(
+    userId: string,
+    businessId: string
+) {
+    return prisma.user.update({
+        where: {
+            id: userId,
+        },
+
+        data: {
+            businessId,
+        },
+    });
+}
+
+
+async assignBranch(
+    userId: string,
+    branchId: string
+) {
+    return prisma.user.update({
+        where: {
+            id: userId,
+        },
+
+        data: {
+            branchId,
+        },
+    });
+}
+
+
+async completeOnboarding(
+    userId: string
+) {
+    return prisma.user.update({
+        where: {
+            id: userId,
+        },
+
+        data: {
+            onboardingCompleted: true,
+        },
+    });
+}
   
 }

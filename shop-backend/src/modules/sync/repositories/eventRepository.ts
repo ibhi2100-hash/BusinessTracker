@@ -104,6 +104,21 @@ export class EventRepository {
     return rows.map(EventMapper.fromRow);
   }
 
+  async getGlobalPosition(
+    tx: Prisma.TransactionClient = prisma
+  ): Promise<bigint> {
+      const event = await tx.event.findFirst({
+          orderBy: {
+              globalPosition: "desc",
+          },
+          select: {
+              globalPosition: true,
+          },
+      });
+
+      return event?.globalPosition ?? 0n;
+  }
+
   async findById(
     eventId: string,
   ): Promise<ExistingEvent | null> {

@@ -16,7 +16,7 @@ export class AuthController {
   ): Promise<Response> {
     try {
       const result =
-        await this.authService.registerUser(
+        await this.authService.registerBusinessOwner(
           req.body
         );
 
@@ -99,13 +99,7 @@ export class AuthController {
         accessToken:
           result.accessToken,
         accessExpiresIn:
-          result.accessExpiresIn,
-        activeBranch:
-          result.activeBranch,
-        branches:
-          result.branches,
-        business:
-          result.business,
+          result.accessExpiresIn
       });
     } catch (error) {
       return res.status(401).json({

@@ -112,7 +112,7 @@ export class ProductRepository {
      * ============================================================
      */
 
-    async findByBranch(
+    async findByBusinessAndBranch(
         businessId: string,
         branchId: string
     ): Promise<Product[]> {
@@ -243,6 +243,28 @@ export class ProductRepository {
         });
 
     }
+
+    async findByBusinessId(
+        businessId: string,
+        tx: Prisma.TransactionClient
+    ): Promise<Product[]> {
+
+        const rows =
+            await tx.product.findMany({
+                where: {
+                    businessId,
+                },
+                orderBy: {
+                    createdAt: "asc",
+                },
+            });
+
+        return rows.map(
+            ProductMapper.fromRow
+        );
+    }
+
+
 
 }
 

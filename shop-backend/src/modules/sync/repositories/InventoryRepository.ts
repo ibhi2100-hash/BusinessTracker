@@ -136,12 +136,13 @@ export class InventoryRepository {
      * ============================================================
      */
 
-    async findByBranch(
+    async findByBusinessAndBranch(
         businessId: string,
-        branchId: string
+        branchId: string,
+        tx: Prisma.TransactionClient
     ): Promise<Inventory[]> {
 
-        const rows = await this.db.inventory.findMany({
+        const rows = await tx.inventory.findMany({
             where: {
                 businessId,
                 branchId,
@@ -155,6 +156,27 @@ export class InventoryRepository {
             InventoryMapper.fromRow
         );
     }
+
+    async findByBusinessId(
+        businessId: string
+    ): Promise<Inventory[]> {
+
+        const rows =
+            await this.db.inventory.findMany({
+                where: {
+                    businessId,
+                },
+                orderBy: {
+                    createdAt: "asc",
+                },
+            });
+
+        return rows.map(
+            InventoryMapper.fromRow
+        );
+    }
+
+
 
 
     /*

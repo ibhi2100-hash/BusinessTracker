@@ -323,6 +323,36 @@ export class LedgerRepositoryImpl
 
     }
 
+    async getByBusinessAndBranch(
+        businessId: string,
+        branchId: string,
+        tx: Prisma.TransactionClient
+    ): Promise<LedgerEntry[]> {
+
+        const rows =
+            await tx.ledgerEntry.findMany({
+
+                where: {
+                    businessId,
+                    branchId,
+                },
+
+                orderBy: [
+                    {
+                        createdAt: "asc",
+                    },
+                    {
+                        index: "asc",
+                    },
+                ],
+
+            });
+
+        return rows.map(
+            LedgerMapper.fromRow
+        );
+    }
+
 
     /*
      * ============================================================

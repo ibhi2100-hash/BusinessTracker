@@ -314,23 +314,6 @@ if (range === "all") {
          }
         );
 
-        console.log(
-        "[BuyingAnalysis] RESULT:",
-        result
-      );
-
-      console.log(
-        "[BuyingAnalysis] FIRST ROW:",
-        result[0]
-      );
-
-      console.log(
-        "[BuyingAnalysis] buyingScore:",
-        result[0]?.buyingScore,
-        "type:",
-        typeof result[0]?.buyingScore
-      );
-
       setRows(result);
     } catch (err) {
       console.error(err);

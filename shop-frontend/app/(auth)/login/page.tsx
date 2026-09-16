@@ -17,10 +17,12 @@ import {
 } from "lucide-react";
 
 import { useAuthStore } from "@/src/store/useAuthStore";
-import { SQLiteAuthRepository } from "@/src/offline/sqlite/clientDatabase/repositories/SQLiteAuthRepository/SQLiteAuthRepository";
+import { useApplication } from "@/src/services/ApplicationService/ApplicationContext";
 
 
 export default function LoginPage() {
+
+  const app  = useApplication();
   const router = useRouter();
   const login = useAuthStore((state) => state.setLogin);
 
@@ -51,19 +53,25 @@ export default function LoginPage() {
       );
 
       const result = await res.json();
-
+      console.log("This is the backend Result we get: ", result)
       if (!res.ok) {
         throw new Error(result.message || "Login failed");
       }
-      localStorage.setItem("accessToken", result.accessToken);
+
+      const bootstrapData = {
+        businessId: result.user.businessId,
+        branchId: result.user.branchId,
+        accessToken: result.accessToken
+      }
+
+      await app.business.BootstrapBusiness(bootstrapData)
+      
 
 
       login(
         result.user,
         result.accessToken,
         result.expiresIn,
-        result.branches,
-        result.activeBranch.id
       );
 
 

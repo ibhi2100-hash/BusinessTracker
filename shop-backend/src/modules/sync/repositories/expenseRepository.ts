@@ -151,35 +151,53 @@ export class ExpenseRepository {
 
     }
 
+    async findByBusinessId(
+        businessId: string
+    ): Promise<Expense[]> {
+
+        const rows =
+            await this.db.expense.findMany({
+                where: {
+                    businessId,
+                },
+                orderBy: {
+                    incurredAt: "desc",
+                },
+            });
+
+        return rows.map(
+            ExpenseMapper.fromRow
+        );
+    }
+
+    async findByBusinessIdAndBranchId(
+        businessId: string,
+        branchId: string,
+        tx: Prisma.TransactionClient
+    ): Promise<Expense[]> {
+
+        const rows =
+            await tx.expense.findMany({
+                where: {
+                    businessId,
+                    branchId,
+                },
+                orderBy: {
+                    incurredAt: "desc",
+                },
+            });
+
+        return rows.map(
+            ExpenseMapper.fromRow
+        );
+    }
+
 
     /*
      * ============================================================
      * FIND BY BRANCH
      * ============================================================
      */
-
-    async findByBranch(
-        branchId: string
-    ): Promise<Expense[]> {
-
-        const rows =
-            await this.db.expense.findMany({
-
-                where: {
-                    branchId,
-                },
-
-                orderBy: {
-                    incurredAt: "desc",
-                },
-
-            });
-
-        return rows.map(
-            ExpenseMapper.fromRow
-        );
-
-    }
 
 
     /*

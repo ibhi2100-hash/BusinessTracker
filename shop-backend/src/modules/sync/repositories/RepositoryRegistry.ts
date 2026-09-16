@@ -1,3 +1,4 @@
+import { AuthRepository } from "../../auth/repository/auth.repository.js";
 import { AggregateRepository } from "./aggregateRepository.js";
 import { BranchRepository } from "./BranchRepository.js";
 import { BusinessRepository } from "./BusinessRepository.js";
@@ -36,6 +37,8 @@ export class RepositoryRegistry {
 
     readonly ledger: LedgerRepositoryImpl;
 
+    readonly user: AuthRepository;
+
 
     constructor(){
         this.aggregates = new AggregateRepository()
@@ -61,5 +64,7 @@ export class RepositoryRegistry {
         this.expense = new ExpenseRepository();
 
         this.ledger = new LedgerRepositoryImpl();
+
+        this.user = new AuthRepository();
     }
 }

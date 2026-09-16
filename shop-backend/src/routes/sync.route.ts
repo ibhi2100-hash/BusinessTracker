@@ -40,5 +40,13 @@ export function createSyncRouter(
         )
     );
 
+    router.post(
+        "/bootstrap",
+        authMiddleware,
+        offlineSyncController.bootstrap.bind(
+            offlineSyncController
+        )
+    );
+
     return router;
 }
