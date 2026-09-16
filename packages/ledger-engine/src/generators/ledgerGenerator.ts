@@ -1,4 +1,4 @@
-import { Account, LedgerEntry, DomainEvent } from "@business/shared-types"
+import { Account, LedgerEntry, DomainEvent, expenseEventType } from "@business/shared-types"
 import { OpeningEventType, salesEventType, financeEventType, InventoryEventType,  } from "@business/shared-types"
 
 type Direction = "DEBIT" | "CREDIT";
@@ -204,6 +204,72 @@ export function generateLedgerEntries(event: DomainEvent<any>): LedgerEntry[] {
         buildEntry(event, 1, Account.CASH, "CREDIT", payload.amount),
       ];
       break;
+
+    /**
+     * EXPENSE RECORDED (new expense domain)
+     * Dr Expense
+     * Cr Cash
+     *
+     * Same economics as EXPENSES_ADDED — cash leaves the business
+     * and an operating expense is recognized.
+     */
+    case expenseEventType.EXPENSE_RECORDED: {
+      const amount = Number(payload.amount) || 0;
+
+      entries = [
+        buildEntry(event, 0, Account.EXPENSE, "DEBIT", amount),
+        buildEntry(event, 1, Account.CASH, "CREDIT", amount),
+      ];
+      break;
+    }
+
+    /**
+     * EXPENSE VOIDED
+     * Reverse the original booking:
+     * Dr Cash
+     * Cr Expense
+     *
+     * Restores cash and removes the expense from P&L
+     * (reports that filter status already ignore voided rows).
+     */
+    case expenseEventType.EXPENSE_VOIDED: {
+      // Prefer explicit amount on payload; otherwise you must load
+      // the projection and pass amount into the event when voiding.
+      const amount = Number(payload.amount) || 0;
+
+      if (amount <= 0) {
+        // No financial movement if amount unknown / zero
+        return [];
+      }
+
+      entries = [
+        buildEntry(event, 0, Account.CASH, "DEBIT", amount),
+        buildEntry(event, 1, Account.EXPENSE, "CREDIT", amount),
+      ];
+      break;
+    }
+
+    /**
+     * EXPENSE REIMBURSED
+     * Cash comes back into the business:
+     * Dr Cash
+     * Cr Expense
+     *
+     * Full or partial — amount is the reimbursed portion only.
+     */
+    case expenseEventType.EXPENSE_REIMBURSED: {
+      const amount = Number(payload.amount) || 0;
+
+      if (amount <= 0) {
+        return [];
+      }
+
+      entries = [
+        buildEntry(event, 0, Account.CASH, "DEBIT", amount),
+        buildEntry(event, 1, Account.EXPENSE, "CREDIT", amount),
+      ];
+      break;
+    }
 
     /**
      * CAPITAL INJECTION

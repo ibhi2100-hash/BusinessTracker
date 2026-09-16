@@ -15,6 +15,7 @@ import { SQLiteAggregateRepository } from "./SQLiteAggregateRepository/SQLiteAgg
 import { SyncStateRepository } from "../sync/syncEngine";
 import { SQLiteSyncStateRepository } from "./SQLiteSyncRepository/SQLiteSyncRepository";
 import { QueryRunner } from "@/src/storage/queryRunner/QueryRunner";
+import { SQLiteExpenseRepository } from "./SQLiteProjectionRepository/SQLiteExpenseRepository";
 
 
 export class BusinessRepositoryRegistry {
@@ -32,6 +33,8 @@ export class BusinessRepositoryRegistry {
     readonly inventory: SQLiteInventoryRepository;
 
     readonly sales: SQLiteSalesRepository;
+
+    readonly expenses: SQLiteExpenseRepository;
 
     readonly dashboard: SQLiteDashboardRepository;
 
@@ -78,6 +81,11 @@ export class BusinessRepositoryRegistry {
         this.sales = 
             new SQLiteSalesRepository(
                 statements.sales
+            )
+
+        this.expenses = 
+            new SQLiteExpenseRepository(
+                statements.expenses
             )
 
         this.ledger = 

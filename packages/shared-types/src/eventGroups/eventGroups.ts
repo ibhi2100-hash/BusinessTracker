@@ -53,6 +53,12 @@ export const salesEventType = {
         SALE_REFUNDED: "SALE_REFUNDED"
 }
 
+export const expenseEventType = {
+  EXPENSE_RECORDED: "EXPENSE_RECORDED",
+  EXPENSE_VOIDED: "EXPENSE_VOIDED",
+  EXPENSE_REIMBURSED: "EXPENSE_REIMBURSED",
+} as const;
+
 export const userEventTypes = {
     CREATE_USER: "CREATE_USER",
     LOGIN_USER: "LOGIN_USER"

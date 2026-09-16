@@ -4,6 +4,7 @@ import { BranchStatementDefinition } from "./branch/BranchStatementDefintion";
 import { BusinessStatementDefinition } from "./business/BusinessDefiinition";
 import { DashboardStatementDefinition } from "./dashboard/dashboardStatementsDefinition";
 import { EventStatementsDefinition } from "./events/EventDefinitions";
+import { ExpenseStatementDefinition } from "./expense/expenseStatementDefinition";
 import { InventoryStatementDefinition } from "./inventory/InventoryStatementDefinition";
 import { LedgerStatementDefinition } from "./ledger/ledgerStatementDefinition";
 import { LogicClockDefinition } from "./logicClock/logicClockDefinition"
@@ -21,6 +22,7 @@ export const BusinessStatementsDefinitions: StatementDefinition[] = [
     ...ProductStatementDefinition,
     ...InventoryStatementDefinition,
     ...SalesStatementDefinition,
+    ...ExpenseStatementDefinition,
     ...LedgerStatementDefinition,
     ...DashboardStatementDefinition,
     ...ReportStatementDefinition,

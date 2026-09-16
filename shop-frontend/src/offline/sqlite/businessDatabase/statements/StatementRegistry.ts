@@ -13,6 +13,7 @@ import { ReportStatements } from "./report/reportStatements";
 import { OutboxStatments } from "./outbox/outboxStatements";
 import { AggregateStatements } from "./aggregates/aggregateStatements";
 import { SyncStateStatements } from "./syncState/syncStateStatements";
+import { ExpenseStatement } from "./expense/expenseStatements";
 
 
 export class BusinessStatementRegistry {
@@ -20,6 +21,7 @@ export class BusinessStatementRegistry {
     readonly inventory: InventoryStatements;
     readonly products: ProductStatements;
     readonly sales: SalesStatement;
+    readonly expenses: ExpenseStatement;
     readonly ledger: LedgerStatements;
     readonly business: BusinessStatements;
     readonly branches: BranchStatements;
@@ -58,7 +60,10 @@ export class BusinessStatementRegistry {
             new DashboardStatements(manager);
 
         this.report = 
-            new ReportStatements(manager)
+            new ReportStatements(manager);
+
+        this.expenses = 
+            new ExpenseStatement(manager);
 
         this.outbox = 
             new OutboxStatments(manager)
@@ -71,5 +76,7 @@ export class BusinessStatementRegistry {
 
         this.syncState = 
             new SyncStateStatements(manager)
+
+        
     }
 }

@@ -20,3 +20,4 @@ __exportStar(require("./reducers/branchReducer"), exports);
 __exportStar(require("./reducers/inventoryReducer"), exports);
 __exportStar(require("./reducers/productReducer"), exports);
 __exportStar(require("./reducers/salesReducer"), exports);
+__exportStar(require("./reducers/expenseReducer"), exports);

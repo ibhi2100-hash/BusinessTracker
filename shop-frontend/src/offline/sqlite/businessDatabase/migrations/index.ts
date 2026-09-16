@@ -15,6 +15,7 @@ import { migration016 } from "./016_Sales";
 import { migration017 } from "./017_SyncState";
 import { migration014 } from "./014_pendingCommands";
 import { migration015 } from "./015_EventResolution";
+import { migration018 } from "./018_Expenses";
 
 
 
@@ -35,5 +36,6 @@ export const migrations = [
     migration014,
     migration015,
     migration016,
-    migration017
+    migration017,
+    migration018
 ]

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userEventTypes = exports.salesEventType = exports.OpeningEventType = exports.InventoryEventType = exports.financeEventType = exports.BusinessEventTypes = void 0;
+exports.userEventTypes = exports.expenseEventType = exports.salesEventType = exports.OpeningEventType = exports.InventoryEventType = exports.financeEventType = exports.BusinessEventTypes = void 0;
 exports.BusinessEventTypes = {
     BUSINESS_CREATED: "BUSINESS_CREATED",
     BUSINESS_ACTIVATION: "BUSINESS_ACTIVATION",
@@ -44,6 +44,11 @@ exports.salesEventType = {
     SALE_ADDED: "SALE_ADDED",
     SALE_VOIDED: "SALE_VOIDED",
     SALE_REFUNDED: "SALE_REFUNDED"
+};
+exports.expenseEventType = {
+    EXPENSE_RECORDED: "EXPENSE_RECORDED",
+    EXPENSE_VOIDED: "EXPENSE_VOIDED",
+    EXPENSE_REIMBURSED: "EXPENSE_REIMBURSED",
 };
 exports.userEventTypes = {
     CREATE_USER: "CREATE_USER",

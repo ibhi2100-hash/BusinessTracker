@@ -5,6 +5,7 @@ export * from "./entities/Branch";
 export * from "./entities/User"
 export * from "./entities/Sales"
 export * from "./entities/dashboard"
+export * from "./entities/Expense"
 
 
 export * from "./events/DomainEvents";

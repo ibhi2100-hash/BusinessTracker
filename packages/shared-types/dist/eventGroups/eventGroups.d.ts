@@ -41,6 +41,11 @@ export declare const salesEventType: {
     SALE_VOIDED: string;
     SALE_REFUNDED: string;
 };
+export declare const expenseEventType: {
+    readonly EXPENSE_RECORDED: "EXPENSE_RECORDED";
+    readonly EXPENSE_VOIDED: "EXPENSE_VOIDED";
+    readonly EXPENSE_REIMBURSED: "EXPENSE_REIMBURSED";
+};
 export declare const userEventTypes: {
     CREATE_USER: string;
     LOGIN_USER: string;
