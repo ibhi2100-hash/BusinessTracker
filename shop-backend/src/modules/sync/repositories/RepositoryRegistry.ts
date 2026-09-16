@@ -4,6 +4,7 @@ import { BusinessRepository } from "./BusinessRepository.js";
 import { CustomersRepository } from "./CustomersRepository.js";
 import { EmployeesRepository } from "./EmployeesRepository.js";
 import { EventRepository } from "./eventRepository.js";
+import { ExpenseRepository } from "./expenseRepository.js";
 import { InventoryRepository } from "./InventoryRepository.js";
 import { LedgerRepositoryImpl } from "./LedgerRepository.js";
 import { OutboxRepository } from "./OutboxRepository.js";
@@ -31,6 +32,8 @@ export class RepositoryRegistry {
 
     readonly sales: SalesRepository;
 
+    readonly expense: ExpenseRepository;
+
     readonly ledger: LedgerRepositoryImpl;
 
 
@@ -54,6 +57,8 @@ export class RepositoryRegistry {
         this.employess = new EmployeesRepository();
 
         this.sales = new SalesRepository();
+
+        this.expense = new ExpenseRepository();
 
         this.ledger = new LedgerRepositoryImpl();
     }

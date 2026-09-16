@@ -93,6 +93,11 @@ export type LedgerEntry = Prisma.LedgerEntryModel
  */
 export type Sale = Prisma.SaleModel
 /**
+ * Model Expense
+ * 
+ */
+export type Expense = Prisma.ExpenseModel
+/**
  * Model OutboxEvent
  * 
  */

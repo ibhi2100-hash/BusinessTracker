@@ -27,19 +27,6 @@ export class ProjectionWorker {
 
             try {
 
-                console.log(
-                    "[PROJECTION] Processing outbox:",
-                    {
-                        eventId: item.eventId,
-                        aggregateId: item.aggregateId,
-                        aggregateType: item.aggregateType,
-                        aggregateVersion:
-                            item.aggregateVersion,
-                        globalPosition:
-                            item.globalPosition,
-                    }
-                );
-
 
                 /*
                  * =================================================
@@ -87,32 +74,12 @@ export class ProjectionWorker {
                     );
 
 
-                console.log(
-                    "[PROJECTION] Processed:",
-                    {
-                        eventId: event.id,
-                        globalPosition:
-                            event.globalPosition,
-                    }
-                );
-
-
             } catch (error) {
 
                 const message =
                     error instanceof Error
                         ? error.message
                         : String(error);
-
-
-                console.error(
-                    "[PROJECTION] Failed:",
-                    {
-                        outboxId: item.eventId,
-                        eventId: item.eventId,
-                        error: message,
-                    }
-                );
 
 
                 await this.repositories

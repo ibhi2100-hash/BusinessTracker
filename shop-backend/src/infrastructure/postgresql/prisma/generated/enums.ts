@@ -107,6 +107,25 @@ export const SaleStatus = {
 export type SaleStatus = (typeof SaleStatus)[keyof typeof SaleStatus]
 
 
+export const ExpenseStatus = {
+  recorded: 'recorded',
+  voided: 'voided',
+  reimbursed: 'reimbursed'
+} as const
+
+export type ExpenseStatus = (typeof ExpenseStatus)[keyof typeof ExpenseStatus]
+
+
+export const ExpensePaymentMethod = {
+  cash: 'cash',
+  transfer: 'transfer',
+  card: 'card',
+  other: 'other'
+} as const
+
+export type ExpensePaymentMethod = (typeof ExpensePaymentMethod)[keyof typeof ExpensePaymentMethod]
+
+
 export const PaymentMethod = {
   cash: 'cash',
   transfer: 'transfer',
