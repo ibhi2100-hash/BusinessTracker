@@ -28,7 +28,9 @@ export interface BuyAnalysisPayload {
   currentStart: number,
   currentEnd: number,
   previousStart: number,
-  previousEnd: number
+  previousEnd: number,
+  currentDays: number,
+  previousDays: number
 }
 
 

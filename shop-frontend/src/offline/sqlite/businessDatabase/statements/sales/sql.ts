@@ -436,7 +436,7 @@ current_sales AS (
                 THEN s.profit
                 ELSE 0
             END
-        ) AS grossProfit
+        ) AS grossProfit,
          COUNT(
 
             CASE
@@ -488,7 +488,7 @@ previous_sales AS (
                 THEN s.profit
                 ELSE 0
             END
-        ) AS grossProfit
+        ) AS grossProfit,
 
          COUNT(
 
@@ -691,34 +691,23 @@ trend_metrics AS (
 
         vm.*,
 
-        CASE
+      CASE
 
-            /* New demand */
-
-            WHEN vm.previousSalesVelocity <= 0
-
-                 AND vm.salesVelocity > 0
-
+            WHEN COALESCE(vm.previousSalesVelocity, 0) <= 0
+                AND COALESCE(vm.salesVelocity, 0) > 0
             THEN 1.0
 
-            /* No demand */
-
-            WHEN vm.previousSalesVelocity <= 0
-
-                 AND vm.salesVelocity <= 0
-
+            WHEN COALESCE(vm.previousSalesVelocity, 0) <= 0
+                AND COALESCE(vm.salesVelocity, 0) <= 0
             THEN 0.0
 
-            /* Normal growth/decline */
-
             ELSE
-
                 (
-
                     vm.salesVelocity
-
-                    / vm.previousSalesVelocity
-
+                    / NULLIF(
+                        vm.previousSalesVelocity,
+                        0
+                    )
                 ) - 1.0
 
         END AS demandGrowth
@@ -842,43 +831,25 @@ normalized_scores AS (
            ---------------------------------------------------- */
 
         CASE
-
-            WHEN rm.reorderLevel <= 0
-
+            WHEN COALESCE(rm.reorderLevel, 0) <= 0
             THEN 0
 
             ELSE ROUND(
-
                 MIN(
-
                     100,
-
                     MAX(
-
                         0,
-
                         (
-
                             (
-
                                 rm.reorderLevel
-
                                 - rm.currentStock
-
                             ) * 100.0
-
                             / rm.reorderLevel
-
                         )
-
                     )
-
                 ),
-
                 2
-
             )
-
         END AS inventoryPressureScore,
 
         /* ----------------------------------------------------
@@ -980,31 +951,18 @@ SELECT
        -------------------------------------------------------- */
 
     ROUND(
-
         (
-
-            salesVelocityScore * 0.25
-
+            COALESCE(salesVelocityScore, 0) * 0.25
             +
-
-            grossProfitVelocityScore * 0.20
-
+            COALESCE(grossProfitVelocityScore, 0) * 0.20
             +
-
-            demandTrendScore * 0.15
-
+            COALESCE(demandTrendScore, 0) * 0.15
             +
-
-            inventoryPressureScore * 0.20
-
+            COALESCE(inventoryPressureScore, 0) * 0.20
             +
-
-            confidenceScore * 0.10
-
+            COALESCE(confidenceScore, 0) * 0.10
         ),
-
         2
-
     ) AS buyingScore
 
 FROM normalized_scores

@@ -413,6 +413,8 @@ export class SQLiteSalesRepository
             buyAnalysis.currentEnd,
             buyAnalysis.previousStart,
             buyAnalysis.previousEnd,
+            buyAnalysis.currentDays,
+            buyAnalysis.previousDays
         ]
     );
 

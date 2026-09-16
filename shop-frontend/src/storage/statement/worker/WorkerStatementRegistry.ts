@@ -1,84 +1,140 @@
 import { StatementDefinition } from "@/src/offline/sqlite/PreparedStatement/StatementRegistry/statementDefinition";
 
+
+
 export class WorkerStatementRegistry {
 
     private readonly statements =
         new Map<string, any>();
 
+
     constructor(
         private readonly db: any
     ) {}
+
 
     initialize(
         definitions: StatementDefinition[]
     ) {
 
+
         this.clear();
 
+
         for (
-            const definition
-            of definitions
+            const [
+                index,
+                definition
+            ]
+            of definitions.entries()
         ) {
+
+            const statementNumber =
+                index + 1;
+
+
 
             if (
                 this.statements.has(
                     definition.key
                 )
             ) {
-                throw new Error(
-                    `Duplicate SQLite statement: ${definition.key}`
-                );
+
+                const error =
+                    new Error(
+                        `Duplicate SQLite statement: ${definition.key}`
+                    );
+
+                throw error;
             }
 
-            const stmt =
-                this.db.prepare(
-                    definition.sql
+
+            try {
+
+                const stmt =
+                    this.db.prepare(
+                        definition.sql
+                    );
+
+
+                this.statements.set(
+                    definition.key,
+                    stmt
                 );
 
-            this.statements.set(
-                definition.key,
-                stmt
-            );
+
+            } catch (error) {
+
+                throw error;
+            }
+
         }
     }
 
+
     get(key: string) {
+
 
         const stmt =
             this.statements.get(key);
 
+
         if (!stmt) {
-            throw new Error(
-                `SQLite statement not found: ${key}`
-            );
+
+            const error =
+                new Error(
+                    `SQLite statement not found: ${key}`
+                );
+
+
+            throw error;
         }
 
         return stmt;
     }
 
+
     has(
         key: string
     ): boolean {
-        return this.statements.has(key);
+
+        const result =
+            this.statements.has(key)
+
+        return result;
     }
 
+
     get size(): number {
-        return this.statements.size
+
+        const size =
+            this.statements.size;
+
+        return size;
     }
+
 
     clear() {
 
         for (
-            const stmt
-            of this.statements.values()
+            const [
+                key,
+                stmt
+            ]
+            of this.statements.entries()
         ) {
 
             try {
+
                 stmt.finalize();
-            } catch {
-                
+
+
+            } catch (error) {
+                throw new Error(error)
+
             }
         }
+
 
         this.statements.clear();
     }

@@ -29,7 +29,7 @@ export const migration016 : Migration = {
   saleGroupId   TEXT,
   mode          TEXT NOT NULL DEFAULT 'LIVE',
   createdAt INTEGER NOT NULL,
-  updatedAt. INTEGER
+  updatedAt  INTEGER
 );
 
 CREATE INDEX IF NOT EXISTS idx_sales_branch_created

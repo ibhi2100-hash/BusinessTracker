@@ -299,7 +299,7 @@ if (range === "all") {
 
     previousEndDate.getTime();
 
-}
+}     const days = current.days;
 
       const result =
         await app.sales.buyAnalysis({
@@ -308,9 +308,28 @@ if (range === "all") {
           currentStart,
           currentEnd,
           previousStart,
-          previousEnd
+          previousEnd,
+          currentDays: days,
+          previousDays: days
          }
         );
+
+        console.log(
+        "[BuyingAnalysis] RESULT:",
+        result
+      );
+
+      console.log(
+        "[BuyingAnalysis] FIRST ROW:",
+        result[0]
+      );
+
+      console.log(
+        "[BuyingAnalysis] buyingScore:",
+        result[0]?.buyingScore,
+        "type:",
+        typeof result[0]?.buyingScore
+      );
 
       setRows(result);
     } catch (err) {
@@ -769,7 +788,7 @@ function BuyingProductCard({
                 classes.score
               )}
             >
-              {row.buyingScore.toFixed(0) ?? 0}
+              {row.buyingScore?.toFixed(0) ?? 0}
             </p>
 
             <p className="text-[9px] uppercase tracking-wide text-gray-600">
