@@ -37,59 +37,109 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async (data: LoginInput) => {
-    try {
-      setSubmit(true);
-      setServerError(null);
+ const onSubmit = async (data: LoginInput) => {
+  try {
+    setSubmit(true);
+    setServerError(null);
 
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify(data),
-        }
-      );
-
-      const result = await res.json();
-      console.log("This is the backend Result we get: ", result)
-      if (!res.ok) {
-        throw new Error(result.message || "Login failed");
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(data),
       }
+    );
 
-      const bootstrapData = {
-        businessId: result.user.businessId,
-        branchId: result.user.branchId,
-        accessToken: result.accessToken
-      }
+    const result = await res.json();
 
-      await app.business.BootstrapBusiness(bootstrapData)
-      
+    console.log("Backend login result:", result);
 
-
-      login(
-        result.user,
-        result.accessToken,
-        result.expiresIn,
-      );
-
-
-      if (!result.user.businessId || !result.user.onboardingCompleted) {
-        router.push("/onboarding/step1-business");
-      } 
-      else if (result.user.businessId && !result.user.onboardingCompleted) {
-        router.push("/onboard");
-      }
-      else {
-        router.push("/dashboard");
-      }
-    } catch (error: any) {
-      setServerError(error?.message || "Login failed");
-    } finally {
-      setSubmit(false);
+    if (!res.ok) {
+      throw new Error(result.message || "Login failed");
     }
-  };
+
+    /*
+     * ---------------------------------------------------------
+     * 1. Save authentication/session information
+     * ---------------------------------------------------------
+     */
+
+    await app.client.services.registration.register(result);
+
+    await app.client.services.registration.saveSession(result);
+
+    await app.client.services.registration.saveApplicationState(
+      result.user.id
+    );
+
+    /*
+     * ---------------------------------------------------------
+     * 2. Update React authentication state
+     * ---------------------------------------------------------
+     */
+
+    login(
+      result.user,
+      result.accessToken,
+      result.expiresIn
+    );
+
+    /*
+     * ---------------------------------------------------------
+     * 3. Determine onboarding state
+     * ---------------------------------------------------------
+     */
+
+    if (!result.user.businessId) {
+      router.push("/onboarding/step1-business");
+      return;
+    }
+
+    if (!result.user.onboardingCompleted) {
+      router.push("/onboard");
+      return;
+    }
+
+    /*
+     * ---------------------------------------------------------
+     * 4. Only a fully onboarded user gets a local replica
+     * ---------------------------------------------------------
+     */
+
+    if (!result.user.branchId) {
+      throw new Error(
+        "Your business is configured but no active branch is assigned."
+      );
+    }
+
+    await app.business.BootstrapBusiness({
+      businessId: result.user.businessId,
+      branchId: result.user.branchId,
+      accessToken: result.accessToken,
+    });
+
+    /*
+     * ---------------------------------------------------------
+     * 5. Dashboard
+     * ---------------------------------------------------------
+     */
+
+    router.push("/dashboard");
+
+  } catch (error: any) {
+    console.error("Login error:", error);
+
+    setServerError(
+      error?.message || "Login failed"
+    );
+  } finally {
+    setSubmit(false);
+  }
+};
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-black text-white">

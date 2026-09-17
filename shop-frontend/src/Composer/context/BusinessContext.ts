@@ -27,6 +27,7 @@ export class FrontendBusinessContext
         }
 
         const state = await this.repository.current();
+        console.log("This is the current BusinessContext: ", state)
 
         this.businessId = state.currentBusinessId ?? undefined;
         this.branchId = state.currentBranchId ?? undefined;

@@ -23,9 +23,33 @@ import { useBusinessLiveQuery } from "@/hooks/useBusinessLiveQuery";
 export function DashboardHeader() {
   const router = useRouter();
 
-  const { businessId, branchId, setBranchId, loading: ctxLoading } = useBusinessContext()
+  const {
+  businessId,
+  branchId,
+  loading: ctxLoading,
+} = useBusinessContext();
 
-  const { data } = useBusinessLiveQuery(businessId)
+console.log(
+  "[DashboardHeader] context:",
+  {
+    businessId,
+    branchId,
+    ctxLoading,
+  }
+);
+
+  const { data, loading, error } =
+  useBusinessLiveQuery(businessId);
+
+console.log(
+  "[DashboardHeader] business query:",
+  {
+    businessId,
+    data,
+    loading,
+    error,
+  }
+);
   const business = data
   const role = "ADMIN"
   const app = useApplication()

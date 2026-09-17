@@ -14,6 +14,7 @@ import { BusinessApi } from "./API/business/BusinessApi";
 import { SyncApi } from "./API/sync/syncApi";
 import { SyncApplicationService } from "./API/sync/SyncApplicationService";
 import { ExpenseApi } from "./API/expenses/expensesApi";
+import { SQLiteApplicationStateRepository } from "@/src/offline/sqlite/clientDatabase/repositories/ApplicationStateRepository.ts/SQLiteApplicationStateRepository";
 
 export class Application {
     readonly onboarding: OnboardingApi;
@@ -73,7 +74,7 @@ export class Application {
         
         this.context = 
             new ContextApi(
-                this.manager
+                client.repositories.applicationState
             )
 
         this.capital = 
@@ -96,10 +97,11 @@ export class Application {
                 this.manager
             )
 
-            
+
         this.business = 
             new BusinessApi(
-                this.manager
+                this.manager,
+                client.repositories.currentBusiness
             )
 
         this.sync = 

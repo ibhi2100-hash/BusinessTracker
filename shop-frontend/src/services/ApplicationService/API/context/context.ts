@@ -1,29 +1,40 @@
-import { BusinessManager } from "@/src/Composer/BusinessManager";
+import { SQLiteApplicationStateRepository } from "@/src/offline/sqlite/clientDatabase/repositories/ApplicationStateRepository.ts/SQLiteApplicationStateRepository"; 
 
 export class ContextApi {
-
     constructor(
-        private readonly manager: BusinessManager
+        private readonly applicationState: SQLiteApplicationStateRepository
     ) {}
 
     async current() {
-        const app = await this.manager.current();
-        return await app.context.current();
+
+        const state =
+            await this.applicationState.current();
+        return {
+            businessId:
+                state?.currentBusinessId ?? undefined,
+
+            branchId:
+                state?.currentBranchId ?? undefined,
+        };
     }
 
-    async setActiveBusiness(businessId: string) {
-        const app = await this.manager.current();
-
-        await app.context.setActiveBusiness(businessId);
+    async setActiveBusiness(
+        businessId: string
+    ): Promise<void> {
+        await this.applicationState.setCurrentBusiness(
+            businessId
+        );
     }
 
-    async setActiveBranch(branchId: string) {
-        const app = await this.manager.current();
-
-        await app.context.setActiveBranch(branchId);
+    async setActiveBranch(
+        branchId: string
+    ): Promise<void> {
+        await this.applicationState.setCurrentBranch(
+            branchId
+        );
     }
 
-    clearCache() {
-        // If appropriate, delegate this to the application context.
+    async clear(): Promise<void> {
+        await this.applicationState.clearSession();
     }
 }
