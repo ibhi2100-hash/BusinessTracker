@@ -2,6 +2,7 @@ import {
     SyncCoordinator,
 } from "./SyncCoordinator/SyncCoordinator";
 
+
 export interface NetworkSyncConnectorOptions {
 
     intervalMs?: number;
@@ -16,10 +17,7 @@ export class NetworkSyncConnector {
 
     private readonly syncOnStart: boolean;
 
-    private intervalId:
-        ReturnType<typeof setInterval>
-        | null = null;
-
+    private intervalId: number | null = null;
     private started = false;
 
 
@@ -35,11 +33,24 @@ export class NetworkSyncConnector {
             options.intervalMs ??
             30_000;
 
+
+        /*
+         * Default is false because
+         * BusinessSynchronization owns
+         * application startup synchronization.
+         */
+
         this.syncOnStart =
             options.syncOnStart ??
-            true;
+            false;
     }
 
+
+    /*
+     * ============================================================
+     * START
+     * ============================================================
+     */
 
     start(): void {
 
@@ -47,8 +58,15 @@ export class NetworkSyncConnector {
             return;
         }
 
-        this.started = true;
 
+        if (
+            typeof window === "undefined"
+        ) {
+
+            return;
+        }
+
+        this.started = true;
 
         window.addEventListener(
             "online",
@@ -59,10 +77,12 @@ export class NetworkSyncConnector {
             "offline",
             this.handleOffline
         );
-
+        /*
+         * Periodic synchronization.
+         */
 
         this.intervalId =
-            setInterval(
+            window.setInterval(
                 () => {
 
                     if (
@@ -70,8 +90,7 @@ export class NetworkSyncConnector {
                     ) {
                         return;
                     }
-
-                    void this.coordinator.sync(
+                    void this.runSync(
                         "INTERVAL"
                     );
 
@@ -80,66 +99,126 @@ export class NetworkSyncConnector {
             );
 
 
+        /*
+         * Optional connector-owned startup sync.
+         *
+         * Normally disabled because
+         * BusinessSynchronization owns startup.
+         */
+
         if (
             this.syncOnStart &&
             navigator.onLine
         ) {
 
-            void this.coordinator.sync(
+            void this.runSync(
                 "STARTUP"
             );
         }
     }
-
+    /*
+     * ============================================================
+     * STOP
+     * ============================================================
+     */
 
     stop(): void {
 
         if (!this.started) {
             return;
         }
-
         this.started = false;
 
-
-        window.removeEventListener(
-            "online",
-            this.handleOnline
-        );
-
-        window.removeEventListener(
-            "offline",
-            this.handleOffline
-        );
-
+        if (
+            typeof window !== "undefined"
+        ) {
+            window.removeEventListener(
+                "online",
+                this.handleOnline
+            );
+            window.removeEventListener(
+                "offline",
+                this.handleOffline
+            );
+        }
 
         if (
             this.intervalId !== null
         ) {
 
-            clearInterval(
+            window.clearInterval(
                 this.intervalId
             );
 
             this.intervalId = null;
         }
     }
+    /*
+     * ============================================================
+     * SYNC TRIGGER
+     * ============================================================
+     */
 
+    private async runSync(
+        trigger:
+            "STARTUP" |
+            "NETWORK" |
+            "INTERVAL"
+    ): Promise<void> {
+
+        try {
+
+            await this.coordinator.sync(
+                trigger
+            );
+
+        } catch (error) {
+
+            /*
+             * Synchronization failure must not
+             * create an unhandled Promise rejection.
+             *
+             * The coordinator is responsible for
+             * notifying synchronization listeners.
+             */
+
+            console.error(
+                `[NetworkSyncConnector] ${trigger} sync failed:`,
+                error
+            );
+        }
+    }
+
+
+    /*
+     * ============================================================
+     * NETWORK ONLINE
+     * ============================================================
+     */
 
     private readonly handleOnline =
         (): void => {
 
-            void this.coordinator.sync(
+            void this.runSync(
                 "NETWORK"
             );
         };
 
 
+    /*
+     * ============================================================
+     * NETWORK OFFLINE
+     * ============================================================
+     */
+
     private readonly handleOffline =
         (): void => {
 
-            // No sync operation is started.
-            //
-            // The UI can observe navigator.onLine
-            // or receive a separate offline event.
+            /*
+             * Do not attempt synchronization.
+             *
+             * Existing local events remain safely
+             * in the outbox as PENDING.
+             */
         };
 }

@@ -1,6 +1,17 @@
 import { QueryRunner } from "@/src/storage/queryRunner/QueryRunner";
-import { ProjectionResetRepository } from "./ProjectionResetRepositoryContract";
-import { ProjectionName } from "./ProjectionResetRepositoryContract";
+
+import {
+    ProjectionResetRepository,
+    ProjectionName,
+} from "./ProjectionResetRepositoryContract";
+
+import type {
+    SQLiteStatementOperation,
+} from "@/src/storage/statement/worker/WorkerProtocol";
+import { projectionResetStatements } from "../../statements/projectionRebuilder/projectionRebuilderStatements";
+import { ProjectionResetStatementKeys } from "../../statements/projectionRebuilder/projectionRebuilderKeys";
+
+
 export class SQLiteProjectionResetRepository
     implements ProjectionResetRepository {
 
@@ -8,48 +19,92 @@ export class SQLiteProjectionResetRepository
         private readonly queryRunner: QueryRunner
     ) {}
 
-    async reset(name: ProjectionName): Promise<void> {
+    // =========================================================
+    // TRANSACTIONAL OPERATIONS
+    // =========================================================
+
+    resetOperation(
+        name: ProjectionName
+    ): SQLiteStatementOperation {
 
         switch (name) {
 
             case "businesses":
-                await this.queryRunner.execute(
-                    `DELETE FROM businesses`
-                );
-                break;
+                return {
+                    statementKey:
+                        ProjectionResetStatementKeys.businesses,
+                    params: [],
+                };
 
             case "branches":
-                await this.queryRunner.execute(
-                    `DELETE FROM branches`
-                );
-                break;
+                return {
+                    statementKey:
+                        ProjectionResetStatementKeys.branches,
+                    params: [],
+                };
 
             case "products":
-                await this.queryRunner.execute(
-                    `DELETE FROM products`
-                );
-                break;
+                return {
+                    statementKey:
+                        ProjectionResetStatementKeys.products,
+                    params: [],
+                };
 
             case "inventories":
-                await this.queryRunner.execute(
-                    `DELETE FROM inventories`
-                );
-                break;
+                return {
+                    statementKey:
+                        ProjectionResetStatementKeys.inventories,
+                    params: [],
+                };
 
             case "sales":
-                await this.queryRunner.execute(
-                    `DELETE FROM sales`
-                );
-                break;
+                return {
+                    statementKey:
+                        ProjectionResetStatementKeys.sales,
+                    params: [],
+                };
         }
     }
 
+
+    resetOperations():
+        readonly SQLiteStatementOperation[] {
+
+        return [
+            this.resetOperation("businesses"),
+            this.resetOperation("branches"),
+            this.resetOperation("products"),
+            this.resetOperation("inventories"),
+            this.resetOperation("sales"),
+        ];
+    }
+
+
+    // =========================================================
+    // STANDALONE WRITES
+    // =========================================================
+
+    async reset(
+        name: ProjectionName
+    ): Promise<void> {
+
+        const operation =
+            this.resetOperation(name);
+
+        await this.queryRunner.executePrepared(
+            operation.statementKey,
+            operation.params ?? []
+        );
+    }
+
+
     async resetAll(): Promise<void> {
 
-        await this.reset("businesses");
-        await this.reset("branches");
-        await this.reset("products");
-        await this.reset("inventories");
-        await this.reset("sales");
+        const operations =
+            this.resetOperations();
+
+        await this.queryRunner.transaction(
+            operations
+        );
     }
 }

@@ -1,67 +1,79 @@
-import { Migration } from "./migrationContracts";
-
+import type { Migration } from "./migrationContracts";
+import type { SQLiteMigrationOperation } from "@/src/storage/statement/worker/WorkerProtocol";
 export const migration0010: Migration = {
+
     version: 10,
+
     name: "Current Business",
 
-    async up(q) {
+    up(): readonly SQLiteMigrationOperation[] {
 
-        await q.execute(`
-            CREATE TABLE IF NOT EXISTS current_business (
-                id INTEGER PRIMARY KEY CHECK(id = 1),
+        return [
 
-                businessId TEXT,
+            {
+                sql: `
+                    CREATE TABLE IF NOT EXISTS current_business (
 
-                businessName TEXT,
+                        id INTEGER PRIMARY KEY CHECK(id = 1),
 
-                businessCode TEXT,
+                        businessId TEXT,
 
-                stage TEXT DEFAULT 'ONBOARDING',
+                        businessName TEXT,
 
-                status TEXT DEFAULT 'CREATED',
+                        businessCode TEXT,
 
-                databaseVersion INTEGER DEFAULT 1,
+                        stage TEXT DEFAULT 'ONBOARDING',
 
-                schemaVersion INTEGER DEFAULT 1,
+                        status TEXT DEFAULT 'CREATED',
 
-                lastSequenceNumber INTEGER DEFAULT 0,
+                        databaseVersion INTEGER DEFAULT 1,
 
-                initializedAt INTEGER,
+                        schemaVersion INTEGER DEFAULT 1,
 
-                activatedAt INTEGER,
+                        lastSequenceNumber INTEGER DEFAULT 0,
 
-                lastOpenedAt INTEGER,
+                        initializedAt INTEGER,
 
-                updatedAt INTEGER
-            )
-        `);
+                        activatedAt INTEGER,
 
-        await q.execute(`
-            INSERT INTO current_business (
-                id,
-                businessId,
-                businessName,
-                businessCode,
-                stage,
-                status,
-                databaseVersion,
-                schemaVersion,
-                lastSequenceNumber,
-                initializedAt
-            )
-            VALUES (
-                1,
-                NULL,
-                NULL,
-                NULL,
-                'ONBOARDING',
-                'CREATED',
-                1,
-                1,
-                0,
-                strftime('%s','now')
-            )
-            ON CONFLICT(id) DO NOTHING;
-        `);
-    }
+                        lastOpenedAt INTEGER,
+
+                        updatedAt INTEGER
+
+                    );
+                `,
+            },
+
+            {
+                sql: `
+                    INSERT INTO current_business (
+                        id,
+                        businessId,
+                        businessName,
+                        businessCode,
+                        stage,
+                        status,
+                        databaseVersion,
+                        schemaVersion,
+                        lastSequenceNumber,
+                        initializedAt
+                    )
+                    VALUES (
+                        1,
+                        NULL,
+                        NULL,
+                        NULL,
+                        'ONBOARDING',
+                        'CREATED',
+                        1,
+                        1,
+                        0,
+                        strftime('%s', 'now')
+                    )
+                    ON CONFLICT(id) DO NOTHING;
+                `,
+            },
+
+        ];
+    },
 };

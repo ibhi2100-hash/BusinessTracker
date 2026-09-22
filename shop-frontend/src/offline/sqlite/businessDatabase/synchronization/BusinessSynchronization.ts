@@ -1,35 +1,35 @@
 import { Lifecycle } from "../../lifecycle/LifeCycle";
 
-import {
-    SyncEngine,
-    SyncResult,
-} from "../sync/syncEngine";
-
-import {
-    SyncCoordinator,
-    SyncCoordinatorListener,
-} from "../sync/SyncCoordinator/SyncCoordinator";
+import { SyncResult, SyncCoordinatorListener } from "@business/shared-types";
+import { SyncCoordinator } from "../sync/SyncCoordinator/SyncCoordinator";
 
 import {
     NetworkSyncConnector,
 } from "../sync/NetworkSyncConnector";
 
+
 export class BusinessSynchronization
-implements Lifecycle {
+    implements Lifecycle {
 
-    private started =
-        false;
+    private started = false;
 
-    private initialized =
-        false;
+    private initialized = false;
 
 
     constructor(
-        private readonly engine: SyncEngine,
-        private readonly coordinator: SyncCoordinator,
-        private readonly triggerSource: NetworkSyncConnector,
+        private readonly coordinator:
+            SyncCoordinator,
+
+        private readonly triggerSource:
+            NetworkSyncConnector,
     ) {}
 
+
+    /*
+     * ============================================================
+     * INITIALIZE
+     * ============================================================
+     */
 
     async initialize(): Promise<void> {
 
@@ -41,10 +41,15 @@ implements Lifecycle {
         await this.coordinator.initialize();
 
 
-        this.initialized =
-            true;
+        this.initialized = true;
     }
 
+
+    /*
+     * ============================================================
+     * START
+     * ============================================================
+     */
 
     async start(): Promise<void> {
 
@@ -61,20 +66,22 @@ implements Lifecycle {
         }
 
 
-        this.started =
-            true;
+        this.started = true;
 
 
         /*
-         * Start network / interval triggers.
+         * Start network and interval triggers.
          */
 
         this.triggerSource.start();
 
 
         /*
-         * Startup synchronization is intentionally
+         * Startup synchronization is deliberately
          * non-blocking.
+         *
+         * The application must not wait for the
+         * network before becoming usable.
          */
 
         if (
@@ -87,13 +94,20 @@ implements Lifecycle {
                 .catch(error => {
 
                     console.error(
-                        "Startup synchronization failed:",
+                        "[BusinessSynchronization] Startup sync failed:",
                         error
                     );
+
                 });
         }
     }
 
+
+    /*
+     * ============================================================
+     * STOP
+     * ============================================================
+     */
 
     async stop(): Promise<void> {
 
@@ -102,24 +116,36 @@ implements Lifecycle {
         }
 
 
-        this.started =
-            false;
+        this.started = false;
 
 
         this.triggerSource.stop();
     }
 
 
+    /*
+     * ============================================================
+     * DISPOSE
+     * ============================================================
+     */
+
     async dispose(): Promise<void> {
 
         await this.stop();
 
+
         await this.coordinator.dispose();
 
-        this.initialized =
-            false;
+
+        this.initialized = false;
     }
 
+
+    /*
+     * ============================================================
+     * MANUAL SYNC
+     * ============================================================
+     */
 
     async syncNow(): Promise<SyncResult> {
 
@@ -137,16 +163,27 @@ implements Lifecycle {
     }
 
 
+    /*
+     * ============================================================
+     * STATE
+     * ============================================================
+     */
+
     get isSyncing(): boolean {
 
-        return this.coordinator.IsSyncing;
+        return this.coordinator.isSyncing;
     }
 
 
+    /*
+     * ============================================================
+     * SUBSCRIBE
+     * ============================================================
+     */
+
     subscribe(
-        listener:
-            SyncCoordinatorListener
-    ) {
+        listener: SyncCoordinatorListener
+    ): () => void {
 
         return this.coordinator.subscribe(
             listener

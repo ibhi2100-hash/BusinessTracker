@@ -16,13 +16,19 @@ export function useLiveQuery<T>(
     () => dependencies.slice().sort().join("|"),
     [dependencies]
   );
-
+  let requestId = 0;
   const load = useCallback(async () => {
+    const id = ++requestId;
+
     setLoading(true);
     setError(null);
 
     try {
       const result = await query();
+      
+      if(id !== requestId ) {
+        return
+      }
       setData(result);
     } catch (err) {
       setError(err);
@@ -32,6 +38,7 @@ export function useLiveQuery<T>(
   }, [query]);
 
   useEffect(() => {
+
     load();
 
     const unsubscribe = changeNotifier.subscribe((tables) => {

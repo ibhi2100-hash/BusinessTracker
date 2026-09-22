@@ -1,56 +1,20 @@
-import { QueryRunner } from "../queryRunner/QueryRunner";
-
+import type { QueryRunner } from "../queryRunner/QueryRunner";
+import type { SQLiteStatementOperation } from "../statement/worker/WorkerProtocol";
 
 export class TransactionManager {
-    private active: boolean = true ;
+
     constructor(
         private readonly queryRunner: QueryRunner
     ) {}
 
-    private async begin() {
+    async run(
+        operations: readonly SQLiteStatementOperation[]
+    ): Promise<void> {
 
-        await this.queryRunner.execute(`
-            BEGIN IMMEDIATE;
-        `);
+        if (operations.length === 0) {
+            return;
+        }
 
+        await this.queryRunner.transaction(operations);
     }
-    private async rollback(){
-        await this.queryRunner.execute(`
-            ROLLBACK;`
-        );
-    }
-
-    private async commit() {
-
-        await this.queryRunner.execute(`
-            COMMIT;
-        `);
-
-    }
-
-   async run<T>(
-    action: () => Promise<T>
-): Promise<T> {
-
-    await this.begin();
-
-    try {
-
-        const result = await action();
-
-        await this.commit();
-
-        return result;
-
-    } catch (error) {
-
-        await this.rollback();
-
-        throw error;
-
-    } finally{
-        this.active = false
-    }
-
-} 
 }

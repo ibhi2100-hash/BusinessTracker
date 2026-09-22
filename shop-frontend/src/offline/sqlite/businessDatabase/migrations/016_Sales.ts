@@ -1,51 +1,92 @@
-import { Migration } from "../../clientDatabase/migrations/migrationContracts";
+import type { Migration } from "../../clientDatabase/migrations/migrationContracts";
+import type { SQLiteMigrationOperation } from "@/src/storage/statement/worker/WorkerProtocol";
 
-export const migration016 : Migration = {
+export const migration016: Migration = {
     version: 16,
+
     name: "Sales",
-    async up(q: any) {
 
-        await q.execute(`
-            CREATE TABLE IF NOT EXISTS sales (
-  id            TEXT PRIMARY KEY NOT NULL,
-  businessId    TEXT,
-  branchId      TEXT,
-  productId     TEXT NOT NULL,
-  productName   TEXT,
-  quantity      INTEGER NOT NULL DEFAULT 0,
-  price         REAL NOT NULL DEFAULT 0,
-  costPrice     REAL NOT NULL DEFAULT 0,
-  unitCostPrice     REAL NOT NULL DEFAULT 0,
-  unitPrice     REAL NOT NULL DEFAULT 0,
-  total         REAL NOT NULL DEFAULT 0,
-  profit        REAL NOT NULL DEFAULT 0,
-  paymentMethod TEXT,
-  customerRef   TEXT,
-  customerId    TEXT,
-  userId        TEXT,
-  invoiceId     TEXT,
-  note          TEXT,
-  status        TEXT NOT NULL DEFAULT 'completed', -- completed | voided | refunded
-  saleGroupId   TEXT,
-  mode          TEXT NOT NULL DEFAULT 'LIVE',
-  createdAt INTEGER NOT NULL,
-  updatedAt  INTEGER
-);
+    up(): readonly SQLiteMigrationOperation[] {
+        return [
+            {
+                sql: `
+                    CREATE TABLE IF NOT EXISTS sales (
+                        id TEXT PRIMARY KEY NOT NULL,
 
-CREATE INDEX IF NOT EXISTS idx_sales_branch_created
-  ON sales (branchId, createdAt);
+                        businessId TEXT,
 
-CREATE INDEX IF NOT EXISTS idx_sales_product
-  ON sales (productId);
+                        branchId TEXT,
 
-CREATE INDEX IF NOT EXISTS idx_sales_group
-  ON sales (saleGroupId);
+                        productId TEXT NOT NULL,
 
-CREATE INDEX IF NOT EXISTS idx_sales_status
-  ON sales (status);
-    `
-    );
+                        productName TEXT,
 
-    }
+                        quantity INTEGER NOT NULL DEFAULT 0,
 
-}
+                        price REAL NOT NULL DEFAULT 0,
+
+                        costPrice REAL NOT NULL DEFAULT 0,
+
+                        unitCostPrice REAL NOT NULL DEFAULT 0,
+
+                        unitPrice REAL NOT NULL DEFAULT 0,
+
+                        total REAL NOT NULL DEFAULT 0,
+
+                        profit REAL NOT NULL DEFAULT 0,
+
+                        paymentMethod TEXT,
+
+                        customerRef TEXT,
+
+                        customerId TEXT,
+
+                        userId TEXT,
+
+                        invoiceId TEXT,
+
+                        note TEXT,
+
+                        status TEXT NOT NULL DEFAULT 'completed',
+
+                        saleGroupId TEXT,
+
+                        mode TEXT NOT NULL DEFAULT 'LIVE',
+
+                        createdAt INTEGER NOT NULL,
+
+                        updatedAt INTEGER
+                    );
+                `,
+            },
+
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_sales_branch_created
+                    ON sales(branchId, createdAt);
+                `,
+            },
+
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_sales_product
+                    ON sales(productId);
+                `,
+            },
+
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_sales_group
+                    ON sales(saleGroupId);
+                `,
+            },
+
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_sales_status
+                    ON sales(status);
+                `,
+            },
+        ];
+    },
+};

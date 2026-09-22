@@ -1,6 +1,4 @@
-import { DomainEvent } from "@business/shared-types";
-import { BackendEventPayload } from "./types";
-import { OutboxRow } from "../repositories/SQLiteOutboxRepository/SQLiteOutboxRepository";
+import { DomainEvent, BackendEventPayload } from "@business/shared-types";
 
 
 export function toBackendPayload<TPayload>(

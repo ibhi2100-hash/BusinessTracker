@@ -1,56 +1,69 @@
-import { Migration } from "../../clientDatabase/migrations/migrationContracts";
+import type { Migration } from "../../clientDatabase/migrations/migrationContracts";
+import type { SQLiteMigrationOperation } from "@/src/storage/statement/worker/WorkerProtocol";
 
-export const migration008: Migration =  {
+export const migration008: Migration = {
     version: 8,
+
     name: "Products",
 
-    async up(q){
-        await q.execute(
-            `
-CREATE TABLE IF NOT EXISTS products (
+    up(): readonly SQLiteMigrationOperation[] {
+        return [
+            {
+                sql: `
+                    CREATE TABLE IF NOT EXISTS products (
+                        id TEXT PRIMARY KEY,
 
-    id TEXT PRIMARY KEY,
+                        businessId TEXT,
 
-    businessId TEXT,
+                        branchId TEXT,
 
-    branchId  TEXT,
-    
-    name TEXT NOT NULL,
+                        name TEXT NOT NULL,
 
-    imageUrl TEXT,
+                        imageUrl TEXT,
 
-    description TEXT,
+                        description TEXT,
 
-    costPrice INTEGER DEFAULT 0,
+                        costPrice INTEGER DEFAULT 0,
 
-    price INTEGER DEFAULT 0,
+                        price INTEGER DEFAULT 0,
 
-    category TEXT,
+                        category TEXT,
 
-    reorderLevel INTEGER DEFAULT 0,
+                        reorderLevel INTEGER DEFAULT 0,
 
-    isActive  INTEGER DEFAULT 0,
+                        isActive INTEGER DEFAULT 0,
 
-    isDeleted INTEGER DEFAULT 0,
+                        isDeleted INTEGER DEFAULT 0,
 
-    createdAt INTEGER NOT NULL,
+                        createdAt INTEGER NOT NULL,
 
-    updatedAt INTEGER,
+                        updatedAt INTEGER,
 
-    deletedAt INTEGER
+                        deletedAt INTEGER
+                    );
+                `,
+            },
 
-);
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_product_business_branch
+                    ON products(businessId, branchId);
+                `,
+            },
 
-CREATE INDEX IF NOT EXISTS idx_product
-ON products( businessId, branchId);
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_product_created
+                    ON products(createdAt);
+                `,
+            },
 
-CREATE INDEX IF NOT EXISTS idx_product
-ON products(createdAt);
-
-CREATE INDEX IF NOT EXISTS idx_product
-ON products(branchId);
-
-`
-        )
-    }
-}
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_product_branch
+                    ON products(branchId);
+                `,
+            },
+        ];
+    },
+};

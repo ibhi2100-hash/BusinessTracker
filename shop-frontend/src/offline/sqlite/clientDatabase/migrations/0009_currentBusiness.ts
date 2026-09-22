@@ -1,54 +1,65 @@
-import { Migration } from "./migrationContracts";
+import type { Migration } from "./migrationContracts";
+import type { SQLiteMigrationOperation } from "@/src/storage/statement/worker/WorkerProtocol";
+export const migration0009: Migration = {
 
-export const migration0009: Migration =  {
     version: 9,
-    name: "Applicaton State",
-    async up(q){
-        await q.execute(
-            `CREATE TABLE IF NOT EXISTS application_state(
-                id  INTEGER PRIMARY KEY CHECK(id = 1),
 
-                currentBusinessId   TEXT,
-                
-                currentUserId   TEXT,
+    name: "Application State",
 
-                currentBranchId   TEXT,
+    up(): readonly SQLiteMigrationOperation[] {
 
-                currentWorkspaceId   TEXT,
+        return [
 
-                currentSessionId    TEXT,
+            {
+                sql: `
+                    CREATE TABLE IF NOT EXISTS application_state (
 
-                lastRoute           TEXT,
+                        id INTEGER PRIMARY KEY CHECK(id = 1),
 
-                currentWorkspaceVersion INTEGER,
+                        currentBusinessId TEXT,
 
-                initializedAt   INTEGER
-            )
-            `
-        )
+                        currentUserId TEXT,
 
-        await q.execute(
-                `
-                INSERT INTO application_state (
-                id,
-                currentBusinessId,
-                currentBranchId,
-                currentUserId,
-                currentSessionId,
-                currentWorkspaceVersion,
-                initializedAt
-            )
-            VALUES (
-                1,
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                1,
-                strftime('%s','now')
-            )
-            ON CONFLICT(id) DO NOTHING;
-                            
-            `)
-    }
-}
+                        currentBranchId TEXT,
+
+                        currentWorkspaceId TEXT,
+
+                        currentSessionId TEXT,
+
+                        lastRoute TEXT,
+
+                        currentWorkspaceVersion INTEGER,
+
+                        initializedAt INTEGER
+
+                    );
+                `,
+            },
+
+            {
+                sql: `
+                    INSERT INTO application_state (
+                        id,
+                        currentBusinessId,
+                        currentBranchId,
+                        currentUserId,
+                        currentSessionId,
+                        currentWorkspaceVersion,
+                        initializedAt
+                    )
+                    VALUES (
+                        1,
+                        NULL,
+                        NULL,
+                        NULL,
+                        NULL,
+                        1,
+                        strftime('%s', 'now')
+                    )
+                    ON CONFLICT(id) DO NOTHING;
+                `,
+            },
+
+        ];
+    },
+};

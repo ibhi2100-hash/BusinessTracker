@@ -251,8 +251,7 @@ export class ClientBootstrapper {
 
         const runner =
             new ClientMigrationRunner(
-                queryRunner,
-                transactionManager
+                queryRunner
             );
 
         await runner.run();

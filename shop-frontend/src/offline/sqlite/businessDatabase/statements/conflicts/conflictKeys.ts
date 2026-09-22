@@ -1,0 +1,15 @@
+export const conflictKeys = {
+    getPendingConflicts: "get_pending_conlicts",
+    insert:              "conflict_insert",
+    upsert:              "conflict_upsert",
+    findById:            "conflict_find_by_id",
+    findByAggregate:     "conflict_find_by_aggregate",
+    findByStatus:        "conflict_find_by_status",
+    findPending:         "conflict_find_pending",
+    findPendingByAggregate: "conflict_find_pending_by_aggregate",
+    resolve:             "conflict_resolve",
+    updateStatus:        "conflict_update_status",
+    deleteById:          "conflict_delete_by_id",
+    deleteByAggregate:   "conflict_delete_by_aggregate",
+    countByStatus:       "conflict_count_by_status",
+} 

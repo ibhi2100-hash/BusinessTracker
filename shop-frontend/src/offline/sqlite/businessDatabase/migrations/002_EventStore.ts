@@ -1,50 +1,55 @@
-import { Migration } from "../../clientDatabase/migrations/migrationContracts";
+import type { Migration } from "../../clientDatabase/migrations/migrationContracts";
+import type { SQLiteMigrationOperation } from "@/src/storage/statement/worker/WorkerProtocol";
 
 export const migration002: Migration = {
     version: 2,
+
     name: "Events",
 
-    async up(q) {
-        await q.execute(
-             `
-CREATE TABLE IF NOT EXISTS events (
+    up(): readonly SQLiteMigrationOperation[] {
+        return [
+            {
+                sql: `
+                    CREATE TABLE IF NOT EXISTS events (
+                        id TEXT PRIMARY KEY,
 
-    id TEXT PRIMARY KEY,
+                        aggregateId TEXT NOT NULL,
 
-    aggregateId TEXT NOT NULL,
+                        aggregateType TEXT NOT NULL,
 
-    aggregateType TEXT NOT NULL,
+                        expectedAggregateVersion INTEGER NOT NULL,
 
-    expectedAggregateVersion INTEGER NOT NULL,
+                        type TEXT NOT NULL,
 
-    type TEXT NOT NULL,
+                        payload TEXT NOT NULL,
 
-    payload TEXT NOT NULL,
+                        businessId TEXT NOT NULL,
 
-    businessId TEXT NOT NULL,
+                        branchId TEXT,
 
-    branchId TEXT,
+                        mode TEXT NOT NULL,
 
-    mode TEXT NOT NULL,
+                        actor TEXT,
 
-    actor   TEXT,
+                        causationId TEXT,
 
-    causationId TEXT,
+                        correlationId TEXT,
 
-    correlationId TEXT,
+                        logicClock INTEGER NOT NULL,
 
-    logicClock   INTEGER NOT NULL,
+                        createdAt INTEGER NOT NULL,
 
-    createdAt   INTEGER NOT NULL,
+                        checksum TEXT
+                    );
+                `,
+            },
 
-    checksum TEXT
-);
-
-CREATE INDEX IF NOT EXISTS idx_event_aggregate
-ON events(aggregateType, aggregateId);
-
-
-`
-        )
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_event_aggregate
+                    ON events(aggregateType, aggregateId);
+                `,
+            },
+        ];
     },
-} 
+};

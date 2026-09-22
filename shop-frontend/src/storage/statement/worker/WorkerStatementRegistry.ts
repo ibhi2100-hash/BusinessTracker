@@ -1,7 +1,5 @@
 import { StatementDefinition } from "@/src/offline/sqlite/PreparedStatement/StatementRegistry/statementDefinition";
 
-
-
 export class WorkerStatementRegistry {
 
     private readonly statements =

@@ -1,37 +1,43 @@
-import { Migration } from "../../clientDatabase/migrations/migrationContracts";
+import type { Migration } from "../../clientDatabase/migrations/migrationContracts";
+import type { SQLiteMigrationOperation } from "@/src/storage/statement/worker/WorkerProtocol";
 
 export const migration006: Migration = {
     version: 6,
+
     name: "Business",
 
-    async up(q){
-        await q.execute(
-            `
-CREATE TABLE IF NOT EXISTS businesses (
+    up(): readonly SQLiteMigrationOperation[] {
+        return [
+            {
+                sql: `
+                    CREATE TABLE IF NOT EXISTS businesses (
+                        id TEXT PRIMARY KEY,
 
-    id TEXT PRIMARY KEY,
+                        userId TEXT,
 
-    userId TEXT,
-    
-    name TEXT NOT NULL,
+                        name TEXT NOT NULL,
 
-    address TEXT,
+                        address TEXT,
 
-    createdAt INTEGER NOT NULL,
+                        createdAt INTEGER NOT NULL,
 
-    activatedAt INTEGER,
-    
-    isOnboarding INTEGER DEFAULT 0,
+                        activatedAt INTEGER,
 
-    onboardingCompleted INTEGER DEFAULT 0,
+                        isOnboarding INTEGER DEFAULT 0,
 
-    status  TEXT NOT NULL
-);
+                        onboardingCompleted INTEGER DEFAULT 0,
 
-CREATE INDEX IF NOT EXISTS idx_business
-ON businesses(userId);
+                        status TEXT NOT NULL
+                    );
+                `,
+            },
 
-`
-        )
-    }
-} 
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_business
+                    ON businesses(userId);
+                `,
+            },
+        ];
+    },
+};

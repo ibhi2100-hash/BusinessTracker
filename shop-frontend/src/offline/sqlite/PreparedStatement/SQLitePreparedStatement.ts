@@ -3,6 +3,7 @@ import { PreparedStatement } from "./PreparedStatementContract";
 import { PreparedStatementManager } from "./PreparedStatementManager";
 import { StatementDefinition } from "./StatementRegistry/statementDefinition";
 import { WorkerPreparedStatement } from "@/src/storage/statement/WorkerPreparedStatement";
+import { DatabaseId } from "@/src/storage/statement/worker/DatabaseId";
 
 export class SQLitePreparedStatementManager
 implements PreparedStatementManager {
@@ -11,7 +12,8 @@ implements PreparedStatementManager {
         new Map<string, PreparedStatement>();
 
     constructor(
-        private readonly runtime: SQLiteRuntime
+        private readonly runtime: SQLiteRuntime,
+        private readonly database: DatabaseId
     ) {}
 
     initialize(
@@ -25,6 +27,7 @@ implements PreparedStatementManager {
             const statement =
                 new WorkerPreparedStatement(
                     this.runtime,
+                    this.database,
                     def.key
                 );
 
@@ -35,9 +38,7 @@ implements PreparedStatementManager {
         }
     }
 
-    get(
-        key: string
-    ): PreparedStatement {
+    get(key: string): PreparedStatement {
 
         const statement =
             this.statements.get(key);
@@ -53,10 +54,7 @@ implements PreparedStatementManager {
 
     clear(): void {
 
-        for (
-            const statement
-            of this.statements.values()
-        ) {
+        for (const statement of this.statements.values()) {
             statement.dispose();
         }
 

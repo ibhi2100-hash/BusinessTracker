@@ -1,5 +1,7 @@
 import { AggregateRecord } from "@/offline/domain/aggregate";
 import { AggregateStatements } from "../../statements/aggregates/aggregateStatements";
+import { SQLiteStatementOperation } from "@/src/storage/statement/worker/WorkerProtocol";
+import { aggregateStatementsKeys } from "../../statements/aggregates/aggregateStatementsKeys";
 
 interface AggregateVersion {
     localVersion: number;
@@ -12,6 +14,76 @@ export class SQLiteAggregateRepository {
 
     async insertAggregates(aggregateData: AggregateRecord){
         await this.statements.insert.execute(AggregateMapper.toRow(aggregateData))
+    }
+
+
+
+  /**
+   * Builds the database operation required to commit a local aggregate event.
+   *
+   * IMPORTANT:
+   * - Does not execute anything.
+   * - Does not perform another database read.
+   * - Does not notify observers.
+   * - The returned operation is executed inside the same SQLite transaction
+   *   as the event insert and outbox insert.
+   */
+    commitAggregateOperation(
+        aggregateType: string,
+        aggregateId: string,
+        expectedVersion: number,
+        eventId: string,
+        updatedAt: number,
+        existing: AggregateVersion
+    ): SQLiteStatementOperation {
+        // First local event for this aggregate.
+        if (
+        existing.localVersion === 0 &&
+        expectedVersion === 0
+        ) {
+        return {
+            statementKey: aggregateStatementsKeys.insert,
+            params: [
+            crypto.randomUUID(),
+            aggregateId,
+            aggregateType,
+            1, // localVersion
+            0, // serverVersion
+            eventId,
+            null, // serverEventId
+            null, // serverUpdatedAt
+            0, // pending/whatever your actual column represents
+            updatedAt,
+            ],
+        };
+        }
+
+        /*
+        * The caller calculated expectedVersion from the version read before
+        * entering the transaction.
+        *
+        * This protects the application-level expectation, while the SQL
+        * UPDATE itself must ALSO contain localVersion = expectedVersion
+        * in its WHERE clause so the database enforces the concurrency rule.
+        */
+        if (existing.localVersion !== expectedVersion) {
+        throw new Error(
+            `Aggregate version conflict for ${aggregateType}:${aggregateId}. ` +
+            `Expected local version ${expectedVersion}, ` +
+            `but current local version is ${existing.localVersion}.`
+        );
+        }
+
+        return {
+        statementKey: aggregateStatementsKeys.advanceLocal,
+        params: [
+            eventId,
+            updatedAt,
+            aggregateType,
+            aggregateId,
+            expectedVersion,
+        ],
+        };
     }
 
     async getAggregate(

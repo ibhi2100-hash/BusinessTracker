@@ -172,6 +172,9 @@ export const RESET_IN_FLIGHT = `
   WHERE status = 'IN_FLIGHT' AND lockedUntil <= ?
 `;
 
+export const ALL_OUTBOX =   `
+SELECT * FROM outbox`
+
 export const GET_PENDING_COUNT = `
   SELECT COUNT(*) AS count
   FROM outbox

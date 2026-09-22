@@ -1,9 +1,6 @@
 
 import { BusinessManager } from "@/src/Composer/BusinessManager";
 import { BusinessSynchronization } from "@/src/offline/sqlite/businessDatabase/synchronization/BusinessSynchronization";
-import { SyncApplicationService } from "./SyncTypes";
-import { SyncManagementState } from "@/app/(app)/(sync-mgt)/sync-management/components/syncMgtPage";
-
 
 
 export class SyncApi {
@@ -20,7 +17,9 @@ export class SyncApi {
         if(!app) {
             return null
         }
-        return app.synchronization;
+        await app.synchronization.syncNow();
+
+        return app.synchronization
     }
 
   

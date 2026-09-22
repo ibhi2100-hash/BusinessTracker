@@ -2,6 +2,7 @@ import { StatementDefinition } from "../../PreparedStatement/StatementRegistry/s
 import { AggregateStatementDefinition } from "./aggregates/aggregateStatementDefinition";
 import { BranchStatementDefinition } from "./branch/BranchStatementDefintion";
 import { BusinessStatementDefinition } from "./business/BusinessDefiinition";
+import { ConflictStatementDefinition } from "./conflicts/conflictsStatementDefinition";
 import { DashboardStatementDefinition } from "./dashboard/dashboardStatementsDefinition";
 import { EventStatementsDefinition } from "./events/EventDefinitions";
 import { ExpenseStatementDefinition } from "./expense/expenseStatementDefinition";
@@ -12,7 +13,8 @@ import { OutboxStatementsDefinition } from "./outbox/outboxStatementDefinition";
 import { ProductStatementDefinition } from "./products/productStatementsDefinition";
 import { ReportStatementDefinition } from "./report/reportStatementDefinition";
 import { SalesStatementDefinition } from "./sales/salesStatementDefinition";
-import { SyncStateStatementDefinition } from "./syncState/syncStateDefinition";
+import { SyncActivityStatementDefinition } from "./syncActivities/ActivitiesStatementDefinition";
+import { SyncStateStatementDefinition } from "./syncState/SyncStatementDefinition";
 
 export const BusinessStatementsDefinitions: StatementDefinition[] = [
     ...BusinessStatementDefinition,
@@ -28,5 +30,8 @@ export const BusinessStatementsDefinitions: StatementDefinition[] = [
     ...ReportStatementDefinition,
     ...OutboxStatementsDefinition,
     ...AggregateStatementDefinition,
-    ...SyncStateStatementDefinition
+    ...SyncStateStatementDefinition,
+    ...SyncActivityStatementDefinition,
+    ...ConflictStatementDefinition,
+    ...ProductStatementDefinition
 ]

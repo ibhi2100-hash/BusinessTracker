@@ -1,33 +1,64 @@
-import { Migration } from "../../clientDatabase/migrations/migrationContracts";
+import type { Migration } from "../../clientDatabase/migrations/migrationContracts";
+import type { SQLiteMigrationOperation } from "@/src/storage/statement/worker/WorkerProtocol";
 
-export const migration005 : Migration  = {
+export const migration005: Migration = {
     version: 5,
+
     name: "Conflict",
 
-    async up(q){
-        await q.execute(
-            `
-CREATE TABLE IF NOT EXISTS conflicts (
+    up(): readonly SQLiteMigrationOperation[] {
+        return [
+            {
+                sql: `
+                    CREATE TABLE IF NOT EXISTS conflicts (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-    id TEXT PRIMARY KEY,
+                        eventId TEXT NOT NULL UNIQUE,
 
-    aggregateId TEXT NOT NULL,
+                        aggregateId TEXT NOT NULL,
 
-    aggregateType TEXT NOT NULL,
+                        aggregateType TEXT NOT NULL,
 
-    localVersion INTEGER NOT NULL,
+                        localVersion INTEGER NOT NULL,
 
-    serverVersion INTEGER NOT NULL,
+                        serverVersion INTEGER NOT NULL,
 
-    resolution TEXT,
+                        status TEXT NOT NULL DEFAULT 'PENDING',
 
-    payload TEXT,
+                        payload TEXT,
 
-    createdAt TEXT NOT NULL,
+                        createdAt INTEGER NOT NULL,
 
-    resolvedAt TEXT
-);
-`
-        )
-    }
-} 
+                        resolvedAt INTEGER,
+
+                        updatedAt INTEGER NOT NULL
+                    );
+                `,
+            },
+
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_conflicts_aggregate
+                    ON conflicts(
+                        aggregateType,
+                        aggregateId
+                    );
+                `,
+            },
+
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_conflicts_created_at
+                    ON conflicts(createdAt);
+                `,
+            },
+
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_conflicts_resolved_at
+                    ON conflicts(resolvedAt);
+                `,
+            },
+        ];
+    },
+};

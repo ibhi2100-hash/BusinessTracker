@@ -6,6 +6,9 @@ export * from "./entities/User"
 export * from "./entities/Sales"
 export * from "./entities/dashboard"
 export * from "./entities/Expense"
+export * from "./entities/Activities";
+export * from "./entities/Conflicts";
+export * from "./entities/SyncState"
 
 
 export * from "./events/DomainEvents";

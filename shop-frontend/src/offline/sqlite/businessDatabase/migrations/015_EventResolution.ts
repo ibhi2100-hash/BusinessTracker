@@ -1,25 +1,28 @@
-import { Migration } from "../../clientDatabase/migrations/migrationContracts";
+import type { Migration } from "../../clientDatabase/migrations/migrationContracts";
+import type { SQLiteMigrationOperation } from "@/src/storage/statement/worker/WorkerProtocol";
 
 export const migration015: Migration = {
     version: 15,
+
     name: "Event Resolution",
 
-    async up(q){
-        await q.execute(
-            `
-            CREATE TABLE event_resolution (
-                id       TEXT PRIMARY KEY,
-                
-                eventId  TEXT,
+    up(): readonly SQLiteMigrationOperation[] {
+        return [
+            {
+                sql: `
+                    CREATE TABLE IF NOT EXISTS event_resolution (
+                        id TEXT PRIMARY KEY,
 
-                state   TEXT,
+                        eventId TEXT,
 
-                supersedBy   TEXT,
+                        state TEXT,
 
-                resolvedAt   INTEGER
-                );
+                        supersedBy TEXT,
 
-        `
-        )
-    }
-} 
+                        resolvedAt INTEGER
+                    );
+                `,
+            },
+        ];
+    },
+};

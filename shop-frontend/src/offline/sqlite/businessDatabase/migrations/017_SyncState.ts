@@ -1,65 +1,46 @@
-import { Migration } from "../../clientDatabase/migrations/migrationContracts";
+import type { Migration } from "../../clientDatabase/migrations/migrationContracts";
+import type { SQLiteMigrationOperation } from "@/src/storage/statement/worker/WorkerProtocol";
 
 export const migration017: Migration = {
-
     version: 17,
 
-    name: "SyncState",
+    name: "Sync",
 
-    async up(q) {
+    up(): readonly SQLiteMigrationOperation[] {
+        return [
+            {
+                sql: `
+                    DROP TABLE IF EXISTS sync;
+                `,
+            },
 
-        /*
-         * ---------------------------------------------------------
-         * Remove any previous development version of sync_state.
-         * ---------------------------------------------------------
-         *
-         * The synchronization cursor is only a checkpoint.
-         *
-         * If an old schema exists, we intentionally discard it and
-         * start synchronization from cursor 0.
-         */
+            {
+                sql: `
+                    CREATE TABLE IF NOT EXISTS sync (
+                        stream TEXT PRIMARY KEY,
 
-        await q.execute(`
-            DROP TABLE IF EXISTS sync_state;
-        `);
+                        cursor INTEGER NOT NULL DEFAULT 0,
 
+                        updatedAt INTEGER NOT NULL
+                    );
+                `,
+            },
 
-        /*
-         * ---------------------------------------------------------
-         * Create canonical synchronization state.
-         * ---------------------------------------------------------
-         */
-
-        await q.execute(`
-            CREATE TABLE sync_state (
-
-                stream TEXT PRIMARY KEY,
-
-                cursor INTEGER NOT NULL DEFAULT 0,
-
-                updatedAt INTEGER NOT NULL
-
-            );
-        `);
-
-
-        /*
-         * ---------------------------------------------------------
-         * Create initial BUSINESS stream checkpoint.
-         * ---------------------------------------------------------
-         */
-
-        await q.execute(`
-            INSERT INTO sync_state (
-                stream,
-                cursor,
-                updatedAt
-            )
-            VALUES (
-                'BUSINESS',
-                0,
-                ${Date.now()}
-            );
-        `);
-    }
+            {
+                sql: `
+                    INSERT INTO sync (
+                        stream,
+                        cursor,
+                        updatedAt
+                    )
+                    VALUES (?, ?, ?);
+                `,
+                params: [
+                    "BUSINESS",
+                    0,
+                    Date.now(),
+                ],
+            },
+        ];
+    },
 };

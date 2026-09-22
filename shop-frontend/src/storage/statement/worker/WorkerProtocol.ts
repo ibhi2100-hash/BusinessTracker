@@ -8,14 +8,40 @@ import type {
 
 /**
  * ============================================================
- * TRANSACTION OPERATION
+ * NORMAL TRANSACTION OPERATION
  * ============================================================
  *
- * Operations executed against ONE database inside a transaction.
+ * Used by application/domain transactions.
+ *
+ * Every operation references a registered prepared statement.
  */
 export interface SQLiteStatementOperation {
 
     statementKey: string;
+
+    params?: readonly unknown[];
+}
+
+
+/**
+ * ============================================================
+ * MIGRATION SQL OPERATION
+ * ============================================================
+ *
+ * Used ONLY by the migration system.
+ *
+ * Migrations need arbitrary SQL because they perform things like:
+ *
+ * - CREATE TABLE
+ * - ALTER TABLE
+ * - CREATE INDEX
+ * - CREATE TRIGGER
+ * - INSERT seed data
+ * - etc.
+ */
+export interface SQLiteMigrationOperation {
+
+    sql: string;
 
     params?: readonly unknown[];
 }
@@ -37,6 +63,7 @@ export type SQLiteWorkerRequest =
     | SQLiteWorkerStatementQueryRequest
     | SQLiteWorkerRegisterStatementsRequest
     | SQLiteWorkerTransactionRequest
+    | SQLiteWorkerMigrationRequest
     | SQLiteWorkerHealthRequest;
 
 
@@ -44,38 +71,18 @@ export type SQLiteWorkerRequest =
  * ============================================================
  * INITIALIZE SQLITE ENGINE
  * ============================================================
- *
- * IMPORTANT:
- *
- * This request initializes SQLite WASM and installs the
- * selected VFS.
- *
- * It does NOT open a database.
- *
- * One SQLiteRuntime -> one initialize request.
  */
+
 export interface SQLiteWorkerInitializeRequest {
 
     type: "initialize";
 
     requestId: string;
 
-    /**
-     * SQLite VFS to use.
-     *
-     * Example:
-     * "opfs-sahpool"
-     */
     vfs?: string;
 
-    /**
-     * Optional OPFS SAH-pool directory.
-     */
     opfsDirectory?: string;
 
-    /**
-     * Enables worker-side debugging/logging.
-     */
     debug?: boolean;
 }
 
@@ -84,15 +91,8 @@ export interface SQLiteWorkerInitializeRequest {
  * ============================================================
  * OPEN DATABASE
  * ============================================================
- *
- * Opens one logical database inside the shared SQLite worker.
- *
- * The same worker may receive many of these:
- *
- * database.open(client)
- * database.open(business:A)
- * database.open(business:B)
  */
+
 export interface SQLiteWorkerOpenDatabaseRequest {
 
     type: "database.open";
@@ -101,28 +101,10 @@ export interface SQLiteWorkerOpenDatabaseRequest {
 
     database: DatabaseId;
 
-    /**
-     * SQLite database filename.
-     *
-     * For SAH-pool this should be an absolute virtual
-     * database path, e.g.
-     *
-     * /client.db
-     * /business/abc.db
-     */
     filename: string;
 
-    /**
-     * Optional per-database VFS override.
-     *
-     * Usually omitted when the runtime already has
-     * a global VFS configuration.
-     */
     vfs?: string;
 
-    /**
-     * Optional OPFS directory.
-     */
     opfsDirectory?: string;
 
     debug?: boolean;
@@ -133,11 +115,8 @@ export interface SQLiteWorkerOpenDatabaseRequest {
  * ============================================================
  * CLOSE DATABASE
  * ============================================================
- *
- * Closes ONE database.
- *
- * This does NOT terminate SQLite WASM or the worker.
  */
+
 export interface SQLiteWorkerCloseDatabaseRequest {
 
     type: "database.close";
@@ -152,9 +131,8 @@ export interface SQLiteWorkerCloseDatabaseRequest {
  * ============================================================
  * RAW EXEC
  * ============================================================
- *
- * Executes arbitrary SQL against ONE database.
  */
+
 export interface SQLiteWorkerExecRequest {
 
     type: "exec";
@@ -173,9 +151,8 @@ export interface SQLiteWorkerExecRequest {
  * ============================================================
  * RAW QUERY
  * ============================================================
- *
- * Executes arbitrary SQL and returns rows from ONE database.
  */
+
 export interface SQLiteWorkerQueryRequest {
 
     type: "query";
@@ -234,10 +211,8 @@ export interface SQLiteWorkerStatementQueryRequest {
  * ============================================================
  * REGISTER PREPARED STATEMENTS
  * ============================================================
- *
- * Registers statements inside the statement registry belonging
- * to ONE database.
  */
+
 export interface SQLiteWorkerRegisterStatementsRequest {
 
     type: "statements.initialize";
@@ -252,13 +227,16 @@ export interface SQLiteWorkerRegisterStatementsRequest {
 
 /**
  * ============================================================
- * TRANSACTION
+ * NORMAL APPLICATION TRANSACTION
  * ============================================================
  *
- * A transaction always belongs to exactly ONE database.
+ * One database.
  *
- * The individual operations therefore do NOT need their own
- * DatabaseId.
+ * The worker owns:
+ *
+ * BEGIN
+ * operations
+ * COMMIT / ROLLBACK
  */
 export interface SQLiteWorkerTransactionRequest {
 
@@ -268,7 +246,33 @@ export interface SQLiteWorkerTransactionRequest {
 
     database: DatabaseId;
 
-    operations: SQLiteStatementOperation[];
+    operations: readonly SQLiteStatementOperation[];
+}
+
+
+/**
+ * ============================================================
+ * MIGRATION TRANSACTION
+ * ============================================================
+ *
+ * One database.
+ *
+ * The worker owns:
+ *
+ * BEGIN
+ * migration SQL
+ * schema version SQL
+ * COMMIT / ROLLBACK
+ */
+export interface SQLiteWorkerMigrationRequest {
+
+    type: "migration.transaction";
+
+    requestId: string;
+
+    database: DatabaseId;
+
+    statements: readonly SQLiteMigrationOperation[];
 }
 
 
@@ -276,9 +280,8 @@ export interface SQLiteWorkerTransactionRequest {
  * ============================================================
  * HEALTH CHECK
  * ============================================================
- *
- * Checks the state of ONE opened database.
  */
+
 export interface SQLiteWorkerHealthRequest {
 
     type: "health";
@@ -291,7 +294,7 @@ export interface SQLiteWorkerHealthRequest {
 
 /**
  * ============================================================
- * SUCCESS RESPONSE
+ * SUCCESS
  * ============================================================
  */
 
@@ -307,7 +310,7 @@ export interface SQLiteWorkerSuccess {
 
 /**
  * ============================================================
- * FAILURE RESPONSE
+ * FAILURE
  * ============================================================
  */
 
@@ -330,7 +333,7 @@ export interface SQLiteWorkerFailure {
 
 /**
  * ============================================================
- * WORKER RESPONSE UNION
+ * WORKER RESPONSE
  * ============================================================
  */
 

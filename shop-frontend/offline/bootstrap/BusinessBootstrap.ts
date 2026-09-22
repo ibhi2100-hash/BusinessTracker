@@ -168,8 +168,7 @@ implements Lifecycle {
    private async createStorage(runtime: BusinessRuntime): Promise<BusinessStorage>{
         const migrationRunner = 
             new BusinessMigrationRunner(
-                runtime.queryRunner,
-                runtime.transactionManager
+                runtime.queryRunner
             )
         const statementManager = 
             new BusinessPreparedStatementManager(
@@ -183,7 +182,8 @@ implements Lifecycle {
         const repositories = 
          new BusinessRepositoryRegistry(
             statements,
-            runtime.queryRunner
+            runtime.queryRunner,
+            runtime.transactionManager
          )
 
        return new BusinessStorage(
@@ -219,7 +219,7 @@ implements Lifecycle {
     )
     const pipeline = new KernelExecutionPipeline(
         commandValidator,
-        eventbus,
+        storage.repositories.events,
         clock,
         context,
         client.clientBus,
@@ -297,8 +297,6 @@ private async createSynchronization(
 
 
     return new BusinessSynchronization(
-
-        engine,
 
         coordinator,
 

@@ -20,6 +20,7 @@ import type {
 
 import type {
     SQLiteStatementOperation,
+    SQLiteMigrationOperation
 } from "../statement/worker/WorkerProtocol";
 
 
@@ -137,7 +138,7 @@ export class QueryRunner {
      * All operations execute against this QueryRunner's database.
      */
     async transaction(
-        operations: SQLiteStatementOperation[]
+        operations: readonly SQLiteStatementOperation[]
     ): Promise<void> {
 
         await this.runtime.transaction(
@@ -145,7 +146,15 @@ export class QueryRunner {
             operations
         );
     }
+    async migrationTransaction(
+        statements: readonly SQLiteMigrationOperation[]
+    ): Promise<void> {
 
+        await this.runtime.migrationTransaction(
+            this.database,
+            statements
+        );
+    }
 
     /**
      * Database this QueryRunner is bound to.

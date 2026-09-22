@@ -1,43 +1,50 @@
-import { Migration } from "../../clientDatabase/migrations/migrationContracts";
+import type { Migration } from "../../clientDatabase/migrations/migrationContracts";
+import type { SQLiteMigrationOperation } from "@/src/storage/statement/worker/WorkerProtocol";
 
 export const migration001: Migration = {
     version: 1,
+
     name: "Necessary tables for Business",
 
-    async up(q){
-        await q.execute(
-            `
--- Schema Version
+    up(): readonly SQLiteMigrationOperation[] {
+        return [
+            {
+                sql: `
+                    CREATE TABLE IF NOT EXISTS schema_version (
+                        version INTEGER PRIMARY KEY,
+                        appliedAt TEXT NOT NULL
+                    );
+                `,
+            },
 
-CREATE TABLE IF NOT EXISTS schema_version (
-    version INTEGER PRIMARY KEY,
-    appliedAt TEXT NOT NULL
-);
+            {
+                sql: `
+                    CREATE TABLE IF NOT EXISTS sync_state (
+                        businessId TEXT PRIMARY KEY,
 
+                        deviceId TEXT NOT NULL,
 
--- Sync State
+                        lastGlobalPosition INTEGER DEFAULT 0,
 
-CREATE TABLE IF NOT EXISTS sync_state (
-    businessId TEXT PRIMARY KEY,
+                        lastSnapshotVersion INTEGER DEFAULT 0,
 
-    deviceId TEXT NOT NULL,
+                        lastSnapshotPosition INTEGER DEFAULT 0,
 
-    lastGlobalPosition INTEGER DEFAULT 0,
+                        lastSyncAt TEXT,
 
-    lastSnapshotVersion INTEGER DEFAULT 0,
+                        createdAt TEXT NOT NULL,
 
-    lastSnapshotPosition INTEGER DEFAULT 0,
+                        updatedAt TEXT NOT NULL
+                    );
+                `,
+            },
 
-    lastSyncAt TEXT,
-
-    createdAt TEXT NOT NULL,
-
-    updatedAt TEXT NOT NULL
-);
-
-CREATE INDEX IF NOT EXISTS idx_sync_global_position
-ON sync_state(lastGlobalPosition);
-`
-        )
-    }
-}
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_sync_global_position
+                    ON sync_state(lastGlobalPosition);
+                `,
+            },
+        ];
+    },
+};

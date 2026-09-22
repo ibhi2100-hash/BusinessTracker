@@ -1,371 +1,426 @@
 import { DomainEvent } from "@business/shared-types";
 import { QueryRunner } from "@/src/storage/queryRunner/QueryRunner";
 import { OutboxStatments } from "../../statements/outbox/outboxStatements";
+import { changeNotifier } from "@/src/offline/sqlite/businessDatabase/projections/changeNoifier";
+import { SQLiteStatementOperation } from "@/src/storage/statement/worker/WorkerProtocol";
+import { OutboxKeys } from "../../statements/outbox/outBoxKeys";
 
 export type OutboxStatus =
-  | "PENDING"
-  | "IN_FLIGHT"
-  | "SYNCED"
-  | "CONFLICT"
-  | "REJECTED";
+    | "PENDING"
+    | "IN_FLIGHT"
+    | "SYNCED"
+    | "CONFLICT"
+    | "REJECTED";
 
 export interface PendingOutboxEvent {
-
     outboxId: string;
-
     retryCount: number;
-
     maxAttempts: number;
-
     event: DomainEvent;
 }
+
 export interface OutboxRow {
 
-  // =========================
-  // OUTBOX
-  // =========================
+    // =========================
+    // OUTBOX
+    // =========================
 
-  outboxId: string;
+    outboxId: string;
+    eventId: string;
 
-  eventId: string;
+    status: OutboxStatus;
 
-  status: OutboxStatus;
+    retryCount: number;
+    maxAttempts: number;
 
-  retryCount: number;
+    nextRetryAt: number | null;
+    lockedUntil: number | null;
 
-  maxAttempts: number;
+    lastError: string | null;
 
-  nextRetryAt: number | null;
+    outboxCreatedAt: number;
 
-  lockedUntil: number | null;
+    syncedAt: number | null;
 
-  lastError: string | null;
+    globalPosition: number | null;
 
-  outboxCreatedAt: number;
+    outboxAggregateVersion: number | null;
 
-  syncedAt: number | null;
+    server_commit_time: number | null;
 
-  globalPosition: number | null;
+    // =========================
+    // EVENT
+    // =========================
 
-  outboxAggregateVersion: number | null;
+    id: string;
 
-  server_commit_time: number | null;
+    aggregateId: string;
+    aggregateType: string;
 
+    expectedAggregateVersion: number;
 
-  // =========================
-  // EVENT
-  // =========================
+    type: string;
 
-  id: string;
+    mode: "OPENING" | "LIVE";
 
-  aggregateId: string;
+    businessId: string | null;
+    branchId: string | null;
 
-  aggregateType: string;
+    payload: string;
 
-  expectedAggregateVersion: number;
+    actor: string;
 
-  type: string;
+    causationId: string;
 
-  mode: "OPENING" | "LIVE";
+    correlationId: string | null;
 
-  businessId: string | null;
+    logicClock: number;
 
-  branchId: string | null;
+    eventCreatedAt: number;
 
-  payload: string;
-
-  actor: string;
-
-  causationId: string;
-
-  correlationId: string | null;
-
-  logicClock: number;
-
-  eventCreatedAt: number;
-
-  checksum: string | null;
+    checksum: string | null;
 }
 
 export interface NewOutboxEntry {
-  id: string;
-  eventId: string;
-  createdAt: number;
-  status?: OutboxStatus;
-  retryCount?: number;
-  maxAttempts?: number;
-  nextRetryAt?: number | null;
-  lockedUntil?: number | null;
-  lastError?: string | null;
-  syncedAt?: number | null;
-  globalPosition?: number | null;
-  aggregateVersion?: number | null;
-  server_commit_time?: number | null;
+    id: string;
+    eventId: string;
+    createdAt: number;
+
+    status?: OutboxStatus;
+
+    retryCount?: number;
+    maxAttempts?: number;
+
+    nextRetryAt?: number | null;
+    lockedUntil?: number | null;
+
+    lastError?: string | null;
+
+    syncedAt?: number | null;
+
+    globalPosition?: number | null;
+
+    aggregateVersion?: number | null;
+
+    server_commit_time?: number | null;
 }
 
 export class SQLiteOutboxRepository {
 
-  constructor(
-    private readonly statements: OutboxStatments,
-    private readonly queryRunner: QueryRunner
-  ) {}
+    constructor(
+        private readonly statements: OutboxStatments,
+        private readonly queryRunner: QueryRunner
+    ) {}
 
-  async insert(data: NewOutboxEntry): Promise<void> {
-    await this.statements.insert.execute(
-      OutboxMapper.toInsert(data)
-    );
-  }
+    // =========================================================
+    // WRITE
+    // =========================================================
 
- async getPending(
-    now: number,
-    limit = 100
-): Promise<PendingOutboxEvent[]> {
+    async insert(
+        data: NewOutboxEntry
+    ): Promise<void> {
 
-    const rows =
-        await this.statements.pendingEvents.query<OutboxRow>([
-            now,
-            now,
-            limit,
+        await this.statements.insert.execute(
+            OutboxMapper.toInsert(data)
+        );
+
+        /*
+         * The outbox has changed.
+         *
+         * Any live query depending on "outbox"
+         * must re-read SQLite.
+         */
+        changeNotifier.notify([
+            "outbox",
         ]);
-
-    return rows.map(row => ({
-        outboxId:
-            row.outboxId,
-
-        retryCount:
-            row.retryCount,
-
-        maxAttempts:
-            row.maxAttempts,
-
-        event:
-            OutboxMapper.toDomainEvent(row),
-    }));
-}
-
-  async lockBatch(
-    ids: string[],
-    lockedUntil: number,
-    now: number
-  ): Promise<void> {
-
-    if (ids.length === 0) {
-      return;
     }
 
-    const placeholders =
-      ids.map(() => "?").join(", ");
+    insertOperation(
+        data: NewOutboxEntry
+    ): SQLiteStatementOperation {
 
-    const sql = `
-      UPDATE outbox
-      SET
-        lockedUntil = ?,
-        status = 'IN_FLIGHT'
-      WHERE id IN (${placeholders})
-      AND status = 'PENDING'
-      AND (
-        lockedUntil IS NULL
-        OR lockedUntil <= ?
-      )
-    `;
+        return {
+            statementKey: OutboxKeys.insert,
+            params: OutboxMapper.toInsert(data)
+        };
+    }
+    // =========================================================
+    // READ
+    // =========================================================
 
-    await this.queryRunner.execute(
-      sql,
-      [
-        lockedUntil,
-        ...ids,
-        now
-      ]
-    );
-  }
+    async getPending(
+        now: number,
+        limit = 100
+    ): Promise<PendingOutboxEvent[]> {
 
-  async markSynced(
-    outboxId: string,
-    syncedAt: number,
-    globalPosition: number,
-    aggregateVersion: number,
-    serverCommitTime: number
-  ): Promise<void> {
+        const rows =
+            await this.statements.pendingEvents.query<OutboxRow>([
+                now,
+                now,
+                limit,
+            ]);
 
-    await this.statements.markSynced.execute([
-      syncedAt,
-      globalPosition,
-      aggregateVersion,
-      serverCommitTime,
-      outboxId
-    ]);
-  }
+        return rows.map(row => ({
+            outboxId:
+                row.outboxId,
 
-  async markConflict(
-    outboxId: string,
-    error: string
-  ): Promise<void> {
+            retryCount:
+                row.retryCount,
 
-    await this.statements.markConflict.execute([
-      error,
-      outboxId
-    ]);
-  }
+            maxAttempts:
+                row.maxAttempts,
 
-  async markRejected(
-    outboxId: string,
-    error: string
-  ): Promise<void> {
+            event:
+                OutboxMapper.toDomainEvent(row),
+        }));
+    }
 
-    await this.statements.markRejected.execute([
-      error,
-      outboxId
-    ]);
-  }
+    // =========================================================
+    // LOCK
+    // =========================================================
 
-  async scheduleRetry(
-    outboxId: string,
-    nextRetryAt: number,
-    error: string
-  ): Promise<void> {
+    async lockBatch(
+        ids: string[],
+        lockedUntil: number,
+        now: number
+    ): Promise<void> {
 
-    await this.statements.scheduleRetry.execute([
-      nextRetryAt,
-      error,
-      outboxId
-    ]);
-  }
+        if (ids.length === 0) {
+            return;
+        }
 
-  async resetStaleInFlight(
-    now: number
-  ): Promise<void> {
+        const placeholders =
+            ids.map(() => "?").join(", ");
 
-    await this.statements.resetInFlight.execute([
-      now
-    ]);
-  }
+        const sql = `
+            UPDATE outbox
+            SET
+                lockedUntil = ?,
+                status = 'IN_FLIGHT'
+            WHERE id IN (${placeholders})
+            AND status = 'PENDING'
+            AND (
+                lockedUntil IS NULL
+                OR lockedUntil <= ?
+            )
+        `;
 
-  async getPendingCount(
-    now: number
-  ): Promise<number> {
-    const result = await this.statements.pendingCount.query<{ count: number }>([
-      now,
-      now
-    ]);
-    return result[0].count;
-  }
+        await this.queryRunner.execute(
+            sql,
+            [
+                lockedUntil,
+                ...ids,
+                now,
+            ]
+        );
+
+        changeNotifier.notify([
+            "outbox",
+        ]);
+    }
+
+    // =========================================================
+    // SYNC SUCCESS
+    // =========================================================
+
+    async markSynced(
+        outboxId: string,
+        syncedAt: number,
+        globalPosition: number,
+        aggregateVersion: number,
+        serverCommitTime: number
+    ): Promise<void> {
+
+        await this.statements.markSynced.execute([
+            syncedAt,
+            globalPosition,
+            aggregateVersion,
+            serverCommitTime,
+            outboxId,
+        ]);
+
+        changeNotifier.notify([
+            "outbox",
+        ]);
+    }
+
+    // =========================================================
+    // CONFLICT
+    // =========================================================
+
+    async markConflict(
+        outboxId: string,
+        error: string
+    ): Promise<void> {
+
+        await this.statements.markConflict.execute([
+            error,
+            outboxId,
+        ]);
+
+        changeNotifier.notify([
+            "outbox",
+        ]);
+    }
+
+    // =========================================================
+    // REJECTED
+    // =========================================================
+
+    async markRejected(
+        outboxId: string,
+        error: string
+    ): Promise<void> {
+
+        await this.statements.markRejected.execute([
+            error,
+            outboxId,
+        ]);
+
+        changeNotifier.notify([
+            "outbox",
+        ]);
+    }
+
+    // =========================================================
+    // RETRY
+    // =========================================================
+
+    async scheduleRetry(
+        outboxId: string,
+        nextRetryAt: number,
+        error: string
+    ): Promise<void> {
+
+        await this.statements.scheduleRetry.execute([
+            nextRetryAt,
+            error,
+            outboxId,
+        ]);
+
+        changeNotifier.notify([
+            "outbox",
+        ]);
+    }
+
+    // =========================================================
+    // RECOVER STALE LOCKS
+    // =========================================================
+
+    async resetStaleInFlight(
+        now: number
+    ): Promise<void> {
+
+        await this.statements.resetInFlight.execute([
+            now,
+        ]);
+
+        changeNotifier.notify([
+            "outbox",
+        ]);
+    }
+
+    // =========================================================
+    // READ
+    // =========================================================
+
+    async getPendingCount(
+        now: number
+    ): Promise<number> {
+
+        const result =
+            await this.statements.pendingCount.query<{
+                count: number;
+            }>([
+                now,
+                now,
+            ]);
+
+        return result[0]?.count ?? 0;
+    }
+
+    async getAllOutbox() {
+        return this.statements.allOutbox.query();
+    }
 }
 
 class OutboxMapper {
 
-  static toInsert(
-    data: NewOutboxEntry
-  ): unknown[] {
+    static toInsert(
+        data: NewOutboxEntry
+    ): unknown[] {
 
-    return [
-      data.id,
-      data.eventId,
-      data.status ?? "PENDING",
-      data.retryCount ?? 0,
-      data.maxAttempts ?? 10,
-      data.nextRetryAt ?? null,
-      data.lockedUntil ?? null,
-      data.lastError ?? null,
-      data.createdAt,
-      data.syncedAt ?? null,
-      data.globalPosition ?? null,
-      data.aggregateVersion ?? null,
-      data.server_commit_time ?? null,
-    ];
-  }
+        return [
+            data.id,
+            data.eventId,
+            data.status ?? "PENDING",
+            data.retryCount ?? 0,
+            data.maxAttempts ?? 10,
+            data.nextRetryAt ?? null,
+            data.lockedUntil ?? null,
+            data.lastError ?? null,
+            data.createdAt,
+            data.syncedAt ?? null,
+            data.globalPosition ?? null,
+            data.aggregateVersion ?? null,
+            data.server_commit_time ?? null,
+        ];
+    }
 
-  static toDomainEvent(
-    row: OutboxRow
-  ): DomainEvent {
+    static toDomainEvent(
+        row: OutboxRow
+    ): DomainEvent {
 
-    const payload = JSON.parse(row.payload);
+        const payload =
+            JSON.parse(row.payload);
 
-    const actor = JSON.parse(row.actor);
+        const actor =
+            JSON.parse(row.actor);
 
-    return {
+        return {
 
-      // =========================
-      // EVENT IDENTITY
-      // =========================
+            id:
+                row.id,
 
-      id: row.id,
+            aggregateId:
+                row.aggregateId,
 
-      aggregateId:
-        row.aggregateId,
+            aggregateType:
+                row.aggregateType,
 
-      aggregateType:
-        row.aggregateType,
+            expectedAggregateVersion:
+                row.expectedAggregateVersion,
 
-      expectedAggregateVersion:
-        row.expectedAggregateVersion,
+            type:
+                row.type,
 
+            mode:
+                row.mode,
 
-      // =========================
-      // EVENT SEMANTICS
-      // =========================
+            payload,
 
-      type:
-        row.type,
+            businessId:
+                row.businessId,
 
-      mode:
-        row.mode,
+            branchId:
+                row.branchId,
 
-      payload,
+            actor,
 
-      
-      // =========================
-      // SCOPE
-      // =========================
+            causationId:
+                row.causationId,
 
-      businessId:
-        row.businessId,
+            correlationId:
+                row.correlationId ?? undefined,
 
-      branchId:
-        row.branchId,
+            logicClock:
+                row.logicClock,
 
+            createdAt:
+                row.eventCreatedAt,
 
-      // =========================
-      // ACTOR
-      // =========================
-
-      actor,
-
-
-      // =========================
-      // CAUSALITY
-      // =========================
-
-      causationId:
-        row.causationId,
-
-      correlationId:
-        row.correlationId ?? undefined,
-
-
-      // =========================
-      // ORDERING
-      // =========================
-
-      logicClock:
-        row.logicClock,
-
-
-      // =========================
-      // TIME
-      // =========================
-
-      createdAt:
-        row.eventCreatedAt,
-
-
-      // =========================
-      // INTEGRITY
-      // =========================
-
-      checksum:
-        row.checksum
-    };
-  }
-
-
+            checksum:
+                row.checksum,
+        };
+    }
 }

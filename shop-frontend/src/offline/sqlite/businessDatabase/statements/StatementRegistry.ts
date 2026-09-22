@@ -12,8 +12,10 @@ import { DashboardStatements } from "./dashboard/dashboardStatements";
 import { ReportStatements } from "./report/reportStatements";
 import { OutboxStatments } from "./outbox/outboxStatements";
 import { AggregateStatements } from "./aggregates/aggregateStatements";
-import { SyncStateStatements } from "./syncState/syncStateStatements";
+import { SyncStateStatements } from "./syncState/SyncStatements";
 import { ExpenseStatement } from "./expense/expenseStatements";
+import { ConflictsStatements } from "./conflicts/conflictsStatement";
+import { SyncActivityStatements } from "./syncActivities/ActivityStatements";
 
 
 export class BusinessStatementRegistry {
@@ -31,6 +33,8 @@ export class BusinessStatementRegistry {
     readonly aggregates: AggregateStatements;
     readonly logicClock: LogicClockStatements;
     readonly syncState: SyncStateStatements;
+    readonly conflict: ConflictsStatements;
+    readonly syncActivity: SyncActivityStatements;
 
     constructor(
         manager: PreparedStatementManager
@@ -76,6 +80,12 @@ export class BusinessStatementRegistry {
 
         this.syncState = 
             new SyncStateStatements(manager)
+
+        this.conflict = 
+            new ConflictsStatements(manager)
+
+        this.syncActivity =  
+            new SyncActivityStatements(manager)
 
         
     }

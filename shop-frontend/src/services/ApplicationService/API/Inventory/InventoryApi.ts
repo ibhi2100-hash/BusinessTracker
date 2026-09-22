@@ -57,6 +57,8 @@ export class InventoryApi {
         const app = await this.manager.current();
 
         const adjustCommand = await app.domain.commandFactory.create(adjustIntent);
+
+        console.log("This is the adjust command: ", adjustCommand)
         
         await app.domain.kernel.execute(adjustCommand)
     }

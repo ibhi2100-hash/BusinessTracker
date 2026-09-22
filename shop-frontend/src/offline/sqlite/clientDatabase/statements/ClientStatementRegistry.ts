@@ -12,7 +12,7 @@ export class ClientStatementRegistry {
     readonly executionContext: ExecutionContextStatements;
     readonly knownNodes: KnownNodesStatements;
     readonly applicationState: ApplicationStateStatements;
-    readonly currentBusiness: CurrentBusinessStatements
+    readonly currentBusiness: CurrentBusinessStatements;
 
     constructor(
         manager: PreparedStatementManager
@@ -32,6 +32,6 @@ export class ClientStatementRegistry {
             new ApplicationStateStatements(manager)
 
         this.currentBusiness = 
-            new CurrentBusinessStatements(manager)
+            new CurrentBusinessStatements(manager);
     }
 }

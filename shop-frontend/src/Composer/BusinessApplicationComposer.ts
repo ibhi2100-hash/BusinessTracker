@@ -11,6 +11,7 @@ import { BusinessContextProvider } from "./context/BusinessContextContract";
 
 
 
+
 export class BusinessApplication
 implements  BusinessApplicationContract,
             Lifecycle {
@@ -29,7 +30,8 @@ implements  BusinessApplicationContract,
 
         readonly synchronization: BusinessSynchronization,
 
-        readonly rebuilder: ProjectionRebuilder
+        readonly rebuilder: ProjectionRebuilder,
+
 
 
     ) {}

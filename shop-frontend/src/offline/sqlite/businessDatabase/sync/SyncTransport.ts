@@ -3,7 +3,7 @@ import {
     SyncPushResult,
     SyncPullResult,
     SyncTransport,
-} from "./types";
+} from "@business/shared-types";
 
 import { apiFetch } from "@/lib/api";
 
@@ -50,9 +50,10 @@ export class HttpSyncTransport
             );
         }
 
-        console.log("this is the Response for Pushing Events: ",await response.json())
+        const result =
+            await response.json() as SyncPushResult;
 
-        return await response.json();
+        return result;
     }
 
 

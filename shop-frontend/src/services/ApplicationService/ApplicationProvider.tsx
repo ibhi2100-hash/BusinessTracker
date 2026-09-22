@@ -43,24 +43,10 @@ import {
 } from "@/components/providers/SyncProvider";
 
 
-/*
- * ============================================================
- * Props
- * ============================================================
- */
-
 interface Props {
-
-    children:
-        ReactNode;
+    children: ReactNode;
 }
 
-
-/*
- * ============================================================
- * ApplicationProvider
- * ============================================================
- */
 
 export function ApplicationProvider({
     children,
@@ -69,12 +55,6 @@ export function ApplicationProvider({
     const router =
         useRouter();
 
-
-    /*
-     * ========================================================
-     * Application state
-     * ========================================================
-     */
 
     const [
         application,
@@ -89,12 +69,6 @@ export function ApplicationProvider({
         setReady,
     ] = useState(false);
 
-
-    /*
-     * ========================================================
-     * Boot state
-     * ========================================================
-     */
 
     const [
         boot,
@@ -118,30 +92,16 @@ export function ApplicationProvider({
 
         completedTasks:
             0,
-
     });
 
 
-    /*
-     * ========================================================
-     * Bootstrap lifecycle
-     * ========================================================
-     */
-
     useEffect(() => {
 
-        let mounted =
-            true;
+        let mounted = true;
 
 
         const listener:
             BootListener = {
-
-            /*
-             * ------------------------------------------------
-             * Boot started
-             * ------------------------------------------------
-             */
 
             onStarted(
                 totalTasks
@@ -181,12 +141,6 @@ export function ApplicationProvider({
             },
 
 
-            /*
-             * ------------------------------------------------
-             * Task started
-             * ------------------------------------------------
-             */
-
             onTaskStarted(
                 task,
                 progress
@@ -224,12 +178,6 @@ export function ApplicationProvider({
                 );
             },
 
-
-            /*
-             * ------------------------------------------------
-             * Task completed
-             * ------------------------------------------------
-             */
 
             onTaskCompleted(
                 task,
@@ -269,12 +217,6 @@ export function ApplicationProvider({
             },
 
 
-            /*
-             * ------------------------------------------------
-             * Boot completed
-             * ------------------------------------------------
-             */
-
             onCompleted() {
 
                 if (!mounted) {
@@ -299,12 +241,6 @@ export function ApplicationProvider({
                 );
             },
 
-
-            /*
-             * ------------------------------------------------
-             * Boot failed
-             * ------------------------------------------------
-             */
 
             onFailed(
                 error
@@ -333,21 +269,15 @@ export function ApplicationProvider({
         };
 
 
-        /*
-         * ====================================================
-         * Bootstrap
-         * ====================================================
-         */
-
         async function bootstrap():
             Promise<void> {
 
             try {
 
                 /*
-                 * ------------------------------------------------
-                 * Construct boot manager.
-                 * ------------------------------------------------
+                 * ====================================================
+                 * CREATE BOOT MANAGER
+                 * ====================================================
                  */
 
                 const manager =
@@ -358,9 +288,9 @@ export function ApplicationProvider({
 
 
                 /*
-                 * ------------------------------------------------
-                 * Boot application.
-                 * ------------------------------------------------
+                 * ====================================================
+                 * BOOT APPLICATION
+                 * ====================================================
                  */
 
                 const result =
@@ -379,26 +309,18 @@ export function ApplicationProvider({
 
 
                 /*
-                 * ------------------------------------------------
-                 * Store application.
-                 * ------------------------------------------------
-                 */
-
-                setApplication(
-                    app
-                );
-
-
-                /*
-                 * ------------------------------------------------
-                 * Application services should already be
-                 * constructed by BusinessBootstrapper.
+                 * ====================================================
+                 * INITIALIZE APPLICATION SYNC SERVICE
+                 * ====================================================
                  *
-                 * Initialize synchronization application state
-                 * before the UI begins consuming it.
-                 * ------------------------------------------------
+                 * At this point all local infrastructure should
+                 * already have been constructed by the bootstrapper.
                  */
 
+
+                if (!mounted) {
+                    return;
+                }
 
                 
                 if (!mounted) {
@@ -407,9 +329,20 @@ export function ApplicationProvider({
 
 
                 /*
-                 * ------------------------------------------------
-                 * Restore persisted route.
-                 * ------------------------------------------------
+                 * ====================================================
+                 * PUBLISH APPLICATION
+                 * ====================================================
+                 */
+
+                setApplication(
+                    app
+                );
+
+
+                /*
+                 * ====================================================
+                 * RESTORE LAST ROUTE
+                 * ====================================================
                  */
 
                 const {
@@ -428,10 +361,10 @@ export function ApplicationProvider({
 
 
                 /*
-                 * ------------------------------------------------
-                 * Application is ready.
-                 * ------------------------------------------------
-                 */
+                 * ====================================================
+                 * APPLICATION READY
+                 * ====================================================
+ */
 
                 setReady(
                     true
@@ -441,7 +374,6 @@ export function ApplicationProvider({
                 router.replace(
                     lastRoute
                 );
-
 
             } catch (error) {
 
@@ -477,12 +409,6 @@ export function ApplicationProvider({
         void bootstrap();
 
 
-        /*
-         * ====================================================
-         * React cleanup
-         * ====================================================
-         */
-
         return () => {
 
             mounted =
@@ -495,9 +421,9 @@ export function ApplicationProvider({
 
 
     /*
-     * ========================================================
-     * Boot screen
-     * ========================================================
+     * ============================================================
+     * BOOT SCREEN
+     * ============================================================
      */
 
     if (!ready) {
@@ -511,9 +437,9 @@ export function ApplicationProvider({
 
 
     /*
-     * ========================================================
-     * Defensive guard
-     * ========================================================
+     * ============================================================
+     * DEFENSIVE GUARD
+     * ============================================================
      */
 
     if (
@@ -525,9 +451,9 @@ export function ApplicationProvider({
 
 
     /*
-     * ========================================================
-     * Application tree
-     * ========================================================
+     * ============================================================
+     * APPLICATION TREE
+     * ============================================================
      */
 
     return (

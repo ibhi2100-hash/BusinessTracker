@@ -37,4 +37,8 @@ export class OutboxStatments {
     get pendingCount(){
         return this.manager.get(OutboxKeys.getPendingCount)
     }
+
+    get allOutbox(){
+        return this.manager.get(OutboxKeys.getAllOutbox)
+    }
 }

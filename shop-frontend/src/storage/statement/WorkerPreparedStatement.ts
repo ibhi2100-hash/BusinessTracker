@@ -1,17 +1,14 @@
-// WorkerPreparedStatement.ts
-
-import { PreparedStatement } from "@/src/offline/sqlite/PreparedStatement/PreparedStatementContract";
+import { DatabaseId } from "./worker/DatabaseId";
+import type { PreparedStatement } from "@/src/offline/sqlite/PreparedStatement/PreparedStatementContract";
 import { SQLiteRuntime } from "../runtime/SQLiteRuntime";
 
 export class WorkerPreparedStatement
 implements PreparedStatement {
 
     constructor(
-        private readonly runtime:
-            SQLiteRuntime,
-
-        private readonly key:
-            string
+        private readonly runtime: SQLiteRuntime,
+        private readonly database: DatabaseId,
+        private readonly key: string
     ) {}
 
     async execute(
@@ -20,13 +17,12 @@ implements PreparedStatement {
 
         await this.runtime.request({
             type: "statement.execute",
+
             requestId: crypto.randomUUID(),
 
-            database: {
-                type: "client"
-            },
-            statementKey:
-                this.key,
+            database: this.database,
+
+            statementKey: this.key,
 
             params,
         });
@@ -37,22 +33,19 @@ implements PreparedStatement {
     ): Promise<T[]> {
 
         const result =
-            await this.runtime.request({
+            await this.runtime.request<T[]>({
                 type: "statement.query",
 
                 requestId: crypto.randomUUID(),
 
-                database: {
-                    type: "client"
-                },
+                database: this.database,
 
-                statementKey:
-                    this.key,
+                statementKey: this.key,
 
                 params,
             });
 
-        return result as T[];
+        return result;
     }
 
     async scalar<T>(
@@ -60,19 +53,13 @@ implements PreparedStatement {
     ): Promise<T | null> {
 
         const rows =
-            await this.query<Record<string, unknown>>(
-                params
-            );
+            await this.query<Record<string, unknown>>(params);
 
-        if (
-            rows.length === 0
-        ) {
+        if (rows.length === 0) {
             return null;
         }
 
-        return Object.values(
-            rows[0]
-        )[0] as T;
+        return Object.values(rows[0])[0] as T;
     }
 
     async exists(
@@ -80,18 +67,10 @@ implements PreparedStatement {
     ): Promise<boolean> {
 
         const value =
-            await this.scalar<number>(
-                params
-            );
+            await this.scalar<number>(params);
 
         return value === 1;
     }
 
-    dispose(): void {
-
-        // The actual SQLite statement
-        // belongs to the Worker.
-
-        // No local resource exists here.
-    }
+    dispose(): void {}
 }

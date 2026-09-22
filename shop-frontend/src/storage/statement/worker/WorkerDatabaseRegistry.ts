@@ -8,6 +8,13 @@ import {
 import {
     WorkerStatementRegistry,
 } from "./WorkerStatementRegistry";
+import { WorkerRequest } from "@/src/offline/sqlite/protocol/WorkerRequest";
+
+
+export interface SQLiteInitializationOptions
+extends WorkerRequest {
+
+}
 
 export interface WorkerDatabaseContext {
 
@@ -29,29 +36,38 @@ export class WorkerDatabaseRegistry {
     private readonly databases = new Map<string, WorkerDatabaseContext>();
 
     async initializeSQLite(): Promise<void> {
-        if (this.sqlite3) return;
-
-        this.sqlite3 = await sqlite3InitModule();
-        try {
-            (this.sqlite3 as any).config;
-
-        }catch{
-
+        if (this.sqlite3) {
+            return;
         }
-        // Install the SAH-pool VFS (this is the important part)
-        try {
-        this.sahPoolUtil = await this.sqlite3.installOpfsSAHPoolVfs({
-            initialCapacity: 64
-        });
-        console.log("[SQLite] opfs-sahpool VFS installed successfully");
-        } catch (err) {
-        console.warn("[SQLite] Failed to install opfs-sahpool:", err);
 
-        this.sahPoolUtil = null;
-        throw err
+        // Silence classic OPFS / OPFS-WL installation noise.
+        // We only use opfs-sahpool.
+        const previousConfig = (self as any).sqlite3ApiConfig;
+        (self as any).sqlite3ApiConfig = {
+            debug: () => {},
+            log: () => {},
+            warn: () => {},
+            error: () => {},
+        };
+
+        try {
+            this.sqlite3 = await sqlite3InitModule();
+
+            this.sahPoolUtil = await this.sqlite3.installOpfsSAHPoolVfs({
+                initialCapacity: 64,
+                // optional but useful:
+                // directory: "/biztru-sqlite",   // isolate from other apps
+                // clearOnInit: false,
+            });
+        } finally {
+            // Restore whatever was there (or remove it)
+            if (previousConfig) {
+                (self as any).sqlite3ApiConfig = previousConfig;
+            } else {
+                delete (self as any).sqlite3ApiConfig;
+            }
         }
     }
-
     async open(
         database: DatabaseId,
         filename: string,

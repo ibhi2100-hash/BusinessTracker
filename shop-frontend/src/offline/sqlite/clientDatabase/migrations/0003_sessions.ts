@@ -1,27 +1,35 @@
-import { Migration } from "./migrationContracts";
-
+import type { Migration } from "./migrationContracts";
+import type { SQLiteMigrationOperation } from "@/src/storage/statement/worker/WorkerProtocol";
 export const migration0003: Migration = {
+
     version: 3,
+
     name: "create session",
-    async up(q){
-        await q.execute(
-            `
-                CREATE TABLE IF NOT EXISTS sessions (
 
-                id TEXT PRIMARY KEY,
+    up(): readonly SQLiteMigrationOperation[] {
 
-                accessToken  TEXT,
+        return [
 
-                refreshToken  TEXT,
+            {
+                sql: `
+                    CREATE TABLE IF NOT EXISTS sessions (
 
-                expiresAt INTEGER,
+                        id TEXT PRIMARY KEY,
 
-                userId  TEXT,
+                        accessToken TEXT,
 
-                createdAt INTEGER NOT NULL
+                        refreshToken TEXT,
 
-            );
-            `
-        )
-    }
-} 
+                        expiresAt INTEGER,
+
+                        userId TEXT,
+
+                        createdAt INTEGER NOT NULL
+
+                    );
+                `,
+            },
+
+        ];
+    },
+};

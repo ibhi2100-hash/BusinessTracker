@@ -4,6 +4,7 @@ import { BusinessManagerContract } from "./BusinessManagerContract";
 import { ApplicationContext } from "./context/ApplicationContext";
 import { Business } from "@business/shared-types";
 import { Lifecycle } from "../offline/sqlite/lifecycle/LifeCycle";
+import { SyncApplicationService } from "../services/ApplicationService/API/sync/SyncApplicationService";
 
 export class BusinessManager
 implements BusinessManagerContract, Lifecycle{
@@ -19,6 +20,12 @@ implements BusinessManagerContract, Lifecycle{
     ){}
 
     private currentBusinessId?: string 
+
+    private syncService: SyncApplicationService | null = null;
+
+        setSyncService(service: SyncApplicationService) {
+            this.syncService = service;
+        }
 
     async initialize() {
 
@@ -76,6 +83,7 @@ implements BusinessManagerContract, Lifecycle{
             this.currentBusinessId = 
                 businessId
 
+            await this.syncService?.attachToCurrentBusiness();
             return app
         }
 
@@ -85,18 +93,17 @@ implements BusinessManagerContract, Lifecycle{
                     businessId
                 )
                 if(existing){
+                    this.currentBusinessId= businessId;
+                    await this.syncService?.attachToCurrentBusiness();
                     return existing
                 }
-                const app = 
-                    await this.bootstrap(
+                
+                
+                return await this.bootstrap(
                         businessId
                     )
 
-                    this.applications.set(
-                        businessId,
-                        app
-                    )
-                return app
+               
         }
 
         async close(businessId: string): Promise<void> {
@@ -133,26 +140,19 @@ implements BusinessManagerContract, Lifecycle{
         }
 
         async switch(businessId: string): Promise<BusinessApplication> {
-            const app = 
-                await this.open(
-                    businessId
-                )
-                await this.client.repositories.knownNode.setCurrentBusiness(
-                    businessId
-                )
-
-                this.currentBusinessId = 
-                    businessId
-
-                return app
-        }
-
-        async dispose(): Promise<void> {
-            for(const app of this.applications.values()){
-                await app.dispose();
+            const app = await this.open(businessId);
+                await this.client.repositories.knownNode.setCurrentBusiness(businessId);
+                this.currentBusinessId = businessId;
+                await this.syncService?.attachToCurrentBusiness();
+                return app;
             }
 
-            this.applications.clear()
+        async dispose(): Promise<void> {
+                for(const app of this.applications.values()){
+                    await app.dispose();
+                    }
+
+                this.applications.clear()
 
         }
 

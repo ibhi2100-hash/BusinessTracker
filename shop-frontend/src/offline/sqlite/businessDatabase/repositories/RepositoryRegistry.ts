@@ -12,10 +12,12 @@ import { SQLiteDashboardRepository } from "./DashboardRepository/DashboardReposi
 import { SQLiteReportRepository } from "./ReportRepository/ReportRepository";
 import { SQLiteOutboxRepository } from "./SQLiteOutboxRepository/SQLiteOutboxRepository";
 import { SQLiteAggregateRepository } from "./SQLiteAggregateRepository/SQLiteAggregateRepository";
-import { SyncStateRepository } from "../sync/syncEngine";
 import { SQLiteSyncStateRepository } from "./SQLiteSyncRepository/SQLiteSyncRepository";
 import { QueryRunner } from "@/src/storage/queryRunner/QueryRunner";
 import { SQLiteExpenseRepository } from "./SQLiteProjectionRepository/SQLiteExpenseRepository";
+import { SQLiteSyncActivityRepository } from "./SQLiteSyncRepository/SQLiteActivityRepository";
+import { SQLiteConflictRepository } from "./SQLiteSyncRepository/SQLiteConflictRepository";
+import { TransactionManager } from "@/src/storage/transaction/TransactionManager";
 
 
 export class BusinessRepositoryRegistry {
@@ -46,12 +48,17 @@ export class BusinessRepositoryRegistry {
 
     readonly logicClock: LogicClockRepository;
 
-    readonly syncState: SQLiteSyncStateRepository
+    readonly syncActivity: SQLiteSyncActivityRepository;
+
+    readonly conflict: SQLiteConflictRepository;
+
+    readonly syncState: SQLiteSyncStateRepository;
 
 
     constructor(
         statements: BusinessStatementRegistry,
-        private readonly queryRunner: QueryRunner
+        private readonly queryRunner: QueryRunner,
+        private readonly transaction: TransactionManager
     ){
         this.events =
             new SQLiteEventRepository(
@@ -116,9 +123,24 @@ export class BusinessRepositoryRegistry {
                 statements.logicClock
             )
 
-        this.syncState = 
-            new SQLiteSyncStateRepository(
-                statements.syncState
+        this.syncActivity = 
+            new SQLiteSyncActivityRepository(
+                statements.syncActivity
             )
+
+        this.conflict = 
+             new SQLiteConflictRepository(
+                statements.conflict
+             )
+        this.syncState = 
+             new SQLiteSyncStateRepository(
+                statements.syncState,
+                this.syncActivity,
+                this.conflict,
+                this.outbox,
+                this.transaction
+
+             )
+        
     }
 }

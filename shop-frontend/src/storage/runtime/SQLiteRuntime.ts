@@ -8,6 +8,7 @@ import type {
     SQLiteWorkerRequest,
     SQLiteWorkerResponse,
     SQLiteStatementOperation,
+    SQLiteMigrationOperation,
 } from "../statement/worker/WorkerProtocol";
 
 import type { StatementDefinition } from "@/src/offline/sqlite/PreparedStatement/StatementRegistry/statementDefinition";
@@ -89,17 +90,15 @@ export class SQLiteRuntime implements Lifecycle {
                 "Web Workers are not available."
             );
         }
-
-        const worker =
-            new Worker(
-                new URL(
-                    "../statement/worker/sqlite.worker.ts",
-                    import.meta.url
-                ),
-                {
-                    type: "module",
-                }
-            );
+       const worker = new Worker(
+            new URL(
+                "../statement/worker/sqlite.worker.ts",
+                import.meta.url
+            ),
+            {
+                type: "module",
+            }
+        );
 
         this.worker = worker;
 
@@ -362,7 +361,7 @@ export class SQLiteRuntime implements Lifecycle {
 
     async transaction(
         database: DatabaseId,
-        operations: SQLiteStatementOperation[]
+        operations: readonly SQLiteStatementOperation[]
     ): Promise<void> {
 
         await this.request({
@@ -388,6 +387,19 @@ export class SQLiteRuntime implements Lifecycle {
                 crypto.randomUUID(),
 
             database,
+        });
+    }
+
+    async migrationTransaction(
+        database: DatabaseId,
+        statements: readonly SQLiteMigrationOperation[]
+    ): Promise<void> {
+
+        await this.request({
+            type: "migration.transaction",
+            requestId: crypto.randomUUID(),
+            database,
+            statements,
         });
     }
 

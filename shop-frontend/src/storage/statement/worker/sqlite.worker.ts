@@ -25,6 +25,33 @@ function success(
     };
 }
 
+type QueuedRequest = SQLiteWorkerRequest;
+
+let workerQueue: Promise<void> = Promise.resolve();
+
+function enqueue(
+    request: QueuedRequest
+): void {
+
+    workerQueue =
+        workerQueue
+            .then(async () => {
+
+                const response =
+                    await handleRequest(request);
+
+                self.postMessage(response);
+
+            })
+            .catch(error => {
+
+                console.error(
+                    "[SQLiteWorker] Queue failure",
+                    error
+                );
+            });
+}
+
 
 function failure(
     requestId: string,
@@ -152,7 +179,7 @@ async function handleRequest(
                     await databases.open(
                         request.database,
                         request.filename,
-                        undefined,
+                        request.vfs,
                         request.debug
                     );
 
@@ -367,6 +394,23 @@ async function handleRequest(
                 );
             }
 
+            case "migration.transaction": {
+
+                const context =
+                    databases.get(
+                        request.database
+                    );
+
+                runMigrationTransaction(
+                    context.db,
+                    request.statements
+                );
+
+                return success(
+                    request.requestId
+                );
+            }
+
 
             default: {
 
@@ -388,12 +432,15 @@ async function handleRequest(
     }
 }
 
-
 function runTransaction(
     db: any,
     statements: any,
-    operations: SQLiteStatementOperation[]
+    operations: readonly SQLiteStatementOperation[]
 ): void {
+
+    if (operations.length === 0) {
+        return;
+    }
 
     db.exec("BEGIN IMMEDIATE");
 
@@ -408,7 +455,7 @@ function runTransaction(
 
             executeStatement(
                 statement,
-                operation.params
+                operation.params ?? []
             );
         }
 
@@ -418,25 +465,58 @@ function runTransaction(
 
         try {
             db.exec("ROLLBACK");
-        } catch {}
+        } catch {
+            // Preserve the original transaction error.
+        }
 
         throw error;
     }
 }
 
 
+function runMigrationTransaction(
+    db: any,
+    statements: readonly {
+        sql: string;
+        params?: readonly unknown[];
+    }[]
+): void {
+
+    if (statements.length === 0) {
+        return;
+    }
+
+    db.exec("BEGIN IMMEDIATE");
+
+    try {
+
+        for (const statement of statements) {
+
+            db.exec({
+                sql: statement.sql,
+                bind: statement.params ?? [],
+            });
+        }
+
+        db.exec("COMMIT");
+
+    } catch (error) {
+
+        try {
+            db.exec("ROLLBACK");
+        } catch {
+            // Preserve original migration error.
+        }
+
+        throw error;
+    }
+}
 self.addEventListener(
     "message",
-    async (
+    (
         event: MessageEvent<SQLiteWorkerRequest>
     ) => {
 
-        const request =
-            event.data;
-
-        const response =
-            await handleRequest(request);
-
-        self.postMessage(response);
+        enqueue(event.data);
     }
 );

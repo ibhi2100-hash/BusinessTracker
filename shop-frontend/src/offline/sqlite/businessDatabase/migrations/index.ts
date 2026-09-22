@@ -10,12 +10,14 @@ import { migration009 } from "./009_Inventory";
 import { migration010 } from "./010_Ledger";
 import { migration011 } from "./011_CheckPoint";
 import { migration012 } from "./012_Outbox";
-import { migration0013 } from "./0013_logicClock";
+import { migration013 } from "./0013_logicClock";
 import { migration016 } from "./016_Sales";
 import { migration017 } from "./017_SyncState";
 import { migration014 } from "./014_pendingCommands";
 import { migration015 } from "./015_EventResolution";
 import { migration018 } from "./018_Expenses";
+import { migration019 } from "./019_SyncActivity";
+import { migration020 } from "./020_syncState";
 
 
 
@@ -32,10 +34,12 @@ export const migrations = [
     migration010,
     migration011,
     migration012,
-    migration0013,
+    migration013,
     migration014,
     migration015,
     migration016,
     migration017,
-    migration018
+    migration018,
+    migration019,
+    migration020
 ]

@@ -18,6 +18,10 @@ export class EventStatements {
     get count(){
         return this.manager.get(EventStatementKeys.eventCount)
     }
+
+    get exists() {
+        return this.manager.get(EventStatementKeys.exist);
+    }
     
     get loadAggregate(){
         return this.manager.get(EventStatementKeys.loadAggregates)

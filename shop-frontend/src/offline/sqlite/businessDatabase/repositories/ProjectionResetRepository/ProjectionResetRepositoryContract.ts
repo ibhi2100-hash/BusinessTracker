@@ -1,3 +1,7 @@
+import type {
+    SQLiteStatementOperation,
+} from "@/src/storage/statement/worker/WorkerProtocol";
+
 
 export type ProjectionName =
     | "businesses"
@@ -6,7 +10,19 @@ export type ProjectionName =
     | "inventories"
     | "sales";
 
+
 export interface ProjectionResetRepository {
-    reset(name: ProjectionName): Promise<void>;
+
+    resetOperation(
+        name: ProjectionName
+    ): SQLiteStatementOperation;
+
+    resetOperations():
+        readonly SQLiteStatementOperation[];
+
+    reset(
+        name: ProjectionName
+    ): Promise<void>;
+
     resetAll(): Promise<void>;
 }

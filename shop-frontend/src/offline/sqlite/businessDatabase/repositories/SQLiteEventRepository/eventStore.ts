@@ -3,7 +3,9 @@ import { DomainEvent } from "@business/shared-types";
 import { EventRepository } from "./contracts";
 import { EventStatements } from "../../statements/events/EventStatements";
 import { ProjectionRebuildOptions } from "../../projections/rebuild/types";
-import { BackendAcceptedEvent } from "../../sync/types";
+import { BackendAcceptedEvent } from "@business/shared-types";
+import { SQLiteStatementOperation } from "@/src/storage/statement/worker/WorkerProtocol";
+import { EventStatementKeys } from "../../statements/events/Keys";
 interface EventRow {
 
     id: string;
@@ -36,12 +38,40 @@ interface EventRow {
 
     checksum: string | null;
 }
-export class SQLiteEventRepository
-implements EventRepository {
+export class SQLiteEventRepository implements EventRepository {
 
     constructor(
         private readonly statements: EventStatements
     ) {}
+
+    private toInsertOperation(
+        event: DomainEvent
+    ): SQLiteStatementOperation {
+
+        const row = EventMapper.toRow(event);
+
+        return {
+            statementKey: EventStatementKeys.insert,
+
+            params: [
+                row.id,
+                row.aggregateId,
+                row.aggregateType,
+                row.expectedAggregateVersion,
+                row.type,
+                row.payload,
+                row.businessId,
+                row.branchId,
+                row.mode,
+                row.actor,
+                row.causationId,
+                row.correlationId,
+                row.logicClock,
+                row.createdAt,
+                row.checksum
+            ]
+        };
+    }
 
     async append(
         events: readonly DomainEvent[]
@@ -49,52 +79,43 @@ implements EventRepository {
 
         for (const event of events) {
 
-    const row =
-        EventMapper.toRow(event);
+            const operation =
+                this.toInsertOperation(event);
 
-    await this.statements.insert.execute([
-        row.id,
-        row.aggregateId,
-        row.aggregateType,
-        row.expectedAggregateVersion,
-        row.type,
-        row.payload,
-        row.businessId,
-        row.branchId,
-        row.mode,
-        row.actor,
-        row.causationId,
-        row.correlationId,
-        row.logicClock,
-        row.createdAt,
-        row.checksum
-    ]);
-}
-    const SQLiteEvents =
-        await this.loadAllEvents();
-    console.log("This are the SQLite Saved Events: ", SQLiteEvents)
+            await this.statements.insert.execute(
+                operation.params
+            );
+        }
+    }
+
+    appendOperations(
+        events: readonly DomainEvent[]
+    ): SQLiteStatementOperation[] {
+
+        return events.map(
+            event => this.toInsertOperation(event)
+        );
     }
 
     async loadAggregate(
         aggregateId: string
-    ): Promise<DomainEvent[]>{
-        const rows = await this.statements.loadAggregate.query<EventRow>([
-                    aggregateId
-                ]);
+    ): Promise<DomainEvent[]> {
 
-        return rows.map(EventMapper.fromRow)
+        const rows =
+            await this.statements.loadAggregate.query<EventRow>([
+                aggregateId
+            ]);
 
+        return rows.map(EventMapper.fromRow);
     }
 
     async exists(
         eventId: string
     ): Promise<boolean> {
 
-        return this.statements.count
-                .exists([
-                    eventId
-                ]);
-
+        return this.statements.exists.exists([
+            eventId
+        ]);
     }
 
     async loadById(
@@ -253,6 +274,4 @@ class EventMapper {
            checksum: row.checksum
         }
     }
-    
-
 }

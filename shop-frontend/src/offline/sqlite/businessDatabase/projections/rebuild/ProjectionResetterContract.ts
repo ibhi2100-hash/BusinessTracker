@@ -1,6 +1,13 @@
+import type { SQLiteStatementOperation } from "@/src/storage/statement/worker/WorkerProtocol";
 import { ProjectionName } from "../../repositories/ProjectionResetRepository/ProjectionResetRepositoryContract";
 
 export interface ProjectionResetter {
-    resetAll(): Promise<void>;
-    reset(name: ProjectionName): Promise<void>;
+
+    resetOperations():
+        readonly SQLiteStatementOperation[];
+
+    resetOperation(
+        name: ProjectionName
+    ): SQLiteStatementOperation;
+
 }

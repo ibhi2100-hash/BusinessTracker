@@ -14,10 +14,9 @@ implements ApplicationStateRepository {
     ) {}
 
     async current(): Promise<ApplicationState> {
-        console.log("AM inside application State Repo now am getting the State: 😂")
+    
         const rows =
             await this.statements.current.query<ApplicationState>();
-        console.log("this the Business State Rows i get from Backend: ", rows)
 
         return rows[0];
     }

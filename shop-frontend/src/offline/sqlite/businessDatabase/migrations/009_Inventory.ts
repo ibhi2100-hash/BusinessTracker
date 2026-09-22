@@ -1,39 +1,55 @@
-import { Migration } from "../../clientDatabase/migrations/migrationContracts";
+import type { Migration } from "../../clientDatabase/migrations/migrationContracts";
+import type { SQLiteMigrationOperation } from "@/src/storage/statement/worker/WorkerProtocol";
 
 export const migration009: Migration = {
     version: 9,
+
     name: "Inventory",
 
-    async up(q){
-        await q.execute(
-            `
-        CREATE TABLE IF NOT EXISTS inventories (
+    up(): readonly SQLiteMigrationOperation[] {
+        return [
+            {
+                sql: `
+                    CREATE TABLE IF NOT EXISTS inventories (
+                        id TEXT PRIMARY KEY,
 
-            id TEXT PRIMARY KEY,
+                        productId TEXT,
 
-            productId TEXT,
-            
-            branchId TEXT,
+                        branchId TEXT,
 
-            businessId  TEXT,
+                        businessId TEXT,
 
-            quantity INTEGER DEFAULT 0,
+                        quantity INTEGER DEFAULT 0,
 
-            costPrice  INTEGER DEFAULT 0,
+                        costPrice INTEGER DEFAULT 0,
 
-            createdAt INTEGER NOT NULL,
-            updatedAt INTEGER
-        );
+                        createdAt INTEGER NOT NULL,
 
-        CREATE INDEX IF NOT EXISTS idx_inventory
-        ON inventories(businessId, branchId);
+                        updatedAt INTEGER
+                    );
+                `,
+            },
 
-        CREATE INDEX IF NOT EXISTS idx_inventory
-        ON inventories(productId, createdAt);
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_inventory_business_branch
+                    ON inventories(businessId, branchId);
+                `,
+            },
 
-        CREATE INDEX IF NOT EXISTS idx_inventory
-        ON inventories(productId, quantity);
-        `
-        )
-    }
-} 
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_inventory_product_created
+                    ON inventories(productId, createdAt);
+                `,
+            },
+
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_inventory_product_quantity
+                    ON inventories(productId, quantity);
+                `,
+            },
+        ];
+    },
+};

@@ -1,54 +1,82 @@
-import { Migration } from "./migrationContracts";
+import type { Migration } from "./migrationContracts";
+import type { SQLiteMigrationOperation } from "@/src/storage/statement/worker/WorkerProtocol";
+export const migration0002: Migration = {
 
-export const migration0002: Migration ={
     version: 2,
+
     name: "create user",
-    async up(q){
-        await q.execute(
-            `
-                CREATE TABLE IF NOT EXISTS users (
 
-                    id TEXT PRIMARY KEY,
+    up(): readonly SQLiteMigrationOperation[] {
 
-                    businessId TEXT,
+        return [
 
-                    branchId TEXT,
+            {
+                sql: `
+                    CREATE TABLE IF NOT EXISTS users (
 
-                    name TEXT NOT NULL,
+                        id TEXT PRIMARY KEY,
 
-                    email TEXT NOT NULL,
+                        businessId TEXT,
 
-                    role TEXT NOT NULL,
+                        branchId TEXT,
 
-                    onboardingCompleted INTEGER NOT NULL DEFAULT 0,
+                        name TEXT NOT NULL,
 
-                    isActive INTEGER NOT NULL DEFAULT 1,
+                        email TEXT NOT NULL,
 
-                    version INTEGER NOT NULL DEFAULT 0,
+                        role TEXT NOT NULL,
 
-                    lastEventId TEXT,
+                        onboardingCompleted INTEGER NOT NULL DEFAULT 0,
 
-                    createdAt INTEGER NOT NULL,
+                        isActive INTEGER NOT NULL DEFAULT 1,
 
-                    updatedAt INTEGER
+                        version INTEGER NOT NULL DEFAULT 0,
 
-                );
+                        lastEventId TEXT,
 
-                CREATE INDEX IF NOT EXISTS idx_users_business
-                ON users(businessId);
+                        createdAt INTEGER NOT NULL,
 
-                CREATE INDEX IF NOT EXISTS idx_users_branch
-                ON users(branchId);
+                        updatedAt INTEGER
 
-                CREATE INDEX IF NOT EXISTS idx_users_business_branch
-                ON users(businessId, branchId);
+                    );
+                `,
+            },
 
-                CREATE INDEX IF NOT EXISTS idx_users_role
-                ON users(role);
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_users_business
+                    ON users(businessId);
+                `,
+            },
 
-                CREATE INDEX IF NOT EXISTS idx_users_active
-                ON users(isActive);
-                `
-        )
-    }
-} 
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_users_branch
+                    ON users(branchId);
+                `,
+            },
+
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_users_business_branch
+                    ON users(businessId, branchId);
+                `,
+            },
+
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_users_role
+                    ON users(role);
+                `,
+            },
+
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_users_active
+                    ON users(isActive);
+                `,
+            },
+
+        ];
+    },
+};

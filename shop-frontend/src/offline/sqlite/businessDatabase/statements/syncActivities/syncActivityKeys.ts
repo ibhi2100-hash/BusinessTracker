@@ -1,0 +1,16 @@
+export const syncActivityKeys = {
+  insert:             "sync_activity_insert",
+  findById:           "sync_activity_find_by_id",
+  findByActivityId:   "sync_activity_find_by_activity_id",
+  findRecent:         "sync_activity_find_recent",
+  findByType:         "sync_activity_find_by_type",
+  findByStatus:       "sync_activity_find_by_status",
+  findByEvent:        "sync_activity_find_by_event",
+  findByAggregate:    "sync_activity_find_by_aggregate",
+  findByTypeAndRange: "sync_activity_find_by_type_and_range",
+  findInRange:        "sync_activity_find_in_range",
+  findErrors:         "sync_activity_find_errors",
+  countByType:        "sync_activity_count_by_type",
+  deleteOlderThan:    "sync_activity_delete_older_than",
+  deleteById:         "sync_activity_delete_by_id",
+};

@@ -9,4 +9,5 @@ export const OutboxKeys = {
   scheduleRetry: "scheduleRetry.outbox",
   resetInFlight: "resetInFlight.outbox",
   getPendingCount: "getPendingCount.outbox",
+  getAllOutbox: "getAllOutbox"
 } as const;

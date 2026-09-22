@@ -1,29 +1,37 @@
-import { Migration } from "./migrationContracts";
+import type { Migration } from "./migrationContracts";
+import type { SQLiteMigrationOperation } from "@/src/storage/statement/worker/WorkerProtocol";
+export const migration0005: Migration = {
 
-export const migration0005: Migration =  {
     version: 5,
+
     name: "known nodes",
-    async up(q){
-        await q.execute(
-            `
-                CREATE TABLE IF NOT EXISTS known_nodes(
 
-                id TEXT PRIMARY KEY,
+    up(): readonly SQLiteMigrationOperation[] {
 
-                name TEXT NOT NULL,
+        return [
 
-                address TEXT,
+            {
+                sql: `
+                    CREATE TABLE IF NOT EXISTS known_nodes (
 
-                createdAt INTEGER NOT NULL,
+                        id TEXT PRIMARY KEY,
 
-                lastOpenedAt INTEGER,
+                        name TEXT NOT NULL,
 
-                existsLocally INTEGER NOT NULL DEFAULT 1,
+                        address TEXT,
 
-                icon TEXT
+                        createdAt INTEGER NOT NULL,
 
-            );
-            `
-        )
-    }
-}
+                        lastOpenedAt INTEGER,
+
+                        existsLocally INTEGER NOT NULL DEFAULT 1,
+
+                        icon TEXT
+
+                    );
+                `,
+            },
+
+        ];
+    },
+};

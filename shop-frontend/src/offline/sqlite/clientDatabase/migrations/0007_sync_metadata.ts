@@ -1,23 +1,31 @@
-import { Migration } from "./migrationContracts";
-
+import type { Migration } from "./migrationContracts";
+import type { SQLiteMigrationOperation } from "@/src/storage/statement/worker/WorkerProtocol";
 export const migration0007: Migration = {
+
     version: 7,
+
     name: "sync meta",
-    async up(q){
-        await q.execute(
-             `
-    CREATE TABLE IF NOT EXISTS sync_metadata (
 
-    id TEXT PRIMARY KEY,
+    up(): readonly SQLiteMigrationOperation[] {
 
-    createdAt INTEGER NOT NULL,
+        return [
 
-    appVersion TEXT,
+            {
+                sql: `
+                    CREATE TABLE IF NOT EXISTS sync_metadata (
 
-    platform TEXT
+                        id TEXT PRIMARY KEY,
 
-);
-`
-        )
-    }
-}
+                        createdAt INTEGER NOT NULL,
+
+                        appVersion TEXT,
+
+                        platform TEXT
+
+                    );
+                `,
+            },
+
+        ];
+    },
+};

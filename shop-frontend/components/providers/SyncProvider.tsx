@@ -14,22 +14,14 @@ import { useRouter } from "next/navigation";
 
 import { toast } from "sonner";
 
-import {
-    SyncResult,
-} from "@/src/offline/sqlite/businessDatabase/sync/syncEngine";
-
-import {
-    SyncTrigger,
-} from "@/src/offline/sqlite/businessDatabase/sync/SyncCoordinator/SyncCoordinator";
-
+import { SyncResult, SyncTrigger, PersistedSyncState } from "@business/shared-types";
 import {
     SyncApplicationService,
     SyncApplicationEvent,
 } from "@/src/services/ApplicationService/API/sync/SyncApplicationService";
+import { useLiveSyncManagement } from "@/hooks/useLiveSyncManagement";
+import { number } from "zod";
 
-import {
-    SyncApplicationState,
-} from "@/src/services/ApplicationService/API/sync/SyncApplicationState";
 
 
 /*
@@ -41,7 +33,7 @@ import {
 export interface SyncContextValue {
 
     status:
-        SyncApplicationState["status"];
+        PersistedSyncState["status"];
 
     isSyncing:
         boolean;
@@ -77,7 +69,7 @@ export interface SyncContextValue {
         SyncResult | null;
 
     conflicts:
-        SyncApplicationState["conflicts"];
+        PersistedSyncState["conflicts"];
 
     error:
         string | null;
@@ -124,52 +116,12 @@ export function SyncProvider({
      * SyncApplicationService is the single source of truth.
      */
 
-    const [
-        syncState,
-        setSyncState,
-    ] = useState<SyncApplicationState>(
-        () =>
-            syncService.getState()
-    );
-
-
-    /*
-     * ========================================================
-     * Synchronization state subscription
-     * ========================================================
-     */
-
-    useEffect(() => {
-
-        return syncService.subscribe(
-            setSyncState
-        );
-
-    }, [
-        syncService,
-    ]);
-
-
-    /*
-     * ========================================================
-     * Synchronization event subscription
-     *
-     * Used only for presentation concerns such as toast
-     * notifications.
-     * ========================================================
-     */
-
-    useEffect(() => {
-
-        return syncService.subscribeEvents(
-            handleSynchronizationEvent
-        );
-
-    }, [
-        syncService,
-        router,
-    ]);
-
+    const {
+        data: syncState,
+        loading,
+        error,
+        refresh,
+    } = useLiveSyncManagement();
 
     /*
      * ========================================================
@@ -288,46 +240,46 @@ export function SyncProvider({
             () => ({
 
                 status:
-                    syncState.status,
+                    syncState?.status,
 
                 isSyncing:
-                    syncState.status ===
+                    syncState?.status ===
                     "SYNCING",
 
                 isOnline,
 
                 pendingEvents:
-                    syncState.pendingEvents,
+                    syncState?.pendingEvents,
 
                 uploadedEvents:
-                    syncState.uploadedEvents,
+                    syncState?.uploadedEvents,
 
                 acceptedEvents:
-                    syncState.acceptedEvents,
+                    syncState?.acceptedEvents,
 
                 rejectedEvents:
-                    syncState.rejectedEvents,
+                    syncState?.rejectedEvents,
 
                 conflictEvents:
-                    syncState.conflictEvents,
+                    syncState?.conflictEvents,
 
                 lastPulledGlobalPosition:
-                    syncState.lastPulledGlobalPosition,
+                    syncState?.lastPulledGlobalPosition,
 
                 lastSyncAt:
-                    syncState.lastSyncAt,
+                    syncState?.lastSyncAt,
 
                 lastSyncDurationMs:
-                    syncState.lastSyncDurationMs,
+                    syncState?.lastSyncDurationMs,
 
                 lastResult:
-                    syncState.lastResult,
+                    syncState?.lastResult,
 
                 conflicts:
-                    syncState.conflicts,
+                    syncState?.conflicts,
 
                 error:
-                    syncState.error,
+                    syncState?.error,
 
                 syncNow,
             }),
@@ -734,8 +686,7 @@ interface SyncSummary {
     accepted:
         number;
 
-    rejected:
-        number;
+    rejected: number;
 
     conflicts:
         number;
@@ -789,7 +740,7 @@ function summarizeResult(
                     result.pushed,
 
                 rejected:
-                    result.rejected,
+                    result.rejected.length,
 
                 conflicts:
                     0,

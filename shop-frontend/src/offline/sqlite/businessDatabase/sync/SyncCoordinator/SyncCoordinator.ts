@@ -1,85 +1,12 @@
 import {
     SyncEngine,
-    SyncResult,
 } from "../syncEngine";
 
-export type SyncTrigger =
-    | "NETWORK"
-    | "INTERVAL"
-    | "MANUAL"
-    | "STARTUP";
+import { SyncResult, SyncCoordinatorListener, SyncTrigger, SyncCoordinatorEvent, SyncCoordinatorResult } from "@business/shared-types";
 
-export interface SyncCoordinatorListener {
-
-    onSyncStarted(
-        trigger: SyncTrigger
-    ): void;
-
-    onSyncCompleted(
-        event: SyncCoordinatorEvent
-    ): void;
-
-    onSyncFailed(
-        event: SyncCoordinatorFailedEvent
-    ): void;
-}
-
-
-export interface SyncCoordinatorFailedEvent {
-
-    trigger:
-        SyncTrigger;
-
-    error:
-        Error;
-
-    startedAt:
-        number;
-
-    failedAt:
-        number;
-}
-export interface SyncCoordinatorEvent {
-
-    trigger:
-        SyncTrigger;
-
-    result:
-        SyncResult;
-
-    startedAt:
-        number;
-
-    completedAt:
-        number;
-}
-
-export type SyncCoordinatorResult =
-    | {
-        kind: "completed";
-        result: SyncResult;
-      }
-    | {
-        kind: "already-running";
-      };
-
-export interface SyncCoordinatorListener {
-
-    onSyncStarted(
-        trigger: SyncTrigger
-    ): void;
-
-    onSyncCompleted(
-        event: SyncCoordinatorEvent
-    ): void;
-
-    onSyncFailed(
-        error: Error
-    ): void;
-}
 export class SyncCoordinator {
 
-    private isSyncing = false;
+    isSyncing = false;
 
     private activeSync: Promise<SyncResult> | null = null;
 
@@ -106,10 +33,7 @@ export class SyncCoordinator {
         trigger: SyncTrigger
     ): Promise<SyncResult> {
 
-        if( this.isSyncing) {
-            return this.activeSync ??
-                Promise.reject(new Error("Synchronization is already in progress"));
-        }
+       
 
         if (this.activeSync) {
             return this.activeSync;
@@ -117,16 +41,14 @@ export class SyncCoordinator {
 
         this.activeSync = this.execute(
             trigger
-        );
+        ).finally(() => {
+            this.activeSync = null;
+            this.isSyncing = false
+        })
 
         this.isSyncing = true;
 
-        try {
-            return await this.activeSync;
-        } finally {
-            this.activeSync = null;
-            this.isSyncing = false;
-        }
+          return await this.activeSync;
     }
 
     private async execute(

@@ -63,3 +63,9 @@ export const GET_LASTROUTE = `
     FROM application_state
     WHERE id = 1
 `
+export const GET_SYNC_STATE = `
+SELECT *
+FROM sync_state
+WHERE id = 1
+`
+

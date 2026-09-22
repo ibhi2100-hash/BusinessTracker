@@ -1,16 +1,34 @@
-import { ProjectionName, ProjectionResetRepository } from "../../repositories/ProjectionResetRepository/ProjectionResetRepositoryContract";
+import {
+    ProjectionName,
+    ProjectionResetRepository,
+} from "../../repositories/ProjectionResetRepository/ProjectionResetRepositoryContract";
+
 import { ProjectionResetter } from "./ProjectionResetterContract";
+
+import type {
+    SQLiteStatementOperation,
+} from "@/src/storage/statement/worker/WorkerProtocol";
+
+
 export class ProjectionReset
-implements ProjectionResetter {
+    implements ProjectionResetter {
+
     constructor(
         private readonly repository: ProjectionResetRepository
-    ){}
+    ) {}
 
-    async resetAll(): Promise<void> {
-        await this.repository.resetAll()
+    resetOperation(
+        name: ProjectionName
+    ): SQLiteStatementOperation {
+
+        return this.repository.resetOperation(
+            name
+        );
     }
 
-    async reset(name: ProjectionName): Promise<void> {
-        await this.repository.reset(name)
+    resetOperations():
+        readonly SQLiteStatementOperation[] {
+
+        return this.repository.resetOperations();
     }
 }

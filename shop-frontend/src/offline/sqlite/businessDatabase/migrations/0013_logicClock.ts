@@ -1,31 +1,34 @@
-import { Migration } from "../../clientDatabase/migrations/migrationContracts";
+import type { Migration } from "../../clientDatabase/migrations/migrationContracts";
+import type { SQLiteMigrationOperation } from "@/src/storage/statement/worker/WorkerProtocol";
 
-export const migration0013: Migration = {
+export const migration013: Migration = {
     version: 13,
+
     name: "create logicClock",
-    async up(q){
-        await q.execute(
-            `
-                CREATE TABLE IF NOT EXISTS logic_clock(
 
-                id INTEGER PRIMARY KEY CHECK(id = 1),
+    up(): readonly SQLiteMigrationOperation[] {
+        return [
+            {
+                sql: `
+                    CREATE TABLE IF NOT EXISTS logic_clock (
+                        id INTEGER PRIMARY KEY CHECK(id = 1),
 
-                value INTEGER NOT NULL
+                        value INTEGER NOT NULL
+                    );
+                `,
+            },
 
-            );
-        `
-        );
-        await q.execute(`
-            
-            INSERT INTO logic_clock(
-                            id,
-                            value
-                        )
-                        VALUES(
-                            1,
-                            0
-                        );
-            `
-        )
-    }
-}
+            {
+                sql: `
+                    INSERT INTO logic_clock (
+                        id,
+                        value
+                    )
+                    VALUES (?, ?)
+                    ON CONFLICT(id) DO NOTHING;
+                `,
+                params: [1, 0],
+            },
+        ];
+    },
+};
