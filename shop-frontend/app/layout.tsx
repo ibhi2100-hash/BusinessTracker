@@ -7,6 +7,7 @@ import { ApplicationProvider } from "@/src/services/ApplicationService/Applicati
 import { RoutePersistence } from "@/components/RouterPersistence";
 import { BusinessProvider } from "@/src/context/BusinessContext";
 import { useApplication } from "@/src/services/ApplicationService/ApplicationContext";
+import { ServiceWorkerRegistration } from "@/components/serviceWorker";
 
 export const metadata = {
   title: "BizTru",
@@ -27,6 +28,7 @@ export default function RootLayout({
             <BusinessProvider>
               <RoutePersistence />
                 <AppShell>
+                    <ServiceWorkerRegistration/>
                     {children}
                 </AppShell>
                 <Toaster richColors position="top-right" />
