@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import { RepositoryRegistry } from "../modules/sync/repositories/RepositoryRegistry.js";
-import { ProjectionEventBus } from "@business/event-bus";
+import { ProjectionEventBus } from "../buses/ProjectionEventBus.js";
 import { EventValidator } from "../modules/sync/service/EventValidator.js";
 import { createSyncRouter } from "../routes/sync.route.js";
 

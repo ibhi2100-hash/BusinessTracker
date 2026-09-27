@@ -1,4 +1,4 @@
-import { ProjectionEventBus } from "@business/event-bus";
+import { ProjectionEventBus } from "../../../buses/ProjectionEventBus.js";
 import { RepositoryRegistry } from "../repositories/RepositoryRegistry.js";
 import { BackendToDomainEventTransformer } from "../../../lib/BackendEventTransformer.js";
 
