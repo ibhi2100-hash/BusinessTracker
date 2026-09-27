@@ -13,7 +13,7 @@ import { ProjectionReducer } from "../contracts/ProjectionReducer";
 /*  Event payloads                                                    */
 /* ------------------------------------------------------------------ */
 
-interface ExpenseRecordedPayload {
+export interface ExpenseRecordedPayload {
   title: string;
   description?: string | null;
 

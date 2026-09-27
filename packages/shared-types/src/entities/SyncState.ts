@@ -471,3 +471,11 @@ export interface SyncManagementViewModel {
   online: boolean;
 }
 
+
+
+export interface SQLiteStatementOperation {
+
+    statementKey: string;
+
+    params?: readonly unknown[];
+}

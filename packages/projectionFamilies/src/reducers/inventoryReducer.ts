@@ -8,23 +8,23 @@ import {
 
 import { ProjectionReducer } from "../contracts/ProjectionReducer";
 
-interface InventoryPayload {
+export interface InventoryPayload {
     productId: string;
     quantity: number;
 
 }
-interface CreateInventoryPayload extends
+export interface CreateInventoryPayload extends
 InventoryPayload {
     id: string;
     costPrice: number;
 }
 
-interface ReceivePayload extends
+export interface ReceivePayload extends
 InventoryPayload {
     costPrice: number;
     note?: string
 }
-interface AdjustPayload
+export interface AdjustPayload
 extends InventoryPayload {
     direction: "increase" | "decrease"
 }

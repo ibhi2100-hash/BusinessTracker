@@ -64,9 +64,11 @@ export class ProjectionRebuilder {
             const resetOperations =
                 this.projectionResetter.resetOperations();
 
-            await this.transaction.run(
-                resetOperations
-            );
+            if (resetOperations.length > 0) {
+                await this.transaction.run(
+                    resetOperations
+                );
+            }
 
             await this.observer.onResetCompleted?.();
 
@@ -80,66 +82,105 @@ export class ProjectionRebuilder {
                 of this.eventStore.stream(options)
             ) {
 
+                if (batch.length === 0) {
+                    continue;
+                }
+
                 const operations:
                     SQLiteStatementOperation[] = [];
 
 
-                // =============================================
-                // BUILD BATCH PROJECTION OPERATIONS
-                // =============================================
+                // =================================================
+                // EVENT OBSERVATION
+                // =================================================
 
                 for (const event of batch) {
 
                     await this.observer.onEventStarted?.(
                         event
                     );
+                }
 
 
-                    for (
-                        const consumer
-                        of this.projectionBus.getConsumers()
-                    ) {
+                // =================================================
+                // BUILD PROJECTION OPERATIONS
+                //
+                // Each consumer receives the complete batch.
+                //
+                // IMPORTANT:
+                //
+                // buildOperations() returns:
+                //
+                // SQLiteStatementOperation[]
+                //
+                // Therefore we FLATTEN with:
+                //
+                // operations.push(...consumerOperations)
+                //
+                // and never:
+                //
+                // operations.push(consumerOperations)
+                // =================================================
 
-                        const consumerStarted =
-                            Date.now();
+                for (
+                    const consumer
+                    of this.projectionBus.getConsumers()
+                ) {
+
+                    const consumerStarted =
+                        Date.now();
+
+
+                    // -------------------------------------------------
+                    // Build operations for the entire batch
+                    // -------------------------------------------------
+
+                    const consumerOperations =
+                        consumer.buildOperations(batch);
+
+
+                    // -------------------------------------------------
+                    // Flatten consumer operations into transaction
+                    // -------------------------------------------------
+
+                    operations.push(
+                        ...consumerOperations
+                    );
+
+
+                    const duration =
+                        Date.now() -
+                        consumerStarted;
+
+
+                    // -------------------------------------------------
+                    // Consumer observation
+                    //
+                    // The observer contract is currently event-based,
+                    // so report the consumer against each event.
+                    // -------------------------------------------------
+
+                    for (const event of batch) {
 
                         await this.observer.onConsumerStarted?.(
                             consumer,
                             event
                         );
 
-
-                        try {
-
-                            const consumerOperations =
-                                consumer.buildOperations([
-                                    event,
-                                ]);
-
-                            operations.push(
-                                ...consumerOperations
-                            );
-
-
-                            await this.observer.onConsumerCompleted?.(
-                                consumer,
-                                event,
-                                Date.now() -
-                                consumerStarted
-                            );
-
-                        } catch (error) {
-
-                            await this.observer.onConsumerFailed?.(
-                                consumer,
-                                event,
-                                error
-                            );
-
-                            throw error;
-                        }
+                        await this.observer.onConsumerCompleted?.(
+                            consumer,
+                            event,
+                            duration
+                        );
                     }
+                }
 
+
+                // =================================================
+                // EVENT PROGRESS
+                // =================================================
+
+                for (const event of batch) {
 
                     eventsProcessed++;
 
@@ -152,9 +193,9 @@ export class ProjectionRebuilder {
                 }
 
 
-                // =============================================
+                // =================================================
                 // ATOMIC BATCH COMMIT
-                // =============================================
+                // =================================================
 
                 if (operations.length > 0) {
 
@@ -180,7 +221,8 @@ export class ProjectionRebuilder {
                     lastLogicClock,
 
                 durationMs:
-                    Date.now() - startedAt,
+                    Date.now() -
+                    startedAt,
             };
 
 

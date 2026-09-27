@@ -13,7 +13,7 @@ import { ProjectionReducer } from "../contracts/ProjectionReducer";
 /*  Event payloads                                                    */
 /* ------------------------------------------------------------------ */
 
-interface SaleAddedPayload {
+export interface SaleAddedPayload {
   productId: string;
   productName: string ;
   /** Unit sell price */
@@ -37,12 +37,12 @@ interface SaleAddedPayload {
   costIsLineTotal?: boolean;
 }
 
-interface SaleVoidedPayload {
+export interface SaleVoidedPayload {
   saleId?: string;
   reason?: string;
 }
 
-interface SaleRefundedPayload {
+export interface SaleRefundedPayload {
   saleId?: string;
   /** Money returned to customer */
   amount: number;
@@ -53,7 +53,7 @@ interface SaleRefundedPayload {
   reason?: string;
 }
 
-type SalesEventPayload =
+export type SalesEventPayload =
   | SaleAddedPayload
   | SaleVoidedPayload
   | SaleRefundedPayload;

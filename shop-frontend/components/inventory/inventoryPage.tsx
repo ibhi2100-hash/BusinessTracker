@@ -268,8 +268,6 @@ export default function InventoryPage({
       setLoading(true);
 
       await app.sales.createSale({
-        aggregateType: AggregateType.SALE,
-        aggregateId: productId,
         type: salesEventType.SALE_ADDED,
         mode,
         payload: {
@@ -306,8 +304,6 @@ export default function InventoryPage({
 
       for (const item of cartItems) {
         await app.sales.createSale({
-          aggregateType: AggregateType.SALE,
-          aggregateId: item.productId,
           type: salesEventType.SALE_ADDED,
           mode: "LIVE",
           payload: {

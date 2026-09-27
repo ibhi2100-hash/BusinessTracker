@@ -1,6 +1,6 @@
 import { Business, DomainEvent } from "@business/shared-types";
 import { ProjectionReducer } from "../contracts/ProjectionReducer";
-interface BusinessPayload {
+export interface BusinessPayload {
     id: string;
     name: string;
     address: string;
@@ -10,4 +10,3 @@ export declare class BusinessReducer implements ProjectionReducer<Business, Doma
     private created;
     private activate;
 }
-export {};

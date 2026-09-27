@@ -48,12 +48,8 @@ implements Lifecycle {
         const bootstrapId =
             crypto.randomUUID();
 
-        console.log(
-            "[BUSINESS BOOTSTRAP START]",
-            bootstrapId,
-            businessId
-        );
-                const runtime = 
+       
+        const runtime = 
             await this.createRuntime(
                 client,
                 businessId
@@ -112,12 +108,6 @@ implements Lifecycle {
         await application.initialize();
 
         await application.start();
-
-        console.log(
-            "[BUSINESS BOOTSTRAP COMPLETE]",
-            bootstrapId,
-            businessId
-        );
                 
         return application
     }
@@ -321,10 +311,10 @@ private async createSynchronization(
     return new ProjectionEventBus()
    }
 
-   private async createConsumers(
+   private createConsumers(
         bus: ProjectionEventBus,
         repositories: BusinessRepositoryRegistry
-   ){
+   ): void{
         bus.subscribe(
             new BusinessConsumer(
                 repositories.business

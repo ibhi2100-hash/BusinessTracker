@@ -4,8 +4,8 @@ import { ProjectionReducer } from "../contracts/ProjectionReducer";
 interface BranchPayload {
   id: string;
   name: string;
-  address: string;
-  phone: string;
+  address?: string;
+  phone?: string;
 }
 export class BranchReducer 
 implements ProjectionReducer<Branch, DomainEvent<BranchPayload>> {

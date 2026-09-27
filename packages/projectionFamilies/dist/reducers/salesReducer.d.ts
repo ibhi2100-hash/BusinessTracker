@@ -1,6 +1,6 @@
 import { DomainEvent, Sales, Mode, PaymentMethod } from "@business/shared-types";
 import { ProjectionReducer } from "../contracts/ProjectionReducer";
-interface SaleAddedPayload {
+export interface SaleAddedPayload {
     productId: string;
     productName: string;
     /** Unit sell price */
@@ -21,11 +21,11 @@ interface SaleAddedPayload {
     /** If true, costPrice is already line total (unit × qty) */
     costIsLineTotal?: boolean;
 }
-interface SaleVoidedPayload {
+export interface SaleVoidedPayload {
     saleId?: string;
     reason?: string;
 }
-interface SaleRefundedPayload {
+export interface SaleRefundedPayload {
     saleId?: string;
     /** Money returned to customer */
     amount: number;
@@ -35,11 +35,10 @@ interface SaleRefundedPayload {
     productId?: string;
     reason?: string;
 }
-type SalesEventPayload = SaleAddedPayload | SaleVoidedPayload | SaleRefundedPayload;
+export type SalesEventPayload = SaleAddedPayload | SaleVoidedPayload | SaleRefundedPayload;
 export declare class SalesReducer implements ProjectionReducer<Sales, DomainEvent> {
     reduce(state: Sales | null, event: DomainEvent<SalesEventPayload>): Sales;
     private onSaleAdded;
     private onSaleVoided;
     private onSaleRefunded;
 }
-export {};

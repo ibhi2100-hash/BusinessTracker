@@ -8,7 +8,7 @@ implements PreparedStatement {
     constructor(
         private readonly runtime: SQLiteRuntime,
         private readonly database: DatabaseId,
-        private readonly key: string
+        public readonly key: string
     ) {}
 
     async execute(

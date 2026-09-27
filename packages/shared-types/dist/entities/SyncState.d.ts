@@ -250,3 +250,7 @@ export interface SyncManagementViewModel {
     conflicts: Conflict[];
     online: boolean;
 }
+export interface SQLiteStatementOperation {
+    statementKey: string;
+    params?: readonly unknown[];
+}

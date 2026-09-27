@@ -1,46 +1,84 @@
-// ============================================================
-// SalesConsumer.ts
-// ============================================================
-import { EventConsumer } from "@business/event-bus";
-import { DomainEvent, salesEventType } from "@business/shared-types";
-import { SalesReducer } from "@business/projection-families";
+import { ProjectionConsumer } from "@business/event-bus";
+import {
+  DomainEvent,
+  salesEventType,
+} from "@business/shared-types";
+import { SalesEventPayload, SalesReducer } from "@business/projection-families";
 import { SQLiteSalesRepository } from "../repositories/SQLiteProjectionRepository/SQLiteSalesRepository";
 import { changeNotifier } from "./changeNoifier";
+import type { SQLiteStatementOperation } from "@/src/storage/statement/worker/WorkerProtocol";
 
-export class SalesConsumer implements EventConsumer<DomainEvent> {
+export class SalesConsumer
+  implements ProjectionConsumer<DomainEvent>
+{
   readonly name = "sales";
 
-  constructor(private readonly repository: SQLiteSalesRepository) {}
+  /**
+   * Rebuild state.
+   *
+   * Keyed by sale ID because SALE_VOIDED and SALE_REFUNDED
+   * mutate an existing sale.
+   */
+  private readonly states = new Map<string, any>();
 
-  async handle(events: readonly DomainEvent<any>[]): Promise<void> {
+  constructor(
+    private readonly repository: SQLiteSalesRepository
+  ) {}
+
+  async handle(
+    events: readonly DomainEvent<SalesEventPayload>[]
+  ): Promise<void> {
     for (const event of events) {
       switch (event.type) {
         case salesEventType.SALE_ADDED: {
-          const sale = new SalesReducer().reduce(null, event);
+          const sale =
+            new SalesReducer().reduce(null, event);
+
           await this.repository.upsert(sale);
-          changeNotifier.notify(["sales"])
+
+          changeNotifier.notify(["sales"]);
           break;
         }
 
         case salesEventType.SALE_VOIDED: {
-          const existing = await this.repository.findById(
-            event.aggregateId ?? event.payload?.saleId
-          );
+          const saleId =
+            event.aggregateId
+
+          const existing =
+            await this.repository.findById(saleId);
+
           if (!existing) break;
 
-          const voided = new SalesReducer().reduce(existing, event);
+          const voided =
+            new SalesReducer().reduce(
+              existing,
+              event
+            );
+
           await this.repository.upsert(voided);
+
+          changeNotifier.notify(["sales"]);
           break;
         }
 
         case salesEventType.SALE_REFUNDED: {
-          const existing = await this.repository.findById(
-            event.aggregateId ?? event.payload?.saleId
-          );
+          const saleId =
+            event.aggregateId
+
+          const existing =
+            await this.repository.findById(saleId);
+
           if (!existing) break;
 
-          const refunded = new SalesReducer().reduce(existing, event);
+          const refunded =
+            new SalesReducer().reduce(
+              existing,
+              event
+            );
+
           await this.repository.upsert(refunded);
+
+          changeNotifier.notify(["sales"]);
           break;
         }
 
@@ -48,5 +86,83 @@ export class SalesConsumer implements EventConsumer<DomainEvent> {
           break;
       }
     }
+  }
+
+  buildOperations(
+    events: readonly DomainEvent[]
+  ): SQLiteStatementOperation[] {
+    const operations: SQLiteStatementOperation[] = [];
+
+    for (const event of events) {
+      switch (event.type) {
+        case salesEventType.SALE_ADDED: {
+          const sale =
+            new SalesReducer().reduce(null, event);
+
+          const saleId =
+            event.aggregateId 
+            sale.id;
+
+          this.states.set(saleId, sale);
+
+          operations.push(
+            this.repository.upsertOperation(sale)
+          );
+
+          break;
+        }
+
+        case salesEventType.SALE_VOIDED: {
+          const saleId =
+            event.aggregateId 
+          const existing =
+            this.states.get(saleId);
+
+          if (!existing) break;
+
+          const voided =
+            new SalesReducer().reduce(
+              existing,
+              event
+            );
+
+          this.states.set(saleId, voided);
+
+          operations.push(
+            this.repository.upsertOperation(voided)
+          );
+
+          break;
+        }
+
+        case salesEventType.SALE_REFUNDED: {
+          const saleId =
+            event.aggregateId 
+          const existing =
+            this.states.get(saleId);
+
+          if (!existing) break;
+
+          const refunded =
+            new SalesReducer().reduce(
+              existing,
+              event
+            );
+
+          this.states.set(saleId, refunded);
+
+          operations.push(
+            this.repository.upsertOperation(refunded)
+          );
+
+          break;
+        }
+
+        default:
+          break;
+      }
+    }
+
+    return operations;
   }
 }

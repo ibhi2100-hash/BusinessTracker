@@ -1,6 +1,6 @@
 import { Business, BusinessEventTypes, DomainEvent } from "@business/shared-types";
 import { ProjectionReducer } from "../contracts/ProjectionReducer";
-interface BusinessPayload {
+export interface BusinessPayload {
   id: string;
   name: string;
   address: string;

@@ -15,18 +15,16 @@ class ProjectionEventBus {
         return [...this.consumers];
     }
     async publish(event) {
-        await this.publishMany([event]);
+        await this.publishMany([
+            event,
+        ]);
     }
     async publishMany(events) {
-        const startedAt = Date.now();
         for (const event of events) {
             for (const consumer of this.consumers) {
-                try {
-                    await consumer.handle([event]);
-                }
-                catch (error) {
-                    throw error;
-                }
+                await consumer.handle([
+                    event,
+                ]);
             }
         }
     }

@@ -1,71 +1,251 @@
-import { EventConsumer } from "@business/event-bus";
-import {  DomainEvent, InventoryEventType, salesEventType } from "@business/shared-types";
-import {  InventoryReducer } from "@business/projection-families";
+import { ProjectionConsumer } from "@business/event-bus";
+import {
+  DomainEvent,
+  InventoryEventType,
+  salesEventType,
+} from "@business/shared-types";
+import { InventoryReducer } from "@business/projection-families";
 import { SQLiteInventoryRepository } from "../repositories/SQLiteProjectionRepository/SQLiteInventoryRepository";
 import { changeNotifier } from "./changeNoifier";
+import type { SQLiteStatementOperation } from "@/src/storage/statement/worker/WorkerProtocol";
 
 export class InventoryConsumer
-implements EventConsumer<DomainEvent> {
+  implements ProjectionConsumer<DomainEvent>
+{
+  readonly name = "inventories";
 
-    readonly name = "inventories"
-    constructor(
-        private readonly repostory: SQLiteInventoryRepository
+  /**
+   * Inventory projection state is keyed by productId.
+   *
+   * This survives across rebuild batches so that a later batch
+   * can continue reducing the state produced by earlier events.
+   */
+  private readonly states = new Map<string, any>();
 
-    ){}
+  constructor(
+    private readonly repository: SQLiteInventoryRepository
+  ) {}
 
-   async handle(events: readonly DomainEvent<any>[]): Promise<void> {
-        for(const event of events){
-            switch(event.type){
+  async handle(events: readonly DomainEvent<any>[]): Promise<void> {
+    for (const event of events) {
+      switch (event.type) {
+        case InventoryEventType.INVENTORY_ADDED: {
+          const inventory =
+            new InventoryReducer().reduce(null, event);
 
-                case InventoryEventType.INVENTORY_ADDED:
-                    const inventory = new InventoryReducer().reduce(null, event)
-                    await this.repostory.upsert(inventory)
-                    changeNotifier.notify(["inventories"])
-                    break
+          await this.repository.upsert(inventory);
 
-                case InventoryEventType.INVENTORY_RECEIVED: 
-                    const currentReceivedInventory = await this.repostory.findProductId(event.payload.productId);
-                    console.log("This is the current Recieved Inventory: ", currentReceivedInventory)
-                    const receivedInventory = new InventoryReducer().reduce(currentReceivedInventory, event);
-                    console.log("This is the reduced Received Inventory: ", receivedInventory)
-                    await this.repostory.upsert(receivedInventory);
-
-                    changeNotifier.notify(["inventories"])
-
-                    break
-
-                case InventoryEventType.INVENTORY_ADJUSTED: 
-                    const currentAdjustedInventory = await this.repostory.findProductId(event.payload.productId);
-
-                    const adjustedInventory = new InventoryReducer().reduce(currentAdjustedInventory, event);
-
-                    await this.repostory.upsert(adjustedInventory);
-
-                    changeNotifier.notify(["inventories"])
-
-                    break
-                
-                case InventoryEventType.INVENTORY_TRANSFER: 
-                    const currentTransferInventory = await this.repostory.findProductId(event.payload.productId);
-
-                    const transferInventory = new InventoryReducer().reduce(currentTransferInventory, event);
-
-                    await this.repostory.upsert(transferInventory);
-
-                    changeNotifier.notify(["inventories"])
-
-                    break
-                case salesEventType.SALE_ADDED:
-                    const currentInventory = await this.repostory.findProductId(event.payload.productId);
-
-                    const saleInventory = new InventoryReducer().reduce(currentInventory, event);
-
-                    await this.repostory.upsert(saleInventory);
-
-                    changeNotifier.notify(["inventories", "sales"])
-            }
-            break
-
+          changeNotifier.notify(["inventories"]);
+          break;
         }
+
+        case InventoryEventType.INVENTORY_RECEIVED: {
+          const current =
+            await this.repository.findProductId(
+              event.payload.productId
+            );
+
+          const received =
+            new InventoryReducer().reduce(
+              current,
+              event
+            );
+
+          await this.repository.upsert(received);
+
+          changeNotifier.notify(["inventories"]);
+          break;
+        }
+
+        case InventoryEventType.INVENTORY_ADJUSTED: {
+          const current =
+            await this.repository.findProductId(
+              event.payload.productId
+            );
+
+          const adjusted =
+            new InventoryReducer().reduce(
+              current,
+              event
+            );
+
+          await this.repository.upsert(adjusted);
+
+          changeNotifier.notify(["inventories"]);
+          break;
+        }
+
+        case InventoryEventType.INVENTORY_TRANSFER: {
+          const current =
+            await this.repository.findProductId(
+              event.payload.productId
+            );
+
+          const transferred =
+            new InventoryReducer().reduce(
+              current,
+              event
+            );
+
+          await this.repository.upsert(transferred);
+
+          changeNotifier.notify(["inventories"]);
+          break;
+        }
+
+        case salesEventType.SALE_ADDED: {
+          const current =
+            await this.repository.findProductId(
+              event.payload.productId
+            );
+
+          const saleInventory =
+            new InventoryReducer().reduce(
+              current,
+              event
+            );
+
+          await this.repository.upsert(saleInventory);
+
+          changeNotifier.notify([
+            "inventories",
+            "sales",
+          ]);
+
+          break;
+        }
+
+        default:
+          break;
+      }
     }
+  }
+
+  buildOperations(
+    events: readonly DomainEvent<any>[]
+  ): SQLiteStatementOperation[] {
+    const operations: SQLiteStatementOperation[] = [];
+
+    for (const event of events) {
+      switch (event.type) {
+        case InventoryEventType.INVENTORY_ADDED: {
+          const inventory =
+            new InventoryReducer().reduce(null, event);
+
+          const productId =
+            event.payload.productId ??
+            inventory.productId;
+
+          this.states.set(productId, inventory);
+
+          operations.push(
+            this.repository.upsertOperation(inventory)
+          );
+
+          break;
+        }
+
+        case InventoryEventType.INVENTORY_RECEIVED: {
+          const productId =
+            event.payload.productId;
+
+          const current =
+            this.states.get(productId);
+
+          if (!current) break;
+
+          const received =
+            new InventoryReducer().reduce(
+              current,
+              event
+            );
+
+          this.states.set(productId, received);
+
+          operations.push(
+            this.repository.upsertOperation(received)
+          );
+
+          break;
+        }
+
+        case InventoryEventType.INVENTORY_ADJUSTED: {
+          const productId =
+            event.payload.productId;
+
+          const current =
+            this.states.get(productId);
+
+          if (!current) break;
+
+          const adjusted =
+            new InventoryReducer().reduce(
+              current,
+              event
+            );
+
+          this.states.set(productId, adjusted);
+
+          operations.push(
+            this.repository.upsertOperation(adjusted)
+          );
+
+          break;
+        }
+
+        case InventoryEventType.INVENTORY_TRANSFER: {
+          const productId =
+            event.payload.productId;
+
+          const current =
+            this.states.get(productId);
+
+          if (!current) break;
+
+          const transferred =
+            new InventoryReducer().reduce(
+              current,
+              event
+            );
+
+          this.states.set(productId, transferred);
+
+          operations.push(
+            this.repository.upsertOperation(transferred)
+          );
+
+          break;
+        }
+
+        case salesEventType.SALE_ADDED: {
+          const productId =
+            event.payload.productId;
+
+          const current =
+            this.states.get(productId);
+
+          if (!current) break;
+
+          const saleInventory =
+            new InventoryReducer().reduce(
+              current,
+              event
+            );
+
+          this.states.set(productId, saleInventory);
+
+          operations.push(
+            this.repository.upsertOperation(saleInventory)
+          );
+
+          break;
+        }
+
+        default:
+          break;
+      }
+    }
+
+    return operations;
+  }
 }

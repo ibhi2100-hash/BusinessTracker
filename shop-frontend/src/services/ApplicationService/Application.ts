@@ -101,7 +101,8 @@ export class Application {
         this.business = 
             new BusinessApi(
                 this.manager,
-                client.repositories.currentBusiness
+                client.repositories.currentBusiness,
+                client.transactionManager
             )
 
         this.sync = 

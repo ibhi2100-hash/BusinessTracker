@@ -1,7 +1,7 @@
 // PreparedStatement.ts
 
 export interface PreparedStatement {
-
+    readonly key: string;
     execute(
         params?: readonly unknown[]
     ): Promise<void>;

@@ -1,10 +1,19 @@
-import { DomainEvent } from "@business/shared-types";   
- import{ EventConsumer } from "./EventSubscriber";
+import {
+    ProjectionOperationConsumer,
+    EventConsumer,
+} from "./EventSubscriber";
+
+
+export type ProjectionConsumer<TEvent> =
+    EventConsumer<TEvent>
+    &
+    ProjectionOperationConsumer<TEvent>;
+
+
 export interface EventBus<TEvent> {
 
     publish(
-        event: TEvent,
-
+        event: TEvent
     ): Promise<void>;
 
     publishMany(
@@ -12,59 +21,63 @@ export interface EventBus<TEvent> {
     ): Promise<void>;
 
     subscribe(
-        subscription: EventConsumer<TEvent>
+        subscription: ProjectionConsumer<TEvent>
     ): void;
 }
 
+
 export interface RebuildObserver<TEvent> {
 
-  onStarted(): void;
-  onRebuildStarted(totalEvents: number): void
+    onStarted(): void;
 
-  onResetStarted(): void;
+    onRebuildStarted(
+        totalEvents: number
+    ): void;
 
-  onResetCompleted(): void;
+    onResetStarted(): void;
 
-  onEventsLoaded(
-    events: readonly TEvent[]
-  ): void;
+    onResetCompleted(): void;
 
-  onEventStarted(
-    event: TEvent
-  ): void;
+    onEventsLoaded(
+        events: readonly TEvent[]
+    ): void;
 
-  onConsumerStarted(
-    consumer: EventConsumer<TEvent>,
-    event: TEvent
-  ): void;
+    onEventStarted(
+        event: TEvent
+    ): void;
 
-  onConsumerCompleted(
-    consumer: EventConsumer<TEvent>,
-    event: TEvent,
-    duration: number
-  ): void;
+    onConsumerStarted(
+        consumer: ProjectionConsumer<TEvent>,
+        event: TEvent
+    ): void;
 
-  onConsumerFailed(
-    consumer: EventConsumer<TEvent>,
-    event: TEvent,
-    error: string
-  ): void;
+    onConsumerCompleted(
+        consumer: ProjectionConsumer<TEvent>,
+        event: TEvent,
+        duration: number
+    ): void;
 
-  onEventCompleted(
-    event: TEvent
-  ): void;
-  
-  onProjectionUpdated(
-    projection: string,
-    rows: number,
-    position: number
-  ): void;
+    onConsumerFailed(
+        consumer: ProjectionConsumer<TEvent>,
+        event: TEvent,
+        error: unknown
+    ): void;
 
-  onCommitStarted(): void;
+    onEventCompleted(
+        event: TEvent
+    ): void;
 
-  onCompleted(): void;
+    onProjectionUpdated(
+        projection: string,
+        rows: number,
+        position: number
+    ): void;
 
-  onFailed(
-    error: unknown
-  ): void;
+    onCommitStarted(): void;
+
+    onCompleted(): void;
+
+    onFailed(
+        error: unknown
+    ): void;
 }

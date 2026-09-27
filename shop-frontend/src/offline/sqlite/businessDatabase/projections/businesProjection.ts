@@ -1,36 +1,170 @@
-import { EventConsumer } from "@business/event-bus";
-import { Business, BusinessEventTypes, DomainEvent } from "@business/shared-types";
-import { SQLiteBusinessRepository } from "../repositories/SQLiteProjectionRepository/SQLiteBusinessRepository";
-import { BusinessReducer } from "@business/projection-families";
-import { changeNotifier } from "./changeNoifier";
+import {
+    ProjectionConsumer,
+} from "@business/event-bus";
+
+import {
+    BusinessEventTypes,
+    DomainEvent,
+} from "@business/shared-types";
+
+import {
+    BusinessPayload,
+    BusinessReducer,
+} from "@business/projection-families";
+
+import {
+    SQLiteBusinessRepository,
+} from "../repositories/SQLiteProjectionRepository/SQLiteBusinessRepository";
+
+import {
+    changeNotifier,
+} from "./changeNoifier";
+
+import type {
+    SQLiteStatementOperation,
+} from "@/src/storage/statement/worker/WorkerProtocol";
+
 
 export class BusinessConsumer
-implements EventConsumer<DomainEvent> {
-    readonly name = "businesses"
+    implements ProjectionConsumer<DomainEvent> {
+
+    readonly name = "businesses";
+
     constructor(
-        private readonly repostory: SQLiteBusinessRepository
-    ){}
+        private readonly repository: SQLiteBusinessRepository
+    ) {}
 
-   async handle(events: readonly DomainEvent<any>[]): Promise<void> {
-        for(const event of events){
-            switch(event.type){
 
-                case BusinessEventTypes.BUSINESS_CREATED:
-                    const business = new BusinessReducer().reduce(null, event)
-                    await this.repostory.upsert(business)
-                    changeNotifier.notify(["businesses"])
-                    break
-                case BusinessEventTypes.BUSINESS_ACTIVATION:
-                    const businessState = await this.repostory.findById(event.businessId);
-                    const allBusiness = await this.repostory.findAll();
-                    console.log("this are all the businesses: ", allBusiness)
-                    console.log("this is The current business State for the reducer: ", businessState)
-                    const businessActivation = new BusinessReducer().reduce(businessState, event);
-                    await this.repostory.activateBusiness(businessActivation)
-                    changeNotifier.notify(["businesses"])
-                    break
+    // =========================================================
+    // LIVE EVENT PROCESSING
+    // =========================================================
+
+    async handle(
+        events: readonly DomainEvent<BusinessPayload>[]
+    ): Promise<void> {
+
+        for (const event of events) {
+
+            switch (event.type) {
+
+                case BusinessEventTypes.BUSINESS_CREATED: {
+
+                    const business =
+                        new BusinessReducer().reduce(
+                            null,
+                            event
+                        );
+
+                    await this.repository.upsert(
+                        business
+                    );
+
+                    changeNotifier.notify([
+                        "businesses",
+                    ]);
+
+                    break;
+                }
+
+
+                case BusinessEventTypes.BUSINESS_ACTIVATION: {
+
+                    const businessState =
+                        await this.repository.findById(
+                            event.businessId
+                        );
+
+                    const businessActivation =
+                        new BusinessReducer().reduce(
+                            businessState,
+                            event
+                        );
+
+                    await this.repository.activateBusiness(
+                        businessActivation
+                    );
+
+                    changeNotifier.notify([
+                        "businesses",
+                    ]);
+
+                    break;
+                }
             }
-
         }
+    }
+
+
+    // =========================================================
+    // PROJECTION REBUILD
+    // =========================================================
+
+    buildOperations(
+        events: readonly DomainEvent<BusinessPayload>[]
+    ): SQLiteStatementOperation[] {
+
+        const operations:
+            SQLiteStatementOperation[] = [];
+
+        /*
+         * IMPORTANT:
+         *
+         * Do NOT do:
+         *
+         * await repository.findById(...)
+         *
+         * here.
+         *
+         * The rebuild database is being reconstructed.
+         * The projection must be derived from the event stream.
+         */
+
+        let businessState: ReturnType<
+            BusinessReducer["reduce"]
+        > | null = null;
+
+
+        for (const event of events) {
+
+            switch (event.type) {
+
+                case BusinessEventTypes.BUSINESS_CREATED: {
+
+                    businessState =
+                        new BusinessReducer().reduce(
+                            null,
+                            event
+                        );
+
+                    operations.push(
+                        this.repository.upsertOperation(
+                            businessState
+                        )
+                    );
+
+                    break;
+                }
+
+
+                case BusinessEventTypes.BUSINESS_ACTIVATION: {
+
+                    businessState =
+                        new BusinessReducer().reduce(
+                            businessState,
+                            event
+                        );
+
+                    operations.push(
+                        this.repository.activateBusinessOperation(
+                            businessState
+                        )
+                    );
+
+                    break;
+                }
+            }
+        }
+
+        return operations;
     }
 }

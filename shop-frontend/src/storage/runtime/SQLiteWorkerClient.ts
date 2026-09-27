@@ -17,7 +17,7 @@ export class WorkerPreparedStatement
     constructor(
         private readonly runtime: SQLiteRuntime,
         private readonly database: DatabaseId,
-        private readonly statementKey: string
+        public readonly key: string
     ) {}
 
     async execute(
@@ -28,7 +28,7 @@ export class WorkerPreparedStatement
 
         await this.runtime.execute(
             this.database,
-            this.statementKey,
+            this.key,
             params
         );
     }
@@ -41,7 +41,7 @@ export class WorkerPreparedStatement
 
         return this.runtime.query<T>(
             this.database,
-            this.statementKey,
+            this.key,
             params
         );
     }
@@ -84,7 +84,7 @@ export class WorkerPreparedStatement
         if (this.disposed) {
 
             throw new Error(
-                `Prepared statement "${this.statementKey}" has been disposed.`
+                `Prepared statement "${this.key}" has been disposed.`
             );
         }
     }

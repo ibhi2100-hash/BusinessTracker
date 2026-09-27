@@ -35,11 +35,14 @@ export function inventoryKeyFromObject({
  * Useful in reducers/debugging.
  */
 export function parseInventoryKey(key: string): InventoryKeyParts {
-  const [productId, branchId] = key.split(":");
+  const [branchId, productId] = key.split(":");
 
   if (!productId || !branchId) {
     throw new Error(`Invalid inventory key: ${key}`);
   }
 
-  return { productId, branchId };
+  return {
+    productId,
+    branchId,
+  };
 }

@@ -437,7 +437,6 @@ function runTransaction(
     statements: any,
     operations: readonly SQLiteStatementOperation[]
 ): void {
-
     if (operations.length === 0) {
         return;
     }
@@ -445,13 +444,34 @@ function runTransaction(
     db.exec("BEGIN IMMEDIATE");
 
     try {
+        for (const [index, operation] of operations.entries()) {
+            if (!operation) {
+                throw new Error(
+                    `Invalid SQLite transaction operation at index ${index}: operation is null or undefined`
+                );
+            }
 
-        for (const operation of operations) {
+            if (
+                typeof operation.statementKey !== "string" ||
+                operation.statementKey.trim() === ""
+            ) {
+                throw new Error(
+                    `Invalid SQLite transaction operation at index ${index}: ` +
+                    `statementKey=${String(operation.statementKey)}, ` +
+                    `operation=${JSON.stringify(operation)}`
+                );
+            }
+
+            if (!statements.has(operation.statementKey)) {
+                throw new Error(
+                    `SQLite transaction statement not registered: ` +
+                    `${operation.statementKey} ` +
+                    `(operation index ${index})`
+                );
+            }
 
             const statement =
-                statements.get(
-                    operation.statementKey
-                );
+                statements.get(operation.statementKey);
 
             executeStatement(
                 statement,
@@ -460,20 +480,16 @@ function runTransaction(
         }
 
         db.exec("COMMIT");
-
     } catch (error) {
-
         try {
             db.exec("ROLLBACK");
         } catch {
-            // Preserve the original transaction error.
+            // Preserve original transaction error.
         }
 
         throw error;
     }
 }
-
-
 function runMigrationTransaction(
     db: any,
     statements: readonly {

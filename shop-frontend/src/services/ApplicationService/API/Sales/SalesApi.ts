@@ -35,9 +35,7 @@ export interface BuyAnalysisPayload {
 
 
 export interface CreateSaleRequest {
-  aggregateType?: AggregateType;
-  /** Unique sale / line id. Prefer a dedicated saleId, not productId. */
-  aggregateId: string;
+  aggregateId?: string;
   type?: typeof salesEventType.SALE_ADDED;
   mode: SaleMode;
   payload: SaleLinePayload & {
@@ -163,7 +161,7 @@ export class SalesApi {
     const app = await this.manager.current();
 
     const salesIntent: CommandIntent<any> = {
-      aggregateType: request.aggregateType ?? AggregateType.SALE,
+      aggregateType: AggregateType.SALE,
       aggregateId: saleId,
       type: request.type ?? salesEventType.SALE_ADDED,
       mode: request.mode,

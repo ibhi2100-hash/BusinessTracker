@@ -1,55 +1,64 @@
 import {
-    EventBus
+    EventBus,
+    ProjectionConsumer,
 } from "../contracts/EventBus";
-import { EventConsumer } from "../contracts/EventSubscriber";
 
-import { DomainEvent } from "@business/shared-types";
+import {
+    DomainEvent,
+} from "@business/shared-types";
+
 
 export class ProjectionEventBus
-implements EventBus<DomainEvent> {
+    implements EventBus<DomainEvent> {
 
     private readonly consumers =
-        new Set<EventConsumer<DomainEvent>>();
+        new Set<ProjectionConsumer<DomainEvent>>();
+
 
     subscribe(
-        consumer: EventConsumer<DomainEvent>
+        consumer: ProjectionConsumer<DomainEvent>
     ): void {
+
         this.consumers.add(consumer);
     }
 
+
     unsubscribe(
-        consumer: EventConsumer<DomainEvent>
+        consumer: ProjectionConsumer<DomainEvent>
     ): void {
+
         this.consumers.delete(consumer);
     }
 
-    getConsumers(): readonly EventConsumer<DomainEvent>[]{
-        return [...this.consumers]
+
+    getConsumers():
+        readonly ProjectionConsumer<DomainEvent>[] {
+
+        return [...this.consumers];
     }
 
 
     async publish(
         event: DomainEvent
     ): Promise<void> {
-        await this.publishMany([event]);
+
+        await this.publishMany([
+            event,
+        ]);
     }
+
 
     async publishMany(
         events: readonly DomainEvent[]
     ): Promise<void> {
-        const startedAt = Date.now()
+
         for (const event of events) {
 
             for (const consumer of this.consumers) {
 
-                try {
-
-                    await consumer.handle([event]);
-
-                } catch (error) {
-
-                    throw error;
-                }
+                await consumer.handle([
+                    event,
+                ]);
             }
         }
     }

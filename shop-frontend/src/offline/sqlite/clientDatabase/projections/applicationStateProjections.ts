@@ -1,29 +1,79 @@
-import { EventConsumer } from "@business/event-bus";
-import { BusinessEventTypes, DomainEvent } from "@business/shared-types";
+import { ProjectionConsumer } from "@business/event-bus";
+import {
+  BusinessEventTypes,
+  DomainEvent,
+} from "@business/shared-types";
 import { SQLiteApplicationStateRepository } from "../repositories/ApplicationStateRepository.ts/SQLiteApplicationStateRepository";
+import type { SQLiteStatementOperation } from "@/src/storage/statement/worker/WorkerProtocol";
 
 export class ApplicationStateProjection
-implements EventConsumer<DomainEvent> {
-    constructor(
-        private readonly repository: SQLiteApplicationStateRepository
-    ){}
-    name: string = "Application State"
+  implements ProjectionConsumer<DomainEvent>
+{
+  readonly name = "Application State";
 
-    async handle(events: readonly DomainEvent<any>[]): Promise<void> {
-    
-        for(const event of events){
-            switch(event.type){
+  constructor(
+    private readonly repository: SQLiteApplicationStateRepository
+  ) {}
 
-                case BusinessEventTypes.BUSINESS_CREATED:
-                    
+  async handle(
+    events: readonly DomainEvent[]
+  ): Promise<void> {
+    for (const event of events) {
+      switch (event.type) {
+        case BusinessEventTypes.BUSINESS_CREATED: {
+          await this.repository.setCurrentBusiness(
+            event.aggregateId
+          );
 
-                    await this.repository.setCurrentBusiness(event.aggregateId);
-                    break;
-                
-                case BusinessEventTypes.BRANCH_CREATED:
-                    await this.repository.setCurrentBranch(event.aggregateId)
-                    break
-            }
+          break;
         }
+
+        case BusinessEventTypes.BRANCH_CREATED: {
+          await this.repository.setCurrentBranch(
+            event.aggregateId
+          );
+
+          break;
+        }
+
+        default:
+          break;
+      }
     }
+  }
+
+  buildOperations(
+    events: readonly DomainEvent[]
+  ): SQLiteStatementOperation[] {
+    const operations: SQLiteStatementOperation[] = [];
+
+    for (const event of events) {
+      switch (event.type) {
+        case BusinessEventTypes.BUSINESS_CREATED: {
+          operations.push(
+            this.repository.setCurrentBusinessOperation(
+              event.aggregateId
+            )
+          );
+
+          break;
+        }
+
+        case BusinessEventTypes.BRANCH_CREATED: {
+          operations.push(
+            this.repository.setCurrentBranchOperation(
+              event.aggregateId
+            )
+          );
+
+          break;
+        }
+
+        default:
+          break;
+      }
+    }
+
+    return operations;
+  }
 }

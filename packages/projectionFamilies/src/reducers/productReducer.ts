@@ -8,7 +8,7 @@ import {
 import { ProjectionReducer } from "../contracts/ProjectionReducer";
 
 
-interface ProductPayload {
+export interface ProductPayload {
 
     id: string;
 

@@ -4,6 +4,7 @@ import { changeNotifier } from "@/src/offline/sqlite/businessDatabase/projection
 import { Business } from "@business/shared-types";
 import { CurrentBusinessRepository } from "@/src/offline/sqlite/clientDatabase/repositories/CurrentBusiness/SQLiteCurrentBusinessRepository"; 
 import { SQLiteStatementOperation } from "@/src/storage/statement/worker/WorkerProtocol";
+import { TransactionManager } from "@/src/storage/transaction/TransactionManager";
 
 export interface BootstrapBusiness {
     businessId: string;
@@ -16,7 +17,8 @@ export class BusinessApi {
     constructor(
         private readonly manager: BusinessManager,
         private readonly currentBusiness:
-            CurrentBusinessRepository
+            CurrentBusinessRepository,
+        private readonly clientTransactionManager: TransactionManager
     ) {}
 
     async CurrentBusiness(
@@ -104,7 +106,7 @@ export class BusinessApi {
                     app.storage.repositories.expenses.upsertOperation(expense)
             ),
 
-            app.storage.repositories.ledger.appendOperations(ledgerEntries),
+            ...app.storage.repositories.ledger.appendOperations(ledgerEntries),
 
 
         ];
@@ -123,7 +125,7 @@ export class BusinessApi {
         }
 
         // 4. Update current-business record in client DB
-        await app.runtime.transactionManager.run([
+        this.clientTransactionManager.run([
             this.currentBusiness.upsertOperation({
                 id: 0,
 
