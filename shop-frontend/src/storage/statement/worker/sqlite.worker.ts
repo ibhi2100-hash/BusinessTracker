@@ -29,29 +29,13 @@ type QueuedRequest = SQLiteWorkerRequest;
 
 let workerQueue: Promise<void> = Promise.resolve();
 
-function enqueue(
-    request: QueuedRequest
-): void {
-
-    workerQueue =
-        workerQueue
-            .then(async () => {
-
-                const response =
-                    await handleRequest(request);
-
-                self.postMessage(response);
-
-            })
-            .catch(error => {
-
-                console.error(
-                    "[SQLiteWorker] Queue failure",
-                    error
-                );
-            });
+function enqueue(request: QueuedRequest): void {
+    workerQueue = workerQueue.then(async () => {
+        const response = await handleRequest(request);
+        self.postMessage(response);
+    });
+    // Don't catch here — let handleRequest's try/catch return failure responses
 }
-
 
 function failure(
     requestId: string,

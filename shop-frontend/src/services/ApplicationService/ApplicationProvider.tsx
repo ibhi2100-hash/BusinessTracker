@@ -41,6 +41,7 @@ import {
 import {
     SyncProvider,
 } from "@/components/providers/SyncProvider";
+import { SQLiteRuntime } from "@/src/storage/runtime/SQLiteRuntime";
 
 
 interface Props {
@@ -362,6 +363,12 @@ export function ApplicationProvider({
                 }
 
 
+                let runtimeToDispose: SQLiteRuntime | undefined;
+
+                runtimeToDispose = result.application?.client.runtime;
+
+
+                        
                 /*
                  * ====================================================
                  * APPLICATION READY
@@ -392,10 +399,7 @@ export function ApplicationProvider({
                  * React state and don't report cancellation as a boot
                  * failure.
                  */
-                if (cancelled) {
-                    return;
-                }
-
+                
                 console.error(
                     "Application bootstrap failed:",
                     error
@@ -441,32 +445,11 @@ export function ApplicationProvider({
          * because React does not treat an async cleanup function as
          * a normal cleanup callback.
          */
+        
         return () => {
-
-            mounted =
-                false;
-
-            cancelled =
-                true;
-
-
-            /*
-             * app may still be undefined if boot is in progress.
-             *
-             * If boot has already completed, dispose the exact runtime
-             * created by this effect.
-             */
-            if (app) {
-
-                void app
-                    .client
-                    .runtime
-                    .dispose();
-
-                app =
-                    undefined;
-            }
-        };
+            mounted = false;
+            cancelled = true;
+        }
 
     }, [
         router,

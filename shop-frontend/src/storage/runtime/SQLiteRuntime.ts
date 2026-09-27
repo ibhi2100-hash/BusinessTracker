@@ -410,70 +410,28 @@ export class SQLiteRuntime implements Lifecycle {
      * database.close requests.
      */
     async stop(): Promise<void> {
+        const worker = this.worker;
+        if (!worker) return;
 
-        const worker =
-            this.worker;
+        // 1. Reject any pending requests FIRST so callers don't hang
+        this.rejectPending(new Error("SQLiteRuntime is stopping."));
 
-        if (!worker) {
-            return;
-        }
-
-        /*
-         * Close every database while the worker
-         * is still available.
-         */
-        const databases =
-            [...this.databases.values()];
-
+        // 2. Close databases
+        const databases = [...this.databases.values()];
         for (const database of databases) {
-
             try {
-
-                await this.request({
-                    type: "database.close",
-
-                    requestId:
-                        crypto.randomUUID(),
-
-                    database,
-                });
-
-            } catch (error) {
-
-                console.warn(
-                    "[SQLiteRuntime] Failed to close database:",
-                    database,
-                    error
-                );
-            }
+                await this.request({ type: "database.close", requestId: crypto.randomUUID(), database });
+            } catch { /* ignore */ }
         }
+
+        // 3. Wait for the worker's queue to drain
+        await new Promise(resolve => setTimeout(resolve, 0));
 
         this.databases.clear();
-
-        /*
-         * Only now detach the worker.
-         */
-        this.worker =
-            undefined;
-
-        worker.removeEventListener(
-            "message",
-            this.handleMessage
-        );
-
-        worker.removeEventListener(
-            "error",
-            this.handleWorkerError
-        );
-
+        this.worker = undefined;
+        worker.removeEventListener("message", this.handleMessage);
+        worker.removeEventListener("error", this.handleWorkerError);
         worker.terminate();
-
-        this.rejectPending(
-            new Error(
-                "SQLiteRuntime stopped."
-            )
-        );
-
         this.initialized = false;
     }
 
@@ -574,4 +532,24 @@ export class SQLiteRuntime implements Lifecycle {
 
         this.pending.clear();
     }
+}
+
+// SQLiteRuntime.ts — add a module-level singleton guard
+let sharedRuntime: SQLiteRuntime | undefined;
+let sharedRuntimePromise: Promise<SQLiteRuntime> | undefined;
+
+export function getSharedRuntime(options: SQLiteRuntimeOptions): Promise<SQLiteRuntime> {
+    if (sharedRuntime?.isInitialized) {
+        return Promise.resolve(sharedRuntime);
+    }
+    if (sharedRuntimePromise) {
+        return sharedRuntimePromise;
+    }
+    sharedRuntimePromise = (async () => {
+        const runtime = new SQLiteRuntime(options);
+        await runtime.start();
+        sharedRuntime = runtime;
+        return runtime;
+    })();
+    return sharedRuntimePromise;
 }

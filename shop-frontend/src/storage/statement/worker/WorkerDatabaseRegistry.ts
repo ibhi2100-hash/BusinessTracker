@@ -35,7 +35,13 @@ export class WorkerDatabaseRegistry {
     private sahPoolUtil?: any;          // ← add this
     private readonly databases = new Map<string, WorkerDatabaseContext>();
 
+    private initialized = false;
+
     async initializeSQLite(): Promise<void> {
+        if(this.initialized) {
+            return;
+        }
+
         if (this.sqlite3) {
             return;
         }
@@ -55,8 +61,8 @@ export class WorkerDatabaseRegistry {
 
             this.sahPoolUtil = await this.sqlite3.installOpfsSAHPoolVfs({
                 initialCapacity: 64,
+                forceReinitIfPreviouslyFailed: true,   // ← add this
                 // optional but useful:
-                // directory: "/biztru-sqlite",   // isolate from other apps
                 // clearOnInit: false,
             });
         } finally {
@@ -67,6 +73,8 @@ export class WorkerDatabaseRegistry {
                 delete (self as any).sqlite3ApiConfig;
             }
         }
+
+        this.initialized = true;
     }
     async open(
         database: DatabaseId,
