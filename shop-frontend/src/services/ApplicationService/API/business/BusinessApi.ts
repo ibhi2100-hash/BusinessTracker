@@ -3,6 +3,7 @@ import { BusinessManager } from "@/src/Composer/BusinessManager";
 import { changeNotifier } from "@/src/offline/sqlite/businessDatabase/projections/changeNoifier";
 import { Business } from "@business/shared-types";
 import { CurrentBusinessRepository } from "@/src/offline/sqlite/clientDatabase/repositories/CurrentBusiness/SQLiteCurrentBusinessRepository"; 
+import { SQLiteStatementOperation } from "@/src/storage/statement/worker/WorkerProtocol";
 
 export interface BootstrapBusiness {
     businessId: string;
@@ -75,107 +76,94 @@ export class BusinessApi {
                 request.businessId
             );
 
-        await app.runtime.transactionManager.run(
-            async () => {
+        const operations: SQLiteStatementOperation[] = [
+            app.storage.repositories.business.upsertOperation(business),
 
-                await app.storage.repositories.business
-                    .upsert(business);
+            ...branches.map(
+                branch =>
+                    app.storage.repositories.branches.insertOperation(branch)
+            ),
 
-                for (const branch of branches) {
-                    await app.storage.repositories.branches
-                        .upsert(branch);
-                }
+            ...products.map(
+                product =>
+                    app.storage.repositories.products.upsertOperation(product)
+            ),
 
-                await app.context.setActiveBusiness(
-                    request.businessId
-                );
+            ...inventories.map(
+                inventory =>
+                    app.storage.repositories.inventory.upsertOperation(inventory)
+            ),
 
-                if (request.branchId) {
-                    await app.context.setActiveBranch(
-                        request.branchId
-                    );
-                }
+            ...sales.map(
+                sale =>
+                    app.storage.repositories.sales.upsertOperation(sale)
+            ),
 
-                for (const product of products) {
-                    await app.storage.repositories.products
-                        .upsert(product);
-                }
+            ...expenses.map(
+                expense =>
+                    app.storage.repositories.expenses.upsertOperation(expense)
+            ),
 
-                for (const inventory of inventories) {
-                    await app.storage.repositories.inventory
-                        .upsert(inventory);
-                }
+            app.storage.repositories.ledger.appendOperations(ledgerEntries),
 
-                for (const sale of sales) {
-                    await app.storage.repositories.sales
-                        .upsert(sale);
-                }
 
-                for (const expense of expenses) {
-                    await app.storage.repositories.expenses
-                        .upsert(expense);
-                }
+        ];
 
-                await app.storage.repositories.ledger
-                    .append(ledgerEntries);
-
-                /*
-                 * Save the active business in the CLIENT database.
-                 *
-                 * This is deliberately outside app.storage because
-                 * app.storage belongs to the business database.
-                 */
-                await this.currentBusiness.save({
-                    id: 0,
-
-                    businessId:
-                        business.id,
-
-                    businessName:
-                        business.name ?? null,
-
-                    businessCode:
-                        business.code ?? null,
-
-                    stage:
-                        business.status ?? "ONBOARDING",
-
-                    status:
-                        business.status ?? "CREATED",
-
-                    databaseVersion:
-                        business.databaseVersion ?? 1,
-
-                    schemaVersion:
-                        business.schemaVersion ?? 1,
-
-                    lastSequenceNumber:
-                        business.lastSequenceNumber ?? 0,
-
-                    initializedAt:
-                        business.initializedAt,
-
-                    activatedAt:
-                        business.activatedAt ?? null,
-
-                    lastOpenedAt:
-                        Date.now(),
-
-                    updatedAt:
-                        Date.now(),
-                });
-
-                const businesses =
-                    await app.storage.repositories.business
-                        .findAll();
-
-                console.log(
-                    "These are the businesses saved in frontend:",
-                    businesses
-                );
-            }
+        await app.runtime.transactionManager.run(operations);  
+        
+        // 3. Update client/application state
+        await app.context.setActiveBusiness(
+            request.businessId
         );
 
+        if (request.branchId) {
+            await app.context.setActiveBranch(
+                request.branchId
+            );
+        }
+
+        // 4. Update current-business record in client DB
+        await app.runtime.transactionManager.run([
+            this.currentBusiness.upsertOperation({
+                id: 0,
+
+                businessId: business.id,
+
+                businessName:
+                    business.name ?? null,
+
+                businessCode:
+                    business.code ?? null,
+
+                stage:
+                    business.status ?? "ONBOARDING",
+
+                status:
+                    business.status ?? "CREATED",
+
+                databaseVersion:
+                    business.databaseVersion ?? 1,
+
+                schemaVersion:
+                    business.schemaVersion ?? 1,
+
+                lastSequenceNumber:
+                    business.lastSequenceNumber ?? 0,
+
+                initializedAt:
+                    business.initializedAt,
+
+                activatedAt:
+                    business.activatedAt ?? null,
+
+                lastOpenedAt:
+                    Date.now(),
+
+                updatedAt:
+                    Date.now(),
+            }),
+        ]);
+        
         changeNotifier.notify([
             "application_state",
             "current_business",

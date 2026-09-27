@@ -1,7 +1,7 @@
 import { StatementDefinition } from "../../../PreparedStatement/StatementRegistry/statementDefinition";
 import { ProjectionResetStatementKeys } from "./projectionRebuilderKeys";
 
-export const projectionResetStatementDefinitions: StatementDefinition[] = [
+export const ProjectionResetStatementDefinitions: StatementDefinition[] = [
     {
         key: ProjectionResetStatementKeys.businesses,
         sql: `DELETE FROM businesses`,

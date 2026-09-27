@@ -45,18 +45,7 @@ implements PipelineKernel {
     console.log("[KERNEL 03] COMMAND VALIDATED");
 
     const logicalClock = await this.clock.next();
-
-    console.log(
-        "[KERNEL 04] LOGICAL CLOCK",
-        logicalClock
-    );
-
     const context = await this.businessContext.current();
-
-    console.log(
-        "[KERNEL 05] BUSINESS CONTEXT",
-        context
-    );
 
     const aggregateVersion =
         await this.repository.aggregates.getVersion(
@@ -64,18 +53,8 @@ implements PipelineKernel {
             command.aggregateType
         );
 
-    console.log(
-        "[KERNEL 06] AGGREGATE VERSION",
-        aggregateVersion
-    );
-
     const expectedAggregateVersion =
         aggregateVersion.localVersion ?? 0;
-
-    console.log(
-        "[KERNEL 07] EXPECTED VERSION",
-        expectedAggregateVersion
-    );
 
     const event =
         await domainEventTransformer(
@@ -84,13 +63,7 @@ implements PipelineKernel {
             logicalClock,
             expectedAggregateVersion
         );
-
-    console.log(
-        "[KERNEL 08] DOMAIN EVENT CREATED",
-        event
-    );
-
-        console.log("[KERNEL 09] BEGIN TRANSACTION");
+        
         const operations: SQLiteStatementOperation[] = [
             ...this.eventStore.appendOperations([event]),
 

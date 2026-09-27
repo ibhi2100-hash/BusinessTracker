@@ -52,29 +52,22 @@ export function ApplicationProvider({
     children,
 }: Props) {
 
-    const router =
-        useRouter();
-
+    const router = useRouter();
 
     const [
         application,
         setApplication,
-    ] = useState<Application | null>(
-        null
-    );
-
+    ] = useState<Application | null>(null);
 
     const [
         ready,
         setReady,
     ] = useState(false);
 
-
     const [
         boot,
         setBoot,
     ] = useState<BootState>({
-
         stage:
             BootStage.STARTING,
 
@@ -97,11 +90,21 @@ export function ApplicationProvider({
 
     useEffect(() => {
 
+        let cancelled = false;
+
         let mounted = true;
 
+        /*
+         * The local application reference owns the runtime created
+         * by this effect.
+         *
+         * Do NOT use React state inside cleanup because the cleanup
+         * closure can contain the initial null value.
+         */
+        let app: Application | undefined;
 
-        const listener:
-            BootListener = {
+
+        const listener: BootListener = {
 
             onStarted(
                 totalTasks
@@ -111,10 +114,8 @@ export function ApplicationProvider({
                     return;
                 }
 
-
                 setBoot(
                     previous => ({
-
                         ...previous,
 
                         stage:
@@ -150,10 +151,8 @@ export function ApplicationProvider({
                     return;
                 }
 
-
                 setBoot(
                     previous => ({
-
                         ...previous,
 
                         stage:
@@ -188,10 +187,8 @@ export function ApplicationProvider({
                     return;
                 }
 
-
                 setBoot(
                     previous => ({
-
                         ...previous,
 
                         stage:
@@ -223,10 +220,8 @@ export function ApplicationProvider({
                     return;
                 }
 
-
                 setBoot(
                     previous => ({
-
                         ...previous,
 
                         stage:
@@ -250,10 +245,8 @@ export function ApplicationProvider({
                     return;
                 }
 
-
                 setBoot(
                     previous => ({
-
                         ...previous,
 
                         stage:
@@ -269,8 +262,7 @@ export function ApplicationProvider({
         };
 
 
-        async function bootstrap():
-            Promise<void> {
+        async function bootstrap(): Promise<void> {
 
             try {
 
@@ -299,44 +291,42 @@ export function ApplicationProvider({
                     );
 
 
-                if (!mounted) {
+                /*
+                 * The effect may have been cleaned up while booting.
+                 *
+                 * In that case React no longer owns this application,
+                 * so dispose it immediately instead of putting it
+                 * into state.
+                 */
+                if (cancelled) {
+
+                    if (result.application) {
+
+                        await result
+                            .application
+                            .client
+                            .runtime
+                            .dispose();
+                    }
+
                     return;
                 }
 
 
-                const app =
+                /*
+                 * Keep the application in this effect's local scope
+                 * so cleanup can dispose the exact runtime that this
+                 * effect created.
+                 */
+                app =
                     result.application;
 
 
-                /*
-                 * ====================================================
-                 * INITIALIZE APPLICATION SYNC SERVICE
-                 * ====================================================
-                 *
-                 * At this point all local infrastructure should
-                 * already have been constructed by the bootstrapper.
-                 */
-
-
-                if (!mounted) {
-                    return;
+                if (!app) {
+                    throw new Error(
+                        "Boot manager completed without an application."
+                    );
                 }
-
-                
-                if (!mounted) {
-                    return;
-                }
-
-
-                /*
-                 * ====================================================
-                 * PUBLISH APPLICATION
-                 * ====================================================
-                 */
-
-                setApplication(
-                    app
-                );
 
 
                 /*
@@ -355,7 +345,19 @@ export function ApplicationProvider({
                         .getLastRoute();
 
 
-                if (!mounted) {
+                /*
+                 * The component may have unmounted while the route
+                 * was being restored.
+                 */
+                if (cancelled || !mounted) {
+
+                    await app
+                        .client
+                        .runtime
+                        .dispose();
+
+                    app = undefined;
+
                     return;
                 }
 
@@ -366,16 +368,33 @@ export function ApplicationProvider({
                  * ====================================================
  */
 
+                setApplication(
+                    app
+                );
+
                 setReady(
                     true
                 );
 
 
+                /*
+                 * Only navigate after the application has successfully
+                 * completed bootstrapping and its runtime is retained.
+                 */
                 router.replace(
                     lastRoute
                 );
 
             } catch (error) {
+
+                /*
+                 * If the effect was already cancelled, don't update
+                 * React state and don't report cancellation as a boot
+                 * failure.
+                 */
+                if (cancelled) {
+                    return;
+                }
 
                 console.error(
                     "Application bootstrap failed:",
@@ -390,7 +409,6 @@ export function ApplicationProvider({
 
                 setBoot(
                     previous => ({
-
                         ...previous,
 
                         stage:
@@ -409,10 +427,45 @@ export function ApplicationProvider({
         void bootstrap();
 
 
+        /*
+         * ============================================================
+         * EFFECT CLEANUP
+         * ============================================================
+         *
+         * React cleanup must be synchronous.
+         *
+         * We cannot:
+         *
+         *     return async () => {}
+         *
+         * because React does not treat an async cleanup function as
+         * a normal cleanup callback.
+         */
         return () => {
 
             mounted =
                 false;
+
+            cancelled =
+                true;
+
+
+            /*
+             * app may still be undefined if boot is in progress.
+             *
+             * If boot has already completed, dispose the exact runtime
+             * created by this effect.
+             */
+            if (app) {
+
+                void app
+                    .client
+                    .runtime
+                    .dispose();
+
+                app =
+                    undefined;
+            }
         };
 
     }, [

@@ -40,7 +40,7 @@ export class WorkerStatementRegistry {
 
                 const error =
                     new Error(
-                        `Duplicate SQLite statement: ${definition.key}`
+                        `Duplicate SQLite statement: ${definition.key}: ${definition.sql}`
                     );
 
                 throw error;

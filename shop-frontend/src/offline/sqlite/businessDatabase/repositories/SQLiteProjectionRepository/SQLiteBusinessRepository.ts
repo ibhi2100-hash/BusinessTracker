@@ -1,56 +1,128 @@
 // SQLiteBusinessRepository.ts
 
 import { Business } from "@business/shared-types";
-import { IProjectionEntityRepository } from "./repositoryContract";
-import { BusinessStatements } from "../../statements/business/BusinessStatements";
+
+import {
+    IProjectionEntityRepository,
+} from "./repositoryContract";
+
+import {
+    BusinessStatements,
+} from "../../statements/business/BusinessStatements";
+
+import type {
+    SQLiteStatementOperation,
+} from "@/src/storage/statement/worker/WorkerProtocol";
+import { businessKeys } from "../../statements/business/businessKeys";
+
 
 export class SQLiteBusinessRepository
-  implements IProjectionEntityRepository<Business> {
-  constructor(
-          private readonly statements: BusinessStatements
-      ) {}
-  async upsert(state: Business): Promise<void> {
-    await this.statements.upsert.execute(
-      BusinessMapper.ToInsert(state)
-    )
-  }
-  async findById(id: string): Promise<Business | null> {
-  console.log("looking for:", id);
+    implements IProjectionEntityRepository<Business>
+{
+    constructor(
+        private readonly statements: BusinessStatements
+    ) {}
 
-  // A) current prepared statement
-  let rows = await this.statements.findById.query<Business>([id]);
+    // ============================================================
+    // TRANSACTION OPERATIONS
+    // ============================================================
+
+    upsertOperation(
+        state: Business
+    ): SQLiteStatementOperation {
+
+        return {
+            statementKey:
+                businessKeys.businessUpsert,
+
+            params:
+                BusinessMapper.toInsert(state),
+        };
+    }
+
+    activateBusinessOperation(
+        state: Business
+    ): SQLiteStatementOperation {
+
+        return {
+            statementKey:
+                businessKeys.businessActivation,
+
+            params:
+                BusinessMapper.toActivation(state),
+        };
+    }
 
 
-  return rows[0] ?? null;
+    // ============================================================
+    // IMMEDIATE WRITES
+    // ============================================================
+
+    async upsert(
+        state: Business
+    ): Promise<void> {
+
+        await this.statements.upsert.execute(
+            BusinessMapper.toInsert(state)
+        );
+    }
+
+
+    async activateBusiness(
+        state: Business
+    ): Promise<void> {
+
+        await this.statements.activate.execute(
+            BusinessMapper.toActivation(state)
+        );
+    }
+
+
+    async delete(
+        id: string
+    ): Promise<void> {
+
+        await this.statements.delete.execute([
+            id,
+        ]);
+    }
+
+
+    // ============================================================
+    // READS
+    // ============================================================
+
+    async findById(
+        id: string
+    ): Promise<Business | null> {
+
+        const rows =
+            await this.statements.findById.query<Business>([
+                id,
+            ]);
+
+        return rows[0] ?? null;
+    }
+
+
+    async findAll(): Promise<Business[]> {
+
+        return this.statements.findAll.query<Business>([]);
+    }
 }
 
-  async findAll() {
-    const all = await this.statements.findAll.query<Business>();
-    
-  return all
-  }
 
-  async delete(id: string) {
-    await this.statements.delete.query(
-      [id]
-    );
-  }
-  async activateBusiness(
-    state: Business
-  ): Promise<void> {
-    await this.statements.activate.execute(
-      BusinessMapper.toActivation(state)
-    );
-  }
-}
-
+// ================================================================
+// MAPPER
+// ================================================================
 
 export class BusinessMapper {
-  static ToInsert(
-    business: Business
 
-  ): unknown[]{
-   return  [
+    static toInsert(
+        business: Business
+    ): unknown[] {
+
+        return [
             business.id,
             business.userId,
             business.name ?? "",
@@ -59,16 +131,20 @@ export class BusinessMapper {
             business.activatedAt ?? "",
             business.isOnboarding,
             business.onboardingCompleted,
-            business.status
-        ]
-  }
+            business.status,
+        ];
+    }
 
-  static toActivation(business: Business): unknown[] {
-  return [
-    business.activatedAt,
-    business.status,
-    business.isOnboarding,
-    business.onboardingCompleted
-  ];
-}
+
+    static toActivation(
+        business: Business
+    ): unknown[] {
+
+        return [
+            business.activatedAt,
+            business.status,
+            business.isOnboarding,
+            business.onboardingCompleted,
+        ];
+    }
 }

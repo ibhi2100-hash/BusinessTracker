@@ -1,27 +1,103 @@
+// SQLiteLedgerRepository.ts
+
 import {
   LedgerEntry,
-  Account
+  Account,
 } from "@business/shared-types";
 
 import {
   LedgerRepository,
-  LedgerAccountTotals
+  LedgerAccountTotals,
 } from "@business/ledger-engine";
 
-import { LedgerStatements }
-  from "../../statements/ledger/LedgerStatements";
-import { LedgerMapper } from "./LedgerMapper";
+import {
+  LedgerStatements,
+} from "../../statements/ledger/LedgerStatements";
+
+import {
+  LedgerMapper,
+} from "./LedgerMapper";
+
+import type {
+  SQLiteStatementOperation,
+} from "@/src/storage/statement/worker/WorkerProtocol";
+import { ledgerKeys } from "../../statements/ledger/ledgerKeys";
+
 
 export class SQLiteLedgerRepository
-  implements LedgerRepository {
-
+  implements LedgerRepository
+{
   constructor(
     private readonly statements: LedgerStatements
   ) {}
 
 
+  // ============================================================
+  // TRANSACTION OPERATIONS
+  // ============================================================
+
+  /**
+   * Build ledger insert operations without executing them.
+   *
+   * Used when ledger writes must participate in a larger
+   * SQLite transaction.
+   *
+   * Example:
+   *
+   * const operations = [
+   *   ...ledger.appendOperations(entries),
+   *   ...otherRepositoryOperations
+   * ];
+   *
+   * await transaction.run(operations);
+   */
+  appendOperations(
+    entries: readonly LedgerEntry[]
+  ): SQLiteStatementOperation[] {
+
+    return entries.map(
+      entry => ({
+        statementKey:
+          ledgerKeys.append,
+
+        params:
+          LedgerMapper.toInsert(entry),
+      })
+    );
+  }
+
+
+  /**
+   * Build one ledger insert operation.
+   *
+   * Useful when the caller already has a single entry.
+   */
+  appendOperation(
+    entry: LedgerEntry
+  ): SQLiteStatementOperation {
+
+    return {
+      statementKey:
+        ledgerKeys.append,
+
+      params:
+        LedgerMapper.toInsert(entry),
+    };
+  }
+
+
+  // ============================================================
+  // IMMEDIATE WRITE
+  // ============================================================
+
+  /**
+   * Immediate non-transactional append.
+   *
+   * Use this when the ledger write does not need to be grouped
+   * with other database operations.
+   */
   async append(
-    entries: LedgerEntry[]
+    entries: readonly LedgerEntry[]
   ): Promise<void> {
 
     for (const entry of entries) {
@@ -29,20 +105,22 @@ export class SQLiteLedgerRepository
       await this.statements.append.execute(
         LedgerMapper.toInsert(entry)
       );
-
     }
-
   }
 
+
+  // ============================================================
+  // READS
+  // ============================================================
 
   async getById(
     id: string
   ): Promise<LedgerEntry | null> {
 
     const rows =
-      await this.statements.findById.query<LedgerEntry>(
-        [id]
-      );
+      await this.statements.findById.query<LedgerEntry>([
+        id,
+      ]);
 
     return rows[0] ?? null;
   }
@@ -53,9 +131,9 @@ export class SQLiteLedgerRepository
   ): Promise<LedgerEntry[]> {
 
     return this.statements.findByEvent
-      .query<LedgerEntry>(
-        [eventId]
-      );
+      .query<LedgerEntry>([
+        eventId,
+      ]);
   }
 
 
@@ -64,9 +142,9 @@ export class SQLiteLedgerRepository
   ): Promise<LedgerEntry[]> {
 
     return this.statements.findByBusiness
-      .query<LedgerEntry>(
-        [businessId]
-      );
+      .query<LedgerEntry>([
+        businessId,
+      ]);
   }
 
 
@@ -75,9 +153,9 @@ export class SQLiteLedgerRepository
   ): Promise<LedgerEntry[]> {
 
     return this.statements.findByBranch
-      .query<LedgerEntry>(
-        [branchId]
-      );
+      .query<LedgerEntry>([
+        branchId,
+      ]);
   }
 
 
@@ -86,9 +164,9 @@ export class SQLiteLedgerRepository
   ): Promise<LedgerEntry[]> {
 
     return this.statements.findByAccount
-      .query<LedgerEntry>(
-        [account]
-      );
+      .query<LedgerEntry>([
+        account,
+      ]);
   }
 
 
@@ -101,35 +179,53 @@ export class SQLiteLedgerRepository
       await this.statements.accountTotals
         .query<LedgerAccountTotals>([
           businessId,
-          account
+          account,
         ]);
 
     return result[0] ?? {
       totalDebits: 0,
-      totalCredits: 0
+      totalCredits: 0,
     };
   }
 
 
-async verifyEvent(
-  eventId: string
-): Promise<boolean> {
+  // ============================================================
+  // INTEGRITY
+  // ============================================================
 
-  const result =
-    await this.statements.verifyEvent
-      .query<LedgerAccountTotals>([
-        eventId
-      ]);
+  async verifyEvent(
+    eventId: string
+  ): Promise<boolean> {
 
-  const totals = result[0];
+    const result =
+      await this.statements.verifyEvent
+        .query<LedgerAccountTotals>([
+          eventId,
+        ]);
 
-  if (!totals) {
-    return false;
+    const totals = result[0];
+
+    if (!totals) {
+      return false;
+    }
+
+    return (
+      totals.totalDebits ===
+      totals.totalCredits
+    );
   }
 
-  return totals.totalDebits === totals.totalCredits;
-}
-  async getDashboard(branchId: string): Promise<any> {
-    return await this.statements.dashboard.query([branchId])
+
+  // ============================================================
+  // DASHBOARD
+  // ============================================================
+
+  async getDashboard(
+    branchId: string
+  ): Promise<any> {
+
+    return this.statements.dashboard.query([
+      branchId,
+    ]);
   }
 }

@@ -45,7 +45,15 @@ implements Lifecycle {
         client: ApplicationContext,
         businessId: string
     ){
-        const runtime = 
+        const bootstrapId =
+            crypto.randomUUID();
+
+        console.log(
+            "[BUSINESS BOOTSTRAP START]",
+            bootstrapId,
+            businessId
+        );
+                const runtime = 
             await this.createRuntime(
                 client,
                 businessId
@@ -104,7 +112,13 @@ implements Lifecycle {
         await application.initialize();
 
         await application.start();
-            
+
+        console.log(
+            "[BUSINESS BOOTSTRAP COMPLETE]",
+            bootstrapId,
+            businessId
+        );
+                
         return application
     }
     async initialize(): Promise<void> {
@@ -291,7 +305,7 @@ private async createSynchronization(
                     30_000,
 
                 syncOnStart:
-                    true,
+                    false,
             }
         );
 

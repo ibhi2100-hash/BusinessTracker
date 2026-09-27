@@ -1,62 +1,150 @@
+// SQLiteProductRepository.ts
+
 import { Product } from "@business/shared-types";
-import { IProjectionEntityRepository } from "./repositoryContract";
-import { ProductStatements } from "../../statements/products/ProductStatements";
+
+import {
+    IProjectionEntityRepository,
+} from "./repositoryContract";
+
+import {
+    ProductStatements,
+} from "../../statements/products/ProductStatements";
+
+import type {
+    SQLiteStatementOperation,
+} from "@/src/storage/statement/worker/WorkerProtocol";
+import { productKeys } from "../../statements/products/productStatementKeys";
+
+
 export interface LiveProduct {
-  id: string;
-  name: string;
-  price: number;
-  costPrice: number;
-  quantity: number;
-  category: string | null;
-  imageUrl: string | null;
-  isActive: number;
-  branchId: string | null;
+
+    id: string;
+
+    name: string;
+
+    price: number;
+
+    costPrice: number;
+
+    quantity: number;
+
+    category: string | null;
+
+    imageUrl: string | null;
+
+    isActive: number;
+
+    branchId: string | null;
 }
 
-export class SQLiteProductRepository
-implements IProjectionEntityRepository<Product> {
 
+export class SQLiteProductRepository
+    implements IProjectionEntityRepository<Product>
+{
     constructor(
         private readonly statements: ProductStatements
     ) {}
 
-    async upsert(state: Product): Promise<void> {
+
+    // ============================================================
+    // TRANSACTION OPERATIONS
+    // ============================================================
+
+    upsertOperation(
+        state: Product
+    ): SQLiteStatementOperation {
+
+        return {
+            statementKey:
+                productKeys.productUpsert,
+
+            params:
+                ProductMapper.toInsert(state),
+        };
+    }
+
+
+    deleteOperation(
+        id: string
+    ): SQLiteStatementOperation {
+
+        return {
+            statementKey:
+                productKeys.productDelete,
+
+            params: [
+                id,
+            ],
+        };
+    }
+
+
+    // ============================================================
+    // IMMEDIATE WRITES
+    // ============================================================
+
+    async upsert(
+        state: Product
+    ): Promise<void> {
+
         await this.statements.upsert.execute(
-            ProductMapper.ToInsert(state)
+            ProductMapper.toInsert(state)
         );
     }
 
-    async findById(id: string) {
+
+    async delete(
+        id: string
+    ): Promise<void> {
+
+        await this.statements.delete.execute([
+            id,
+        ]);
+    }
+
+
+    // ============================================================
+    // READS
+    // ============================================================
+
+    async findById(
+        id: string
+    ): Promise<Product | null> {
 
         const rows =
-            await this.statements.findById.query<Product>(
-                [id]
-            );
+            await this.statements.findById.query<Product>([
+                id,
+            ]);
 
         return rows[0] ?? null;
     }
 
+
     async findAll(): Promise<Product[]> {
-        return await this.statements.update.query();
+
+        return this.statements.update.query<Product>([]);
     }
 
-    async delete(id: string) {
-        await this.statements.delete.execute(
-            [id]
-        );
+
+    async products(
+        branchId: string
+    ): Promise<LiveProduct[]> {
+
+        return this.statements.products.query<LiveProduct>([
+            branchId,
+            branchId,
+        ]);
     }
-
-    async products(branchId): Promise<LiveProduct[]> {
-        const products =  await this.statements.products.query<LiveProduct>([branchId, branchId])
-
-        return products
-    }
-
 }
+
+
+// ================================================================
+// MAPPER
+// ================================================================
 
 export class ProductMapper {
 
-    static ToInsert(
+    static toInsert(
         product: Product
     ): unknown[] {
 
@@ -90,10 +178,7 @@ export class ProductMapper {
 
             product.updatedAt ?? "",
 
-            product.deletedAt ?? ""
-
+            product.deletedAt ?? "",
         ];
-
     }
-
 }

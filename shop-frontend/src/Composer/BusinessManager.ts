@@ -8,9 +8,10 @@ import { SyncApplicationService } from "../services/ApplicationService/API/sync/
 
 export class BusinessManager
 implements BusinessManagerContract, Lifecycle{
-    private readonly applications = 
-        new Map<string, BusinessApplication>()
+    private readonly applications = new Map<string, BusinessApplication>()
 
+    private readonly booting =
+    new Map<string, Promise<BusinessApplication>>();
     private readonly knownBusinesses = new Map<string, KnownBusiness>();
 
     
@@ -66,25 +67,64 @@ implements BusinessManagerContract, Lifecycle{
         
     }
     async bootstrap(businessId: string): Promise<BusinessApplication> {
-        
-            const app = 
-                await this.bootstrapper.bootstrap(
-                    this.client,
-                    businessId
-                );
-            
+            console.log(
+                "[BUSINESS MANAGER BOOTSTRAP]",
+                businessId
+            );
+            const existing = this.applications.get(businessId);
+
+            if(existing){
+                this.currentBusinessId = businessId;
+                await this.syncService.attachToCurrentBusiness();
+                return existing
+            }
+
+            const existingBoot = this.booting.get(businessId);
+
+            if(existingBoot){
+                const app = await existingBoot;
+
+                this.currentBusinessId = businessId;
+
+                await this.syncService.attachToCurrentBusiness();
+
+                return app;
+            }
+            const bootPromise = 
+                this.bootstrapper
+                    .bootstrap(
+                        this.client,
+                        businessId
+                    );
+
+            this.booting.set(
+                businessId,
+                bootPromise
+            );
+             try {
+
+            const app =
+                await bootPromise;
+
             this.applications.set(
                 businessId,
                 app
-            )
+            );
 
-            
+            this.currentBusinessId =
+                businessId;
 
-            this.currentBusinessId = 
+            await this.syncService
+                ?.attachToCurrentBusiness();
+
+            return app;
+
+        } finally {
+
+            this.booting.delete(
                 businessId
-
-            await this.syncService?.attachToCurrentBusiness();
-            return app
+            );
+        }
         }
 
         async open(businessId: string): Promise<BusinessApplication> {

@@ -1,4 +1,6 @@
+import { SQLiteStatementOperation } from "@/src/storage/statement/worker/WorkerProtocol";
 import { CurrentBusinessStatements } from "../../statements/currentBusiness/currentBusinessStatements";
+import { currentBusinessKeys } from "../../statements/currentBusiness/key";
 
 export interface CurrentBusiness {
     id: number;
@@ -21,17 +23,36 @@ export class CurrentBusinessRepository {
         private readonly statements: CurrentBusinessStatements
     ) {}
 
-    async save(currentBusiness: CurrentBusiness): Promise<void> {
+    /**
+     * Build the database operation without executing it.
+     */
+    upsertOperation(
+        currentBusiness: CurrentBusiness
+    ): SQLiteStatementOperation {
+        return {
+            statementKey: currentBusinessKeys.updateCurrentBusiness,
+            params: CurrentBusinessMapper.toUpsertRow(
+                currentBusiness
+            ),
+        };
+    }
+
+    /**
+     * Immediate write for callers that don't need a transaction.
+     */
+    async save(
+        currentBusiness: CurrentBusiness
+    ): Promise<void> {
         await this.statements.update.execute(
             CurrentBusinessMapper.toUpsertRow(currentBusiness)
         );
-        const current = await this.find();
-        console.log("This is the CurrentBusiness: ", current)
     }
 
     async find(): Promise<CurrentBusiness | undefined> {
-        const rows = await this.statements.find.query<CurrentBusiness>();
-        return rows[0]
+        const rows =
+            await this.statements.find.query<CurrentBusiness>();
+
+        return rows[0];
     }
 }
 

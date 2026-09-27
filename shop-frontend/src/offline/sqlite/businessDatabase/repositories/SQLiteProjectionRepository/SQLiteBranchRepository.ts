@@ -1,60 +1,114 @@
+// SQLiteBranchRepository.ts
+
 import { Branch } from "@business/shared-types";
-import { IProjectionEntityRepository } from "./repositoryContract";
-import { BranchStatements } from "../../statements/branch/BranchStatements";
+
+import {
+    IProjectionEntityRepository,
+} from "./repositoryContract";
+
+import {
+    BranchStatements,
+} from "../../statements/branch/BranchStatements";
+
+import type {
+    SQLiteStatementOperation,
+} from "@/src/storage/statement/worker/WorkerProtocol";
+import { BranchStatementKeys } from "../../statements/branch/BranchStatementKeys";
+
 
 export class SQLiteBranchRepository
-implements IProjectionEntityRepository<Branch> {
-
+    implements IProjectionEntityRepository<Branch>
+{
     constructor(
         private readonly statements: BranchStatements
     ) {}
 
-    async upsert(state: Branch): Promise<void> {
+
+    // ============================================================
+    // TRANSACTION OPERATIONS
+    // ============================================================
+
+    insertOperation(
+        state: Branch
+    ): SQLiteStatementOperation {
+
+        return {
+            statementKey:
+                BranchStatementKeys.insert,
+
+            params:
+                BranchMapper.toInsert(state),
+        };
+    }
+
+
+    // ============================================================
+    // IMMEDIATE WRITE
+    // ============================================================
+
+    async upsert(
+        state: Branch
+    ): Promise<void> {
 
         await this.statements.insert.execute(
-            BranchMapper.ToInsert(state)
+            BranchMapper.toInsert(state)
         );
-
     }
 
-    async findById(id: string) {
+
+    async delete(
+        id: string
+    ): Promise<void> {
+
+        await this.statements.delete.execute([
+            id,
+        ]);
+    }
+
+
+    // ============================================================
+    // READS
+    // ============================================================
+
+    async findById(
+        id: string
+    ): Promise<Branch | null> {
 
         const rows =
-            await this.statements.findById.query<Branch>(
-                [id]
-            );
+            await this.statements.findById.query<Branch>([
+                id,
+            ]);
 
         return rows[0] ?? null;
-
     }
 
-    async findAll() {
 
-        return await this.statements.findAll.query<Branch>();
+    async findAll(): Promise<Branch[]> {
 
+        return this.statements.findAll.query<Branch>([]);
     }
-
-    async delete(id: string) {
-
-        await this.statements.delete.execute(
-            [id]
-        );
-
-    }
-
 }
 
+
+// ================================================================
+// MAPPER
+// ================================================================
+
 export class BranchMapper {
-  static ToInsert(branch: Branch): unknown[] {
-    return [
-      branch.id,
-      branch.businessId,
-      branch.name,
-      branch.address ?? null,          // 4 – address
-      branch.phone ?? null,            // 5 – phone
-      branch.isActive ? 1 : 0,         // 6 – isActive (prefer 0/1 for SQLite)
-      branch.createdAt,                // 7 – createdAt (must be a number)
-      branch.isDefault ? 1 : 0,        // 8 – isDefault
-    ];
-  }
+
+    static toInsert(
+        branch: Branch
+    ): unknown[] {
+
+        return [
+            branch.id,
+            branch.businessId,
+            branch.name,
+            branch.address ?? null,
+            branch.phone ?? null,
+            branch.isActive ? 1 : 0,
+            branch.createdAt,
+            branch.isDefault ? 1 : 0,
+        ];
+    }
 }
