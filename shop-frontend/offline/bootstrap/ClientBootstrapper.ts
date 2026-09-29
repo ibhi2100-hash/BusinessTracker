@@ -209,7 +209,7 @@ export class ClientBootstrapper {
         const runtime =
             new SQLiteRuntime({
 
-                vfs: "opfs-sahpool",
+                vfs: "opfs",
 
                 debug:
                     process.env.NODE_ENV === "development",
