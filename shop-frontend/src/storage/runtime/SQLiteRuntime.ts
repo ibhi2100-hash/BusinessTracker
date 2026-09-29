@@ -69,6 +69,8 @@ export class SQLiteRuntime implements Lifecycle {
         this.initializationPromise =
             this.startInternal();
 
+     console.log("Interval just started:")
+
         try {
             await this.initializationPromise;
         } finally {
@@ -111,7 +113,7 @@ export class SQLiteRuntime implements Lifecycle {
             "error",
             this.handleWorkerError
         );
-
+        console.log("runtime about to send request to initialize database")
         await this.request({
             type: "initialize",
 
