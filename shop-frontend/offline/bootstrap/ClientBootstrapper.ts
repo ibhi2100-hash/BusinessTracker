@@ -675,6 +675,8 @@ export class ClientBootstrapper {
                     process.env.NODE_ENV === "development",
             });
 
+        console.log("this is the runtine: ", runtime)
+
         await runtime.start();
 
         return runtime;
