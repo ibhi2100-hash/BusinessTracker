@@ -108,7 +108,22 @@ export class WorkerDatabaseRegistry {
             performance.now();
 
         this.sqlite3 =
-            await sqlite3InitModule();
+            await console.log(
+    "[SQLiteWorker] SQLite WASM loaded",
+    {
+        sqlite3: !!this.sqlite3,
+        oo1: !!this.sqlite3?.oo1,
+        OpfsDb: !!this.sqlite3?.oo1?.OpfsDb,
+
+        oo1Keys:
+            this.sqlite3?.oo1
+                ? Object.keys(this.sqlite3.oo1)
+                : [],
+
+        version:
+            this.sqlite3?.version?.libVersion,
+    }
+);
 
         console.log(
             "[SQLiteWorker] sqlite3InitModule() SUCCESS",
