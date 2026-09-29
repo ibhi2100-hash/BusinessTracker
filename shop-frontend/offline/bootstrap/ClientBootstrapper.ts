@@ -29,139 +29,599 @@ import { ApplicationStateProjection } from "@/src/offline/sqlite/clientDatabase/
 
 export class ClientBootstrapper {
 
-    async bootstrap(): Promise<ApplicationContext> {
+   async bootstrap(): Promise<ApplicationContext> {
 
-        // ============================================================
-        // 1. CREATE THE SINGLE SHARED SQLITE RUNTIME
-        // ============================================================
+    const bootstrapStartedAt = performance.now();
 
-        const runtime =
+    console.log(
+        "[Bootstrap] ========================================"
+    );
+
+    console.log(
+        "[Bootstrap] Starting application bootstrap..."
+    );
+
+
+    // ============================================================
+    // 1. CREATE THE SINGLE SHARED SQLITE RUNTIME
+    // ============================================================
+
+    console.log(
+        "[Bootstrap] [1/11] Initializing SQLite runtime..."
+    );
+
+    const runtimeStartedAt = performance.now();
+
+    let runtime;
+
+    try {
+
+        runtime =
             await this.initializeRuntime();
 
+        console.log(
+            "[Bootstrap] [1/11] SQLite runtime initialized",
+            {
+                elapsedMs:
+                    Math.round(
+                        performance.now() - runtimeStartedAt
+                    ),
+            }
+        );
 
-        // ============================================================
-        // 2. OPEN CLIENT DATABASE INSIDE THAT RUNTIME
-        // ============================================================
+    } catch (error) {
 
-        const clientDatabase: DatabaseId = {
-            type: "client",
-        };
+        console.error(
+            "[Bootstrap] [1/11] FAILED: SQLite runtime initialization",
+            error
+        );
+
+        throw error;
+    }
+
+
+    // ============================================================
+    // 2. OPEN CLIENT DATABASE INSIDE THAT RUNTIME
+    // ============================================================
+
+    const clientDatabase: DatabaseId = {
+        type: "client",
+    };
+
+    console.log(
+        "[Bootstrap] [2/11] Opening client database...",
+        {
+            database: clientDatabase,
+            path: "/client.db",
+        }
+    );
+
+    const openDatabaseStartedAt = performance.now();
+
+    try {
 
         await runtime.openDatabase(
             clientDatabase,
             "/client.db"
         );
 
+        console.log(
+            "[Bootstrap] [2/11] Client database opened",
+            {
+                database: clientDatabase,
+                path: "/client.db",
+                elapsedMs:
+                    Math.round(
+                        performance.now() -
+                        openDatabaseStartedAt
+                    ),
+            }
+        );
 
-        // ============================================================
-        // 3. CREATE CLIENT-BOUND INFRASTRUCTURE
-        // ============================================================
+    } catch (error) {
 
-        const infrastructure =
+        console.error(
+            "[Bootstrap] [2/11] FAILED: Opening client database",
+            {
+                database: clientDatabase,
+                path: "/client.db",
+                error,
+            }
+        );
+
+        throw error;
+    }
+
+
+    // ============================================================
+    // 3. CREATE CLIENT-BOUND INFRASTRUCTURE
+    // ============================================================
+
+    console.log(
+        "[Bootstrap] [3/11] Initializing client infrastructure..."
+    );
+
+    const infrastructureStartedAt = performance.now();
+
+    let infrastructure;
+
+    try {
+
+        infrastructure =
             this.initializeInfrastructure(
                 runtime,
                 clientDatabase
             );
 
+        console.log(
+            "[Bootstrap] [3/11] Client infrastructure initialized",
+            {
+                elapsedMs:
+                    Math.round(
+                        performance.now() -
+                        infrastructureStartedAt
+                    ),
+            }
+        );
 
-        // ============================================================
-        // 4. MIGRATE CLIENT DATABASE
-        // ============================================================
+    } catch (error) {
+
+        console.error(
+            "[Bootstrap] [3/11] FAILED: Client infrastructure initialization",
+            error
+        );
+
+        throw error;
+    }
+
+
+    // ============================================================
+    // 4. MIGRATE CLIENT DATABASE
+    // ============================================================
+
+    console.log(
+        "[Bootstrap] [4/11] Starting client database migration..."
+    );
+
+    const migrationStartedAt = performance.now();
+
+    try {
 
         await this.migrate(
             infrastructure.queryRunner,
             infrastructure.transactionManager
         );
 
+        console.log(
+            "[Bootstrap] [4/11] Client database migration completed",
+            {
+                elapsedMs:
+                    Math.round(
+                        performance.now() -
+                        migrationStartedAt
+                    ),
+            }
+        );
 
-        // ============================================================
-        // 5. REGISTER CLIENT PREPARED STATEMENTS
-        // ============================================================
+    } catch (error) {
+
+        console.error(
+            "[Bootstrap] [4/11] FAILED: Client database migration",
+            error
+        );
+
+        throw error;
+    }
+
+
+    // ============================================================
+    // 5. REGISTER CLIENT PREPARED STATEMENTS
+    // ============================================================
+
+    console.log(
+        "[Bootstrap] [5/11] Registering client prepared statements...",
+        {
+            statementCount:
+                ClientStatementDefinitions.length,
+        }
+    );
+
+    const statementsStartedAt = performance.now();
+
+    try {
 
         await runtime.registerStatements(
             clientDatabase,
             ClientStatementDefinitions
         );
 
+        console.log(
+            "[Bootstrap] [5/11] Client prepared statements registered",
+            {
+                statementCount:
+                    ClientStatementDefinitions.length,
 
-        // ============================================================
-        // 6. CREATE APPLICATION-SIDE STATEMENT MANAGER
-        // ============================================================
+                elapsedMs:
+                    Math.round(
+                        performance.now() -
+                        statementsStartedAt
+                    ),
+            }
+        );
 
-        const statementManager =
+    } catch (error) {
+
+        console.error(
+            "[Bootstrap] [5/11] FAILED: Registering client prepared statements",
+            error
+        );
+
+        throw error;
+    }
+
+
+    // ============================================================
+    // 6. CREATE APPLICATION-SIDE STATEMENT MANAGER
+    // ============================================================
+
+    console.log(
+        "[Bootstrap] [6/11] Initializing statement manager..."
+    );
+
+    const statementManagerStartedAt = performance.now();
+
+    let statementManager;
+
+    try {
+
+        statementManager =
             this.initializeStatements(
                 infrastructure.queryRunner
             );
 
+        console.log(
+            "[Bootstrap] [6/11] Statement manager initialized",
+            {
+                elapsedMs:
+                    Math.round(
+                        performance.now() -
+                        statementManagerStartedAt
+                    ),
+            }
+        );
 
-        const statementRegistry =
+    } catch (error) {
+
+        console.error(
+            "[Bootstrap] [6/11] FAILED: Statement manager initialization",
+            error
+        );
+
+        throw error;
+    }
+
+
+    console.log(
+        "[Bootstrap] [6/11] Creating statement registry..."
+    );
+
+    const statementRegistryStartedAt = performance.now();
+
+    let statementRegistry;
+
+    try {
+
+        statementRegistry =
             this.createStatementRegistry(
                 statementManager
             );
 
+        console.log(
+            "[Bootstrap] [6/11] Statement registry created",
+            {
+                elapsedMs:
+                    Math.round(
+                        performance.now() -
+                        statementRegistryStartedAt
+                    ),
+            }
+        );
 
-        // ============================================================
-        // 7. CREATE CLIENT REPOSITORIES
-        // ============================================================
+    } catch (error) {
 
-        const repositories =
+        console.error(
+            "[Bootstrap] [6/11] FAILED: Statement registry creation",
+            error
+        );
+
+        throw error;
+    }
+
+
+    // ============================================================
+    // 7. CREATE CLIENT REPOSITORIES
+    // ============================================================
+
+    console.log(
+        "[Bootstrap] [7/11] Creating client repositories..."
+    );
+
+    const repositoriesStartedAt = performance.now();
+
+    let repositories;
+
+    try {
+
+        repositories =
             this.createRepositories(
                 statementRegistry
             );
 
+        console.log(
+            "[Bootstrap] [7/11] Client repositories created",
+            {
+                elapsedMs:
+                    Math.round(
+                        performance.now() -
+                        repositoriesStartedAt
+                    ),
+            }
+        );
 
-        // ============================================================
-        // 8. CLIENT EVENT BUS
-        // ============================================================
+    } catch (error) {
 
-        const bus =
+        console.error(
+            "[Bootstrap] [7/11] FAILED: Client repository creation",
+            error
+        );
+
+        throw error;
+    }
+
+
+    // ============================================================
+    // 8. CLIENT EVENT BUS
+    // ============================================================
+
+    console.log(
+        "[Bootstrap] [8/11] Creating client event bus..."
+    );
+
+    const eventBusStartedAt = performance.now();
+
+    let bus;
+
+    try {
+
+        bus =
             this.createEventBus();
 
+        console.log(
+            "[Bootstrap] [8/11] Event bus created",
+            {
+                elapsedMs:
+                    Math.round(
+                        performance.now() -
+                        eventBusStartedAt
+                    ),
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            "[Bootstrap] [8/11] FAILED: Event bus creation",
+            error
+        );
+
+        throw error;
+    }
+
+
+    console.log(
+        "[Bootstrap] [8/11] Registering event consumers..."
+    );
+
+    try {
 
         this.registerConsumers(
             bus,
             repositories
         );
 
+        console.log(
+            "[Bootstrap] [8/11] Event consumers registered"
+        );
 
-        // ============================================================
-        // 9. CLIENT SERVICES
-        // ============================================================
+    } catch (error) {
 
-        const services =
+        console.error(
+            "[Bootstrap] [8/11] FAILED: Event consumer registration",
+            error
+        );
+
+        throw error;
+    }
+
+
+    // ============================================================
+    // 9. CLIENT SERVICES
+    // ============================================================
+
+    console.log(
+        "[Bootstrap] [9/11] Creating client services..."
+    );
+
+    const servicesStartedAt = performance.now();
+
+    let services;
+
+    try {
+
+        services =
             this.createServices(
                 repositories
             );
 
+        console.log(
+            "[Bootstrap] [9/11] Client services created",
+            {
+                elapsedMs:
+                    Math.round(
+                        performance.now() -
+                        servicesStartedAt
+                    ),
+            }
+        );
 
-        // ============================================================
-        // 10. EXECUTION CONTEXT
-        // ============================================================
+    } catch (error) {
 
-        const executionContextProvider =
+        console.error(
+            "[Bootstrap] [9/11] FAILED: Client service creation",
+            error
+        );
+
+        throw error;
+    }
+
+
+    // ============================================================
+    // 10. EXECUTION CONTEXT
+    // ============================================================
+
+    console.log(
+        "[Bootstrap] [10/11] Creating execution context provider..."
+    );
+
+    const executionContextStartedAt = performance.now();
+
+    let executionContextProvider;
+
+    try {
+
+        executionContextProvider =
             new ExecutionContextProvider(
                 repositories.executionContext
             );
 
+        console.log(
+            "[Bootstrap] [10/11] Execution context provider created"
+        );
+
+    } catch (error) {
+
+        console.error(
+            "[Bootstrap] [10/11] FAILED: Execution context provider creation",
+            error
+        );
+
+        throw error;
+    }
+
+
+    console.log(
+        "[Bootstrap] [10/11] Initializing execution context..."
+    );
+
+    try {
+
         await executionContextProvider.initialize();
 
-
-        // ============================================================
-        // 11. RETURN APPLICATION CONTEXT
-        // ============================================================
-
-        return this.createContext(
-            runtime,
-            clientDatabase,
-            infrastructure.queryRunner,
-            infrastructure.transactionManager,
-            repositories,
-            services,
-            statementRegistry,
-            executionContextProvider,
-            bus
+        console.log(
+            "[Bootstrap] [10/11] Execution context initialized",
+            {
+                elapsedMs:
+                    Math.round(
+                        performance.now() -
+                        executionContextStartedAt
+                    ),
+            }
         );
+
+    } catch (error) {
+
+        console.error(
+            "[Bootstrap] [10/11] FAILED: Execution context initialization",
+            error
+        );
+
+        throw error;
     }
+
+
+    // ============================================================
+    // 11. RETURN APPLICATION CONTEXT
+    // ============================================================
+
+    console.log(
+        "[Bootstrap] [11/11] Creating application context..."
+    );
+
+    const contextStartedAt = performance.now();
+
+    try {
+
+        const context =
+            this.createContext(
+                runtime,
+                clientDatabase,
+                infrastructure.queryRunner,
+                infrastructure.transactionManager,
+                repositories,
+                services,
+                statementRegistry,
+                executionContextProvider,
+                bus
+            );
+
+        console.log(
+            "[Bootstrap] [11/11] Application context created",
+            {
+                elapsedMs:
+                    Math.round(
+                        performance.now() -
+                        contextStartedAt
+                    ),
+            }
+        );
+
+
+        // ========================================================
+        // BOOTSTRAP COMPLETE
+        // ========================================================
+
+        console.log(
+            "[Bootstrap] ========================================"
+        );
+
+        console.log(
+            "[Bootstrap] BOOTSTRAP COMPLETE",
+            {
+                totalElapsedMs:
+                    Math.round(
+                        performance.now() -
+                        bootstrapStartedAt
+                    ),
+            }
+        );
+
+        console.log(
+            "[Bootstrap] ========================================"
+        );
+
+
+        return context;
+
+    } catch (error) {
+
+        console.error(
+            "[Bootstrap] [11/11] FAILED: Application context creation",
+            error
+        );
+
+        throw error;
+    }
+}
 
 
     private createContext(
