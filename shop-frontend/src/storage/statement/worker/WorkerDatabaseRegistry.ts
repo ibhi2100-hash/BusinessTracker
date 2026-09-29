@@ -8,37 +8,37 @@ import {
 import {
     WorkerStatementRegistry,
 } from "./WorkerStatementRegistry";
-import { WorkerRequest } from "@/src/offline/sqlite/protocol/WorkerRequest";
-
-
-export interface SQLiteInitializationOptions
-extends WorkerRequest {
-
-}
 
 export interface WorkerDatabaseContext {
-
     id: DatabaseId;
-
     key: string;
-
     filename: string;
-
     db: any;
-
     statements: WorkerStatementRegistry;
 }
 
 export class WorkerDatabaseRegistry {
 
     private sqlite3?: any;
-    private sahPoolUtil?: any;          // ← add this
-    private readonly databases = new Map<string, WorkerDatabaseContext>();
+
+    private readonly databases =
+        new Map<string, WorkerDatabaseContext>();
 
     private initialized = false;
 
+    /**
+     * Initialize SQLite WASM and verify that the
+     * standard OPFS VFS is available.
+     *
+     * IMPORTANT:
+     * We deliberately do NOT install opfs-sahpool.
+     *
+     * Standard "opfs" supports concurrent database
+     * connections from multiple browser contexts.
+     */
     async initializeSQLite(): Promise<void> {
-        if(this.initialized) {
+
+        if (this.initialized) {
             return;
         }
 
@@ -46,9 +46,9 @@ export class WorkerDatabaseRegistry {
             return;
         }
 
-        // Silence classic OPFS / OPFS-WL installation noise.
-        // We only use opfs-sahpool.
-        const previousConfig = (self as any).sqlite3ApiConfig;
+        const previousConfig =
+            (self as any).sqlite3ApiConfig;
+
         (self as any).sqlite3ApiConfig = {
             debug: () => {},
             log: () => {},
@@ -57,29 +57,43 @@ export class WorkerDatabaseRegistry {
         };
 
         try {
-            this.sqlite3 = await sqlite3InitModule();
 
-            this.sahPoolUtil = await this.sqlite3.installOpfsSAHPoolVfs({
-                initialCapacity: 64,
-                forceReinitIfPreviouslyFailed: true,   // ← add this
-                // optional but useful:
-                // clearOnInit: false,
-            });
+            this.sqlite3 =
+                await sqlite3InitModule();
+
         } finally {
-            // Restore whatever was there (or remove it)
+
             if (previousConfig) {
-                (self as any).sqlite3ApiConfig = previousConfig;
+                (self as any).sqlite3ApiConfig =
+                    previousConfig;
             } else {
                 delete (self as any).sqlite3ApiConfig;
             }
         }
 
+        /**
+         * Standard OPFS VFS is exposed through
+         *
+         * sqlite3.oo1.OpfsDb
+         */
+        if (!this.sqlite3?.oo1?.OpfsDb) {
+
+            this.sqlite3 = undefined;
+
+            throw new Error(
+                "SQLite OPFS VFS is not available. " +
+                "Ensure sqlite3 WASM is running inside a Worker " +
+                "and the browser supports OPFS."
+            );
+        }
+
         this.initialized = true;
     }
+
     async open(
         database: DatabaseId,
         filename: string,
-        vfs?: string,
+        vfs = "opfs",
         debug = false
     ): Promise<WorkerDatabaseContext> {
 
@@ -88,6 +102,10 @@ export class WorkerDatabaseRegistry {
         const key =
             databaseIdToKey(database);
 
+        /**
+         * One database connection per database identity
+         * inside THIS worker.
+         */
         const existing =
             this.databases.get(key);
 
@@ -96,32 +114,41 @@ export class WorkerDatabaseRegistry {
         }
 
         if (!this.sqlite3) {
+
             throw new Error(
                 "SQLite WASM has not been initialized."
             );
         }
 
-        if (!this.sahPoolUtil?.OpfsSAHPoolDb) {
+        if (!this.sqlite3.oo1?.OpfsDb) {
+
             throw new Error(
-                "SQLite opfs-sahpool VFS is not available."
+                "SQLite standard OPFS VFS is not available."
             );
         }
 
-        const sahFilename =
+        /**
+         * Standard OPFS uses the filename directly.
+         *
+         * Keep the same naming convention as the rest
+         * of your application.
+         */
+        const opfsFilename =
             filename.startsWith("/")
                 ? filename
                 : `/${filename}`;
 
         if (debug) {
+
             console.debug(
                 "[BizTru SQLite Worker] opening database",
                 {
                     key,
                     database,
                     filename,
-                    sahFilename,
+                    opfsFilename,
                     requestedVfs: vfs,
-                    actualVfs: "opfs-sahpool",
+                    actualVfs: "opfs",
                 }
             );
         }
@@ -130,19 +157,35 @@ export class WorkerDatabaseRegistry {
 
         try {
 
+            /**
+             * OpfsDb is SQLite's OO1 convenience wrapper
+             * around the standard "opfs" VFS.
+             */
             db =
-                new this.sahPoolUtil.OpfsSAHPoolDb(
-                    sahFilename
+                new this.sqlite3.oo1.OpfsDb(
+                    opfsFilename
                 );
 
+            /**
+             * Connection-level configuration.
+             */
             db.exec(
                 `PRAGMA foreign_keys = ON;`
             );
 
+            /**
+             * WAL is important for your architecture because
+             * multiple connections may read while another
+             * connection writes.
+             */
             db.exec(
                 `PRAGMA journal_mode = WAL;`
             );
 
+            /**
+             * Do not immediately fail when another tab currently
+             * owns a SQLite lock.
+             */
             db.exec(
                 `PRAGMA busy_timeout = 5000;`
             );
@@ -154,7 +197,7 @@ export class WorkerDatabaseRegistry {
                 WorkerDatabaseContext = {
                     id: database,
                     key,
-                    filename: sahFilename,
+                    filename: opfsFilename,
                     db,
                     statements,
                 };
@@ -165,12 +208,13 @@ export class WorkerDatabaseRegistry {
             );
 
             if (debug) {
+
                 console.debug(
                     "[BizTru SQLite Worker] opened",
                     {
                         key,
-                        filename: sahFilename,
-                        vfs: "opfs-sahpool",
+                        filename: opfsFilename,
+                        vfs: "opfs",
                     }
                 );
             }
@@ -186,6 +230,7 @@ export class WorkerDatabaseRegistry {
             throw error;
         }
     }
+
     get(
         database: DatabaseId
     ): WorkerDatabaseContext {
@@ -229,12 +274,17 @@ export class WorkerDatabaseRegistry {
             return;
         }
 
-        context.statements.clear();
-
         try {
-            context.db.close();
+
+            context.statements.clear();
+
         } finally {
-            this.databases.delete(key);
+
+            try {
+                context.db.close();
+            } finally {
+                this.databases.delete(key);
+            }
         }
     }
 
@@ -255,7 +305,6 @@ export class WorkerDatabaseRegistry {
     }
 
     get size(): number {
-
         return this.databases.size;
     }
 }
