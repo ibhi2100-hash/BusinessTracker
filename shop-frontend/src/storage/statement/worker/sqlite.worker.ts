@@ -144,7 +144,7 @@ async function handleRequest(
             // ========================================================
 
             case "initialize": {
-               await databases.initializSQLite()
+               await databases.initializeSQLite()
                 return success(
                     request.requestId
                 );
