@@ -31,6 +31,7 @@ let workerQueue: Promise<void> = Promise.resolve();
 
 function enqueue(request: QueuedRequest): void {
     workerQueue = workerQueue.then(async () => {
+        console.log("this is inside queue")
         const response = await handleRequest(request);
         self.postMessage(response);
     });
