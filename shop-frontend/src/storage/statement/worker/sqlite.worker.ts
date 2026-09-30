@@ -144,6 +144,7 @@ async function handleRequest(
             // ========================================================
 
             case "initialize": {
+                console.log("initialozer is about to be hit in worker")
                await databases.initializeSQLite()
                 return success(
                     request.requestId
