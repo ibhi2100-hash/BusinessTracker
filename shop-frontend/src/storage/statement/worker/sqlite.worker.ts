@@ -144,8 +144,7 @@ async function handleRequest(
             // ========================================================
 
             case "initialize": {
-               console.log("Sqlite initialized is hit in tge worker, now its about to initialized")
-
+               
                 return success(
                     request.requestId
                 );
