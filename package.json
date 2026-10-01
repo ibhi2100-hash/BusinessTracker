@@ -4,6 +4,7 @@
   "workspaces": [
     "shop-frontend",
     "shop-backend",
+    "biztru-react",
     "packages/*"
   ],
   "scripts": {

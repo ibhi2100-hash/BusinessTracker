@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import { GlassSheet } from "@/components/ui/GlassSheet";
-import { useRebuilderStore } from "../store/ProjectionRebuilderStore";
+import { useRebuilderStore } from "../../../../../../biztru-react/src/Biztru/store/ProjectionRebuilderStore";
 
 // You can replace this with a real table later
 function ReadModelTable({ projection }: { projection: string | null }) {

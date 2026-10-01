@@ -1,7 +1,7 @@
 import {
     EventBus,
     ProjectionConsumer,
-} from "../contracts/EventBus";
+} from "../contracts/EventBus.js";
 
 import {
     DomainEvent,

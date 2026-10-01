@@ -1,4 +1,4 @@
-import { ProjectionOperationConsumer, EventConsumer } from "./EventSubscriber";
+import { ProjectionOperationConsumer, EventConsumer } from "./EventSubscriber.js";
 /**
  * Consumer capable of both:
  *

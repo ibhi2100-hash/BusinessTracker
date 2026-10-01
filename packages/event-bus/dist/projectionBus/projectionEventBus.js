@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProjectionEventBus = void 0;
-class ProjectionEventBus {
+export class ProjectionEventBus {
     constructor() {
         this.consumers = new Set();
     }
@@ -29,4 +26,3 @@ class ProjectionEventBus {
         }
     }
 }
-exports.ProjectionEventBus = ProjectionEventBus;

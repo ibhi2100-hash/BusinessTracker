@@ -1,0 +1,49 @@
+export enum AggregateType {
+  BUSINESS = "BUSINESS",
+  BRANCH = "BRANCH",
+
+  PRODUCT = "PRODUCT",
+  INVENTORY = "INVENTORY",
+
+  
+
+  ASSET = "ASSET",
+  LIABILITY = "LIABILITY",
+
+  CAPITAL_ACCOUNT = "CAPITAL_ACCOUNT",
+
+  SALE = "SALE",
+  EXPENSE = "EXPENSE",
+}
+
+export interface AggregateRecord {
+
+  id: string;
+
+  aggregateId: string;
+
+  aggregateType: string;
+
+  localVersion: number;
+
+  version?: number;
+
+  lastEventId?: string;
+
+  lastLogicClock?: number;
+
+  lastGlobalPosition?: bigint;
+
+  lastSnapshotVersion?: number;
+
+  isDeleted?: boolean
+
+  updatedAt: number;
+}
+
+export interface ReplicaMeta {
+
+  deviceId: string;
+
+  lastLogicClock: number;
+}

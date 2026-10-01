@@ -1,4 +1,4 @@
-import { Account } from "../enums/Account";
+import { Account } from "../enums/Account.js";
 export interface LedgerEntry {
     id: string;
     eventId: string;

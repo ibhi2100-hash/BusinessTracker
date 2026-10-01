@@ -1,4 +1,4 @@
-import { Scope } from "../enums/Scope";
+import { Scope } from "../enums/Scope.js";
 
 export interface Snapshot <T = any> {
 

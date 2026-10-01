@@ -1,10 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SyncEventMapper = void 0;
 /**
  * Maps a domain event into the wire format expected by the backend.
  */
-class SyncEventMapper {
+export class SyncEventMapper {
     static toBackendPayload(event) {
         return {
             id: event.id,
@@ -23,4 +20,3 @@ class SyncEventMapper {
         };
     }
 }
-exports.SyncEventMapper = SyncEventMapper;

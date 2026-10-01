@@ -1,5 +1,5 @@
 import { GlassCard } from "@/components/ui/GlassCard";
-import { ProjectionStatus } from "../store/ProjectionRebuilderStore";
+import { ProjectionStatus } from "../../../../../../biztru-react/src/Biztru/store/ProjectionRebuilderStore";
 
 interface ProjectionStatusCardsProps {
   projections: ProjectionStatus[];

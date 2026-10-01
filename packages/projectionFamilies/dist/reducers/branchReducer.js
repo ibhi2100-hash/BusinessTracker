@@ -1,11 +1,8 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.BranchReducer = void 0;
-const shared_types_1 = require("@business/shared-types");
-class BranchReducer {
+import { BusinessEventTypes } from "@business/shared-types";
+export class BranchReducer {
     reduce(state, event) {
         switch (event.type) {
-            case shared_types_1.BusinessEventTypes.BRANCH_CREATED:
+            case BusinessEventTypes.BRANCH_CREATED:
                 return {
                     id: event.payload.id,
                     name: event.payload.name,
@@ -21,4 +18,3 @@ class BranchReducer {
         }
     }
 }
-exports.BranchReducer = BranchReducer;

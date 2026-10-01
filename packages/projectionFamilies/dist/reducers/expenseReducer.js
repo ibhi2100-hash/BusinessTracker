@@ -1,18 +1,15 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ExpenseReducer = void 0;
-const shared_types_1 = require("@business/shared-types");
+import { expenseEventType, } from "@business/shared-types";
 /* ------------------------------------------------------------------ */
 /*  Reducer                                                           */
 /* ------------------------------------------------------------------ */
-class ExpenseReducer {
+export class ExpenseReducer {
     reduce(state, event) {
         switch (event.type) {
-            case shared_types_1.expenseEventType.EXPENSE_RECORDED:
+            case expenseEventType.EXPENSE_RECORDED:
                 return this.onExpenseRecorded(event);
-            case shared_types_1.expenseEventType.EXPENSE_VOIDED:
+            case expenseEventType.EXPENSE_VOIDED:
                 return this.onExpenseVoided(state, event);
-            case shared_types_1.expenseEventType.EXPENSE_REIMBURSED:
+            case expenseEventType.EXPENSE_REIMBURSED:
                 return this.onExpenseReimbursed(state, event);
             default:
                 if (!state) {
@@ -102,4 +99,3 @@ class ExpenseReducer {
         };
     }
 }
-exports.ExpenseReducer = ExpenseReducer;

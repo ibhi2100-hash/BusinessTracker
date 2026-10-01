@@ -1,0 +1,92 @@
+
+import { BranchStatements } from "./branch/BranchStatements";
+import { BusinessStatements } from "./business/BusinessStatements";
+import { EventStatements } from "./events/EventStatements";
+import { InventoryStatements } from "./inventory/InventoryStatements";
+import { ProductStatements } from "./products/ProductStatements";
+import type{ PreparedStatementManager } from "../../PreparedStatement/PreparedStatementManager";
+import { LogicClockStatements } from "./logicClock/logicClockStatements"
+import { SalesStatement } from "./sales/salesStatements";
+import { LedgerStatements } from "./ledger/LedgerStatements";
+import { DashboardStatements } from "./dashboard/dashboardStatements";
+import { ReportStatements } from "./report/reportStatements";
+import { OutboxStatments } from "./outbox/outboxStatements";
+import { AggregateStatements } from "./aggregates/aggregateStatements";
+import { SyncStateStatements } from "./syncState/SyncStatements";
+import { ExpenseStatement } from "./expense/expenseStatements";
+import { ConflictsStatements } from "./conflicts/conflictsStatement";
+import { SyncActivityStatements } from "./syncActivities/ActivityStatements";
+
+
+export class BusinessStatementRegistry {
+    readonly events: EventStatements;
+    readonly inventory: InventoryStatements;
+    readonly products: ProductStatements;
+    readonly sales: SalesStatement;
+    readonly expenses: ExpenseStatement;
+    readonly ledger: LedgerStatements;
+    readonly business: BusinessStatements;
+    readonly branches: BranchStatements;
+    readonly dashboard: DashboardStatements;
+    readonly report: ReportStatements;
+    readonly outbox: OutboxStatments;
+    readonly aggregates: AggregateStatements;
+    readonly logicClock: LogicClockStatements;
+    readonly syncState: SyncStateStatements;
+    readonly conflict: ConflictsStatements;
+    readonly syncActivity: SyncActivityStatements;
+
+    constructor(
+        manager: PreparedStatementManager
+    ){
+        this.events =
+            new EventStatements(manager);
+
+        this.inventory =
+            new InventoryStatements(manager);
+        
+        this.products = 
+            new ProductStatements(manager);
+        
+        this.sales =  
+            new SalesStatement(manager)
+
+        this.ledger = 
+            new LedgerStatements(manager)
+
+        this.business = 
+            new BusinessStatements(manager);
+        
+        this.branches =
+            new BranchStatements(manager);
+            
+        this.dashboard  = 
+            new DashboardStatements(manager);
+
+        this.report = 
+            new ReportStatements(manager);
+
+        this.expenses = 
+            new ExpenseStatement(manager);
+
+        this.outbox = 
+            new OutboxStatments(manager)
+
+        this.aggregates = 
+            new AggregateStatements(manager)
+
+        this.logicClock = 
+            new LogicClockStatements(manager)
+
+        this.syncState = 
+            new SyncStateStatements(manager)
+
+        this.conflict = 
+            new ConflictsStatements(manager)
+
+        this.syncActivity =  
+            new SyncActivityStatements(manager)
+
+        
+    }
+}

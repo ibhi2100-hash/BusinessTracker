@@ -1,4 +1,4 @@
-import { EventBus, ProjectionConsumer } from "../contracts/EventBus";
+import { EventBus, ProjectionConsumer } from "../contracts/EventBus.js";
 import { DomainEvent } from "@business/shared-types";
 export declare class ProjectionEventBus implements EventBus<DomainEvent> {
     private readonly consumers;

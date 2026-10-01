@@ -1,5 +1,5 @@
 import { GlassCard } from "@/components/ui/GlassCard"
-import { ConsumerActivity } from "../store/ProjectionRebuilderStore";
+import { ConsumerActivity } from "../../../../../../biztru-react/src/Biztru/store/ProjectionRebuilderStore";
 
 interface ConsumerActivityPanelProps {
   consumers: ConsumerActivity[];

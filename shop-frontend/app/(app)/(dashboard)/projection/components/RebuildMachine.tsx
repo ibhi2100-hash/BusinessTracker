@@ -11,7 +11,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import type { RebuildProgressStatus } from "./RebuildProgress";
-import type { ReplayEvent, ProjectionStatus } from "../store/ProjectionRebuilderStore";
+import type { ReplayEvent, ProjectionStatus } from "../../../../../../biztru-react/src/Biztru/store/ProjectionRebuilderStore";
 
 interface RebuildMachineProps {
   status: RebuildProgressStatus;

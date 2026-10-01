@@ -1,4 +1,4 @@
-import { Mode } from "../enums/Mode";
+import { Mode } from "../enums/Mode.js";
 export interface BackendEvent {
     id: string;
     businessId: string;

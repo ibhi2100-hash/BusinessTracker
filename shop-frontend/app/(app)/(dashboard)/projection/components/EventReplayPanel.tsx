@@ -1,5 +1,5 @@
 import { GlassCard } from "@/components/ui/GlassCard";
-import { ReplayEvent } from "../store/ProjectionRebuilderStore";
+import { ReplayEvent } from "../../../../../../biztru-react/src/Biztru/store/ProjectionRebuilderStore";
 import { RebuildEventView } from "./RebuildStatus";
 import { CheckCircle2, Circle, Loader2, XCircle } from "lucide-react";
 

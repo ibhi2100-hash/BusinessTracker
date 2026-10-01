@@ -1,6 +1,6 @@
-import { DomainEvent } from "../events/DomainEvents";
-import { SyncActivity } from "./Activities";
-import { Conflict } from "./Conflicts";
+import { DomainEvent } from "../events/DomainEvents.js";
+import { SyncActivity } from "./Activities.js";
+import { Conflict } from "./Conflicts.js";
 export type SyncStatus = "IDLE" | "SYNCED" | "PENDING" | "SYNCING" | "CONFLICT" | "ERROR";
 export type NetworkStatus = "OFFLINE" | "ONLINE";
 export interface SyncState {

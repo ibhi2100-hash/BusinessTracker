@@ -1,18 +1,15 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SalesReducer = void 0;
-const shared_types_1 = require("@business/shared-types");
+import { salesEventType, } from "@business/shared-types";
 /* ------------------------------------------------------------------ */
 /*  Reducer                                                           */
 /* ------------------------------------------------------------------ */
-class SalesReducer {
+export class SalesReducer {
     reduce(state, event) {
         switch (event.type) {
-            case shared_types_1.salesEventType.SALE_ADDED:
+            case salesEventType.SALE_ADDED:
                 return this.onSaleAdded(event);
-            case shared_types_1.salesEventType.SALE_VOIDED:
+            case salesEventType.SALE_VOIDED:
                 return this.onSaleVoided(state, event);
-            case shared_types_1.salesEventType.SALE_REFUNDED:
+            case salesEventType.SALE_REFUNDED:
                 return this.onSaleRefunded(state, event);
             default:
                 if (!state) {
@@ -117,4 +114,3 @@ class SalesReducer {
         };
     }
 }
-exports.SalesReducer = SalesReducer;

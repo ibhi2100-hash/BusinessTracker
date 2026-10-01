@@ -1,7 +1,7 @@
 import {
     ProjectionOperationConsumer,
     EventConsumer,
-} from "./EventSubscriber";
+} from "./EventSubscriber.js";
 
 
 /**

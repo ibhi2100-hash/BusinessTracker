@@ -1,0 +1,61 @@
+// hooks/useLiveQuery.ts
+import { useState, useCallback, useEffect, useMemo } from "react";
+import { changeNotifier } from "../Biztru/offline/sqlite/businessDatabase/projections/changeNoifier"; 
+export function useLiveQuery<T>(
+  dependencies: string[],
+  query: () => Promise<T>,
+  initialValue: T
+) {
+  const [data, setData] = useState<T>(initialValue);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<unknown>(null);
+
+  // Stabilize the dependency array so identity changes don't cause resubscriptions
+  const dependencyKey = useMemo(
+    () => dependencies.slice().sort().join("|"),
+    [dependencies]
+  );
+  let requestId = 0;
+  const load = useCallback(async () => {
+    const id = ++requestId;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const result = await query();
+      
+      if(id !== requestId ) {
+        return
+      }
+      setData(result);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  }, [query]);
+
+  useEffect(() => {
+
+    load();
+
+    const unsubscribe = changeNotifier.subscribe((tables) => {
+      const interested = tables.some((table) =>
+        dependencies.includes(table)
+      );
+      if (interested) {
+        load();
+      }
+    });
+
+    return unsubscribe;
+  }, [load, dependencyKey]); // dependencyKey instead of the array itself
+
+  return {
+    data,
+    loading,
+    error,
+    refresh: load,
+  };
+}

@@ -1,6 +1,6 @@
 import { Branch } from "@business/shared-types";
 import { DomainEvent } from "@business/shared-types";
-import { ProjectionReducer } from "../contracts/ProjectionReducer";
+import { ProjectionReducer } from "../contracts/ProjectionReducer.js";
 interface BranchPayload {
     id: string;
     name: string;

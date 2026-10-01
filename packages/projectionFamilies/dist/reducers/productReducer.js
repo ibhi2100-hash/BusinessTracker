@@ -1,29 +1,26 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProductReducer = void 0;
-const shared_types_1 = require("@business/shared-types");
-class ProductReducer {
+import { InventoryEventType, } from "@business/shared-types";
+export class ProductReducer {
     reduce(state, event) {
         switch (event.type) {
             // =====================================================
             // CREATE PRODUCT
             // =====================================================
-            case shared_types_1.InventoryEventType.PRODUCT_CREATED:
+            case InventoryEventType.PRODUCT_CREATED:
                 return this.created(event);
             // =====================================================
             // UPDATE PRODUCT
             // =====================================================
-            case shared_types_1.InventoryEventType.PRODUCT_UPDATED:
+            case InventoryEventType.PRODUCT_UPDATED:
                 return this.update(state, event);
             // =====================================================
             // DELETE PRODUCT
             // =====================================================
-            case shared_types_1.InventoryEventType.PRODUCT_DELETED:
+            case InventoryEventType.PRODUCT_DELETED:
                 return this.deleted(state, event);
             // =====================================================
             // INVENTORY RECEIVED
             // =====================================================
-            case shared_types_1.InventoryEventType.INVENTORY_RECEIVED:
+            case InventoryEventType.INVENTORY_RECEIVED:
                 return this.inventoryReceived(state, event);
             // =====================================================
             // UNKNOWN EVENT
@@ -54,7 +51,7 @@ class ProductReducer {
             isDeleted: false,
             createdAt: event.createdAt,
             updatedAt: event.createdAt,
-            deletedAt: event.type === shared_types_1.InventoryEventType.PRODUCT_DELETED
+            deletedAt: event.type === InventoryEventType.PRODUCT_DELETED
                 ? event.createdAt
                 : null
         };
@@ -120,4 +117,3 @@ class ProductReducer {
         return state;
     }
 }
-exports.ProductReducer = ProductReducer;

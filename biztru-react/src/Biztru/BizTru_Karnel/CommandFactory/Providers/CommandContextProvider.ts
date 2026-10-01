@@ -1,0 +1,5 @@
+import type { CommandContext } from "../factoryDependencies/EventContext";
+
+export interface CommandContextProvider {
+    current(): Promise<CommandContext>
+}

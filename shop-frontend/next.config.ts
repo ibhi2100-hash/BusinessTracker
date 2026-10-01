@@ -11,6 +11,21 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ["dexie"],
   },
 
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      console.log(
+        "[WEBPACK] SQLite-related rules:",
+        config.module.rules.filter(
+          (rule: any) =>
+            rule?.test?.toString?.().includes("js") ||
+            rule?.test?.toString?.().includes("worker")
+        )
+      );
+    }
+
+    return config;
+  },
+
   async headers() {
     return [
       {

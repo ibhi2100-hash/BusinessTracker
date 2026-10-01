@@ -57,10 +57,6 @@ export function BusinessProvider({
                 const ctx =
                     await app.context.current();
 
-                console.log(
-                    "[BusinessProvider] loaded context:",
-                    ctx
-                );
 
                 setBusinessId(
                     ctx.businessId ?? null

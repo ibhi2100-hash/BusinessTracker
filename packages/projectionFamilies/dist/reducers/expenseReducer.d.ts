@@ -1,5 +1,5 @@
 import { DomainEvent, Expense, Mode, ExpensePaymentMethod } from "@business/shared-types";
-import { ProjectionReducer } from "../contracts/ProjectionReducer";
+import { ProjectionReducer } from "../contracts/ProjectionReducer.js";
 export interface ExpenseRecordedPayload {
     title: string;
     description?: string | null;

@@ -5,7 +5,7 @@ import {
     
 } from "@business/shared-types";
 
-import { ProjectionReducer } from "../contracts/ProjectionReducer";
+import { ProjectionReducer } from "../contracts/ProjectionReducer.js";
 
 
 export interface ProductPayload {

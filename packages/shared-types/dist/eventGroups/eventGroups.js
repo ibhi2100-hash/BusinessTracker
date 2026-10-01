@@ -1,13 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.userEventTypes = exports.expenseEventType = exports.salesEventType = exports.OpeningEventType = exports.InventoryEventType = exports.financeEventType = exports.BusinessEventTypes = void 0;
-exports.BusinessEventTypes = {
+export const BusinessEventTypes = {
     BUSINESS_CREATED: "BUSINESS_CREATED",
     BUSINESS_ACTIVATION: "BUSINESS_ACTIVATION",
     BRANCH_CREATED: "BRANCH_CREATED",
     BRANCH_SWITCH: "BRANCH_SWITCH"
 };
-exports.financeEventType = {
+export const financeEventType = {
     ASSET_ADDED: "ASSET_ADDED",
     ASSET_DISPOSED: "ASSET_DISPOSED",
     EXPENSES_ADDED: "EXPENSES_ADDED",
@@ -21,7 +18,7 @@ exports.financeEventType = {
     BRANCH_TRANSFER_OUT: "BRANCH_TRANSFER_OUT",
     BRANCH_TRANSFER_IN: "BRANCH_TRANSFER_IN"
 };
-exports.InventoryEventType = {
+export const InventoryEventType = {
     PRODUCT_CREATED: "PRODUCT_CREATED",
     PRODUCT_UPDATED: "PRODUCT_UPDATED",
     PRODUCT_DELETED: "PRODUCT_DELETED",
@@ -32,7 +29,7 @@ exports.InventoryEventType = {
     INVENTORY_TRANSFER: "INVENTORY_TRANSFER",
     INVENTORY_RECEIVED: "INVENTORY_RECEIVED"
 };
-exports.OpeningEventType = {
+export const OpeningEventType = {
     OPENING_INVENTORY_CREATED: "OPENING_INVENTORY_CREATED",
     OPENING_INVENTORY_UPDATED: "OPENING_INVENTORY_UPDATED",
     OPENING_INVENTORY_DELETED: "OPENING_INVENTORY_DELETED",
@@ -40,17 +37,17 @@ exports.OpeningEventType = {
     OPENING_LIABILITIES: "OPENING_LIABILITIES",
     OPENING_CASH_ADDED: "OPENING_CASH"
 };
-exports.salesEventType = {
+export const salesEventType = {
     SALE_ADDED: "SALE_ADDED",
     SALE_VOIDED: "SALE_VOIDED",
     SALE_REFUNDED: "SALE_REFUNDED"
 };
-exports.expenseEventType = {
+export const expenseEventType = {
     EXPENSE_RECORDED: "EXPENSE_RECORDED",
     EXPENSE_VOIDED: "EXPENSE_VOIDED",
     EXPENSE_REIMBURSED: "EXPENSE_REIMBURSED",
 };
-exports.userEventTypes = {
+export const userEventTypes = {
     CREATE_USER: "CREATE_USER",
     LOGIN_USER: "LOGIN_USER"
 };

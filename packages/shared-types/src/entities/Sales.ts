@@ -1,4 +1,4 @@
-import { Mode } from "../enums/Mode";
+import { Mode } from "../enums/Mode.js";
 /**
  * Sales read-model / projection entity.
  *

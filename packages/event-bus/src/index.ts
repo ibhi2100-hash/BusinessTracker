@@ -1,3 +1,3 @@
-export * from  "./contracts/EventBus"
-export * from "./contracts/EventSubscriber";
-export * from "./projectionBus/projectionEventBus"
+export * from  "./contracts/EventBus.js"
+export * from "./contracts/EventSubscriber.js";
+export * from "./projectionBus/projectionEventBus.js"

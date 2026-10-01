@@ -1,5 +1,5 @@
 // Expense.ts
-import { Mode } from "../enums/Mode";
+import { Mode } from "../enums/Mode.js";
 
 export type ExpenseStatus = "recorded" | "voided" | "reimbursed";
 export type ExpensePaymentMethod = "cash" | "transfer" | "card" | "other";

@@ -1,7 +1,7 @@
 // ProjectionRebuilderPage.tsx
 "use client";
 
-import { useRebuilderStore } from "./store/ProjectionRebuilderStore";
+import { useRebuilderStore } from "../../../../../biztru-react/src/Biztru/store/ProjectionRebuilderStore";
 import { EventReplayPanel } from "./components/EventReplayPanel";
 import { ConsumerActivityPanel } from "./components/ComsumerActivity";
 import { ProjectionStatusCards } from "./components/ProjectionCards";

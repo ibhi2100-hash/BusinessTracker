@@ -1,0 +1,44 @@
+import { Toaster } from "sonner";
+import { BrowserRouter } from "react-router-dom";
+
+import { Providers } from "./providers";
+import { ApplicationProvider } from "./Biztru/services/ApplicationService/ApplicationProvider";
+import { BusinessProvider } from "./Biztru/context/BusinessContext";
+import { AppShell } from "./components/layout/AppShell";
+import { ServiceWorkerRegistration } from "./components/serviceWorker";
+import { AppRouter } from "./router";
+
+function App() {
+    return (
+        <Providers>
+
+            <BrowserRouter>
+
+                <ApplicationProvider>
+
+                    <BusinessProvider>
+
+                        <AppShell>
+
+                            <ServiceWorkerRegistration />
+
+                            <AppRouter />
+
+                        </AppShell>
+
+                        <Toaster
+                            richColors
+                            position="top-right"
+                        />
+
+                    </BusinessProvider>
+
+                </ApplicationProvider>
+
+            </BrowserRouter>
+
+        </Providers>
+    );
+}
+
+export default App;

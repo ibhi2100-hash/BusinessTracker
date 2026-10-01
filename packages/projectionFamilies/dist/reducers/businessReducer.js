@@ -1,13 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.BusinessReducer = void 0;
-const shared_types_1 = require("@business/shared-types");
-class BusinessReducer {
+import { BusinessEventTypes } from "@business/shared-types";
+export class BusinessReducer {
     reduce(state, event) {
         switch (event.type) {
-            case shared_types_1.BusinessEventTypes.BUSINESS_CREATED:
+            case BusinessEventTypes.BUSINESS_CREATED:
                 return this.created(event);
-            case shared_types_1.BusinessEventTypes.BUSINESS_ACTIVATION:
+            case BusinessEventTypes.BUSINESS_ACTIVATION:
                 return this.activate(state, event);
             default:
                 return state;
@@ -39,4 +36,3 @@ class BusinessReducer {
         };
     }
 }
-exports.BusinessReducer = BusinessReducer;
