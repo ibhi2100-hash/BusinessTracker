@@ -103,7 +103,25 @@ export class WorkerDatabaseRegistry {
         console.log(
             "[SQLiteWorker] Calling sqlite3InitModule()..."
         );
+        console.log(
+    "[SQLiteWorker] OPFS environment",
+    {
+        crossOriginIsolated:
+            self.crossOriginIsolated,
 
+        SharedArrayBuffer:
+            typeof SharedArrayBuffer !== "undefined",
+
+        Atomics:
+            typeof Atomics !== "undefined",
+
+        waitAsync:
+            typeof Atomics?.waitAsync === "function",
+
+        origin:
+            self.location.origin,
+    }
+);
         const startedAt =
             performance.now();
 

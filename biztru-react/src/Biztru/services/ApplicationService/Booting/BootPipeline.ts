@@ -3,10 +3,10 @@ import type{
     BootContext,
     BootListener,
     BootProgress,
-    BootStage,
     BootTask,
     BootTaskReport
 } from "./BootStage";
+import { BootStage } from "./BootStage";
 
 export class BootPipeline {
 
