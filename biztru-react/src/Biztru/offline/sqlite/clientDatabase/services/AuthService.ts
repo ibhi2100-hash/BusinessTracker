@@ -3,6 +3,7 @@ import type{ User } from "@business/shared-types";
 import { SQLiteSessionRepository } from "../repositories/SQLiteSessionRepository/SQLiteSessionRepository";
 import { SQLiteAuthRepository } from "../repositories/SQLiteAuthRepository/SQLiteAuthRepository";
 import { SQLiteApplicationStateRepository } from "../repositories/ApplicationStateRepository.ts/SQLiteApplicationStateRepository";
+import type { CurrentSessionRepository } from "../repositories/currentSessionRepository/currentSessionRepository";
 
 
 interface RegisterResponse {
@@ -13,14 +14,23 @@ interface RegisterResponse {
   refreshExpiresIn: number;
 }
 export class RegistrationService {
-
+    private readonly repository: SQLiteAuthRepository;
+    private readonly session: SQLiteSessionRepository;
+    private readonly applicationState: SQLiteApplicationStateRepository;
+    private readonly currentSessionRepository: CurrentSessionRepository;
     constructor(
 
-        private readonly repository: SQLiteAuthRepository,
-        private readonly session: SQLiteSessionRepository,
-        private readonly applicationState: SQLiteApplicationStateRepository,
+        repository: SQLiteAuthRepository,
+        session: SQLiteSessionRepository,
+        applicationState: SQLiteApplicationStateRepository,
+        currentSessionRepository: CurrentSessionRepository
 
-    ) {}
+    ) {
+        this.repository = repository;
+        this.session = session;
+        this.applicationState = applicationState;
+        this.currentSessionRepository = currentSessionRepository;
+    }
 
     async register(result: RegisterResponse): Promise<User> {
 
@@ -51,8 +61,17 @@ export class RegistrationService {
             updatedAt: null
 
         };
+        
         const userRegisterd = await this.repository.addUser(user)
-        console.log("User Registerd: ", userRegisterd)
+
+        await this.currentSessionRepository.save({
+            id: 1,
+            userId: user.id,
+            createdAt: Date.now(),
+            lastAuthenticatedAt: Date.now(),
+            updatedAt: null
+        })
+        
         return userRegisterd
 
     }

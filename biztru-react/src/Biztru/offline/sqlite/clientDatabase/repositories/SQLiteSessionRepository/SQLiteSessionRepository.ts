@@ -2,24 +2,27 @@ import type{ Session, SessionRepositoryContract } from "./SessionInterface";
 import { SessionStatements } from "../../statements/session/SessionStatements";
 
 export class SQLiteSessionRepository implements SessionRepositoryContract {
+    private readonly statements: SessionStatements;
     constructor(
-        private sessionStatement: SessionStatements
-    ){}
+        sessionStatement: SessionStatements
+    ) {
+        this.statements = sessionStatement;
+    }
 
     async saveSession(sessionData: Session){
         console.log("This is the Session Data that is being saved: ", sessionData)
-        await this.sessionStatement.saveSession.execute(
+        await this.statements.saveSession.execute(
             SessionMapper.toInsert(sessionData)
         )
     }
 
     async getCurrentSession(): Promise<Session> {
-        const rows = await this.sessionStatement.getCurrentSession.query<Session>()
+        const rows = await this.statements.getCurrentSession.query<Session>()
 
         return rows[0]
     }
     async clearSession(): Promise<void> {
-        await this.sessionStatement.clearSession.execute()
+        await this.statements.clearSession.execute()
     }
 }
 export class SessionMapper {

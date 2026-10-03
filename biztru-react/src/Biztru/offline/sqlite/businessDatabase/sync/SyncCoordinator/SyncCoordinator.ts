@@ -48,7 +48,7 @@ export class SyncCoordinator {
 
         this.isSyncing = true;
 
-          return await this.activeSync;
+          return this.activeSync;
     }
 
     private async execute(

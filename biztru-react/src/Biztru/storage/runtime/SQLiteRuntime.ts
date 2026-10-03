@@ -11,106 +11,223 @@ import type {
 
 import type { StatementDefinition } from "../../offline/sqlite/PreparedStatement/StatementRegistry/statementDefinition";
 
+
 export interface SQLiteRuntimeOptions {
     vfs?: string;
     opfsDirectory?: string;
     debug?: boolean;
 }
 
+
 interface PendingRequest {
     resolve: (value: unknown) => void;
     reject: (error: unknown) => void;
 }
 
+
+type SQLiteRuntimeState =
+    | "created"
+    | "starting"
+    | "started"
+    | "stopping"
+    | "stopped";
+
+
 export class SQLiteRuntime implements Lifecycle {
 
-    private worker?: Worker;
+    /**
+     * ============================================================
+     * RUNTIME STATE
+     * ============================================================
+     */
 
-    private initialized = false;
+    private worker: Worker | undefined;
 
-    private initializationPromise?: Promise<void>;
+    private state: SQLiteRuntimeState =
+        "created";
 
+    private startPromise:
+        Promise<void> | undefined;
+
+
+    /**
+     * All outstanding worker RPCs.
+     */
     private readonly pending =
         new Map<string, PendingRequest>();
 
+
     /**
-     * Databases currently opened through this runtime.
-     *
-     * The actual database ownership remains inside
-     * WorkerDatabaseRegistry.
+     * Databases opened by this runtime.
      */
     private readonly databases =
         new Map<string, DatabaseId>();
+
 
     constructor(
         private readonly options: SQLiteRuntimeOptions
     ) {}
 
+
+    /**
+     * ============================================================
+     * STATE
+     * ============================================================
+     */
+
     get isInitialized(): boolean {
-        return this.initialized;
+
+        return this.state === "started";
     }
 
+
+    get runtimeState(): SQLiteRuntimeState {
+
+        return this.state;
+    }
+
+
+    /**
+     * ============================================================
+     * START
+     * ============================================================
+     */
+
     async initialize(): Promise<void> {
+
         await this.start();
     }
 
+
     async start(): Promise<void> {
 
-        if (this.initialized) {
+        /**
+         * Already running.
+         */
+        if (this.state === "started") {
             return;
         }
 
-        if (this.initializationPromise) {
-            return this.initializationPromise;
+
+        /**
+         * Another caller is already starting us.
+         *
+         * Everybody shares the same startup Promise.
+         */
+        if (this.state === "starting") {
+
+            if (!this.startPromise) {
+
+                throw new Error(
+                    "SQLiteRuntime is in starting state without a start Promise."
+                );
+            }
+
+            return this.startPromise;
         }
 
-        this.initializationPromise =
+
+        /**
+         * Don't allow startup while shutting down.
+         */
+        if (this.state === "stopping") {
+
+            throw new Error(
+                "SQLiteRuntime is currently stopping."
+            );
+        }
+
+
+        this.state = "starting";
+
+
+        this.startPromise =
             this.startInternal();
 
+
         try {
-            await this.initializationPromise;
+
+            await this.startPromise;
+
+            this.state = "started";
+
+        } catch (error) {
+
+            this.state = "stopped";
+
+            this.worker = undefined;
+
+            throw error;
+
         } finally {
-            this.initializationPromise =
+
+            this.startPromise =
                 undefined;
         }
     }
 
+
+    /**
+     * ============================================================
+     * INTERNAL STARTUP
+     * ============================================================
+     */
+
     private async startInternal(): Promise<void> {
 
         if (typeof window === "undefined") {
+
             throw new Error(
                 "SQLiteRuntime can only run in the browser."
             );
         }
 
+
         if (typeof Worker === "undefined") {
+
             throw new Error(
                 "Web Workers are not available."
             );
         }
-       const worker = new Worker(
-            new URL(
-                "../statement/worker/sqlite.worker.ts",
-                import.meta.url
-            ),
-            {
-                type: "module",
-            }
-        );
 
-        this.worker = worker;
+
+        const worker =
+            new Worker(
+                new URL(
+                    "../statement/worker/sqlite.worker.ts",
+                    import.meta.url
+                ),
+                {
+                    type: "module",
+                }
+            );
+
+
+        this.worker =
+            worker;
+
 
         worker.addEventListener(
             "message",
             this.handleMessage
         );
 
+
         worker.addEventListener(
             "error",
             this.handleWorkerError
         );
-        
-        await this.request({
+
+
+        /**
+         * IMPORTANT:
+         *
+         * Do NOT call this.request() here.
+         *
+         * request() is a public lifecycle-aware method.
+         * Startup itself must use the raw RPC mechanism.
+         */
+        await this.rawRequest({
             type: "initialize",
 
             requestId:
@@ -125,14 +242,128 @@ export class SQLiteRuntime implements Lifecycle {
             debug:
                 this.options.debug,
         });
-
-        this.initialized = true;
     }
 
+
     /**
-     * Open one logical SQLite database inside
-     * this shared SQLite worker.
+     * ============================================================
+     * LOW LEVEL RPC
+     * ============================================================
+     *
+     * This method does NOT check runtime lifecycle.
+     *
+     * It is used internally during startup/shutdown.
      */
+
+    private rawRequest<T = unknown>(
+        request: SQLiteWorkerRequest
+    ): Promise<T> {
+
+        const worker =
+            this.worker;
+
+
+        if (!worker) {
+
+            return Promise.reject(
+                new Error(
+                    "SQLite worker is not available."
+                )
+            );
+        }
+
+
+        return new Promise<T>(
+            (resolve, reject) => {
+
+                this.pending.set(
+                    request.requestId,
+                    {
+                        resolve:
+                            resolve as (
+                                value: unknown
+                            ) => void,
+
+                        reject,
+                    }
+                );
+
+
+                try {
+
+                    worker.postMessage(
+                        request
+                    );
+
+                } catch (error) {
+
+                    this.pending.delete(
+                        request.requestId
+                    );
+
+                    reject(error);
+                }
+            }
+        );
+    }
+
+
+    /**
+     * ============================================================
+     * PUBLIC RPC
+     * ============================================================
+     */
+
+    public async request<T = unknown>(
+        request: SQLiteWorkerRequest
+    ): Promise<T> {
+
+        /**
+         * If startup is already underway, wait for it.
+         */
+        if (
+            this.state === "created" ||
+            this.state === "stopped"
+        ) {
+
+            await this.start();
+        }
+
+
+        /**
+         * If another caller is currently starting the runtime,
+         * wait for that same startup operation.
+         */
+        else if (this.state === "starting") {
+
+            await this.start();
+        }
+
+
+        if (
+            this.state !== "started" ||
+            !this.worker
+        ) {
+
+            throw new Error(
+                `SQLiteRuntime is not started. ` +
+                `Current state: ${this.state}`
+            );
+        }
+
+
+        return this.rawRequest<T>(
+            request
+        );
+    }
+
+
+    /**
+     * ============================================================
+     * DATABASE
+     * ============================================================
+     */
+
     async openDatabase(
         database: DatabaseId,
         filename: string
@@ -158,19 +389,14 @@ export class SQLiteRuntime implements Lifecycle {
                 this.options.debug,
         });
 
-        const key =
-            this.databaseKey(database);
 
         this.databases.set(
-            key,
+            this.databaseKey(database),
             database
         );
     }
 
-    /**
-     * Close one database without destroying
-     * the shared SQLite worker.
-     */
+
     async closeDatabase(
         database: DatabaseId
     ): Promise<void> {
@@ -184,10 +410,12 @@ export class SQLiteRuntime implements Lifecycle {
             database,
         });
 
+
         this.databases.delete(
             this.databaseKey(database)
         );
     }
+
 
     hasDatabase(
         database: DatabaseId
@@ -198,67 +426,25 @@ export class SQLiteRuntime implements Lifecycle {
         );
     }
 
+
     private databaseKey(
         database: DatabaseId
     ): string {
 
         if (database.type === "client") {
+
             return "client";
         }
 
         return `business:${database.businessId}`;
     }
 
+
     /**
-     * Public deliberately.
-     *
-     * WorkerPreparedStatement uses this as the
-     * single RPC boundary.
+     * ============================================================
+     * RAW SQL
+     * ============================================================
      */
-    public request<T = unknown>(
-        request: SQLiteWorkerRequest
-    ): Promise<T> {
-
-        if (!this.worker) {
-            return Promise.reject(
-                new Error(
-                    "SQLiteRuntime has not been started."
-                )
-            );
-        }
-
-        return new Promise<T>(
-            (resolve, reject) => {
-
-                this.pending.set(
-                    request.requestId,
-                    {
-                        resolve:
-                            resolve as (
-                                value: unknown
-                            ) => void,
-
-                        reject,
-                    }
-                );
-
-                try {
-
-                    this.worker!.postMessage(
-                        request
-                    );
-
-                } catch (error) {
-
-                    this.pending.delete(
-                        request.requestId
-                    );
-
-                    reject(error);
-                }
-            }
-        );
-    }
 
     async rawExec(
         database: DatabaseId,
@@ -280,6 +466,7 @@ export class SQLiteRuntime implements Lifecycle {
         });
     }
 
+
     async rawQuery<T = Record<string, unknown>>(
         database: DatabaseId,
         sql: string,
@@ -300,6 +487,13 @@ export class SQLiteRuntime implements Lifecycle {
         });
     }
 
+
+    /**
+     * ============================================================
+     * PREPARED STATEMENTS
+     * ============================================================
+     */
+
     async registerStatements(
         database: DatabaseId,
         definitions: StatementDefinition[]
@@ -316,6 +510,7 @@ export class SQLiteRuntime implements Lifecycle {
             definitions,
         });
     }
+
 
     async execute(
         database: DatabaseId,
@@ -337,6 +532,7 @@ export class SQLiteRuntime implements Lifecycle {
         });
     }
 
+
     async query<T = Record<string, unknown>>(
         database: DatabaseId,
         statementKey: string,
@@ -357,6 +553,13 @@ export class SQLiteRuntime implements Lifecycle {
         });
     }
 
+
+    /**
+     * ============================================================
+     * TRANSACTION
+     * ============================================================
+     */
+
     async transaction(
         database: DatabaseId,
         operations: readonly SQLiteStatementOperation[]
@@ -374,19 +577,29 @@ export class SQLiteRuntime implements Lifecycle {
         });
     }
 
-    async healthCheck(
+
+    /**
+     * ============================================================
+     * HEALTH
+     * ============================================================
+     */
+
+   async healthCheck(
         database: DatabaseId
     ): Promise<unknown> {
 
         return this.request({
             type: "health",
-
-            requestId:
-                crypto.randomUUID(),
-
+            requestId: crypto.randomUUID(),
             database,
         });
     }
+
+    /**
+     * ============================================================
+     * MIGRATION
+     * ============================================================
+     */
 
     async migrationTransaction(
         database: DatabaseId,
@@ -395,86 +608,215 @@ export class SQLiteRuntime implements Lifecycle {
 
         await this.request({
             type: "migration.transaction",
-            requestId: crypto.randomUUID(),
+
+            requestId:
+                crypto.randomUUID(),
+
             database,
+
             statements,
         });
     }
 
+
     /**
-     * IMPORTANT:
-     *
-     * Do not clear this.worker before sending
-     * database.close requests.
+     * ============================================================
+     * STOP
+     * ============================================================
      */
+
     async stop(): Promise<void> {
-        const worker = this.worker;
-        if (!worker) return;
 
-        // 1. Reject any pending requests FIRST so callers don't hang
-        this.rejectPending(new Error("SQLiteRuntime is stopping."));
+        /**
+         * Already stopped.
+         */
+        if (
+            this.state === "stopped" ||
+            this.state === "created"
+        ) {
 
-        // 2. Close databases
-        const databases = [...this.databases.values()];
-        for (const database of databases) {
-            try {
-                await this.request({ type: "database.close", requestId: crypto.randomUUID(), database });
-            } catch { /* ignore */ }
+            this.state = "stopped";
+
+            return;
         }
 
-        // 3. Wait for the worker's queue to drain
-        await new Promise(resolve => setTimeout(resolve, 0));
+
+        /**
+         * Somebody else is already stopping us.
+         */
+        if (this.state === "stopping") {
+            return;
+        }
+
+
+        this.state = "stopping";
+
+
+        const worker =
+            this.worker;
+
+
+        if (!worker) {
+
+            this.state = "stopped";
+
+            return;
+        }
+
+
+        /**
+         * We deliberately DO NOT reject pending requests here
+         * before trying to close databases.
+         *
+         * Doing that makes database.close impossible.
+         */
+
+
+        /**
+         * Close databases.
+         *
+         * If something fails, shutdown still continues.
+         */
+        const databases =
+            [...this.databases.values()];
+
+
+        for (
+            const database
+            of databases
+        ) {
+
+            try {
+
+                await this.rawRequest({
+                    type: "database.close",
+
+                    requestId:
+                        crypto.randomUUID(),
+
+                    database,
+                });
+
+            } catch {
+
+                // Continue shutdown.
+            }
+        }
+
 
         this.databases.clear();
-        this.worker = undefined;
-        worker.removeEventListener("message", this.handleMessage);
-        worker.removeEventListener("error", this.handleWorkerError);
+
+
+        /**
+         * At this point we are deliberately destroying
+         * the worker. Any requests still pending must fail.
+         */
+        this.rejectPending(
+            new Error(
+                "SQLiteRuntime stopped."
+            )
+        );
+
+
+        worker.removeEventListener(
+            "message",
+            this.handleMessage
+        );
+
+
+        worker.removeEventListener(
+            "error",
+            this.handleWorkerError
+        );
+
+
         worker.terminate();
-        this.initialized = false;
+
+
+        this.worker =
+            undefined;
+
+
+        this.state =
+            "stopped";
     }
 
+
     async dispose(): Promise<void> {
+
         await this.stop();
     }
 
+
+    /**
+     * ============================================================
+     * WORKER MESSAGE
+     * ============================================================
+     */
+
     private readonly handleMessage = (
-    event: MessageEvent<SQLiteWorkerResponse>
-): void => {
-    const response = event.data;
+        event: MessageEvent<SQLiteWorkerResponse>
+    ): void => {
 
-    const pending = this.pending.get(
-        response.requestId
-    );
+        const response =
+            event.data;
 
-    if (!pending) {
-        return;
-    }
 
-    this.pending.delete(
-        response.requestId
-    );
+        const pending =
+            this.pending.get(
+                response.requestId
+            );
 
-    if (response.ok === true) {
-        pending.resolve(
-            response.result
+
+        if (!pending) {
+            return;
+        }
+
+
+        this.pending.delete(
+            response.requestId
         );
 
-        return;
-    }
 
-    // response is now SQLiteWorkerFailure
-    const error = new Error(
-        response.error.message
-    );
+        if (response.ok === true) {
 
-    error.name = response.error.name;
+            pending.resolve(
+                response.result
+            );
 
-    if (response.error.stack) {
-        error.stack = response.error.stack;
-    }
+            return;
+        }
 
-    pending.reject(error);
-};
+
+        const error =
+            new Error(
+                response.error.message
+            );
+
+
+        error.name =
+            response.error.name;
+
+
+        if (response.error.stack) {
+
+            error.stack =
+                response.error.stack;
+        }
+
+
+        pending.reject(
+            error
+        );
+    };
+
+
+    /**
+     * ============================================================
+     * WORKER FAILURE
+     * ============================================================
+     */
+
     private readonly handleWorkerError = (
         event: ErrorEvent
     ): void => {
@@ -487,6 +829,7 @@ export class SQLiteRuntime implements Lifecycle {
                     : ""
             ) ||
             "SQLite Worker failed.";
+
 
         if (
             message.includes(
@@ -502,20 +845,60 @@ export class SQLiteRuntime implements Lifecycle {
                 message
             );
 
+
             event.preventDefault?.();
+
 
             return;
         }
+
 
         const error =
             event.error instanceof Error
                 ? event.error
                 : new Error(message);
 
-        this.rejectPending(error);
 
-        this.initialized = false;
+        /**
+         * The worker is no longer usable.
+         */
+        const worker =
+            this.worker;
+
+
+        this.worker =
+            undefined;
+
+
+        this.state =
+            "stopped";
+
+
+        this.rejectPending(
+            error
+        );
+
+
+        if (worker) {
+
+            worker.removeEventListener(
+                "message",
+                this.handleMessage
+            );
+
+            worker.removeEventListener(
+                "error",
+                this.handleWorkerError
+            );
+        }
     };
+
+
+    /**
+     * ============================================================
+     * REJECT PENDING
+     * ============================================================
+     */
 
     private rejectPending(
         error: unknown
@@ -525,29 +908,127 @@ export class SQLiteRuntime implements Lifecycle {
             const pending
             of this.pending.values()
         ) {
-            pending.reject(error);
+
+            pending.reject(
+                error
+            );
         }
+
 
         this.pending.clear();
     }
 }
 
-// SQLiteRuntime.ts — add a module-level singleton guard
-let sharedRuntime: SQLiteRuntime | undefined;
-let sharedRuntimePromise: Promise<SQLiteRuntime> | undefined;
 
-export function getSharedRuntime(options: SQLiteRuntimeOptions): Promise<SQLiteRuntime> {
-    if (sharedRuntime?.isInitialized) {
-        return Promise.resolve(sharedRuntime);
+/**
+ * =================================================================
+ * SHARED RUNTIME
+ * =================================================================
+ *
+ * There must be ONE runtime instance for the application.
+ */
+
+let sharedRuntime:
+    SQLiteRuntime | undefined;
+
+
+let sharedRuntimePromise:
+    Promise<SQLiteRuntime> | undefined;
+
+
+export function getSharedRuntime(
+    options: SQLiteRuntimeOptions
+): Promise<SQLiteRuntime> {
+
+    /**
+     * Existing healthy runtime.
+     */
+    if (
+        sharedRuntime &&
+        sharedRuntime.isInitialized
+    ) {
+
+        return Promise.resolve(
+            sharedRuntime
+        );
     }
+
+
+    /**
+     * Existing startup operation.
+     */
     if (sharedRuntimePromise) {
+
         return sharedRuntimePromise;
     }
-    sharedRuntimePromise = (async () => {
-        const runtime = new SQLiteRuntime(options);
-        await runtime.start();
-        sharedRuntime = runtime;
-        return runtime;
-    })();
+
+
+    /**
+     * Create exactly one runtime.
+     */
+    const runtime =
+        new SQLiteRuntime(
+            options
+        );
+
+
+    sharedRuntimePromise =
+        runtime.start()
+            .then(() => {
+
+                sharedRuntime =
+                    runtime;
+
+                return runtime;
+
+            })
+            .catch(error => {
+
+                /**
+                 * Do not leave a rejected startup Promise
+                 * permanently poisoning the singleton.
+                 */
+                sharedRuntime =
+                    undefined;
+
+                throw error;
+
+            })
+            .finally(() => {
+
+                sharedRuntimePromise =
+                    undefined;
+            });
+
+
     return sharedRuntimePromise;
+}
+
+
+/**
+ * =================================================================
+ * SHARED RUNTIME SHUTDOWN
+ * =================================================================
+ *
+ * Do not call runtime.stop() directly from arbitrary services.
+ */
+
+export async function stopSharedRuntime(): Promise<void> {
+
+    const runtime =
+        sharedRuntime;
+
+
+    sharedRuntime =
+        undefined;
+
+
+    sharedRuntimePromise =
+        undefined;
+
+
+    if (runtime) {
+
+        await runtime.stop();
+    }
 }

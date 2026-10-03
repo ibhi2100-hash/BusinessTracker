@@ -2,9 +2,12 @@ import type{ PreparedStatementManager } from "../../../PreparedStatement/Prepare
 import { currentBusinessKeys } from "./key";
 
 export class CurrentBusinessStatements {
+    private readonly managers: PreparedStatementManager;
     constructor(
-        private readonly managers: PreparedStatementManager
-    ) {}
+        managers: PreparedStatementManager
+    ) {
+        this.managers = managers;
+    }
 
     get insert() {
         return this.managers.get(

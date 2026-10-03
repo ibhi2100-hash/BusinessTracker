@@ -7,11 +7,13 @@ implements PreparedStatementManager {
 
     private readonly cache =
         new Map<string, PreparedStatement>();
-
+    private readonly queryRunner: QueryRunner;
     constructor(
-        private readonly queryRunner: QueryRunner
+        queryRunner: QueryRunner
 
-    ) {}
+    ) {
+        this.queryRunner = queryRunner;
+    }
 
    get(
         key: string

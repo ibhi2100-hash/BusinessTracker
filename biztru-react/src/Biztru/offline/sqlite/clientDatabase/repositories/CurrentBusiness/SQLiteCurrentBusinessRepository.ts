@@ -19,9 +19,12 @@ export interface CurrentBusiness {
 }
 
 export class CurrentBusinessRepository {
+    private readonly statements: CurrentBusinessStatements;
     constructor(
-        private readonly statements: CurrentBusinessStatements
-    ) {}
+        statements: CurrentBusinessStatements
+    ) {
+        this.statements = statements;
+    }
 
     /**
      * Build the database operation without executing it.

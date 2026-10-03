@@ -42,7 +42,7 @@ export class BusinessApi {
         };
 
         const res = await apiFetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/sync/bootstrap`,
+            `${import.meta.env.VITE_API_URL}`,
             {
                 method: "POST",
                 body: JSON.stringify(data),

@@ -14,6 +14,7 @@ import { BusinessApi } from "./API/business/BusinessApi";
 import { SyncApi } from "./API/sync/syncApi";
 import { SyncApplicationService } from "./API/sync/SyncApplicationService";
 import { ExpenseApi } from "./API/expenses/expensesApi";
+import { SessionApi } from "./API/session/ApplicationSession";
 
 export class Application {
     readonly onboarding: OnboardingApi;
@@ -31,44 +32,45 @@ export class Application {
     readonly report: ReportApi;
     readonly sync: SyncApi;
     readonly syncService: SyncApplicationService
-
+    readonly session: SessionApi;
+    private readonly manager: BusinessManager;
 
     
     constructor(
         client: ApplicationContext,
-        private readonly manager: BusinessManager
+        manager: BusinessManager
 
     ){
         this.client = client;
-
+        this.manager = manager;
         this.onboarding = 
             new OnboardingApi(
-                this.manager
+                manager
             )
         
         this.branch = 
             new BranchApi(
-                this.manager
+                manager
             )
             
         this.product = 
             new ProductApi(
-                this.manager
+                manager
             )
         
         this.inventory = 
             new InventoryApi(
-                this.manager
+                manager
             )
 
         this.sales = 
             new SalesApi(
-                this.manager
+                manager
             )
 
         this.rebuild = 
             new RebuildApi(
-                this.manager
+                manager
             )
         
         this.context = 
@@ -78,40 +80,43 @@ export class Application {
 
         this.capital = 
             new CapitalApi(
-                this.manager
+                manager
             )
 
         this.dashboard = 
             new DashboardApi(
-                this.manager
+                manager
             )
 
         this.report = 
             new ReportApi(
-                this.manager
+                manager
             )
 
         this.expense = 
             new ExpenseApi(
-                this.manager
+                manager
             )
 
 
         this.business = 
             new BusinessApi(
-                this.manager,
+                manager,
                 client.repositories.currentBusiness,
                 client.transactionManager
             )
 
         this.sync = 
             new SyncApi(
-                this.manager
+                manager
             )
 
         this.syncService = 
             new SyncApplicationService(
-                this.manager
+                manager
             )
+
+        this.session = 
+            new SessionApi()
     }
 }

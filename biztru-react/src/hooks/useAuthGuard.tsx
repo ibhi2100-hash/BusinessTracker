@@ -1,62 +1,82 @@
 // hooks/useAuthGuard.tsx
-"use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useAuthStore } from "../Biztru/store/useAuthStore";
-import { useBusinessStore } from "../Biztru/store/businessStore"; 
-
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import{ useApplicationSession } from "../Biztru/context/AplicationSerssionContext"
 interface AuthGuardProps {
-  children: React.ReactNode;
-  adminOnly?: boolean;
-  blockIfOnboarding?: boolean; // NEW FLAG
+    adminOnly?: boolean;
+    blockIfOnboarding?: boolean;
 }
-
+let hydrated = false;
 export function AuthGuard({
-  children,
-  adminOnly = false,
-  blockIfOnboarding = false,
+    adminOnly = false,
+    blockIfOnboarding = false,
 }: AuthGuardProps) {
-  const router = useRouter();
 
-  const hydrated = useAuthStore((state) => state.hydrated);
-  const user = useAuthStore((state) => state.user);
-
-  const business = useBusinessStore.getState().business
-  
-
-  useEffect(() => {
-    if (!hydrated) return;
-
-    
-    // Role check
-    if (adminOnly && user?.role !== "ADMIN") {
-      router.replace("/unauthorized");
-      return;
-    }
-
-    // 🔒 Block dashboard access during onboarding
-    if (blockIfOnboarding && business?.isOnboarding) {
-      router.replace("/onboarding");
-      return;
-    }
-  }, [
-    hydrated,
+    const location = useLocation();
+    const {
+    status,
     user,
-    router,
-    adminOnly,
     business,
-    blockIfOnboarding,
-  ]);
+} = useApplicationSession();
+// ----------------------------------------
+    // 1. Wait for persisted auth state
+    // ----------------------------------------
 
-  // Prevent flashing content while checking
-  if (
-    !hydrated ||
-    (adminOnly && user?.role !== "ADMIN") ||
-    (blockIfOnboarding && business?.isOnboarding)
-  ) {
-    return null;
-  }
+    if (!hydrated) {
+        return nu
+    }
 
-  return <>{children}</>;
+    // ----------------------------------------
+    // 2. Require authentication
+    // ----------------------------------------
+
+    if (!user) {
+        return (
+            <Navigate
+                to="/"
+                replace
+                state={{
+                    from: location,
+                }}
+            />
+        );
+    }
+
+    // ----------------------------------------
+    // 3. Role authorization
+    // ----------------------------------------
+
+    if (
+        adminOnly &&
+        user.role !== "ADMIN"
+    ) {
+        return (
+            <Navigate
+                to="/unauthorized"
+                replace
+            />
+        );
+    }
+
+    // ----------------------------------------
+    // 4. Onboarding restriction
+    // ----------------------------------------
+
+    if (
+        blockIfOnboarding &&
+        business?.isOnboarding
+    ) {
+        return (
+            <Navigate
+                to="/onboarding"
+                replace
+            />
+        );
+    }
+
+    // ----------------------------------------
+    // 5. Allow nested route
+    // ----------------------------------------
+
+    return <Outlet />;
 }

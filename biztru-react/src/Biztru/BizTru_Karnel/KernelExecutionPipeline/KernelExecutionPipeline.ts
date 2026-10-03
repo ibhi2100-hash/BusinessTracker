@@ -11,39 +11,41 @@ import type { SQLiteStatementOperation } from "@business/shared-types";
 
 export class KernelExecutionPipeline
 implements PipelineKernel {
-    
+    private readonly validator: CommandValidator;
+    private readonly eventStore: SQLiteEventRepository;
+    private readonly clock: BusinessClock
+    public readonly businessContext: FrontendBusinessContext;
+    private readonly clientBus: ProjectionEventBus
+    private readonly businessBus: ProjectionEventBus
+    private readonly transaction: TransactionManager
+    private readonly repository: BusinessRepositoryRegistry
     constructor(
-        private readonly validator: CommandValidator,
-        private readonly eventStore: SQLiteEventRepository,
-        private readonly clock: BusinessClock,
-        public businessContext: FrontendBusinessContext,
-        private readonly clientBus: ProjectionEventBus,
-        private readonly businessBus: ProjectionEventBus,
-        private readonly transaction: TransactionManager,
-        private readonly repository: BusinessRepositoryRegistry
+        validator: CommandValidator,
+        eventStore: SQLiteEventRepository,
+        clock: BusinessClock,
+        businessContext: FrontendBusinessContext,
+        clientBus: ProjectionEventBus,
+        businessBus: ProjectionEventBus,
+        transaction: TransactionManager,
+        repository: BusinessRepositoryRegistry
 
-    ) {}
+    ) {
+        this.validator = validator;
+        this.eventStore = eventStore;
+        this.clock = clock;
+        this.businessContext = businessContext;
+        this.clientBus = clientBus;
+        this.businessBus = businessBus;
+        this.transaction = transaction;
+        this.repository = repository;
+    }
 
     async execute(command: Command): Promise<void> {
 
-    console.log(
-        "[KERNEL 01] ENTER",
-        {
-            commandId: command.id,
-            type: command.type,
-            aggregateId: command.aggregateId,
-            aggregateType: command.aggregateType,
-            mode: command.mode,
-        }
-    );
-
-    console.log("[KERNEL 02] VALIDATING COMMAND");
-
     await this.validator.validate(command);
 
-    console.log("[KERNEL 03] COMMAND VALIDATED");
-
     const logicalClock = await this.clock.next();
+    console.log("Logical clock value: ", logicalClock)
     const context = await this.businessContext.current();
 
     const aggregateVersion =
@@ -53,7 +55,7 @@ implements PipelineKernel {
         );
 
     const expectedAggregateVersion =
-        aggregateVersion.localVersion ?? 0;
+        aggregateVersion!.localVersion ?? 0;
 
     const event =
         await domainEventTransformer(
@@ -62,6 +64,7 @@ implements PipelineKernel {
             logicalClock,
             expectedAggregateVersion
         );
+    console.log("Tranformd event: ", event)
         
         const operations: SQLiteStatementOperation[] = [
             ...this.eventStore.appendOperations([event]),
@@ -73,7 +76,7 @@ implements PipelineKernel {
                     event.expectedAggregateVersion,
                     event.id,
                     event.createdAt,
-                    aggregateVersion
+                    aggregateVersion!
                 ),
 
             this.repository.outbox

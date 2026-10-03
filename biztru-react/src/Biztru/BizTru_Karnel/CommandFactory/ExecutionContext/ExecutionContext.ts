@@ -15,7 +15,6 @@ export class ExecutionContextProvider
 
         this.currentContext = 
             await this.executionRepository.getCurrentContext()
-        console.log("this is the context required in the factory: ", this.currentContext)
     }
 
    current(): ExecutionContext {

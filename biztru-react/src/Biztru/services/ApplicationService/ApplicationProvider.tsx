@@ -91,6 +91,8 @@ export function ApplicationProvider({
          */
         let app: Application | undefined;
 
+        const controller = new AbortController();
+
 
         const listener: BootListener = {
 
@@ -252,195 +254,124 @@ export function ApplicationProvider({
 
         async function bootstrap(): Promise<void> {
 
-            try {
+        try {
 
-                /*
-                 * ====================================================
-                 * CREATE BOOT MANAGER
-                 * ====================================================
-                 */
+            const manager =
+                new BootManager(
+                    new ClientBootstrapper(),
+                    new BusinessBootstrapper()
+                );
 
-                const manager =
-                    new BootManager(
-                        new ClientBootstrapper(),
-                        new BusinessBootstrapper()
-                    );
+            const result =
+                await manager.boot(
+                    listener,
+                    controller.signal
+                );
 
-
-                /*
-                 * ====================================================
-                 * BOOT APPLICATION
-                 * ====================================================
-                 */
-
-                const result =
-                    await manager.boot(
-                        listener
-                    );
-
-
-                /*
-                 * The effect may have been cleaned up while booting.
-                 *
-                 * In that case React no longer owns this application,
-                 * so dispose it immediately instead of putting it
-                 * into state.
-                 */
-                if (cancelled) {
-
-                    if (result.application) {
-
-                        await result
-                            .application
-                            .client
-                            .runtime
-                            .dispose();
-                    }
-
-                    return;
-                }
-
-
-                /*
-                 * Keep the application in this effect's local scope
-                 * so cleanup can dispose the exact runtime that this
-                 * effect created.
-                 */
-                app =
-                    result.application;
-
-
-                if (!app) {
-                    throw new Error(
-                        "Boot manager completed without an application."
-                    );
-                }
-
-
-                /*
-                 * ====================================================
-                 * RESTORE LAST ROUTE
-                 * ====================================================
-                 */
-
-                const {
-                    lastRoute,
-                } =
-                    await app
-                        .client
-                        .repositories
-                        .applicationState
-                        .getLastRoute();
-
-
-                /*
-                 * The component may have unmounted while the route
-                 * was being restored.
-                 */
-                if (cancelled || !mounted) {
-
-                    await app
+            if (
+                cancelled ||
+                controller.signal.aborted
+            ) {
+                if (result.application) {
+                    await result
+                        .application
                         .client
                         .runtime
                         .dispose();
-
-                    app = undefined;
-
-                    return;
                 }
 
+                return;
+            }
 
-                let runtimeToDispose: SQLiteRuntime | undefined;
+            app = result.application;
 
-                runtimeToDispose = result.application?.client.runtime;
-
-
-                        
-                /*
-                 * ====================================================
-                 * APPLICATION READY
-                 * ====================================================
- */
-
-                setApplication(
-                    app
-                );
-
-                setReady(
-                    true
-                );
-
-
-                /*
-                 * Only navigate after the application has successfully
-                 * completed bootstrapping and its runtime is retained.
-                 */
-                navigate(
-                    lastRoute
-                );
-
-            } catch (error) {
-
-                /*
-                 * If the effect was already cancelled, don't update
-                 * React state and don't report cancellation as a boot
-                 * failure.
-                 */
-                
-                console.error(
-                    "Application bootstrap failed:",
-                    error
-                );
-
-
-                if (!mounted) {
-                    return;
-                }
-
-
-                setBoot(
-                    previous => ({
-                        ...previous,
-
-                        stage:
-                            BootStage.FAILED,
-
-                        error:
-                            error instanceof Error
-                                ? error.message
-                                : String(error),
-                    })
+            if (!app) {
+                throw new Error(
+                    "Boot manager completed without an application."
                 );
             }
+            await app.session.restore();
+            
+            const { lastRoute } =
+                await app
+                    .client
+                    .repositories
+                    .applicationState
+                    .getLastRoute();
+
+            if (
+                cancelled ||
+                !mounted ||
+                controller.signal.aborted
+            ) {
+
+                await app
+                    .client
+                    .runtime
+                    .dispose();
+
+                app = undefined;
+
+                return;
+            }
+
+            setApplication(app);
+            setReady(true);
+
+            navigate(lastRoute);
+
+        } catch (error) {
+
+            if (
+                cancelled ||
+                controller.signal.aborted
+            ) {
+                return;
+            }
+
+            console.error(
+                "Application bootstrap failed:",
+                error
+            );
+
+            if (!mounted) {
+                return;
+            }
+
+            setBoot(previous => ({
+                ...previous,
+
+                stage:
+                    BootStage.FAILED,
+
+                error:
+                    error instanceof Error
+                        ? error.message
+                        : String(error),
+            }));
         }
+    }
 
+    void bootstrap();
 
-        void bootstrap();
+    return () => {
 
+        mounted = false;
+        cancelled = true;
 
-        /*
-         * ============================================================
-         * EFFECT CLEANUP
-         * ============================================================
-         *
-         * React cleanup must be synchronous.
-         *
-         * We cannot:
-         *
-         *     return async () => {}
-         *
-         * because React does not treat an async cleanup function as
-         * a normal cleanup callback.
-         */
-        
-        return () => {
-            mounted = false;
-            cancelled = true;
+        controller.abort();
+
+        if (app) {
+            void app
+                .client
+                .runtime
+                .dispose();
+
+            app = undefined;
         }
+    };
 
-    }, [
-        navigate,
-    ]);
+}, [navigate]);
 
 
     /*

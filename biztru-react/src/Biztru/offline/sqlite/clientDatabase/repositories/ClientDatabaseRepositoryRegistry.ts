@@ -1,6 +1,7 @@
 import { ClientStatementRegistry } from "../statements/ClientStatementRegistry";
 import { SQLiteApplicationStateRepository } from "./ApplicationStateRepository.ts/SQLiteApplicationStateRepository";
 import { CurrentBusinessRepository } from "./CurrentBusiness/SQLiteCurrentBusinessRepository";
+import { CurrentSessionRepository } from "./currentSessionRepository/currentSessionRepository";
 import { ExecutionContextRepository } from "./ExecutionContextRepitory/ExecutionContextRepository";
 import { SQLiteKnownNodeRepository } from "./KnownNodes/SQLiteKnownNodeRepository";
 import { SQLiteAuthRepository } from "./SQLiteAuthRepository/SQLiteAuthRepository";
@@ -12,7 +13,7 @@ export class ClientRepositoryRegistry {
     readonly knownNode: SQLiteKnownNodeRepository;
     readonly applicationState: SQLiteApplicationStateRepository;
     readonly currentBusiness: CurrentBusinessRepository;
-    
+    readonly currentSession: CurrentSessionRepository;
 
     constructor(
         statements: ClientStatementRegistry
@@ -45,6 +46,11 @@ export class ClientRepositoryRegistry {
         this.currentBusiness = 
             new CurrentBusinessRepository(
                 statements.currentBusiness
+            )
+
+        this.currentSession = 
+            new CurrentSessionRepository(
+                statements.currentSession
             )
     }
 }

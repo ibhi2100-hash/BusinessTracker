@@ -9,10 +9,12 @@ interface LastRoute {
 
 export class SQLiteApplicationStateRepository
 implements ApplicationStateRepository {
-
+    private readonly statements: ApplicationStateStatements;
     constructor(
-        private readonly statements: ApplicationStateStatements
-    ) {}
+        statements: ApplicationStateStatements
+    ) {
+        this.statements = statements;
+    }
 
     // ============================================================
     // READ

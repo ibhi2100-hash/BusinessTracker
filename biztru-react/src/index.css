@@ -6,13 +6,13 @@
 
 :root {
     /* Colors */
-    --background: #ffffff;
+    --background: #1a7ac9;
     --foreground: #171717;
 
     --text: #6b6375;
-    --text-h: #08060d;
+    --text-h: #eeeef0;
 
-    --bg: #ffffff;
+    --bg: #000000;
     --border: #e5e4e7;
 
     --code-bg: #f4f3ec;

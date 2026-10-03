@@ -38,31 +38,14 @@ export class WorkerDatabaseRegistry {
      */
     async initializeSQLite(): Promise<void> {
 
-    console.log(
-        "[SQLiteWorker] initializeSQLite() START"
-    );
-
     if (this.initialized) {
-
-        console.log(
-            "[SQLiteWorker] SQLite already initialized"
-        );
-
         return;
     }
 
     if (this.sqlite3) {
-
-        console.log(
-            "[SQLiteWorker] sqlite3 instance already exists"
-        );
-
         return;
     }
 
-    console.log(
-        "[SQLiteWorker] sqlite3ApiConfig: installing..."
-    );
 
     const previousConfig =
         (self as any).sqlite3ApiConfig;
@@ -100,68 +83,9 @@ export class WorkerDatabaseRegistry {
 
     try {
 
-        console.log(
-            "[SQLiteWorker] Calling sqlite3InitModule()..."
-        );
-        console.log(
-    "[SQLiteWorker] OPFS environment",
-    {
-        crossOriginIsolated:
-            self.crossOriginIsolated,
-
-        SharedArrayBuffer:
-            typeof SharedArrayBuffer !== "undefined",
-
-        Atomics:
-            typeof Atomics !== "undefined",
-
-        waitAsync:
-            typeof Atomics?.waitAsync === "function",
-
-        origin:
-            self.location.origin,
-    }
-);
-        const startedAt =
-            performance.now();
-
         this.sqlite3 =
             await await sqlite3InitModule();
-        console.log(
-            "[SQLiteWorker] SQLite WASM loaded",
-            {
-                sqlite3: !!this.sqlite3,
-                oo1: !!this.sqlite3?.oo1,
-                OpfsDb: !!this.sqlite3?.oo1?.OpfsDb,
-
-                oo1Keys:
-                    this.sqlite3?.oo1
-                        ? Object.keys(this.sqlite3.oo1)
-                        : [],
-
-                version:
-                    this.sqlite3?.version?.libVersion,
-            }
-        );
-
-        console.log(
-            "[SQLiteWorker] sqlite3InitModule() SUCCESS",
-            {
-                elapsedMs:
-                    Math.round(
-                        performance.now() - startedAt
-                    ),
-
-                sqlite3:
-                    !!this.sqlite3,
-
-                oo1:
-                    !!this.sqlite3?.oo1,
-
-                OpfsDb:
-                    !!this.sqlite3?.oo1?.OpfsDb,
-            }
-        );
+        
 
     } catch (error) {
 
@@ -190,10 +114,6 @@ export class WorkerDatabaseRegistry {
 
     } finally {
 
-        console.log(
-            "[SQLiteWorker] Restoring sqlite3ApiConfig..."
-        );
-
         if (previousConfig) {
 
             (self as any).sqlite3ApiConfig =
@@ -204,10 +124,6 @@ export class WorkerDatabaseRegistry {
             delete (self as any).sqlite3ApiConfig;
         }
     }
-
-    console.log(
-        "[SQLiteWorker] Checking sqlite3.oo1.OpfsDb..."
-    );
 
     if (!this.sqlite3?.oo1?.OpfsDb) {
 
@@ -232,15 +148,7 @@ export class WorkerDatabaseRegistry {
         );
     }
 
-    console.log(
-        "[SQLiteWorker] OpfsDb is available"
-    );
-
     this.initialized = true;
-
-    console.log(
-        "[SQLiteWorker] initializeSQLite() COMPLETE"
-    );
 }
 
     async open(

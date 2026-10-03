@@ -1,4 +1,5 @@
 
+import { BootPipelineException } from "./BootException";
 import type{
     BootContext,
     BootListener,
@@ -16,7 +17,8 @@ export class BootPipeline {
 
     async execute(
         context: BootContext,
-        listener?: BootListener
+        listener?: BootListener,
+        signal?: AbortSignal
     ): Promise<readonly BootTaskReport[]> {
 
         listener?.onStarted(
@@ -36,7 +38,12 @@ export class BootPipeline {
         try {
 
             for (const task of this.tasks) {
-
+                if(signal?.aborted){
+                    throw new DOMException(
+                        "Boot pipeline aborted.",
+                        "AbortError"
+                    );
+                }
                 listener?.onTaskStarted(
                     task,
                     this.createProgress(
@@ -126,14 +133,12 @@ export class BootPipeline {
 
         } catch (error) {
 
-            throw new BootPipelineException(
+            throw new BootPipelineException
+            (
 
-                task,
+                task.id,
 
                 error,
-
-                performance.now() -
-                startedAt
 
             );
 

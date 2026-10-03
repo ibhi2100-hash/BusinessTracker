@@ -19,19 +19,22 @@ import { DetermineStartupTask } from "./task/DetermineStartupTask";
 import { CreateApplicationTask } from "./task/CreateApplicationTask";
 
 export class BootManager {
-
+    private readonly clientBootstrapper: ClientBootstrapper;
+    private readonly businessBootstrapper: BusinessBootstrapper;
     constructor(
 
-        private readonly clientBootstrapper:
-            ClientBootstrapper,
+        clientBootstrapper: ClientBootstrapper,
 
-        private readonly businessBootstrapper:
-            BusinessBootstrapper
+        businessBootstrapper:   BusinessBootstrapper
 
-    ) {}
+    ) {
+        this.clientBootstrapper = clientBootstrapper;
+        this.businessBootstrapper = businessBootstrapper;
+    }
 
     async boot(
-        listener?: BootListener
+        listener?: BootListener,
+        signal?: AbortSignal
     ): Promise<BootResult> {
 
         const startedAt = Date.now();
@@ -45,7 +48,8 @@ export class BootManager {
         const taskReports =
             await pipeline.execute(
                 context,
-                listener
+                listener,
+                signal
             );
 
         const finishedAt = Date.now();

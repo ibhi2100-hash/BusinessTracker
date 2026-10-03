@@ -31,6 +31,6 @@
     "**/*.mts",
     "*.css",
     "types/**/*.d.ts"
-, "../packages/domain-models/src/reducers/branchReducer.ts", "../packages/domain-models/src/reducers/businessReducer.ts", "../packages/domain-models/src/reducers/inventoryReducer.ts", "../packages/domain-models/src/reducers/productReducer.ts", "src/offline/sqlite/businessDatabase/migrations/010_Ledger.ts", "src/services/ApplicationService/API/onboarding", "../biztru-react/src/Biztru/store/ProjectionRebuilderStore.ts", "../biztru-react/src/hooks/projection.ts"  ],
+, "../packages/domain-models/src/reducers/branchReducer.ts", "../packages/domain-models/src/reducers/businessReducer.ts", "../packages/domain-models/src/reducers/inventoryReducer.ts", "../packages/domain-models/src/reducers/productReducer.ts", "src/offline/sqlite/businessDatabase/migrations/010_Ledger.ts", "src/services/ApplicationService/API/onboarding", "../biztru-react/src/Biztru/store/ProjectionRebuilderStore.ts", "../biztru-react/src/hooks/projection.ts", "../biztru-react/src/pages/onboarding/BusinessOnboarding.tsx", "../biztru-react/src/pages/onboarding/Onboard.tsx", "../biztru-react/src/pages/onboarding/OnboardingInventory.tsx", "../biztru-react/src/pages/onboarding/OnboardingCash.tsx", "../biztru-react/src/pages/InventoryPage.tsx", "../biztru-react/src/pages/CapitalInject.tsx", "../biztru-react/src/pages/CapitalWithdraw.tsx", "../biztru-react/src/pages/ExpensePage.tsx", "../biztru-react/src/pages/SalesList.tsx", "../biztru-react/src/pages/SalesPage.tsx"  ],
   "exclude": ["node_modules"]
 }

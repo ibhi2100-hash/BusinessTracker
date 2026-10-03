@@ -6,6 +6,7 @@ import { ExecutionContextDefinitions } from "../repositories/ExecutionContextRep
 import { KnownNodesDefinitions } from "./knownNodes/KnownNodeDefinition";
 import { ApplicationStateDefinition } from "./applicationState/applicationStateDefinition";
 import { CurrentBusinessDefinitions } from "./currentBusiness/currentBusinessDefinitions";
+import { CurrentSessionDefinitions } from "./clientSession/clientSessionDefinition";
 
 
 export const ClientStatementDefinitions: StatementDefinition[] = [
@@ -15,5 +16,6 @@ export const ClientStatementDefinitions: StatementDefinition[] = [
     ...ExecutionContextDefinitions,
     ...KnownNodesDefinitions,
     ...ApplicationStateDefinition,
-    ...CurrentBusinessDefinitions
+    ...CurrentBusinessDefinitions,
+    ...CurrentSessionDefinitions
 ];

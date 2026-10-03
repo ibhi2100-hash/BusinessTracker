@@ -10,8 +10,8 @@ import type { DomainEvent } from "@business/shared-types";
 
 import type {
     BusinessPayload,
-    BusinessReducer,
 } from "@business/projection-families";
+import { BusinessReducer } from "@business/projection-families";
 
 import {
     SQLiteBusinessRepository,

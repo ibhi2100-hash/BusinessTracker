@@ -8,6 +8,7 @@ import { migration0007 } from "./0007_sync_metadata";
 import { migration0008 } from "./0008_activeBranch";
 import { migration0009 } from "./0009_currentBusiness";
 import { migration0010 } from "./0010_currentBusiness";
+import { migration0011 } from "./0011_clientSession";
 import type{ Migration } from "./migrationContracts";
 
 export const migrations: Migration[] = [
@@ -21,6 +22,7 @@ export const migrations: Migration[] = [
     migration0008,
     migration0009,
     migration0010,
+    migration0011
 
     
 ]

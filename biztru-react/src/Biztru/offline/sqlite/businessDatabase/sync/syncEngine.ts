@@ -19,7 +19,6 @@ import type{
 import { SQLiteOutboxRepository } from "../repositories/SQLiteOutboxRepository/SQLiteOutboxRepository";
 import { SQLiteEventRepository } from "../repositories/SQLiteEventRepository/eventStore";
 import { SQLiteSyncStateRepository } from "../repositories/SQLiteSyncRepository/SQLiteSyncRepository";
-import { changeNotifier } from "../projections/changeNoifier";
 
 export class SyncEngine {
   private readonly lockDurationMs: number;
@@ -243,48 +242,66 @@ export class SyncEngine {
    * produce exactly one notification.
    */
   private async applyPushAcknowledgements(
-    pending: PendingOutboxEvent[],
-    pushResult: SyncPushResult,
-    now: number
-  ): Promise<void> {
-    
+  pending: PendingOutboxEvent[],
+  pushResult: SyncPushResult,
+  now: number
+): Promise<void> {
 
-    await changeNotifier.subscribe(async () => {
-      const pendingById = new Map(
-        pending.map((p) => [p.event.id, p] as const)
-      );
+  const pendingById = new Map(
+    pending.map((p) => [p.event.id, p] as const)
+  );
 
-      for (const accepted of pushResult.accepted) {
-        const row = pendingById.get(accepted.eventId);
-        if (!row) continue;
-        await this.outbox.markSynced(
-          row.outboxId,
-          now,
-          accepted.globalPosition,
-          accepted.aggregateVersion,
-          now
-        );
-      }
+  for (const accepted of pushResult.accepted) {
 
-      for (const conflict of pushResult.conflicts) {
-        const row = pendingById.get(conflict.eventId);
-        if (!row) continue;
-        await this.outbox.markConflict(
-          row.outboxId,
-          conflict.status
-        );
-      }
+    const row = pendingById.get(
+      accepted.eventId
+    );
 
-      for (const rejected of pushResult.rejected) {
-        const row = pendingById.get(rejected.eventId);
-        if (!row) continue;
-        await this.outbox.markRejected(
-          row.outboxId,
-          rejected.reason
-        );
-      }
-    });
+    if (!row) {
+      continue;
+    }
+
+    await this.outbox.markSynced(
+      row.outboxId,
+      now,
+      accepted.globalPosition,
+      accepted.aggregateVersion,
+      now
+    );
   }
+
+  for (const conflict of pushResult.conflicts) {
+
+    const row = pendingById.get(
+      conflict.eventId
+    );
+
+    if (!row) {
+      continue;
+    }
+
+    await this.outbox.markConflict(
+      row.outboxId,
+      conflict.status
+    );
+  }
+
+  for (const rejected of pushResult.rejected) {
+
+    const row = pendingById.get(
+      rejected.eventId
+    );
+
+    if (!row) {
+      continue;
+    }
+
+    await this.outbox.markRejected(
+      row.outboxId,
+      rejected.reason
+    );
+  }
+}
 
   async getCurrentCursor(): Promise<number> {
     return this.syncState.getCursor();
@@ -311,32 +328,42 @@ export class SyncEngine {
   }
 
   private async scheduleRetries(
-    items: PendingOutboxEvent[],
-    error: string,
-    now: number
-  ): Promise<void> {
-    await changeNotifier.subscribe(async () => {
-      for (const item of items) {
-        const attempt = item.retryCount + 1;
+  items: PendingOutboxEvent[],
+  error: string,
+  now: number
+): Promise<void> {
 
-        if (attempt >= item.maxAttempts) {
-          await this.outbox.markRejected(
-            item.outboxId,
-            `max attempts exceeded: ${error}`
-          );
-          continue;
-        }
+  for (const item of items) {
 
-        const backoff =
-          this.baseBackoffMs * Math.pow(2, attempt - 1);
-        const jitter = Math.floor(Math.random() * 500);
+    const attempt =
+      item.retryCount + 1;
 
-        await this.outbox.scheduleRetry(
-          item.outboxId,
-          now + backoff + jitter,
-          error
-        );
-      }
-    });
+    if (attempt >= item.maxAttempts) {
+
+      await this.outbox.markRejected(
+        item.outboxId,
+        `max attempts exceeded: ${error}`
+      );
+
+      continue;
+    }
+
+    const backoff =
+      this.baseBackoffMs *
+      Math.pow(2, attempt - 1);
+
+    const jitter =
+      Math.floor(
+        Math.random() * 500
+      );
+
+    await this.outbox.scheduleRetry(
+      item.outboxId,
+      now + backoff + jitter,
+      error
+    );
+  }
+
+
   }
 }

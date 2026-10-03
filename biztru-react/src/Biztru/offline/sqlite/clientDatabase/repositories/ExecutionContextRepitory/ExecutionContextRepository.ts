@@ -4,18 +4,18 @@ import { ExecutionContextStatements } from "./ExecutionPreparedStatements";
 import type{ ExecutionContext } from "../../../../../BizTru_Karnel/KarnelTypes/types";
 export class ExecutionContextRepository 
 implements ExecutionContextRepositoryContract {
-    
+    private readonly statements: ExecutionContextStatements;
     constructor(
-        private statements: ExecutionContextStatements
-    ){}
+        statements: ExecutionContextStatements
+    ) {
+        this.statements = statements;
+    }
 
     async getCurrentContext(): Promise<ExecutionContext> {
             
     const rows = 
         await this.statements.current.query<ExecutionContext>();
         const row  = rows[0]
-        
-        console.log("This is the row that comeback from frontend: ", row)
     
      return {
 

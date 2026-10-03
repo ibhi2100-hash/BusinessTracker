@@ -5,6 +5,7 @@ import { KnownNodesStatements } from "./knownNodes/KnownNodesStatements";
 import { SessionStatements } from "./session/SessionStatements";
 import { ApplicationStateStatements } from "./applicationState/applicationStateStatements";
 import { CurrentBusinessStatements } from "./currentBusiness/currentBusinessStatements";
+import  { CurrentSessionStatements } from "./clientSession/clientSessionStatements";
 
 export class ClientStatementRegistry {
     readonly users: UserStatements;
@@ -13,6 +14,7 @@ export class ClientStatementRegistry {
     readonly knownNodes: KnownNodesStatements;
     readonly applicationState: ApplicationStateStatements;
     readonly currentBusiness: CurrentBusinessStatements;
+    readonly currentSession: CurrentSessionStatements;
 
     constructor(
         manager: PreparedStatementManager
@@ -33,5 +35,8 @@ export class ClientStatementRegistry {
 
         this.currentBusiness = 
             new CurrentBusinessStatements(manager);
+
+        this.currentSession = 
+            new CurrentSessionStatements(manager);
     }
 }

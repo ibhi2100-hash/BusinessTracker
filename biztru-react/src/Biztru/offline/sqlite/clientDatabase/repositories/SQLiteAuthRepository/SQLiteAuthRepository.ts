@@ -1,13 +1,16 @@
-// SQLiteBusinessRepository.ts
+// SQLiteAuthRepository.ts
 
 import type { User } from "@business/shared-types";
 import { UserStatements } from "../../statements/users/UserStatements";
 
 
 export class SQLiteAuthRepository{
+    private readonly users: UserStatements;
   constructor (
-    private readonly users: UserStatements
-  ){}
+    users: UserStatements
+  ){
+    this.users = users;
+  }
 
   async addUser(user: User): Promise<User> {
     await this.users.insert.execute(

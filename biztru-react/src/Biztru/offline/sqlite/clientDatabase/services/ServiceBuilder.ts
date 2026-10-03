@@ -3,9 +3,12 @@ import { LoginService, RegistrationService } from "./AuthService";
 import { ClientServiceRegistry } from "./ClientServiceRegistry";
 
 export class ServiceBuilder {
+    private readonly repositories: ClientRepositoryRegistry;
     constructor(
-        private readonly repositories: ClientRepositoryRegistry
-    ){}
+        repositories: ClientRepositoryRegistry
+    ){
+        this.repositories = repositories;
+    }
 
     build(){
 
@@ -13,7 +16,8 @@ export class ServiceBuilder {
             new RegistrationService(
                 this.repositories.users,
                 this.repositories.session,
-                this.repositories.applicationState
+                this.repositories.applicationState,
+                this.repositories.currentSession
             ),
             new LoginService(
                 this.repositories.users
