@@ -47,7 +47,7 @@ export function SetupChecklist() {
             flex w-full items-center justify-between gap-3
             px-4 py-4 text-left
             transition-all duration-200
-            hover:bg-white/[0.04]
+            hover:bg-white/4
             active:scale-[0.99]
             sm:px-5 sm:py-5
             `,

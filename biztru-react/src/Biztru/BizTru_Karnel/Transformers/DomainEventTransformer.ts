@@ -1,15 +1,26 @@
-import type{ Command } from "../KarnelTypes/types";
+import type { Command } from "../KarnelTypes/types";
 import type { DomainEvent } from "@business/shared-types";
 import { BusinessEventTypes } from "@business/shared-types";
-import type{ BusinessContext } from "../../Composer/context/BusinessContextContract"
+import type { BusinessContext } from "../../Composer/context/BusinessContextContract";
 
-export async function domainEventTransformer(command: Command,  context: BusinessContext, logicClock: number, expectedAggregateVersion: number):Promise<DomainEvent>{
-    if(!context.branchId){
-        throw new Error("BranchId does not exists")
+export async function domainEventTransformer(
+    command: Command,
+    context: BusinessContext,
+    logicClock: number,
+    expectedAggregateVersion: number
+): Promise<DomainEvent> {
+
+    const businessId =
+        command.type === BusinessEventTypes.BUSINESS_CREATED
+            ? command.aggregateId
+            : context.businessId;
+
+    if (!businessId) {
+        throw new Error(
+            "BusinessId is required to transform this command into a domain event"
+        );
     }
-    if(!context.businessId){
-        throw new Error("BusinessId does not exists")
-    }
+
     return {
         id: command.id,
         aggregateId: command.aggregateId,
@@ -17,14 +28,14 @@ export async function domainEventTransformer(command: Command,  context: Busines
         expectedAggregateVersion,
         type: command.type,
         mode: command.mode,
-        businessId: 
-            command.type === BusinessEventTypes.BUSINESS_CREATED
-                ? command.aggregateId
-                :context.businessId,
+
+        businessId,
+
         branchId:
-            command.type === BusinessEventTypes.BRANCH_CREATED 
-                ?command.aggregateId
-                :context.branchId,
+            command.type === BusinessEventTypes.BRANCH_CREATED
+                ? command.aggregateId
+                : context.branchId ?? null,
+
         payload: command.payload,
         actor: command.actor,
         causationId: command.causationId,
@@ -32,6 +43,5 @@ export async function domainEventTransformer(command: Command,  context: Busines
         logicClock,
         createdAt: command.createdAt,
         checksum: crypto.randomUUID(),
-    }
-
+    };
 }
