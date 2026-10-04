@@ -24,22 +24,20 @@ export function ServiceWorkerRegistration() {
             return;
         }
 
-        if (import.meta.env.PROD) {
-            void navigator.serviceWorker
-                .register("/sw.js")
-                .then((registration) => {
-                    console.log(
-                        "[SW] Production service worker registered:",
-                        registration.scope
-                    );
-                })
-                .catch((error) => {
-                    console.error(
-                        "[SW] Production service worker registration failed:",
-                        error
-                    );
-                });
-        }
+        void navigator.serviceWorker
+            .register("/sw.js")
+            .then((registration) => {
+                console.log(
+                    "[SW] Production service worker registered:",
+                    registration.scope
+                );
+            })
+            .catch((error) => {
+                console.error(
+                    "[SW] Production service worker registration failed:",
+                    error
+                );
+            });
     }, []);
 
     return null;
