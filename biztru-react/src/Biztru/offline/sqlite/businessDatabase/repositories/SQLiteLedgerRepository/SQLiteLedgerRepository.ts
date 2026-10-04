@@ -25,9 +25,12 @@ import { ledgerKeys } from "../../statements/ledger/ledgerKeys";
 export class SQLiteLedgerRepository
   implements LedgerRepository
 {
+  private readonly statements: LedgerStatements;
   constructor(
-    private readonly statements: LedgerStatements
-  ) {}
+    statements: LedgerStatements
+  ) {
+    this.statements = statements
+  }
 
 
   // ============================================================

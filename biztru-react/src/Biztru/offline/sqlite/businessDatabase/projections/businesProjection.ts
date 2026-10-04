@@ -27,10 +27,12 @@ export class BusinessConsumer
     implements ProjectionConsumer<DomainEvent> {
 
     readonly name = "businesses";
-
+    private readonly repository: SQLiteBusinessRepository
     constructor(
-        private readonly repository: SQLiteBusinessRepository
-    ) {}
+        repository: SQLiteBusinessRepository
+    ) {
+        this.repository = repository
+    }
 
 
     // =========================================================

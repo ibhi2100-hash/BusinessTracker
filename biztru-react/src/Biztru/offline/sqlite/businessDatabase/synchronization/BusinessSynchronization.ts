@@ -15,14 +15,15 @@ export class BusinessSynchronization
 
     private initialized = false;
 
-
+    private readonly coordinator: SyncCoordinator;
+    private readonly triggerSource: NetworkSyncConnector;
     constructor(
-        private readonly coordinator:
-            SyncCoordinator,
-
-        private readonly triggerSource:
-            NetworkSyncConnector,
-    ) {}
+        coordinator: SyncCoordinator,
+        triggerSource: NetworkSyncConnector,
+    ) {
+        this.coordinator = coordinator;
+        this.triggerSource = triggerSource
+    }
 
 
     /*

@@ -136,7 +136,10 @@ export interface ProductSalesSummary {
 /* ------------------------------------------------------------------ */
 
 export class SalesApi {
-  constructor(private readonly manager: BusinessManager) {}
+  private readonly manager: BusinessManager;
+  constructor(manager: BusinessManager) {
+    this.manager = manager;
+  }
 
   /* ================================================================ */
   /*  WRITE – Commands                                                */
@@ -183,8 +186,13 @@ export class SalesApi {
         createdAt: new Date().toISOString(),
       },
     };
-    const salesCommand = await app.domain.commandFactory.create(salesIntent);
-
+    const salesCommand = await app?.domain.commandFactory.create(salesIntent);
+     if(!app){
+            throw new Error("Business Does not exist")
+        }
+        if(!salesCommand){
+            throw new Error("Business Does not exist")
+        }
     await app.domain.kernel.execute(salesCommand)
     return { saleId };
   }
@@ -249,8 +257,13 @@ export class SalesApi {
 
     const app = await this.manager.current();
 
-    const voidSalesCommand = await app.domain.commandFactory.create(voidSalesIntent);
-
+    const voidSalesCommand = await app?.domain.commandFactory.create(voidSalesIntent);
+     if(!app){
+            throw new Error("Business Does not exist")
+        }
+        if(!voidSalesCommand){
+            throw new Error("Business Does not exist")
+        }
     await app.domain.kernel.execute(voidSalesCommand)
   }
 
@@ -286,8 +299,13 @@ export class SalesApi {
 
         const app = await this.manager.current();
 
-        const refundCommand = await app.domain.commandFactory.create(refundIntent);
-
+        const refundCommand = await app?.domain.commandFactory.create(refundIntent);
+         if(!app){
+            throw new Error("Business Does not exist")
+        }
+        if(!refundCommand){
+            throw new Error("Business Does not exist")
+        }
         await app.domain.kernel.execute(refundCommand)
 
     return { refundId };
@@ -302,6 +320,10 @@ export class SalesApi {
    */
   async getSale(saleId: string): Promise<Sales| null> {
     const app = await this.manager.current();
+     if(!app){
+            throw new Error("Business Does not exist")
+        }
+
     return await app.storage.repositories.sales.findById(saleId);
   }
 
@@ -314,7 +336,7 @@ export class SalesApi {
     const app = await this.manager.current();
 
     const list =
-        await app.storage.repositories.sales.list({
+        await app?.storage.repositories.sales.list({
             businessId: filters.businessId,
             branchId: filters.branchId,
             productId: filters.productId,
@@ -324,15 +346,9 @@ export class SalesApi {
             limit: filters.limit ?? 100,
             offset: filters.offset ?? 0,
         });
-
-    console.log(
-        "[SalesApi] listSales",
-        {
-            filters,
-            count: list.length,
-        }
-    );
-
+    if(!list){
+      throw new Error("Sales does not exists")
+    }
     return list;
 }
   /**
@@ -340,7 +356,9 @@ export class SalesApi {
    */
   async getSaleGroup(saleGroupId: string): Promise<Sales[]> {
     const app = await this.manager.current();
-
+     if(!app){
+            throw new Error("Business Does not exist")
+        }
     const salesGroup = await app.storage.repositories.sales.findByGroup(saleGroupId);
 
     return salesGroup
@@ -419,7 +437,7 @@ export class SalesApi {
     for (const row of rows) {
       const existing = map.get(row.productId) ?? {
         productId: row.productId,
-        productName: row.productName,
+        productName: row.productName ?? undefined,
         quantitySold: 0,
         revenue: 0,
         cost: 0,
@@ -477,7 +495,9 @@ export class SalesApi {
 
   async buyAnalysis(buyAnalysis: BuyAnalysisPayload): Promise<BuyingAnalysisRow[] | null>{
     const app = await this.manager.current();
-
+     if(!app){
+            throw new Error("Business Does not exist")
+        }
     return await app.storage.repositories.sales.getBuyingAnalysis(buyAnalysis)
 
   }

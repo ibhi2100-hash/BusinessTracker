@@ -1,4 +1,4 @@
-import { Mode } from "@business/shared-types";
+import type{ Mode } from "@business/shared-types";
 
 export interface InventoryRequest {
     id: string;

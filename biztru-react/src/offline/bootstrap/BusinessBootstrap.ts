@@ -44,10 +44,6 @@ implements Lifecycle {
         client: ApplicationContext,
         businessId: string
     ){
-        const bootstrapId =
-            crypto.randomUUID();
-
-       
         const runtime = 
             await this.createRuntime(
                 client,

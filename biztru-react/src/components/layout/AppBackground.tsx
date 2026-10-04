@@ -7,11 +7,11 @@ export function AppBackground() {
       <div
         className="
         absolute
-        top-[-120px]
+        -top-30
         left-1/2
         -translate-x-1/2
-        h-[420px]
-        w-[420px]
+        h-105
+        w-105
         rounded-full
         bg-teal-500/20
         blur-[120px]
@@ -22,9 +22,9 @@ export function AppBackground() {
       <div
         className="
         absolute
-        bottom-[-120px]
-        right-[-80px]
-        h-[320px]
+        -botton-30
+        -right-20
+        h-80
         w-[320px]
         rounded-full
         bg-cyan-500/20
@@ -39,7 +39,7 @@ export function AppBackground() {
         inset-0
         opacity-[0.04]
         bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)]
-        bg-[size:50px_50px]
+        bg-size-[50px_50px]
       "
       />
     </div>

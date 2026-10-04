@@ -8,8 +8,6 @@ import {
 
 import {
   Package,
-  Tag,
-  DollarSign,
 } from "lucide-react";
 
 import { GlassSheet } from "../../ui/GlassSheet"; 
@@ -388,7 +386,7 @@ export default function ProductSheet({
               border-amber-400/20
               bg-black/20
               shadow-inner
-              shadow-[0_0_0_1px_rgba(245,158,11,0.04),0_20px_60px_rgba(245,158,11,0.06)]
+              shadow-linear
               transition-all
               duration-200
               focus-within:border-amber-400/50
@@ -489,7 +487,7 @@ export default function ProductSheet({
               border-emerald-400/25
               bg-black/20
               shadow-inner
-              shadow-[0_0_0_1px_rgba(16,185,129,0.05),0_24px_70px_rgba(16,185,129,0.07)]
+              shadow-linear
               transition-all
               duration-200
               focus-within:border-emerald-400/60
@@ -574,8 +572,8 @@ export default function ProductSheet({
                   mt-3
                   rounded-2xl
                   border
-                  border-white/[0.06]
-                  bg-white/[0.025]
+                  border-white/6
+                  bg-white/2.5
                   px-4
                   py-3
                 "
@@ -655,7 +653,7 @@ export default function ProductSheet({
                 border-blue-400/20
                 bg-black/20
                 shadow-inner
-                shadow-[0_0_0_1px_rgba(59,130,246,0.04),0_20px_60px_rgba(59,130,246,0.06)]
+                shadow-linear
                 transition-all
                 duration-200
                 focus-within:border-blue-400/50
@@ -742,8 +740,8 @@ export default function ProductSheet({
               className="
                 rounded-2xl
                 border
-                border-white/[0.06]
-                bg-white/[0.02]
+                border-white/6
+                bg-white/2
                 px-4
                 py-3
               "

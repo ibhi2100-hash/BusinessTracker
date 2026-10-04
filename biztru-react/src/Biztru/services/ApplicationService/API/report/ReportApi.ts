@@ -98,10 +98,16 @@ export function previousPeriodOf(current: PeriodFilter): PeriodFilter {
 }
 
 export class ReportApi {
-  constructor(private readonly manager: BusinessManager) {}
+  private readonly manager: BusinessManager;
+  constructor(manager: BusinessManager) {
+    this.manager = manager;
+  }
 
   private async repo() {
     const app = await this.manager.current();
+     if(!app){
+            throw new Error("Business Does not exist")
+        }
     return app.storage.repositories.report;
   }
 

@@ -46,7 +46,7 @@ export interface AggregateRebuilder<
 export interface SnapshotLoader {
 
     load(
-        aggregateId
+        aggregateId: string
     ): Snapshot | null;
 
 }

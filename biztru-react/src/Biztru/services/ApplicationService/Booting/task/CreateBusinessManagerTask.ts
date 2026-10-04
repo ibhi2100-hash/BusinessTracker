@@ -9,15 +9,17 @@ implements BootTask {
     readonly title: string = "Creating Business Manager";
 
     readonly weight: number = 10;
-
+    private readonly bootstrapper: BusinessBootstrapper;
     constructor(
-        private readonly bootstrapper: BusinessBootstrapper
-    ){}
+        bootstrapper: BusinessBootstrapper
+    ){
+        this.bootstrapper = bootstrapper
+    }
 
     async execute(context: BootContext): Promise<void> {
         context.runtime.businessManager =
             new BusinessManager(
-                context.infrastructure.client,
+                context.infrastructure.client!,
                 this.bootstrapper
             )
     }

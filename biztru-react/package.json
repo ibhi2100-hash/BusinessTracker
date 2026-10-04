@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "npm run build --workspace=@business/projection-families && npm run build --workspace=@business/ledger-engine && npm run build --workspace=@business/snapshot-engine && npm run build --workspace=@business/shared-types && npm run build --workspace=@business/sync",
+    "prebuild": "npm run build --workspace=@business/projectionFamilies && npm run build --workspace=@business/ledger-engine && npm run build --workspace=@business/snapshot-engine && npm run build --workspace=@business/shared-types && npm run build --workspace=@business/sync",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"

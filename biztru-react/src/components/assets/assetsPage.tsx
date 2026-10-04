@@ -73,7 +73,6 @@ export default function AddAssetPage({
     );
 
   const onSubmit = async (
-    data: CreateAssetInput
   ) => {
     try {
       setLoading(true);

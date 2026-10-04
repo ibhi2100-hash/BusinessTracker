@@ -47,17 +47,33 @@ export interface PersistPullResultInput {
 }
 
 export class SQLiteSyncStateRepository {
+
+    private readonly statements: SyncStateStatements;
+    private readonly syncActivityRepo: SQLiteSyncActivityRepository;
+    private readonly conflictRepo: SQLiteConflictRepository;
+    private readonly outboxRepo: SQLiteOutboxRepository
+    private readonly transaction: TransactionManager
     constructor(
-        private readonly statements: SyncStateStatements,
+        statements: SyncStateStatements,
 
-        private readonly syncActivityRepo: SQLiteSyncActivityRepository,
+        syncActivityRepo: SQLiteSyncActivityRepository,
 
-        private readonly conflictRepo: SQLiteConflictRepository,
+        conflictRepo: SQLiteConflictRepository,
 
-        private readonly outboxRepo: SQLiteOutboxRepository,
+        outboxRepo: SQLiteOutboxRepository,
 
-        private readonly transaction: TransactionManager
-    ) {}
+        transaction: TransactionManager
+    ) {
+        this.statements = statements;
+
+        this.syncActivityRepo = syncActivityRepo;
+
+        this.conflictRepo = conflictRepo;
+
+        this.outboxRepo = outboxRepo;
+
+        this.transaction = transaction
+    }
 
     // =========================================================
     // READ

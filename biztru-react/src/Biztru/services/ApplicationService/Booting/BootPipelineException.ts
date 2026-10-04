@@ -2,16 +2,25 @@ import type{ BootTask } from "./BootStage";
 
 export class BootPipelineException
 extends Error {
+    readonly task: BootTask;
+    readonly cause: unknown;
+    readonly duration: number
     constructor(
-        readonly task: BootTask,
+        task: BootTask,
 
-        readonly cause: unknown,
+        cause: unknown,
 
-        readonly duration: number
-    ){
+        duration : number
+    ){ 
         super(
             `Boot task '$${task.title}' failed.`
         )
+
+        this.task = task;
+
+        this.cause = cause;
+
+        this.duration = duration
     }
 
 

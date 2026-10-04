@@ -16,10 +16,13 @@ import { businessKeys } from "../../statements/business/businessKeys";
 
 export class SQLiteBusinessRepository
     implements IProjectionEntityRepository<Business>
-{
+{   
+    private readonly statements: BusinessStatements
     constructor(
-        private readonly statements: BusinessStatements
-    ) {}
+        statements: BusinessStatements
+    ) {
+        this.statements = statements
+    }
 
     // ============================================================
     // TRANSACTION OPERATIONS

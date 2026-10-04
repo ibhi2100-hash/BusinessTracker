@@ -69,7 +69,7 @@ export interface PersistedSyncState {
     conflicts: Conflict[];
 }
 
-export interface BackendEventPayload<TPayload = any> {
+export interface BackendEventPayload<TPayload = unknown> {
     id: string;
 
     businessId?: string | null;
@@ -88,7 +88,7 @@ export interface BackendEventPayload<TPayload = any> {
 
     mode: "OPENING" | "LIVE";
 
-    payload: Readonly<TPayload>;
+    payload: TPayload;
 
     actor: {
         userId: string;

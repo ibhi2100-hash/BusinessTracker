@@ -12,10 +12,12 @@ export class ProductConsumer
   implements ProjectionConsumer<DomainEvent>
 {
   readonly name = "products";
-
+  private readonly repository: SQLiteProductRepository
   constructor(
-    private readonly repository: SQLiteProductRepository
-  ) {}
+    repository: SQLiteProductRepository
+  ) {
+    this.repository = repository
+  }
 
   async handle(
     events: readonly DomainEvent[]

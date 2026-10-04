@@ -8,10 +8,12 @@ import type { ProjectionResetter } from "./ProjectionResetterContract";
 import type{ SQLiteStatementOperation } from "../../../../../storage/statement/worker/WorkerProtocol";
 export class ProjectionReset
     implements ProjectionResetter {
-
+    private readonly repository: ProjectionResetRepository
     constructor(
-        private readonly repository: ProjectionResetRepository
-    ) {}
+        repository: ProjectionResetRepository
+    ) {
+        this.repository = repository
+    }
 
     resetOperation(
         name: ProjectionName

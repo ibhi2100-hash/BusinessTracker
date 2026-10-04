@@ -21,10 +21,12 @@ export class InventoryConsumer
    * can continue reducing the state produced by earlier events.
    */
   private readonly states = new Map<string, any>();
-
+  private readonly repository: SQLiteInventoryRepository
   constructor(
-    private readonly repository: SQLiteInventoryRepository
-  ) {}
+    repository: SQLiteInventoryRepository
+  ) {
+    this.repository = repository
+  }
 
   async handle(events: readonly DomainEvent<any>[]): Promise<void> {
     for (const event of events) {

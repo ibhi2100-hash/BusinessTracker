@@ -1,5 +1,5 @@
 
-type ProductUpdateInput = {
+export type ProductUpdateInput = {
   productId: string;
   name?: string;
   price?: number;
@@ -7,7 +7,7 @@ type ProductUpdateInput = {
   quantity?: number; // optional stock adjustment
 };
 
-function computeProductDiff(oldP, newP) {
+export function computeProductDiff(oldP: any, newP: any) {
   return {
     productChanged:
       oldP.name !== newP.name ||

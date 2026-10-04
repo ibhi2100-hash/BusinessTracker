@@ -6,8 +6,6 @@ import { TransactionManager } from "../../storage/transaction/TransactionManager
 import { ClientStatementRegistry } from "../../offline/sqlite/clientDatabase/statements/ClientStatementRegistry" 
 import { ExecutionContextProvider } from "../../BizTru_Karnel/CommandFactory/ExecutionContext/ExecutionContext" 
 import { ProjectionEventBus } from "@business/event-bus";
-import type{ DatabaseId } from "../../storage/statement/worker/DatabaseId" 
-
 
 
 export class ApplicationContext
@@ -30,8 +28,6 @@ export class ApplicationContext
 
     constructor(
         runtime: SQLiteRuntime,
-
-        database: DatabaseId,
 
         queryRunner: QueryRunner,
 

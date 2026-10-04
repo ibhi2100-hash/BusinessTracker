@@ -4,9 +4,12 @@ import { BusinessSynchronization } from "../../../../offline/sqlite/businessData
 
 
 export class SyncApi {
+    private readonly manager: BusinessManager
     constructor(
-        private readonly manager: BusinessManager
-    ){}
+        manager: BusinessManager
+    ){
+        this.manager = manager
+    }
    
 
     async Sync(): Promise<BusinessSynchronization | null>{

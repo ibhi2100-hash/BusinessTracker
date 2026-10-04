@@ -6,9 +6,9 @@ import { Loader2, Wallet, Calendar, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import type{
+import{
   repayLiabilitySchema,
-  RepayLiabilityInput,
+  type RepayLiabilityInput,
 } from "../../schemas/repayliability.schema";
 
 
@@ -24,7 +24,6 @@ interface Props {
 }
 
 export function RepayLiabilityModal({
-  liabilityId,
   onClose,
 }: Props) {
   const [pending, setPending] =
@@ -56,7 +55,7 @@ export function RepayLiabilityModal({
     try {
       setPending(true);
 
-  
+      console.log("This is the User repay liability model:", data)
 
       toast.success(
         "Liability repayment recorded"

@@ -106,11 +106,15 @@ export interface NewOutboxEntry {
 }
 
 export class SQLiteOutboxRepository {
-
+    private readonly statements: OutboxStatments;
+    private readonly queryRunner: QueryRunner;
     constructor(
-        private readonly statements: OutboxStatments,
-        private readonly queryRunner: QueryRunner
-    ) {}
+        statements: OutboxStatments,
+        queryRunner: QueryRunner
+    ) {
+        this.statements = statements;
+        this.queryRunner = queryRunner
+    }
 
     // =========================================================
     // WRITE
@@ -370,7 +374,16 @@ class OutboxMapper {
     static toDomainEvent(
         row: OutboxRow
     ): DomainEvent {
+        if(!row.businessId){
+            throw new Error("fields in events are empty at Outobx repos")
+        }
 
+        if(!row.correlationId){
+            throw new Error("fields in events are empty at Outobx repos")
+        }
+        if(!row.checksum){
+            throw new Error("fields in events are empty at Outobx repos")
+        }
         const payload =
             JSON.parse(row.payload);
 

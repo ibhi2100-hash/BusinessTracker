@@ -36,7 +36,7 @@ type FinancialState = {
 // ---------------------------
 // STORE
 // ---------------------------
-export const useFinancialStore = create<FinancialState>((set, get) => ({
+export const useFinancialStore = create<FinancialState>((set) => ({
 
     // ---------------------------
     // GLOBAL METRICS
@@ -65,8 +65,6 @@ export const useFinancialStore = create<FinancialState>((set, get) => ({
     _applyEntry: (entry) =>
         set((state) => {
             const { account, debit = 0, credit = 0, timestamp } = entry;
-
-            const now = new Date();
             const start = new Date();
             start.setHours(0, 0, 0, 0);
 

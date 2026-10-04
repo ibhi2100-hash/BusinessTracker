@@ -1,12 +1,12 @@
 // hooks/useAuthGuard.tsx
 
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import{ useApplicationSession } from "../Biztru/context/AplicationSerssionContext"
+import{ useApplicationSession } from "../Biztru/context/AplicationSessionContext"
 interface AuthGuardProps {
     adminOnly?: boolean;
     blockIfOnboarding?: boolean;
 }
-let hydrated = false;
+
 export function AuthGuard({
     adminOnly = false,
     blockIfOnboarding = false,
@@ -14,17 +14,9 @@ export function AuthGuard({
 
     const location = useLocation();
     const {
-    status,
     user,
     business,
 } = useApplicationSession();
-// ----------------------------------------
-    // 1. Wait for persisted auth state
-    // ----------------------------------------
-
-    if (!hydrated) {
-        return nu
-    }
 
     // ----------------------------------------
     // 2. Require authentication

@@ -17,10 +17,12 @@ import { inventoryKeys } from "../../statements/inventory/inventoryStatementKeys
 
 export class SQLiteInventoryRepository
     implements IProjectionEntityRepository<Inventory>
-{
+{   private readonly statements: InventoryStatements
     constructor(
-        private readonly statements: InventoryStatements
-    ) {}
+        statements: InventoryStatements
+    ) {
+        this.statements = statements
+    }
 
 
     // ============================================================

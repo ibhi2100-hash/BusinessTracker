@@ -1,6 +1,6 @@
 // SnapshotRepository.ts
 
-import { Snapshot } from "@business/shared-types";
+import type{ Snapshot } from "@business/shared-types";
 
 export interface SnapshotRepository {
 

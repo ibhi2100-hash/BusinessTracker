@@ -8,7 +8,6 @@ import {
   LayoutGrid,
   ShoppingCart,
   Minus,
-  X,
   Trash2,
   CreditCard,
 } from "lucide-react";
@@ -24,12 +23,8 @@ import ProductDetailsSheet from "./dialogs/ProductsManagement";
 import { useCartStore } from "../../Biztru/store/useCartStore"; 
 import { useApplication } from "../../Biztru/services/ApplicationService/ApplicationContext"; 
 import {
-  OpeningEventType,
-  InventoryEventType,
   salesEventType,
 } from "@business/shared-types";
-import { AggregateType } from "../../offline/domain/aggregate"; 
-
 import SellCard from "./cards/SellCard";
 import { GlassButton } from "../ui/GlassButton";
 import { GlassCard } from "../ui/GlassCard";
@@ -38,11 +33,11 @@ import { GlassSheet } from "../ui/GlassSheet";
 import { GlassIcon } from "../ui/GlassIcon";
 import { useBranchStore } from "../../Biztru/store/useBranchStore"; 
 import { inventoryKey } from "../../Biztru/utils/keygenerator"; 
-import { useNavigate } from "react-router-dom";
 import { useLiveProducts } from "../../hooks/useLiveProducts"; 
 import { useBusinessContext } from "../../Biztru/context/BusinessContext"; 
 import type{ LiveProduct } from "../../Biztru/offline/sqlite/businessDatabase/repositories/SQLiteProjectionRepository/SQLiteProductRepository"; 
 import { cn } from "../../lib/utils"; 
+
 
 interface InventoryPageProps {
   context: "sell" | "admin";
@@ -63,20 +58,20 @@ export default function InventoryPage({
   mode,
 }: InventoryPageProps) {
   const app = useApplication();
-  const navigate = useNavigate();
 
   const {
-    businessId,
     branchId,
-    setBranchId,
-    loading: ctxLoading,
   } = useBusinessContext();
-
+  if(!branchId){
+    throw new  Error("Branch ID does not exist in branchId")
+  }
   const { data, loading } = useLiveProducts(branchId);
   const products = data;
-
+  if(!products){
+    throw new Error("Products Does not exist in Inventory Page")
+  }
   const branches = useBranchStore((s) => s.branches);
-
+ 
   /*
    * -----------------------------
    * UI STATE
@@ -89,7 +84,7 @@ export default function InventoryPage({
   const [loader, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<string>("All");
-  const [history, setHistory] = useState<ProductHistoryItem[]>([]);
+  const [history ] = useState<ProductHistoryItem[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
 
   type ActiveSheet =
@@ -168,32 +163,13 @@ export default function InventoryPage({
     setSelectedProduct(null);
   };
 
-  const openEdit = (product: LiveProduct) => {
-    setActiveSheet("edit");
-    setSelectedProduct(product);
-  };
-
   const openManage = (product: LiveProduct) => {
     setActiveSheet("manage");
     setSelectedProduct(product);
   };
 
   const handleDelete = async (productId: string) => {
-    try {
-      await app.product.delete({
-        aggregateType: AggregateType.PRODUCT,
-        aggregateId: productId,
-        type:
-          mode === "OPENING"
-            ? OpeningEventType.OPENING_INVENTORY_DELETED
-            : InventoryEventType.PRODUCT_DELETED,
-        mode,
-        payload: { productId },
-      });
-      toast.success("Removed");
-    } catch {
-      toast.error("Delete failed");
-    }
+   console.log(`Product : ${productId} is being deleted`)
   };
 
   /*
@@ -334,10 +310,12 @@ export default function InventoryPage({
 
   const handleReceiveStock = async (
     quantity: number,
-    costPrice?: number,
+    costPrice: number,
     note?: string
   ) => {
-    
+    if(!selectedProduct){
+      throw new Error("Product now is null")
+    }
     const key = inventoryKey(selectedProduct.id, branchId)
     await app.inventory.receiveStock({
       aggregateId: key,
@@ -461,7 +439,7 @@ export default function InventoryPage({
   return (
     <div className="min-h-screen pb-32 bg-neutral-950 text-white">
       {/* ================= HEADER ================= */}
-      <div className="sticky top-0 z-40 backdrop-blur-2xl border-b border-white/10 bg-white/[0.03]">
+      <div className="sticky top-0 z-40 backdrop-blur-2xl border-b border-white/10 bg-white/3]">
         <div className="px-4 pt-4 pb-3 space-y-4">
           {/* Title row */}
           <div className="flex items-center justify-between">
@@ -489,10 +467,6 @@ export default function InventoryPage({
                   )}
                 </button>
               )}
-
-              <GlassButton variant="secondary" onClick={() => router.replace("/projection")}>
-                Projections
-              </GlassButton>
             </div>
           </div>
 
@@ -514,7 +488,7 @@ export default function InventoryPage({
                   "flex items-center gap-1.5 px-4 py-2 rounded-full text-sm transition-all whitespace-nowrap border",
                   activeCategory === cat
                     ? "bg-teal-500/20 text-teal-300 border-teal-500/40 shadow-[0_0_20px_rgba(20,184,166,0.15)]"
-                    : "bg-white/[0.04] text-gray-400 border-white/10 hover:bg-white/[0.08] hover:text-gray-200"
+                    : "bg-white/4 text-gray-400 border-white/10 hover:bg-white/8 hover:text-gray-200"
                 )}
               >
                 <Package className="w-3.5 h-3.5" />
@@ -675,7 +649,7 @@ export default function InventoryPage({
 
                 <div className="flex items-center justify-between mt-3.5">
                   {/* Quantity controls */}
-                  <div className="flex items-center rounded-xl border border-white/10 overflow-hidden bg-white/[0.03]">
+                  <div className="flex items-center rounded-xl border border-white/10 overflow-hidden bg-white/3">
                     <button
                       type="button"
                       onClick={() =>
@@ -721,7 +695,7 @@ export default function InventoryPage({
       {context === "admin" && (
         <GlassButton
           onClick={openCreate}
-          className="fixed right-4 bottom-[90px] !p-0 w-14 h-14 rounded-2xl shadow-lg shadow-teal-500/20"
+          className="fixed right-4 bottom-22.5 p-0! w-14 h-14 rounded-2xl shadow-lg shadow-teal-500/20"
           icon={<Plus className="w-6 h-6" />}
         />
       )}

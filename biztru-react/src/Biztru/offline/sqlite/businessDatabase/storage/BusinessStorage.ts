@@ -8,19 +8,39 @@ import { BusinessStatementsDefinitions } from "../statements/BusinessStatementsD
 
 export class BusinessStorage
 implements Lifecycle {
+    readonly migrationRunner: BusinessMigrationRunner
+
+    readonly statements: BusinessStatementRegistry;
+
+    readonly runtime: BusinessRuntime;
+
+    readonly statementManager: BusinessPreparedStatementManager;
+
+    readonly repositories: BusinessRepositoryRegistry
+
 
     constructor(
-        readonly runtime: BusinessRuntime,
+        runtime: BusinessRuntime,
 
-        readonly migrationRunner: BusinessMigrationRunner,
+        migrationRunner: BusinessMigrationRunner,
 
-        readonly statements: BusinessStatementRegistry,
+        statements: BusinessStatementRegistry,
 
-        readonly statementManager: BusinessPreparedStatementManager,
+        statementManager: BusinessPreparedStatementManager,
 
-        readonly repositories: BusinessRepositoryRegistry,
+        repositories: BusinessRepositoryRegistry,
 
-    ){}
+    ){
+        this.runtime = runtime;
+
+        this.migrationRunner = migrationRunner;
+
+        this.statements = statements;
+        
+        this.statementManager = statementManager;
+
+        this.repositories = repositories
+    }
 
     async initialize(): Promise<void> {
         await this.runtime.initialize();

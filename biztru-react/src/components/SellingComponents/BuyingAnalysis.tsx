@@ -3,12 +3,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
   AlertTriangle,
-  ArrowDown,
   ArrowUp,
   BarChart3,
-  CheckCircle2,
   Package,
-  Percent,
   RefreshCw,
   ShoppingCart,
   Target,
@@ -196,6 +193,10 @@ export default function BuyingAnalysisPage() {
     branchId,
   } = useBusinessContext();
 
+  if(!branchId){
+    throw new Error("BusinessId does not exists in BuyingAnalysis")
+  }
+
   const [range, setRange] = useState<RangeKey>("30d");
 
   const [rows, setRows] = useState<BuyingAnalysisRow[]>([]);
@@ -312,6 +313,9 @@ if (range === "all") {
           previousDays: days
          }
         );
+      if(!result){
+        throw new Error("result in BuyingAnalysis")
+      }
 
       setRows(result);
     } catch (err) {
@@ -461,7 +465,7 @@ if (range === "all") {
                   "whitespace-nowrap rounded-full border px-3.5 py-1.5 text-xs transition",
                   range === item.key
                     ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-300"
-                    : "border-white/10 bg-white/[0.04] text-gray-400 hover:bg-white/[0.07]"
+                    : "border-white/10 bg-white/4 text-gray-400 hover:bg-white/[0.07]"
                 )}
               >
                 {item.label}
@@ -873,7 +877,7 @@ function BuyingProductCard({
 
         {/* REASON */}
 
-        <div className="mt-4 rounded-xl border border-white/5 bg-white/[0.025] p-3">
+        <div className="mt-4 rounded-xl border border-white/5 bg-white/2.5 p-3">
           <p className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-gray-600">
             Why this product?
           </p>

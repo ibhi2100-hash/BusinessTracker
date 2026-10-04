@@ -2,9 +2,12 @@ import type { BusinessClock } from "../logicClockContract"
 import { LogicClockRepository } from "../../offline/sqlite/businessDatabase/repositories/LogicClockRepository/LogicClockRepository"
 export class SQLiteBusinessClock 
 implements BusinessClock {
+    private readonly repository: LogicClockRepository
     constructor(
-        private readonly repository: LogicClockRepository
-    ){}
+        repository: LogicClockRepository
+    ){
+        this.repository = repository
+    }
 
     async next(): Promise<number> {
         return await this.repository.next();

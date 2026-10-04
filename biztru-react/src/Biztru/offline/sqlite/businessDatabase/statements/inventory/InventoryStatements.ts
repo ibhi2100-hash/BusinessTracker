@@ -1,11 +1,13 @@
 import type { PreparedStatementManager } from "../../../PreparedStatement/PreparedStatementManager";
 import { inventoryKeys } from "./inventoryStatementKeys";
 
-export class InventoryStatements {
-
+export class InventoryStatements {  
+    private readonly manager: PreparedStatementManager
     constructor(
-        private readonly manager: PreparedStatementManager
-    ) {}
+        manager: PreparedStatementManager
+    ) {
+        this.manager = manager
+    }
 
     get upsert() {
         return this.manager.get(

@@ -3,10 +3,12 @@ import { SQLiteEventRepository } from "../../offline/sqlite/businessDatabase/rep
 
 
 export class EventStore{
-    
+    private readonly eventRepository: SQLiteEventRepository;
     constructor(
-       private readonly eventRepository: SQLiteEventRepository
-    ){}
+       eventRepository: SQLiteEventRepository
+    ){
+        this.eventRepository = eventRepository
+    }
     
     async append(events: readonly DomainEvent[]): Promise<void> {
 

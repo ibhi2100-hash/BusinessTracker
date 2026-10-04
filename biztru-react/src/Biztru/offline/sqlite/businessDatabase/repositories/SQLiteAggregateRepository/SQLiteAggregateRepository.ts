@@ -8,9 +8,12 @@ interface AggregateVersion {
     version: number
 }
 export class SQLiteAggregateRepository {
+    private readonly statements: AggregateStatements
     constructor(
-        private readonly statements: AggregateStatements
-    ){}
+        statements: AggregateStatements
+    ){
+        this.statements = statements
+    }
 
     async insertAggregates(aggregateData: AggregateRecord){
         await this.statements.insert.execute(AggregateMapper.toRow(aggregateData))
@@ -141,6 +144,9 @@ export class SQLiteAggregateRepository {
         /*
          * First event for this aggregate.
          */
+        if(!existing){
+            throw new Error("AggregateVersion Does not Exist")
+        }
         if (
             existing.localVersion === 0 &&
             expectedVersion === 0

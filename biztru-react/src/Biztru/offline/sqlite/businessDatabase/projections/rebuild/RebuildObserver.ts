@@ -1,9 +1,10 @@
 
-import type{ EventConsumer, RebuildObserver } from "@business/event-bus";
+import type{ EventConsumer} from "@business/event-bus";
 import type{ DomainEvent } from "@business/shared-types";
+import { useRebuilderStore } from "../../../../../store/ProjectionRebuilderStore";
 
 export class ProjectionRebuildObserver
-implements RebuildObserver<DomainEvent>  {
+ {
     onStarted(): void {
         const store = 
             useRebuilderStore.getState();
@@ -28,18 +29,12 @@ implements RebuildObserver<DomainEvent>  {
       status: "PROCESSING",
     });
   }
-  onEventsLoaded(events: readonly DomainEvent<unknown>[]): void {
-      
-  }
-  onEventCompleted(event: DomainEvent<unknown>): void {
-      
-  }
 
   onResetStarted(): void {
       useRebuilderStore.getState().setStatus("RESETTING")
   }
   onResetCompleted(): void {
-      useRebuilderStore.getState().setStatus("REPLAYING");
+      useRebuilderStore.getState().setStatus("COMPLETED");
   }
 
   onConsumerStarted(
@@ -111,9 +106,6 @@ implements RebuildObserver<DomainEvent>  {
         ? error.message
         : String(error)
     );
-  }
-  onProjectionUpdated(projection: string, rows: number, position: number): void {
-      
   }
   onCommitStarted(): void {
       

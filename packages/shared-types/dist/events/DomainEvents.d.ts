@@ -1,4 +1,4 @@
-export interface DomainEvent<TPayload = unknown> {
+export interface DomainEvent<T = unknown> {
     readonly id: string;
     readonly businessId: string;
     readonly branchId: string | null;
@@ -7,7 +7,7 @@ export interface DomainEvent<TPayload = unknown> {
     readonly expectedAggregateVersion: number;
     readonly type: string;
     readonly mode: "OPENING" | "LIVE";
-    readonly payload: TPayload;
+    readonly payload: T;
     readonly actor: ActorContext;
     readonly causationId: string;
     readonly correlationId: string;

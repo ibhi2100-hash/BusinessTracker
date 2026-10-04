@@ -9,10 +9,12 @@ import { apiFetch } from "../../../../../lib/api";
 
 export class HttpSyncTransport
     implements SyncTransport {
-
+    private readonly baseUrl: string
     constructor(
-        private readonly baseUrl: string
-    ) {}
+        baseUrl: string
+    ) {
+        this.baseUrl = baseUrl
+    }
 
     async push(
         events: BackendEventPayload[]

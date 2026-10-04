@@ -1,8 +1,10 @@
 export class SQLiteStatement {
-
+    private readonly stmt: any
     constructor(
-        private readonly stmt: any
-    ) {}
+        stmt: any
+    ) {
+        this.stmt = stmt
+    }
 
     async run(...params: unknown[]) {
 

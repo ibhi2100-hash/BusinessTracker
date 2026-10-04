@@ -77,7 +77,10 @@ export interface ExpenseFilters {
 }
 
 export class ExpenseApi {
-  constructor(private readonly manager: BusinessManager) {}
+  private readonly manager: BusinessManager;
+  constructor(manager: BusinessManager) {
+    this.manager = manager;
+  }
 
   /* ========== WRITE ========== */
 
@@ -108,7 +111,13 @@ export class ExpenseApi {
       },
     };
 
-    const command = await app.domain.commandFactory.create(intent);
+    const command = await app?.domain.commandFactory.create(intent);
+     if(!app){
+            throw new Error("Business Does not exist")
+        }
+        if(!command){
+            throw new Error("Business Does not exist")
+        }
     await app.domain.kernel.execute(command);
 
     return { expenseId };
@@ -162,7 +171,13 @@ export class ExpenseApi {
       },
     };
 
-    const command = await app.domain.commandFactory.create(intent);
+    const command = await app?.domain.commandFactory.create(intent);
+     if(!app){
+            throw new Error("Business Does not exist")
+        }
+        if(!command){
+            throw new Error("Business Does not exist")
+        }
     await app.domain.kernel.execute(command);
   }
 
@@ -192,7 +207,13 @@ export class ExpenseApi {
       },
     };
 
-    const command = await app.domain.commandFactory.create(intent);
+    const command = await app?.domain.commandFactory.create(intent);
+     if(!app){
+            throw new Error("Business Does not exist")
+        }
+        if(!command){
+            throw new Error("Business Does not exist")
+        }
     await app.domain.kernel.execute(command);
 
     return { reimbursementId };
@@ -202,11 +223,17 @@ export class ExpenseApi {
 
   async getExpense(expenseId: string): Promise<Expense | null> {
     const app = await this.manager.current();
+     if(!app){
+            throw new Error("Business Does not exist")
+        }
     return app.storage.repositories.expenses.findById(expenseId);
   }
 
   async listExpenses(filters: ExpenseFilters): Promise<Expense[]> {
     const app = await this.manager.current();
+     if(!app){
+            throw new Error("Business Does not exist")
+        }
     return app.storage.repositories.expenses.list({
       businessId: filters.businessId,
       branchId: filters.branchId,
@@ -221,6 +248,9 @@ export class ExpenseApi {
 
   async getExpenseGroup(expenseGroupId: string): Promise<Expense[]> {
     const app = await this.manager.current();
+     if(!app){
+            throw new Error("Business Does not exist")
+        }
     return app.storage.repositories.expenses.findByGroup(expenseGroupId);
   }
 
@@ -230,6 +260,9 @@ export class ExpenseApi {
     branchId?: string | null;
   }): Promise<ExpenseSummaryRow> {
     const app = await this.manager.current();
+     if(!app){
+            throw new Error("Business Does not exist")
+        }
     return app.storage.repositories.expenses.summary(filters);
   }
 
@@ -240,11 +273,13 @@ export class ExpenseApi {
     branchId?: string | null;
   }): Promise<ExpenseCategorySummaryRow[]> {
     const app = await this.manager.current();
+     if(!app){
+            throw new Error("Business Does not exist")
+        }
     return app.storage.repositories.expenses.summaryByCategory(filters);
   }
 
   async getTodayExpenseSummary(
-    businessId: string,
     branchId?: string
   ): Promise<ExpenseSummaryRow> {
     const start = new Date();

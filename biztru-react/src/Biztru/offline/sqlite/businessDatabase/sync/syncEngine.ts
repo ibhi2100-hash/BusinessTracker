@@ -26,17 +26,28 @@ export class SyncEngine {
   private readonly pushBatchSize: number;
   private readonly pullBatchSize: number;
 
+
+  private readonly outbox: SQLiteOutboxRepository;
+  private readonly transport: SyncTransport;
+  private readonly syncState: SQLiteSyncStateRepository;
+  private readonly eventStore: SQLiteEventRepository;
+
   constructor(
-    private readonly outbox: SQLiteOutboxRepository,
-    private readonly transport: SyncTransport,
-    private readonly syncState: SQLiteSyncStateRepository,
-    private readonly eventStore: SQLiteEventRepository,
+    outbox: SQLiteOutboxRepository,
+    transport: SyncTransport,
+    syncState: SQLiteSyncStateRepository,
+    eventStore: SQLiteEventRepository,
     options: SyncEngineOptions = {}
   ) {
     this.lockDurationMs = options.lockDurationMs ?? 30_000;
     this.baseBackoffMs = options.baseBackoffMs ?? 1_000;
     this.pushBatchSize = options.pushBatchSize ?? 50;
     this.pullBatchSize = options.pullBatchSize ?? 100;
+
+    this.outbox = outbox;
+    this.transport = transport;
+    this.syncState = syncState;
+    this.eventStore = eventStore;
   }
 
   async sync(): Promise<SyncResult> {
@@ -157,7 +168,7 @@ export class SyncEngine {
     }
 
     if (pullResult.events.length > 0) {
-      await this.eventStore.applyRemoteEvents(pullResult.events);
+      await this.eventStore.applyRemoteEvents();
     }
 
     if (pullResult.cursor > cursor) {

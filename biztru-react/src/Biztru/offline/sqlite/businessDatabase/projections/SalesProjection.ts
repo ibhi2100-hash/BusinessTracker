@@ -21,10 +21,12 @@ export class SalesConsumer
    * mutate an existing sale.
    */
   private readonly states = new Map<string, any>();
-
+  private readonly repository: SQLiteSalesRepository
   constructor(
-    private readonly repository: SQLiteSalesRepository
-  ) {}
+    repository: SQLiteSalesRepository
+  ) {
+    this.repository = repository
+  }
 
   async handle(
     events: readonly DomainEvent<SalesEventPayload>[]
@@ -90,7 +92,7 @@ export class SalesConsumer
   }
 
   buildOperations(
-    events: readonly DomainEvent[]
+    events: readonly DomainEvent<SalesEventPayload>             []
   ): SQLiteStatementOperation[] {
     const operations: SQLiteStatementOperation[] = [];
 

@@ -1,4 +1,5 @@
 import { Mode } from "../enums/Mode.js";
+export type EventPayload = Readonly<Record<string, unknown>>;
 export interface BackendEvent {
     id: string;
     businessId: string;

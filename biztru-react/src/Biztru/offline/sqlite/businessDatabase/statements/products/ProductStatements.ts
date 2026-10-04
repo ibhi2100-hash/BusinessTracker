@@ -2,10 +2,13 @@ import type{ PreparedStatementManager } from "../../../PreparedStatement/Prepare
 import { productKeys } from "./productStatementKeys";
 
 export class ProductStatements {
+    private readonly manager: PreparedStatementManager;
 
     constructor(
-        private readonly manager: PreparedStatementManager
-    ) {}
+        manager: PreparedStatementManager
+    ) {
+        this.manager = manager
+    }
 
     get upsert() {
         return this.manager.get(

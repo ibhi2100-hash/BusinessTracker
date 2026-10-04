@@ -12,7 +12,7 @@ import { useLiveDashboard } from "../../hooks/useLiveDashboard";
 import { useBusinessContext } from "../../Biztru/context/BusinessContext"; 
 
 export function FinancialCarousel() {
-   const { businessId, branchId, setBranchId, loading: ctxLoading } = useBusinessContext()
+   const { branchId} = useBusinessContext()
   const  { data } =  useLiveDashboard(branchId)
   const summary = data
 
@@ -33,11 +33,11 @@ export function FinancialCarousel() {
           <div
             key={i}
             className="
-            min-w-[260px]
-            h-[120px]
+            min-w-65
+            h-30
             rounded-3xl
             animate-pulse
-            bg-white/[0.04]
+            bg-white/4
             border
             border-white/10
           "
@@ -119,7 +119,7 @@ export function FinancialCarousel() {
         <div
           key={metric.id}
           className="
-          min-w-[280px]
+          min-w-70
           snap-start
         "
         >

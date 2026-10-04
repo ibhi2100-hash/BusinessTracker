@@ -7,9 +7,12 @@ import type{ BranchCreationRequest, BranchPayload } from "../branch/branchReques
 
 
 export class OnboardingApi {
+    private readonly manager: BusinessManager;
     constructor(
-        private readonly manager: BusinessManager
-    ){}
+        manager: BusinessManager
+    ) {
+        this.manager = manager;
+    }
     async createBusiness(
         request: CreateBusinessRequest
     ){
@@ -43,15 +46,20 @@ export class OnboardingApi {
             payload: {
                 id: request.id,
                 name: request.name,
-                address: request.address ??  null,
-                phone: request.phone ?? null
+                address: request.address ??  undefined,
+                phone: request.phone ?? undefined
             },
             mode: "OPENING"   
         }
         const app = await this.manager.current();
 
-        const command = await app.domain.commandFactory.create(branchIntent);
-
+        const command = await app?.domain.commandFactory.create(branchIntent);
+         if(!app){
+            throw new Error("Business Does not exist")
+        }
+        if(!command){
+            throw new Error("Business Does not exist")
+        }
         await app.domain.kernel.execute(command)
     }
 
@@ -66,8 +74,13 @@ export class OnboardingApi {
         
         const app = await this.manager.current();
 
-        const command = await app.domain.commandFactory.create(intent);
-
+        const command = await app?.domain.commandFactory.create(intent);
+         if(!app){
+            throw new Error("Business Does not exist")
+        }
+        if(!command){
+            throw new Error("Business Does not exist")
+        }
         await app.domain.kernel.execute(command)  
 
     }

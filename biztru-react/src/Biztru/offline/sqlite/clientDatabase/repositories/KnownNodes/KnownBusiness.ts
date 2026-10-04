@@ -1,4 +1,4 @@
-interface KnownBusiness {
+export interface KnownBusiness {
 
     id: string;
 

@@ -5,7 +5,7 @@ import {
 import {
     ProjectionEventBus,
 } from "@business/event-bus";
-import type{ RebuildObserver } from "@business/event-bus";
+
 
 import type{
     ProjectionResetter,
@@ -17,22 +17,35 @@ import type {
     ProjectionRebuildOptions,
     ProjectionRebuildResult,
 } from "./types";
-
-import type {
-    DomainEvent,
-} from "@business/shared-types";
-
 import type { SQLiteStatementOperation } from "../../../../../storage/statement/worker/WorkerProtocol";
+import type { ProjectionRebuildObserver } from "./RebuildObserver";
 
 export class ProjectionRebuilder {
 
+    private readonly transaction: TransactionManager;
+    private readonly eventStore: SQLiteEventRepository;
+    private readonly projectionBus: ProjectionEventBus;
+    private readonly projectionResetter: ProjectionResetter;
+    private readonly observer: ProjectionRebuildObserver;
+
     constructor(
-        private readonly transaction: TransactionManager,
-        private readonly eventStore: SQLiteEventRepository,
-        private readonly projectionBus: ProjectionEventBus,
-        private readonly projectionResetter: ProjectionResetter,
-        private readonly observer: RebuildObserver<DomainEvent>
-    ) {}
+        transaction: TransactionManager,
+        eventStore: SQLiteEventRepository,
+        projectionBus: ProjectionEventBus,
+        projectionResetter: ProjectionResetter,
+        observer: ProjectionRebuildObserver
+    ) {
+
+        this.transaction = transaction;
+
+        this.eventStore = eventStore;
+
+        this.projectionBus = projectionBus;
+
+        this.projectionResetter = projectionResetter;
+
+        this.observer = observer
+    }
 
     async rebuild(
         options: ProjectionRebuildOptions = {}
@@ -122,10 +135,6 @@ export class ProjectionRebuilder {
                     of this.projectionBus.getConsumers()
                 ) {
 
-                    const consumerStarted =
-                        Date.now();
-
-
                     // -------------------------------------------------
                     // Build operations for the entire batch
                     // -------------------------------------------------
@@ -141,11 +150,6 @@ export class ProjectionRebuilder {
                     operations.push(
                         ...consumerOperations
                     );
-
-
-                    const duration =
-                        Date.now() -
-                        consumerStarted;
 
 
                     // -------------------------------------------------
@@ -164,8 +168,7 @@ export class ProjectionRebuilder {
 
                         await this.observer.onConsumerCompleted?.(
                             consumer,
-                            event,
-                            duration
+                            event
                         );
                     }
                 }
@@ -181,10 +184,6 @@ export class ProjectionRebuilder {
 
                     lastLogicClock =
                         event.logicClock;
-
-                    await this.observer.onEventCompleted?.(
-                        event
-                    );
                 }
 
 

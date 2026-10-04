@@ -47,8 +47,7 @@ export class ClientBootstrapper {
                 );
 
             await this.migrate(
-                infrastructure.queryRunner,
-                infrastructure.transactionManager
+                infrastructure.queryRunner
             );
 
             await runtime.registerStatements(
@@ -94,7 +93,6 @@ export class ClientBootstrapper {
             const context =
                 this.createContext(
                     runtime,
-                    clientDatabase,
                     infrastructure.queryRunner,
                     infrastructure.transactionManager,
                     repositories,
@@ -130,7 +128,6 @@ export class ClientBootstrapper {
 
     private createContext(
         runtime: SQLiteRuntime,
-        database: DatabaseId,
         queryRunner: QueryRunner,
         transactionManager: TransactionManager,
         repositoryRegistry: ClientRepositoryRegistry,
@@ -142,7 +139,6 @@ export class ClientBootstrapper {
 
         return new ApplicationContext(
             runtime,
-            database,
             queryRunner,
             transactionManager,
             repositoryRegistry,
@@ -210,7 +206,6 @@ export class ClientBootstrapper {
 
     private async migrate(
         queryRunner: QueryRunner,
-        transactionManager: TransactionManager
     ) {
 
         const runner =
@@ -267,7 +262,8 @@ export class ClientBootstrapper {
             new RegistrationService(
                 repositories.users,
                 repositories.session,
-                repositories.applicationState
+                repositories.applicationState,
+                repositories.currentSession
             );
 
 

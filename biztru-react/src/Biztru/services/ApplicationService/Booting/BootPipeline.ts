@@ -10,10 +10,12 @@ import type{
 import { BootStage } from "./BootStage";
 
 export class BootPipeline {
-
+    private readonly tasks: readonly BootTask[]
     constructor(
-        private readonly tasks: readonly BootTask[]
-    ) {}
+        tasks: readonly BootTask[]
+    ) {
+        this.tasks = tasks
+    }
 
     async execute(
         context: BootContext,

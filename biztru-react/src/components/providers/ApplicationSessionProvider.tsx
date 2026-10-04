@@ -1,11 +1,5 @@
 
-import type React from "react";
-
-import {
-    ApplicationSessionContext,
-    type ApplicationSessionState,
-} from "../../Biztru/context/AppContext";
-
+import { ApplicationSessionContext, type ApplicationSessionState } from "../../Biztru/context/AplicationSessionContext";
 interface ApplicationSessionProviderProps {
     children: React.ReactNode;
 

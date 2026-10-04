@@ -7,9 +7,12 @@ import type{ LiveProduct } from "../../../../offline/sqlite/businessDatabase/rep
 
 
 export class ProductApi {
+    private readonly manager: BusinessManager;
     constructor(
-        private readonly manager: BusinessManager
-    ){}
+        manager: BusinessManager
+    ) {
+        this.manager = manager;
+    }
     async create(
         request: ProductRequest
     ){
@@ -30,21 +33,22 @@ export class ProductApi {
        }
 
        const app = await this.manager.current()
-       const command = await app.domain.commandFactory.create(productIntent);
-
+       const command = await app?.domain.commandFactory.create(productIntent);
+        if(!app){
+            throw new Error("Business Does not exist")
+        }
+        if(!command){
+            throw new Error("Business Does not exist")
+        }
        await app.domain.kernel.execute(command)
-    }
-
-    async update(businessId: string, request: ProductRequest) {
-        // Implementation for creating a branch
-    }
-
-    async delete(productId){
-
     }
 
     async getProducts(branchId: string): Promise<LiveProduct[]>{
         const app = await this.manager.current();
+
+         if(!app){
+            throw new Error("Business Does not exist")
+        }
         return await app.storage.repositories.products.products(branchId)
     }
 }

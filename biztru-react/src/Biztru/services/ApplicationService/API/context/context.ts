@@ -1,9 +1,12 @@
 import { SQLiteApplicationStateRepository } from "../../../../offline/sqlite/clientDatabase/repositories/ApplicationStateRepository.ts/SQLiteApplicationStateRepository";  
 
 export class ContextApi {
+    private readonly applicationState: SQLiteApplicationStateRepository;
     constructor(
-        private readonly applicationState: SQLiteApplicationStateRepository
-    ) {}
+        applicationState: SQLiteApplicationStateRepository
+    ) {
+        this.applicationState = applicationState;
+    }
 
     async current() {
 

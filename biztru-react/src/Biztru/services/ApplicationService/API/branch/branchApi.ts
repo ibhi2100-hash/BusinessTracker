@@ -6,11 +6,14 @@ import type{ BranchPayload } from "./branchRequest";
 
 
 export class BranchApi {
+    private readonly manager: BusinessManager;
     constructor(
-        private readonly manager: BusinessManager
-    ){}
+        manager: BusinessManager
+    ) {
+        this.manager = manager;
+    }
     async switchBranch(
-        request
+        request: any
     ){
         
 
@@ -29,13 +32,18 @@ export class BranchApi {
 
         const app = await this.manager.current()
 
-        const command = await app.domain.commandFactory.create(intent);
-
+        const command = await app?.domain.commandFactory.create(intent);
+        if(!app){
+            throw new Error("Business Does not exist")
+        }
+        if(!command){
+            throw new Error("Business Does not exist")
+        }
         await app.domain.kernel.execute(command)  
 
     }
 
-    async createBranch(request) {
+    async createBranch(request: any) {
         const branchIntent: CommandIntent<BranchPayload> = {
             type: request.type,
             aggregateId: request.aggregateId,
@@ -50,8 +58,13 @@ export class BranchApi {
         }
         const app = await this.manager.current();
 
-        const command = await app.domain.commandFactory.create(branchIntent);
-
+        const command = await app?.domain.commandFactory.create(branchIntent);
+         if(!app){
+            throw new Error("Business Does not exist")
+        }
+        if(!command){
+            throw new Error("Business Does not exist")
+        }
         await app.domain.kernel.execute(command)
     }
 }

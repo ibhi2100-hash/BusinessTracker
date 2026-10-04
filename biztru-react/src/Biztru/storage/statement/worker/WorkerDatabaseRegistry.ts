@@ -151,28 +151,41 @@ export class WorkerDatabaseRegistry {
     this.initialized = true;
 }
 
-    async open(
-        database: DatabaseId,
-        filename: string,
-        vfs = "opfs",
-        debug = false
-    ): Promise<WorkerDatabaseContext> {
+  async open(
+    database: DatabaseId,
+    filename: string,
+    vfs = "opfs",
+    debug = false
+): Promise<WorkerDatabaseContext> {
 
-        await this.initializeSQLite();
+    await this.initializeSQLite();
 
-        const key =
-            databaseIdToKey(database);
+    const key = databaseIdToKey(database);
 
-        /**
-         * One database connection per database identity
-         * inside THIS worker.
-         */
-        const existing =
-            this.databases.get(key);
-
-        if (existing) {
-            return existing;
+    console.log(
+        "[SQLite Registry] OPEN REQUEST",
+        {
+            database,
+            key,
+            filename,
+            existing: this.databases.has(key),
+            registrySize: this.databases.size,
         }
+    );
+
+    const existing = this.databases.get(key);
+
+    if (existing) {
+        console.log(
+            "[SQLite Registry] ALREADY OPEN",
+            {
+                database,
+                key,
+            }
+        );
+
+        return existing;
+    }
 
         if (!this.sqlite3) {
 
@@ -322,33 +335,73 @@ export class WorkerDatabaseRegistry {
     }
 
     close(
-        database: DatabaseId
-    ): void {
+    database: DatabaseId
+): void {
 
-        const key =
-            databaseIdToKey(database);
+    const key =
+        databaseIdToKey(database);
 
-        const context =
-            this.databases.get(key);
-
-        if (!context) {
-            return;
+    console.warn(
+        "[SQLite Registry] CLOSE REQUEST",
+        {
+            database,
+            key,
+            exists:
+                this.databases.has(key),
+            databases: [
+                ...this.databases.keys(),
+            ],
+            stack:
+                new Error(
+                    "SQLite close requested"
+                ).stack,
         }
+    );
+
+    const context =
+        this.databases.get(key);
+
+    if (!context) {
+
+        console.warn(
+            "[SQLite Registry] CLOSE REQUEST FOR ALREADY CLOSED DATABASE",
+            {
+                database,
+                key,
+            }
+        );
+
+        return;
+    }
+
+    try {
+
+        context.statements.clear();
+
+    } finally {
 
         try {
 
-            context.statements.clear();
+            context.db.close();
 
         } finally {
 
-            try {
-                context.db.close();
-            } finally {
-                this.databases.delete(key);
-            }
+            this.databases.delete(key);
+
+            console.warn(
+                "[SQLite Registry] DATABASE CLOSED",
+                {
+                    database,
+                    key,
+                    remaining:
+                        [
+                            ...this.databases.keys(),
+                        ],
+                }
+            );
         }
     }
-
+}
     closeAll(): void {
 
         for (const context of this.databases.values()) {

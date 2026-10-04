@@ -5,7 +5,10 @@ import { DashboardStatements } from "../../statements/dashboard/dashboardStateme
 
 
 export class SQLiteDashboardRepository implements DashboardRepository {
-  constructor(private readonly statements: DashboardStatements) {}
+  private readonly statements: DashboardStatements
+  constructor( statements: DashboardStatements) {
+    this.statements = statements
+  }
 
   async getSummary(
     branchId: string,

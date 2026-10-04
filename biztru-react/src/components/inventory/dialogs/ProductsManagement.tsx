@@ -1,5 +1,4 @@
 import { 
-    Package,
     Pencil,
     ArrowDownToLine,
     ArrowLeftRight,
@@ -12,20 +11,14 @@ import { GlassSheet } from "../../ui/GlassSheet";
 import { GlassButton } from "../../ui/GlassButton";
 import { DataCard } from "../../ui/DataCard";
 import { StockBadge } from "../../ui/StockBadge";
+import type { LiveProduct } from "../../../Biztru/offline/sqlite/businessDatabase/repositories/SQLiteProjectionRepository/SQLiteProductRepository";
 
 
 interface ProductDetailsSheetProps {
     open: boolean;
     onclose: () => void;
 
-    product: {
-        id: string;
-        name: string;
-        quantity: number;
-        price: number;
-        costPrice: number;
-        category?: string;
-    } | null;
+    product: LiveProduct | null;
 
     onEditDetails?: () => void;
     onReceiveStock?: () => void;

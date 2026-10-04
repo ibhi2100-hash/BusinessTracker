@@ -3,20 +3,35 @@ import type{ CommandFactory } from "../../../../BizTru_Karnel/CommandFactory/fac
 import { EventStore } from "../../../../BizTru_Karnel/EventStore/EventStore"; 
 import type{ Lifecycle } from "../../lifecycle/LifeCycle";
 import { ExecutionContextProvider } from "../../../../BizTru_Karnel/CommandFactory/ExecutionContext/ExecutionContext"; 
-import { ProjectionEventBus } from "@business/event-bus";
 
 export class BusinessDomain
 implements Lifecycle {
-    readonly buses: ProjectionEventBus;
+
+    readonly executionContext: ExecutionContextProvider;
+
+    readonly commandFactory: CommandFactory;
+
+    readonly kernel: Kernel;
+
+    readonly eventStore: EventStore
     constructor(
-        readonly executionContext: ExecutionContextProvider,
+        executionContext: ExecutionContextProvider,
 
-        readonly commandFactory: CommandFactory,
+        commandFactory: CommandFactory,
 
-        readonly kernel: Kernel,
+        kernel: Kernel,
 
-        readonly eventStore: EventStore,
+        eventStore: EventStore,
     ){
+        this.executionContext = executionContext;
+
+        this.commandFactory = commandFactory;
+
+        this.kernel = kernel;
+
+        this.eventStore = eventStore
+
+
     }
 
     async initialize(): Promise<void> {

@@ -36,10 +36,12 @@ interface SyncActivityRow {
 }
 
 export class SQLiteSyncActivityRepository {
-
+    private readonly statements: SyncActivityStatements;
     constructor(
-        private readonly statements: SyncActivityStatements
-    ) {}
+        statements: SyncActivityStatements
+    ) {
+        this.statements = statements
+    }
 
     // =========================================================
     // TRANSACTIONAL WRITE

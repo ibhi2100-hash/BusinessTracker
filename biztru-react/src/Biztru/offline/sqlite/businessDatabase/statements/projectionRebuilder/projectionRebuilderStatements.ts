@@ -1,15 +1,13 @@
-import type { PreparedStatement } from "../../../PreparedStatement/PreparedStatementContract";
 import type{ PreparedStatementManager } from "../../../PreparedStatement/PreparedStatementManager";
-
-import {
-    ProjectionResetStatementKeys,
-} from "./projectionRebuilderKeys";
 
 
 export class  projectionResetStatements {
+    readonly manager: PreparedStatementManager
      constructor(
-        private readonly manager: PreparedStatementManager
-      ) {}
+        manager: PreparedStatementManager
+      ) {
+        this.manager = manager
+      }
 
       
     

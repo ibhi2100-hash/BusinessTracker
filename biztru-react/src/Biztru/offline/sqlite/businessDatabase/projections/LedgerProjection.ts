@@ -9,10 +9,13 @@ export class LedgerConsumer
   implements ProjectionConsumer<DomainEvent>
 {
   readonly name = "ledger projection";
+  private readonly repository: SQLiteLedgerRepository;
 
   constructor(
-    private readonly repository: SQLiteLedgerRepository
-  ) {}
+    repository: SQLiteLedgerRepository
+  ) {
+    this.repository = repository
+  }
 
   async handle(
     events: readonly DomainEvent[]

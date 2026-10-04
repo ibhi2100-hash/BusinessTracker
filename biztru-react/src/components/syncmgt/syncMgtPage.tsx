@@ -3,7 +3,6 @@
 import {
   CheckCircle2,
   Cloud,
-  CloudOff,
   Database,
   History,
   RefreshCw,
@@ -18,14 +17,13 @@ import {
   WifiOff,
 } from "lucide-react";
 
-import { GlassCard } from "@/components/ui/GlassCard";
-import { GlassButton } from "@/components/ui/GlassButton";
-import { GlassIcon } from "@/components/ui/GlassIcon";
-import { StatCard } from "@/components/ui/StatCard";
-import { DataCard } from "@/components/ui/DataCard";
-import { GlassSheet } from "@/components/ui/GlassSheet";
-import { useApplication } from "@/src/services/ApplicationService/ApplicationContext";
-import {
+import { GlassCard } from "../ui/GlassCard"; 
+import { GlassButton } from "../ui/GlassButton"; 
+import { GlassIcon } from "../ui/GlassIcon";
+import { StatCard } from "../ui/StatCard"; 
+import { DataCard } from "../ui/DataCard";
+import { useApplication } from "../../Biztru/services/ApplicationService/ApplicationContext"; 
+import type{
   SyncResult,
   Conflict,
   SyncActivity,
@@ -33,7 +31,7 @@ import {
   SyncStatus,
 } from "@business/shared-types";
 
-import { useLiveSyncManagement } from "@/hooks/useLiveSyncManagement";
+import { useLiveSyncManagement } from "../../hooks/useLiveSyncManagement"; 
 import { useCallback, useEffect, useState } from "react";
 
 export interface SyncManagementState {
@@ -180,7 +178,7 @@ function ActivityItem({
         </div>
 
         <div className="mt-2">
-          <StatusBadge status={activity.status} />
+          <StatusBadge status={activity.status!} />
         </div>
 
         <p className="mt-2 text-xs text-gray-500">
@@ -267,9 +265,6 @@ export default function SyncManagementPage() {
 const app = useApplication();
   const {
     data: syncState,
-    loading,
-    error,
-    refresh,
 } = useLiveSyncManagement();
   const [online, setOnline] = useState(
     typeof navigator !== "undefined" ? navigator.onLine : true
@@ -293,15 +288,15 @@ const app = useApplication();
     }
   }, [app]);
 
- const statusContent = SyncStatusContent({ status: syncState.status });
+ const statusContent = SyncStatusContent({ status: syncState?.status! });
 
   const lastSyncLabel =
-    syncState.lastSyncAt != null
+    syncState?.lastSyncAt != null
       ? new Date(syncState.lastSyncAt).toLocaleString()
       : "Never";
 
   const durationLabel =
-    syncState.lastSyncDurationMs != null
+    syncState?.lastSyncDurationMs != null
       ? `${(syncState.lastSyncDurationMs / 1000).toFixed(1)}s`
       : "—";
 
@@ -345,11 +340,11 @@ const app = useApplication();
 
         <GlassButton
           variant="primary"
-          icon={<RefreshCw size={18} className={syncState.status === "SYNCING" ? "animate-spin" : ""} />}
+          icon={<RefreshCw size={18} className={syncState?.status === "SYNCING" ? "animate-spin" : ""} />}
           onClick={handleSync}
-          disabled={syncState.status === "SYNCING" || !online}
+          disabled={syncState?.status === "SYNCING" || !online}
         >
-          {syncState.status === "SYNCING" ? "Syncing…" : "Sync Now"}
+          {syncState?.status === "SYNCING" ? "Syncing…" : "Sync Now"}
         </GlassButton>
       </div>
 
@@ -369,13 +364,13 @@ const app = useApplication();
               <div className="flex items-center gap-2">
                 <span
                   className={`h-2 w-2 rounded-full ${
-                    syncState.status === "SYNCED"
+                    syncState?.status === "SYNCED"
                       ? "bg-emerald-400"
-                      : syncState.status === "SYNCING"
+                      : syncState?.status === "SYNCING"
                       ? "bg-blue-400 animate-pulse"
-                      : syncState.status === "PENDING"
+                      : syncState?.status === "PENDING"
                       ? "bg-amber-400"
-                      : syncState.status === "ERROR" || syncState.status 
+                      : syncState?.status === "ERROR" || syncState?.status 
                       ? "bg-red-400"
                       : "bg-amber-400"
                   }`}
@@ -389,7 +384,7 @@ const app = useApplication();
               </p>
               <p className="mt-2 text-xs text-gray-500">
                 Last sync: {lastSyncLabel}
-                {syncState.lastSyncDurationMs != null && ` · ${durationLabel}`}
+                {syncState?.lastSyncDurationMs != null && ` · ${durationLabel}`}
               </p>
             </div>
           </div>
@@ -397,7 +392,7 @@ const app = useApplication();
           <div className="flex flex-col sm:items-end gap-1">
             <span className="text-xs text-gray-500">Server position</span>
             <span className="text-lg font-semibold text-white">
-              {(syncState.lastPulledGlobalPosition ?? 0).toLocaleString()}
+              {(syncState?.lastPulledGlobalPosition ?? 0).toLocaleString()}
             </span>
           </div>
         </div>
@@ -416,11 +411,11 @@ const app = useApplication();
         </div>
 
        <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
-        <StatCard value={syncState.pendingEvents} label="Pending" icon={<Upload size={20} className="text-teal-400" />} />
-        <StatCard value={syncState.uploadedEvents} label="Uploaded" icon={<Cloud size={20} className="text-teal-400" />} />
-        <StatCard value={syncState.acceptedEvents} label="Accepted" icon={<CheckCircle2 size={20} className="text-emerald-400" />} />
-        <StatCard value={syncState.conflictEvents} label="Conflicts" icon={<AlertTriangle size={20} className="text-amber-400" />} />
-        <StatCard value={syncState.rejectedEvents} label="Rejected" icon={<XCircle size={20} className="text-red-400" />} />
+        <StatCard value={syncState?.pendingEvents!} label="Pending" icon={<Upload size={20} className="text-teal-400" />} />
+        <StatCard value={syncState?.uploadedEvents!} label="Uploaded" icon={<Cloud size={20} className="text-teal-400" />} />
+        <StatCard value={syncState?.acceptedEvents!} label="Accepted" icon={<CheckCircle2 size={20} className="text-emerald-400" />} />
+        <StatCard value={syncState?.conflictEvents!} label="Conflicts" icon={<AlertTriangle size={20} className="text-amber-400" />} />
+        <StatCard value={syncState?.rejectedEvents!} label="Rejected" icon={<XCircle size={20} className="text-red-400" />} />
       </div>
       </div>
 
@@ -471,7 +466,7 @@ const app = useApplication();
           </div>
 
 
-          {syncState.activities?.length === 0 ? (
+          {syncState?.activities?.length === 0 ? (
 
             <div className="py-10 text-center">
 
@@ -483,7 +478,7 @@ const app = useApplication();
 
         ) : (
 
-            syncState.activities.map(
+            syncState?.activities.map(
                 activity => (
                     <ActivityItem
                         key={activity.id}
@@ -533,7 +528,7 @@ const app = useApplication();
           </div>
 
 
-          {syncState.conflicts.length === 0 ? (
+          {syncState?.conflicts.length === 0 ? (
 
             <div className="py-10 text-center">
 
@@ -556,7 +551,7 @@ const app = useApplication();
 
             <div className="space-y-3">
 
-                {syncState.conflicts.map(
+                {syncState?.conflicts.map(
                     conflict => (
 
                         <DataCard
@@ -688,12 +683,12 @@ const app = useApplication();
                 {
                     label: "Cursor",
                     value:
-                        syncState.deviceCursor.toLocaleString(),
+                        syncState?.deviceCursor.toLocaleString()!,
                 },
                 {
                     label: "Pending",
                     value:
-                        syncState.pendingEvents,
+                        syncState?.pendingEvents!,
                 },
             ]}
             badge={
@@ -711,7 +706,7 @@ const app = useApplication();
                 {
                     label: "Position",
                     value:
-                        syncState.lastPulledGlobalPosition.toLocaleString(),
+                        syncState?.lastPulledGlobalPosition.toLocaleString()!,
                 },
             ]}
             badge={

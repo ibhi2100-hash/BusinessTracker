@@ -4,7 +4,9 @@ import type{ BusinessManagerContract } from "./BusinessManagerContract";
 import { ApplicationContext } from "./context/ApplicationContext";
 import type{ Lifecycle } from "../offline/sqlite/lifecycle/LifeCycle";
 import { SyncApplicationService } from "../services/ApplicationService/API/sync/SyncApplicationService";
-
+export interface KnownBusiness {
+    id: string
+}
 export class BusinessManager
 implements BusinessManagerContract, Lifecycle{
     private readonly applications = new Map<string, BusinessApplication>()
@@ -13,11 +15,15 @@ implements BusinessManagerContract, Lifecycle{
     new Map<string, Promise<BusinessApplication>>();
     private readonly knownBusinesses = new Map<string, KnownBusiness>();
 
-    
+    private readonly client: ApplicationContext;
+    private readonly bootstrapper: BusinessBootstrapper;
     constructor(
-        private readonly client: ApplicationContext,
-        private readonly bootstrapper: BusinessBootstrapper
-    ){}
+        client: ApplicationContext,
+        bootstrapper: BusinessBootstrapper
+    ) {
+        this.client = client;
+        this.bootstrapper = bootstrapper;
+    }
 
     private currentBusinessId?: string 
 
@@ -74,7 +80,7 @@ implements BusinessManagerContract, Lifecycle{
 
             if(existing){
                 this.currentBusinessId = businessId;
-                await this.syncService.attachToCurrentBusiness();
+                await this.syncService?.attachToCurrentBusiness();
                 return existing
             }
 
@@ -85,7 +91,7 @@ implements BusinessManagerContract, Lifecycle{
 
                 this.currentBusinessId = businessId;
 
-                await this.syncService.attachToCurrentBusiness();
+                await this.syncService?.attachToCurrentBusiness();
 
                 return app;
             }
@@ -161,26 +167,30 @@ implements BusinessManagerContract, Lifecycle{
             )
         }
 
-        get(businessId: string): BusinessApplication | undefined {
-            return this.applications.get(
+        get(businessId: string): BusinessApplication {
+            const app = this.applications.get(
                 businessId
-            )
+            );
+            if (!app) {
+                throw new Error(`Business application not found for ID: ${businessId}`);
+            }
+            return app;
         }
 
         current(): BusinessApplication | undefined {
-            
-            if(!this.currentBusinessId){
-                return undefined
+
+            if (!this.currentBusinessId) {
+                return undefined;
             }
-           
+
             return this.applications.get(
                 this.currentBusinessId
-            )
+            );
         }
 
         async switch(businessId: string): Promise<BusinessApplication> {
             const app = await this.open(businessId);
-                await this.client.repositories.knownNode.setCurrentBusiness(businessId);
+                await this.client.repositories.knownNode.setCurrentBusiness();
                 this.currentBusinessId = businessId;
                 await this.syncService?.attachToCurrentBusiness();
                 return app;

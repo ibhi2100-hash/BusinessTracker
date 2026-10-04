@@ -1,49 +1,36 @@
-export enum AggregateType {
-  BUSINESS = "BUSINESS",
-  BRANCH = "BRANCH",
+export const AggregateType = {
+  BUSINESS: "BUSINESS",
+  BRANCH: "BRANCH",
+  PRODUCT: "PRODUCT",
+  INVENTORY: "INVENTORY",
 
-  PRODUCT = "PRODUCT",
-  INVENTORY = "INVENTORY",
+  ASSET: "ASSET",
+  LIABILITY: "LIABILITY",
+  CAPITAL_ACCOUNT: "CAPITAL_ACCOUNT",
+  SALE: "SALE",
+  EXPENSE: "EXPENSE",
+} as const;
 
-  
+export type AggregateType =
+  typeof AggregateType[keyof typeof AggregateType];
 
-  ASSET = "ASSET",
-  LIABILITY = "LIABILITY",
-
-  CAPITAL_ACCOUNT = "CAPITAL_ACCOUNT",
-
-  SALE = "SALE",
-  EXPENSE = "EXPENSE",
-}
 
 export interface AggregateRecord {
-
   id: string;
-
   aggregateId: string;
-
   aggregateType: string;
-
   localVersion: number;
-
   version?: number;
-
   lastEventId?: string;
-
   lastLogicClock?: number;
-
   lastGlobalPosition?: bigint;
-
   lastSnapshotVersion?: number;
-
-  isDeleted?: boolean
-
+  isDeleted?: boolean;
   updatedAt: number;
 }
 
+
 export interface ReplicaMeta {
-
   deviceId: string;
-
   lastLogicClock: number;
 }

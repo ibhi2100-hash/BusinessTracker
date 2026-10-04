@@ -12,7 +12,7 @@ export interface BusinessManagerContract {
 
     get(
         businessId: string
-    ): BusinessApplication | undefined;
+    ): BusinessApplication;
 
     current():
         BusinessApplication | undefined;

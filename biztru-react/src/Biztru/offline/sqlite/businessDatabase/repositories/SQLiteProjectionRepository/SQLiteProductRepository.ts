@@ -38,10 +38,13 @@ export interface LiveProduct {
 
 export class SQLiteProductRepository
     implements IProjectionEntityRepository<Product>
-{
+{   private readonly statements: ProductStatements;
+
     constructor(
-        private readonly statements: ProductStatements
-    ) {}
+        statements: ProductStatements
+    ) {
+        this.statements = statements
+    }
 
 
     // ============================================================

@@ -2,9 +2,12 @@ import type{ PreparedStatementManager } from "../../../PreparedStatement/Prepare
 import { syncStateKeys } from "./syncStateKeys";
 
 export class SyncStateStatements {
+  private readonly manager: PreparedStatementManager
   constructor(
-    private readonly manager: PreparedStatementManager
-  ) {}
+    manager: PreparedStatementManager
+  ) {
+    this.manager = manager
+  }
 
   get upsert() {
     return this.manager.get(syncStateKeys.upsert);

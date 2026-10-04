@@ -5,11 +5,13 @@ import type{ Command } from "./KarnelTypes/types";
 
 export class DefaultBusinessKernel
 implements Kernel {
-  
+    private readonly pipeline: PipelineKernel
     constructor(
-          private readonly pipeline: 
+          pipeline: 
         PipelineKernel
-    ){}
+    ){
+        this.pipeline = pipeline
+    }
  
 
     async execute(command: Command): Promise<void> {

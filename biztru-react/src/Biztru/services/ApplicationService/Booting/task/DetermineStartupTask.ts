@@ -12,7 +12,7 @@ implements BootTask {
         const current = 
             await context
                 .infrastructure
-                .client
+                .client!
                 .repositories
                 .currentBusiness
                 .find();

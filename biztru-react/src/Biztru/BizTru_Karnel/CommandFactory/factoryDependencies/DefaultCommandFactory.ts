@@ -9,11 +9,15 @@ import type{ ExecutionContextProvider } from "../ExecutionContext/ExecutionConte
 
 export class DefaultCommandFactory implements CommandFactory {
     
-
+    private readonly context: ExecutionContextProvider
+    private readonly idGenerator: IdGenerator
     constructor(
-        private readonly context: ExecutionContextProvider,
-        private readonly idGenerator: IdGenerator,
-    ){}
+        context: ExecutionContextProvider,
+        idGenerator: IdGenerator,
+    ){
+        this.context = context;
+        this.idGenerator = idGenerator
+    }
 
     async create<TPayload>(
         intent: CommandIntent<TPayload>
@@ -24,9 +28,9 @@ export class DefaultCommandFactory implements CommandFactory {
         const commandId = 
             this.idGenerator.next();
         const actorData: ActorContext = {
-            userId: context.actorId,
+            userId: context.actorId!,
             deviceId: context.deviceId,
-            sessionId: context.sessionId
+            sessionId: context.sessionId!
         }
         const command: Command<TPayload> = Object.freeze({
             id: commandId,

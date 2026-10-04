@@ -3,7 +3,6 @@ import type{ DomainEvent } from "@business/shared-types";
 import type{ EventRepository } from "./contracts";
 import { EventStatements } from "../../statements/events/EventStatements";
 import type{ ProjectionRebuildOptions } from "../../projections/rebuild/types";
-import type{ BackendAcceptedEvent } from "@business/shared-types";
 import type{ SQLiteStatementOperation } from "../../../../../storage/statement/worker/WorkerProtocol"; 
 import { EventStatementKeys } from "../../statements/events/Keys";
 interface EventRow {
@@ -39,10 +38,12 @@ interface EventRow {
     checksum: string | null;
 }
 export class SQLiteEventRepository implements EventRepository {
-
+    private readonly statements: EventStatements;
     constructor(
-        private readonly statements: EventStatements
-    ) {}
+        statements: EventStatements
+    ) {
+        this.statements = statements
+    }
 
     private toInsertOperation(
         event: DomainEvent
@@ -187,7 +188,7 @@ export class SQLiteEventRepository implements EventRepository {
         }
     }
 
-    async applyRemoteEvents(events: BackendAcceptedEvent[]): Promise<void> {
+    async applyRemoteEvents(): Promise<void> {
         
     }
 
@@ -238,6 +239,9 @@ class EventMapper {
     static fromRow(
         row: EventRow
     ): DomainEvent {
+        if(!row.businessId){
+            throw new Error("There is no businessId in EventStore")
+        }
         return {
            id: row.id,
 
@@ -271,7 +275,7 @@ class EventMapper {
 
            createdAt: row.createdAt,
 
-           checksum: row.checksum
+           checksum: row.checksum!
         }
     }
 }

@@ -1,73 +1,53 @@
-import type{ StatementDefinition } from "../../../offline/sqlite/PreparedStatement/StatementRegistry/statementDefinition"; 
+import type { StatementDefinition } from "../../../offline/sqlite/PreparedStatement/StatementRegistry/statementDefinition";
 
 export class WorkerStatementRegistry {
 
     private readonly statements =
         new Map<string, any>();
 
-
+    private readonly db: any;
     constructor(
-        private readonly db: any
-    ) {}
+        db: any
+    ) {
+        this.db = db
+    }
 
 
     initialize(
-        definitions: StatementDefinition[]
-    ) {
+    definitions: StatementDefinition[]
+) {
+    this.clear();
 
+    for (const definition of definitions) {
 
-        this.clear();
-
-
-        for (
-            const [
-                index,
-                definition
-            ]
-            of definitions.entries()
+        if (
+            this.statements.has(
+                definition.key
+            )
         ) {
+            throw new Error(
+                `Duplicate SQLite statement: ${definition.key}: ${definition.sql}`
+            );
+        }
 
-            const statementNumber =
-                index + 1;
+        try {
 
-
-
-            if (
-                this.statements.has(
-                    definition.key
-                )
-            ) {
-
-                const error =
-                    new Error(
-                        `Duplicate SQLite statement: ${definition.key}: ${definition.sql}`
-                    );
-
-                throw error;
-            }
-
-
-            try {
-
-                const stmt =
-                    this.db.prepare(
-                        definition.sql
-                    );
-
-
-                this.statements.set(
-                    definition.key,
-                    stmt
+            const stmt =
+                this.db.prepare(
+                    definition.sql
                 );
 
+            this.statements.set(
+                definition.key,
+                stmt
+            );
 
-            } catch (error) {
+        } catch (error) {
 
-                throw error;
-            }
-
+            throw error;
         }
     }
+}
 
 
     get(key: string) {
@@ -116,19 +96,18 @@ export class WorkerStatementRegistry {
 
         for (
             const [
-                key,
+            
                 stmt
             ]
             of this.statements.entries()
         ) {
 
             try {
-
-                stmt.finalize();
+                stmt
 
 
             } catch (error) {
-                throw new Error(error)
+                throw new Error();
 
             }
         }

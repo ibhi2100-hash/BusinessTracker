@@ -11,10 +11,12 @@ import { ProjectionResetStatementKeys } from "../../statements/projectionRebuild
 
 export class SQLiteProjectionResetRepository
     implements ProjectionResetRepository {
-
+    private readonly queryRunner: QueryRunner;
     constructor(
-        private readonly queryRunner: QueryRunner
-    ) {}
+        queryRunner: QueryRunner
+    ) {
+        this.queryRunner = queryRunner
+    }
 
     // =========================================================
     // TRANSACTIONAL OPERATIONS

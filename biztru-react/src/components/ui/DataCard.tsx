@@ -2,17 +2,9 @@
 import { cn } from "../../lib/utils";
 import { GlassCard } from "../ui/GlassCard";
 
-
-type DataCardVariant =
-  | "inventory"
-  | "finance"
-  | "person"
-  | "asset"
-  | "generic";
-
 interface DataCardProps {
   title: string;
-  subtitle?: string;
+  subtitle?: string | null;
 
   image?: string;
 
@@ -53,11 +45,11 @@ export function DataCard({
         className={cn(
           `
         p-4
-        hover:bg-white/[0.08]
+        hover:bg-white/8
         transition-all
         duration-200
         active:scale-[0.97]
-        hover: bg-white/[0.08]
+        hover: bg-white/8
         `,
         selected && 
                 `
@@ -107,7 +99,7 @@ export function DataCard({
             <div
               key={i}
               className="
-              bg-white/[0.03]
+              bg-white/3
               border
               border-white/10
               rounded-xl

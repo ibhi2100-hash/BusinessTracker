@@ -10,10 +10,12 @@ export class ApplicationStateProjection
   implements ProjectionConsumer<DomainEvent>
 {
   readonly name = "Application State";
-
+  private readonly repository: SQLiteApplicationStateRepository
   constructor(
-    private readonly repository: SQLiteApplicationStateRepository
-  ) {}
+    repository: SQLiteApplicationStateRepository
+  ) {
+    this.repository = repository
+  }
 
   async handle(
     events: readonly DomainEvent[]

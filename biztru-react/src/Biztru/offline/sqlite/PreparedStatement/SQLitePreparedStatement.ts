@@ -5,16 +5,23 @@ import type{ StatementDefinition } from "./StatementRegistry/statementDefinition
 import { WorkerPreparedStatement } from "../../../storage/runtime/SQLiteWorkerClient"; 
 import type{ DatabaseId } from "../../../storage/statement/worker/DatabaseId";
 
+
 export class SQLitePreparedStatementManager
 implements PreparedStatementManager {
 
     private readonly statements =
         new Map<string, PreparedStatement>();
 
+    private readonly runtime: SQLiteRuntime;
+    private readonly database: DatabaseId;
     constructor(
-        private readonly runtime: SQLiteRuntime,
-        private readonly database: DatabaseId
-    ) {}
+        runtime: SQLiteRuntime,
+        database: DatabaseId
+    ) {
+        this.runtime = runtime;
+
+        this.database = database
+    }
 
     initialize(
         defs: StatementDefinition[]

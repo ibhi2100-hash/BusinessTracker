@@ -1,6 +1,6 @@
 import { authSession } from "./refreshService";
 
-async function restoreSession() {
+export async function restoreSession() {
 
     const accessToken =
         await authSession.refresh();

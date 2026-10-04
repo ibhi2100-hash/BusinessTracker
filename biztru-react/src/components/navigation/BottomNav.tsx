@@ -1,5 +1,3 @@
-"use client";
-
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -244,7 +242,7 @@ function SettingsItem({
     <button
       type="button"
       onClick={onClick}
-      className="flex w-full items-center gap-3 rounded-2xl border border-white/8 bg-white/[0.03] px-3 py-3 text-left transition-all hover:bg-white/[0.06] active:scale-[0.98]"
+      className="flex w-full items-center gap-3 rounded-2xl border border-white/8 bg-white/3 px-3 py-3 text-left transition-all hover:bg-white/6 active:scale-[0.98]"
     >
       <GlassIcon size="sm" variant="primary">
         <Icon className="h-4 w-4" />
@@ -344,7 +342,7 @@ export default function AppNav() {
     },
     [closeAllOverlays, navigate]
   );
-
+console.log("This is the goto callback: ", goto)
   const openSettings = useCallback(() => {
     setMoreOpen(false);
     setSettingsOpen(true);
@@ -553,7 +551,7 @@ export default function AppNav() {
       {/* -------------------- More sheet (mobile) -------------------- */}
       {moreOpen && (
         <div
-          className="fixed inset-0 z-[60] flex items-end justify-center lg:hidden"
+          className="fixed inset-0 z-60 flex items-end justify-center lg:hidden"
           role="dialog"
           aria-modal="true"
           aria-label="More navigation"
@@ -607,7 +605,7 @@ export default function AppNav() {
                             "flex w-full items-center gap-3 rounded-2xl border px-3 py-3 text-left transition-all active:scale-[0.98]",
                             active
                               ? "border-teal-500/25 bg-teal-500/10"
-                              : "border-white/8 bg-white/[0.03] hover:bg-white/[0.06]"
+                              : "border-white/8 bg-white/3 hover:bg-white/6"
                           )}
                         >
                           <GlassIcon size="sm" variant="primary">
@@ -643,7 +641,7 @@ export default function AppNav() {
       {/* -------------------- Settings panel -------------------- */}
       {settingsOpen && (
         <div
-          className="fixed inset-0 z-[70] flex items-end lg:items-center lg:justify-end"
+          className="fixed inset-0 z-70 flex items-end lg:items-center lg:justify-end"
           role="dialog"
           aria-modal="true"
           aria-label="Business settings"
@@ -655,7 +653,7 @@ export default function AppNav() {
             onClick={() => setSettingsOpen(false)}
           />
 
-          <div className="relative flex max-h-[88dvh] w-full animate-in flex-col rounded-t-[28px] border border-white/10 bg-neutral-950/95 shadow-[0_-20px_60px_rgba(0,0,0,0.5)] duration-300 slide-in-from-bottom backdrop-blur-2xl lg:h-full lg:max-h-none lg:w-[430px] lg:rounded-none lg:rounded-l-[28px] lg:slide-in-from-right">
+          <div className="relative flex max-h-[88dvh] w-full animate-in flex-col rounded-t-[28px] border border-white/10 bg-neutral-950/95 shadow-[0_-20px_60px_rgba(0,0,0,0.5)] duration-300 slide-in-from-bottom backdrop-blur-2xl lg:h-full lg:max-h-none lg:w-107.5 lg:rounded-none lg:rounded-l-[28px] lg:slide-in-from-right">
             <div className="flex items-center justify-between border-b border-white/10 px-5 py-5">
               <div>
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-teal-400">
@@ -758,7 +756,7 @@ export default function AppNav() {
       {/* -------------------- App update panel -------------------- */}
       {updateOpen && (
         <div
-          className="fixed inset-0 z-[80] flex items-end lg:items-center lg:justify-end"
+          className="fixed inset-0 z-80 flex items-end lg:items-center lg:justify-end"
           role="dialog"
           aria-modal="true"
           aria-label="App update"
@@ -773,7 +771,7 @@ export default function AppNav() {
             }}
           />
 
-          <div className="relative flex max-h-[88dvh] w-full animate-in flex-col rounded-t-[28px] border border-white/10 bg-neutral-950/95 shadow-[0_-20px_60px_rgba(0,0,0,0.5)] duration-300 slide-in-from-bottom backdrop-blur-2xl lg:mr-6 lg:h-auto lg:max-h-[90vh] lg:w-[430px] lg:rounded-[28px] lg:slide-in-from-right">
+          <div className="relative flex max-h-[88dvh] w-full animate-in flex-col rounded-t-[28px] border border-white/10 bg-neutral-950/95 shadow-[0_-20px_60px_rgba(0,0,0,0.5)] duration-300 slide-in-from-bottom backdrop-blur-2xl lg:mr-6 lg:h-auto lg:max-h-[90vh] lg:w-107.5 lg:rounded-[28px] lg:slide-in-from-right">
             <div className="flex items-center justify-between border-b border-white/10 px-5 py-5">
               <div>
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-teal-400">
@@ -800,7 +798,7 @@ export default function AppNav() {
             <div className="overflow-y-auto p-5">
               {updateStatus === "idle" && (
                 <>
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                  <div className="rounded-2xl border border-white/10 bg-white/3 p-4">
                     <div className="flex items-start gap-3">
                       <GlassIcon size="sm" variant="primary">
                         <Database className="h-4 w-4" />
@@ -817,7 +815,7 @@ export default function AppNav() {
                     </div>
                   </div>
 
-                  <div className="mt-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                  <div className="mt-3 rounded-2xl border border-white/10 bg-white/3 p-4">
                     <div className="flex items-start gap-3">
                       <GlassIcon size="sm" variant="primary">
                         <ShieldCheck className="h-4 w-4" />
@@ -859,7 +857,7 @@ export default function AppNav() {
                     Applying pending database migrations and rebuilding
                     prepared statements.
                   </p>
-                  <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3">
+                  <div className="mt-5 rounded-2xl border border-white/10 bg-white/3 px-4 py-3">
                     <div className="flex items-center gap-3">
                       <Loader2 className="h-4 w-4 animate-spin text-teal-400" />
                       <span className="text-xs text-gray-300">
@@ -886,7 +884,7 @@ export default function AppNav() {
                   </p>
 
                   {updateResult && (
-                    <div className="mt-5 space-y-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                    <div className="mt-5 space-y-3 rounded-2xl border border-white/10 bg-white/3 p-4">
                       {typeof updateResult.fromVersion === "number" &&
                         typeof updateResult.toVersion === "number" && (
                           <div className="flex items-center justify-between">
@@ -938,7 +936,7 @@ export default function AppNav() {
                   </p>
                   {updateError && (
                     <div className="mt-5 rounded-2xl border border-red-500/20 bg-red-500/5 p-4">
-                      <p className="break-words text-xs leading-5 text-red-300">
+                      <p className="wrap-break-word text-xs leading-5 text-red-300">
                         {updateError}
                       </p>
                     </div>

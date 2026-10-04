@@ -20,10 +20,12 @@ export class ExpenseConsumer
    * from the expense projection table during rebuild.
    */
   private readonly states = new Map<string, any>();
-
+  private repository: SQLiteExpenseRepository;
   constructor(
-    private readonly repository: SQLiteExpenseRepository
-  ) {}
+    repository: SQLiteExpenseRepository
+  ) {
+    this.repository = repository
+  }
 
   async handle(events: readonly DomainEvent<any>[]): Promise<void> {
     for (const event of events) {

@@ -1,9 +1,12 @@
 import { BusinessManager } from "../../../../Composer/BusinessManager";
 import type{ ProjectionRebuildOptions, ProjectionRebuildResult } from "../../../../offline/sqlite/businessDatabase/projections/rebuild/types";
 export class RebuildApi {
+  private readonly manager: BusinessManager;
   constructor(
-    private readonly manager: BusinessManager
-  ) {}
+    manager: BusinessManager
+  ) {
+    this.manager = manager;
+  }
 
   /**
    * Rebuild projections for the currently open business.

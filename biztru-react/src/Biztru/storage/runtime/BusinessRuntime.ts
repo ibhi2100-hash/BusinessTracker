@@ -11,13 +11,19 @@ export class BusinessRuntime
     readonly queryRunner: QueryRunner;
     readonly transactionManager: TransactionManager;
 
+    readonly businessId: string;
+    readonly database: DatabaseId;
+    readonly sqlite: SQLiteRuntime
     constructor(
-        readonly businessId: string,
-        readonly database: DatabaseId,
-        readonly sqlite: SQLiteRuntime,
+        businessId: string,
+        database: DatabaseId,
+        sqlite: SQLiteRuntime,
         queryRunner: QueryRunner,
         transactionManager: TransactionManager,
     ) {
+        this.businessId = businessId;
+        this.database  = database;
+        this.sqlite = sqlite
         this.queryRunner = queryRunner;
         this.transactionManager = transactionManager;
     }

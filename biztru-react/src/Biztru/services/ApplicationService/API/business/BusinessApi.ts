@@ -1,10 +1,12 @@
 import { apiFetch } from "../../../../../lib/api"; 
 import { BusinessManager } from "../../../../Composer/BusinessManager"; 
 import { changeNotifier } from "../../../../offline/sqlite/businessDatabase/projections/changeNoifier"; 
-import type{ Business } from "@business/shared-types";
+import type{ Business, Expense, Inventory, Product, Sales } from "@business/shared-types";
 import { CurrentBusinessRepository } from "../../../../offline/sqlite/clientDatabase/repositories/CurrentBusiness/SQLiteCurrentBusinessRepository";  
 import type{ SQLiteStatementOperation } from "../../../../storage/statement/worker/WorkerProtocol"; 
 import { TransactionManager } from "../../../../storage/transaction/TransactionManager"; 
+
+import type{ Branch } from "@business/shared-types";
 
 export interface BootstrapBusiness {
     businessId: string;
@@ -13,13 +15,18 @@ export interface BootstrapBusiness {
 }
 
 export class BusinessApi {
-
+    private readonly manager: BusinessManager;
+    private readonly currentBusiness: CurrentBusinessRepository
+    private readonly clientTransactionManager: TransactionManager
     constructor(
-        private readonly manager: BusinessManager,
-        private readonly currentBusiness:
-            CurrentBusinessRepository,
-        private readonly clientTransactionManager: TransactionManager
-    ) {}
+        manager: BusinessManager,
+        currentBusiness: CurrentBusinessRepository,
+        clientTransactionManager: TransactionManager
+    ) {
+        this.manager = manager;
+        this.currentBusiness = currentBusiness;
+        this.clientTransactionManager = clientTransactionManager;
+    }
 
     async CurrentBusiness(
         businessId: string
@@ -28,8 +35,13 @@ export class BusinessApi {
         const app =
             await this.manager.current();
 
-        return app.storage.repositories.business
+        const business =  app?.storage.repositories.business
             .findById(businessId);
+        if(!business){
+            throw new Error("This is the Charger")
+        }
+
+        return business
     }
 
     async BootstrapBusiness(
@@ -82,27 +94,27 @@ export class BusinessApi {
             app.storage.repositories.business.upsertOperation(business),
 
             ...branches.map(
-                branch =>
+                (branch: Branch) =>
                     app.storage.repositories.branches.insertOperation(branch)
             ),
 
             ...products.map(
-                product =>
+                (product: Product) =>
                     app.storage.repositories.products.upsertOperation(product)
             ),
 
             ...inventories.map(
-                inventory =>
+                (inventory: Inventory) =>
                     app.storage.repositories.inventory.upsertOperation(inventory)
             ),
 
             ...sales.map(
-                sale =>
+                (sale: Sales)=>
                     app.storage.repositories.sales.upsertOperation(sale)
             ),
 
             ...expenses.map(
-                expense =>
+                (expense: Expense)=>
                     app.storage.repositories.expenses.upsertOperation(expense)
             ),
 

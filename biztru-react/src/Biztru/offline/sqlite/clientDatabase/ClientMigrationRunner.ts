@@ -6,10 +6,12 @@ import {
 
 
 export class ClientMigrationRunner {
-
+    private readonly queryRunner: QueryRunner ;
     constructor(
-        private readonly queryRunner: QueryRunner
-    ) {}
+        queryRunner: QueryRunner
+    ) {
+        this.queryRunner = queryRunner
+    }
 
 
     async run(): Promise<void> {

@@ -1,15 +1,20 @@
-import type{ DatabaseId } from "./worker/DatabaseId";
-import type { PreparedStatement } from "@sqlite.org/sqlite-wasm"; 
+import type{ DatabaseId } from "./worker/DatabaseId"; 
 import { SQLiteRuntime } from "../runtime/SQLiteRuntime";
 
 export class WorkerPreparedStatement
-implements PreparedStatement {
-
+{
+    private readonly runtime: SQLiteRuntime;
+    private readonly database: DatabaseId;
+    public readonly key: string;
     constructor(
-        private readonly runtime: SQLiteRuntime,
-        private readonly database: DatabaseId,
-        public readonly key: string
-    ) {}
+        runtime: SQLiteRuntime,
+        database: DatabaseId,
+        key: string
+    ) {
+        this.runtime = runtime;
+        this.database = database;
+        this.key = key;
+    }
 
     async execute(
         params: readonly unknown[] = []

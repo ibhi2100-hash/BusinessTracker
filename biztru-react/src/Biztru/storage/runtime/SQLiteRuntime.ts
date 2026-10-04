@@ -63,10 +63,13 @@ export class SQLiteRuntime implements Lifecycle {
     private readonly databases =
         new Map<string, DatabaseId>();
 
+    private readonly options: SQLiteRuntimeOptions
 
     constructor(
-        private readonly options: SQLiteRuntimeOptions
-    ) {}
+        options: SQLiteRuntimeOptions
+    ) {
+        this.options = options
+    }
 
 
     /**

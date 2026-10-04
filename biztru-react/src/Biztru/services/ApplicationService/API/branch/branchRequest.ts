@@ -1,3 +1,5 @@
+import type { AggregateType } from "../../../../../offline/domain/aggregate";
+
 export interface BranchCreationRequest {
     id: string;
     businessId: string;
@@ -11,4 +13,12 @@ export interface BranchPayload {
     name: string;
     address?: string;
     phone?: string;
+}
+
+export interface SwitchBranchRequest {
+    aggregateType: AggregateType;
+    aggregateId: string;
+    type: string;
+    mode: "OPENING" | "LIVE";
+    payload: BranchPayload;
 }

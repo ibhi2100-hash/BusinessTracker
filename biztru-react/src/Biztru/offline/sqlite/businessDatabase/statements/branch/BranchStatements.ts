@@ -2,9 +2,12 @@ import type{ PreparedStatementManager } from "../../../PreparedStatement/Prepare
 import { BranchStatementKeys } from "./BranchStatementKeys";
 
 export class BranchStatements {
+    private readonly manager: PreparedStatementManager;
     constructor(
-        private readonly manager: PreparedStatementManager
-    ){}
+        manager: PreparedStatementManager
+    ){
+        this.manager = manager
+    }
 
     get insert(){
         return this.manager.get(BranchStatementKeys.insert);

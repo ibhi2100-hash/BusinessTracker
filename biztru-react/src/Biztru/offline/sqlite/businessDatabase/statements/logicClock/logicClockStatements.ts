@@ -2,9 +2,12 @@ import type{ PreparedStatementManager } from "../../../PreparedStatement/Prepare
 import { logicClockKeys } from "./Keys";
 
 export class LogicClockStatements {
+    private readonly manager: PreparedStatementManager;
     constructor(
-        private readonly manager: PreparedStatementManager
-    ){}
+        manager: PreparedStatementManager
+    ){
+        this.manager = manager
+    }
 
     get current(){
         return this.manager.get(logicClockKeys.getclock)

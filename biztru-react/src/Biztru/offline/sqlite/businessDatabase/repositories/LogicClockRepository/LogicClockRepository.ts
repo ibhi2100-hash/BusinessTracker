@@ -1,9 +1,12 @@
 import { LogicClockStatements } from "../../statements/logicClock/logicClockStatements"
 
 export class LogicClockRepository {
+    private readonly statements: LogicClockStatements
     constructor(
-        private readonly statements: LogicClockStatements
-    ){}
+        statements: LogicClockStatements
+    ){
+        this.statements = statements
+    }
 
     async current(): Promise<number>{
         const result = await this.statements.current.query() as Array<{ value: number }>;

@@ -1,10 +1,9 @@
-"use client";
+
 
 import {
     LoaderCircle,
     CheckCircle2,
     AlertTriangle,
-    Database,
     ServerCog
 } from "lucide-react";
 
@@ -317,8 +316,6 @@ interface FooterProps{
 }
 
 function Footer({
-
-    state
 
 }:FooterProps){
 

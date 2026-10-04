@@ -2,7 +2,7 @@ import {
     SyncEngine,
 } from "../syncEngine";
 
-import type{ SyncResult, SyncCoordinatorListener, SyncTrigger, SyncCoordinatorEvent, SyncCoordinatorResult } from "@business/shared-types";
+import type{ SyncResult, SyncCoordinatorListener, SyncTrigger, SyncCoordinatorEvent} from "@business/shared-types";
 
 export class SyncCoordinator {
 
@@ -16,11 +16,10 @@ export class SyncCoordinator {
     private listeners =
         new Set<SyncCoordinatorListener>();
 
-
-    constructor(
-        private readonly engine:
-            SyncEngine
-    ) {}
+    private readonly engine: SyncEngine
+    constructor(engine:SyncEngine) {
+        this.engine = engine
+    }
 
 
     async initialize(): Promise<void> {

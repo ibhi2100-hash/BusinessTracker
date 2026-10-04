@@ -68,9 +68,12 @@ export interface SalesCountRow {
 export class SQLiteSalesRepository
     implements IProjectionEntityRepository<Sales>
 {
+    private readonly statements: SalesStatement;
     constructor(
-        private readonly statements: SalesStatement
-    ) {}
+        statements: SalesStatement
+    ) {
+        this.statements = statements
+    }
 
 
     // ============================================================

@@ -1,7 +1,6 @@
 
 
 import { useState } from "react";
-import { nanoid } from "nanoid";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -55,7 +54,7 @@ export function CreateLiabilityForm({
   ) => {
     try {
       setLoading(true);
-
+      console.log("This is the created Liability: ", data)
       toast.success(
         "Liability created successfully"
       );

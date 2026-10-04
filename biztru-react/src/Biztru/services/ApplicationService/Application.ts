@@ -33,8 +33,8 @@ export class Application {
     readonly sync: SyncApi;
     readonly syncService: SyncApplicationService
     readonly session: SessionApi;
-    private readonly manager: BusinessManager;
 
+    readonly manager: BusinessManager
     
     constructor(
         client: ApplicationContext,
@@ -117,6 +117,8 @@ export class Application {
             )
 
         this.session = 
-            new SessionApi()
+            new SessionApi(
+                client.repositories,
+                manager           )
     }
 }

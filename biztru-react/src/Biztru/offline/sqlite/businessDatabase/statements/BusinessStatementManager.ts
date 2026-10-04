@@ -8,10 +8,12 @@ implements PreparedStatementManager {
 
     private readonly cache =
         new Map<string, PreparedStatement>()
-
+        private readonly queryRunner: QueryRunner
         constructor(
-            private readonly querryRunner: QueryRunner
-        ){}
+            querryRunner: QueryRunner
+        ){
+            this.queryRunner = querryRunner
+        }
 
         get(key: string): PreparedStatement {
             let stmt = 
@@ -33,7 +35,7 @@ implements PreparedStatementManager {
                 }
 
                 const stmt =
-                    this.querryRunner.prepare(
+                    this.queryRunner.prepare(
                         def
                     );
 

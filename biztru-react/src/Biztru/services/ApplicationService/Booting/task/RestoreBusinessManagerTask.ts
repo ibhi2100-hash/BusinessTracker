@@ -11,7 +11,7 @@ implements BootTask {
     async execute(context: BootContext): Promise<void> {
         const manager = 
             context.runtime.businessManager;
-            await manager.initialize();
+            await manager!.initialize();
             
 
     }

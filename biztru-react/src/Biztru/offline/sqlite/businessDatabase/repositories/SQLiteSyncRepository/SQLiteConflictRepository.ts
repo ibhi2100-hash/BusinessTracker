@@ -9,14 +9,16 @@ import { conflictKeys } from "../../statements/conflicts/conflictKeys";
 
 export class SQLiteConflictRepository {
 
+    private readonly statements: ConflictsStatements
     constructor(
-        private readonly statements: ConflictsStatements
-    ) {}
+         statements: ConflictsStatements
+    ) {
+        this.statements = statements
+    }
 
     // =========================================================
     // TRANSACTIONAL OPERATIONS
     // =========================================================
-
     insertOperation(
         conflict: Conflict
     ): SQLiteStatementOperation {

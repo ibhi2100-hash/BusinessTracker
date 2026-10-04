@@ -7,10 +7,14 @@ export class ExecutionContextProvider
  implements ExecutionContextProviderContract {
     
     private currentContext?: ExecutionContext;
+
+    private readonly executionRepository: ExecutionContextRepositoryContract
     constructor(
-        private readonly executionRepository:
+        executionRepository:
         ExecutionContextRepositoryContract
-    ){}
+    ){
+        this.executionRepository = executionRepository
+    }
      async initialize() {
 
         this.currentContext = 

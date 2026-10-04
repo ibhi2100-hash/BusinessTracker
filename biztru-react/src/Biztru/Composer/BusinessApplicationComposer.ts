@@ -15,26 +15,42 @@ import type{ BusinessContextProvider } from "./context/BusinessContextContract";
 export class BusinessApplication
 implements  BusinessApplicationContract,
             Lifecycle {
+    readonly businessId: string;
+    public context: BusinessContextProvider;
+    readonly runtime: BusinessRuntime;
+    readonly storage: BusinessStorage
+    readonly domain: BusinessDomain;
+    readonly synchronization: BusinessSynchronization
+    readonly rebuilder: ProjectionRebuilder;
+
 
     constructor(
 
-        readonly businessId: string,
+        businessId: string,
 
-        public context: BusinessContextProvider,
+        context: BusinessContextProvider,
 
-        readonly runtime: BusinessRuntime,
+        runtime: BusinessRuntime,
 
-        readonly storage: BusinessStorage,
+        storage: BusinessStorage,
 
-        readonly domain: BusinessDomain,
+        domain: BusinessDomain,
 
-        readonly synchronization: BusinessSynchronization,
+        synchronization: BusinessSynchronization,
 
-        readonly rebuilder: ProjectionRebuilder,
+        rebuilder: ProjectionRebuilder,
 
 
 
-    ) {}
+    ) {
+        this.businessId = businessId;
+        this.context = context;
+        this.runtime = runtime;
+        this.storage = storage;
+        this.domain = domain;
+        this.synchronization = synchronization;
+        this.rebuilder = rebuilder;
+    }
 
     async rebuildProjections(
     options: ProjectionRebuildOptions = {}

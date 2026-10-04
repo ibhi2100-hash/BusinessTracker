@@ -4,7 +4,10 @@ import type{ PreparedStatementManager } from "../../../PreparedStatement/Prepare
 import { reportKeys } from "./reportKeys";
 
 export class ReportStatements {
-  constructor(private readonly manager: PreparedStatementManager) {}
+  private readonly manager: PreparedStatementManager;
+  constructor(manager: PreparedStatementManager) {
+    this.manager = manager
+  }
 
   get periodSummary() {
     return this.manager.get(reportKeys.periodSummary);

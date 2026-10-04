@@ -8,10 +8,12 @@ implements BootTask {
     readonly title: string = "Initializing Client";
 
     readonly weight: number = 25;
-
+    private readonly bootstrapper: ClientBootstrapper
     constructor(
-        private readonly bootstrapper: ClientBootstrapper
-    ){}
+        bootstrapper: ClientBootstrapper
+    ){
+        this.bootstrapper = bootstrapper
+    }
 
     async execute(
         context: BootContext

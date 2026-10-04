@@ -2,10 +2,15 @@ import {
     useEffect,
     useState,
 } from "react";
+
 import type {
-      ReactNode
-} from "react"
-import { useNavigate } from "react-router-dom";
+    ReactNode,
+} from "react";
+
+import {
+    useNavigate,
+} from "react-router-dom";
+
 import Context from "./ApplicationContext";
 
 import type {
@@ -16,21 +21,36 @@ import {
     BootManager,
 } from "./Booting/BootManager";
 
-import type{
+import type {
     BootListener,
     BootState,
 } from "./Booting/BootStage";
-import { BootStage } from "./Booting/BootStage";
-import { ClientBootstrapper } from "../../../offline/bootstrap/ClientBootstrapper";
 
-import { BusinessBootstrapper } from "../../../offline/bootstrap/BusinessBootstrap";
+import {
+    BootStage,
+} from "./Booting/BootStage";
+
+import {
+    ClientBootstrapper,
+} from "../../../offline/bootstrap/ClientBootstrapper";
+
+import {
+    BusinessBootstrapper,
+} from "../../../offline/bootstrap/BusinessBootstrap";
+
 import {
     BootSplash,
 } from "./Booting/components/BootSplash";
 
-import { SyncProvider } from "../../../components/providers/SyncProvider";
-import { SQLiteRuntime } from "../../storage/runtime/SQLiteRuntime";
+import {
+    ApplicationSessionProvider,
+} from "../../../components/providers/ApplicationSessionProvider";
 
+import {
+    SyncProvider,
+} from "../../../components/providers/SyncProvider";
+
+import type { ApplicationSessionState } from "../../context/AplicationSessionContext";
 interface Props {
     children: ReactNode;
 }
@@ -42,15 +62,47 @@ export function ApplicationProvider({
 
     const navigate = useNavigate();
 
+    /*
+     * ============================================================
+     * APPLICATION STATE
+     * ============================================================
+     */
+
     const [
         application,
         setApplication,
     ] = useState<Application | null>(null);
 
+    /*
+     * React-facing projection of the durable application session.
+     *
+     * The durable source of truth remains client.db.
+     * This state only represents the restored session for React.
+     */
+    const [
+        session,
+        setSession,
+    ] = useState<ApplicationSessionState | null>(null);
+
+    /*
+     * The application becomes ready only after:
+     *
+     * 1. Client infrastructure has booted.
+     * 2. Business infrastructure has been restored.
+     * 3. Application has been created.
+     * 4. Durable session has been restored.
+     */
     const [
         ready,
         setReady,
     ] = useState(false);
+
+
+    /*
+     * ============================================================
+     * BOOT STATE
+     * ============================================================
+     */
 
     const [
         boot,
@@ -76,59 +128,68 @@ export function ApplicationProvider({
     });
 
 
+    /*
+     * ============================================================
+     * APPLICATION BOOTSTRAP
+     * ============================================================
+     */
+
     useEffect(() => {
 
+        let mounted = true;
         let cancelled = false;
 
-        let mounted = true;
-
         /*
-         * The local application reference owns the runtime created
-         * by this effect.
+         * This reference owns the application created by
+         * this particular effect execution.
          *
-         * Do NOT use React state inside cleanup because the cleanup
-         * closure can contain the initial null value.
+         * This is intentionally not React state because cleanup
+         * must always have access to the application created by
+         * this bootstrap attempt.
          */
         let app: Application | undefined;
 
-        const controller = new AbortController();
+        const controller =
+            new AbortController();
 
+
+        /*
+         * ========================================================
+         * BOOT LISTENER
+         * ========================================================
+         */
 
         const listener: BootListener = {
 
-            onStarted(
-                totalTasks
-            ) {
+            onStarted(totalTasks) {
 
                 if (!mounted) {
                     return;
                 }
 
-                setBoot(
-                    previous => ({
-                        ...previous,
+                setBoot(previous => ({
+                    ...previous,
 
-                        stage:
-                            BootStage.STARTING,
+                    stage:
+                        BootStage.STARTING,
 
-                        totalTasks,
+                    totalTasks,
 
-                        completedTasks:
-                            0,
+                    completedTasks:
+                        0,
 
-                        progress:
-                            0,
+                    progress:
+                        0,
 
-                        title:
-                            "Starting BizTru...",
+                    title:
+                        "Starting BizTru...",
 
-                        completed:
-                            false,
+                    completed:
+                        false,
 
-                        error:
-                            undefined,
-                    })
-                );
+                    error:
+                        undefined,
+                }));
             },
 
 
@@ -141,30 +202,28 @@ export function ApplicationProvider({
                     return;
                 }
 
-                setBoot(
-                    previous => ({
-                        ...previous,
+                setBoot(previous => ({
+                    ...previous,
 
-                        stage:
-                            progress.stage,
+                    stage:
+                        progress.stage,
 
-                        title:
-                            task.title,
+                    title:
+                        task.title,
 
-                        progress:
-                            progress.percentage,
+                    progress:
+                        progress.percentage,
 
-                        completedTasks:
-                            Math.round(
-                                progress.completed
-                            ),
+                    completedTasks:
+                        Math.round(
+                            progress.completed
+                        ),
 
-                        totalTasks:
-                            Math.round(
-                                progress.total
-                            ),
-                    })
-                );
+                    totalTasks:
+                        Math.round(
+                            progress.total
+                        ),
+                }));
             },
 
 
@@ -177,30 +236,28 @@ export function ApplicationProvider({
                     return;
                 }
 
-                setBoot(
-                    previous => ({
-                        ...previous,
+                setBoot(previous => ({
+                    ...previous,
 
-                        stage:
-                            progress.stage,
+                    stage:
+                        progress.stage,
 
-                        title:
-                            task.title,
+                    title:
+                        task.title,
 
-                        progress:
-                            progress.percentage,
+                    progress:
+                        progress.percentage,
 
-                        completedTasks:
-                            Math.round(
-                                progress.completed
-                            ),
+                    completedTasks:
+                        Math.round(
+                            progress.completed
+                        ),
 
-                        totalTasks:
-                            Math.round(
-                                progress.total
-                            ),
-                    })
-                );
+                    totalTasks:
+                        Math.round(
+                            progress.total
+                        ),
+                }));
             },
 
 
@@ -210,168 +267,305 @@ export function ApplicationProvider({
                     return;
                 }
 
-                setBoot(
-                    previous => ({
-                        ...previous,
+                setBoot(previous => ({
+                    ...previous,
 
-                        stage:
-                            BootStage.COMPLETED,
+                    stage:
+                        BootStage.COMPLETED,
 
-                        progress:
-                            100,
+                    progress:
+                        100,
 
-                        completed:
-                            true,
-                    })
-                );
+                    completed:
+                        true,
+                }));
             },
 
 
-            onFailed(
-                error
-            ) {
+            onFailed(error) {
 
                 if (!mounted) {
                     return;
                 }
 
-                setBoot(
-                    previous => ({
-                        ...previous,
+                setBoot(previous => ({
+                    ...previous,
 
-                        stage:
-                            BootStage.FAILED,
+                    stage:
+                        BootStage.FAILED,
 
-                        error:
-                            error instanceof Error
-                                ? error.message
-                                : String(error),
-                    })
-                );
+                    error:
+                        error instanceof Error
+                            ? error.message
+                            : String(error),
+                }));
             },
         };
 
 
+        /*
+         * ========================================================
+         * BOOT PROCESS
+         * ========================================================
+         */
+
         async function bootstrap(): Promise<void> {
 
-        try {
+            try {
 
-            const manager =
-                new BootManager(
-                    new ClientBootstrapper(),
-                    new BusinessBootstrapper()
-                );
+                /*
+                 * ------------------------------------------------
+                 * 1. Create boot manager
+                 * ------------------------------------------------
+                 */
 
-            const result =
-                await manager.boot(
-                    listener,
-                    controller.signal
-                );
+                const manager =
+                    new BootManager(
+                        new ClientBootstrapper(),
+                        new BusinessBootstrapper()
+                    );
 
-            if (
-                cancelled ||
-                controller.signal.aborted
-            ) {
-                if (result.application) {
-                    await result
-                        .application
+
+                /*
+                 * ------------------------------------------------
+                 * 2. Execute application boot pipeline
+                 * ------------------------------------------------
+                 */
+
+                const result =
+                    await manager.boot(
+                        listener,
+                        controller.signal
+                    );
+
+
+                /*
+                 * ------------------------------------------------
+                 * 3. Handle cancellation after boot
+                 * ------------------------------------------------
+                 */
+
+                if (
+                    cancelled ||
+                    controller.signal.aborted
+                ) {
+
+                    if (result.application) {
+
+                        await result
+                            .application
+                            .client
+                            .runtime
+                            .dispose();
+                    }
+
+                    return;
+                }
+
+
+                /*
+                 * ------------------------------------------------
+                 * 4. Acquire application
+                 * ------------------------------------------------
+                 */
+
+                app =
+                    result.application;
+
+
+                if (!app) {
+
+                    throw new Error(
+                        "Boot manager completed without an application."
+                    );
+                }
+
+
+                /*
+                 * ------------------------------------------------
+                 * 5. Restore durable application session
+                 * ------------------------------------------------
+                 *
+                 * SessionApi restores:
+                 *
+                 * client_session
+                 *       ↓
+                 * user
+                 *       ↓
+                 * business
+                 *       ↓
+                 * branch
+                 *       ↓
+                 * ApplicationSessionState
+                 */
+
+                const restoredSession =
+                    await app.session.restore();
+
+
+                /*
+                 * ------------------------------------------------
+                 * 6. Restore last application route
+                 * ------------------------------------------------
+                 */
+
+                const {
+                    lastRoute,
+                } =
+                    await app
+                        .client
+                        .repositories
+                        .applicationState
+                        .getLastRoute();
+
+
+                /*
+                 * ------------------------------------------------
+                 * 7. Check cancellation after all async work
+                 * ------------------------------------------------
+                 */
+
+                if (
+                    cancelled ||
+                    !mounted ||
+                    controller.signal.aborted
+                ) {
+
+                    await app
                         .client
                         .runtime
                         .dispose();
+
+                    app = undefined;
+
+                    return;
                 }
 
-                return;
-            }
 
-            app = result.application;
+                /*
+                 * ------------------------------------------------
+                 * 8. Publish fully reconstructed state
+                 * ------------------------------------------------
+                 *
+                 * React must not render the application tree
+                 * until both application and session exist.
+                 */
 
-            if (!app) {
-                throw new Error(
-                    "Boot manager completed without an application."
+                setApplication(app);
+                setSession(restoredSession);
+
+
+                /*
+                 * ------------------------------------------------
+                 * 9. Application is now ready
+                 * ------------------------------------------------
+                 */
+
+                setReady(true);
+
+                if(lastRoute){
+                    navigate(lastRoute)
+                }
+
+            } catch (error) {
+
+                /*
+                 * Cancellation is expected during unmount,
+                 * especially under React StrictMode.
+                 */
+                if (
+                    cancelled ||
+                    controller.signal.aborted
+                ) {
+                    return;
+                }
+
+
+                console.error(
+                    "Application bootstrap failed:",
+                    error
                 );
+
+
+                /*
+                 * If application creation succeeded but a later
+                 * bootstrap step failed, release the application
+                 * resources before exposing the failure.
+                 */
+                if (app) {
+
+                    try {
+
+                        await app
+                            .client
+                            .runtime
+                            .dispose();
+
+                    } catch (disposeError) {
+
+                        console.error(
+                            "Failed to dispose application after boot failure:",
+                            disposeError
+                        );
+                    }
+
+                    app = undefined;
+                }
+
+
+                if (!mounted) {
+                    return;
+                }
+
+
+                setBoot(previous => ({
+                    ...previous,
+
+                    stage:
+                        BootStage.FAILED,
+
+                    error:
+                        error instanceof Error
+                            ? error.message
+                            : String(error),
+                }));
             }
-            await app.session.restore();
-            
-            const { lastRoute } =
-                await app
-                    .client
-                    .repositories
-                    .applicationState
-                    .getLastRoute();
+        }
 
-            if (
-                cancelled ||
-                !mounted ||
-                controller.signal.aborted
-            ) {
 
-                await app
+        void bootstrap();
+
+
+        /*
+         * ========================================================
+         * CLEANUP
+         * ========================================================
+         */
+
+        return () => {
+
+            mounted = false;
+            cancelled = true;
+
+            controller.abort();
+
+
+            /*
+             * Dispose the application owned by this bootstrap
+             * execution.
+             */
+            if (app) {
+
+                void app
                     .client
                     .runtime
                     .dispose();
 
                 app = undefined;
-
-                return;
             }
+        };
 
-            setApplication(app);
-            setReady(true);
-
-            navigate(lastRoute);
-
-        } catch (error) {
-
-            if (
-                cancelled ||
-                controller.signal.aborted
-            ) {
-                return;
-            }
-
-            console.error(
-                "Application bootstrap failed:",
-                error
-            );
-
-            if (!mounted) {
-                return;
-            }
-
-            setBoot(previous => ({
-                ...previous,
-
-                stage:
-                    BootStage.FAILED,
-
-                error:
-                    error instanceof Error
-                        ? error.message
-                        : String(error),
-            }));
-        }
-    }
-
-    void bootstrap();
-
-    return () => {
-
-        mounted = false;
-        cancelled = true;
-
-        controller.abort();
-
-        if (app) {
-            void app
-                .client
-                .runtime
-                .dispose();
-
-            app = undefined;
-        }
-    };
-
-}, [navigate]);
+    }, [navigate]);
 
 
     /*
@@ -392,12 +586,13 @@ export function ApplicationProvider({
 
     /*
      * ============================================================
-     * DEFENSIVE GUARD
+     * DEFENSIVE READY CHECK
      * ============================================================
      */
 
     if (
-        application === null
+        application === null ||
+        session === null
     ) {
 
         return null;
@@ -413,20 +608,24 @@ export function ApplicationProvider({
     return (
 
         <Context.Provider
-            value={
-                application
-            }
+            value={application}
         >
 
-            <SyncProvider
-                syncService={
-                    application.syncService
-                }
+            <ApplicationSessionProvider
+                session={session}
             >
 
-                {children}
+                <SyncProvider
+                    syncService={
+                        application.syncService
+                    }
+                >
 
-            </SyncProvider>
+                    {children}
+
+                </SyncProvider>
+
+            </ApplicationSessionProvider>
 
         </Context.Provider>
     );

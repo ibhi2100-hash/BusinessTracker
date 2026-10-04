@@ -13,8 +13,8 @@ implements BootTask {
     async execute(context: BootContext): Promise<void> {
         context.output.application = 
             new Application(
-                context.infrastructure.client,
-                context.runtime.businessManager
+                context.infrastructure.client!,
+                context.runtime.businessManager!
             )
     }
 

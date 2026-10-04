@@ -7,18 +7,9 @@ export function useProjectionRebuilderController(projectionRebuilder: Projection
     state => state.start
   );
 
-  const setStatus = useRebuilderStore(
-    state => state.setStatus
-  );
-
   const setError = useRebuilderStore(
     state => state.setError
   );
-
-  const setEvents = useRebuilderStore(
-    state => state.setEvents
-  );
-
   async function rebuild() {
     try {
       start();

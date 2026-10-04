@@ -8,10 +8,12 @@ import { salesKeys } from "./salesStatementKeys";
 
 
 export class SalesStatement {
-
+  private readonly manager: PreparedStatementManager
   constructor(
-    private readonly manager: PreparedStatementManager
-  ) {}
+     manager: PreparedStatementManager
+  ) {
+    this.manager = manager
+  }
 
   get upsert() {
     return this.manager.get(salesKeys.salesUpsert);

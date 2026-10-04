@@ -4,6 +4,12 @@ import { BusinessEventTypes } from "@business/shared-types";
 import type{ BusinessContext } from "../../Composer/context/BusinessContextContract"
 
 export async function domainEventTransformer(command: Command,  context: BusinessContext, logicClock: number, expectedAggregateVersion: number):Promise<DomainEvent>{
+    if(!context.branchId){
+        throw new Error("BranchId does not exists")
+    }
+    if(!context.businessId){
+        throw new Error("BusinessId does not exists")
+    }
     return {
         id: command.id,
         aggregateId: command.aggregateId,

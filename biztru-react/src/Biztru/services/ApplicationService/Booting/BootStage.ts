@@ -1,169 +1,292 @@
-import { ApplicationContext } from "../../../Composer/context/ApplicationContext"; 
-import { Application } from "../Application";
-import { BusinessManager } from "../../../Composer/BusinessManager"; 
-import type{ CurrentBusiness } from "../../../offline/sqlite/clientDatabase/repositories/CurrentBusiness/SQLiteCurrentBusinessRepository"; 
+import { ApplicationContext } 
+    from "../../../Composer/context/ApplicationContext";
 
-export enum BootStage {
+import { Application } 
+    from "../Application";
 
-    STARTING,
+import { BusinessManager } 
+    from "../../../Composer/BusinessManager";
 
-    OPENING_CLIENT_DATABASE,
+import type { CurrentBusiness } 
+    from "../../../offline/sqlite/clientDatabase/repositories/CurrentBusiness/SQLiteCurrentBusinessRepository";
 
-    RUNNING,
 
-    LOADING_CONFIGURATION,
+/* =========================================================
+   BOOT STAGES
+   ========================================================= */
 
-    RESTORING_BUSINESSES,
+export const BootStage = {
 
-    OPENING_CURRENT_BUSINESS,
+    STARTING:
+        "STARTING",
 
-    STARTING_EVENT_BUS,
+    OPENING_CLIENT_DATABASE:
+        "OPENING_CLIENT_DATABASE",
 
-    COMPLETED,
+    RUNNING:
+        "RUNNING",
 
-    FAILED
+    LOADING_CONFIGURATION:
+        "LOADING_CONFIGURATION",
 
+    RESTORING_BUSINESSES:
+        "RESTORING_BUSINESSES",
+
+    OPENING_CURRENT_BUSINESS:
+        "OPENING_CURRENT_BUSINESS",
+
+    STARTING_EVENT_BUS:
+        "STARTING_EVENT_BUS",
+
+    COMPLETED:
+        "COMPLETED",
+
+    FAILED:
+        "FAILED",
+
+} as const;
+
+
+/*
+ * A single boot-stage value.
+ *
+ * Example:
+ *
+ * BootStage.FAILED
+ *
+ * has type:
+ *
+ * "FAILED"
+ */
+
+export type BootStageType =
+    typeof BootStage[keyof typeof BootStage];
+
+
+/* =========================================================
+   STARTUP DESTINATIONS
+   ========================================================= */
+
+export const StartupDestination = {
+
+    HOME:
+        "/",
+
+    ONBOARD:
+        "/onboard",
+
+    DASHBOARD:
+        "/dashboard",
+
+    RECOVERY:
+        "/recovery",
+
+} as const;
+
+
+export type StartupDestinationType =
+    typeof StartupDestination[
+        keyof typeof StartupDestination
+    ];
+
+
+/* =========================================================
+   BOOT RESULT
+   ========================================================= */
+
+export interface BootResult {
+
+    application:
+        Application;
+
+    destination:
+        StartupDestinationType;
+
+    diagnostics?:
+        BootDiagnostics;
+
+    report:
+        BootReport;
 }
-export interface BootResult{
 
-    application:Application;
 
-    destination:StartupDestination;
-
-    diagnostics?:BootDiagnostics;
-
-    report: BootReport;
-
-}
-export enum StartupDestination {
-
-    HOME = "/",
-
-    ONBOARD = "/onboard",
-
-    DASHBOARD = "/dashboard",
-
-    RECOVERY = "/recovery"
-
-}
+/* =========================================================
+   BOOT CONTEXT
+   ========================================================= */
 
 export interface BootContext {
+
     infrastructure: {
-        client?: ApplicationContext;
+
+        client?:
+            ApplicationContext;
+
     };
 
     runtime: {
-        businessManager?: BusinessManager;
-        currentBusiness?: CurrentBusiness;
+
+        businessManager?:
+            BusinessManager;
+
+        currentBusiness?:
+            CurrentBusiness;
+
     };
 
     output: {
-        application?: Application;
-        destination?: StartupDestination;
+
+        application?:
+            Application;
+
+        destination?:
+            StartupDestinationType;
+
     };
 }
 
 
-export interface BootTask{
+/* =========================================================
+   BOOT TASK
+   ========================================================= */
 
-    readonly id: string;
+export interface BootTask {
 
-    readonly title: string;
+    readonly id:
+        string;
 
-    readonly weight: number;
+    readonly title:
+        string;
+
+    readonly weight:
+        number;
 
     execute(
         context: BootContext
     ): Promise<void>;
-
 }
 
-export interface BootProgress{
+
+/* =========================================================
+   BOOT PROGRESS
+   ========================================================= */
+export interface BootProgress {
     taskId: string;
     taskTitle: string;
-
-    stage?: BootStage;
-
-    percentage:number;
-
-    completed:number;
-
-    total:number;
-
+    stage: BootStageType;
+    percentage: number;
+    completed: number;
+    total: number;
     elapsed: number;
-
-}
-export interface BootDiagnostics{
-
-    runtime:boolean;
-
-    clientDatabase:boolean;
-
-    migrations:boolean;
-
-    repositories:boolean;
-
-    services:boolean;
-
-    businessManager:boolean;
-
-    businessDatabase:boolean;
-
-    executionContext:boolean;
-
 }
 
-export interface BootListener{
+/* =========================================================
+   BOOT DIAGNOSTICS
+   ========================================================= */
+
+export interface BootDiagnostics {
+
+    runtime:
+        boolean;
+
+    clientDatabase:
+        boolean;
+
+    migrations:
+        boolean;
+
+    repositories:
+        boolean;
+
+    services:
+        boolean;
+
+    businessManager:
+        boolean;
+
+    businessDatabase:
+        boolean;
+
+    executionContext:
+        boolean;
+}
+
+
+/* =========================================================
+   BOOT LISTENER
+   ========================================================= */
+
+export interface BootListener {
 
     onStarted(
-        totalTasks:number
-    ):void;
+        totalTasks: number
+    ): void;
 
     onTaskStarted(
-        task:BootTask,
-        progress:BootProgress
-    ):void;
+        task: BootTask,
+        progress: BootProgress
+    ): void;
 
     onTaskCompleted(
-        task:BootTask,
-        progress:BootProgress
-    ):void;
+        task: BootTask,
+        progress: BootProgress
+    ): void;
 
     onCompleted(
-        result:BootResult
-    ):void;
+        result: BootResult
+    ): void;
 
     onFailed(
-        error:unknown
-    ):void;
-
+        error: unknown
+    ): void;
 }
+
+
+/* =========================================================
+   BOOT TASK REPORT
+   ========================================================= */
 
 export interface BootTaskReport {
 
-    id: string;
+    id:
+        string;
 
-    title: string;
+    title:
+        string;
 
-    duration: number;
+    duration:
+        number;
 
-    success: boolean;
+    success:
+        boolean;
 
-    error?: string
-
+    error?:
+        string;
 }
+
+
+/* =========================================================
+   BOOT REPORT
+   ========================================================= */
 
 export interface BootReport {
 
-    startedAt: number;
+    startedAt:
+        number;
 
-    finishedAt: number;
+    finishedAt:
+        number;
 
-    duration: number;
+    duration:
+        number;
 
-    tasks: readonly BootTaskReport[];
-
+    tasks:
+        readonly BootTaskReport[];
 }
+
+
+/* =========================================================
+   BOOT PIPELINE MIDDLEWARE
+   ========================================================= */
 
 export interface BootPipelineMiddleware {
 
@@ -183,20 +306,32 @@ export interface BootPipelineMiddleware {
         error: unknown
     ): Promise<void>;
 }
+
+
+/* =========================================================
+   BOOT STATE
+   ========================================================= */
+
 export interface BootState {
 
-    stage: BootStage;
+    stage:
+        BootStageType;
 
-    progress: number;
+    progress:
+        number;
 
-    title: string;
+    title:
+        string;
 
-    completed: boolean;
+    completed:
+        boolean;
 
-    totalTasks: number;
+    totalTasks:
+        number;
 
-    completedTasks: number;
+    completedTasks:
+        number;
 
-    error?: string;
-
+    error?:
+        string;
 }

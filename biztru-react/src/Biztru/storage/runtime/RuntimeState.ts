@@ -1,13 +1,13 @@
-export enum RuntimeState {
+export const RuntimeState = {
 
-    Created,
+    Created: "Created",
 
-    Initialized,
+    Initialized: " Initialized",
 
-    Started,
+    Started: "Started",
 
-    Stopped,
+    Stopped: "Stopped",
 
-    Disposed
+    Disposed: "Disposed"
 
-}
+} as const

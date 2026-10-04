@@ -6,10 +6,12 @@ import { ledgerKeys }
 
 
 export class LedgerStatements {
-
+  private readonly manager: PreparedStatementManager
   constructor(
-    private readonly manager: PreparedStatementManager
-  ) {}
+    manager: PreparedStatementManager
+  ) {
+    this.manager = manager
+  }
 
   get append() {
     return this.manager.get(

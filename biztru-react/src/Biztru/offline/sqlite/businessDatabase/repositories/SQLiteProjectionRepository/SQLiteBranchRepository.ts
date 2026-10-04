@@ -16,10 +16,12 @@ import { BranchStatementKeys } from "../../statements/branch/BranchStatementKeys
 
 export class SQLiteBranchRepository
     implements IProjectionEntityRepository<Branch>
-{
+{   private readonly statements: BranchStatements;
     constructor(
-        private readonly statements: BranchStatements
-    ) {}
+        statements: BranchStatements
+    ) {
+        this.statements = statements
+    }
 
 
     // ============================================================

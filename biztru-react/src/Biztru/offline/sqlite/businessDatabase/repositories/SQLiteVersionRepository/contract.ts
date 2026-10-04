@@ -1,6 +1,6 @@
 // AggregateRepository.ts
 
-import { AggregateRecord } from "./types";
+import type { AggregateRecord } from "./types";
 
 export interface AggregateRepository {
 

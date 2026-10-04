@@ -54,11 +54,11 @@ export class RegistrationService {
 
             version: 0,
 
-            lastEventId: null,
+            lastEventId: undefined,
 
             createdAt: Date.now(),
 
-            updatedAt: null
+            updatedAt: undefined
 
         };
         
@@ -69,7 +69,7 @@ export class RegistrationService {
             userId: user.id,
             createdAt: Date.now(),
             lastAuthenticatedAt: Date.now(),
-            updatedAt: null
+            updatedAt: Date.now()
         })
         
         return userRegisterd
@@ -122,9 +122,12 @@ export class RegistrationService {
 
 }
 export class LoginService {
+    readonly repositories: SQLiteAuthRepository;
     constructor(
-        private readonly repositories: SQLiteAuthRepository
-    ){}
+        repositories: SQLiteAuthRepository
+    ){
+        this.repositories = repositories;
+    }
 
 
 }

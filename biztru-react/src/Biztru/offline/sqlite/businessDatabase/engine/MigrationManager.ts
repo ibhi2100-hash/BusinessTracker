@@ -3,9 +3,12 @@ import { QueryRunner } from "../../../../storage/queryRunner/QueryRunner";
 import { migrations } from "../migrations";
 
 export class BusinessMigrationRunner {
+    private readonly queryRunner: QueryRunner;
     constructor(
-        private readonly queryRunner: QueryRunner
-    ) {}
+        queryRunner: QueryRunner
+    ) {
+        this.queryRunner = queryRunner
+    }
 
     async initialize(): Promise<void> {
         await this.queryRunner.execute(`

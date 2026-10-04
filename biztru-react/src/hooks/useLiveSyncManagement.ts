@@ -6,14 +6,6 @@ import { useApplication } from "../Biztru/services/ApplicationService/Applicatio
 import { useLiveQuery } from "./useLiveQuery";
 
 import type{ PersistedSyncState } from "@business/shared-types";
-
-const SYNC_DEPENDENCIES = [
-    "sync_state",
-    "sync_activities",
-    "conflicts",
-    "outbox",
-] as const;
-
 export function useLiveSyncManagement() {
 
     const app = useApplication();

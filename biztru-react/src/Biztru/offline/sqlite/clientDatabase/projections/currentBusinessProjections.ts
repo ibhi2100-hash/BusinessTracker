@@ -12,10 +12,12 @@ export class CurrentBusinessProjection
   implements ProjectionConsumer<DomainEvent>
 {
   readonly name = "CurrentBusiness";
-
+  private readonly repository: CurrentBusinessRepository;
   constructor(
-    private readonly repository: CurrentBusinessRepository
-  ) {}
+    repository: CurrentBusinessRepository
+  ) {
+    this.repository = repository
+  }
 
   async handle(
     events: readonly DomainEvent<any>[]

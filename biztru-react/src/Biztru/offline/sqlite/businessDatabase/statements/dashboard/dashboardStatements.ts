@@ -2,7 +2,10 @@
 import type{ PreparedStatementManager } from "../../../PreparedStatement/PreparedStatementManager";
 import { dashboardKeys } from "./dashbordStatementKeys";
 export class DashboardStatements {
-  constructor(private readonly manager: PreparedStatementManager) {}
+  private readonly manager: PreparedStatementManager;
+  constructor(manager: PreparedStatementManager) {
+    this.manager = manager
+  }
 
   get balances()   { return this.manager.get(dashboardKeys.balances); }
   get revenue()    { return this.manager.get(dashboardKeys.revenue); }

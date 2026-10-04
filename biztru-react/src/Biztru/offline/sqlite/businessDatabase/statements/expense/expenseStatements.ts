@@ -3,7 +3,10 @@ import type{ PreparedStatementManager } from "../../../PreparedStatement/Prepare
 import { expenseKeys } from "./expenseStatementKey";
 
 export class ExpenseStatement {
-  constructor(private readonly manager: PreparedStatementManager) {}
+  private readonly manager: PreparedStatementManager;
+  constructor(manager: PreparedStatementManager) {
+    this.manager = manager
+  }
 
   get upsert() {
     return this.manager.get(expenseKeys.expenseUpsert);

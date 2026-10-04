@@ -7,6 +7,6 @@ export interface BusinessContextProvider {
 }
 
 export interface BusinessContext {
-    businessId: string;
+    businessId?: string;
     branchId?: string;
 }

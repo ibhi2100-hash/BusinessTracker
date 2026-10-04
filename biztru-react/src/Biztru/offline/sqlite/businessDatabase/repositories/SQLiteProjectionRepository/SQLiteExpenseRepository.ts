@@ -49,10 +49,12 @@ export interface ExpenseCountRow {
 
 export class SQLiteExpenseRepository
     implements IProjectionEntityRepository<Expense>
-{
+{   private readonly statements: ExpenseStatement
     constructor(
-        private readonly statements: ExpenseStatement
-    ) {}
+        statements: ExpenseStatement
+    ) {
+        this.statements  = statements
+    }
 
 
     // ============================================================

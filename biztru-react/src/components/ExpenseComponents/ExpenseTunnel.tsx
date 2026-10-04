@@ -113,6 +113,9 @@ export default function ExpenseTunnel({
 
   const loadRecent = useCallback(async () => {
     if (!businessId) return;
+    if(!branchId){
+      throw new Error("Branch id does not exist now in expense tunnel")
+    }
     try {
       const list = await app.expense.listExpenses({
         businessId,
@@ -162,6 +165,10 @@ export default function ExpenseTunnel({
     if (!businessId) {
       toast.error("Business context is missing");
       return;
+    }
+    if(!branchId) {
+      toast.error("BranchId does not exist");
+      throw new Error("Branchid does not exist")
     }
 
     try {
@@ -213,7 +220,7 @@ export default function ExpenseTunnel({
       />
 
       {mode === "OPENING" && (
-        <div className="rounded-2xl border border-amber-400/10 bg-amber-400/[0.06] px-4 py-3.5">
+        <div className="rounded-2xl border border-amber-400/10 bg-amber-400/6 px-4 py-3.5">
           <div className="flex items-start gap-3">
             <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-amber-400/10 text-amber-300">
               <Receipt size={14} />
@@ -233,7 +240,7 @@ export default function ExpenseTunnel({
 
       <GlassCard
         variant="elevated"
-        className="overflow-hidden rounded-[28px] border-white/[0.08] p-0"
+        className="overflow-hidden rounded-[28px] border-white/8 p-0"
       >
         <div className="px-6 pt-6 sm:px-7 sm:pt-7">
           <div className="flex items-center justify-between">
@@ -260,7 +267,7 @@ export default function ExpenseTunnel({
           <label className="mb-3 block px-1 text-xs font-medium uppercase tracking-wider text-gray-500">
             Amount
           </label>
-          <div className="relative overflow-hidden rounded-[24px] border border-red-400/20 bg-black/20 shadow-inner transition-all duration-200 focus-within:border-red-400/50">
+          <div className="relative overflow-hidden rounded-3xl border border-red-400/20 bg-black/20 shadow-inner transition-all duration-200 focus-within:border-red-400/50">
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-red-300/30" />
             <span className="absolute left-5 top-1/2 z-10 -translate-y-1/2 text-3xl font-medium text-red-300">
               ₦
@@ -286,7 +293,7 @@ export default function ExpenseTunnel({
           </div>
         </div>
 
-        <div className="space-y-5 border-t border-white/[0.06] bg-white/[0.012] px-6 py-6 sm:px-7">
+        <div className="space-y-5 border-t border-white/6 bg-white/[0.012] px-6 py-6 sm:px-7">
           <div>
             <label className="mb-2 block text-xs font-medium text-gray-400">
               Expense category
@@ -297,7 +304,7 @@ export default function ExpenseTunnel({
                 setCategory(e.target.value as ExpenseCategory)
               }
               disabled={loading}
-              className="h-12 w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 text-sm text-white outline-none transition focus:border-white/20 disabled:opacity-50"
+              className="h-12 w-full rounded-2xl border border-white/10 bg-white/4 px-4 text-sm text-white outline-none transition focus:border-white/20 disabled:opacity-50"
             >
               {EXPENSE_CATEGORIES.map((item) => (
                 <option
@@ -348,7 +355,7 @@ export default function ExpenseTunnel({
                 setPaymentMethod(e.target.value as UiPaymentMethod)
               }
               disabled={loading}
-              className="h-12 w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 text-sm text-white outline-none transition focus:border-white/20 disabled:opacity-50"
+              className="h-12 w-full rounded-2xl border border-white/10 bg-white/4 px-4 text-sm text-white outline-none transition focus:border-white/20 disabled:opacity-50"
             >
               {PAYMENT_METHODS.map((item) => (
                 <option
@@ -377,7 +384,7 @@ export default function ExpenseTunnel({
           </div>
         </div>
 
-        <div className="border-t border-white/[0.06] bg-white/[0.015] px-6 py-5 sm:px-7">
+        <div className="border-t border-white/6 bg-white/1.5 px-6 py-5 sm:px-7">
           <div className="flex flex-col gap-3 sm:flex-row">
             <GlassButton
               disabled={isDisabled}
@@ -415,7 +422,7 @@ export default function ExpenseTunnel({
         </div>
 
         {entries.length === 0 ? (
-          <GlassCard className="rounded-[24px] border-white/[0.06] p-10">
+          <GlassCard className="rounded-3xl border-white/6 p-10">
             <div className="text-center">
               <GlassIcon size="lg" variant="primary">
                 <Receipt size={21} />
@@ -432,7 +439,7 @@ export default function ExpenseTunnel({
           entries.map((entry) => (
             <GlassCard
               key={entry.id}
-              className="rounded-2xl border-white/[0.06] p-4 transition hover:bg-white/[0.025]"
+              className="rounded-2xl border-white/6 p-4 transition hover:bg-white/2.5"
             >
               <div className="flex items-center justify-between gap-4">
                 <div className="flex min-w-0 items-center gap-3">

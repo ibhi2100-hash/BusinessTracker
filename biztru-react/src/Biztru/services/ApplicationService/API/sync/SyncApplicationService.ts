@@ -39,10 +39,12 @@ export class SyncApplicationService {
   private unsubscribeSynchronization: (() => void) | null = null;
   private boundBusinessId: string | null = null;   // ← replaces “initialized”
   private disposed = false;
-
+  private readonly manager: BusinessManager
   constructor(
-    private readonly manager: BusinessManager
-  ) {}
+    manager: BusinessManager
+  ) {
+    this.manager = manager
+  }
 
   // ─────────────────────────────────────────────
   // Lifecycle – call this whenever a business becomes current
@@ -87,23 +89,19 @@ export class SyncApplicationService {
   // Commands
   // ─────────────────────────────────────────────
 
-  async syncNow(): Promise<SyncResult | null> {
+  async syncNow(): Promise<SyncResult> {
     if (this.disposed) {
       throw new Error("SyncApplicationService has been disposed.");
     }
 
     // ensure we are attached to the current business
-    const attached = await this.attachToCurrentBusiness();
-    if (!attached) {
-      return null;
-    }
+    await this.attachToCurrentBusiness();
 
     const app = this.manager.current();
-    
-            if(!app){ 
-                return
+    if(!app){
+                throw new Error("Business Does not exist")
             }
-
+       
     return app.synchronization.syncNow();
   }
 
@@ -124,10 +122,10 @@ export class SyncApplicationService {
 
     async getState(): Promise<PersistedSyncState>{
             const app = await this.manager.current();
-
-            if(!app){ 
-                return
-            }
+        if(!app){
+                    throw new Error("Business Does not exist")
+                }
+                
 
         const state = await  app.storage.repositories.syncState.getState()
         
@@ -148,8 +146,8 @@ async refreshPendingAndCursor(): Promise<void> {
   if (!app) return;
 
   const now = Date.now();
-    const pendingEvents = await app.storage.repositories.outbox.getPendingCount(now);
-  const deviceCursor =await app.storage.repositories.syncState.getCursor();
+  await app.storage.repositories.outbox.getPendingCount(now);
+  await app.storage.repositories.syncState.getCursor();
 } 
 
    

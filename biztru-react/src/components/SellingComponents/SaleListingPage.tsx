@@ -6,9 +6,7 @@ import {
   Receipt,
   Filter,
   RefreshCw,
-  ShoppingBag,
-  Calendar,
-  X,
+  ShoppingBag
 } from "lucide-react";
 
 import { GlassCard } from "../ui/GlassCard";
@@ -62,7 +60,9 @@ function StatusPill({ status }: { status: string }) {
 export default function SalesListPage() {
   const app = useApplication();
   const { businessId, branchId } = useBusinessContext();
-
+  if(!businessId){
+    throw new Error("This is the new BusinessId")
+  }
   const [sales, setSales] = useState<Sales[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -121,7 +121,7 @@ export default function SalesListPage() {
   return (
     <div className="min-h-screen pb-28 bg-neutral-950 text-white">
       {/* Header */}
-      <div className="sticky top-0 z-40 backdrop-blur-2xl border-b border-white/10 bg-white/[0.03]">
+      <div className="sticky top-0 z-40 backdrop-blur-2xl border-b border-white/10 bg-white/3">
         <div className="px-4 pt-4 pb-3 space-y-3">
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-semibold flex items-center gap-2.5">
@@ -170,7 +170,7 @@ export default function SalesListPage() {
                     "px-3.5 py-1.5 rounded-full text-xs capitalize border whitespace-nowrap transition",
                     status === s
                       ? "bg-teal-500/20 text-teal-300 border-teal-500/40"
-                      : "bg-white/[0.04] text-gray-400 border-white/10"
+                      : "bg-white/4 text-gray-400 border-white/10"
                   )}
                 >
                   {s}
@@ -222,7 +222,7 @@ export default function SalesListPage() {
             >
               <GlassCard
                 variant="default"
-                className="p-4 hover:bg-white/[0.06] transition"
+                className="p-4 hover:bg-white/6 transition"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
@@ -344,7 +344,7 @@ export default function SalesListPage() {
                     : ""
                 )
               }
-              className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none focus:border-teal-500"
+              className="w-full rounded-2xl border border-white/10 bg-white/4 px-4 py-3 text-white outline-none focus:border-teal-500"
             />
           </div>
           <div>
@@ -359,7 +359,7 @@ export default function SalesListPage() {
                     : ""
                 )
               }
-              className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none focus:border-teal-500"
+              className="w-full rounded-2xl border border-white/10 bg-white/4 px-4 py-3 text-white outline-none focus:border-teal-500"
             />
           </div>
         </div>

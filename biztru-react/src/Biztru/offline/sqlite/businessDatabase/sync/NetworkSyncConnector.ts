@@ -20,9 +20,10 @@ export class NetworkSyncConnector {
     private intervalId: number | null = null;
     private started = false;
 
+    private readonly coordinator: SyncCoordinator;
 
     constructor(
-        private readonly coordinator:
+        coordinator:
             SyncCoordinator,
 
         options:
@@ -32,6 +33,8 @@ export class NetworkSyncConnector {
         this.intervalMs =
             options.intervalMs ??
             30_000;
+
+        this.coordinator = coordinator
 
 
         /*

@@ -17,7 +17,7 @@ export const migration0011: Migration = {
                         userId TEXT NOT NULL,
                         createdAt INTEGER NOT NULL,
                         lastAuthenticatedAt INTEGER NOT NULL,
-                        updatedAt INTEGER NOT NULL,
+                        updatedAt INTEGER,
 
                         CHECK (id = 1),
 

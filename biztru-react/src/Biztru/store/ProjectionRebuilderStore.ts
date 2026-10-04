@@ -8,6 +8,25 @@ export interface ReplayEvent {
   consumer?: string;
   error?: string;
 }
+export const RebuildProgressStatus = {
+  IDLE: "IDLE",
+  RESETTING: "RESETTING",
+  PROCESSING: "PROCESSING",
+  COMPLETED: "COMPLETED",
+  FAILED: "FAILED",
+} as const;
+export interface RebuildLogEntry {
+  timestamp: number;
+  level: "INFO" | "WARN" | "ERROR";
+  message: string;
+  eventId?: string;
+  consumer?: string;
+  duration?: number;
+}
+export type RebuildProgressStatusType =
+  typeof RebuildProgressStatus[
+    keyof typeof RebuildProgressStatus
+  ];
 
 export interface ConsumerActivity {
   name: string;
@@ -27,7 +46,7 @@ export interface ProjectionStatus {
 }
 
 interface RebuilderState {
-  status: RebuildProgressStatus;
+  status: RebuildProgressStatusType;
   totalEvents: number;
   processedEvents: number;
   currentEvent: ReplayEvent | null;
@@ -41,7 +60,7 @@ interface RebuilderState {
   completedAt: number | null;
 
   // actions
-  setStatus: (status: RebuildProgressStatus) => void;
+  setStatus: (status: RebuildProgressStatusType) => void;
   setTotalEvents: (total: number) => void;
   setCurrentEvent: (event: ReplayEvent | null) => void;
   setCurrentConsumer: (consumer: string | null) => void;

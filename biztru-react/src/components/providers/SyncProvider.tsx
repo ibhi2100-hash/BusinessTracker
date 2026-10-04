@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+
 import {
     createContext,
     useCallback,
@@ -12,19 +13,80 @@ import { useNavigate } from "react-router-dom";
 
 import { toast } from "sonner";
 
-import type { SyncResult, SyncTrigger, PersistedSyncState } from "@business/shared-types";
+import type {
+    PersistedSyncState,
+    SyncResult,
+    SyncTrigger,
+} from "@business/shared-types";
+
 import {
     SyncApplicationService,
 } from "../../Biztru/services/ApplicationService/API/sync/SyncApplicationService";
-import type { SyncApplicationEvent } from "../../Biztru/services/ApplicationService/API/sync/SyncApplicationService";
-import { useLiveSyncManagement } from "../../hooks/useLiveSyncManagement";
-import { number } from "zod";
 
+import type {
+    SyncApplicationEvent,
+} from "../../Biztru/services/ApplicationService/API/sync/SyncApplicationService";
+
+import {
+    useLiveSyncManagement,
+} from "../../hooks/useLiveSyncManagement";
 
 
 /*
  * ============================================================
- * Context
+ * Default synchronization state
+ * ============================================================
+ *
+ * Used while the durable synchronization state is being
+ * restored from the local database.
+ *
+ * This keeps the React-facing contract total:
+ *
+ * PersistedSyncState
+ *       ↓
+ * SyncContextValue
+ *
+ * No required context property becomes undefined while the
+ * live query is loading.
+ */
+
+const DEFAULT_SYNC_STATE: PersistedSyncState = {
+    status: "IDLE",
+
+    pendingEvents: 0,
+
+    uploadedEvents: 0,
+
+    acceptedEvents: 0,
+
+    alreadyAcceptedEvents: 0,
+
+    rejectedEvents: 0,
+
+    conflictEvents: 0,
+
+    pulledEvents: 0,
+
+    lastPulledGlobalPosition: 0,
+
+    deviceCursor: 0,
+
+    lastSyncAt: null,
+
+    lastSyncDurationMs: null,
+
+    lastResult: null,
+
+    conflicts: [],
+
+    activities: [],
+
+    error: null,
+};
+
+/*
+ * ============================================================
+ * Context contract
  * ============================================================
  */
 
@@ -72,16 +134,22 @@ export interface SyncContextValue {
     error:
         string | null;
 
-    syncNow():
-        Promise<SyncResult>;
+    syncNow:
+        () => Promise<SyncResult>;
 }
 
 
 const SyncContext =
-    createContext<
-        SyncContextValue | null
-    >(null);
+    createContext<SyncContextValue | null>(
+        null
+    );
 
+
+/*
+ * ============================================================
+ * Provider props
+ * ============================================================
+ */
 
 interface SyncProviderProps {
 
@@ -93,9 +161,21 @@ interface SyncProviderProps {
 }
 
 
+/*
+ * ============================================================
+ * Toast configuration
+ * ============================================================
+ */
+
 const SYNC_TOAST_ID =
     "business-sync";
 
+
+/*
+ * ============================================================
+ * Provider
+ * ============================================================
+ */
 
 export function SyncProvider({
     children,
@@ -108,36 +188,51 @@ export function SyncProvider({
 
     /*
      * ========================================================
-     * Application synchronization state
+     * Durable synchronization state
      * ========================================================
      *
-     * SyncApplicationService is the single source of truth.
+     * The local synchronization state is restored through
+     * useLiveSyncManagement().
+     *
+     * The hook may temporarily return undefined while the
+     * durable state is being loaded.
+     *
+     * React receives the canonical default state during that
+     * short initialization period.
      */
 
     const {
         data: syncState,
-        loading,
-        error,
-        refresh,
-    } = useLiveSyncManagement();
+    } =
+        useLiveSyncManagement();
+
+
+    const currentSyncState =
+        syncState ??
+        DEFAULT_SYNC_STATE;
+
 
     /*
      * ========================================================
      * Browser connectivity
-     *
-     * This does NOT initiate synchronization.
      * ========================================================
+     *
+     * Browser connectivity is deliberately separate from
+     * application synchronization state.
+     *
+     * Going offline does not mutate the durable sync state.
      */
 
     const [
         isOnline,
         setIsOnline,
-    ] = useState(
-        () =>
-            typeof navigator === "undefined"
-                ? true
-                : navigator.onLine
-    );
+    ] =
+        useState<boolean>(
+            () =>
+                typeof navigator === "undefined"
+                    ? true
+                    : navigator.onLine
+        );
 
 
     useEffect(() => {
@@ -145,14 +240,18 @@ export function SyncProvider({
         const handleOnline =
             (): void => {
 
-                setIsOnline(true);
+                setIsOnline(
+                    true
+                );
             };
 
 
         const handleOffline =
             (): void => {
 
-                setIsOnline(false);
+                setIsOnline(
+                    false
+                );
 
 
                 toast.warning(
@@ -168,6 +267,7 @@ export function SyncProvider({
                             8_000,
 
                         action: {
+
                             label:
                                 "View sync",
 
@@ -215,11 +315,16 @@ export function SyncProvider({
      * ========================================================
      * Manual synchronization command
      * ========================================================
+     *
+     * The provider does not implement synchronization logic.
+     *
+     * SyncApplicationService remains responsible for executing
+     * synchronization.
      */
 
     const syncNow =
         useCallback(
-            () =>
+            (): Promise<SyncResult> =>
                 syncService.syncNow(),
             [
                 syncService,
@@ -238,56 +343,63 @@ export function SyncProvider({
             () => ({
 
                 status:
-                    syncState?.status,
+                    currentSyncState.status,
 
                 isSyncing:
-                    syncState?.status ===
+                    currentSyncState.status ===
                     "SYNCING",
 
                 isOnline,
 
                 pendingEvents:
-                    syncState?.pendingEvents,
+                    currentSyncState.pendingEvents,
 
                 uploadedEvents:
-                    syncState?.uploadedEvents,
+                    currentSyncState.uploadedEvents,
 
                 acceptedEvents:
-                    syncState?.acceptedEvents,
+                    currentSyncState.acceptedEvents,
 
                 rejectedEvents:
-                    syncState?.rejectedEvents,
+                    currentSyncState.rejectedEvents,
 
                 conflictEvents:
-                    syncState?.conflictEvents,
+                    currentSyncState.conflictEvents,
 
                 lastPulledGlobalPosition:
-                    syncState?.lastPulledGlobalPosition,
+                    currentSyncState.lastPulledGlobalPosition,
 
                 lastSyncAt:
-                    syncState?.lastSyncAt,
+                    currentSyncState.lastSyncAt,
 
                 lastSyncDurationMs:
-                    syncState?.lastSyncDurationMs,
+                    currentSyncState.lastSyncDurationMs,
 
                 lastResult:
-                    syncState?.lastResult,
+                    currentSyncState.lastResult,
 
                 conflicts:
-                    syncState?.conflicts,
+                    currentSyncState.conflicts,
 
                 error:
-                    syncState?.error,
+                    currentSyncState.error,
 
                 syncNow,
+
             }),
             [
-                syncState,
+                currentSyncState,
                 isOnline,
                 syncNow,
             ]
         );
 
+
+    /*
+     * ========================================================
+     * Provider
+     * ========================================================
+     */
 
     return (
 
@@ -304,7 +416,7 @@ export function SyncProvider({
 
 /*
  * ============================================================
- * Hook
+ * Consumer hook
  * ============================================================
  */
 
@@ -317,10 +429,12 @@ export function useSync():
         );
 
 
-    if (context === null) {
+    if (
+        context === null
+    ) {
 
         throw new Error(
-            "useSync must be used inside SyncProvider"
+            "useSync must be used inside SyncProvider."
         );
     }
 
@@ -333,9 +447,21 @@ export function useSync():
  * ============================================================
  * Synchronization event presentation
  * ============================================================
+ *
+ * These functions translate application synchronization events
+ * into user-facing notifications.
+ *
+ * They do not mutate synchronization state.
  */
 
-function handleSynchronizationEvent(
+
+/*
+ * ============================================================
+ * Event dispatcher
+ * ============================================================
+ */
+
+export function handleSynchronizationEvent(
     event: SyncApplicationEvent
 ): void {
 
@@ -378,7 +504,7 @@ function handleSynchronizationEvent(
 
 /*
  * ============================================================
- * Started
+ * Synchronization started
  * ============================================================
  */
 
@@ -387,7 +513,7 @@ function handleSyncStarted(
 ): void {
 
     /*
-     * Interval synchronization should remain silent.
+     * Background interval synchronization remains silent.
      */
 
     if (
@@ -414,7 +540,7 @@ function handleSyncStarted(
 
 /*
  * ============================================================
- * Completed
+ * Synchronization completed
  * ============================================================
  */
 
@@ -457,6 +583,7 @@ function handleSyncCompleted(
                     10_000,
 
                 action: {
+
                     label:
                         "Resolve",
 
@@ -501,6 +628,7 @@ function handleSyncCompleted(
                     10_000,
 
                 action: {
+
                     label:
                         "View",
 
@@ -541,6 +669,7 @@ function handleSyncCompleted(
                     10_000,
 
                 action: {
+
                     label:
                         "View sync",
 
@@ -589,7 +718,7 @@ function handleSyncCompleted(
 
     /*
      * --------------------------------------------------------
-     * Interval synchronization remains silent.
+     * Background synchronization
      * --------------------------------------------------------
      */
 
@@ -630,7 +759,7 @@ function handleSyncCompleted(
 
 /*
  * ============================================================
- * Failed
+ * Synchronization failed
  * ============================================================
  */
 
@@ -653,6 +782,7 @@ function handleSyncFailed(
                 10_000,
 
             action: {
+
                 label:
                     "View sync",
 
@@ -669,7 +799,7 @@ function handleSyncFailed(
 
 /*
  * ============================================================
- * Helpers
+ * Synchronization summary
  * ============================================================
  */
 
@@ -684,7 +814,8 @@ interface SyncSummary {
     accepted:
         number;
 
-    rejected: number;
+    rejected:
+        number;
 
     conflicts:
         number;
@@ -818,9 +949,39 @@ function summarizeResult(
                 transientError:
                     result.error,
             };
+
+
+        default:
+
+            return {
+
+                pushed:
+                    0,
+
+                pulled:
+                    0,
+
+                accepted:
+                    0,
+
+                rejected:
+                    0,
+
+                conflicts:
+                    0,
+
+                transientError:
+                    "Unknown synchronization result.",
+            };
     }
 }
 
+
+/*
+ * ============================================================
+ * Synchronization message
+ * ============================================================
+ */
 
 function getSyncingMessage(
     trigger: SyncTrigger
@@ -829,19 +990,47 @@ function getSyncingMessage(
     switch (trigger) {
 
         case "NETWORK":
-            return "Connection restored — syncing";
+
+            return (
+                "Connection restored — syncing"
+            );
+
 
         case "MANUAL":
-            return "Synchronizing";
+
+            return (
+                "Synchronizing"
+            );
+
 
         case "STARTUP":
-            return "Checking synchronization";
+
+            return (
+                "Checking synchronization"
+            );
+
 
         case "INTERVAL":
-            return "Synchronizing";
+
+            return (
+                "Synchronizing"
+            );
+
+
+        default:
+
+            return (
+                "Synchronizing"
+            );
     }
 }
 
+
+/*
+ * ============================================================
+ * Successful synchronization description
+ * ============================================================
+ */
 
 function buildSuccessDescription(
     pushed: number,

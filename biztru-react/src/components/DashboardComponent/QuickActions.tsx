@@ -4,7 +4,6 @@ import {
   ArrowUpCircle,
   Building2,
   CreditCard,
-  DollarSign,
   Landmark,
   Package,
   PlusCircle,
@@ -319,14 +318,14 @@ function FrequentActionTile({
       className="
         group
         relative
-        min-h-[132px]
+        min-h-33
         touch-manipulation
         rounded-3xl
         border border-green-500/20
-        bg-gradient-to-br
+        bg-linear-to-br
         from-green-500/15
-        via-white/[0.05]
-        to-white/[0.02]
+        via-white/5
+        to-white/2
         p-5
         text-left
         shadow-[0_12px_40px_rgba(0,0,0,0.25)]
@@ -339,9 +338,9 @@ function FrequentActionTile({
         focus:ring-2
         focus:ring-green-500/50
         active:scale-[0.97]
-        sm:min-h-[150px]
+        sm:min-h-37.5
         sm:p-6
-        lg:min-h-[175px]
+        lg:min-h-43.75
       "
     >
       {/* Frequency indicator */}
@@ -422,7 +421,7 @@ function SecondaryActionTile({
       onClick={onClick}
       className="
         group
-        min-h-[92px]
+        min-h-23
         touch-manipulation
         rounded-2xl
         border border-white/10
@@ -432,12 +431,12 @@ function SecondaryActionTile({
         transition-all
         duration-200
         hover:border-white/20
-        hover:bg-white/[0.06]
+        hover:bg-white/6
         focus:outline-none
         focus:ring-2
         focus:ring-green-500/40
         active:scale-[0.97]
-        lg:min-h-[105px]
+        lg:min-h-26.25
       "
     >
       <div className="flex items-start gap-3">

@@ -20,7 +20,7 @@ export function PricingCards() {
   const handleSubscribe = async (
     planId: string
   ) => {
-   
+    console.log("This is the plan am doing", planId)
   };
 
   if (!plans?.length) {

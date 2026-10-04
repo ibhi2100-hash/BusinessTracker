@@ -53,11 +53,13 @@ export class BusinessRepositoryRegistry {
 
     readonly syncState: SQLiteSyncStateRepository;
 
-
+    readonly queryRunner: QueryRunner;
+    readonly transaction: TransactionManager
+    
     constructor(
         statements: BusinessStatementRegistry,
-        private readonly queryRunner: QueryRunner,
-        private readonly transaction: TransactionManager
+        queryRunner: QueryRunner,
+        transaction: TransactionManager
     ){
         this.events =
             new SQLiteEventRepository(
@@ -111,7 +113,7 @@ export class BusinessRepositoryRegistry {
         this.outbox = 
             new SQLiteOutboxRepository(
                 statements.outbox,
-                this.queryRunner
+                queryRunner
             )
         this.aggregates = 
             new SQLiteAggregateRepository(
@@ -137,9 +139,13 @@ export class BusinessRepositoryRegistry {
                 this.syncActivity,
                 this.conflict,
                 this.outbox,
-                this.transaction
+                transaction
 
              )
+
+        this.transaction = transaction;
+
+        this.queryRunner = queryRunner
         
     }
 }

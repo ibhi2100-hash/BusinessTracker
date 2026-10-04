@@ -7,9 +7,12 @@ import type{ AdjustInventoryPayload, AdjustInventoryRequest, InventoryPayload, I
 
 
 export class InventoryApi {
+    private readonly manager: BusinessManager;
     constructor(
-        private readonly manager: BusinessManager
-    ){}
+        manager: BusinessManager
+    ) {
+        this.manager = manager;
+    }
     async createStock(request: InventoryRequest){
         
         const inventoryIntent: CommandIntent<InventoryPayload> = {
@@ -26,8 +29,13 @@ export class InventoryApi {
         }
         const app = await this.manager.current();
 
-        const command = await app.domain.commandFactory.create(inventoryIntent);
-        
+        const command = await app?.domain.commandFactory.create(inventoryIntent);
+         if(!app){
+            throw new Error("Business Does not exist")
+        }
+        if(!command){
+            throw new Error("Business Does not exist")
+        }
         await app.domain.kernel.execute(command)
     }
     async receiveStock(request: ReceiveInventoryRequest){
@@ -41,8 +49,13 @@ export class InventoryApi {
         }
         const app = await this.manager.current();
 
-        const recieveCommand = await app.domain.commandFactory.create(receivedInventoryIntent);
-        console.log("This is the Received Stock Command", recieveCommand)
+        const recieveCommand = await app?.domain.commandFactory.create(receivedInventoryIntent);
+         if(!app){
+            throw new Error("Business Does not exist")
+        }
+        if(!recieveCommand){
+            throw new Error("Business Does not exist")
+        }
         await app.domain.kernel.execute(recieveCommand)
     }
 
@@ -56,9 +69,14 @@ export class InventoryApi {
         }
         const app = await this.manager.current();
 
-        const adjustCommand = await app.domain.commandFactory.create(adjustIntent);
+        const adjustCommand = await app?.domain.commandFactory.create(adjustIntent);
 
-        console.log("This is the adjust command: ", adjustCommand)
+         if(!app){
+            throw new Error("Business Does not exist")
+        }
+        if(!adjustCommand){
+            throw new Error("Business Does not exist")
+        }
         
         await app.domain.kernel.execute(adjustCommand)
     }
@@ -72,8 +90,13 @@ export class InventoryApi {
         }
         const app = await this.manager.current();
 
-        const transferCommand = await app.domain.commandFactory.create(transferIntent);
-        
+        const transferCommand = await app?.domain.commandFactory.create(transferIntent);
+         if(!app){
+            throw new Error("Business Does not exist")
+        }
+        if(!transferCommand){
+            throw new Error("Business Does not exist")
+        }
         await app.domain.kernel.execute(transferCommand)
     }
 }

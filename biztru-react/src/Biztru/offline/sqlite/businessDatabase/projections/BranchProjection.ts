@@ -25,10 +25,12 @@ export class BranchConsumer
     implements ProjectionConsumer<DomainEvent> {
 
     readonly name = "branches";
-
+    private readonly repository: SQLiteBranchRepository
     constructor(
-        private readonly repository: SQLiteBranchRepository
-    ) {}
+        repository: SQLiteBranchRepository
+    ) {
+        this.repository = repository
+    }
 
 
     // =========================================================
@@ -50,6 +52,9 @@ export class BranchConsumer
                             null,
                             event
                         );
+                    if(!branch){
+                        throw new Error("No Branch we gets")
+                    }
 
                     await this.repository.upsert(
                         branch
@@ -88,7 +93,9 @@ export class BranchConsumer
                             null,
                             event
                         );
-
+                    if(!branch){
+                        throw new Error("The Branch does exists")
+                    }
                     operations.push(
                         this.repository.insertOperation(
                             branch

@@ -24,6 +24,10 @@ import { AuthGuard } from "./hooks/useAuthGuard";
 import { AppShell } from "./components/layout/AppShell"; 
 import { DashboardShell } from "./components/layout/DashBoardShell";
 import LoginPage from "./pages/auth/Login";
+import ReportsDashboardPage from "./components/reports/ReportDashboardPage";
+import ComparisontReportsPage from "./pages/reports/comparison/page";
+import YearlyReportsPage from "./pages/reports/yearly/page";
+import SyncMgtpage from "./pages/sync/SyncMgtPage";
 
 export function AppRouter() {
     return (
@@ -108,18 +112,43 @@ export function AppRouter() {
                         />
 
                         <Route
-                            path="/sale/list"
+                            path="/sales/list"
                             element={<ListSalesPage />}
                         />
 
                         <Route
-                            path="/sales/ananysis"
+                            path="/sales/analysis"
                             element={<AnalysisBuyPage />}
                         />
 
                         <Route
-                            path="/expense"
+                            path="/expenses"
                             element={<ExpensePage />}
+                        />
+
+                        <Route
+                            path="/expenses/new"
+                            element={<ExpensePage />}
+                        />
+
+                         <Route
+                            path="/reports"
+                            element={<ReportsDashboardPage />}
+                        />
+
+                         <Route
+                            path="/reports/comparison"
+                            element={<ComparisontReportsPage />}
+                        />
+
+                         <Route
+                            path="/reports/yearly"
+                            element={<YearlyReportsPage />}
+                        />
+
+                         <Route
+                            path="/sync-management"
+                            element={<SyncMgtpage />}
                         />
 
 

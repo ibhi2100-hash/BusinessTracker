@@ -8,11 +8,14 @@ interface capitalPayload {
 }
 
 export class CapitalApi {
+    private readonly manager: BusinessManager;
     constructor(
-        private readonly manager: BusinessManager
-    ){}
+        manager: BusinessManager
+    ) {
+        this.manager = manager;
+    }
     async injectCapital(
-        request
+        request: any
     ){
         
 
@@ -28,17 +31,22 @@ export class CapitalApi {
 
         const app = await this.manager.current()
 
-        const command = await app.domain.commandFactory.create(intent);
-
+        const command = await app?.domain.commandFactory.create(intent);
+        if(!app){
+            throw new Error("application of business does not exist")
+        }
+        if(!command){
+            throw new Error("No command is created")
+        }
         await app.domain.kernel.execute(command)  
 
     }
 
-    async withdrawCapital(request) {
+    async withdrawCapital(request: any) {
         const branchIntent: CommandIntent<capitalPayload> = {
             type: request.type,
             aggregateId: request.aggregateId,
-            aggregateType: AggregateType.BRANCH,
+            aggregateType: AggregateType.CAPITAL_ACCOUNT,
             payload: {
                 amount: request.payload.amount
             },
@@ -46,8 +54,13 @@ export class CapitalApi {
         }
         const app = await this.manager.current();
 
-        const command = await app.domain.commandFactory.create(branchIntent);
-
+        const command = await app?.domain.commandFactory.create(branchIntent);
+        if(!app){
+            throw new Error("application of business does not exist")
+        }
+        if(!command){
+            throw new Error("No command is created")
+        }
         await app.domain.kernel.execute(command)
     }
 }

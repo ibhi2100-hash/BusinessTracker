@@ -12,7 +12,10 @@ import type{
 } from "@business/shared-types";
 
 export class SQLiteReportRepository implements ReportRepository {
-  constructor(private readonly statements: ReportStatements) {}
+  private readonly statements: ReportStatements;
+  constructor(statements: ReportStatements) {
+    this.statements  = statements
+  }
 
   async getPeriodSummary(
     branchId: string,

@@ -10,12 +10,18 @@ export class WorkerPreparedStatement
     implements PreparedStatement {
 
     private disposed = false;
-
+    private readonly runtime: SQLiteRuntime;
+    private readonly database: DatabaseId;
+    public readonly key: string
     constructor(
-        private readonly runtime: SQLiteRuntime,
-        private readonly database: DatabaseId,
-        public readonly key: string
-    ) {}
+        runtime: SQLiteRuntime,
+        database: DatabaseId,
+        key: string
+    ) {
+        this.runtime = runtime;
+        this.database = database;
+        this.key = key
+    }
 
     async execute(
         params: readonly unknown[] = []

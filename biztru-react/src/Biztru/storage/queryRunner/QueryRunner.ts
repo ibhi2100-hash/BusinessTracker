@@ -21,11 +21,16 @@ import type {
 
 
 export class QueryRunner {
+    private readonly runtime: SQLiteRuntime;
+    private readonly database: DatabaseId;
 
     constructor(
-        private readonly runtime: SQLiteRuntime,
-        private readonly database: DatabaseId
-    ) {}
+        runtime: SQLiteRuntime,
+        database: DatabaseId
+    ) {
+        this.runtime = runtime;
+        this.database = database
+    }
 
 
     /**

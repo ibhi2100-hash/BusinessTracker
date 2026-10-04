@@ -1,4 +1,4 @@
-export interface DomainEvent<TPayload = unknown> {
+export interface DomainEvent<T = unknown> {
 
     readonly id: string;
 
@@ -16,7 +16,7 @@ export interface DomainEvent<TPayload = unknown> {
 
     readonly mode: "OPENING" | "LIVE"
 
-    readonly payload: TPayload;
+    readonly payload: T;
 
     readonly actor: ActorContext;
 
