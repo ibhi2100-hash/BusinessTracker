@@ -102,12 +102,12 @@ export default function LoginPage() {
        */
 
       if (!result.user.businessId) {
-        navigate("/onboarding/step1-business");
+        navigate("/onboarding-business");
         return;
       }
 
       if (!result.user.onboardingCompleted) {
-        navigate("/onboard");
+        navigate("/onboarding");
         return;
       }
 
