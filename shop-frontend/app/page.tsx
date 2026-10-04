@@ -14,16 +14,6 @@ import {
 
 export default function Page() {
   const router = useRouter();
-
-  useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/sw.js")
-        .then((reg) => console.log("Registered", reg))
-        .catch((err) => console.error("SW Error", err));
-    }
-  }, []);
-
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#030712] text-white">
       {/* ================= BACKGROUND ================= */}

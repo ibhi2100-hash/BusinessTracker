@@ -6,6 +6,7 @@ import { ApplicationProvider } from "./Biztru/services/ApplicationService/Applic
 import { BusinessProvider } from "./Biztru/context/BusinessContext";
 import { ServiceWorkerRegistration } from "./components/serviceWorker";
 import { AppRouter } from "./router";
+import { NavigationPersistence } from "./pages/NavigationPersistence";
 
 function App() {
     return (
@@ -16,7 +17,7 @@ function App() {
                 <ApplicationProvider>
 
                     <BusinessProvider>
-
+                            <NavigationPersistence />
                             <ServiceWorkerRegistration />
 
                             <AppRouter />

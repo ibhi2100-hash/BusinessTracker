@@ -1,6 +1,7 @@
 import {
     useEffect,
     useState,
+    useRef
 } from "react";
 
 import type {
@@ -61,7 +62,9 @@ export function ApplicationProvider({
 }: Props) {
 
     const navigate = useNavigate();
+    const navigateRef = useRef(navigate);
 
+    navigateRef.current = navigate
     /*
      * ============================================================
      * APPLICATION STATE
@@ -441,7 +444,7 @@ export function ApplicationProvider({
                     return;
                 }
 
-
+                console.log("This is the last visited Route: ", lastRoute)
                 /*
                  * ------------------------------------------------
                  * 8. Publish fully reconstructed state
@@ -464,7 +467,9 @@ export function ApplicationProvider({
                 setReady(true);
 
                 if(lastRoute){
-                    navigate(lastRoute)
+                   navigateRef.current(lastRoute, {
+                    replace: true
+                   })
                 }
 
             } catch (error) {
@@ -565,7 +570,7 @@ export function ApplicationProvider({
             }
         };
 
-    }, [navigate]);
+    }, []);
 
 
     /*

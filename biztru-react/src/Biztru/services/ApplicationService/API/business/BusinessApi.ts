@@ -54,7 +54,7 @@ export class BusinessApi {
         };
 
         const res = await apiFetch(
-            `${import.meta.env.VITE_API_URL}`,
+            `${import.meta.env.VITE_API_URL}/bootstrap`,
             {
                 method: "POST",
                 body: JSON.stringify(data),
