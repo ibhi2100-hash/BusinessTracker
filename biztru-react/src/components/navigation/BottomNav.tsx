@@ -1,7 +1,18 @@
-import { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom"
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type ComponentType,
+  type ReactNode,
+} from "react";
+
+import {
+  Link,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+
 import {
   Home,
   ShoppingCart,
@@ -32,23 +43,33 @@ import {
   ArrowDownCircle,
 } from "lucide-react";
 
-import { GlassCard } from "../ui/GlassCard"; 
-import { GlassIcon } from "../ui/GlassIcon"; 
+import { GlassCard } from "../ui/GlassCard";
+import { GlassIcon } from "../ui/GlassIcon";
 import { cn } from "../../lib/utils";
-import { useApplication } from "../../Biztru/services/ApplicationService/ApplicationContext"; 
+
+import {
+  useApplication,
+} from "../../Biztru/services/ApplicationService/ApplicationContext";
+
+import {
+  useApplicationSession,
+} from "../../Biztru/context/AplicationSessionContext";
 
 /* ------------------------------------------------------------------ */
-/*  Types                                                             */
+/* Types                                                              */
 /* ------------------------------------------------------------------ */
 
-type IconComponent = React.ComponentType<{ className?: string }>;
+type IconComponent = ComponentType<{
+  className?: string;
+}>;
+
+type UserRole = "ADMIN" | "STAFF";
 
 type MoreItem = {
   label: string;
   description?: string;
   href: string;
   icon: IconComponent;
-  /** Opens settings panel instead of navigating */
   action?: "settings";
 };
 
@@ -57,7 +78,11 @@ type MoreGroup = {
   items: MoreItem[];
 };
 
-type UpdateStatus = "idle" | "checking" | "updating" | "success" | "error";
+type UpdateStatus =
+  | "idle"
+  | "updating"
+  | "success"
+  | "error";
 
 type UpdateResult = {
   fromVersion?: number;
@@ -66,17 +91,63 @@ type UpdateResult = {
 };
 
 /* ------------------------------------------------------------------ */
-/*  Navigation config                                                 */
+/* Navigation configuration                                            */
 /* ------------------------------------------------------------------ */
 
-const primaryNav = [
-  { label: "Home", icon: Home, href: "/dashboard" },
-  { label: "Sell", icon: ShoppingCart, href: "/sales" },
-  { label: "Stock", icon: Package, href: "/inventory" },
-  { label: "Reports", icon: BarChart2, href: "/reports" },
+/**
+ * STAFF
+ *
+ * Staff members operate from the sales workspace.
+ *
+ * Their application navigation intentionally contains only
+ * sales-related destinations.
+ */
+const staffPrimaryNav = [
+  {
+    label: "Sell",
+    icon: ShoppingCart,
+    href: "/sales",
+  },
+  {
+    label: "Sales",
+    icon: Receipt,
+    href: "/sales/list",
+  },
 ] as const;
 
-const moreGroups: MoreGroup[] = [
+/**
+ * ADMIN
+ *
+ * Administrators receive the complete Business OS navigation.
+ */
+const adminPrimaryNav = [
+  {
+    label: "Home",
+    icon: Home,
+    href: "/dashboard",
+  },
+  {
+    label: "Sell",
+    icon: ShoppingCart,
+    href: "/sales",
+  },
+  {
+    label: "Stock",
+    icon: Package,
+    href: "/inventory",
+  },
+  {
+    label: "Reports",
+    icon: BarChart2,
+    href: "/reports",
+  },
+] as const;
+
+/* ------------------------------------------------------------------ */
+/* ADMIN: More navigation                                              */
+/* ------------------------------------------------------------------ */
+
+const adminMoreGroups: MoreGroup[] = [
   {
     title: "Sales",
     items: [
@@ -100,6 +171,7 @@ const moreGroups: MoreGroup[] = [
       },
     ],
   },
+
   {
     title: "Finance",
     items: [
@@ -117,6 +189,7 @@ const moreGroups: MoreGroup[] = [
       },
     ],
   },
+
   {
     title: "Reports",
     items: [
@@ -140,6 +213,7 @@ const moreGroups: MoreGroup[] = [
       },
     ],
   },
+
   {
     title: "Operations",
     items: [
@@ -163,6 +237,7 @@ const moreGroups: MoreGroup[] = [
       },
     ],
   },
+
   {
     title: "Business",
     items: [
@@ -196,18 +271,52 @@ const moreGroups: MoreGroup[] = [
 ];
 
 /* ------------------------------------------------------------------ */
-/*  Helpers                                                           */
+/* STAFF: More navigation                                              */
 /* ------------------------------------------------------------------ */
 
-function isActive(pathname: string, href: string): boolean {
+const staffMoreGroups: MoreGroup[] = [
+  {
+    title: "Sales",
+    items: [
+      {
+        label: "Quick Sell",
+        description: "Ring up a sale",
+        href: "/sales",
+        icon: Zap,
+      },
+      {
+        label: "Sales list",
+        description: "History & receipts",
+        href: "/sales/list",
+        icon: Receipt,
+      },
+    ],
+  },
+];
+
+/* ------------------------------------------------------------------ */
+/* Helpers                                                            */
+/* ------------------------------------------------------------------ */
+
+function isActive(
+  pathname: string,
+  href: string,
+): boolean {
   if (href === "/dashboard") {
-    return pathname === "/dashboard" || pathname === "/";
+    return (
+      pathname === "/dashboard" ||
+      pathname === "/"
+    );
   }
-  return pathname === href || pathname.startsWith(`${href}/`);
+
+  return (
+    pathname === href ||
+    pathname.startsWith(`${href}/`)
+  );
 }
 
 /* ------------------------------------------------------------------ */
-/*  Small UI pieces                                                   */
+/* Settings UI                                                        */
 /* ------------------------------------------------------------------ */
 
 function SettingsSection({
@@ -215,14 +324,17 @@ function SettingsSection({
   children,
 }: {
   title: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <section>
       <p className="mb-2 px-1 text-[10px] font-semibold uppercase tracking-wider text-gray-500">
         {title}
       </p>
-      <div className="space-y-1.5">{children}</div>
+
+      <div className="space-y-1.5">
+        {children}
+      </div>
     </section>
   );
 }
@@ -242,19 +354,43 @@ function SettingsItem({
     <button
       type="button"
       onClick={onClick}
-      className="flex w-full items-center gap-3 rounded-2xl border border-white/8 bg-white/3 px-3 py-3 text-left transition-all hover:bg-white/6 active:scale-[0.98]"
+      className="
+        flex w-full items-center gap-3
+        rounded-2xl
+        border border-white/8
+        bg-white/3
+        px-3 py-3
+        text-left
+        transition-all
+        hover:bg-white/6
+        active:scale-[0.98]
+      "
     >
-      <GlassIcon size="sm" variant="primary">
+      <GlassIcon
+        size="sm"
+        variant="primary"
+      >
         <Icon className="h-4 w-4" />
       </GlassIcon>
+
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-medium text-white">{label}</p>
-        <p className="truncate text-[11px] text-gray-500">{description}</p>
+        <p className="text-sm font-medium text-white">
+          {label}
+        </p>
+
+        <p className="truncate text-[11px] text-gray-500">
+          {description}
+        </p>
       </div>
+
       <ChevronRight className="h-4 w-4 shrink-0 text-gray-600" />
     </button>
   );
 }
+
+/* ------------------------------------------------------------------ */
+/* Navigation row                                                     */
+/* ------------------------------------------------------------------ */
 
 function NavLinkRow({
   to,
@@ -272,62 +408,152 @@ function NavLinkRow({
   return (
     <Link
       to={to}
+      aria-current={active ? "page" : undefined}
       className={cn(
         "flex items-center gap-3 rounded-xl text-sm transition-all",
-        compact ? "px-3 py-2" : "px-3 py-2.5",
+        compact
+          ? "px-3 py-2"
+          : "px-3 py-2.5",
         active
           ? "bg-teal-500/15 text-teal-300"
-          : "text-gray-400 hover:bg-white/5 hover:text-gray-200"
+          : "text-gray-400 hover:bg-white/5 hover:text-gray-200",
       )}
     >
       <Icon
         className={cn(
           "shrink-0",
-          compact ? "h-4 w-4 opacity-80" : "h-5 w-5"
+          compact
+            ? "h-4 w-4 opacity-80"
+            : "h-5 w-5",
         )}
       />
-      <span className="truncate">{label}</span>
+
+      <span className="truncate">
+        {label}
+      </span>
     </Link>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/*  Component                                                         */
+/* Component                                                          */
 /* ------------------------------------------------------------------ */
 
 export default function AppNav() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+
+  const { session } = useApplicationSession();
+
   const app = useApplication();
 
-  const [moreOpen, setMoreOpen] = useState(false);
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  const [updateOpen, setUpdateOpen] = useState(false);
+  /* ---------------------------------------------------------------- */
+  /* Role                                                             */
+  /* ---------------------------------------------------------------- */
+
+  const role: UserRole | undefined =
+    session.user?.role === "ADMIN" || session.user?.role === "STAFF"
+      ? session.user?.role
+      : undefined;
+
+  const isStaff = role === "STAFF";
+  const isAdmin = role === "ADMIN";
+
+  /* ---------------------------------------------------------------- */
+  /* Role-aware navigation                                            */
+  /* ---------------------------------------------------------------- */
+
+  const primaryNav = useMemo(
+    () =>
+      isStaff
+        ? staffPrimaryNav
+        : adminPrimaryNav,
+    [isStaff],
+  );
+
+  const moreGroups = useMemo(
+    () =>
+      isStaff
+        ? staffMoreGroups
+        : adminMoreGroups,
+    [isStaff],
+  );
+
+  /* ---------------------------------------------------------------- */
+  /* Overlay state                                                    */
+  /* ---------------------------------------------------------------- */
+
+  const [moreOpen, setMoreOpen] =
+    useState(false);
+
+  const [settingsOpen, setSettingsOpen] =
+    useState(false);
+
+  const [updateOpen, setUpdateOpen] =
+    useState(false);
 
   const [updateStatus, setUpdateStatus] =
     useState<UpdateStatus>("idle");
+
   const [updateResult, setUpdateResult] =
     useState<UpdateResult | null>(null);
-  const [updateError, setUpdateError] = useState<string | null>(null);
 
-  /* Close overlays on route change */
+  const [updateError, setUpdateError] =
+    useState<string | null>(null);
+
+  /* ---------------------------------------------------------------- */
+  /* Close overlays when route changes                                */
+  /* ---------------------------------------------------------------- */
+
   useEffect(() => {
     setMoreOpen(false);
     setSettingsOpen(false);
     setUpdateOpen(false);
   }, [pathname]);
 
-  /* Lock body scroll while any overlay is open */
-  useEffect(() => {
-    const overlayOpen = moreOpen || settingsOpen || updateOpen;
-    if (!overlayOpen) return;
+  /* ---------------------------------------------------------------- */
+  /* Staff must never retain admin overlays                           */
+  /* ---------------------------------------------------------------- */
 
-    const previous = document.body.style.overflow;
+  useEffect(() => {
+    if (!isAdmin) {
+      setSettingsOpen(false);
+      setUpdateOpen(false);
+    }
+  }, [isAdmin]);
+
+  /* ---------------------------------------------------------------- */
+  /* Body scroll lock                                                 */
+  /* ---------------------------------------------------------------- */
+
+  useEffect(() => {
+    const overlayOpen =
+      moreOpen ||
+      settingsOpen ||
+      updateOpen;
+
+    if (!overlayOpen) {
+      return;
+    }
+
+    const previousOverflow =
+      document.body.style.overflow;
+
     document.body.style.overflow = "hidden";
+
     return () => {
-      document.body.style.overflow = previous;
+      document.body.style.overflow =
+        previousOverflow;
     };
-  }, [moreOpen, settingsOpen, updateOpen]);
+  }, [
+    moreOpen,
+    settingsOpen,
+    updateOpen,
+  ]);
+
+  /* ---------------------------------------------------------------- */
+  /* Navigation                                                       */
+  /* ---------------------------------------------------------------- */
 
   const closeAllOverlays = useCallback(() => {
     setMoreOpen(false);
@@ -335,93 +561,203 @@ export default function AppNav() {
     setUpdateOpen(false);
   }, []);
 
-  const goto = useCallback(
+  const navigateTo = useCallback(
     (href: string) => {
       closeAllOverlays();
       navigate(href);
     },
-    [closeAllOverlays, navigate]
+    [
+      closeAllOverlays,
+      navigate,
+    ],
   );
-console.log("This is the goto callback: ", goto)
+
+  /* ---------------------------------------------------------------- */
+  /* Settings                                                         */
+  /* ---------------------------------------------------------------- */
+
   const openSettings = useCallback(() => {
+    if (!isAdmin) {
+      return;
+    }
+
     setMoreOpen(false);
     setSettingsOpen(true);
-  }, []);
+  }, [isAdmin]);
+
+  /* ---------------------------------------------------------------- */
+  /* App update                                                       */
+  /* ---------------------------------------------------------------- */
 
   const openUpdate = useCallback(() => {
+    if (!isAdmin) {
+      return;
+    }
+
     setSettingsOpen(false);
+
     setUpdateStatus("idle");
     setUpdateResult(null);
     setUpdateError(null);
+
     setUpdateOpen(true);
-  }, []);
+  }, [isAdmin]);
 
   /**
-   * Connects to your runtime update pipeline.
-   * Prefer app.system.update() when available; otherwise surface a clear error.
+   * Connects to the application runtime update pipeline.
    */
-  const runAppUpdate = useCallback(async (): Promise<UpdateResult> => {
-    const system = (app as { system?: { update?: () => Promise<UpdateResult> } })
-      ?.system;
+  const runAppUpdate = useCallback(
+    async (): Promise<UpdateResult> => {
+      const system = (
+        app as {
+          system?: {
+            update?: () => Promise<UpdateResult>;
+          };
+        }
+      )?.system;
 
-    if (!system?.update) {
-      throw new Error(
-        "App update is not available on this device yet. Connect app.system.update()."
-      );
-    }
-
-    return system.update();
-  }, [app]);
-
-  const handleAppUpdate = useCallback(async () => {
-    if (updateStatus === "checking" || updateStatus === "updating") return;
-
-    setUpdateStatus("updating");
-    setUpdateResult(null);
-    setUpdateError(null);
-
-    try {
-      const result = await runAppUpdate();
-      setUpdateResult(result);
-      setUpdateStatus("success");
-    } catch (error) {
-      console.error("[App Update] Failed:", error);
-      setUpdateError(
-        error instanceof Error ? error.message : String(error)
-      );
-      setUpdateStatus("error");
-    }
-  }, [runAppUpdate, updateStatus]);
-
-  const handleMoreItem = useCallback(
-    (item: MoreItem) => {
-      if (item.action === "settings") {
-        openSettings();
-        return;
+      if (!system?.update) {
+        throw new Error(
+          "App update is not available on this device yet. Connect app.system.update().",
+        );
       }
-      navigate(item.href);
+
+      return system.update();
     },
-    [navigate, openSettings]
+    [app],
   );
 
-  /* ================================================================ */
-  /*  Render                                                          */
-  /* ================================================================ */
+  const handleAppUpdate =
+    useCallback(async () => {
+      if (
+        updateStatus === "updating"
+      ) {
+        return;
+      }
+
+      setUpdateStatus("updating");
+      setUpdateResult(null);
+      setUpdateError(null);
+
+      try {
+        const result =
+          await runAppUpdate();
+
+        setUpdateResult(result);
+        setUpdateStatus("success");
+      } catch (error) {
+        console.error(
+          "[App Update] Failed:",
+          error,
+        );
+
+        setUpdateError(
+          error instanceof Error
+            ? error.message
+            : String(error),
+        );
+
+        setUpdateStatus("error");
+      }
+    }, [
+      runAppUpdate,
+      updateStatus,
+    ]);
+
+  /* ---------------------------------------------------------------- */
+  /* More menu                                                       */
+  /* ---------------------------------------------------------------- */
+
+  const handleMoreItem =
+    useCallback(
+      (item: MoreItem) => {
+        if (
+          item.action === "settings"
+        ) {
+          openSettings();
+          return;
+        }
+
+        navigateTo(item.href);
+      },
+      [
+        navigateTo,
+        openSettings,
+      ],
+    );
+
+  /* ---------------------------------------------------------------- */
+  /* Labels                                                          */
+  /* ---------------------------------------------------------------- */
+
+  const workspaceLabel = isStaff
+    ? "Sales Workspace"
+    : "Business OS";
+
+  const workspaceTitle = isStaff
+    ? "Sales"
+    : "Workspace";
+
+  const mobileMoreDescription =
+    isStaff
+      ? "Sales tools"
+      : "Sales, finance, reports & settings";
+
+  /* ---------------------------------------------------------------- */
+  /* Render                                                           */
+  /* ---------------------------------------------------------------- */
 
   return (
     <>
-      {/* -------------------- Desktop sidebar -------------------- */}
-      <aside className="fixed bottom-0 left-0 top-0 z-40 hidden w-64 flex-col border-r border-white/10 bg-neutral-950/90 backdrop-blur-2xl lg:flex">
+      {/* ============================================================ */}
+      {/* Desktop sidebar                                              */}
+      {/* ============================================================ */}
+
+      <aside
+        className="
+          fixed
+          bottom-0
+          left-0
+          top-0
+          z-40
+          hidden
+          w-64
+          flex-col
+          border-r
+          border-white/10
+          bg-neutral-950/90
+          backdrop-blur-2xl
+          lg:flex
+        "
+        aria-label={
+          isStaff
+            ? "Sales navigation"
+            : "Business navigation"
+        }
+      >
+        {/* Header */}
+
         <div className="border-b border-white/10 px-5 py-6">
           <p className="text-xs font-medium uppercase tracking-wide text-teal-400/80">
-            Business OS
+            {workspaceLabel}
           </p>
+
           <h2 className="mt-1 text-lg font-semibold text-white">
-            Workspace
+            {workspaceTitle}
           </h2>
+
+          {isStaff && (
+            <p className="mt-1 text-[11px] text-gray-500">
+              Sales operations
+            </p>
+          )}
         </div>
 
+        {/* Navigation */}
+
         <nav className="flex-1 space-y-6 overflow-y-auto px-3 py-4">
+          {/* Primary */}
+
           <div className="space-y-1">
             {primaryNav.map((item) => (
               <NavLinkRow
@@ -429,87 +765,168 @@ console.log("This is the goto callback: ", goto)
                 to={item.href}
                 label={item.label}
                 icon={item.icon}
-                active={isActive(pathname, item.href)}
+                active={isActive(
+                  pathname,
+                  item.href,
+                )}
               />
             ))}
           </div>
+
+          {/* Secondary */}
 
           {moreGroups.map((group) => (
             <div key={group.title}>
               <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-wider text-gray-500">
                 {group.title}
               </p>
-              <div className="space-y-0.5">
-                {group.items.map((item) => {
-                  if (item.action === "settings") {
-                    const Icon = item.icon;
-                    const active = isActive(pathname, item.href);
-                    return (
-                      <button
-                        key={`${item.href}-settings`}
-                        type="button"
-                        onClick={openSettings}
-                        className={cn(
-                          "flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm transition-all",
-                          active
-                            ? "bg-teal-500/15 text-teal-300"
-                            : "text-gray-400 hover:bg-white/5 hover:text-gray-200"
-                        )}
-                      >
-                        <Icon className="h-4 w-4 shrink-0 opacity-80" />
-                        <span className="truncate">{item.label}</span>
-                      </button>
-                    );
-                  }
 
-                  return (
-                    <NavLinkRow
-                      key={item.href}
-                      to={item.href}
-                      label={item.label}
-                      icon={item.icon}
-                      active={isActive(pathname, item.href)}
-                      compact
-                    />
-                  );
-                })}
+              <div className="space-y-0.5">
+                {group.items.map(
+                  (item) => {
+                    /*
+                     * Settings is an admin-only
+                     * interactive action.
+                     */
+                    if (
+                      item.action ===
+                      "settings"
+                    ) {
+                      if (!isAdmin) {
+                        return null;
+                      }
+
+                      const Icon =
+                        item.icon;
+
+                      const active =
+                        isActive(
+                          pathname,
+                          item.href,
+                        );
+
+                      return (
+                        <button
+                          key={`${item.href}-settings`}
+                          type="button"
+                          onClick={
+                            openSettings
+                          }
+                          className={cn(
+                            "flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm transition-all",
+                            active
+                              ? "bg-teal-500/15 text-teal-300"
+                              : "text-gray-400 hover:bg-white/5 hover:text-gray-200",
+                          )}
+                        >
+                          <Icon className="h-4 w-4 shrink-0 opacity-80" />
+
+                          <span className="truncate">
+                            {item.label}
+                          </span>
+                        </button>
+                      );
+                    }
+
+                    return (
+                      <NavLinkRow
+                        key={item.href}
+                        to={item.href}
+                        label={
+                          item.label
+                        }
+                        icon={
+                          item.icon
+                        }
+                        active={isActive(
+                          pathname,
+                          item.href,
+                        )}
+                        compact
+                      />
+                    );
+                  },
+                )}
               </div>
             </div>
           ))}
         </nav>
       </aside>
 
-      {/* -------------------- Mobile bottom bar -------------------- */}
-      <div className="fixed bottom-4 left-3 right-3 z-50 pb-[env(safe-area-inset-bottom)] lg:hidden">
+      {/* ============================================================ */}
+      {/* Mobile bottom navigation                                     */}
+      {/* ============================================================ */}
+
+      <div
+        className="
+          fixed
+          bottom-4
+          left-3
+          right-3
+          z-50
+          pb-[env(safe-area-inset-bottom)]
+          lg:hidden
+        "
+      >
         <GlassCard
           variant="elevated"
           className="border-white/15 px-1.5 py-1.5"
         >
-          <nav className="flex items-center justify-between">
+          <nav
+            className="flex items-center justify-between"
+            aria-label={
+              isStaff
+                ? "Sales navigation"
+                : "Primary navigation"
+            }
+          >
             {primaryNav.map((item) => {
               const Icon = item.icon;
-              const active = isActive(pathname, item.href);
+
+              const active =
+                isActive(
+                  pathname,
+                  item.href,
+                );
 
               return (
                 <Link
                   key={item.href}
                   to={item.href}
-                  className="flex flex-1 flex-col items-center justify-center gap-0.5 rounded-2xl py-1.5 transition-all active:scale-95"
+                  aria-current={
+                    active
+                      ? "page"
+                      : undefined
+                  }
+                  className="
+                    flex flex-1
+                    flex-col
+                    items-center
+                    justify-center
+                    gap-0.5
+                    rounded-2xl
+                    py-1.5
+                    transition-all
+                    active:scale-95
+                  "
                 >
                   <div
                     className={cn(
                       "rounded-xl p-2 transition-colors",
                       active
                         ? "bg-teal-500/15 text-teal-400"
-                        : "text-gray-400"
+                        : "text-gray-400",
                     )}
                   >
                     <Icon className="h-5 w-5" />
                   </div>
+
                   <span
                     className={cn(
                       "text-[10px] font-medium",
-                      active ? "text-teal-400" : "text-gray-500"
+                      active
+                        ? "text-teal-400"
+                        : "text-gray-500",
                     )}
                   >
                     {item.label}
@@ -521,24 +938,41 @@ console.log("This is the goto callback: ", goto)
             <button
               type="button"
               aria-label="Open more navigation"
-              aria-expanded={moreOpen}
-              onClick={() => setMoreOpen(true)}
-              className="flex flex-1 flex-col items-center justify-center gap-0.5 rounded-2xl py-1.5 transition-all active:scale-95"
+              aria-expanded={
+                moreOpen
+              }
+              onClick={() =>
+                setMoreOpen(true)
+              }
+              className="
+                flex flex-1
+                flex-col
+                items-center
+                justify-center
+                gap-0.5
+                rounded-2xl
+                py-1.5
+                transition-all
+                active:scale-95
+              "
             >
               <div
                 className={cn(
                   "rounded-xl p-2 transition-colors",
                   moreOpen
                     ? "bg-teal-500/15 text-teal-400"
-                    : "text-gray-400"
+                    : "text-gray-400",
                 )}
               >
                 <MoreHorizontal className="h-5 w-5" />
               </div>
+
               <span
                 className={cn(
                   "text-[10px] font-medium",
-                  moreOpen ? "text-teal-400" : "text-gray-500"
+                  moreOpen
+                    ? "text-teal-400"
+                    : "text-gray-500",
                 )}
               >
                 More
@@ -548,133 +982,284 @@ console.log("This is the goto callback: ", goto)
         </GlassCard>
       </div>
 
-      {/* -------------------- More sheet (mobile) -------------------- */}
+      {/* ============================================================ */}
+      {/* Mobile More sheet                                            */}
+      {/* ============================================================ */}
+
       {moreOpen && (
         <div
-          className="fixed inset-0 z-60 flex items-end justify-center lg:hidden"
+          className="
+            fixed inset-0
+            z-60
+            flex items-end
+            justify-center
+            lg:hidden
+          "
           role="dialog"
           aria-modal="true"
           aria-label="More navigation"
         >
+          {/* Backdrop */}
+
           <button
             type="button"
             aria-label="Close more navigation"
-            className="absolute inset-0 cursor-default bg-black/60 backdrop-blur-md"
-            onClick={() => setMoreOpen(false)}
+            className="
+              absolute inset-0
+              cursor-default
+              bg-black/60
+              backdrop-blur-md
+            "
+            onClick={() =>
+              setMoreOpen(false)
+            }
           />
 
-          <div className="relative flex max-h-[85dvh] w-full animate-in flex-col rounded-t-[28px] border border-b-0 border-white/10 bg-neutral-950/95 shadow-[0_-20px_60px_rgba(0,0,0,0.5)] duration-300 slide-in-from-bottom backdrop-blur-2xl">
+          {/* Sheet */}
+
+          <div
+            className="
+              relative
+              flex
+              max-h-[85dvh]
+              w-full
+              animate-in
+              flex-col
+              rounded-t-[28px]
+              border
+              border-b-0
+              border-white/10
+              bg-neutral-950/95
+              shadow-[0_-20px_60px_rgba(0,0,0,0.5)]
+              duration-300
+              slide-in-from-bottom
+              backdrop-blur-2xl
+            "
+          >
+            {/* Handle */}
+
             <div className="flex justify-center pb-1 pt-3">
               <div className="h-1.5 w-12 rounded-full bg-white/20" />
             </div>
 
+            {/* Header */}
+
             <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
               <div>
-                <h2 className="text-lg font-semibold text-white">More</h2>
+                <h2 className="text-lg font-semibold text-white">
+                  More
+                </h2>
+
                 <p className="mt-0.5 text-xs text-gray-500">
-                  Sales, finance, reports & settings
+                  {mobileMoreDescription}
                 </p>
               </div>
+
               <button
                 type="button"
                 aria-label="Close more navigation"
-                onClick={() => setMoreOpen(false)}
-                className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 transition hover:bg-white/10"
+                onClick={() =>
+                  setMoreOpen(false)
+                }
+                className="
+                  flex h-9 w-9
+                  items-center
+                  justify-center
+                  rounded-xl
+                  bg-white/5
+                  transition
+                  hover:bg-white/10
+                "
               >
                 <X className="h-4 w-4 text-gray-300" />
               </button>
             </div>
 
-            <div className="flex-1 space-y-6 overflow-y-auto px-4 py-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
-              {moreGroups.map((group) => (
-                <div key={group.title}>
-                  <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-wider text-gray-500">
-                    {group.title}
-                  </p>
-                  <div className="space-y-1.5">
-                    {group.items.map((item) => {
-                      const Icon = item.icon;
-                      const active = isActive(pathname, item.href);
+            {/* Content */}
 
-                      return (
-                        <button
-                          key={`${group.title}-${item.href}-${item.label}`}
-                          type="button"
-                          onClick={() => handleMoreItem(item)}
-                          className={cn(
-                            "flex w-full items-center gap-3 rounded-2xl border px-3 py-3 text-left transition-all active:scale-[0.98]",
-                            active
-                              ? "border-teal-500/25 bg-teal-500/10"
-                              : "border-white/8 bg-white/3 hover:bg-white/6"
-                          )}
-                        >
-                          <GlassIcon size="sm" variant="primary">
-                            <Icon className="h-4 w-4" />
-                          </GlassIcon>
-                          <div className="min-w-0 flex-1">
-                            <p
+            <div className="flex-1 space-y-6 overflow-y-auto px-4 py-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+              {moreGroups.map(
+                (group) => (
+                  <div
+                    key={
+                      group.title
+                    }
+                  >
+                    <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-wider text-gray-500">
+                      {group.title}
+                    </p>
+
+                    <div className="space-y-1.5">
+                      {group.items.map(
+                        (item) => {
+                          const Icon =
+                            item.icon;
+
+                          const active =
+                            isActive(
+                              pathname,
+                              item.href,
+                            );
+
+                          return (
+                            <button
+                              key={`${group.title}-${item.href}-${item.label}`}
+                              type="button"
+                              onClick={() =>
+                                handleMoreItem(
+                                  item,
+                                )
+                              }
                               className={cn(
-                                "text-sm font-medium",
-                                active ? "text-teal-300" : "text-white"
+                                "flex w-full items-center gap-3 rounded-2xl border px-3 py-3 text-left transition-all active:scale-[0.98]",
+                                active
+                                  ? "border-teal-500/25 bg-teal-500/10"
+                                  : "border-white/8 bg-white/3 hover:bg-white/6",
                               )}
                             >
-                              {item.label}
-                            </p>
-                            {item.description && (
-                              <p className="truncate text-[11px] text-gray-500">
-                                {item.description}
-                              </p>
-                            )}
-                          </div>
-                          <ChevronRight className="h-4 w-4 shrink-0 text-gray-600" />
-                        </button>
-                      );
-                    })}
+                              <GlassIcon
+                                size="sm"
+                                variant="primary"
+                              >
+                                <Icon className="h-4 w-4" />
+                              </GlassIcon>
+
+                              <div className="min-w-0 flex-1">
+                                <p
+                                  className={cn(
+                                    "text-sm font-medium",
+                                    active
+                                      ? "text-teal-300"
+                                      : "text-white",
+                                  )}
+                                >
+                                  {
+                                    item.label
+                                  }
+                                </p>
+
+                                {item.description && (
+                                  <p className="truncate text-[11px] text-gray-500">
+                                    {
+                                      item.description
+                                    }
+                                  </p>
+                                )}
+                              </div>
+
+                              <ChevronRight className="h-4 w-4 shrink-0 text-gray-600" />
+                            </button>
+                          );
+                        },
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ),
+              )}
             </div>
           </div>
         </div>
       )}
 
-      {/* -------------------- Settings panel -------------------- */}
-      {settingsOpen && (
+      {/* ============================================================ */}
+      {/* ADMIN SETTINGS PANEL                                         */}
+      {/* ============================================================ */}
+
+      {isAdmin && settingsOpen && (
         <div
-          className="fixed inset-0 z-70 flex items-end lg:items-center lg:justify-end"
+          className="
+            fixed inset-0
+            z-70
+            flex
+            items-end
+            lg:items-center
+            lg:justify-end
+          "
           role="dialog"
           aria-modal="true"
           aria-label="Business settings"
         >
+          {/* Backdrop */}
+
           <button
             type="button"
             aria-label="Close settings"
-            className="absolute inset-0 cursor-default bg-black/60 backdrop-blur-md"
-            onClick={() => setSettingsOpen(false)}
+            className="
+              absolute inset-0
+              cursor-default
+              bg-black/60
+              backdrop-blur-md
+            "
+            onClick={() =>
+              setSettingsOpen(false)
+            }
           />
 
-          <div className="relative flex max-h-[88dvh] w-full animate-in flex-col rounded-t-[28px] border border-white/10 bg-neutral-950/95 shadow-[0_-20px_60px_rgba(0,0,0,0.5)] duration-300 slide-in-from-bottom backdrop-blur-2xl lg:h-full lg:max-h-none lg:w-107.5 lg:rounded-none lg:rounded-l-[28px] lg:slide-in-from-right">
+          {/* Panel */}
+
+          <div
+            className="
+              relative
+              flex
+              max-h-[88dvh]
+              w-full
+              animate-in
+              flex-col
+              rounded-t-[28px]
+              border
+              border-white/10
+              bg-neutral-950/95
+              shadow-[0_-20px_60px_rgba(0,0,0,0.5)]
+              duration-300
+              slide-in-from-bottom
+              backdrop-blur-2xl
+
+              lg:h-full
+              lg:max-h-none
+              lg:w-107.5
+              lg:rounded-none
+              lg:rounded-l-[28px]
+              lg:slide-in-from-right
+            "
+          >
+            {/* Header */}
+
             <div className="flex items-center justify-between border-b border-white/10 px-5 py-5">
               <div>
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-teal-400">
                   Business
                 </p>
+
                 <h2 className="mt-1 text-lg font-semibold text-white">
                   Settings
                 </h2>
+
                 <p className="mt-0.5 text-xs text-gray-500">
                   Configure your business workspace
                 </p>
               </div>
+
               <button
                 type="button"
                 aria-label="Close settings"
-                onClick={() => setSettingsOpen(false)}
-                className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 transition hover:bg-white/10"
+                onClick={() =>
+                  setSettingsOpen(false)
+                }
+                className="
+                  flex h-9 w-9
+                  items-center
+                  justify-center
+                  rounded-xl
+                  bg-white/5
+                  transition
+                  hover:bg-white/10
+                "
               >
                 <X className="h-4 w-4 text-gray-300" />
               </button>
             </div>
+
+            {/* Content */}
 
             <div className="flex-1 space-y-6 overflow-y-auto p-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
               <SettingsSection title="Business">
@@ -682,19 +1267,33 @@ console.log("This is the goto callback: ", goto)
                   icon={Building2}
                   label="Business profile"
                   description="Business identity and information"
-                  onClick={() => navigate("/settings")}
+                  onClick={() =>
+                    navigateTo(
+                      "/settings",
+                    )
+                  }
                 />
+
                 <SettingsItem
                   icon={Building2}
                   label="Branches"
                   description="Manage business locations"
-                  onClick={() => navigate("/settings/branches")}
+                  onClick={() =>
+                    navigateTo(
+                      "/settings/branches",
+                    )
+                  }
                 />
+
                 <SettingsItem
                   icon={Users}
                   label="Team"
                   description="Users, roles and permissions"
-                  onClick={() => navigate("/settings/team")}
+                  onClick={() =>
+                    navigateTo(
+                      "/settings/team",
+                    )
+                  }
                 />
               </SettingsSection>
 
@@ -703,25 +1302,44 @@ console.log("This is the goto callback: ", goto)
                   icon={ShoppingCart}
                   label="Sales"
                   description="Sales behavior and defaults"
-                  onClick={() => navigate("/settings/sales")}
+                  onClick={() =>
+                    navigateTo(
+                      "/settings/sales",
+                    )
+                  }
                 />
+
                 <SettingsItem
                   icon={Package}
                   label="Inventory"
                   description="Inventory rules and defaults"
-                  onClick={() => navigate("/settings/inventory")}
+                  onClick={() =>
+                    navigateTo(
+                      "/settings/inventory",
+                    )
+                  }
                 />
+
                 <SettingsItem
                   icon={ArrowDownCircle}
                   label="Expenses"
                   description="Expense categories and defaults"
-                  onClick={() => navigate("/expenses")}
+                  onClick={() =>
+                    navigateTo(
+                      "/expenses",
+                    )
+                  }
                 />
+
                 <SettingsItem
                   icon={CreditCard}
                   label="Payments"
                   description="Payment methods and accounts"
-                  onClick={() => navigate("/settings/payments")}
+                  onClick={() =>
+                    navigateTo(
+                      "/settings/payments",
+                    )
+                  }
                 />
               </SettingsSection>
 
@@ -730,7 +1348,11 @@ console.log("This is the goto callback: ", goto)
                   icon={FileText}
                   label="Invoices"
                   description="Invoice and document configuration"
-                  onClick={() => navigate("/invoices")}
+                  onClick={() =>
+                    navigateTo(
+                      "/invoices",
+                    )
+                  }
                 />
               </SettingsSection>
 
@@ -739,13 +1361,20 @@ console.log("This is the goto callback: ", goto)
                   icon={RefreshCw}
                   label="App Update"
                   description="Database migrations and runtime updates"
-                  onClick={openUpdate}
+                  onClick={
+                    openUpdate
+                  }
                 />
+
                 <SettingsItem
                   icon={RefreshCw}
                   label="Sync Management"
                   description="Manage device synchronization"
-                  onClick={() => navigate("/sync-management")}
+                  onClick={() =>
+                    navigateTo(
+                      "/sync-management",
+                    )
+                  }
                 />
               </SettingsSection>
             </div>
@@ -753,63 +1382,159 @@ console.log("This is the goto callback: ", goto)
         </div>
       )}
 
-      {/* -------------------- App update panel -------------------- */}
-      {updateOpen && (
+      {/* ============================================================ */}
+      {/* ADMIN APP UPDATE PANEL                                       */}
+      {/* ============================================================ */}
+
+      {isAdmin && updateOpen && (
         <div
-          className="fixed inset-0 z-80 flex items-end lg:items-center lg:justify-end"
+          className="
+            fixed inset-0
+            z-80
+            flex
+            items-end
+            lg:items-center
+            lg:justify-end
+          "
           role="dialog"
           aria-modal="true"
           aria-label="App update"
         >
+          {/* Backdrop */}
+
           <button
             type="button"
             aria-label="Close app update"
-            disabled={updateStatus === "updating"}
-            className="absolute inset-0 cursor-default bg-black/60 backdrop-blur-md disabled:cursor-not-allowed"
+            disabled={
+              updateStatus ===
+              "updating"
+            }
+            className="
+              absolute inset-0
+              cursor-default
+              bg-black/60
+              backdrop-blur-md
+              disabled:cursor-not-allowed
+            "
             onClick={() => {
-              if (updateStatus !== "updating") setUpdateOpen(false);
+              if (
+                updateStatus !==
+                "updating"
+              ) {
+                setUpdateOpen(
+                  false,
+                );
+              }
             }}
           />
 
-          <div className="relative flex max-h-[88dvh] w-full animate-in flex-col rounded-t-[28px] border border-white/10 bg-neutral-950/95 shadow-[0_-20px_60px_rgba(0,0,0,0.5)] duration-300 slide-in-from-bottom backdrop-blur-2xl lg:mr-6 lg:h-auto lg:max-h-[90vh] lg:w-107.5 lg:rounded-[28px] lg:slide-in-from-right">
+          {/* Panel */}
+
+          <div
+            className="
+              relative
+              flex
+              max-h-[88dvh]
+              w-full
+              animate-in
+              flex-col
+              rounded-t-[28px]
+              border
+              border-white/10
+              bg-neutral-950/95
+              shadow-[0_-20px_60px_rgba(0,0,0,0.5)]
+              duration-300
+              slide-in-from-bottom
+              backdrop-blur-2xl
+
+              lg:mr-6
+              lg:h-auto
+              lg:max-h-[90vh]
+              lg:w-107.5
+              lg:rounded-[28px]
+              lg:slide-in-from-right
+            "
+          >
+            {/* Header */}
+
             <div className="flex items-center justify-between border-b border-white/10 px-5 py-5">
               <div>
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-teal-400">
                   System
                 </p>
+
                 <h2 className="mt-1 text-lg font-semibold text-white">
                   App Update
                 </h2>
+
                 <p className="mt-0.5 text-xs text-gray-500">
                   Update the local application runtime
                 </p>
               </div>
+
               <button
                 type="button"
                 aria-label="Close app update"
-                disabled={updateStatus === "updating"}
-                onClick={() => setUpdateOpen(false)}
-                className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
+                disabled={
+                  updateStatus ===
+                  "updating"
+                }
+                onClick={() =>
+                  setUpdateOpen(
+                    false,
+                  )
+                }
+                className="
+                  flex h-9 w-9
+                  items-center
+                  justify-center
+                  rounded-xl
+                  bg-white/5
+                  transition
+                  hover:bg-white/10
+                  disabled:cursor-not-allowed
+                  disabled:opacity-40
+                "
               >
                 <X className="h-4 w-4 text-gray-300" />
               </button>
             </div>
 
+            {/* Content */}
+
             <div className="overflow-y-auto p-5">
-              {updateStatus === "idle" && (
+              {/* ---------------------------------------------------- */}
+              {/* Idle */}
+              {/* ---------------------------------------------------- */}
+
+              {updateStatus ===
+                "idle" && (
                 <>
                   <div className="rounded-2xl border border-white/10 bg-white/3 p-4">
                     <div className="flex items-start gap-3">
-                      <GlassIcon size="sm" variant="primary">
+                      <GlassIcon
+                        size="sm"
+                        variant="primary"
+                      >
                         <Database className="h-4 w-4" />
                       </GlassIcon>
+
                       <div>
                         <p className="text-sm font-medium text-white">
                           Local database update
                         </p>
+
                         <p className="mt-1 text-xs leading-5 text-gray-500">
-                          The app will apply any database migrations that are
-                          newer than this device&apos;s current schema version.
+                          The app will
+                          apply any
+                          database
+                          migrations
+                          newer than
+                          this
+                          device&apos;s
+                          current
+                          schema
+                          version.
                         </p>
                       </div>
                     </div>
@@ -817,16 +1542,30 @@ console.log("This is the goto callback: ", goto)
 
                   <div className="mt-3 rounded-2xl border border-white/10 bg-white/3 p-4">
                     <div className="flex items-start gap-3">
-                      <GlassIcon size="sm" variant="primary">
+                      <GlassIcon
+                        size="sm"
+                        variant="primary"
+                      >
                         <ShieldCheck className="h-4 w-4" />
                       </GlassIcon>
+
                       <div>
                         <p className="text-sm font-medium text-white">
                           Runtime rebuild
                         </p>
+
                         <p className="mt-1 text-xs leading-5 text-gray-500">
-                          After migration, the SQLite prepared statement
-                          registry will be rebuilt against the current schema.
+                          After
+                          migration,
+                          the SQLite
+                          prepared
+                          statement
+                          registry
+                          will be
+                          rebuilt
+                          against the
+                          current
+                          schema.
                         </p>
                       </div>
                     </div>
@@ -834,8 +1573,25 @@ console.log("This is the goto callback: ", goto)
 
                   <button
                     type="button"
-                    onClick={() => void handleAppUpdate()}
-                    className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-teal-500 px-4 py-3 text-sm font-semibold text-neutral-950 transition-all hover:bg-teal-400 active:scale-[0.98]"
+                    onClick={() =>
+                      void handleAppUpdate()
+                    }
+                    className="
+                      mt-5
+                      flex w-full
+                      items-center
+                      justify-center
+                      gap-2
+                      rounded-2xl
+                      bg-teal-500
+                      px-4 py-3
+                      text-sm
+                      font-semibold
+                      text-neutral-950
+                      transition-all
+                      hover:bg-teal-400
+                      active:scale-[0.98]
+                    "
                   >
                     <RefreshCw className="h-4 w-4" />
                     Update App
@@ -843,67 +1599,107 @@ console.log("This is the goto callback: ", goto)
                 </>
               )}
 
-              {updateStatus === "updating" && (
+              {/* ---------------------------------------------------- */}
+              {/* Updating */}
+              {/* ---------------------------------------------------- */}
+
+              {updateStatus ===
+                "updating" && (
                 <div className="py-8">
                   <div className="flex justify-center">
                     <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-teal-500/20 bg-teal-500/10">
                       <Loader2 className="h-6 w-6 animate-spin text-teal-400" />
                     </div>
                   </div>
+
                   <h3 className="mt-5 text-center text-base font-semibold text-white">
                     Updating application
                   </h3>
+
                   <p className="mt-2 text-center text-xs leading-5 text-gray-500">
-                    Applying pending database migrations and rebuilding
+                    Applying pending
+                    database migrations
+                    and rebuilding
                     prepared statements.
                   </p>
+
                   <div className="mt-5 rounded-2xl border border-white/10 bg-white/3 px-4 py-3">
                     <div className="flex items-center gap-3">
                       <Loader2 className="h-4 w-4 animate-spin text-teal-400" />
+
                       <span className="text-xs text-gray-300">
-                        Updating local runtime…
+                        Updating local
+                        runtime…
                       </span>
                     </div>
                   </div>
                 </div>
               )}
 
-              {updateStatus === "success" && (
+              {/* ---------------------------------------------------- */}
+              {/* Success */}
+              {/* ---------------------------------------------------- */}
+
+              {updateStatus ===
+                "success" && (
                 <div className="py-4">
                   <div className="flex justify-center">
                     <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-teal-500/20 bg-teal-500/10">
                       <CheckCircle2 className="h-7 w-7 text-teal-400" />
                     </div>
                   </div>
+
                   <h3 className="mt-5 text-center text-base font-semibold text-white">
                     App is up to date
                   </h3>
+
                   <p className="mt-2 text-center text-xs leading-5 text-gray-500">
-                    The local database and prepared statement registry are now
-                    synchronized with the current application schema.
+                    The local database
+                    and prepared
+                    statement registry
+                    are now synchronized
+                    with the current
+                    application schema.
                   </p>
 
                   {updateResult && (
                     <div className="mt-5 space-y-3 rounded-2xl border border-white/10 bg-white/3 p-4">
-                      {typeof updateResult.fromVersion === "number" &&
-                        typeof updateResult.toVersion === "number" && (
+                      {typeof updateResult.fromVersion ===
+                        "number" &&
+                        typeof updateResult.toVersion ===
+                          "number" && (
                           <div className="flex items-center justify-between">
                             <span className="text-xs text-gray-500">
                               Schema
                             </span>
+
                             <span className="text-xs font-medium text-white">
-                              v{updateResult.fromVersion} → v
-                              {updateResult.toVersion}
+                              v
+                              {
+                                updateResult.fromVersion
+                              }{" "}
+                              →
+                              v
+                              {
+                                updateResult.toVersion
+                              }
                             </span>
                           </div>
                         )}
+
                       {updateResult.applied && (
                         <div>
                           <p className="text-xs text-gray-500">
-                            Migrations applied
+                            Migrations
+                            applied
                           </p>
+
                           <p className="mt-1 text-sm font-medium text-teal-300">
-                            {updateResult.applied.length}
+                            {
+                              updateResult
+                                .applied
+                                .length
+                            }
                           </p>
                         </div>
                       )}
@@ -912,8 +1708,25 @@ console.log("This is the goto callback: ", goto)
 
                   <button
                     type="button"
-                    onClick={() => window.location.reload()}
-                    className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-teal-500 px-4 py-3 text-sm font-semibold text-neutral-950 transition-all hover:bg-teal-400 active:scale-[0.98]"
+                    onClick={() =>
+                      window.location.reload()
+                    }
+                    className="
+                      mt-5
+                      flex w-full
+                      items-center
+                      justify-center
+                      gap-2
+                      rounded-2xl
+                      bg-teal-500
+                      px-4 py-3
+                      text-sm
+                      font-semibold
+                      text-neutral-950
+                      transition-all
+                      hover:bg-teal-400
+                      active:scale-[0.98]
+                    "
                   >
                     <RefreshCw className="h-4 w-4" />
                     Reload App
@@ -921,19 +1734,29 @@ console.log("This is the goto callback: ", goto)
                 </div>
               )}
 
-              {updateStatus === "error" && (
+              {/* ---------------------------------------------------- */}
+              {/* Error */}
+              {/* ---------------------------------------------------- */}
+
+              {updateStatus ===
+                "error" && (
                 <div className="py-4">
                   <div className="flex justify-center">
                     <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-red-500/20 bg-red-500/10">
                       <AlertTriangle className="h-7 w-7 text-red-400" />
                     </div>
                   </div>
+
                   <h3 className="mt-5 text-center text-base font-semibold text-white">
                     Update failed
                   </h3>
+
                   <p className="mt-2 text-center text-xs leading-5 text-gray-500">
-                    The local update could not be completed.
+                    The local update
+                    could not be
+                    completed.
                   </p>
+
                   {updateError && (
                     <div className="mt-5 rounded-2xl border border-red-500/20 bg-red-500/5 p-4">
                       <p className="wrap-break-word text-xs leading-5 text-red-300">
@@ -941,10 +1764,30 @@ console.log("This is the goto callback: ", goto)
                       </p>
                     </div>
                   )}
+
                   <button
                     type="button"
-                    onClick={() => void handleAppUpdate()}
-                    className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm font-semibold text-white transition-all hover:bg-white/15 active:scale-[0.98]"
+                    onClick={() =>
+                      void handleAppUpdate()
+                    }
+                    className="
+                      mt-5
+                      flex w-full
+                      items-center
+                      justify-center
+                      gap-2
+                      rounded-2xl
+                      border
+                      border-white/10
+                      bg-white/10
+                      px-4 py-3
+                      text-sm
+                      font-semibold
+                      text-white
+                      transition-all
+                      hover:bg-white/15
+                      active:scale-[0.98]
+                    "
                   >
                     <RefreshCw className="h-4 w-4" />
                     Try Again

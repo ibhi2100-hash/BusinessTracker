@@ -2,12 +2,31 @@
 
 export const UserStatementKeys = {
 
-    insert: "users.insert",
+    insert:
+        "users.insert",
 
-    findById: "users.findById",
+    findById:
+        "users.findById",
 
-    update: "users.update",
+    update:
+        "users.update",
 
-    delete: "users.delete"
+    updateBusiness:
+        "users.updateBusiness",
+
+    updateBranch:
+        "users.updateBranch",
+
+    updateActivation:
+        "users.updateActivation",
+
+    updateOnboarding:
+        "users.updateOnboarding",
+
+    updateProfile:
+        "users.updateProfile",
+
+    delete:
+        "users.delete",
 
 } as const;

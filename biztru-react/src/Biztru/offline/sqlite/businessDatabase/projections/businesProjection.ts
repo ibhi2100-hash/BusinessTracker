@@ -23,6 +23,7 @@ import {
 
 import type { SQLiteStatementOperation } from "../../../../storage/statement/worker/WorkerProtocol";
 
+
 export class BusinessConsumer
     implements ProjectionConsumer<DomainEvent> {
 
@@ -79,11 +80,9 @@ export class BusinessConsumer
                             businessState,
                             event
                         );
-
                     await this.repository.activateBusiness(
                         businessActivation
                     );
-
                     changeNotifier.notify([
                         "businesses",
                     ]);

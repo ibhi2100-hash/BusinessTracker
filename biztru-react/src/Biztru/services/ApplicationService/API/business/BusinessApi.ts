@@ -54,7 +54,7 @@ export class BusinessApi {
         };
 
         const res = await apiFetch(
-            `${import.meta.env.VITE_API_URL}/bootstrap`,
+            `${import.meta.env.VITE_API_URL}/sync/bootstrap`,
             {
                 method: "POST",
                 body: JSON.stringify(data),
@@ -177,7 +177,7 @@ export class BusinessApi {
                     Date.now(),
             }),
         ]);
-        
+        console.log("Bootstrapping of current business just finished: ", business)
         changeNotifier.notify([
             "application_state",
             "current_business",

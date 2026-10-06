@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 
 import { useApplication } from "../../Biztru/services/ApplicationService/ApplicationContext";
+import { useApplicationSession } from "../../Biztru/context/AplicationSessionContext";
 
 
 export default function RegisterPage() {
@@ -37,7 +38,7 @@ export default function RegisterPage() {
    */
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
+  const {refreshSession} = useApplicationSession()
   const {
     register,
     handleSubmit,
@@ -115,6 +116,7 @@ export default function RegisterPage() {
       await app.client.services.registration.saveApplicationState(
         result.user.id
       );
+      await refreshSession()
 
       navigate("/onboarding-business");
     } catch (error: unknown) {

@@ -1,6 +1,7 @@
 import { SQLiteApplicationStateRepository } from "../../offline/sqlite/clientDatabase/repositories/ApplicationStateRepository.ts/SQLiteApplicationStateRepository"; 
 import type{ BusinessContext, BusinessContextProvider } from "./BusinessContextContract";
-// FrontendBusinessContext.ts
+
+
 export class FrontendBusinessContext
     implements BusinessContextProvider {
 

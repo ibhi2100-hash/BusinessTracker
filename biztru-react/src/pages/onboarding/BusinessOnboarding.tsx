@@ -14,11 +14,12 @@ import { GlassCard } from "../../components/ui/GlassCard";
 import { GlassIcon } from "../../components/ui/GlassIcon";
 import { GlassInput } from "../../components/ui/GlassInput";
 import { useApplication } from "../../Biztru/services/ApplicationService/ApplicationContext"; 
+import { useApplicationSession } from "../../Biztru/context/AplicationSessionContext";
 
 export default function OnboardingBusinessPage() {
   const navigate = useNavigate() 
   const app = useApplication();
-
+  const { refreshSession, session } = useApplicationSession()
   const [form, setForm] = useState({
     name: "",
     address: "",
@@ -36,8 +37,8 @@ export default function OnboardingBusinessPage() {
     if (loading) return;
 
     if (!form.name.trim()) {
-      setError("Business name is required");
-      return;
+        setError("Business name is required");
+        return;
     }
 
     setLoading(true);
@@ -47,34 +48,176 @@ export default function OnboardingBusinessPage() {
     const branchId = crypto.randomUUID();
 
     try {
-      await app.onboarding.createBusiness({
-        id: businessId,
-        name: form.name.trim(),
-        address: form.address.trim(),
+        /*
+         * ============================================================
+         * 1. CREATE BUSINESS
+         * ============================================================
+         */
+
+        await app.onboarding.createBusiness({
+            id: businessId,
+            name: form.name.trim(),
+            address: form.address.trim(),
+        });
+
+        /*
+         * ============================================================
+         * 2. CREATE MAIN BRANCH
+         * ============================================================
+         */
+
+        await app.onboarding.createMainBranch({
+            id: branchId,
+            businessId,
+            name: "Main Branch",
+        });
+
+        /*
+         * ============================================================
+         * 3. SET ACTIVE BUSINESS
+         * ============================================================
+         */
+
+        await app.context.setActiveBusiness(
+            businessId
+        );
+
+        /*
+         * ============================================================
+         * 4. SET ACTIVE BRANCH
+         * ============================================================
+         */
+
+        await app.context.setActiveBranch(
+            branchId
+        );
+
+        console.log("[Onboarding] BEFORE REFRESH", {
+          sessionUserId: session.user?.id,
+          sessionBusinessId: session.user?.businessId,
+          expectedBusinessId: businessId,
       });
+              /*
+         * ============================================================
+         * 5. RECONSTRUCT DURABLE SESSION
+         * ============================================================
+         */
 
-      await app.onboarding.createMainBranch({
-        id: branchId,
-        businessId,
-        name: "Main Branch",
-      });
+        const nextSession =
+            await refreshSession();
 
-      await app.context.setActiveBusiness(businessId);
-      await app.context.setActiveBranch(branchId);
+        console.log("[Onboarding] AFTER REFRESH", {
+            userId: nextSession.user?.id,
+            businessId: nextSession.user?.businessId,
+            expectedBusinessId: businessId,
+        });
+        /*
+         * ============================================================
+         * 6. VERIFY SESSION
+         * ============================================================
+         */
 
-      navigate("/onboarding");
+        if (
+            nextSession.status !== "authenticated"
+        ) {
+            throw new Error(
+                "Business was created, but the application session is not authenticated."
+            );
+        }
+
+        if (
+            !nextSession.user
+        ) {
+            throw new Error(
+                "Business was created, but the authenticated user could not be restored."
+            );
+        }
+
+        if (
+            nextSession.user.businessId !== businessId
+        ) {
+            throw new Error(
+                `Session user does not reference the created business. Expected ${businessId}, received ${nextSession.user.businessId ?? "null"}.`
+            );
+        }
+
+        if (
+            !nextSession.business
+        ) {
+            throw new Error(
+                "Business was created, but it could not be restored from durable storage."
+            );
+        }
+
+        if (
+            nextSession.business.id !== businessId
+        ) {
+            throw new Error(
+                `Restored business does not match the created business. Expected ${businessId}, received ${nextSession.business.id}.`
+            );
+        }
+
+        /*
+         * ============================================================
+         * 7. VERIFY BRANCH
+         * ============================================================
+         */
+
+        if (
+            nextSession.user.branchId !== branchId
+        ) {
+            throw new Error(
+                `Session user does not reference the created branch. Expected ${branchId}, received ${nextSession.user.branchId ?? "null"}.`
+            );
+        }
+
+        if (
+            !nextSession.branch
+        ) {
+            throw new Error(
+                "Branch was created, but it could not be restored from durable storage."
+            );
+        }
+
+        if (
+            nextSession.branch.id !== branchId
+        ) {
+            throw new Error(
+                `Restored branch does not match the created branch. Expected ${branchId}, received ${nextSession.branch.id}.`
+            );
+        }
+
+        /*
+         * ============================================================
+         * 8. SESSION IS NOW VALID
+         * ============================================================
+         */
+
+        navigate(
+            "/onboarding",
+            {
+                replace: true,
+            }
+        );
+
     } catch (err) {
-      console.error(err);
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Could not create business. Try again."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
 
+        console.error(
+            "[Onboarding] Business setup failed:",
+            err
+        );
+
+        setError(
+            err instanceof Error
+                ? err.message
+                : "Could not create business. Try again."
+        );
+
+    } finally {
+
+        setLoading(false);
+    }
+};
   return (
     <div className="min-h-[100dvh] bg-neutral-950 text-white">
       {/* Centered shell: full width on mobile, card on desktop */}

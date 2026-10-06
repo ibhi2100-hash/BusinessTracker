@@ -45,6 +45,13 @@ export class SessionApi {
                 clientSession.userId
             );
 
+        console.log("[SessionApi] RESTORE", {
+            sessionUserId: clientSession.userId,
+            userId: user?.id,
+            businessId: user?.businessId,
+            branchId: user?.branchId,
+        });
+
         if (!user) {
 
             /*
@@ -134,6 +141,14 @@ export class SessionApi {
             );
         }
 
+        console.log("[SessionApi] FINAL RESTORED SESSION", {
+            userId: user.id,
+            user: user,
+            businessId: user.businessId,
+            business: business,
+            branchId: user.branchId,
+            branch: branch?.id ?? null,
+        });
         /*
          * 7. Fully reconstructed application session.
          */

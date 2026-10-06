@@ -1,7 +1,8 @@
 import {
+    useCallback,
     useEffect,
+    useRef,
     useState,
-    useRef
 } from "react";
 
 import type {
@@ -51,7 +52,11 @@ import {
     SyncProvider,
 } from "../../../components/providers/SyncProvider";
 
-import type { ApplicationSessionState } from "../../context/AplicationSessionContext";
+import type {
+    ApplicationSessionState,
+} from "../../context/AplicationSessionContext";
+
+
 interface Props {
     children: ReactNode;
 }
@@ -62,13 +67,29 @@ export function ApplicationProvider({
 }: Props) {
 
     const navigate = useNavigate();
+
+    /*
+     * ================================================================
+     * NAVIGATION
+     * ================================================================
+     *
+     * Keep a stable reference to the latest navigate function.
+     *
+     * The bootstrap effect intentionally runs once. Therefore we
+     * cannot safely capture a potentially stale navigate function
+     * without this ref.
+     */
     const navigateRef = useRef(navigate);
 
-    navigateRef.current = navigate
+    useEffect(() => {
+        navigateRef.current = navigate;
+    }, [navigate]);
+
+
     /*
-     * ============================================================
+     * ================================================================
      * APPLICATION STATE
-     * ============================================================
+     * ================================================================
      */
 
     const [
@@ -76,19 +97,33 @@ export function ApplicationProvider({
         setApplication,
     ] = useState<Application | null>(null);
 
+
     /*
-     * React-facing projection of the durable application session.
+     * ================================================================
+     * SESSION STATE
+     * ================================================================
      *
-     * The durable source of truth remains client.db.
-     * This state only represents the restored session for React.
+     * This is the React-facing projection of the durable session.
+     *
+     * IMPORTANT:
+     *
+     * The durable database remains the source of truth.
+     *
+     * This state exists so React can render the current durable
+     * session without having every component directly query SQLite.
      */
     const [
         session,
         setSession,
     ] = useState<ApplicationSessionState | null>(null);
 
+
     /*
-     * The application becomes ready only after:
+     * ================================================================
+     * APPLICATION READY STATE
+     * ================================================================
+     *
+     * The application becomes renderable only after:
      *
      * 1. Client infrastructure has booted.
      * 2. Business infrastructure has been restored.
@@ -102,9 +137,9 @@ export function ApplicationProvider({
 
 
     /*
-     * ============================================================
+     * ================================================================
      * BOOT STATE
-     * ============================================================
+     * ================================================================
      */
 
     const [
@@ -132,34 +167,87 @@ export function ApplicationProvider({
 
 
     /*
-     * ============================================================
-     * APPLICATION BOOTSTRAP
-     * ============================================================
+     * ================================================================
+     * SESSION REFRESH
+     * ================================================================
+     *
+     * This function DOES NOT bootstrap the application again.
+     *
+     * It simply reconstructs the React-facing session from the
+     * application's current durable state.
+     *
+     * Correct lifecycle:
+     *
+     * durable mutation
+     *       ↓
+     * runtime/business synchronization
+     *       ↓
+     * refreshSession()
+     *       ↓
+     * React receives new session
+     *       ↓
+     * navigation
      */
+  const refreshSession = useCallback(
+    async (): Promise<ApplicationSessionState> => {
 
+        if (!application) {
+            throw new Error(
+                "Cannot refresh session before application is ready."
+            );
+        }
+
+        const nextSession =
+            await application.session.restore();
+
+        setSession(nextSession);
+
+        return nextSession;
+    },
+    [application]
+);
+    /*
+     * ================================================================
+     * APPLICATION BOOTSTRAP
+     * ================================================================
+     *
+     * Boot happens once for this ApplicationProvider lifecycle.
+     *
+     * Do NOT add application/session to this dependency array.
+     *
+     * Doing so would cause the entire infrastructure boot pipeline
+     * to execute again whenever session state changes.
+     */
     useEffect(() => {
 
         let mounted = true;
         let cancelled = false;
 
         /*
-         * This reference owns the application created by
-         * this particular effect execution.
+         * This reference owns the application created by THIS
+         * bootstrap execution.
          *
-         * This is intentionally not React state because cleanup
-         * must always have access to the application created by
-         * this bootstrap attempt.
+         * It is deliberately separate from React state because
+         * cleanup must be able to dispose the application even
+         * before setApplication() has completed.
          */
         let app: Application | undefined;
+
+
+        /*
+         * ------------------------------------------------------------
+         * ABORT CONTROLLER
+         * ------------------------------------------------------------
+         */
 
         const controller =
             new AbortController();
 
 
         /*
-         * ========================================================
+         * ============================================================
          * BOOT LISTENER
-         * ========================================================
+         * ============================================================
          */
 
         const listener: BootListener = {
@@ -307,9 +395,9 @@ export function ApplicationProvider({
 
 
         /*
-         * ========================================================
+         * ============================================================
          * BOOT PROCESS
-         * ========================================================
+         * ============================================================
          */
 
         async function bootstrap(): Promise<void> {
@@ -317,9 +405,9 @@ export function ApplicationProvider({
             try {
 
                 /*
-                 * ------------------------------------------------
-                 * 1. Create boot manager
-                 * ------------------------------------------------
+                 * ----------------------------------------------------
+                 * 1. CREATE BOOT MANAGER
+                 * ----------------------------------------------------
                  */
 
                 const manager =
@@ -330,9 +418,9 @@ export function ApplicationProvider({
 
 
                 /*
-                 * ------------------------------------------------
-                 * 2. Execute application boot pipeline
-                 * ------------------------------------------------
+                 * ----------------------------------------------------
+                 * 2. EXECUTE APPLICATION BOOT PIPELINE
+                 * ----------------------------------------------------
                  */
 
                 const result =
@@ -343,9 +431,9 @@ export function ApplicationProvider({
 
 
                 /*
-                 * ------------------------------------------------
-                 * 3. Handle cancellation after boot
-                 * ------------------------------------------------
+                 * ----------------------------------------------------
+                 * 3. HANDLE CANCELLATION AFTER BOOT
+                 * ----------------------------------------------------
                  */
 
                 if (
@@ -367,9 +455,9 @@ export function ApplicationProvider({
 
 
                 /*
-                 * ------------------------------------------------
-                 * 4. Acquire application
-                 * ------------------------------------------------
+                 * ----------------------------------------------------
+                 * 4. ACQUIRE APPLICATION
+                 * ----------------------------------------------------
                  */
 
                 app =
@@ -385,11 +473,11 @@ export function ApplicationProvider({
 
 
                 /*
-                 * ------------------------------------------------
-                 * 5. Restore durable application session
-                 * ------------------------------------------------
+                 * ----------------------------------------------------
+                 * 5. RESTORE DURABLE SESSION
+                 * ----------------------------------------------------
                  *
-                 * SessionApi restores:
+                 * SessionApi resolves:
                  *
                  * client_session
                  *       ↓
@@ -407,9 +495,9 @@ export function ApplicationProvider({
 
 
                 /*
-                 * ------------------------------------------------
-                 * 6. Restore last application route
-                 * ------------------------------------------------
+                 * ----------------------------------------------------
+                 * 6. RESTORE LAST APPLICATION ROUTE
+                 * ----------------------------------------------------
                  */
 
                 const {
@@ -423,9 +511,14 @@ export function ApplicationProvider({
 
 
                 /*
-                 * ------------------------------------------------
-                 * 7. Check cancellation after all async work
-                 * ------------------------------------------------
+                 * ----------------------------------------------------
+                 * 7. FINAL CANCELLATION CHECK
+                 * ----------------------------------------------------
+                 *
+                 * There are multiple async boundaries above.
+                 *
+                 * The component may have unmounted while any of
+                 * those operations were running.
                  */
 
                 if (
@@ -444,39 +537,64 @@ export function ApplicationProvider({
                     return;
                 }
 
-                console.log("This is the last visited Route: ", lastRoute)
+
                 /*
-                 * ------------------------------------------------
-                 * 8. Publish fully reconstructed state
-                 * ------------------------------------------------
-                 *
-                 * React must not render the application tree
-                 * until both application and session exist.
+                 * ----------------------------------------------------
+                 * 8. PUBLISH APPLICATION
+                 * ----------------------------------------------------
                  */
 
                 setApplication(app);
-                setSession(restoredSession);
 
 
                 /*
-                 * ------------------------------------------------
-                 * 9. Application is now ready
-                 * ------------------------------------------------
+                 * ----------------------------------------------------
+                 * 9. PUBLISH SESSION
+                 * ----------------------------------------------------
+                 */
+
+                setSession(
+                    restoredSession
+                );
+
+
+                /*
+                 * ----------------------------------------------------
+                 * 10. MARK APPLICATION READY
+                 * ----------------------------------------------------
                  */
 
                 setReady(true);
 
-                if(lastRoute){
-                   navigateRef.current(lastRoute, {
-                    replace: true
-                   })
+
+                /*
+                 * ----------------------------------------------------
+                 * 11. RESTORE LAST ROUTE
+                 * ----------------------------------------------------
+                 *
+                 * Route restoration happens only AFTER the
+                 * application and session have been published.
+                 *
+                 * Navigation itself does not restore session state.
+                 */
+                if (lastRoute) {
+
+                    navigateRef.current(
+                        lastRoute,
+                        {
+                            replace: true,
+                        }
+                    );
                 }
 
             } catch (error) {
 
                 /*
-                 * Cancellation is expected during unmount,
-                 * especially under React StrictMode.
+                 * ----------------------------------------------------
+                 * CANCELLATION
+                 * ----------------------------------------------------
+                 *
+                 * Cancellation during unmount is expected.
                  */
                 if (
                     cancelled ||
@@ -493,10 +611,11 @@ export function ApplicationProvider({
 
 
                 /*
-                 * If application creation succeeded but a later
-                 * bootstrap step failed, release the application
-                 * resources before exposing the failure.
+                 * ----------------------------------------------------
+                 * DISPOSE PARTIALLY CREATED APPLICATION
+                 * ----------------------------------------------------
                  */
+
                 if (app) {
 
                     try {
@@ -518,10 +637,15 @@ export function ApplicationProvider({
                 }
 
 
+                /*
+                 * ----------------------------------------------------
+                 * PUBLISH BOOT FAILURE
+                 * ----------------------------------------------------
+                 */
+
                 if (!mounted) {
                     return;
                 }
-
 
                 setBoot(previous => ({
                     ...previous,
@@ -538,13 +662,19 @@ export function ApplicationProvider({
         }
 
 
+        /*
+         * ============================================================
+         * START BOOT
+         * ============================================================
+         */
+
         void bootstrap();
 
 
         /*
-         * ========================================================
+         * ============================================================
          * CLEANUP
-         * ========================================================
+         * ============================================================
          */
 
         return () => {
@@ -556,8 +686,10 @@ export function ApplicationProvider({
 
 
             /*
-             * Dispose the application owned by this bootstrap
-             * execution.
+             * Dispose the application owned by this specific
+             * bootstrap execution.
+             *
+             * This is intentionally not dependent on React state.
              */
             if (app) {
 
@@ -574,11 +706,13 @@ export function ApplicationProvider({
 
 
     /*
-     * ============================================================
+     * ================================================================
      * BOOT SCREEN
-     * ============================================================
+     * ================================================================
+     *
+     * Nothing below the application provider is rendered until the
+     * infrastructure and durable session have been reconstructed.
      */
-
     if (!ready) {
 
         return (
@@ -590,11 +724,13 @@ export function ApplicationProvider({
 
 
     /*
-     * ============================================================
+     * ================================================================
      * DEFENSIVE READY CHECK
-     * ============================================================
+     * ================================================================
+     *
+     * `ready` and the actual state are intentionally checked
+     * independently.
      */
-
     if (
         application === null ||
         session === null
@@ -605,19 +741,19 @@ export function ApplicationProvider({
 
 
     /*
-     * ============================================================
+     * ================================================================
      * APPLICATION TREE
-     * ============================================================
+     * ================================================================
      */
 
     return (
-
         <Context.Provider
             value={application}
         >
 
             <ApplicationSessionProvider
                 session={session}
+                refreshSession={refreshSession}
             >
 
                 <SyncProvider

@@ -72,7 +72,7 @@ export class SQLiteBusinessRepository
     async activateBusiness(
         state: Business
     ): Promise<void> {
-
+        console.log("This is the state of the business to be activated: ", state)
         await this.statements.activate.execute(
             BusinessMapper.toActivation(state)
         );
@@ -146,6 +146,7 @@ export class BusinessMapper {
             business.status,
             business.isOnboarding,
             business.onboardingCompleted,
+            business.id
         ];
     }
 }

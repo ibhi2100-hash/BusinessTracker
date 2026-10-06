@@ -1,10 +1,12 @@
+// src/components/layout/DashboardShell.tsx
+
 import { Outlet } from "react-router-dom";
-import AppNav from "../navigation/BottomNav"
+import AppNav from "../navigation/BottomNav";
 
 export function DashboardShell() {
     return (
         <div className="relative z-10 min-h-screen bg-neutral-950 text-white">
-            
+
             <AppNav />
 
             <main

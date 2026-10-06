@@ -18,6 +18,7 @@ import { ProjectionEventBus } from "@business/event-bus";
 
 import { CurrentBusinessProjection } from "../../Biztru/offline/sqlite/clientDatabase/projections/currentBusinessProjections"; 
 import { ApplicationStateProjection } from "../../Biztru/offline/sqlite/clientDatabase/projections/applicationStateProjections"; 
+import { UserProjection } from "../../Biztru/offline/sqlite/clientDatabase/projections/userProjection";
 
 
 export class ClientBootstrapper {
@@ -303,5 +304,11 @@ export class ClientBootstrapper {
                 repositories.applicationState
             )
         );
+        bus.subscribe(
+            new UserProjection(
+                repositories.users
+            )
+        );
+        
     }
 }

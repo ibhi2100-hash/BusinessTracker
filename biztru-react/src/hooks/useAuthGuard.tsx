@@ -1,74 +1,129 @@
-// hooks/useAuthGuard.tsx
+// src/hooks/useAuthGuard.tsx
 
-import { Navigate, Outlet, useLocation } from "react-router-dom";
-import{ useApplicationSession } from "../Biztru/context/AplicationSessionContext"
+import {
+  Navigate,
+  Outlet,
+  useLocation,
+} from "react-router-dom";
+
+import {
+  useApplicationSession,
+} from "../Biztru/context/AplicationSessionContext";
+
+type UserRole =
+  | "ADMIN"
+  | "STAFF";
+
 interface AuthGuardProps {
-    adminOnly?: boolean;
-    blockIfOnboarding?: boolean;
+  requireAuth?: boolean;
+  requireBusiness?: boolean;
+  blockIfOnboarding?: boolean;
+  requireOnboarding?: boolean;
+  roles?: UserRole[];
 }
 
 export function AuthGuard({
-    adminOnly = false,
-    blockIfOnboarding = false,
+  requireAuth = true,
+  requireBusiness = false,
+  blockIfOnboarding = false,
+  requireOnboarding = false,
+  roles,
 }: AuthGuardProps) {
+  const location =
+    useLocation();
 
-    const location = useLocation();
-    const {
-    user,
-    business,
-} = useApplicationSession();
+  const {
+    session
+  } = useApplicationSession();
 
-    // ----------------------------------------
-    // 2. Require authentication
-    // ----------------------------------------
+  /* -------------------------------------------------------------- */
+  /* Authentication                                                  */
+  /* -------------------------------------------------------------- */
 
-    if (!user) {
-        return (
-            <Navigate
-                to="/"
-                replace
-                state={{
-                    from: location,
-                }}
-            />
-        );
+  if (
+    requireAuth &&
+    !session.user
+  ) {
+    return (
+      <Navigate
+        to="/login"
+        replace
+        state={{
+          from: location,
+        }}
+      />
+    );
+  }
+
+  /* -------------------------------------------------------------- */
+  /* Business                                                        */
+  /* -------------------------------------------------------------- */
+
+  if (
+    requireBusiness &&
+    !session.business
+  ) {
+    return (
+      <Navigate
+        to="/onboarding-business"
+        replace
+        state={{
+          from: location,
+        }}
+      />
+    );
+  }
+
+  /* -------------------------------------------------------------- */
+  /* Onboarding required                                             */
+  /* -------------------------------------------------------------- */
+
+  if (
+    requireOnboarding &&
+    session.business &&
+    !session.business.isOnboarding
+  ) {
+    return (
+      <Navigate
+        to="/app"
+        replace
+      />
+    );
+  }
+
+  /* -------------------------------------------------------------- */
+  /* Application blocked during onboarding                           */
+  /* -------------------------------------------------------------- */
+
+  if (
+    blockIfOnboarding &&
+    session.business?.isOnboarding
+  ) {
+    return (
+      <Navigate
+        to="/onboarding"
+        replace
+      />
+    );
+  }
+
+  /* -------------------------------------------------------------- */
+  /* Role                                                             */
+  /* -------------------------------------------------------------- */
+
+  if (roles && session.user) {
+    const role =
+      session.user.role as UserRole;
+
+    if (!roles.includes(role)) {
+      return (
+        <Navigate
+          to="/unauthorized"
+          replace
+        />
+      );
     }
+  }
 
-    // ----------------------------------------
-    // 3. Role authorization
-    // ----------------------------------------
-
-    if (
-        adminOnly &&
-        user.role !== "ADMIN"
-    ) {
-        return (
-            <Navigate
-                to="/unauthorized"
-                replace
-            />
-        );
-    }
-
-    // ----------------------------------------
-    // 4. Onboarding restriction
-    // ----------------------------------------
-
-    if (
-        blockIfOnboarding &&
-        business?.isOnboarding
-    ) {
-        return (
-            <Navigate
-                to="/onboarding"
-                replace
-            />
-        );
-    }
-
-    // ----------------------------------------
-    // 5. Allow nested route
-    // ----------------------------------------
-
-    return <Outlet />;
+  return <Outlet />;
 }

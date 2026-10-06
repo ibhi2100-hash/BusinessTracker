@@ -8,6 +8,7 @@ import { GlassButton } from "../ui/GlassButton";
 import { GlassIcon } from "../ui/GlassIcon"; 
 import { useBusinessContext } from "../../Biztru/context/BusinessContext"; 
 import { useApplication } from "../../Biztru/services/ApplicationService/ApplicationContext"; 
+import { useApplicationSession } from "../../Biztru/context/AplicationSessionContext";
 
 export function ActivateBusinessButton() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ export function ActivateBusinessButton() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
+  const { refreshSession } = useApplicationSession()
   const canActivate = Boolean(businessId && branchId);
 
   const handleActivate = async () => {
@@ -27,7 +28,7 @@ export function ActivateBusinessButton() {
       setError("");
 
       await app.onboarding.activateBusiness(businessId);
-
+      await refreshSession()
       toast.success("Business activated successfully");
       navigate("/dashboard");
     } catch (err: unknown) {
