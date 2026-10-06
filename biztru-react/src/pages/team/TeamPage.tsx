@@ -4,7 +4,6 @@ import {
 } from "react";
 
 import {
-  BriefcaseBusiness,
   CheckCircle2,
   Clock3,
   Plus,
