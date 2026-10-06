@@ -321,6 +321,12 @@ export default function ProductSheet({
           ? "Update product information"
           : "Add a product to your inventory"
       }
+      className="
+        w-full
+        sm:max-w-xl
+        lg:max-w-2xl
+        xl:max-w-3xl
+      "
     >
       <div className="space-y-7 pb-4">
 
