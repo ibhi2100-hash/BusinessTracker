@@ -51,7 +51,7 @@ export function GlassSheet({
         absolute
         inset-0
         bg-black/50
-        backdrop-blur-md
+        backdrop-blur-xs
         "
       />
 

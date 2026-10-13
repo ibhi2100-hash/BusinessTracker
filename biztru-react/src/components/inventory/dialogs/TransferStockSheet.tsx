@@ -74,6 +74,12 @@ export default function TransferStockSheet({
       onClose={onClose}
       title="Transfer Stock"
       subtitle={product.name}
+      className="
+        w-full
+        sm:max-w-xl
+        lg:max-w-2xl
+        xl:max-w-3xl
+      "
     >
       <div className="space-y-4">
 

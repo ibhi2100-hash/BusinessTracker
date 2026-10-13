@@ -15,6 +15,7 @@ import { SyncApi } from "./API/sync/syncApi";
 import { SyncApplicationService } from "./API/sync/SyncApplicationService";
 import { ExpenseApi } from "./API/expenses/expensesApi";
 import { SessionApi } from "./API/session/ApplicationSession";
+import { EmployeeApi } from "./API/employee/EmployeeApi";
 
 export class Application {
     readonly onboarding: OnboardingApi;
@@ -33,6 +34,7 @@ export class Application {
     readonly sync: SyncApi;
     readonly syncService: SyncApplicationService
     readonly session: SessionApi;
+    readonly employee: EmployeeApi
 
     readonly manager: BusinessManager
     
@@ -120,5 +122,11 @@ export class Application {
             new SessionApi(
                 client.repositories,
                 manager           )
+
+        this.employee = 
+            new EmployeeApi(
+                manager,
+                client.transactionManager,
+            )
     }
 }

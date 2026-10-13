@@ -86,7 +86,7 @@ async registerBusinessOwner(dto: RegisterDto) {
   }
 
   if (!user.password) {
-    throw new Error("Invalid credentials");
+    throw new Error("User Password does not exists");
   }
 
   if (!dto.password) {
@@ -100,7 +100,7 @@ async registerBusinessOwner(dto: RegisterDto) {
     );
 
   if (!valid) {
-    throw new Error("Invalid credentials");
+    throw new Error("Incorrect Password, try again");
   }
 
   const access =

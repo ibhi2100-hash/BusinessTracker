@@ -16,6 +16,7 @@ import { SyncStateStatements } from "./syncState/SyncStatements";
 import { ExpenseStatement } from "./expense/expenseStatements";
 import { ConflictsStatements } from "./conflicts/conflictsStatement";
 import { SyncActivityStatements } from "./syncActivities/ActivityStatements";
+import { EmployeeStatements } from "./employees/employeesStatements";
 
 
 export class BusinessStatementRegistry {
@@ -24,6 +25,7 @@ export class BusinessStatementRegistry {
     readonly products: ProductStatements;
     readonly sales: SalesStatement;
     readonly expenses: ExpenseStatement;
+    readonly employees: EmployeeStatements;
     readonly ledger: LedgerStatements;
     readonly business: BusinessStatements;
     readonly branches: BranchStatements;
@@ -86,6 +88,9 @@ export class BusinessStatementRegistry {
 
         this.syncActivity =  
             new SyncActivityStatements(manager)
+
+        this.employees = 
+            new EmployeeStatements(manager)
 
         
     }

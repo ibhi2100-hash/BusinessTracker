@@ -5,5 +5,6 @@ export * from "./reducers/branchReducer.js";
 export * from "./reducers/inventoryReducer.js";
 export * from "./reducers/productReducer.js";
 export * from "./reducers/salesReducer.js"
-export * from "./reducers/expenseReducer.js"
+export * from "./reducers/expenseReducer.js";
+export * from "./reducers/employee/employeeReducer.js"
 

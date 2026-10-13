@@ -1,5 +1,3 @@
-
-
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,12 +22,14 @@ import {
 
 import { useAuthStore } from "../../Biztru/store/useAuthStore"
 import { useApplication } from "../../Biztru/services/ApplicationService/ApplicationContext";
+import { useApplicationSession } from "../../Biztru/context/AplicationSessionContext";
 
 export default function LoginPage() {
-  const app = useApplication();
+ const app = useApplication();
   const navigate = useNavigate();
   const login = useAuthStore((state) => state.setLogin);
 
+  const { refreshSession } = useApplicationSession();
   const [submit, setSubmit] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -65,77 +65,82 @@ export default function LoginPage() {
 
       const result = await res.json();
 
+      
       if (!res.ok) {
         throw new Error(result.message || "Login failed");
       }
 
-      /*
-       * ---------------------------------------------------------
-       * 1. Save authentication/session information
-       * ---------------------------------------------------------
-       */
+      // Validate the minimum authentication contract.
+      if (!result?.user?.id || !result?.accessToken) {
+        throw new Error(
+          "Login response is missing the user or access token."
+        );
+      }
 
-      await app.client.services.registration.register(result);
+      const user = result.user;
 
-      await app.client.services.registration.saveSession(result);
+      // Handle accounts that do not have a business yet.
+      if (!user.businessId) {
+        await app.client.services.registration.register(result);
+        await app.client.services.registration.saveSession(result);
+        await app.client.services.registration.saveApplicationState(
+          user.id
+        );
 
-      await app.client.services.registration.saveApplicationState(
-        result.user.id
-      );
-
-      /*
-       * ---------------------------------------------------------
-       * 2. Update React authentication state
-       * ---------------------------------------------------------
-       */
-
-      login(
-        result.user,
-        result.accessToken,
-        result.expiresIn
-      );
-
-      /*
-       * ---------------------------------------------------------
-       * 3. Determine onboarding state
-       * ---------------------------------------------------------
-       */
-
-      if (!result.user.businessId) {
+        login(user, result.accessToken, result.expiresIn);
+        await refreshSession()
         navigate("/onboarding-business");
         return;
       }
 
-      if (!result.user.onboardingCompleted) {
+      // Handle businesses that are still onboarding.
+      if (!user.onboardingCompleted) {
+        await app.client.services.registration.register(result);
+        await app.client.services.registration.saveSession(result);
+        await app.client.services.registration.saveApplicationState(
+          user.id
+        );
+
+        login(user, result.accessToken, result.expiresIn);
+        await refreshSession()
         navigate("/onboarding");
         return;
       }
 
-      /*
-       * ---------------------------------------------------------
-       * 4. Bootstrap local business replica
-       * ---------------------------------------------------------
-       */
-
-      if (!result.user.branchId) {
+      // A fully onboarded business must have an active branch.
+      if (!user.branchId) {
         throw new Error(
           "Your business is configured but no active branch is assigned."
         );
       }
 
+      /*
+       * IMPORTANT:
+       * Install the local business replica BEFORE persisting the
+       * authenticated user/session state.
+       */
       await app.business.BootstrapBusiness({
-        businessId: result.user.businessId,
-        branchId: result.user.branchId,
+        businessId: user.businessId,
+        branchId: user.branchId,
         accessToken: result.accessToken,
       });
 
       /*
-       * ---------------------------------------------------------
-       * 5. Dashboard
-       * ---------------------------------------------------------
+       * These methods must be idempotent.
+       * register() must not blindly INSERT an existing user.
        */
+      await app.client.services.registration.register(result);
+      await app.client.services.registration.saveSession(result);
+      await app.client.services.registration.saveApplicationState(
+        user.id
+      );
+
+      // Commit in-memory authentication only after persistence succeeds.
+      login(user, result.accessToken, result.expiresIn);
+      await refreshSession()
 
       navigate("/dashboard");
+
     } catch (error: unknown) {
       console.error("Login error:", error);
 

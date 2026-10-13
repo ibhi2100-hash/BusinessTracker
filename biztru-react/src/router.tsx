@@ -43,6 +43,7 @@ import {
   RoleHomeRedirect,
 } from "./components/navigation/RoleHomeRedirect";
 import TeamPage from "./pages/team/TeamPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 /* ------------------------------------------------------------------ */
 /* Router                                                             */
@@ -293,9 +294,9 @@ export function AppRouter() {
       <Route
         path="*"
         element={
-          <RoleHomeRedirect />
+            <NotFoundPage />
         }
-      />
+    />
 
     </Routes>
   );

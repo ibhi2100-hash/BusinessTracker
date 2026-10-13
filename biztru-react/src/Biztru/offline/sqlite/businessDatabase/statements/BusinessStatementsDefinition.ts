@@ -4,6 +4,7 @@ import { BranchStatementDefinition } from "./branch/BranchStatementDefintion";
 import { BusinessStatementDefinition } from "./business/BusinessDefiinition";
 import { ConflictStatementDefinition } from "./conflicts/conflictsStatementDefinition";
 import { DashboardStatementDefinition } from "./dashboard/dashboardStatementsDefinition";
+import { EmployeeStatementDefinitions } from "./employees/employeeStatementDefinition";
 import { EventStatementsDefinition } from "./events/EventDefinitions";
 import { ExpenseStatementDefinition } from "./expense/expenseStatementDefinition";
 import { InventoryStatementDefinition } from "./inventory/InventoryStatementDefinition";
@@ -34,5 +35,6 @@ export const BusinessStatementsDefinitions: StatementDefinition[] = [
     ...SyncStateStatementDefinition,
     ...SyncActivityStatementDefinition,
     ...ConflictStatementDefinition,
-    ...ProjectionResetStatementDefinitions
+    ...ProjectionResetStatementDefinitions,
+    ...EmployeeStatementDefinitions
 ]

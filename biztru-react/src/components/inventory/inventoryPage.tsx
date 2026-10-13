@@ -1,9 +1,10 @@
-
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
+
 import {
   Search,
   Plus,
+  Upload,
   Package,
   LayoutGrid,
   ShoppingCart,
@@ -19,25 +20,34 @@ import ReceiveStockSheet from "./dialogs/ReceivedStockSheet";
 import TransferStockSheet from "./dialogs/TransferStockSheet";
 import ProductHistorySheet from "./dialogs/ProductHistorySheet";
 import ProductDetailsSheet from "./dialogs/ProductsManagement";
+import ProductImportSheet from "./dialogs/ProductImportSheet";
 
-import { useCartStore } from "../../Biztru/store/useCartStore"; 
-import { useApplication } from "../../Biztru/services/ApplicationService/ApplicationContext"; 
+import { useCartStore } from "../../Biztru/store/useCartStore";
+import { useApplication } from "../../Biztru/services/ApplicationService/ApplicationContext";
+
 import {
   salesEventType,
 } from "@business/shared-types";
+
+import type { ValidatedProductImportRow } from "@business/shared-types";
 import SellCard from "./cards/SellCard";
+
 import { GlassButton } from "../ui/GlassButton";
 import { GlassCard } from "../ui/GlassCard";
 import { GlassInput } from "../ui/GlassInput";
 import { GlassSheet } from "../ui/GlassSheet";
 import { GlassIcon } from "../ui/GlassIcon";
-import { useBranchStore } from "../../Biztru/store/useBranchStore"; 
-import { inventoryKey } from "../../Biztru/utils/keygenerator"; 
-import { useLiveProducts } from "../../hooks/useLiveProducts"; 
-import { useBusinessContext } from "../../Biztru/context/BusinessContext"; 
-import type{ LiveProduct } from "../../Biztru/offline/sqlite/businessDatabase/repositories/SQLiteProjectionRepository/SQLiteProductRepository"; 
-import { cn } from "../../lib/utils"; 
 
+import { useBranchStore } from "../../Biztru/store/useBranchStore";
+import { inventoryKey } from "../../Biztru/utils/keygenerator";
+import { useLiveProducts } from "../../hooks/useLiveProducts";
+import { useBusinessContext } from "../../Biztru/context/BusinessContext";
+
+import type {
+  LiveProduct,
+} from "../../Biztru/offline/sqlite/businessDatabase/repositories/SQLiteProjectionRepository/SQLiteProductRepository";
+
+import { cn } from "../../lib/utils";
 
 interface InventoryPageProps {
   context: "sell" | "admin";
@@ -53,25 +63,30 @@ interface ProductHistoryItem {
   description?: string;
 }
 
+interface ProductImportResult {
+  totalOperations: number;
+  createdProducts: number;
+  updatedProducts: number;
+  createdStock: number;
+  failedOperations: number;
+}
+
 export default function InventoryPage({
   context,
   mode,
 }: InventoryPageProps) {
   const app = useApplication();
 
-  const {
-    branchId,
-  } = useBusinessContext();
-  if(!branchId){
-    throw new  Error("Branch ID does not exist in branchId")
-  }
+  const { branchId } = useBusinessContext();
+
   const { data, loading } = useLiveProducts(branchId);
-  const products = data;
-  if(!products){
-    throw new Error("Products Does not exist in Inventory Page")
-  }
-  const branches = useBranchStore((s) => s.branches);
- 
+
+  const products = data ?? [];
+
+  const branches = useBranchStore(
+    (state) => state.branches,
+  );
+
   /*
    * -----------------------------
    * UI STATE
@@ -82,10 +97,19 @@ export default function InventoryPage({
     useState<LiveProduct | null>(null);
 
   const [loader, setLoading] = useState(false);
+
   const [search, setSearch] = useState("");
-  const [activeCategory, setActiveCategory] = useState<string>("All");
-  const [history ] = useState<ProductHistoryItem[]>([]);
+
+  const [activeCategory, setActiveCategory] =
+    useState<string>("All");
+
+  const [history] =
+    useState<ProductHistoryItem[]>([]);
+
   const [cartOpen, setCartOpen] = useState(false);
+
+  const [productImportOpen, setProductImportOpen] =
+    useState(false);
 
   type ActiveSheet =
     | null
@@ -97,7 +121,8 @@ export default function InventoryPage({
     | "transfer"
     | "history";
 
-  const [activeSheet, setActiveSheet] = useState<ActiveSheet>(null);
+  const [activeSheet, setActiveSheet] =
+    useState<ActiveSheet>(null);
 
   /*
    * -----------------------------
@@ -105,17 +130,24 @@ export default function InventoryPage({
    * -----------------------------
    */
 
-  const cartItems = useCartStore((state) => state.items);
+  const cartItems = useCartStore(
+    (state) => state.items,
+  );
+
   const cartStore = useCartStore();
 
   const cartQuantity = useMemo(() => {
-    return cartItems.reduce((total, item) => total + item.quantity, 0);
+    return cartItems.reduce(
+      (total, item) => total + item.quantity,
+      0,
+    );
   }, [cartItems]);
 
   const cartTotal = useMemo(() => {
     return cartItems.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0
+      (total, item) =>
+        total + item.price * item.quantity,
+      0,
     );
   }, [cartItems]);
 
@@ -126,10 +158,17 @@ export default function InventoryPage({
    */
 
   const categories = useMemo(() => {
-    const set = new Set(
-      products.map((p) => p.category || "Uncategorized")
+    const categorySet = new Set(
+      products.map(
+        (product) =>
+          product.category || "Uncategorized",
+      ),
     );
-    return ["All", ...Array.from(set)];
+
+    return [
+      "All",
+      ...Array.from(categorySet),
+    ];
   }, [products]);
 
   /*
@@ -139,18 +178,29 @@ export default function InventoryPage({
    */
 
   const filteredProducts = useMemo(() => {
-    return products.filter((p) => {
-      const matchSearch = p.name
-        .toLowerCase()
-        .includes(search.toLowerCase());
+    const normalizedSearch =
+      search.trim().toLowerCase();
+
+    return products.filter((product) => {
+      const matchSearch =
+        normalizedSearch.length === 0 ||
+        product.name
+          .toLowerCase()
+          .includes(normalizedSearch);
 
       const matchCategory =
         activeCategory === "All" ||
-        (p.category || "Uncategorized") === activeCategory;
+        (product.category ||
+          "Uncategorized") ===
+          activeCategory;
 
       return matchSearch && matchCategory;
     });
-  }, [products, search, activeCategory]);
+  }, [
+    products,
+    search,
+    activeCategory,
+  ]);
 
   /*
    * -----------------------------
@@ -158,19 +208,27 @@ export default function InventoryPage({
    * -----------------------------
    */
 
-  const openCreate = () => {
+  const openCreate = useCallback(() => {
     setActiveSheet("create");
     setSelectedProduct(null);
-  };
+  }, []);
 
-  const openManage = (product: LiveProduct) => {
-    setActiveSheet("manage");
-    setSelectedProduct(product);
-  };
+  const openManage = useCallback(
+    (product: LiveProduct) => {
+      setActiveSheet("manage");
+      setSelectedProduct(product);
+    },
+    [],
+  );
 
-  const handleDelete = async (productId: string) => {
-   console.log(`Product : ${productId} is being deleted`)
-  };
+  const handleDelete = useCallback(
+    async (productId: string) => {
+      console.log(
+        `Product : ${productId} is being deleted`,
+      );
+    },
+    [],
+  );
 
   /*
    * -----------------------------
@@ -178,28 +236,53 @@ export default function InventoryPage({
    * -----------------------------
    */
 
-  const handleAddToCart = (productId: string, quantity: number) => {
-    const product = products.find((p) => p.id === productId);
-    if (!product) return;
+  const handleAddToCart = useCallback(
+    (
+      productId: string,
+      quantity: number,
+    ) => {
+      const product = products.find(
+        (item) => item.id === productId,
+      );
 
-    const existing = cartItems.find((item) => item.productId === productId);
-    const currentQuantity = existing?.quantity ?? 0;
+      if (!product) {
+        return;
+      }
 
-    if (currentQuantity + quantity > product.quantity) {
-      toast.error(`Only ${product.quantity} available`);
-      return;
-    }
+      const existing = cartItems.find(
+        (item) =>
+          item.productId === productId,
+      );
 
-    cartStore.addItem({
-      productId: product.id,
-      name: product.name,
-      quantity,
-      price: product.price,
-      costPrice: product.costPrice,
-    });
+      const currentQuantity =
+        existing?.quantity ?? 0;
 
-    setCartOpen(true);
-  };
+      if (
+        currentQuantity + quantity >
+        product.quantity
+      ) {
+        toast.error(
+          `Only ${product.quantity} available`,
+        );
+        return;
+      }
+
+      cartStore.addItem({
+        productId: product.id,
+        name: product.name,
+        quantity,
+        price: product.price,
+        costPrice: product.costPrice,
+      });
+
+      setCartOpen(true);
+    },
+    [
+      products,
+      cartItems,
+      cartStore,
+    ],
+  );
 
   /*
    * -----------------------------
@@ -207,22 +290,40 @@ export default function InventoryPage({
    * -----------------------------
    */
 
-  const handleChangeCartQuantity = (productId: string, quantity: number) => {
-    if (quantity <= 0) {
-      cartStore.removeItem(productId);
-      return;
-    }
+  const handleChangeCartQuantity =
+    useCallback(
+      (
+        productId: string,
+        quantity: number,
+      ) => {
+        if (quantity <= 0) {
+          cartStore.removeItem(productId);
+          return;
+        }
 
-    const product = products.find((p) => p.id === productId);
-    if (!product) return;
+        const product = products.find(
+          (item) =>
+            item.id === productId,
+        );
 
-    if (quantity > product.quantity) {
-      toast.error(`Only ${product.quantity} available`);
-      return;
-    }
+        if (!product) {
+          return;
+        }
 
-    cartStore.updateQty(productId, quantity);
-  };
+        if (quantity > product.quantity) {
+          toast.error(
+            `Only ${product.quantity} available`,
+          );
+          return;
+        }
+
+        cartStore.updateQty(
+          productId,
+          quantity,
+        );
+      },
+      [products, cartStore],
+    );
 
   /*
    * -----------------------------
@@ -230,40 +331,67 @@ export default function InventoryPage({
    * -----------------------------
    */
 
-  const handleQuickSell = async (productId: string, quantity: number) => {
-    const product = products.find((p) => p.id === productId);
-    if (!product) return;
+  const handleQuickSell = useCallback(
+    async (
+      productId: string,
+      quantity: number,
+    ) => {
+      const product = products.find(
+        (item) =>
+          item.id === productId,
+      );
 
-    if (quantity > product.quantity) {
-      toast.error("Insufficient stock");
-      return;
-    }
+      if (!product) {
+        return;
+      }
 
-    try {
-      setLoading(true);
+      if (quantity > product.quantity) {
+        toast.error(
+          "Insufficient stock",
+        );
+        return;
+      }
 
-      await app.sales.createSale({
-        type: salesEventType.SALE_ADDED,
-        mode,
-        payload: {
-          productId,
-          productName: product.name,
-          quantity,
-          amount: product.price * quantity,
-          costPrice: product.costPrice * quantity,
-          unitCostPrice: product.costPrice,
-          unitPrice: product.price
-        },
-      });
+      try {
+        setLoading(true);
 
-      toast.success("Sale completed");
-    } catch (error) {
-      console.error(error);
-      toast.error("Sale failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+        await app.sales.createSale({
+          type: salesEventType.SALE_ADDED,
+          mode,
+          payload: {
+            productId,
+            productName: product.name,
+            quantity,
+            amount:
+              product.price * quantity,
+            costPrice:
+              product.costPrice * quantity,
+            unitCostPrice:
+              product.costPrice,
+            unitPrice:
+              product.price,
+          },
+        });
+
+        toast.success(
+          "Sale completed",
+        );
+      } catch (error) {
+        console.error(error);
+
+        toast.error(
+          "Sale failed",
+        );
+      } finally {
+        setLoading(false);
+      }
+    },
+    [
+      products,
+      app.sales,
+      mode,
+    ],
+  );
 
   /*
    * -----------------------------
@@ -271,36 +399,58 @@ export default function InventoryPage({
    * -----------------------------
    */
 
-  const handleCheckout = async () => {
-    if (!cartItems.length) return;
-
-    try {
-      setLoading(true);
-
-      for (const item of cartItems) {
-        await app.sales.createSale({
-          type: salesEventType.SALE_ADDED,
-          mode: "LIVE",
-          payload: {
-            productId: item.productId,
-            productName: item.name,
-            quantity: item.quantity,
-            amount: item.price * item.quantity,
-            costPrice: item.costPrice * item.quantity,
-          },
-        });
+  const handleCheckout = useCallback(
+    async () => {
+      if (!cartItems.length) {
+        return;
       }
 
-      cartStore.clear();
-      setCartOpen(false);
-      toast.success("Sale completed");
-    } catch (error) {
-      console.error(error);
-      toast.error("Checkout failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+      try {
+        setLoading(true);
+
+        for (const item of cartItems) {
+          await app.sales.createSale({
+            type: salesEventType.SALE_ADDED,
+            mode: "LIVE",
+            payload: {
+              productId:
+                item.productId,
+              productName:
+                item.name,
+              quantity:
+                item.quantity,
+              amount:
+                item.price *
+                item.quantity,
+              costPrice:
+                item.costPrice *
+                item.quantity,
+            },
+          });
+        }
+
+        cartStore.clear();
+        setCartOpen(false);
+
+        toast.success(
+          "Sale completed",
+        );
+      } catch (error) {
+        console.error(error);
+
+        toast.error(
+          "Checkout failed",
+        );
+      } finally {
+        setLoading(false);
+      }
+    },
+    [
+      cartItems,
+      app.sales,
+      cartStore,
+    ],
+  );
 
   /*
    * -----------------------------
@@ -308,78 +458,143 @@ export default function InventoryPage({
    * -----------------------------
    */
 
-  const handleReceiveStock = async (
-    quantity: number,
-    costPrice: number,
-    note?: string
-  ) => {
-    if(!selectedProduct){
-      throw new Error("Product now is null")
-    }
-    const key = inventoryKey(selectedProduct.id, branchId)
-    await app.inventory.receiveStock({
-      aggregateId: key,
-      mode,
-      payload: {
-        productId: selectedProduct.id,
-        quantity,
-        costPrice,
-        note,
+  const handleReceiveStock =
+    useCallback(
+      async (
+        quantity: number,
+        costPrice: number,
+        note?: string,
+      ) => {
+        if (!selectedProduct) {
+          throw new Error(
+            "Product now is null",
+          );
+        }
+
+        const key = inventoryKey(
+          selectedProduct.id,
+          branchId,
+        );
+
+        await app.inventory.receiveStock({
+          aggregateId: key,
+          mode,
+          payload: {
+            productId:
+              selectedProduct.id,
+            quantity,
+            costPrice,
+            note,
+          },
+        });
+
+        toast.success(
+          "Stock received",
+        );
+
+        setActiveSheet(null);
       },
-    });
+      [
+        selectedProduct,
+        branchId,
+        app.inventory,
+        mode,
+      ],
+    );
 
-    toast.success("Stock received");
-    setActiveSheet(null);
-  };
+  const handleAdjustStock =
+    useCallback(
+      async (
+        direction:
+          | "increase"
+          | "decrease",
+        quantity: number,
+        reason: string,
+      ) => {
+        if (
+          !selectedProduct ||
+          !branchId
+        ) {
+          return;
+        }
 
-  const handleAdjustStock = async (
-    direction: "increase" | "decrease",
-    quantity: number,
-    reason: string
-  ) => {
-    if (!selectedProduct || !branchId) return;
+        const key = inventoryKey(
+          selectedProduct.id,
+          branchId,
+        );
 
-    const key = inventoryKey(selectedProduct.id, branchId);
+        await app.inventory.adjust({
+          aggregateId: key,
+          mode,
+          payload: {
+            productId:
+              selectedProduct.id,
+            costPrice:
+              selectedProduct.costPrice,
+            direction,
+            quantity,
+            reason,
+          },
+        });
 
-    await app.inventory.adjust({
-      aggregateId: key,
-      mode,
-      payload: {
-        productId: selectedProduct.id,
-        costPrice: selectedProduct.costPrice,
-        direction,
-        quantity,
-        reason,
+        toast.success(
+          "Inventory adjusted",
+        );
+
+        setActiveSheet(null);
       },
-    });
+      [
+        selectedProduct,
+        branchId,
+        app.inventory,
+        mode,
+      ],
+    );
 
-    toast.success("Inventory adjusted");
-    setActiveSheet(null);
-  };
+  const handleTransferStock =
+    useCallback(
+      async (
+        targetBranchId: string,
+        quantity: number,
+        note?: string,
+      ) => {
+        if (
+          !selectedProduct ||
+          !branchId
+        ) {
+          return;
+        }
 
-  const handleTransferStock = async (
-    targetBranchId: string,
-    quantity: number,
-    note?: string
-  ) => {
-    if (!selectedProduct || !branchId) return;
+        const key = inventoryKey(
+          selectedProduct.id,
+          branchId,
+        );
 
-    const key = inventoryKey(selectedProduct.id, branchId);
+        await app.inventory.transfer({
+          aggregateId: key,
+          mode,
+          payload: {
+            productId:
+              selectedProduct.id,
+            targetBranchId,
+            quantity,
+            note,
+          },
+        });
 
-    await app.inventory.transfer({
-      aggregateId: key,
-      mode,
-      payload: {
-        productId: selectedProduct.id,
-        targetBranchId,
-        quantity,
-        note,
+        toast.success(
+          "Stock transferred",
+        );
+
+        setActiveSheet(null);
       },
-    });
-
-    toast.success("Stock transferred");
-    setActiveSheet(null);
-  };
+      [
+        selectedProduct,
+        branchId,
+        app.inventory,
+        mode,
+      ],
+    );
 
   /*
    * -----------------------------
@@ -387,48 +602,139 @@ export default function InventoryPage({
    * -----------------------------
    */
 
-  const handleSubmit = async (data: {
-    name: string;
-    price: number;
-    cost: number;
-    quantity: number;
-  }) => {
-    try {
-      setLoading(true);
+  const handleSubmit = useCallback(
+    async (data: {
+      name: string;
+      price: number;
+      cost: number;
+      quantity: number;
+    }) => {
+      try {
+        setLoading(true);
 
-      const productId = crypto.randomUUID();
-      const inventoryId = inventoryKey(productId, branchId);
+        const productId =
+          crypto.randomUUID();
 
-      console.log("This is inventoryId to be used: ", inventoryId)
+        const inventoryId =
+          inventoryKey(
+            productId,
+            branchId,
+          );
 
-      if (activeSheet === "create") {
-        await app.product.create({
-          id: productId,
-          name: data.name,
-          price: data.price,
-          costPrice: data.cost,
-          mode,
-        });
+        if (
+          activeSheet === "create"
+        ) {
+          await app.product.create({
+            id: productId,
+            name: data.name,
+            price: data.price,
+            costPrice: data.cost,
+            description: null,
+            sku: null,
+            barcode: null,
+            reorderLevel: null,
+            imageUrl: null,
+            category: null,
+            mode,
+          });
 
-        await app.inventory.createStock({
-          id: inventoryId,
-          productId,
-          quantity: data.quantity,
-          costPrice: data.cost,
-          mode,
-        });
+          await app.inventory.createStock({
+            id: inventoryId,
+            productId,
+            quantity: data.quantity,
+            costPrice: data.cost,
+            mode,
+          });
 
-        toast.success("Product created");
+          toast.success(
+            "Product created",
+          );
+        }
+
+        setActiveSheet(null);
+      } catch (error) {
+        console.error(error);
+
+        toast.error(
+          "Operation failed",
+        );
+      } finally {
+        setLoading(false);
       }
+    },
+    [
+      activeSheet,
+      app.product,
+      app.inventory,
+      branchId,
+      mode,
+    ],
+  );
 
-      setActiveSheet(null);
-    } catch (error) {
-      console.error(error);
-      toast.error("Operation failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+  /*
+   * -----------------------------
+   * PRODUCT IMPORT
+   * -----------------------------
+   *
+   * This is deliberately kept as an
+   * application boundary.
+   *
+   * The import sheet prepares and validates
+   * the catalogue. The actual command/event
+   * execution should be provided by the
+   * ProductImportService rather than making
+   * the UI directly manipulate SQLite.
+   */
+
+  const handleProductImport =
+    useCallback(
+      async (
+        rows: ValidatedProductImportRow[],
+      ): Promise<ProductImportResult> => {
+        /*
+         * TODO:
+         *
+         * Replace this boundary with:
+         *
+         * app.productImport.execute({
+         *   branchId,
+         *   mode,
+         *   rows,
+         * });
+         *
+         * once ProductImportService is connected
+         * to ProductApi / InventoryApi.
+         *
+         * Do NOT write directly to SQLite here.
+         */
+
+        console.log(
+          "Approved product import:",
+          rows,
+        );
+
+        throw new Error(
+          "Product import service is not connected yet.",
+        );
+      },
+      [],
+    );
+
+  /*
+   * -----------------------------
+   * HEADER ACTIONS
+   * -----------------------------
+   */
+
+  const handleOpenImport =
+    useCallback(() => {
+      setProductImportOpen(true);
+    }, []);
+
+  const handleCloseImport =
+    useCallback(() => {
+      setProductImportOpen(false);
+    }, []);
 
   /*
    * -----------------------------
@@ -437,32 +743,121 @@ export default function InventoryPage({
    */
 
   return (
-    <div className="min-h-screen pb-32 bg-neutral-950 text-white">
+    <div className="min-h-screen bg-neutral-950 pb-32 text-white">
       {/* ================= HEADER ================= */}
-      <div className="sticky top-0 z-40 backdrop-blur-2xl border-b border-white/10 bg-white/3]">
-        <div className="px-4 pt-4 pb-3 space-y-4">
-          {/* Title row */}
-          <div className="flex items-center justify-between">
-            <h1 className="text-xl font-semibold flex items-center gap-2.5">
-              <GlassIcon size="sm" variant="primary">
-                <LayoutGrid className="w-4 h-4" />
+
+      <div
+        className="
+          sticky
+          top-0
+          z-40
+          border-b
+          border-white/10
+          bg-neutral-950/85
+          backdrop-blur-2xl
+        "
+      >
+        <div className="space-y-4 px-4 pb-3 pt-4">
+          {/* ================= TITLE ROW ================= */}
+
+          <div className="flex min-w-0 items-center justify-between gap-3">
+            <h1 className="flex min-w-0 items-center gap-2.5 text-xl font-semibold">
+              <GlassIcon
+                size="sm"
+                variant="primary"
+              >
+                <LayoutGrid className="h-4 w-4" />
               </GlassIcon>
-              {context === "sell" ? "Quick Sell" : "Inventory"}
+
+              <span className="truncate">
+                {context === "sell"
+                  ? "Quick Sell"
+                  : "Inventory"}
+              </span>
             </h1>
 
-            <div className="flex items-center gap-2">
-              {/* Cart icon – only in sell mode */}
+            <div className="flex shrink-0 items-center gap-2">
+              {/* ================= DESKTOP ADMIN ACTIONS ================= */}
+
+              {context === "admin" && (
+                <div className="hidden items-center gap-2 sm:flex">
+                  <GlassButton
+                    type="button"
+                    variant="secondary"
+                    onClick={
+                      handleOpenImport
+                    }
+                    className="h-10 px-3.5"
+                    icon={
+                      <Upload className="h-4 w-4" />
+                    }
+                  >
+                    Import
+                  </GlassButton>
+
+                  <GlassButton
+                    type="button"
+                    onClick={openCreate}
+                    className="h-10 px-3.5"
+                    icon={
+                      <Plus className="h-4 w-4" />
+                    }
+                  >
+                    Add product
+                  </GlassButton>
+                </div>
+              )}
+
+              {/* ================= SELL CART ================= */}
+
               {context === "sell" && (
                 <button
                   type="button"
-                  onClick={() => setCartOpen(true)}
-                  className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition"
+                  onClick={() =>
+                    setCartOpen(true)
+                  }
+                  aria-label="Open cart"
+                  className="
+                    relative
+                    flex
+                    h-10
+                    w-10
+                    shrink-0
+                    items-center
+                    justify-center
+                    rounded-xl
+                    border
+                    border-white/10
+                    bg-white/5
+                    transition
+                    hover:bg-white/10
+                    active:scale-95
+                  "
                 >
-                  <ShoppingCart className="w-5 h-5" />
+                  <ShoppingCart className="h-5 w-5" />
 
                   {cartQuantity > 0 && (
-                    <span className="absolute -top-1.5 -right-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-teal-500 px-1 text-[10px] font-bold text-white">
-                      {cartQuantity > 99 ? "99+" : cartQuantity}
+                    <span
+                      className="
+                        absolute
+                        -right-1.5
+                        -top-1.5
+                        flex
+                        h-5
+                        min-w-5
+                        items-center
+                        justify-center
+                        rounded-full
+                        bg-teal-500
+                        px-1
+                        text-[10px]
+                        font-bold
+                        text-white
+                      "
+                    >
+                      {cartQuantity > 99
+                        ? "99+"
+                        : cartQuantity}
                     </span>
                   )}
                 </button>
@@ -470,29 +865,75 @@ export default function InventoryPage({
             </div>
           </div>
 
-          {/* Search */}
+          {/* ================= SEARCH ================= */}
+
           <GlassInput
-            icon={<Search className="w-4 h-4" />}
+            icon={
+              <Search className="h-4 w-4" />
+            }
             placeholder="Search products..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(event) =>
+              setSearch(
+                event.target.value,
+              )
+            }
           />
 
-          {/* Categories */}
-          <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
-            {categories.map((cat) => (
+          {/* ================= CATEGORIES ================= */}
+
+          <div
+            className="
+              no-scrollbar
+              flex
+              gap-2
+              overflow-x-auto
+              pb-1
+            "
+          >
+            {categories.map((category) => (
               <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
+                key={category}
+                type="button"
+                onClick={() =>
+                  setActiveCategory(
+                    category,
+                  )
+                }
                 className={cn(
-                  "flex items-center gap-1.5 px-4 py-2 rounded-full text-sm transition-all whitespace-nowrap border",
-                  activeCategory === cat
-                    ? "bg-teal-500/20 text-teal-300 border-teal-500/40 shadow-[0_0_20px_rgba(20,184,166,0.15)]"
-                    : "bg-white/4 text-gray-400 border-white/10 hover:bg-white/8 hover:text-gray-200"
+                  `
+                    flex
+                    shrink-0
+                    items-center
+                    gap-1.5
+                    rounded-full
+                    border
+                    px-4
+                    py-2
+                    text-sm
+                    whitespace-nowrap
+                    transition-all
+                  `,
+                  activeCategory ===
+                    category
+                    ? `
+                      border-teal-500/40
+                      bg-teal-500/20
+                      text-teal-300
+                      shadow-[0_0_20px_rgba(20,184,166,0.15)]
+                    `
+                    : `
+                      border-white/10
+                      bg-white/4
+                      text-gray-400
+                      hover:bg-white/8
+                      hover:text-gray-200
+                    `,
                 )}
               >
-                <Package className="w-3.5 h-3.5" />
-                {cat}
+                <Package className="h-3.5 w-3.5" />
+
+                {category}
               </button>
             ))}
           </div>
@@ -500,111 +941,305 @@ export default function InventoryPage({
       </div>
 
       {/* ================= PRODUCT GRID ================= */}
-      <div className="px-3 pt-4 pb-6">
-        {filteredProducts.length === 0 ? (
+
+      <div className="px-3 pb-6 pt-4 sm:px-4 lg:px-6">
+        {!branchId || loading ? (
+          <div className="flex items-center justify-center py-24 text-gray-400">
+            {branchId ? "Loading products..." : "Loading branch..."}
+          </div>
+        )
+        : filteredProducts.length ===
+        0 ? (
           <div className="flex flex-col items-center justify-center py-24 text-gray-500">
-            <GlassIcon size="lg" variant="primary">
-              <Package className="w-6 h-6" />
+            <GlassIcon
+              size="lg"
+              variant="primary"
+            >
+              <Package className="h-6 w-6" />
             </GlassIcon>
-            <p className="mt-4 text-sm">No products found</p>
+
+            <p className="mt-4 text-sm">
+              No products found
+            </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-            {filteredProducts.map((product) =>
-              context === "sell" ? (
-                <SellCard
-                  key={product.id}
-                  product={product}
-                  cartQuantity={
-                    cartItems.find((item) => item.productId === product.id)
-                      ?.quantity ?? 0
-                  }
-                  disabled={loader}
-                  onAddToCart={handleAddToCart}
-                  onChangeCartQuantity={handleChangeCartQuantity}
-                  onQuickSell={handleQuickSell}
-                />
-              ) : (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  context={context}
-                  onManage={openManage}
-                  onDelete={handleDelete}
-                />
-              )
+          <div
+            className="
+              grid
+              grid-cols-1
+              gap-3
+              sm:grid-cols-2
+              sm:gap-4
+              lg:grid-cols-3
+              xl:grid-cols-4
+              2xl:grid-cols-5
+            "
+          >
+            {filteredProducts.map(
+              (product) =>
+                context === "sell" ? (
+                  <SellCard
+                    key={product.id}
+                    product={product}
+                    cartQuantity={
+                      cartItems.find(
+                        (item) =>
+                          item.productId ===
+                          product.id,
+                      )?.quantity ?? 0
+                    }
+                    disabled={loader}
+                    onAddToCart={
+                      handleAddToCart
+                    }
+                    onChangeCartQuantity={
+                      handleChangeCartQuantity
+                    }
+                    onQuickSell={
+                      handleQuickSell
+                    }
+                  />
+                ) : (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    context={context}
+                    onManage={
+                      openManage
+                    }
+                    onDelete={
+                      handleDelete
+                    }
+                  />
+                ),
             )}
           </div>
         )}
       </div>
 
-      {/* ================= MOBILE CART BAR ================= */}
-      {context === "sell" && cartItems.length > 0 && (
-        <div className="fixed bottom-4 left-3 right-3 z-50">
-          <GlassCard
-            variant="elevated"
-            className="overflow-hidden border-white/15"
-          >
-            <button
-              type="button"
-              onClick={() => setCartOpen(true)}
-              className="w-full px-4 py-3.5 flex items-center gap-3 active:scale-[0.98] transition"
+      {/* ================= MOBILE ADMIN ACTIONS ================= */}
+
+      {context === "admin" && (
+        <div
+          className="
+            pointer-events-none
+            fixed
+            inset-x-0
+            bottom-0
+            z-40
+            px-4
+            pb-[max(1rem,env(safe-area-inset-bottom))]
+            pt-3
+            sm:hidden
+          "
+        >
+          <div className="flex justify-end">
+            <div
+              className="
+                pointer-events-auto
+                flex
+                items-center
+                gap-2
+                rounded-2xl
+                border
+                border-white/10
+                bg-neutral-950/90
+                p-1.5
+                shadow-2xl
+                shadow-black/50
+                backdrop-blur-2xl
+              "
             >
-              <GlassIcon size="sm" variant="primary">
-                <ShoppingCart className="w-4 h-4" />
-              </GlassIcon>
+              {/* ================= MOBILE IMPORT ================= */}
 
-              <div className="flex-1 text-left">
-                <div className="text-sm font-semibold text-white">
-                  {cartQuantity} {cartQuantity === 1 ? "item" : "items"}
-                </div>
-                <div className="text-xs text-gray-400">Tap to view cart</div>
-              </div>
+              <button
+                type="button"
+                onClick={
+                  handleOpenImport
+                }
+                aria-label="Import products"
+                className="
+                  flex
+                  h-12
+                  w-12
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-xl
+                  border
+                  border-white/10
+                  bg-white/5
+                  text-white/80
+                  transition
+                  hover:bg-white/10
+                  active:scale-95
+                "
+              >
+                <Upload className="h-5 w-5" />
+              </button>
 
-              <div className="text-right">
-                <div className="text-sm font-bold text-teal-300">
-                  ₦{cartTotal.toLocaleString()}
-                </div>
-                <div className="text-[10px] text-gray-500">Checkout →</div>
-              </div>
-            </button>
-          </GlassCard>
+              {/* ================= MOBILE ADD ================= */}
+
+              <button
+                type="button"
+                onClick={openCreate}
+                aria-label="Add product"
+                className="
+                  flex
+                  h-12
+                  w-12
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-xl
+                  bg-teal-500
+                  text-white
+                  shadow-lg
+                  shadow-teal-500/25
+                  transition
+                  hover:bg-teal-400
+                  active:scale-95
+                "
+              >
+                <Plus className="h-6 w-6" />
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
+      {/* ================= MOBILE CART BAR ================= */}
+
+      {context === "sell" &&
+        cartItems.length > 0 && (
+          <div
+            className="
+              fixed
+              bottom-4
+              left-3
+              right-3
+              z-50
+            "
+          >
+            <GlassCard
+              variant="elevated"
+              className="
+                overflow-hidden
+                border-white/15
+              "
+            >
+              <button
+                type="button"
+                onClick={() =>
+                  setCartOpen(true)
+                }
+                className="
+                  flex
+                  w-full
+                  items-center
+                  gap-3
+                  px-4
+                  py-3.5
+                  transition
+                  active:scale-[0.98]
+                "
+              >
+                <GlassIcon
+                  size="sm"
+                  variant="primary"
+                >
+                  <ShoppingCart className="h-4 w-4" />
+                </GlassIcon>
+
+                <div className="flex-1 text-left">
+                  <div className="text-sm font-semibold text-white">
+                    {cartQuantity}{" "}
+                    {cartQuantity === 1
+                      ? "item"
+                      : "items"}
+                  </div>
+
+                  <div className="text-xs text-gray-400">
+                    Tap to view cart
+                  </div>
+                </div>
+
+                <div className="text-right">
+                  <div className="text-sm font-bold text-teal-300">
+                    ₦
+                    {cartTotal.toLocaleString()}
+                  </div>
+
+                  <div className="text-[10px] text-gray-500">
+                    Checkout →
+                  </div>
+                </div>
+              </button>
+            </GlassCard>
+          </div>
+        )}
+
       {/* ================= CART SHEET ================= */}
+
       {context === "sell" && (
         <GlassSheet
           open={cartOpen}
-          onClose={() => setCartOpen(false)}
+          onClose={() =>
+            setCartOpen(false)
+          }
           title="Current Sale"
           subtitle={`${cartQuantity} ${
-            cartQuantity === 1 ? "item" : "items"
-          } · ${cartItems.length} products`}
+            cartQuantity === 1
+              ? "item"
+              : "items"
+          } · ${
+            cartItems.length
+          } products`}
           size="lg"
+          className="
+            w-full
+            sm:max-w-xl
+            lg:max-w-2xl
+            xl:max-w-3xl
+          "
           loading={loader}
           footer={
             <div className="w-full space-y-3">
-              <div className="flex justify-between text-sm px-1">
-                <span className="text-gray-400">Subtotal</span>
+              <div className="flex justify-between px-1 text-sm">
+                <span className="text-gray-400">
+                  Subtotal
+                </span>
+
                 <span className="text-gray-200">
-                  ₦{cartTotal.toLocaleString()}
+                  ₦
+                  {cartTotal.toLocaleString()}
                 </span>
               </div>
 
-              <div className="flex justify-between items-center px-1">
-                <span className="font-semibold text-white">Total</span>
+              <div className="flex items-center justify-between px-1">
+                <span className="font-semibold text-white">
+                  Total
+                </span>
+
                 <span className="text-2xl font-bold text-emerald-400">
-                  ₦{cartTotal.toLocaleString()}
+                  ₦
+                  {cartTotal.toLocaleString()}
                 </span>
               </div>
 
               <GlassButton
                 variant="success"
-                disabled={loader || !cartItems.length}
-                onClick={handleCheckout}
-                className="w-full h-12"
-                icon={<CreditCard className="w-5 h-5" />}
+                disabled={
+                  loader ||
+                  !cartItems.length
+                }
+                onClick={
+                  handleCheckout
+                }
+                className="h-12 w-full"
+                icon={
+                  <CreditCard className="h-5 w-5" />
+                }
               >
                 {loader
                   ? "Processing..."
@@ -613,8 +1248,17 @@ export default function InventoryPage({
 
               <button
                 type="button"
-                onClick={() => cartStore.clear()}
-                className="w-full text-xs text-red-400/80 hover:text-red-400 py-1 transition"
+                onClick={() =>
+                  cartStore.clear()
+                }
+                className="
+                  w-full
+                  py-1
+                  text-xs
+                  text-red-400/80
+                  transition
+                  hover:text-red-400
+                "
               >
                 Clear cart
               </button>
@@ -622,140 +1266,275 @@ export default function InventoryPage({
           }
         >
           <div className="space-y-2.5">
-            {cartItems.map((item) => (
-              <GlassCard
-                key={item.productId}
-                variant="default"
-                className="p-3.5 border-white/10"
-              >
-                <div className="flex gap-3">
-                  <div className="flex-1 min-w-0">
-                    <div className="font-semibold text-sm text-white truncate">
-                      {item.name}
-                    </div>
-                    <div className="text-xs text-gray-400 mt-1">
-                      ₦{item.price.toLocaleString()} each
-                    </div>
-                  </div>
+            {cartItems.map(
+              (item) => (
+                <GlassCard
+                  key={item.productId}
+                  variant="default"
+                  className="
+                    border-white/10
+                    p-3.5
+                  "
+                >
+                  <div className="flex gap-3">
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate text-sm font-semibold text-white">
+                        {item.name}
+                      </div>
 
-                  <button
-                    type="button"
-                    onClick={() => cartStore.removeItem(item.productId)}
-                    className="text-gray-500 hover:text-red-400 transition p-1"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-
-                <div className="flex items-center justify-between mt-3.5">
-                  {/* Quantity controls */}
-                  <div className="flex items-center rounded-xl border border-white/10 overflow-hidden bg-white/3">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleChangeCartQuantity(
-                          item.productId,
-                          item.quantity - 1
-                        )
-                      }
-                      className="w-9 h-9 flex items-center justify-center text-gray-300 hover:bg-white/5 transition"
-                    >
-                      <Minus className="w-4 h-4" />
-                    </button>
-
-                    <div className="w-10 text-center text-sm font-bold text-white">
-                      {item.quantity}
+                      <div className="mt-1 text-xs text-gray-400">
+                        ₦
+                        {item.price.toLocaleString()}{" "}
+                        each
+                      </div>
                     </div>
 
                     <button
                       type="button"
                       onClick={() =>
-                        handleChangeCartQuantity(
+                        cartStore.removeItem(
                           item.productId,
-                          item.quantity + 1
                         )
                       }
-                      className="w-9 h-9 flex items-center justify-center text-gray-300 hover:bg-white/5 transition"
+                      aria-label={`Remove ${item.name} from cart`}
+                      className="
+                        p-1
+                        text-gray-500
+                        transition
+                        hover:text-red-400
+                      "
                     >
-                      <Plus className="w-4 h-4" />
+                      <Trash2 className="h-4 w-4" />
                     </button>
                   </div>
 
-                  <div className="font-bold text-sm text-teal-300">
-                    ₦{(item.price * item.quantity).toLocaleString()}
+                  <div className="mt-3.5 flex items-center justify-between">
+                    {/* Quantity controls */}
+
+                    <div
+                      className="
+                        flex
+                        items-center
+                        overflow-hidden
+                        rounded-xl
+                        border
+                        border-white/10
+                        bg-white/3
+                      "
+                    >
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleChangeCartQuantity(
+                            item.productId,
+                            item.quantity - 1,
+                          )
+                        }
+                        aria-label="Decrease quantity"
+                        className="
+                          flex
+                          h-9
+                          w-9
+                          items-center
+                          justify-center
+                          text-gray-300
+                          transition
+                          hover:bg-white/5
+                        "
+                      >
+                        <Minus className="h-4 w-4" />
+                      </button>
+
+                      <div className="w-10 text-center text-sm font-bold text-white">
+                        {item.quantity}
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleChangeCartQuantity(
+                            item.productId,
+                            item.quantity + 1,
+                          )
+                        }
+                        aria-label="Increase quantity"
+                        className="
+                          flex
+                          h-9
+                          w-9
+                          items-center
+                          justify-center
+                          text-gray-300
+                          transition
+                          hover:bg-white/5
+                        "
+                      >
+                        <Plus className="h-4 w-4" />
+                      </button>
+                    </div>
+
+                    <div className="text-sm font-bold text-teal-300">
+                      ₦
+                      {(
+                        item.price *
+                        item.quantity
+                      ).toLocaleString()}
+                    </div>
                   </div>
-                </div>
-              </GlassCard>
-            ))}
+                </GlassCard>
+              ),
+            )}
           </div>
         </GlassSheet>
       )}
 
-      {/* ================= ADMIN FAB ================= */}
-      {context === "admin" && (
-        <GlassButton
-          onClick={openCreate}
-          className="fixed right-4 bottom-22.5 p-0! w-14 h-14 rounded-2xl shadow-lg shadow-teal-500/20"
-          icon={<Plus className="w-6 h-6" />}
-        />
-      )}
+      {/* ================= PRODUCT IMPORT ================= */}
+
+      <ProductImportSheet
+        open={productImportOpen}
+        onClose={
+          handleCloseImport
+        }
+        onImport={
+          handleProductImport
+        }
+        onViewProducts={() => {
+          setProductImportOpen(
+            false,
+          );
+        }}
+        onViewInventory={() => {
+          setProductImportOpen(
+            false,
+          );
+        }}
+      />
 
       {/* ================= PRODUCT SHEET ================= */}
+
       <ProductSheet
-        open={activeSheet === "create" || activeSheet === "edit"}
-        mode={activeSheet === "create" ? "create" : "edit"}
-        initialData={selectedProduct}
+        open={
+          activeSheet ===
+            "create" ||
+          activeSheet === "edit"
+        }
+        mode={
+          activeSheet === "create"
+            ? "create"
+            : "edit"
+        }
+        initialData={
+          selectedProduct
+        }
         loading={loading}
-        onClose={() => setActiveSheet(null)}
+        onClose={() =>
+          setActiveSheet(null)
+        }
         onSubmit={handleSubmit}
       />
 
       {/* ================= MANAGEMENT ================= */}
+
       <ProductDetailsSheet
-        open={activeSheet === "manage"}
-        onclose={() => setActiveSheet(null)}
-        product={selectedProduct}
+        open={
+          activeSheet === "manage"
+        }
+        onclose={() =>
+          setActiveSheet(null)
+        }
+        product={
+          selectedProduct
+        }
         onEditDetails={() => {
-          if (!selectedProduct) return;
+          if (!selectedProduct) {
+            return;
+          }
+
           setActiveSheet("edit");
         }}
-        onReceiveStock={() => setActiveSheet("receive")}
-        onAdjustStock={() => setActiveSheet("adjust")}
-        onTransferStock={() => setActiveSheet("transfer")}
-        onViewHistory={() => setActiveSheet("history")}
+        onReceiveStock={() =>
+          setActiveSheet("receive")
+        }
+        onAdjustStock={() =>
+          setActiveSheet("adjust")
+        }
+        onTransferStock={() =>
+          setActiveSheet("transfer")
+        }
+        onViewHistory={() =>
+          setActiveSheet("history")
+        }
       />
 
       {/* ================= RECEIVE ================= */}
+
       <ReceiveStockSheet
-        open={activeSheet === "receive"}
-        product={selectedProduct}
-        onClose={() => setActiveSheet(null)}
-        onSubmit={handleReceiveStock}
+        open={
+          activeSheet ===
+          "receive"
+        }
+        product={
+          selectedProduct
+        }
+        onClose={() =>
+          setActiveSheet(null)
+        }
+        onSubmit={
+          handleReceiveStock
+        }
       />
 
       {/* ================= ADJUST ================= */}
+
       <AdjustStockSheet
-        open={activeSheet === "adjust"}
-        product={selectedProduct}
-        onClose={() => setActiveSheet(null)}
-        onSubmit={handleAdjustStock}
+        open={
+          activeSheet ===
+          "adjust"
+        }
+        product={
+          selectedProduct
+        }
+        onClose={() =>
+          setActiveSheet(null)
+        }
+        onSubmit={
+          handleAdjustStock
+        }
       />
 
       {/* ================= TRANSFER ================= */}
+
       <TransferStockSheet
-        open={activeSheet === "transfer"}
-        product={selectedProduct}
+        open={
+          activeSheet ===
+          "transfer"
+        }
+        product={
+          selectedProduct
+        }
         branches={branches}
-        onClose={() => setActiveSheet(null)}
-        onSubmit={handleTransferStock}
+        onClose={() =>
+          setActiveSheet(null)
+        }
+        onSubmit={
+          handleTransferStock
+        }
       />
 
       {/* ================= HISTORY ================= */}
+
       <ProductHistorySheet
-        open={activeSheet === "history"}
-        product={selectedProduct}
+        open={
+          activeSheet ===
+          "history"
+        }
+        product={
+          selectedProduct
+        }
         history={history}
-        onClose={() => setActiveSheet(null)}
+        onClose={() =>
+          setActiveSheet(null)
+        }
       />
     </div>
   );

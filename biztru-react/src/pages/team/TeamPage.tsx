@@ -17,62 +17,18 @@ import { GlassIcon } from "../../components//ui/GlassIcon";
 import { GlassButton } from "../../components/ui/GlassButton";
 
 import StaffInvitationSheet, {
-  type BranchOption,
   type StaffInvitationData,
 } from "../../components/employeeComponent/StaffInvitationSheet";
 
 import StaffCard, {
   type StaffMember,
 } from "../../components/employeeComponent/StaffCard";
+import { useBranchLiveQuery } from "../../hooks/useBranches";
+import { useBusinessContext } from "../../Biztru/context/BusinessContext";
+import type { InviteEmployeeRequest } from "../../Biztru/services/ApplicationService/API/employee/EmployeeRequests";
+import { useApplication } from "../../Biztru/services/ApplicationService/ApplicationContext";
+import { useLiveEmployees } from "../../hooks/useLiveEmployees";
 
-const BRANCHES: BranchOption[] = [
-  {
-    id: "branch-wuse",
-    name: "Wuse Branch",
-  },
-  {
-    id: "branch-garki",
-    name: "Garki Branch",
-  },
-  {
-    id: "branch-maitama",
-    name: "Maitama Branch",
-  },
-];
-
-const INITIAL_STAFF: StaffMember[] = [
-  {
-    id: "user-musa",
-    name: "Musa Ibrahim",
-    phone: "08012345678",
-    email: "musa@example.com",
-    role: "STAFF",
-    branchId: "branch-wuse",
-    branchName: "Wuse Branch",
-    employmentStatus: "ACTIVE",
-    joinedAt: "2026-09-12",
-  },
-  {
-    id: "user-chinedu",
-    name: "Chinedu Okafor",
-    phone: "08098765432",
-    email: "chinedu@example.com",
-    role: "MANAGER",
-    branchId: "branch-garki",
-    branchName: "Garki Branch",
-    employmentStatus: "ACTIVE",
-    joinedAt: "2026-08-21",
-  },
-  {
-    id: "user-sarah",
-    name: "Sarah John",
-    phone: "08111222333",
-    role: "STAFF",
-    branchId: "branch-wuse",
-    branchName: "Wuse Branch",
-    employmentStatus: "INVITED",
-  },
-];
 
 export default function TeamPage() {
   const [
@@ -80,18 +36,24 @@ export default function TeamPage() {
     setInviteOpen,
   ] = useState(false);
 
+  const app = useApplication()
+
   const [
     invitationLoading,
     setInvitationLoading,
   ] = useState(false);
+  const {businessId } = useBusinessContext()
+  console.log("This is the businessId to be passed to the whole temapage: ", businessId)
+  const { data: branches = [] } = useBranchLiveQuery(businessId);
 
-  const [
-    staff,
-    setStaff,
-  ] = useState<StaffMember[]>(
-    INITIAL_STAFF
-  );
+  console.log("This are all the Branches that i get: ", branches)
 
+  const {
+  data: staffData,
+  loading: staffLoading,
+  error: staffError,
+} = useLiveEmployees(businessId);
+  const staff = staffData ?? [];
   /*
    * ==========================================================
    * DERIVED TEAM METRICS
@@ -100,7 +62,7 @@ export default function TeamPage() {
 
   const activeCount = useMemo(
     () =>
-      staff.filter(
+      staff?.filter(
         (member) =>
           member.employmentStatus ===
           "ACTIVE"
@@ -110,7 +72,7 @@ export default function TeamPage() {
 
   const invitedCount = useMemo(
     () =>
-      staff.filter(
+      staff?.filter(
         (member) =>
           member.employmentStatus ===
           "INVITED"
@@ -120,7 +82,7 @@ export default function TeamPage() {
 
   const managerCount = useMemo(
     () =>
-      staff.filter(
+      staff?.filter(
         (member) =>
           member.role === "MANAGER"
       ).length,
@@ -150,16 +112,14 @@ export default function TeamPage() {
        */
 
       const branch =
-        BRANCHES.find(
+        branches?.find(
           (item) =>
             item.id === data.branchId
         );
 
-      const newMember: StaffMember = {
-        id:
-          `invitation-${Date.now()}`,
+      const newMember: InviteEmployeeRequest = {
 
-        name: data.fullName,
+        fullName: data.fullName,
 
         phone: data.phone,
 
@@ -177,11 +137,7 @@ export default function TeamPage() {
         employmentStatus:
           "INVITED",
       };
-
-      setStaff((previous) => [
-        newMember,
-        ...previous,
-      ]);
+      await app.employee.inviteEmployee(newMember)
 
       setInviteOpen(false);
 
@@ -484,7 +440,27 @@ export default function TeamPage() {
               STAFF GRID
               ================================================== */}
 
-          {staff.length > 0 ? (
+          {
+          staffLoading ? (
+            <GlassCard className="p-8 text-center">
+              <p className="text-sm text-gray-400">
+                Loading team members...
+              </p>
+            </GlassCard>
+          ) : staffError ? (
+            <GlassCard className="p-8 text-center">
+              <p className="text-sm text-red-400">
+                Unable to load team members.
+              </p>
+              <GlassButton
+                onClick={() => void console.log("This is the Refetchd Being hit")}
+                className="mt-4"
+              >
+                Retry
+              </GlassButton>
+            </GlassCard>
+          ) :
+          staff.length > 0 ? (
             <div
               className="
                 grid
@@ -493,7 +469,7 @@ export default function TeamPage() {
                 xl:grid-cols-3
               "
             >
-              {staff.map((member) => (
+              {staff?.map((member) => (
                 <StaffCard
                   key={member.id}
                   member={member}
@@ -560,7 +536,7 @@ export default function TeamPage() {
 
       <StaffInvitationSheet
         open={inviteOpen}
-        branches={BRANCHES}
+        branches={branches!}
         loading={invitationLoading}
         onClose={() =>
           setInviteOpen(false)

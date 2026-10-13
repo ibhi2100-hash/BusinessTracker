@@ -16,6 +16,7 @@ import {
 import { GlassSheet } from "../ui/GlassSheet";
 import { GlassInput } from "../ui/GlassInput";
 import { GlassButton } from "../ui/GlassButton";
+import type { Branch } from "@business/shared-types";
 
 export type StaffRole =
   | "STAFF"
@@ -34,15 +35,10 @@ export interface StaffInvitationData {
   branchId: string;
 }
 
-export interface BranchOption {
-  id: string;
-  name: string;
-}
-
 interface Props {
   open: boolean;
 
-  branches: BranchOption[];
+  branches: Branch[];
 
   loading?: boolean;
 
@@ -209,10 +205,15 @@ export default function StaffInvitationSheet({
     <GlassSheet
       open={open}
       onClose={handleClose}
-      size="lg"
       title="Add Staff"
       subtitle="Invite a team member to your business"
       loading={loading}
+      className="
+        w-full
+        sm:max-w-xl
+        lg:max-w-2xl
+        xl:max-w-3xl
+      "
     >
       <div className="space-y-7 pb-4">
 

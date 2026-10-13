@@ -18,6 +18,7 @@ import { migration015 } from "./015_EventResolution";
 import { migration018 } from "./018_Expenses";
 import { migration019 } from "./019_SyncActivity";
 import { migration020 } from "./020_syncState";
+import { migration021 } from "./021_EmployeeSystem";
 
 
 
@@ -41,5 +42,6 @@ export const migrations = [
     migration017,
     migration018,
     migration019,
-    migration020
+    migration020,
+    migration021
 ]

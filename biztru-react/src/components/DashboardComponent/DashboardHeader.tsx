@@ -27,10 +27,12 @@ export function DashboardHeader() {
     businessId,
   } = useBusinessContext();
 
-  const { data } =
-    useBusinessLiveQuery(businessId);
+  const {
+  data: business,
+  loading: businessLoading,
+  error: businessError,
+} = useBusinessLiveQuery(businessId);
 
-  const business = data;
   const role = "ADMIN";
   const app = useApplication();
 
@@ -140,14 +142,12 @@ export function DashboardHeader() {
 
             {/* BUSINESS NAME */}
 
-            <h1
-              className="
-                text-2xl
-                font-bold
-                truncate
-              "
-            >
-              {business?.name}
+            <h1 className="text-2xl font-bold truncate">
+              {businessLoading
+                ? "Loading business..."
+                : businessError
+                  ? "Unable to load business"
+                  : business?.name ?? "Business unavailable"}
             </h1>
 
 

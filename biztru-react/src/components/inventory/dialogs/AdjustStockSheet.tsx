@@ -67,6 +67,12 @@ export default function AdjustStockSheet({
       onClose={onClose}
       title="Adjust Stock"
       subtitle={product.name}
+      className="
+        w-full
+        sm:max-w-xl
+        lg:max-w-2xl
+        xl:max-w-3xl
+      "
     >
       <div className="space-y-4">
 

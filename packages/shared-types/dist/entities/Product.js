@@ -1,1 +1,56 @@
-export {};
+export const FIELD_ALIASES = {
+    name: [
+        "name",
+        "product",
+        "product name",
+        "item",
+        "item name",
+        "description",
+    ],
+    sku: [
+        "sku",
+        "item code",
+        "product code",
+        "stock code",
+        "code",
+    ],
+    barcode: [
+        "barcode",
+        "bar code",
+        "ean",
+        "upc",
+    ],
+    costPrice: [
+        "cost",
+        "cost price",
+        "buying price",
+        "purchase price",
+        "unit cost",
+    ],
+    sellingPrice: [
+        "price",
+        "selling price",
+        "retail price",
+        "sale price",
+        "unit price",
+    ],
+    category: [
+        "category",
+        "group",
+        "department",
+        "product group",
+    ],
+    quantity: [
+        "quantity",
+        "qty",
+        "stock",
+        "opening stock",
+        "inventory",
+    ],
+    reorderLevel: [
+        "reorder",
+        "reorder level",
+        "minimum stock",
+        "min stock",
+    ],
+};

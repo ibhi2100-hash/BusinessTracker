@@ -6,6 +6,7 @@ export function ServiceWorkerRegistration() {
             return;
         }
 
+        // Never allow the production SW to interfere with Vite development.
         if (import.meta.env.DEV) {
             void navigator.serviceWorker
                 .getRegistrations()
@@ -13,10 +14,21 @@ export function ServiceWorkerRegistration() {
                     for (const registration of registrations) {
                         await registration.unregister();
                     }
+
+                    // Also remove old development caches.
+                    const cacheNames = await caches.keys();
+
+                    await Promise.all(
+                        cacheNames
+                            .filter((name) =>
+                                name.startsWith("biztru-")
+                            )
+                            .map((name) => caches.delete(name))
+                    );
                 })
                 .catch((error) => {
                     console.error(
-                        "[SW] Failed to unregister service worker:",
+                        "[SW] Failed to clean development service worker:",
                         error
                     );
                 });
@@ -25,12 +37,18 @@ export function ServiceWorkerRegistration() {
         }
 
         void navigator.serviceWorker
-            .register("/sw.js")
-            .then((registration) => {
+            .register("/sw.js", {
+                scope: "/",
+                updateViaCache: "none",
+            })
+            .then(async (registration) => {
                 console.log(
                     "[SW] Production service worker registered:",
                     registration.scope
                 );
+
+                // Ask the browser to check for a newer SW.
+                await registration.update();
             })
             .catch((error) => {
                 console.error(

@@ -1,3 +1,4 @@
+import type { Branch } from "@business/shared-types";
 import { AggregateType } from "../../../../../offline/domain/aggregate";
 import type{ CommandIntent } from "../../../../BizTru_Karnel/CommandFactory/CommandIntent"; 
 import { BusinessManager } from "../../../../Composer/BusinessManager"; 
@@ -66,5 +67,30 @@ export class BranchApi {
             throw new Error("Business Does not exist")
         }
         await app.domain.kernel.execute(command)
+    }
+
+    async findBranch(branchId: string): Promise<Branch> {
+        const app = await this.manager.current();
+
+        const branch = await app?.storage.repositories.branches.findById(branchId)
+        if(!branch) {
+            throw new Error("Please Branch does not exist for this branch")
+        }
+
+        return branch
+    }
+
+    async findAllBusinessBranches(businessId: string): Promise<Branch[]> {
+        const app = await this.manager.current();
+
+        const branches = await app?.storage.repositories.branches.findAll(businessId);
+        if(branches?.length === 0 ){
+            throw new Error("Please Branches does not exist")
+        };
+          if(!branches) {
+            throw new Error("Please Branch does not exist for this branch")
+        }
+
+        return branches
     }
 }

@@ -39,6 +39,12 @@ export default function ProductHistorySheet({
       onClose={onClose}
       title="Product History"
       subtitle={product.name}
+      className="
+        w-full
+        sm:max-w-xl
+        lg:max-w-2xl
+        xl:max-w-3xl
+      "
     >
       <div className="space-y-3">
 

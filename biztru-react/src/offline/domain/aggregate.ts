@@ -3,6 +3,7 @@ export const AggregateType = {
   BRANCH: "BRANCH",
   PRODUCT: "PRODUCT",
   INVENTORY: "INVENTORY",
+  EMPLOYEE: "EMPLOYEE",
 
   ASSET: "ASSET",
   LIABILITY: "LIABILITY",

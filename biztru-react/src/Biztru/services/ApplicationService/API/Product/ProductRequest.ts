@@ -1,20 +1,29 @@
 import type{ Mode } from "@business/shared-types";
 
 export interface ProductRequest {
-   id: string;
-   name: string;
-   imageUrl?: string;
-   description?: string;
-   price: number;
-   costPrice: number;
-   mode: Mode;
+    id: string;
+    name: string;
+    imageUrl: string | null;
+    description: string | null;
+    price: number;
+    costPrice: number;
+    category: string | null;
+    sku: string | null;
+    barcode: string | null;
+    reorderLevel: string  | null;
+    mode: Mode;
 }
 
 export interface ProductPayload {
     id: string;
     name: string;
-    imageUrl?: string;
-    description?: string;
+    imageUrl: string | null;
+    description: string | null;
     price: number;
     costPrice: number;
+    category: string | null;
+    sku: string | null;
+    barcode: string | null;
+    reorderLevel: string  | null;
+
 }

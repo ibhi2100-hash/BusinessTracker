@@ -4,7 +4,7 @@ import { useApplication } from "../Biztru/services/ApplicationService/Applicatio
 import { useLiveQuery } from "./useLiveQuery";
 import type{ DashboardSummary } from "@business/shared-types";
 
-export function useLiveDashboard(branchId: string | null) {
+export function useLiveDashboard(branchId: string | null | undefined) {
   const app = useApplication();
 
   const query = useCallback(async (): Promise<DashboardSummary | null> => {

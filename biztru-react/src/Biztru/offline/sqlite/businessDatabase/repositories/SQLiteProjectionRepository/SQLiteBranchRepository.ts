@@ -15,7 +15,6 @@ import { BranchStatementKeys } from "../../statements/branch/BranchStatementKeys
 
 
 export class SQLiteBranchRepository
-    implements IProjectionEntityRepository<Branch>
 {   private readonly statements: BranchStatements;
     constructor(
         statements: BranchStatements
@@ -83,9 +82,9 @@ export class SQLiteBranchRepository
     }
 
 
-    async findAll(): Promise<Branch[]> {
+    async findAll(businessId: string): Promise<Branch[]> {
 
-        return this.statements.findAll.query<Branch>([]);
+        return this.statements.findAll.query<Branch>([businessId]);
     }
 }
 

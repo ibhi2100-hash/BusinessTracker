@@ -19,18 +19,34 @@ export class ProductApi {
         
        const productIntent: CommandIntent<ProductPayload> = {
             type: InventoryEventType.PRODUCT_CREATED,
+
             aggregateId: request.id,
+
             aggregateType: AggregateType.PRODUCT,
+
             mode: request.mode,
+
             payload: {
                 id: request.id,
                 name: request.name,
+
                 price: request.price,
                 costPrice: request.costPrice,
-                imageUrl: request.imageUrl,
-                description: request.description
-            }
-       }
+
+                category: request.category ?? null,
+                sku: request.sku ?? null,
+                barcode: request.barcode ?? null,
+                reorderLevel:
+                    request.reorderLevel ?? null,
+
+                imageUrl:
+                    request.imageUrl ?? null,
+
+                description:
+                    request.description ?? null,
+            },
+        };
+
 
        const app = await this.manager.current()
        const command = await app?.domain.commandFactory.create(productIntent);
