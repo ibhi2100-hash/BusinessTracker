@@ -36,12 +36,12 @@ export class EmployeeRequestRepository {
 
   async updateAssignment(
     id: string,
-    assigneeEmployeeId: string | null,
+    assignedToEmployeeId: string | null,
     tx: Prisma.TransactionClient = prisma,
   ): Promise<void> {
     await tx.employeeRequest.update({
       where: { id },
-      data: { assigneeEmployeeId },
+      data: { assignedToEmployeeId },
     });
   }
 
@@ -92,11 +92,11 @@ export class EmployeeRequestRepository {
   }
 
   async findByAssignee(
-    assigneeEmployeeId: string,
+    assignedToEmployeeId: string,
     tx: Prisma.TransactionClient = prisma,
   ) {
     return tx.employeeRequest.findMany({
-      where: { assigneeEmployeeId },
+      where: { assignedToEmployeeId },
       orderBy: { createdAt: "desc" },
     });
   }

@@ -22,7 +22,6 @@ implements EventConsumer<DomainEvent<EmployeeInvitationPayload>>{
                         new EmployeeInvitationReducer().reduce(null, event);
 
                     await this.repository.upsert(invitation!)
-
                     break;
                 }
             }

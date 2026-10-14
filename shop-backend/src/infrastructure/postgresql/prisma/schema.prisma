@@ -117,6 +117,19 @@ enum EmployeeInvitationStatus {
   EXPIRED
 }
 
+enum InvitationDeliveryChannel {
+  EMAIL
+  SMS
+}
+
+enum InvitationDeliveryStatus {
+  PENDING
+  PROCESSING
+  SENT
+  DELIVERED
+  FAILED
+  CANCELLED
+}
 
 /////**** MODELS ****/////
 
@@ -1019,4 +1032,30 @@ model EmployeeNotification {
 
   @@index([employeeId, read, createdAt])
   @@index([businessId])
+}
+model InvitationDelivery {
+  id             String   @id
+  invitationId   String
+  businessId     String
+  channel        InvitationDeliveryChannel
+  recipient      String
+  status         InvitationDeliveryStatus @default(PENDING)
+  attempts       Int      @default(0)
+  maxAttempts    Int      @default(5)
+  nextAttemptAt  DateTime @default(now())
+
+  provider       String?
+  providerMessageId String?
+  lastError      String?
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @default(now()) @updatedAt
+  sentAt         DateTime?
+  deliveredAt    DateTime?
+  failedAt       DateTime?
+
+  @@index([status, nextAttemptAt])
+  @@index([invitationId])
+  @@index([businessId, createdAt])
+  @@index([providerMessageId])
 }
