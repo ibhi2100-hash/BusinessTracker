@@ -6,7 +6,7 @@ import { useApplication } from "../Biztru/services/ApplicationService/Applicatio
 
 import { useLiveQuery } from "./useLiveQuery";
 
-import type { StaffMember } from "../components/employeeComponent/StaffCard";
+import type { Employee } from "@business/shared-types";
 
 export function useLiveEmployees(
   businessId: string | null
@@ -14,20 +14,20 @@ export function useLiveEmployees(
   const app = useApplication();
 
   const query = useCallback(
-    async (): Promise<StaffMember[]> => {
+    async (): Promise<Employee[] | null> => {
       if (!businessId) {
         return [];
       }
 
       // Replace this with the actual employee read contract.
-      return app.employee.findAllBusinessEmployees(
+      return app.employee.findBusinessEmployees(
         businessId
       );
     },
     [app, businessId]
   );
 
-  return useLiveQuery<StaffMember[]>(
+  return useLiveQuery<Employee[]>(
     ["employees", businessId ?? "no-business"],
     query,
     []

@@ -10,8 +10,10 @@ export class SQLiteEmployeeInvitationRepository {
     ) {
         this.statements = statements
     }
-    async insertInvitation(EmployeeInvitation: EmployeeInvitation){
-
+    async insertInvitation(employeeInvitation: EmployeeInvitation){
+        await this.statements.insertInvitation.execute(
+            EmployeeInvitationMapper.toInsert(employeeInvitation)
+        )
     }
     async findById(
         id: string,
@@ -44,5 +46,29 @@ export class SQLiteEmployeeInvitationRepository {
             ]);
 
         return (result ?? []) as EmployeeInvitation[];
+    }
+}
+
+class EmployeeInvitationMapper {
+    static toInsert(
+        invitation: EmployeeInvitation
+    ): unknown[]{
+
+        return [
+            invitation.id,
+            invitation.businessId,
+            invitation.employeeId,
+            invitation.branchId,
+            invitation.email,
+            invitation.phone,
+            invitation.role,
+            invitation.status,
+            invitation.expiresAt,
+            invitation.createdAt,
+            invitation.acceptedAt,
+            invitation.revokedAt,
+            invitation.updatedAt,
+            invitation.version
+        ]
     }
 }

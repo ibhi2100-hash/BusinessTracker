@@ -96,6 +96,28 @@ enum PaymentMethod {
   other
 }
 
+
+enum EmployeeRole {
+  ADMIN
+  MANAGER
+  STAFF
+}
+
+enum EmploymentStatus {
+  INVITED
+  ACTIVE
+  SUSPENDED
+  REMOVED
+}
+
+enum EmployeeInvitationStatus {
+  PENDING
+  ACCEPTED
+  REVOKED
+  EXPIRED
+}
+
+
 /////**** MODELS ****/////
 
 model Business {
@@ -126,6 +148,12 @@ model Business {
   ledgerEntries LedgerEntry[]
   sale          Sale[]
   expense       Expense[]
+  employees                   Employee[]
+  employeeInvitations         EmployeeInvitation[]
+  employeeCompensations       EmployeeCompensation[]
+  employeeCompensationHistory EmployeeCompensationHistory[]
+  employeeRequests            EmployeeRequest[]
+  employeeNotifications       EmployeeNotification[]
 
   subscriptions BusinessSubscription[]
 
@@ -152,6 +180,11 @@ model Branch {
 
   users         User[]
   products      Product[]
+  employees                   Employee[]
+  employeeInvitations         EmployeeInvitation[]
+  employeeCompensations       EmployeeCompensation[]
+  employeeCompensationHistory EmployeeCompensationHistory[]
+  employeeRequests            EmployeeRequest[]
   inventories   Inventory[]
   snapshots     Snapshot[]
   alerts        Alert[]
@@ -197,6 +230,8 @@ model User {
   passwordResetTokens PasswordResetToken[]
 
   sessions   Session[]
+  employeeProfiles Employee[]
+
 
   @@index([businessId])
 
@@ -792,4 +827,196 @@ model Outbox {
 
   @@index([status, globalPosition])
   @@index([status, createdAt])
+}
+
+
+model Employee {
+  id                 String           @id
+  businessId         String
+  branchId           String?
+  userId             String?
+  reportsToEmployeeId String?
+  employeeNumber     String?
+  fullName           String
+  phone              String?
+  email              String?
+  role               EmployeeRole
+  employmentStatus   EmploymentStatus
+  joinedAt           DateTime?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @default(now()) @updatedAt
+  version            Int              @default(1)
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  branch Branch? @relation(fields: [branchId], references: [id], onDelete: SetNull)
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  reportsTo Employee? @relation("EmployeeReportingLine", fields: [reportsToEmployeeId], references: [id], onDelete: SetNull)
+
+  directReports Employee[] @relation("EmployeeReportingLine")
+
+  invitations EmployeeInvitation[]
+  compensation EmployeeCompensation?
+  compensationHistory EmployeeCompensationHistory[]
+
+  requestsSubmitted EmployeeRequest[] @relation("RequestRequester")
+  requestsAssigned EmployeeRequest[] @relation("RequestAssignee")
+
+  notifications EmployeeNotification[]
+
+  @@index([businessId])
+  @@index([businessId, branchId])
+  @@index([branchId])
+  @@index([userId])
+  @@index([reportsToEmployeeId])
+  @@index([businessId, employmentStatus])
+}
+
+model EmployeeInvitation {
+  id         String                   @id
+  businessId String
+  employeeId String
+  branchId   String?
+  email      String?
+  phone      String?
+  role       EmployeeRole
+  status     EmployeeInvitationStatus
+  expiresAt  DateTime?
+  createdAt  DateTime                 @default(now())
+  acceptedAt DateTime?
+  revokedAt  DateTime?
+  updatedAt  DateTime                 @default(now()) @updatedAt
+  version    Int                      @default(1)
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  branch Branch? @relation(fields: [branchId], references: [id], onDelete: SetNull)
+
+  @@index([businessId])
+  @@index([employeeId])
+  @@index([businessId, status])
+}
+
+model EmployeeCompensation {
+  id                  String   @id
+  businessId          String
+  employeeId          String   @unique
+  branchId            String?
+  currency            String   @default("NGN")
+  payFrequency        String   @default("MONTHLY")
+  baseSalary          Float    @default(0)
+  housingAllowance    Float    @default(0)
+  transportAllowance  Float    @default(0)
+  mealAllowance       Float    @default(0)
+  otherAllowance      Float    @default(0)
+  employerPension     Float    @default(0)
+  employerTax         Float    @default(0)
+  otherEmployerCost   Float    @default(0)
+  commissionRate      Float    @default(0)
+  effectiveFrom       DateTime
+  effectiveTo         DateTime?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @default(now()) @updatedAt
+  version             Int      @default(1)
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  branch Branch? @relation(fields: [branchId], references: [id], onDelete: SetNull)
+
+  @@index([businessId])
+  @@index([businessId, branchId])
+}
+
+model EmployeeCompensationHistory {
+  id                  String   @id
+  businessId          String
+  employeeId          String
+  branchId            String?
+  currency             String   @default("NGN")
+  payFrequency         String   @default("MONTHLY")
+  baseSalary           Float    @default(0)
+  housingAllowance     Float    @default(0)
+  transportAllowance   Float    @default(0)
+  mealAllowance        Float    @default(0)
+  otherAllowance       Float    @default(0)
+  employerPension      Float    @default(0)
+  employerTax          Float    @default(0)
+  otherEmployerCost    Float    @default(0)
+  commissionRate       Float    @default(0)
+  effectiveFrom        DateTime
+  effectiveTo          DateTime?
+  createdAt            DateTime @default(now())
+  version              Int      @default(1)
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  branch Branch? @relation(fields: [branchId], references: [id], onDelete: SetNull)
+
+  @@index([businessId])
+  @@index([employeeId])
+  @@index([employeeId, effectiveFrom, effectiveTo])
+}
+
+model EmployeeRequest {
+  id                    String   @id
+  businessId            String
+  branchId              String?
+  requesterEmployeeId   String
+  assignedToEmployeeId  String?
+  type                  String
+  title                 String
+  description           String?
+  status                String
+  priority              String   @default("NORMAL")
+  amount                Float?
+  currency              String?
+  submittedAt           DateTime
+  resolvedAt            DateTime?
+  resolutionNote        String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @default(now()) @updatedAt
+  version               Int      @default(1)
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  branch Branch? @relation(fields: [branchId], references: [id], onDelete: SetNull)
+
+  requester Employee @relation("RequestRequester", fields: [requesterEmployeeId], references: [id], onDelete: Cascade)
+
+  assignee Employee? @relation("RequestAssignee", fields: [assignedToEmployeeId], references: [id], onDelete: SetNull)
+
+  @@index([businessId])
+  @@index([businessId, branchId])
+  @@index([requesterEmployeeId])
+  @@index([assignedToEmployeeId])
+  @@index([businessId, status])
+}
+
+model EmployeeNotification {
+  id            String   @id
+  businessId    String
+  employeeId    String
+  type          String
+  title         String
+  message       String
+  referenceType String?
+  referenceId   String?
+  read          Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  readAt        DateTime?
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@index([employeeId, read, createdAt])
+  @@index([businessId])
 }

@@ -3,7 +3,11 @@ import { AggregateRepository } from "./aggregateRepository.js";
 import { BranchRepository } from "./BranchRepository.js";
 import { BusinessRepository } from "./BusinessRepository.js";
 import { CustomersRepository } from "./CustomersRepository.js";
-import { EmployeesRepository } from "./EmployeesRepository.js";
+import { EmployeeCompensationRepository } from "./employee/EmployeeCompensationRepository.js";
+import { EmployeeInvitationRepository } from "./employee/EmployeeInvitationRepository.js";
+import { EmployeeNotificationRepository } from "./employee/EmployeeNotificationRepository.js";
+import { EmployeeRequestRepository } from "./employee/EmployeeRequestRepository.js";
+import { EmployeeRepository } from "./employee/EmployeesRepository.js";
 import { EventRepository } from "./eventRepository.js";
 import { ExpenseRepository } from "./expenseRepository.js";
 import { InventoryRepository } from "./InventoryRepository.js";
@@ -29,7 +33,15 @@ export class RepositoryRegistry {
 
     readonly customers: CustomersRepository;
 
-    readonly employess: EmployeesRepository;
+    readonly employees: EmployeeRepository;
+
+    readonly employeeInvitation: EmployeeInvitationRepository;
+
+    readonly employeeRequest: EmployeeRequestRepository;
+    
+    readonly employeeCompensation: EmployeeCompensationRepository;
+
+    readonly employeeNotification: EmployeeNotificationRepository;
 
     readonly sales: SalesRepository;
 
@@ -57,8 +69,16 @@ export class RepositoryRegistry {
 
         this.customers = new CustomersRepository();
 
-        this.employess = new EmployeesRepository();
+        this.employees = new EmployeeRepository();
 
+        this.employeeInvitation = new EmployeeInvitationRepository();
+
+        this.employeeRequest = new EmployeeRequestRepository();
+
+        this.employeeCompensation = new EmployeeCompensationRepository();
+
+        this.employeeNotification = new EmployeeNotificationRepository();
+        
         this.sales = new SalesRepository();
 
         this.expense = new ExpenseRepository();

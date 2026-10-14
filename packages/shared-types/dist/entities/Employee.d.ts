@@ -152,3 +152,4 @@ export interface EmployeeInvitationPayload {
     role: EmployeeRole;
     expiresAt: number | null;
 }
+export type EmployeeInvitedPayload = EmployeePayload & EmployeeInvitationPayload;

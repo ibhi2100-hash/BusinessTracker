@@ -13,6 +13,7 @@
   "dependencies": {
     "@business/event-bus": "*",
     "@business/events": "*",
+    "@business/projection-families": "*",
     "@business/shared-types": "*",
     "@business/ledger-engine": "*",
     "@business/snapshot-engine": "*",

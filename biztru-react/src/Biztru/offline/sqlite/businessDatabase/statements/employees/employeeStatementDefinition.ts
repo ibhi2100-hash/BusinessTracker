@@ -63,6 +63,5 @@ export const EmployeeStatementDefinitions: readonly StatementDefinition[] = [
   { key: employeeKeys.resetInvitations, sql: EMPLOYEE_SQL.RESET_INVITATIONS },
   { key: employeeKeys.resetCompensation, sql: EMPLOYEE_SQL.RESET_COMPENSATION },
   { key: employeeKeys.resetCompensationHistory, sql: EMPLOYEE_SQL.RESET_COMPENSATION_HISTORY },
-  { key: employeeKeys.resetRequests, sql: EMPLOYEE_SQL.RESET_REQUESTS },
   { key: employeeKeys.resetNotifications, sql: EMPLOYEE_SQL.RESET_NOTIFICATIONS },
 ];

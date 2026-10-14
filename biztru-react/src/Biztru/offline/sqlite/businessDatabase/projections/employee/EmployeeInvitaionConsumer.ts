@@ -1,5 +1,6 @@
 import type {
     DomainEvent,
+    EmployeeInvitationPayload,
     EmployeeInvitedPayload,
 } from "@business/shared-types";
 
@@ -9,10 +10,42 @@ import {
 
 import type { SQLiteStatementOperation } from "../../../../../storage/statement/worker/WorkerProtocol";
 import { employeeKeys } from "../../statements/employees/employeeKeys"; 
+import type { ProjectionConsumer } from "@business/event-bus";
+import type { SQLiteEmployeeInvitationRepository } from "../../repositories/EmployeeRepositories/SQLiteEmployeeInvitationRepository";
+import { EmployeeInvitationReducer } from "@business/projection-families";
+import { changeNotifier } from "../changeNoifier";
 
 
-export class EmployeeInvitationConsumer {
+export class EmployeeInvitationConsumer 
+implements ProjectionConsumer<DomainEvent<EmployeeInvitationPayload>>{
 
+    readonly name = "Employee Invitation";
+    private readonly repository: SQLiteEmployeeInvitationRepository;
+    constructor(
+        repository: SQLiteEmployeeInvitationRepository
+    ){
+        this.repository = repository
+    }
+
+    async handle(events: readonly DomainEvent<EmployeeInvitationPayload>[]): Promise<void> {
+         for (const event of events) {
+            switch (event.type) {
+                case EmployeeEventType.EMPLOYEE_INVITED: {
+                    const invitation = 
+                        new EmployeeInvitationReducer().reduce(null, event);
+
+                    await this.repository.insertInvitation(invitation!);
+                    const savedInvite = await this.repository.findByBusiness(event.businessId);
+                    const byId = await this.repository.findById(event.payload.invitationId);
+
+                    console.log("This is the Saved Invites: ", savedInvite, "And this is it by id: ", byId)
+                    changeNotifier.notify(["employee_invitations"]);
+                    break;
+                }
+            }
+        }
+    }
+    
     buildOperations(
         events: readonly DomainEvent<unknown>[],
     ): SQLiteStatementOperation[] {
@@ -26,7 +59,7 @@ export class EmployeeInvitationConsumer {
                 case EmployeeEventType.EMPLOYEE_INVITED: {
 
                     const payload =
-                        event.payload as EmployeeInvitedPayload;
+                        event.payload as EmployeeInvitationPayload;
 
                     /*
                      * Invitation ID should normally be its own

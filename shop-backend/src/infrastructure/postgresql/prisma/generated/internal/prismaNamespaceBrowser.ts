@@ -70,7 +70,13 @@ export const ModelName = {
   OutboxEvent: 'OutboxEvent',
   Snapshot: 'Snapshot',
   Alert: 'Alert',
-  Outbox: 'Outbox'
+  Outbox: 'Outbox',
+  Employee: 'Employee',
+  EmployeeInvitation: 'EmployeeInvitation',
+  EmployeeCompensation: 'EmployeeCompensation',
+  EmployeeCompensationHistory: 'EmployeeCompensationHistory',
+  EmployeeRequest: 'EmployeeRequest',
+  EmployeeNotification: 'EmployeeNotification'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -444,6 +450,139 @@ export const OutboxScalarFieldEnum = {
 } as const
 
 export type OutboxScalarFieldEnum = (typeof OutboxScalarFieldEnum)[keyof typeof OutboxScalarFieldEnum]
+
+
+export const EmployeeScalarFieldEnum = {
+  id: 'id',
+  businessId: 'businessId',
+  branchId: 'branchId',
+  userId: 'userId',
+  reportsToEmployeeId: 'reportsToEmployeeId',
+  employeeNumber: 'employeeNumber',
+  fullName: 'fullName',
+  phone: 'phone',
+  email: 'email',
+  role: 'role',
+  employmentStatus: 'employmentStatus',
+  joinedAt: 'joinedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  version: 'version'
+} as const
+
+export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typeof EmployeeScalarFieldEnum]
+
+
+export const EmployeeInvitationScalarFieldEnum = {
+  id: 'id',
+  businessId: 'businessId',
+  employeeId: 'employeeId',
+  branchId: 'branchId',
+  email: 'email',
+  phone: 'phone',
+  role: 'role',
+  status: 'status',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  acceptedAt: 'acceptedAt',
+  revokedAt: 'revokedAt',
+  updatedAt: 'updatedAt',
+  version: 'version'
+} as const
+
+export type EmployeeInvitationScalarFieldEnum = (typeof EmployeeInvitationScalarFieldEnum)[keyof typeof EmployeeInvitationScalarFieldEnum]
+
+
+export const EmployeeCompensationScalarFieldEnum = {
+  id: 'id',
+  businessId: 'businessId',
+  employeeId: 'employeeId',
+  branchId: 'branchId',
+  currency: 'currency',
+  payFrequency: 'payFrequency',
+  baseSalary: 'baseSalary',
+  housingAllowance: 'housingAllowance',
+  transportAllowance: 'transportAllowance',
+  mealAllowance: 'mealAllowance',
+  otherAllowance: 'otherAllowance',
+  employerPension: 'employerPension',
+  employerTax: 'employerTax',
+  otherEmployerCost: 'otherEmployerCost',
+  commissionRate: 'commissionRate',
+  effectiveFrom: 'effectiveFrom',
+  effectiveTo: 'effectiveTo',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  version: 'version'
+} as const
+
+export type EmployeeCompensationScalarFieldEnum = (typeof EmployeeCompensationScalarFieldEnum)[keyof typeof EmployeeCompensationScalarFieldEnum]
+
+
+export const EmployeeCompensationHistoryScalarFieldEnum = {
+  id: 'id',
+  businessId: 'businessId',
+  employeeId: 'employeeId',
+  branchId: 'branchId',
+  currency: 'currency',
+  payFrequency: 'payFrequency',
+  baseSalary: 'baseSalary',
+  housingAllowance: 'housingAllowance',
+  transportAllowance: 'transportAllowance',
+  mealAllowance: 'mealAllowance',
+  otherAllowance: 'otherAllowance',
+  employerPension: 'employerPension',
+  employerTax: 'employerTax',
+  otherEmployerCost: 'otherEmployerCost',
+  commissionRate: 'commissionRate',
+  effectiveFrom: 'effectiveFrom',
+  effectiveTo: 'effectiveTo',
+  createdAt: 'createdAt',
+  version: 'version'
+} as const
+
+export type EmployeeCompensationHistoryScalarFieldEnum = (typeof EmployeeCompensationHistoryScalarFieldEnum)[keyof typeof EmployeeCompensationHistoryScalarFieldEnum]
+
+
+export const EmployeeRequestScalarFieldEnum = {
+  id: 'id',
+  businessId: 'businessId',
+  branchId: 'branchId',
+  requesterEmployeeId: 'requesterEmployeeId',
+  assignedToEmployeeId: 'assignedToEmployeeId',
+  type: 'type',
+  title: 'title',
+  description: 'description',
+  status: 'status',
+  priority: 'priority',
+  amount: 'amount',
+  currency: 'currency',
+  submittedAt: 'submittedAt',
+  resolvedAt: 'resolvedAt',
+  resolutionNote: 'resolutionNote',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  version: 'version'
+} as const
+
+export type EmployeeRequestScalarFieldEnum = (typeof EmployeeRequestScalarFieldEnum)[keyof typeof EmployeeRequestScalarFieldEnum]
+
+
+export const EmployeeNotificationScalarFieldEnum = {
+  id: 'id',
+  businessId: 'businessId',
+  employeeId: 'employeeId',
+  type: 'type',
+  title: 'title',
+  message: 'message',
+  referenceType: 'referenceType',
+  referenceId: 'referenceId',
+  read: 'read',
+  createdAt: 'createdAt',
+  readAt: 'readAt'
+} as const
+
+export type EmployeeNotificationScalarFieldEnum = (typeof EmployeeNotificationScalarFieldEnum)[keyof typeof EmployeeNotificationScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -35,6 +35,8 @@ import { SyncEngine } from "../../Biztru/offline/sqlite/businessDatabase/sync/sy
 import { SyncCoordinator } from "../../Biztru/offline/sqlite/businessDatabase/sync/SyncCoordinator/SyncCoordinator"; 
 import { NetworkSyncConnector } from "../../Biztru/offline/sqlite/businessDatabase/sync/NetworkSyncConnector"; 
 import type{ DatabaseId } from "../../Biztru/storage/statement/worker/DatabaseId"; 
+import { EmployeeInvitationConsumer } from "../../Biztru/offline/sqlite/businessDatabase/projections/employee/EmployeeInvitaionConsumer";
+import { EmployeeConsumer } from "../../Biztru/offline/sqlite/businessDatabase/projections/employee/EmployeeProjection";
 
 
 export class BusinessBootstrapper
@@ -343,6 +345,18 @@ private async createSynchronization(
         bus.subscribe(
             new LedgerConsumer(
                 repositories.ledger
+            )
+        )
+
+        bus.subscribe(
+            new EmployeeInvitationConsumer(
+                repositories.employeeInvitation
+            )
+        )
+
+        bus.subscribe(
+            new EmployeeConsumer(
+                repositories.employee
             )
         )
    }

@@ -12,6 +12,8 @@ import {
     type EmploymentStatus,
     type EmployeeRequestPriority,
     EmployeeEventType,
+    type EmployeeInvitationPayload,
+    type EmployeeInvitedPayload,
 } from "@business/shared-types";
 import type { inviteEmployeePayload, InviteEmployeeRequest } from "./EmployeeRequests";
 import type { CommandIntent } from "../../../../BizTru_Karnel/CommandFactory/CommandIntent";
@@ -91,31 +93,6 @@ export class EmployeeApi {
         this.clientTransactionManager = clientTransactionManager;
     }
 
-
-    // =========================================================
-    // EMPLOYEE DIRECTORY
-    // =========================================================
-
-    async listEmployees(filters?: EmployeeApiFilters): Promise<Employee[]> {
-        return this.queries.listEmployees(filters);
-    }
-
-    async getEmployee(employeeId: string): Promise<Employee | null> {
-        return this.queries.getEmployee(employeeId);
-    }
-
-    async getEmployeeByUserId(userId: string): Promise<Employee | null> {
-        return this.queries.getEmployeeByUserId(userId);
-    }
-
-    async getEmployeesByBranch(branchId: string): Promise<Employee[]> {
-        return this.queries.getEmployeesByBranch(branchId);
-    }
-
-    async getDirectReports(employeeId: string): Promise<Employee[]> {
-        return this.queries.getDirectReports(employeeId);
-    }
-
     // =========================================================
     // INVITATIONS
     // =========================================================
@@ -124,7 +101,7 @@ export class EmployeeApi {
      * The command factory must persist the employee-invited event and
      * outbox record atomically. Backend delivery is tracked separately.
      */
-    async inviteEmployee(input: InviteEmployeeRequest): Promise<EmployeeInvitation> {
+    async inviteEmployee(input: InviteEmployeeRequest): Promise<void> {
         const fullName = input.fullName.trim();
         const phone = input.phone.trim();
         const email = input.email?.trim() || null;
@@ -141,21 +118,23 @@ export class EmployeeApi {
         if (input.role !== "STAFF" && input.role !== "MANAGER") {
             throw new Error("Only STAFF and MANAGER invitations are allowed here.");
         }
-        const app = await this.manager.current();
-        const employeeIntent: CommandIntent<inviteEmployeePayload> = {
+        const app = this.manager.current();
+        const employeeIntent: CommandIntent<EmployeeInvitedPayload> = {
             aggregateId: crypto.randomUUID(),
             aggregateType: AggregateType.EMPLOYEE,
             type: EmployeeEventType.EMPLOYEE_INVITED,
             payload: {
-                id: crypto.randomUUID(),
-                fullName: input.fullName,
+                invitationId: crypto.randomUUID(),
+                employeeId: crypto.randomUUID(),
                 phone: input.phone,
+                fullName: input.fullName,
                 email: input.email ?? null,
                 role: input.role ?? "STAFF",
                 branchId: input.branchId,
-                branchName: input.branchName ?? null,
-                employeeNumber: input.employeeNumber,
-                employmentStatus: input.employmentStatus ?? "INVITED"
+                employeeNumber: input.employeeNumber ?? null,
+                reportsToEmployeeId: input.employeeNumber ?? null,
+                userId: null,
+                expiresAt: 3000 + Date.now()
             },
             mode: "LIVE"
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
@@ -206,6 +185,11 @@ export class EmployeeApi {
         );
 
         await this.requireSuccess(response, "Accepting employee invitation");
+    }
+
+    async findBusinessEmployees(businessId: string): Promise<Employee[] |null>{
+        const app =  this.manager.current();
+        return await app?.storage.repositories.employee.findByBusiness(businessId) ?? null
     }
 
     async activateEmployee(employeeId: string): Promise<void> {

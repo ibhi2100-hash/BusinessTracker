@@ -9,6 +9,14 @@ export class SQLiteEmployeeRepository {
     ) {
         this.statements = statements
     }
+    async insertEmployee(employee: Employee){
+            await this.statements.insert.execute(
+                EmployeeMapper.toInsert(employee)
+            );
+            const employees = await this.statements.findById.query([
+                employee.id
+            ])
+    }
 
     async findById(id: string): Promise<Employee | null> {
         const result = await this.statements.findById.query<Employee>([id]);
@@ -60,5 +68,29 @@ export class SQLiteEmployeeRepository {
             ]);
 
         return (result ?? []) as Employee[];
+    }
+}
+
+class EmployeeMapper {
+    static toInsert(
+        employee: Employee
+    ): unknown[]{
+        return [
+            employee.id,
+            employee.businessId,
+            employee.branchId,
+            employee.userId,
+            employee.reportsToEmployeeId,
+            employee.employeeNumber,
+            employee.fullName,
+            employee.phone,
+            employee.email,
+            employee.role,
+            employee.employmentStatus,
+            employee.joinedAt,
+            employee.createdAt,
+            employee.updatedAt,
+            employee.version
+        ]
     }
 }

@@ -1,10 +1,9 @@
 import type {
     DomainEvent,
     EmployeeInvitedPayload,
-    EmployeeActivatedPayload,
-    EmployeeRoleChangedPayload,
-    EmployeeBranchChangedPayload,
+    EmployeePayload,
 } from "@business/shared-types";
+
 
 import {
     EmployeeEventType,
@@ -12,17 +11,45 @@ import {
 
 import type { SQLiteStatementOperation } from "../../../../../storage/statement/worker/WorkerProtocol";
 import { employeeKeys } from "../../statements/employees/employeeKeys"; 
+import type { ProjectionConsumer } from "@business/event-bus";
+import type { SQLiteEmployeeRepository } from "../../repositories/EmployeeRepositories/SQLiteEmployeeRepository";
+import { EmployeeReducer } from "@business/projection-families";
+import { changeNotifier } from "../changeNoifier";
 
 
 type EmployeeLifecycleEvent =
     | DomainEvent<EmployeeInvitedPayload>
-    | DomainEvent<EmployeeActivatedPayload>
-    | DomainEvent<EmployeeRoleChangedPayload>
-    | DomainEvent<EmployeeBranchChangedPayload>;
 
 
-export class EmployeeConsumer {
+export class EmployeeConsumer
+implements ProjectionConsumer<DomainEvent<EmployeePayload>> {
+    readonly name = "Employee";
+    private readonly repository: SQLiteEmployeeRepository;
+    constructor(
+        repository: SQLiteEmployeeRepository
+    ){
+        this.repository = repository
+    }
 
+    async handle(events: readonly DomainEvent<EmployeePayload>[]): Promise<void> {
+            for (const event of events) {
+            switch (event.type) {
+                case EmployeeEventType.EMPLOYEE_INVITED: {
+                    const employee = 
+                        new EmployeeReducer().reduce(null, event);
+                        if(!employee){
+                            return
+                        }
+                        await this.repository.insertEmployee(employee);
+
+                        const savedEmployee = await this.repository.findByBusiness(event.businessId);
+                        console.log("This is the saved Employees: ", savedEmployee)
+                        changeNotifier.notify(["employees"])
+                }
+            }
+        }
+    }
+    
     buildOperations(
         events: readonly EmployeeLifecycleEvent[],
     ): SQLiteStatementOperation[] {

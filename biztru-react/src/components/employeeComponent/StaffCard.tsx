@@ -7,47 +7,19 @@ import {
 
 import { DataCard } from "../ui/DataCard";
 import { GlassIcon } from "../ui/GlassIcon";
-
-export type StaffRole =
-  | "ADMIN"
-  | "MANAGER"
-  | "STAFF";
-
-export type StaffEmploymentStatus =
-  | "ACTIVE"
-  | "SUSPENDED"
-  | "INVITED";
-
-export interface StaffMember {
-  id: string;
-
-  name: string;
-
-  phone?: string | null;
-
-  email?: string | null;
-
-  role: StaffRole;
-
-  branchId?: string | null;
-
-  branchName?: string | null;
-
-  employmentStatus: StaffEmploymentStatus;
-
-  joinedAt?: string | null;
-}
+import type { Branch, Employee, EmployeeRole, EmploymentStatus } from "@business/shared-types";
 
 interface Props {
-  member: StaffMember;
+  member: Employee;
+  branch: Branch | null
 
   onManage?: (
-    member: StaffMember
+    member: Employee
   ) => void;
 }
 
 function roleLabel(
-  role: StaffRole
+  role: EmployeeRole
 ): string {
   switch (role) {
     case "ADMIN":
@@ -65,7 +37,7 @@ function roleLabel(
 }
 
 function statusLabel(
-  status: StaffEmploymentStatus
+  status: EmploymentStatus
 ): string {
   switch (status) {
     case "ACTIVE":
@@ -83,7 +55,7 @@ function statusLabel(
 }
 
 function statusClass(
-  status: StaffEmploymentStatus
+  status: EmploymentStatus
 ): string {
   switch (status) {
     case "ACTIVE":
@@ -118,11 +90,12 @@ function statusClass(
 
 export default function StaffCard({
   member,
+  branch,
   onManage,
 }: Props) {
   return (
     <DataCard
-      title={member.name}
+      title={member.fullName}
       subtitle={
         member.phone ||
         member.email ||
@@ -159,7 +132,7 @@ export default function StaffCard({
         {
           label: "Branch",
           value:
-            member.branchName ||
+             branch?.name ??
             "Unassigned",
         },
       ]}
@@ -222,12 +195,12 @@ export default function StaffCard({
                   : "Sales & operations"}
             </p>
 
-            {member.branchName && (
+            {branch?.name && (
               <div className="mt-1 flex items-center gap-1">
                 <Building2 size={11} />
 
                 <span className="truncate text-[10px] text-gray-600">
-                  {member.branchName}
+                  {branch.name}
                 </span>
               </div>
             )}

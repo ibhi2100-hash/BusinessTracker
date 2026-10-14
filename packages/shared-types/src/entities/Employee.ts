@@ -297,3 +297,7 @@ export interface EmployeeInvitationPayload {
 
 
 }
+
+export type EmployeeInvitedPayload =
+  EmployeePayload &
+  EmployeeInvitationPayload;

@@ -18,6 +18,8 @@ import { SQLiteExpenseRepository } from "./SQLiteProjectionRepository/SQLiteExpe
 import { SQLiteSyncActivityRepository } from "./SQLiteSyncRepository/SQLiteActivityRepository";
 import { SQLiteConflictRepository } from "./SQLiteSyncRepository/SQLiteConflictRepository";
 import { TransactionManager } from "../../../../storage/transaction/TransactionManager"; 
+import { SQLiteEmployeeInvitationRepository } from "./EmployeeRepositories/SQLiteEmployeeInvitationRepository";
+import { SQLiteEmployeeRepository } from "./EmployeeRepositories/SQLiteEmployeeRepository";
 
 export class BusinessRepositoryRegistry {
     readonly events: SQLiteEventRepository;
@@ -36,6 +38,10 @@ export class BusinessRepositoryRegistry {
     readonly sales: SQLiteSalesRepository;
 
     readonly expenses: SQLiteExpenseRepository;
+
+    readonly employeeInvitation: SQLiteEmployeeInvitationRepository;
+
+    readonly employee: SQLiteEmployeeRepository;
 
     readonly dashboard: SQLiteDashboardRepository;
 
@@ -94,6 +100,16 @@ export class BusinessRepositoryRegistry {
         this.expenses = 
             new SQLiteExpenseRepository(
                 statements.expenses
+            )
+
+        this.employeeInvitation = 
+            new SQLiteEmployeeInvitationRepository(
+                statements.employees
+            )
+
+        this.employee = 
+            new SQLiteEmployeeRepository(
+                statements.employees
             )
 
         this.ledger = 

@@ -117,3 +117,33 @@ export type Alert = Prisma.AlertModel
  * 
  */
 export type Outbox = Prisma.OutboxModel
+/**
+ * Model Employee
+ * 
+ */
+export type Employee = Prisma.EmployeeModel
+/**
+ * Model EmployeeInvitation
+ * 
+ */
+export type EmployeeInvitation = Prisma.EmployeeInvitationModel
+/**
+ * Model EmployeeCompensation
+ * 
+ */
+export type EmployeeCompensation = Prisma.EmployeeCompensationModel
+/**
+ * Model EmployeeCompensationHistory
+ * 
+ */
+export type EmployeeCompensationHistory = Prisma.EmployeeCompensationHistoryModel
+/**
+ * Model EmployeeRequest
+ * 
+ */
+export type EmployeeRequest = Prisma.EmployeeRequestModel
+/**
+ * Model EmployeeNotification
+ * 
+ */
+export type EmployeeNotification = Prisma.EmployeeNotificationModel

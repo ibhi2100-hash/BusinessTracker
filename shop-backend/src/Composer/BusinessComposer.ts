@@ -14,6 +14,7 @@ import { LedgerConsumer } from "../modules/sync/projection/ledgerConsumer.js";
 import { ProjectionWorker } from "../modules/sync/projection/ProjectionWorker.js"
 import { ExpenseConsumer } from "../modules/sync/projection/expenseConsumer.js";
 import { UserConsumer } from "../modules/sync/projection/userConsumer.js";
+import { EmployeeInvitationConsumer } from "../modules/sync/projection/employeeInvitation.js";
 
 export interface SyncModule {
     router: Router;
@@ -81,6 +82,12 @@ export class BusinessComposer {
         projectionBus.subscribe(
             new UserConsumer(
                 repositories.user
+            )
+        )
+
+        projectionBus.subscribe(
+            new EmployeeInvitationConsumer(
+                repositories.employeeInvitation
             )
         )
 

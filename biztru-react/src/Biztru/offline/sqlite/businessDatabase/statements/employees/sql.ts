@@ -166,6 +166,202 @@ export const EMPLOYEE_SQL = {
     WHERE id = ? AND status = 'PENDING';
   `,
 
+// =========================================================
+    // EMPLOYEE REQUESTS
+    // =========================================================
+
+    INSERT_REQUEST: `
+        INSERT INTO employee_requests (
+            id,
+            businessId,
+            branchId,
+            requesterEmployeeId,
+            assignedToEmployeeId,
+            type,
+            title,
+            description,
+            status,
+            priority,
+            amount,
+            currency,
+            submittedAt,
+            resolvedAt,
+            resolutionNote,
+            createdAt,
+            updatedAt,
+            version
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    `,
+
+    UPDATE_REQUEST: `
+        UPDATE employee_requests
+        SET
+            businessId = ?,
+            branchId = ?,
+            requesterEmployeeId = ?,
+            assignedToEmployeeId = ?,
+            type = ?,
+            title = ?,
+            description = ?,
+            status = ?,
+            priority = ?,
+            amount = ?,
+            currency = ?,
+            submittedAt = ?,
+            resolvedAt = ?,
+            resolutionNote = ?,
+            updatedAt = ?,
+            version = ?
+        WHERE id = ?;
+    `,
+
+    FIND_REQUEST_BY_ID: `
+        SELECT
+            id,
+            businessId,
+            branchId,
+            requesterEmployeeId,
+            assignedToEmployeeId,
+            type,
+            title,
+            description,
+            status,
+            priority,
+            amount,
+            currency,
+            submittedAt,
+            resolvedAt,
+            resolutionNote,
+            createdAt,
+            updatedAt,
+            version
+        FROM employee_requests
+        WHERE id = ?;
+    `,
+
+    FIND_REQUESTS_BY_BUSINESS: `
+        SELECT
+            id,
+            businessId,
+            branchId,
+            requesterEmployeeId,
+            assignedToEmployeeId,
+            type,
+            title,
+            description,
+            status,
+            priority,
+            amount,
+            currency,
+            submittedAt,
+            resolvedAt,
+            resolutionNote,
+            createdAt,
+            updatedAt,
+            version
+        FROM employee_requests
+        WHERE businessId = ?
+        ORDER BY createdAt DESC;
+    `,
+
+    FIND_REQUESTS_BY_BRANCH: `
+        SELECT
+            id,
+            businessId,
+            branchId,
+            requesterEmployeeId,
+            assignedToEmployeeId,
+            type,
+            title,
+            description,
+            status,
+            priority,
+            amount,
+            currency,
+            submittedAt,
+            resolvedAt,
+            resolutionNote,
+            createdAt,
+            updatedAt,
+            version
+        FROM employee_requests
+        WHERE businessId = ?
+          AND branchId = ?
+        ORDER BY createdAt DESC;
+    `,
+
+    FIND_REQUESTS_BY_ASSIGNEE: `
+        SELECT
+            id,
+            businessId,
+            branchId,
+            requesterEmployeeId,
+            assignedToEmployeeId,
+            type,
+            title,
+            description,
+            status,
+            priority,
+            amount,
+            currency,
+            submittedAt,
+            resolvedAt,
+            resolutionNote,
+            createdAt,
+            updatedAt,
+            version
+        FROM employee_requests
+        WHERE assignedToEmployeeId = ?
+        ORDER BY createdAt DESC;
+    `,
+
+    FIND_REQUESTS_BY_STATUS: `
+        SELECT
+            id,
+            businessId,
+            branchId,
+            requesterEmployeeId,
+            assignedToEmployeeId,
+            type,
+            title,
+            description,
+            status,
+            priority,
+            amount,
+            currency,
+            submittedAt,
+            resolvedAt,
+            resolutionNote,
+            createdAt,
+            updatedAt,
+            version
+        FROM employee_requests
+        WHERE businessId = ?
+          AND status = ?
+        ORDER BY createdAt DESC;
+    `,
+
+     UPDATE_REQUEST_ASSIGNMENT: `
+        UPDATE employee_requests
+        SET
+            assignedToEmployeeId = ?,
+            updatedAt = ?,
+            version = ?
+        WHERE id = ?;
+    `,
+
+    UPDATE_REQUEST_RESOLUTION: `
+        UPDATE employee_requests
+        SET
+            status = ?,
+            resolvedAt = ?,
+            resolutionNote = ?,
+            updatedAt = ?,
+            version = ?
+        WHERE id = ?;
+    `,
+
   
   // =========================================================
   // EMPLOYEE NOTIFICATIONS
