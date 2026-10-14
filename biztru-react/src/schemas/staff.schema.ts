@@ -1,7 +1,10 @@
-
 import { z } from "zod";
 
 const emailValidator = z.string().email();
+
+const staffRoleSchema = z.enum(["STAFF", "MANAGER"], {
+  message: "Select a valid staff role",
+});
 
 export const createStaffInvitationSchema = (
   validBranchIds: readonly string[],
@@ -9,17 +12,21 @@ export const createStaffInvitationSchema = (
   z
     .object({
       fullName: z
-        .string()
+        .string({
+          message: "Full name is required",
+        })
         .trim()
         .min(2, "Full name must be at least 2 characters")
         .max(100, "Full name cannot exceed 100 characters"),
 
       phone: z
-        .string()
+        .string({
+          message: "Phone number is required",
+        })
         .trim()
         .regex(
-          /^\d{10,15}$/,
-          "Enter a valid phone number with 10–15 digits",
+          /^\d{11}$/,
+          "Enter a valid phone number with 11 digits",
         ),
 
       email: z
@@ -31,14 +38,12 @@ export const createStaffInvitationSchema = (
           "Enter a valid email address",
         ),
 
-      role: z.enum(["STAFF", "MANAGER"], {
-        errorMap: () => ({
-          message: "Select a valid staff role",
-        }),
-      }),
+      role: staffRoleSchema,
 
       branchId: z
-        .string()
+        .string({
+          message: "Please select a branch",
+        })
         .trim()
         .min(1, "Please select a branch"),
     })
@@ -48,7 +53,7 @@ export const createStaffInvitationSchema = (
         !validBranchIds.includes(data.branchId)
       ) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: "custom",
           path: ["branchId"],
           message: "Select a valid branch from the list",
         });

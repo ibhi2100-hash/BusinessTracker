@@ -129,7 +129,7 @@ implements ProjectionConsumer<DomainEvent<EmployeePayload>> {
                         statementKey:
                             employeeKeys.updateJoined,
                         params: [
-                            payload.joinedAt,
+                            event.createdAt,
                             event.createdAt,
                             event.expectedAggregateVersion,
                             event.aggregateId,

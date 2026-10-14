@@ -321,7 +321,7 @@ export function ImportUploadStep({
           {onCancel && (
             <GlassButton
               type="button"
-              variant="ghost"
+              variant="tertiary"
               onClick={onCancel}
               disabled={disabled}
             >

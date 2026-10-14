@@ -27,6 +27,7 @@ import { useApplication } from "../../Biztru/services/ApplicationService/Applica
 
 import type { InviteEmployeeRequest } from "../../Biztru/services/ApplicationService/API/employee/EmployeeRequests";
 import type { StaffInvitationData } from "../../schemas/staff.schema";
+import type { Employee } from "@business/shared-types";
 
 /* ================================================================
    TEAM PAGE
@@ -223,7 +224,7 @@ export default function TeamPage() {
    */
 
   const handleManage = useCallback(
-    (member: StaffMember) => {
+    (member: Employee) => {
       /*
        * Connect this handler to StaffManagementSheet when
        * the management workflow is implemented.
