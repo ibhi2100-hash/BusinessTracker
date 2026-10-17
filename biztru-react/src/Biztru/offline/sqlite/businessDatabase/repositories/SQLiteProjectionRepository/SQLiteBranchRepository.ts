@@ -1,11 +1,6 @@
 // SQLiteBranchRepository.ts
 
 import type{ Branch } from "@business/shared-types";
-
-import type{
-    IProjectionEntityRepository,
-} from "./repositoryContract";
-
 import {
     BranchStatements,
 } from "../../statements/branch/BranchStatements";

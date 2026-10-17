@@ -100,11 +100,9 @@ export default function StaffInvitationSheet({
     reset,
     setValue,
     getValues,
-    clearErrors,
     formState: {
       errors,
       isSubmitting,
-      isDirty,
     },
   } = useForm<FormState>({
     resolver: zodResolver(schema),

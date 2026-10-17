@@ -125,8 +125,7 @@ export class Application {
 
         this.employee = 
             new EmployeeApi(
-                manager,
-                client.transactionManager,
+                manager
             )
     }
 }

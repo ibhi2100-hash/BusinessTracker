@@ -1,8 +1,5 @@
 import type {
     DomainEvent,
-    EmployeeRequestSubmittedPayload,
-    EmployeeRequestAssignedPayload,
-    EmployeeRequestResolutionPayload,
 } from "@business/shared-types";
 
 import {
@@ -28,7 +25,7 @@ export class EmployeeRequestConsumer {
                 case EmployeeEventType.EMPLOYEE_REQUEST_SUBMITTED: {
 
                     const payload =
-                        event.payload as EmployeeRequestSubmittedPayload;
+                        event.payload as any
 
                     operations.push({
                         statementKey:
@@ -79,7 +76,7 @@ export class EmployeeRequestConsumer {
                 case EmployeeEventType.EMPLOYEE_REQUEST_ASSIGNED: {
 
                     const payload =
-                        event.payload as EmployeeRequestAssignedPayload;
+                        event.payload as any
 
                     operations.push({
                         statementKey:
@@ -103,7 +100,7 @@ export class EmployeeRequestConsumer {
                 case EmployeeEventType.EMPLOYEE_REQUEST_APPROVED: {
 
                     const payload =
-                        event.payload as EmployeeRequestResolutionPayload;
+                        event.payload as any
 
                     operations.push({
                         statementKey:
@@ -131,7 +128,7 @@ export class EmployeeRequestConsumer {
                 case EmployeeEventType.EMPLOYEE_REQUEST_REJECTED: {
 
                     const payload =
-                        event.payload as EmployeeRequestResolutionPayload;
+                        event.payload as any
 
                     operations.push({
                         statementKey:
@@ -159,7 +156,7 @@ export class EmployeeRequestConsumer {
                 case EmployeeEventType.EMPLOYEE_REQUEST_CANCELLED: {
 
                     const payload =
-                        event.payload as EmployeeRequestResolutionPayload;
+                        event.payload as any
 
                     operations.push({
                         statementKey:

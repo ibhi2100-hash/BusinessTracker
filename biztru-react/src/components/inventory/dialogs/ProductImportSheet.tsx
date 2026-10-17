@@ -386,7 +386,7 @@ export default function ProductImportSheet({
 
   const [status, setStatus] =
     useState<ProductImportStatus>("UPLOADED");
-
+  console.log(status)
   const [source, setSource] =
     useState<ProductImportSource | null>(null);
 

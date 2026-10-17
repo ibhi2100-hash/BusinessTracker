@@ -10,7 +10,7 @@ export interface ProductRequest {
     category: string | null;
     sku: string | null;
     barcode: string | null;
-    reorderLevel: string  | null;
+    reorderLevel: number  | null;
     mode: Mode;
 }
 
@@ -24,6 +24,6 @@ export interface ProductPayload {
     category: string | null;
     sku: string | null;
     barcode: string | null;
-    reorderLevel: string  | null;
+    reorderLevel: number  | null;
 
 }

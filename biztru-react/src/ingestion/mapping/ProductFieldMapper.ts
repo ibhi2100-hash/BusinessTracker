@@ -6,7 +6,7 @@ import {
     FIELD_ALIASES
 } from "@business/shared-types"
 
-import type { ParsedProductFile } from "../parsers,/ProductFileParser";
+import type { ParsedProductFile } from "../parsers/ProductFileParser";
 
 
 

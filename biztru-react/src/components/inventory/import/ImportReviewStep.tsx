@@ -20,7 +20,6 @@ import { GlassCard } from "../../../components/ui/GlassCard";
 
 import type {
   ProductImportIssue,
-  ProductImportRow,
   ProductImportSummary,
   ValidatedProductImportRow,
 } from "@business/shared-types";
@@ -551,7 +550,7 @@ export function ImportReviewStep({
       <div className="mt-5 flex items-center justify-between gap-3 border-t border-white/[0.06] pt-5">
         <GlassButton
           type="button"
-          variant="ghost"
+          variant="tertiary"
           onClick={onBack}
           disabled={disabled}
         >

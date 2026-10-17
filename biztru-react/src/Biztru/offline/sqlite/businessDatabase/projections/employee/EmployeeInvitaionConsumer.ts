@@ -1,7 +1,6 @@
 import type {
     DomainEvent,
     EmployeeInvitationPayload,
-    EmployeeInvitedPayload,
 } from "@business/shared-types";
 
 import {

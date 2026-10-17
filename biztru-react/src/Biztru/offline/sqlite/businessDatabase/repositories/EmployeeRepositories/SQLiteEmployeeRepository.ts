@@ -13,9 +13,6 @@ export class SQLiteEmployeeRepository {
             await this.statements.insert.execute(
                 EmployeeMapper.toInsert(employee)
             );
-            const employees = await this.statements.findById.query([
-                employee.id
-            ])
     }
 
     async findById(id: string): Promise<Employee | null> {

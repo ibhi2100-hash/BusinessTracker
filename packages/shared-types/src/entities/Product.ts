@@ -107,7 +107,6 @@ export const FIELD_ALIASES = {
     "product name",
     "item",
     "item name",
-    "description",
   ],
 
   sku: [
@@ -161,6 +160,12 @@ export const FIELD_ALIASES = {
     "reorder level",
     "minimum stock",
     "min stock",
+  ],
+
+  description: [
+    "description",
+    "product description",
+    "details",
   ],
 };
 export type ProductImportSource = {

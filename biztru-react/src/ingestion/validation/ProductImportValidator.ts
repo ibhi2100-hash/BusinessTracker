@@ -1,4 +1,3 @@
-
 import type {
   ProductImportField,
   ProductImportIssue,
@@ -9,7 +8,7 @@ import type {
 
 function addIssue(
   issues: ProductImportIssue[],
-  row: ProductImportRow,
+  rowNumber: number,
   code: string,
   severity: "ERROR" | "WARNING",
   message: string,
@@ -19,15 +18,30 @@ function addIssue(
     code,
     severity,
     message,
-    rowNumber: row.rowNumber,
+    rowNumber,
     ...(field ? { field } : {}),
   });
 }
 
 function normalizeIdentifier(value: string | null): string | null {
-  const normalized = value?.trim().toLocaleLowerCase("en");
-
+  const normalized = value?.trim().toLowerCase();
   return normalized || null;
+}
+
+function isValidMoney(value: number | null): boolean {
+  return (
+    value !== null &&
+    Number.isFinite(value) &&
+    value >= 0
+  );
+}
+
+function isValidWholeNumber(value: number | null): boolean {
+  return (
+    value !== null &&
+    Number.isSafeInteger(value) &&
+    value >= 0
+  );
 }
 
 export function validateProductRows(
@@ -36,123 +50,144 @@ export function validateProductRows(
   results: ValidatedProductImportRow[];
   summary: ProductImportSummary;
 } {
-  const seenSkus = new Map<string, number>();
-  const seenBarcodes = new Map<string, number>();
+  const skuOccurrences = new Map<string, number[]>();
+  const barcodeOccurrences = new Map<string, number[]>();
 
-  const results = rows.map((row) => {
+  // First pass: collect every occurrence so the first duplicate
+  // is flagged as well as subsequent duplicates.
+  for (const row of rows) {
+    const sku = normalizeIdentifier(row.sku);
+    const barcode = normalizeIdentifier(row.barcode);
+
+    if (sku) {
+      const occurrences = skuOccurrences.get(sku) ?? [];
+      occurrences.push(row.rowNumber);
+      skuOccurrences.set(sku, occurrences);
+    }
+
+    if (barcode) {
+      const occurrences = barcodeOccurrences.get(barcode) ?? [];
+      occurrences.push(row.rowNumber);
+      barcodeOccurrences.set(barcode, occurrences);
+    }
+  }
+
+  const results: ValidatedProductImportRow[] = rows.map((row) => {
     const issues: ProductImportIssue[] = [];
 
-    if (!row.name) {
+    // Required product name
+    if (!row.name?.trim()) {
       addIssue(
         issues,
-        row,
-        "PRODUCT_NAME_REQUIRED",
+        row.rowNumber,
+        "NAME_REQUIRED",
         "ERROR",
         "Product name is required.",
         "name",
       );
     }
 
-    if (row.sellingPrice == null) {
+    // Required selling price
+    if (row.sellingPrice === null) {
       addIssue(
         issues,
-        row,
+        row.rowNumber,
         "SELLING_PRICE_REQUIRED",
         "ERROR",
-        "Selling price is missing or is not a valid number.",
+        "Selling price is required.",
         "sellingPrice",
       );
-    } else if (row.sellingPrice < 0) {
+    } else if (!isValidMoney(row.sellingPrice)) {
       addIssue(
         issues,
-        row,
-        "SELLING_PRICE_NEGATIVE",
+        row.rowNumber,
+        "INVALID_SELLING_PRICE",
         "ERROR",
-        "Selling price cannot be negative.",
+        "Selling price must be a finite, non-negative number.",
         "sellingPrice",
       );
     }
 
-    if (row.costPrice == null) {
+    // Required cost price
+    if (row.costPrice === null) {
       addIssue(
         issues,
-        row,
+        row.rowNumber,
         "COST_PRICE_REQUIRED",
         "ERROR",
-        "Cost price is missing or is not a valid number.",
+        "Cost price is required.",
         "costPrice",
       );
-    } else if (row.costPrice < 0) {
+    } else if (!isValidMoney(row.costPrice)) {
       addIssue(
         issues,
-        row,
-        "COST_PRICE_NEGATIVE",
+        row.rowNumber,
+        "INVALID_COST_PRICE",
         "ERROR",
-        "Cost price cannot be negative.",
+        "Cost price must be a finite, non-negative number.",
         "costPrice",
       );
     }
 
+    // Optional reorder level: if provided, it must be a whole number.
     if (
-      row.reorderLevel != null &&
-      row.reorderLevel < 0
+      row.reorderLevel !== null &&
+      !isValidWholeNumber(row.reorderLevel)
     ) {
       addIssue(
         issues,
-        row,
-        "REORDER_LEVEL_NEGATIVE",
+        row.rowNumber,
+        "INVALID_REORDER_LEVEL",
         "ERROR",
-        "Reorder level cannot be negative.",
+        "Reorder level must be a non-negative whole number.",
         "reorderLevel",
       );
     }
 
-    if (row.quantity != null && row.quantity < 0) {
+    // Optional opening stock quantity.
+    if (
+      row.quantity !== null &&
+      !isValidWholeNumber(row.quantity)
+    ) {
       addIssue(
         issues,
-        row,
-        "QUANTITY_NEGATIVE",
+        row.rowNumber,
+        "INVALID_QUANTITY",
         "ERROR",
-        "Opening quantity cannot be negative.",
+        "Opening stock quantity must be a non-negative whole number.",
         "quantity",
       );
     }
 
+    // Duplicate SKU: flag every row containing the duplicate.
     const sku = normalizeIdentifier(row.sku);
-    const barcode = normalizeIdentifier(row.barcode);
 
-    if (sku) {
-      const previousRow = seenSkus.get(sku);
-
-      if (previousRow != null) {
-        addIssue(
-          issues,
-          row,
-          "DUPLICATE_SKU_IN_FILE",
-          "ERROR",
-          `SKU duplicates row ${previousRow} in this file.`,
-          "sku",
-        );
-      } else {
-        seenSkus.set(sku, row.rowNumber);
-      }
+    if (sku && (skuOccurrences.get(sku)?.length ?? 0) > 1) {
+      addIssue(
+        issues,
+        row.rowNumber,
+        "DUPLICATE_SKU_IN_FILE",
+        "ERROR",
+        `SKU "${row.sku}" appears more than once in this file.`,
+        "sku",
+      );
     }
 
-    if (barcode) {
-      const previousRow = seenBarcodes.get(barcode);
+    // Duplicate barcode: flag every row containing the duplicate.
+    const barcode = normalizeIdentifier(row.barcode);
 
-      if (previousRow != null) {
-        addIssue(
-          issues,
-          row,
-          "DUPLICATE_BARCODE_IN_FILE",
-          "ERROR",
-          `Barcode duplicates row ${previousRow} in this file.`,
-          "barcode",
-        );
-      } else {
-        seenBarcodes.set(barcode, row.rowNumber);
-      }
+    if (
+      barcode &&
+      (barcodeOccurrences.get(barcode)?.length ?? 0) > 1
+    ) {
+      addIssue(
+        issues,
+        row.rowNumber,
+        "DUPLICATE_BARCODE_IN_FILE",
+        "ERROR",
+        `Barcode "${row.barcode}" appears more than once in this file.`,
+        "barcode",
+      );
     }
 
     return {
@@ -162,6 +197,18 @@ export function validateProductRows(
     };
   });
 
+  const duplicateRowNumbers = new Set<number>();
+
+  for (const result of results) {
+    if (
+      result.issues.some((issue) =>
+        issue.code.startsWith("DUPLICATE_"),
+      )
+    ) {
+      duplicateRowNumbers.add(result.row.rowNumber);
+    }
+  }
+
   const summary: ProductImportSummary = {
     totalRows: results.length,
     validRows: results.filter((result) => result.valid).length,
@@ -169,11 +216,7 @@ export function validateProductRows(
     warningRows: results.filter((result) =>
       result.issues.some((issue) => issue.severity === "WARNING"),
     ).length,
-    duplicateRows: results.filter((result) =>
-      result.issues.some((issue) =>
-        issue.code.startsWith("DUPLICATE_"),
-      ),
-    ).length,
+    duplicateRows: duplicateRowNumbers.size,
   };
 
   return { results, summary };

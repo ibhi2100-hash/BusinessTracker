@@ -1,7 +1,6 @@
 
 import { apiFetch } from "../../../../../lib/api";
 import { BusinessManager } from "../../../../Composer/BusinessManager";
-import { TransactionManager } from "../../../../storage/transaction/TransactionManager";
 
 import {
     type Employee,
@@ -82,7 +81,6 @@ export class EmployeeApi {
 
     constructor(
         manager: BusinessManager,
-        clientTransactionManager: TransactionManager,
     ) {
         this.manager = manager
     }
@@ -170,6 +168,8 @@ export class EmployeeApi {
                 body: JSON.stringify(input),
             },
         );
+
+        console.log(response)
     }
 
     async findBusinessEmployees(businessId: string): Promise<Employee[] |null>{

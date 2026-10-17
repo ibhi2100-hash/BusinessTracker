@@ -60,6 +60,7 @@ export declare const FIELD_ALIASES: {
     category: string[];
     quantity: string[];
     reorderLevel: string[];
+    description: string[];
 };
 export type ProductImportSource = {
     fileName: string;

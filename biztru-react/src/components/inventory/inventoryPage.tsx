@@ -1,5 +1,3 @@
-// InventoryPage.tsx
-
 import {
   useCallback,
   useMemo,
@@ -20,7 +18,11 @@ import {
   Trash2,
   CreditCard,
 } from "lucide-react";
-
+import {
+  prepareProductImportFile,
+  validateProductImportRows,
+  executeProductImport,
+} from "../../ingestion/ProductImportService";
 import ProductCard from "./cards/ProductCard";
 import ProductSheet from "./dialogs/ProductSheet";
 import AdjustStockSheet from "./dialogs/AdjustStockSheet";
@@ -29,12 +31,9 @@ import TransferStockSheet from "./dialogs/TransferStockSheet";
 import ProductHistorySheet from "./dialogs/ProductHistorySheet";
 import ProductDetailsSheet from "./dialogs/ProductsManagement";
 import ProductImportSheet, {
-  type PreparedProductImport,
   type ProductImportResult,
   type ProductImportProgressUpdate,
-  type ProductImportValidation,
 } from "./dialogs/ProductImportSheet";
-import type{ ProductImportMapping } from "./import/ImportMappingStep";
 
 import SellCard from "./cards/SellCard";
 
@@ -48,7 +47,6 @@ import { useLiveProducts } from "../../hooks/useLiveProducts";
 import { inventoryKey } from "../../Biztru/utils/keygenerator";
 
 import type {
-  ProductImportRow,
   ValidatedProductImportRow,
 } from "@business/shared-types";
 
@@ -104,36 +102,6 @@ interface InventoryPageProps {
   context: InventoryContext;
   mode: InventoryMode;
 
-  /**
-   * Inject the existing file parser/preparation service.
-   * Its source must be ProductImportSource, not string.
-   */
-  prepareProductImportFile: (
-    file: File,
-  ) => Promise<PreparedProductImport>;
-
-  /**
-   * Inject the canonical product-import validator.
-   */
-  validateProductImportRows: (args: {
-    rows: ProductImportRow[];
-    mapping: ProductImportMapping;
-    source: PreparedProductImport["source"];
-  }) => ProductImportValidation;
-
-  /**
-   * Inject the application-level import service.
-   * This service owns persistence, idempotency, and partial-failure
-   * reconciliation. Do not write directly to SQLite from this page.
-   */
-  executeProductImport: (
-    args: {
-      branchId: string;
-      mode: InventoryMode;
-      rows: ValidatedProductImportRow[];
-    },
-    onProgress?: (update: ProductImportProgressUpdate) => void,
-  ) => Promise<ProductImportResult>;
 }
 
 /* ============================================================
@@ -171,9 +139,6 @@ function formatNaira(value: number): string {
 export default function InventoryPage({
   context,
   mode,
-  prepareProductImportFile,
-  validateProductImportRows,
-  executeProductImport,
 }: InventoryPageProps) {
   const app = useApplication();
   const { branchId } = useBusinessContext();
@@ -875,18 +840,15 @@ export default function InventoryPage({
       rows: ValidatedProductImportRow[],
       onProgress?: (update: ProductImportProgressUpdate) => void,
     ): Promise<ProductImportResult> => {
-      const activeBranchId = requireBranchId();
-
-      if (rows.length === 0) {
-        throw new Error("There are no validated rows to import.");
-      }
+      const branchId = requireBranchId();
 
       // Delegate all writes to the application-level service.
       // The service must enforce idempotency and report partial
       // failures accurately.
       return executeProductImport(
+        app,
         {
-          branchId: activeBranchId,
+          branchId,
           mode,
           rows,
         },
@@ -894,9 +856,9 @@ export default function InventoryPage({
       );
     },
     [
-      requireBranchId,
-      executeProductImport,
+      app,
       mode,
+      requireBranchId
     ],
   );
 
