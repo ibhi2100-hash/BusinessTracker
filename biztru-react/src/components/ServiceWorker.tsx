@@ -1,45 +1,43 @@
-import { useEffect } from "react";
 
-import { registerSW } 
+import { useEffect } from "react";
+import { registerSW } from "virtual:pwa-register";
 
 export function ServiceWorkerRegistration() {
-    useEffect(() => {
-        if (import.meta.env.DEV) {
-            return;
-        }
+  useEffect(() => {
+    if (import.meta.env.DEV) {
+      return;
+    }
 
-        const updateSW = registerSW({
-            immediate: true,
+    registerSW({
+      immediate: true,
 
-            onRegistered(registration) {
-                console.log(
-                    "[SW] Registered:",
-                    registration?.scope
-                );
-            },
+      onRegistered(registration) {
+        console.log(
+          "[SW] Registered:",
+          registration?.scope
+        );
+      },
 
-            onRegisterError(error) {
-                console.error(
-                    "[SW] Registration failed:",
-                    error
-                );
-            },
+      onRegisterError(error) {
+        console.error(
+          "[SW] Registration failed:",
+          error
+        );
+      },
 
-            onOfflineReady() {
-                console.log(
-                    "[SW] Offline application ready."
-                );
-            },
+      onOfflineReady() {
+        console.log(
+          "[SW] Offline application ready."
+        );
+      },
 
-            onNeedRefresh() {
-                console.log(
-                    "[SW] New application version available."
-                );
-            },
-        });
+      onNeedRefresh() {
+        console.log(
+          "[SW] A new application version is available."
+        );
+      },
+    });
+  }, []);
 
-        void updateSW;
-    }, []);
-
-    return null;
+  return null;
 }
