@@ -17,8 +17,6 @@ import { ExpenseStatement } from "./expense/expenseStatements";
 import { ConflictsStatements } from "./conflicts/conflictsStatement";
 import { SyncActivityStatements } from "./syncActivities/ActivityStatements";
 import { EmployeeStatements } from "./employees/employeesStatements";
-
-
 export class BusinessStatementRegistry {
     readonly events: EventStatements;
     readonly inventory: InventoryStatements;
