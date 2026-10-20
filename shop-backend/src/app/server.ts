@@ -104,18 +104,7 @@ async function startServer() {
 
     const sync =
         await businessComposer.boot();
-    const invitationWorker =
-
-      await createInvitationDeliveryWorker();
-
-     const projectionWorkerRunner =
-
-       new ProjectionWorkerRunner(sync.projectionWorker);
-
-projectionWorkerRunner.start();
-
-invitationWorker.start();
-      
+    
     // --------------------
     // Routes
     // --------------------
