@@ -104,7 +104,7 @@ async function startServer() {
 
     const sync =
         await businessComposer.boot();
-
+    
     // --------------------
     // Routes
     // --------------------
