@@ -234,6 +234,7 @@ export class EmployeeInvitationReducer {
                     phone: payload.phone ?? null,
                     role: payload.role,
                     status: "PENDING",
+                    tokenHash: payload.tokenHash,
                     expiresAt: payload.expiresAt ?? null,
                     createdAt: event.createdAt,
                     acceptedAt: null,

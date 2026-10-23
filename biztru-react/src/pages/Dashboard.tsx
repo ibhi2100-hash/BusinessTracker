@@ -1,4 +1,3 @@
-"use client";
 import { DashboardHeader } from "../components/DashboardComponent/DashboardHeader"; 
 import { FinancialCarousel } from "../components/DashboardComponent/FinancialCarousel"; 
 import { QuickActions } from "../components/DashboardComponent/QuickActions"; 

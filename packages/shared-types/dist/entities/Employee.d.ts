@@ -95,6 +95,7 @@ export interface EmployeeInvitation {
     phone: string | null;
     role: EmployeeRole;
     status: EmployeeInvitationStatus;
+    tokenHash: string;
     expiresAt: number | null;
     createdAt: number;
     acceptedAt: number | null;
@@ -150,6 +151,7 @@ export interface EmployeeInvitationPayload {
     email: string | null;
     phone: string | null;
     role: EmployeeRole;
+    tokenHash: string;
     expiresAt: number | null;
 }
 export type EmployeeInvitedPayload = EmployeePayload & EmployeeInvitationPayload;

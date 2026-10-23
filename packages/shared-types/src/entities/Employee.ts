@@ -193,6 +193,8 @@ export interface EmployeeInvitation {
 
     status: EmployeeInvitationStatus;
 
+    tokenHash: string;
+
     expiresAt: number | null;
 
     createdAt: number;
@@ -292,6 +294,8 @@ export interface EmployeeInvitationPayload {
     phone: string | null;
 
     role: EmployeeRole;
+
+    tokenHash: string;
 
     expiresAt: number | null;
 

@@ -163,3 +163,23 @@ export const EmployeeInvitationStatus = {
 } as const
 
 export type EmployeeInvitationStatus = (typeof EmployeeInvitationStatus)[keyof typeof EmployeeInvitationStatus]
+
+
+export const InvitationDeliveryChannel = {
+  EMAIL: 'EMAIL',
+  SMS: 'SMS'
+} as const
+
+export type InvitationDeliveryChannel = (typeof InvitationDeliveryChannel)[keyof typeof InvitationDeliveryChannel]
+
+
+export const InvitationDeliveryStatus = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  SENT: 'SENT',
+  DELIVERED: 'DELIVERED',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type InvitationDeliveryStatus = (typeof InvitationDeliveryStatus)[keyof typeof InvitationDeliveryStatus]

@@ -409,7 +409,8 @@ export const ModelName = {
   EmployeeCompensation: 'EmployeeCompensation',
   EmployeeCompensationHistory: 'EmployeeCompensationHistory',
   EmployeeRequest: 'EmployeeRequest',
-  EmployeeNotification: 'EmployeeNotification'
+  EmployeeNotification: 'EmployeeNotification',
+  InvitationDelivery: 'InvitationDelivery'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -425,7 +426,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "business" | "branch" | "user" | "session" | "passwordResetToken" | "subscriptionPlan" | "businessSubscription" | "product" | "aggregate" | "inventory" | "processedSyncEvent" | "event" | "deviceClock" | "ledgerEntry" | "sale" | "expense" | "outboxEvent" | "snapshot" | "alert" | "outbox" | "employee" | "employeeInvitation" | "employeeCompensation" | "employeeCompensationHistory" | "employeeRequest" | "employeeNotification"
+    modelProps: "business" | "branch" | "user" | "session" | "passwordResetToken" | "subscriptionPlan" | "businessSubscription" | "product" | "aggregate" | "inventory" | "processedSyncEvent" | "event" | "deviceClock" | "ledgerEntry" | "sale" | "expense" | "outboxEvent" | "snapshot" | "alert" | "outbox" | "employee" | "employeeInvitation" | "employeeCompensation" | "employeeCompensationHistory" | "employeeRequest" | "employeeNotification" | "invitationDelivery"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2353,6 +2354,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    InvitationDelivery: {
+      payload: Prisma.$InvitationDeliveryPayload<ExtArgs>
+      fields: Prisma.InvitationDeliveryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InvitationDeliveryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvitationDeliveryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InvitationDeliveryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvitationDeliveryPayload>
+        }
+        findFirst: {
+          args: Prisma.InvitationDeliveryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvitationDeliveryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InvitationDeliveryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvitationDeliveryPayload>
+        }
+        findMany: {
+          args: Prisma.InvitationDeliveryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvitationDeliveryPayload>[]
+        }
+        create: {
+          args: Prisma.InvitationDeliveryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvitationDeliveryPayload>
+        }
+        createMany: {
+          args: Prisma.InvitationDeliveryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InvitationDeliveryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvitationDeliveryPayload>[]
+        }
+        delete: {
+          args: Prisma.InvitationDeliveryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvitationDeliveryPayload>
+        }
+        update: {
+          args: Prisma.InvitationDeliveryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvitationDeliveryPayload>
+        }
+        deleteMany: {
+          args: Prisma.InvitationDeliveryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InvitationDeliveryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InvitationDeliveryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvitationDeliveryPayload>[]
+        }
+        upsert: {
+          args: Prisma.InvitationDeliveryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvitationDeliveryPayload>
+        }
+        aggregate: {
+          args: Prisma.InvitationDeliveryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInvitationDelivery>
+        }
+        groupBy: {
+          args: Prisma.InvitationDeliveryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InvitationDeliveryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InvitationDeliveryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InvitationDeliveryCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2779,6 +2854,7 @@ export const EmployeeInvitationScalarFieldEnum = {
   phone: 'phone',
   role: 'role',
   status: 'status',
+  tokenHash: 'tokenHash',
   expiresAt: 'expiresAt',
   createdAt: 'createdAt',
   acceptedAt: 'acceptedAt',
@@ -2880,6 +2956,29 @@ export const EmployeeNotificationScalarFieldEnum = {
 } as const
 
 export type EmployeeNotificationScalarFieldEnum = (typeof EmployeeNotificationScalarFieldEnum)[keyof typeof EmployeeNotificationScalarFieldEnum]
+
+
+export const InvitationDeliveryScalarFieldEnum = {
+  id: 'id',
+  invitationId: 'invitationId',
+  businessId: 'businessId',
+  channel: 'channel',
+  recipient: 'recipient',
+  status: 'status',
+  attempts: 'attempts',
+  maxAttempts: 'maxAttempts',
+  nextAttemptAt: 'nextAttemptAt',
+  provider: 'provider',
+  providerMessageId: 'providerMessageId',
+  lastError: 'lastError',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  sentAt: 'sentAt',
+  deliveredAt: 'deliveredAt',
+  failedAt: 'failedAt'
+} as const
+
+export type InvitationDeliveryScalarFieldEnum = (typeof InvitationDeliveryScalarFieldEnum)[keyof typeof InvitationDeliveryScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -3250,6 +3349,34 @@ export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, '
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
+
+/**
+ * Reference to a field of type 'InvitationDeliveryChannel'
+ */
+export type EnumInvitationDeliveryChannelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvitationDeliveryChannel'>
+    
+
+
+/**
+ * Reference to a field of type 'InvitationDeliveryChannel[]'
+ */
+export type ListEnumInvitationDeliveryChannelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvitationDeliveryChannel[]'>
+    
+
+
+/**
+ * Reference to a field of type 'InvitationDeliveryStatus'
+ */
+export type EnumInvitationDeliveryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvitationDeliveryStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'InvitationDeliveryStatus[]'
+ */
+export type ListEnumInvitationDeliveryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvitationDeliveryStatus[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -3386,6 +3513,7 @@ export type GlobalOmitConfig = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryOmit
   employeeRequest?: Prisma.EmployeeRequestOmit
   employeeNotification?: Prisma.EmployeeNotificationOmit
+  invitationDelivery?: Prisma.InvitationDeliveryOmit
 }
 
 /* Types for Logging */

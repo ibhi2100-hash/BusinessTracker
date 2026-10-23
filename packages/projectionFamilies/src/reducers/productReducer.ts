@@ -200,6 +200,12 @@ implements ProjectionReducer<Product, DomainEvent> {
 
             costPrice:
                 payload.costPrice,
+            
+            sku: payload.sku,
+
+            barcode: payload.barcode,
+
+            category: payload.category,
 
             imageUrl:
                 payload.imageUrl ??

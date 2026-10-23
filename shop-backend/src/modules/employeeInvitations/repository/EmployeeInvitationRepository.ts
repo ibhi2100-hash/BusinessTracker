@@ -7,9 +7,9 @@ import {
   EmployeeInvitation as PrismaEmployeeInvitation,
   EmployeeInvitationStatus,
   Prisma,
-} from "../../../../infrastructure/postgresql/prisma/generated/client.js";
+} from "../../../infrastructure/postgresql/prisma/generated/client.js";
 
-import { prisma } from "../../../../infrastructure/postgresql/prismaClient.js";
+import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
 
 export class EmployeeInvitationRepository {
   /**
@@ -134,6 +134,47 @@ export class EmployeeInvitationRepository {
       },
     });
   }
+
+
+async findByTokenHash(
+  tokenHash: string,
+  tx: Prisma.TransactionClient = prisma,
+): Promise<DomainEmployeeInvitation | null> {
+  const row = await tx.employeeInvitation.findUnique({
+    where: { tokenHash },
+  });
+
+  return row ? EmployeeInvitationMapper.fromRow(row) : null;
+}
+
+/**
+ * Atomically claims a pending, unexpired invitation.
+ * Must be called inside the acceptance transaction.
+ */
+async claimForAcceptance(
+  id: string,
+  tokenHash: string,
+  acceptedAt: number,
+  tx: Prisma.TransactionClient,
+): Promise<boolean> {
+  const result = await tx.employeeInvitation.updateMany({
+    where: {
+      id,
+      tokenHash,
+      status: EmployeeInvitationStatus.PENDING,
+      expiresAt: {
+        gt: EmployeeInvitationMapper.toDate(acceptedAt),
+      },
+    },
+    data: {
+      status: EmployeeInvitationStatus.ACCEPTED,
+      acceptedAt: EmployeeInvitationMapper.toDate(acceptedAt),
+    },
+  });
+
+  return result.count === 1;
+}
+
 }
 
 export class EmployeeInvitationMapper {
@@ -181,6 +222,7 @@ export class EmployeeInvitationMapper {
       phone: invitation.phone,
       role: invitation.role,
       status: invitation.status,
+      tokenHash: invitation.tokenHash,
       expiresAt: this.toNullableDate(invitation.expiresAt),
       createdAt: this.toDate(invitation.createdAt),
       acceptedAt: this.toNullableDate(invitation.acceptedAt),
@@ -229,6 +271,7 @@ export class EmployeeInvitationMapper {
       phone: row.phone,
       role: row.role,
       status: row.status,
+      tokenHash: row.tokenHash,
       expiresAt: this.fromNullableDate(row.expiresAt),
       createdAt: row.createdAt.getTime(),
       acceptedAt: this.fromNullableDate(row.acceptedAt),

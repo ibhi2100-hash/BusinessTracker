@@ -263,6 +263,12 @@ export default function SalesListPage() {
         title="Sale details"
         subtitle={selected ? formatDate(selected.createdAt) : undefined}
         size="md"
+        className="
+        w-full
+        sm:max-w-xl
+        lg:max-w-2xl
+        xl:max-w-3xl
+      "
       >
         {selected && (
           <div className="space-y-4">
@@ -304,7 +310,12 @@ export default function SalesListPage() {
         open={filterOpen}
         onClose={() => setFilterOpen(false)}
         title="Filters"
-        size="sm"
+        className="
+          w-full
+          sm:max-w-xl
+          lg:max-w-2xl
+          xl:max-w-3xl
+        "
         footer={
           <div className="flex gap-2 w-full">
             <GlassButton

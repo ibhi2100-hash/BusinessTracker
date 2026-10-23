@@ -1,7 +1,14 @@
 import { EventConsumer } from "@business/event-bus";
 import { EmployeeInvitationReducer } from "@business/projection-families";
 import { DomainEvent, EmployeeInvitationPayload, EmployeeEventType } from "@business/shared-types";
-import { EmployeeInvitationRepository } from "../repositories/employee/EmployeeInvitationRepository.js";
+import { EmployeeInvitationRepository } from "../../employeeInvitations/repository/EmployeeInvitationRepository.js";
+import { createHash, randomBytes } from "node:crypto";
+
+const rawToken = randomBytes(32).toString("base64url");
+
+const tokenHash = createHash("sha256")
+  .update(rawToken)
+  .digest("hex");
 
 export class EmployeeInvitationConsumer 
 implements EventConsumer<DomainEvent<EmployeeInvitationPayload>>{
@@ -20,7 +27,7 @@ implements EventConsumer<DomainEvent<EmployeeInvitationPayload>>{
                 case EmployeeEventType.EMPLOYEE_INVITED: {
                     const invitation = 
                         new EmployeeInvitationReducer().reduce(null, event);
-
+                    console.log("This is the Invitation that is going to be saved: ", invitation)
                     await this.repository.upsert(invitation!)
                     break;
                 }

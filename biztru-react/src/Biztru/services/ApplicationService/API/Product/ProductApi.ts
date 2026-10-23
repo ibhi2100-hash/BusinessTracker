@@ -59,6 +59,53 @@ export class ProductApi {
        await app.domain.kernel.execute(command)
     }
 
+    async update(
+        request: ProductRequest
+    ){
+        
+       const productIntent: CommandIntent<ProductPayload> = {
+            type: InventoryEventType.PRODUCT_UPDATED,
+
+            aggregateId: request.id,
+
+            aggregateType: AggregateType.PRODUCT,
+
+            mode: request.mode,
+
+            payload: {
+                id: request.id,
+                name: request.name,
+
+                price: request.price,
+                costPrice: request.costPrice,
+
+                category: request.category ?? null,
+                sku: request.sku ?? null,
+                barcode: request.barcode ?? null,
+                reorderLevel:
+                    request.reorderLevel ?? null,
+
+                imageUrl:
+                    request.imageUrl ?? null,
+
+                description:
+                    request.description ?? null,
+            },
+        };
+
+
+       const app = await this.manager.current()
+       const command = await app?.domain.commandFactory.create(productIntent);
+        if(!app){
+            throw new Error("Business Does not exist")
+        }
+        if(!command){
+            throw new Error("Business Does not exist")
+        }
+       await app.domain.kernel.execute(command)
+    }
+
+
     async getProducts(branchId: string): Promise<LiveProduct[]>{
         const app = await this.manager.current();
 

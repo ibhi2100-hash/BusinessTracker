@@ -721,6 +721,40 @@ export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedFloatNullableFilter<$PrismaModel>
 }
 
+export type EnumInvitationDeliveryChannelFilter<$PrismaModel = never> = {
+  equals?: $Enums.InvitationDeliveryChannel | Prisma.EnumInvitationDeliveryChannelFieldRefInput<$PrismaModel>
+  in?: $Enums.InvitationDeliveryChannel[] | Prisma.ListEnumInvitationDeliveryChannelFieldRefInput<$PrismaModel>
+  notIn?: $Enums.InvitationDeliveryChannel[] | Prisma.ListEnumInvitationDeliveryChannelFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumInvitationDeliveryChannelFilter<$PrismaModel> | $Enums.InvitationDeliveryChannel
+}
+
+export type EnumInvitationDeliveryStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.InvitationDeliveryStatus | Prisma.EnumInvitationDeliveryStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.InvitationDeliveryStatus[] | Prisma.ListEnumInvitationDeliveryStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.InvitationDeliveryStatus[] | Prisma.ListEnumInvitationDeliveryStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumInvitationDeliveryStatusFilter<$PrismaModel> | $Enums.InvitationDeliveryStatus
+}
+
+export type EnumInvitationDeliveryChannelWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.InvitationDeliveryChannel | Prisma.EnumInvitationDeliveryChannelFieldRefInput<$PrismaModel>
+  in?: $Enums.InvitationDeliveryChannel[] | Prisma.ListEnumInvitationDeliveryChannelFieldRefInput<$PrismaModel>
+  notIn?: $Enums.InvitationDeliveryChannel[] | Prisma.ListEnumInvitationDeliveryChannelFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumInvitationDeliveryChannelWithAggregatesFilter<$PrismaModel> | $Enums.InvitationDeliveryChannel
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumInvitationDeliveryChannelFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumInvitationDeliveryChannelFilter<$PrismaModel>
+}
+
+export type EnumInvitationDeliveryStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.InvitationDeliveryStatus | Prisma.EnumInvitationDeliveryStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.InvitationDeliveryStatus[] | Prisma.ListEnumInvitationDeliveryStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.InvitationDeliveryStatus[] | Prisma.ListEnumInvitationDeliveryStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumInvitationDeliveryStatusWithAggregatesFilter<$PrismaModel> | $Enums.InvitationDeliveryStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumInvitationDeliveryStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumInvitationDeliveryStatusFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -1363,6 +1397,40 @@ export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedFloatNullableFilter<$PrismaModel>
   _min?: Prisma.NestedFloatNullableFilter<$PrismaModel>
   _max?: Prisma.NestedFloatNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumInvitationDeliveryChannelFilter<$PrismaModel = never> = {
+  equals?: $Enums.InvitationDeliveryChannel | Prisma.EnumInvitationDeliveryChannelFieldRefInput<$PrismaModel>
+  in?: $Enums.InvitationDeliveryChannel[] | Prisma.ListEnumInvitationDeliveryChannelFieldRefInput<$PrismaModel>
+  notIn?: $Enums.InvitationDeliveryChannel[] | Prisma.ListEnumInvitationDeliveryChannelFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumInvitationDeliveryChannelFilter<$PrismaModel> | $Enums.InvitationDeliveryChannel
+}
+
+export type NestedEnumInvitationDeliveryStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.InvitationDeliveryStatus | Prisma.EnumInvitationDeliveryStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.InvitationDeliveryStatus[] | Prisma.ListEnumInvitationDeliveryStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.InvitationDeliveryStatus[] | Prisma.ListEnumInvitationDeliveryStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumInvitationDeliveryStatusFilter<$PrismaModel> | $Enums.InvitationDeliveryStatus
+}
+
+export type NestedEnumInvitationDeliveryChannelWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.InvitationDeliveryChannel | Prisma.EnumInvitationDeliveryChannelFieldRefInput<$PrismaModel>
+  in?: $Enums.InvitationDeliveryChannel[] | Prisma.ListEnumInvitationDeliveryChannelFieldRefInput<$PrismaModel>
+  notIn?: $Enums.InvitationDeliveryChannel[] | Prisma.ListEnumInvitationDeliveryChannelFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumInvitationDeliveryChannelWithAggregatesFilter<$PrismaModel> | $Enums.InvitationDeliveryChannel
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumInvitationDeliveryChannelFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumInvitationDeliveryChannelFilter<$PrismaModel>
+}
+
+export type NestedEnumInvitationDeliveryStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.InvitationDeliveryStatus | Prisma.EnumInvitationDeliveryStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.InvitationDeliveryStatus[] | Prisma.ListEnumInvitationDeliveryStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.InvitationDeliveryStatus[] | Prisma.ListEnumInvitationDeliveryStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumInvitationDeliveryStatusWithAggregatesFilter<$PrismaModel> | $Enums.InvitationDeliveryStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumInvitationDeliveryStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumInvitationDeliveryStatusFilter<$PrismaModel>
 }
 
 

@@ -4,7 +4,7 @@ import { BranchRepository } from "./BranchRepository.js";
 import { BusinessRepository } from "./BusinessRepository.js";
 import { CustomersRepository } from "./CustomersRepository.js";
 import { EmployeeCompensationRepository } from "./employee/EmployeeCompensationRepository.js";
-import { EmployeeInvitationRepository } from "./employee/EmployeeInvitationRepository.js";
+import { EmployeeInvitationRepository } from "../../employeeInvitations/repository/EmployeeInvitationRepository.js";
 import { EmployeeNotificationRepository } from "./employee/EmployeeNotificationRepository.js";
 import { EmployeeRequestRepository } from "./employee/EmployeeRequestRepository.js";
 import { EmployeeRepository } from "./employee/EmployeesRepository.js";

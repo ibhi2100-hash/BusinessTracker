@@ -76,7 +76,8 @@ export const ModelName = {
   EmployeeCompensation: 'EmployeeCompensation',
   EmployeeCompensationHistory: 'EmployeeCompensationHistory',
   EmployeeRequest: 'EmployeeRequest',
-  EmployeeNotification: 'EmployeeNotification'
+  EmployeeNotification: 'EmployeeNotification',
+  InvitationDelivery: 'InvitationDelivery'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -482,6 +483,7 @@ export const EmployeeInvitationScalarFieldEnum = {
   phone: 'phone',
   role: 'role',
   status: 'status',
+  tokenHash: 'tokenHash',
   expiresAt: 'expiresAt',
   createdAt: 'createdAt',
   acceptedAt: 'acceptedAt',
@@ -583,6 +585,29 @@ export const EmployeeNotificationScalarFieldEnum = {
 } as const
 
 export type EmployeeNotificationScalarFieldEnum = (typeof EmployeeNotificationScalarFieldEnum)[keyof typeof EmployeeNotificationScalarFieldEnum]
+
+
+export const InvitationDeliveryScalarFieldEnum = {
+  id: 'id',
+  invitationId: 'invitationId',
+  businessId: 'businessId',
+  channel: 'channel',
+  recipient: 'recipient',
+  status: 'status',
+  attempts: 'attempts',
+  maxAttempts: 'maxAttempts',
+  nextAttemptAt: 'nextAttemptAt',
+  provider: 'provider',
+  providerMessageId: 'providerMessageId',
+  lastError: 'lastError',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  sentAt: 'sentAt',
+  deliveredAt: 'deliveredAt',
+  failedAt: 'failedAt'
+} as const
+
+export type InvitationDeliveryScalarFieldEnum = (typeof InvitationDeliveryScalarFieldEnum)[keyof typeof InvitationDeliveryScalarFieldEnum]
 
 
 export const SortOrder = {

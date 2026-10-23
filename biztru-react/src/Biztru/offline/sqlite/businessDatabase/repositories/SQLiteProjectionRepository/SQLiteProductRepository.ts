@@ -30,6 +30,14 @@ export interface LiveProduct {
 
     imageUrl: string | null;
 
+    sku: string | null;
+
+    barcode: string | null;
+
+    reorderLevel: number | null;
+
+    description: string | null;
+
     isActive: number;
 
     branchId: string | null;

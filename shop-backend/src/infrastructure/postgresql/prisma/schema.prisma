@@ -896,6 +896,7 @@ model EmployeeInvitation {
   phone      String?
   role       EmployeeRole
   status     EmployeeInvitationStatus
+  tokenHash  String @unique
   expiresAt  DateTime?
   createdAt  DateTime                 @default(now())
   acceptedAt DateTime?

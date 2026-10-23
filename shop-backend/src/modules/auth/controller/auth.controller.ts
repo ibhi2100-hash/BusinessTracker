@@ -118,7 +118,6 @@ export class AuthController {
     try {
       const refreshToken =
         req.cookies.refreshToken;
-
       if (!refreshToken) {
         return res.status(401).json({
           message:
@@ -146,6 +145,7 @@ export class AuthController {
         ),
       });
     } catch (error) {
+      console.log("This is the refreshed Error: ", error)
       return res.status(401).json({
         message:
           error instanceof Error

@@ -43,6 +43,7 @@ export type EmployeeInvitationMinAggregateOutputType = {
   phone: string | null
   role: $Enums.EmployeeRole | null
   status: $Enums.EmployeeInvitationStatus | null
+  tokenHash: string | null
   expiresAt: Date | null
   createdAt: Date | null
   acceptedAt: Date | null
@@ -60,6 +61,7 @@ export type EmployeeInvitationMaxAggregateOutputType = {
   phone: string | null
   role: $Enums.EmployeeRole | null
   status: $Enums.EmployeeInvitationStatus | null
+  tokenHash: string | null
   expiresAt: Date | null
   createdAt: Date | null
   acceptedAt: Date | null
@@ -77,6 +79,7 @@ export type EmployeeInvitationCountAggregateOutputType = {
   phone: number
   role: number
   status: number
+  tokenHash: number
   expiresAt: number
   createdAt: number
   acceptedAt: number
@@ -104,6 +107,7 @@ export type EmployeeInvitationMinAggregateInputType = {
   phone?: true
   role?: true
   status?: true
+  tokenHash?: true
   expiresAt?: true
   createdAt?: true
   acceptedAt?: true
@@ -121,6 +125,7 @@ export type EmployeeInvitationMaxAggregateInputType = {
   phone?: true
   role?: true
   status?: true
+  tokenHash?: true
   expiresAt?: true
   createdAt?: true
   acceptedAt?: true
@@ -138,6 +143,7 @@ export type EmployeeInvitationCountAggregateInputType = {
   phone?: true
   role?: true
   status?: true
+  tokenHash?: true
   expiresAt?: true
   createdAt?: true
   acceptedAt?: true
@@ -242,6 +248,7 @@ export type EmployeeInvitationGroupByOutputType = {
   phone: string | null
   role: $Enums.EmployeeRole
   status: $Enums.EmployeeInvitationStatus
+  tokenHash: string
   expiresAt: Date | null
   createdAt: Date
   acceptedAt: Date | null
@@ -282,6 +289,7 @@ export type EmployeeInvitationWhereInput = {
   phone?: Prisma.StringNullableFilter<"EmployeeInvitation"> | string | null
   role?: Prisma.EnumEmployeeRoleFilter<"EmployeeInvitation"> | $Enums.EmployeeRole
   status?: Prisma.EnumEmployeeInvitationStatusFilter<"EmployeeInvitation"> | $Enums.EmployeeInvitationStatus
+  tokenHash?: Prisma.StringFilter<"EmployeeInvitation"> | string
   expiresAt?: Prisma.DateTimeNullableFilter<"EmployeeInvitation"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"EmployeeInvitation"> | Date | string
   acceptedAt?: Prisma.DateTimeNullableFilter<"EmployeeInvitation"> | Date | string | null
@@ -302,6 +310,7 @@ export type EmployeeInvitationOrderByWithRelationInput = {
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  tokenHash?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   acceptedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -315,6 +324,7 @@ export type EmployeeInvitationOrderByWithRelationInput = {
 
 export type EmployeeInvitationWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  tokenHash?: string
   AND?: Prisma.EmployeeInvitationWhereInput | Prisma.EmployeeInvitationWhereInput[]
   OR?: Prisma.EmployeeInvitationWhereInput[]
   NOT?: Prisma.EmployeeInvitationWhereInput | Prisma.EmployeeInvitationWhereInput[]
@@ -334,7 +344,7 @@ export type EmployeeInvitationWhereUniqueInput = Prisma.AtLeast<{
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
   employee?: Prisma.XOR<Prisma.EmployeeScalarRelationFilter, Prisma.EmployeeWhereInput>
   branch?: Prisma.XOR<Prisma.BranchNullableScalarRelationFilter, Prisma.BranchWhereInput> | null
-}, "id">
+}, "id" | "tokenHash">
 
 export type EmployeeInvitationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -345,6 +355,7 @@ export type EmployeeInvitationOrderByWithAggregationInput = {
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  tokenHash?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   acceptedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -370,6 +381,7 @@ export type EmployeeInvitationScalarWhereWithAggregatesInput = {
   phone?: Prisma.StringNullableWithAggregatesFilter<"EmployeeInvitation"> | string | null
   role?: Prisma.EnumEmployeeRoleWithAggregatesFilter<"EmployeeInvitation"> | $Enums.EmployeeRole
   status?: Prisma.EnumEmployeeInvitationStatusWithAggregatesFilter<"EmployeeInvitation"> | $Enums.EmployeeInvitationStatus
+  tokenHash?: Prisma.StringWithAggregatesFilter<"EmployeeInvitation"> | string
   expiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"EmployeeInvitation"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"EmployeeInvitation"> | Date | string
   acceptedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"EmployeeInvitation"> | Date | string | null
@@ -384,6 +396,7 @@ export type EmployeeInvitationCreateInput = {
   phone?: string | null
   role: $Enums.EmployeeRole
   status: $Enums.EmployeeInvitationStatus
+  tokenHash: string
   expiresAt?: Date | string | null
   createdAt?: Date | string
   acceptedAt?: Date | string | null
@@ -404,6 +417,7 @@ export type EmployeeInvitationUncheckedCreateInput = {
   phone?: string | null
   role: $Enums.EmployeeRole
   status: $Enums.EmployeeInvitationStatus
+  tokenHash: string
   expiresAt?: Date | string | null
   createdAt?: Date | string
   acceptedAt?: Date | string | null
@@ -418,6 +432,7 @@ export type EmployeeInvitationUpdateInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
   status?: Prisma.EnumEmployeeInvitationStatusFieldUpdateOperationsInput | $Enums.EmployeeInvitationStatus
+  tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -438,6 +453,7 @@ export type EmployeeInvitationUncheckedUpdateInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
   status?: Prisma.EnumEmployeeInvitationStatusFieldUpdateOperationsInput | $Enums.EmployeeInvitationStatus
+  tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -455,6 +471,7 @@ export type EmployeeInvitationCreateManyInput = {
   phone?: string | null
   role: $Enums.EmployeeRole
   status: $Enums.EmployeeInvitationStatus
+  tokenHash: string
   expiresAt?: Date | string | null
   createdAt?: Date | string
   acceptedAt?: Date | string | null
@@ -469,6 +486,7 @@ export type EmployeeInvitationUpdateManyMutationInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
   status?: Prisma.EnumEmployeeInvitationStatusFieldUpdateOperationsInput | $Enums.EmployeeInvitationStatus
+  tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -486,6 +504,7 @@ export type EmployeeInvitationUncheckedUpdateManyInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
   status?: Prisma.EnumEmployeeInvitationStatusFieldUpdateOperationsInput | $Enums.EmployeeInvitationStatus
+  tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -513,6 +532,7 @@ export type EmployeeInvitationCountOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  tokenHash?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   acceptedAt?: Prisma.SortOrder
@@ -534,6 +554,7 @@ export type EmployeeInvitationMaxOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  tokenHash?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   acceptedAt?: Prisma.SortOrder
@@ -551,6 +572,7 @@ export type EmployeeInvitationMinOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  tokenHash?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   acceptedAt?: Prisma.SortOrder
@@ -699,6 +721,7 @@ export type EmployeeInvitationCreateWithoutBusinessInput = {
   phone?: string | null
   role: $Enums.EmployeeRole
   status: $Enums.EmployeeInvitationStatus
+  tokenHash: string
   expiresAt?: Date | string | null
   createdAt?: Date | string
   acceptedAt?: Date | string | null
@@ -717,6 +740,7 @@ export type EmployeeInvitationUncheckedCreateWithoutBusinessInput = {
   phone?: string | null
   role: $Enums.EmployeeRole
   status: $Enums.EmployeeInvitationStatus
+  tokenHash: string
   expiresAt?: Date | string | null
   createdAt?: Date | string
   acceptedAt?: Date | string | null
@@ -763,6 +787,7 @@ export type EmployeeInvitationScalarWhereInput = {
   phone?: Prisma.StringNullableFilter<"EmployeeInvitation"> | string | null
   role?: Prisma.EnumEmployeeRoleFilter<"EmployeeInvitation"> | $Enums.EmployeeRole
   status?: Prisma.EnumEmployeeInvitationStatusFilter<"EmployeeInvitation"> | $Enums.EmployeeInvitationStatus
+  tokenHash?: Prisma.StringFilter<"EmployeeInvitation"> | string
   expiresAt?: Prisma.DateTimeNullableFilter<"EmployeeInvitation"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"EmployeeInvitation"> | Date | string
   acceptedAt?: Prisma.DateTimeNullableFilter<"EmployeeInvitation"> | Date | string | null
@@ -777,6 +802,7 @@ export type EmployeeInvitationCreateWithoutBranchInput = {
   phone?: string | null
   role: $Enums.EmployeeRole
   status: $Enums.EmployeeInvitationStatus
+  tokenHash: string
   expiresAt?: Date | string | null
   createdAt?: Date | string
   acceptedAt?: Date | string | null
@@ -795,6 +821,7 @@ export type EmployeeInvitationUncheckedCreateWithoutBranchInput = {
   phone?: string | null
   role: $Enums.EmployeeRole
   status: $Enums.EmployeeInvitationStatus
+  tokenHash: string
   expiresAt?: Date | string | null
   createdAt?: Date | string
   acceptedAt?: Date | string | null
@@ -835,6 +862,7 @@ export type EmployeeInvitationCreateWithoutEmployeeInput = {
   phone?: string | null
   role: $Enums.EmployeeRole
   status: $Enums.EmployeeInvitationStatus
+  tokenHash: string
   expiresAt?: Date | string | null
   createdAt?: Date | string
   acceptedAt?: Date | string | null
@@ -853,6 +881,7 @@ export type EmployeeInvitationUncheckedCreateWithoutEmployeeInput = {
   phone?: string | null
   role: $Enums.EmployeeRole
   status: $Enums.EmployeeInvitationStatus
+  tokenHash: string
   expiresAt?: Date | string | null
   createdAt?: Date | string
   acceptedAt?: Date | string | null
@@ -895,6 +924,7 @@ export type EmployeeInvitationCreateManyBusinessInput = {
   phone?: string | null
   role: $Enums.EmployeeRole
   status: $Enums.EmployeeInvitationStatus
+  tokenHash: string
   expiresAt?: Date | string | null
   createdAt?: Date | string
   acceptedAt?: Date | string | null
@@ -909,6 +939,7 @@ export type EmployeeInvitationUpdateWithoutBusinessInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
   status?: Prisma.EnumEmployeeInvitationStatusFieldUpdateOperationsInput | $Enums.EmployeeInvitationStatus
+  tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -927,6 +958,7 @@ export type EmployeeInvitationUncheckedUpdateWithoutBusinessInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
   status?: Prisma.EnumEmployeeInvitationStatusFieldUpdateOperationsInput | $Enums.EmployeeInvitationStatus
+  tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -943,6 +975,7 @@ export type EmployeeInvitationUncheckedUpdateManyWithoutBusinessInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
   status?: Prisma.EnumEmployeeInvitationStatusFieldUpdateOperationsInput | $Enums.EmployeeInvitationStatus
+  tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -959,6 +992,7 @@ export type EmployeeInvitationCreateManyBranchInput = {
   phone?: string | null
   role: $Enums.EmployeeRole
   status: $Enums.EmployeeInvitationStatus
+  tokenHash: string
   expiresAt?: Date | string | null
   createdAt?: Date | string
   acceptedAt?: Date | string | null
@@ -973,6 +1007,7 @@ export type EmployeeInvitationUpdateWithoutBranchInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
   status?: Prisma.EnumEmployeeInvitationStatusFieldUpdateOperationsInput | $Enums.EmployeeInvitationStatus
+  tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -991,6 +1026,7 @@ export type EmployeeInvitationUncheckedUpdateWithoutBranchInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
   status?: Prisma.EnumEmployeeInvitationStatusFieldUpdateOperationsInput | $Enums.EmployeeInvitationStatus
+  tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1007,6 +1043,7 @@ export type EmployeeInvitationUncheckedUpdateManyWithoutBranchInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
   status?: Prisma.EnumEmployeeInvitationStatusFieldUpdateOperationsInput | $Enums.EmployeeInvitationStatus
+  tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1023,6 +1060,7 @@ export type EmployeeInvitationCreateManyEmployeeInput = {
   phone?: string | null
   role: $Enums.EmployeeRole
   status: $Enums.EmployeeInvitationStatus
+  tokenHash: string
   expiresAt?: Date | string | null
   createdAt?: Date | string
   acceptedAt?: Date | string | null
@@ -1037,6 +1075,7 @@ export type EmployeeInvitationUpdateWithoutEmployeeInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
   status?: Prisma.EnumEmployeeInvitationStatusFieldUpdateOperationsInput | $Enums.EmployeeInvitationStatus
+  tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1055,6 +1094,7 @@ export type EmployeeInvitationUncheckedUpdateWithoutEmployeeInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
   status?: Prisma.EnumEmployeeInvitationStatusFieldUpdateOperationsInput | $Enums.EmployeeInvitationStatus
+  tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1071,6 +1111,7 @@ export type EmployeeInvitationUncheckedUpdateManyWithoutEmployeeInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
   status?: Prisma.EnumEmployeeInvitationStatusFieldUpdateOperationsInput | $Enums.EmployeeInvitationStatus
+  tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1090,6 +1131,7 @@ export type EmployeeInvitationSelect<ExtArgs extends runtime.Types.Extensions.In
   phone?: boolean
   role?: boolean
   status?: boolean
+  tokenHash?: boolean
   expiresAt?: boolean
   createdAt?: boolean
   acceptedAt?: boolean
@@ -1110,6 +1152,7 @@ export type EmployeeInvitationSelectCreateManyAndReturn<ExtArgs extends runtime.
   phone?: boolean
   role?: boolean
   status?: boolean
+  tokenHash?: boolean
   expiresAt?: boolean
   createdAt?: boolean
   acceptedAt?: boolean
@@ -1130,6 +1173,7 @@ export type EmployeeInvitationSelectUpdateManyAndReturn<ExtArgs extends runtime.
   phone?: boolean
   role?: boolean
   status?: boolean
+  tokenHash?: boolean
   expiresAt?: boolean
   createdAt?: boolean
   acceptedAt?: boolean
@@ -1150,6 +1194,7 @@ export type EmployeeInvitationSelectScalar = {
   phone?: boolean
   role?: boolean
   status?: boolean
+  tokenHash?: boolean
   expiresAt?: boolean
   createdAt?: boolean
   acceptedAt?: boolean
@@ -1158,7 +1203,7 @@ export type EmployeeInvitationSelectScalar = {
   version?: boolean
 }
 
-export type EmployeeInvitationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "employeeId" | "branchId" | "email" | "phone" | "role" | "status" | "expiresAt" | "createdAt" | "acceptedAt" | "revokedAt" | "updatedAt" | "version", ExtArgs["result"]["employeeInvitation"]>
+export type EmployeeInvitationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "employeeId" | "branchId" | "email" | "phone" | "role" | "status" | "tokenHash" | "expiresAt" | "createdAt" | "acceptedAt" | "revokedAt" | "updatedAt" | "version", ExtArgs["result"]["employeeInvitation"]>
 export type EmployeeInvitationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
@@ -1191,6 +1236,7 @@ export type $EmployeeInvitationPayload<ExtArgs extends runtime.Types.Extensions.
     phone: string | null
     role: $Enums.EmployeeRole
     status: $Enums.EmployeeInvitationStatus
+    tokenHash: string
     expiresAt: Date | null
     createdAt: Date
     acceptedAt: Date | null
@@ -1631,6 +1677,7 @@ export interface EmployeeInvitationFieldRefs {
   readonly phone: Prisma.FieldRef<"EmployeeInvitation", 'String'>
   readonly role: Prisma.FieldRef<"EmployeeInvitation", 'EmployeeRole'>
   readonly status: Prisma.FieldRef<"EmployeeInvitation", 'EmployeeInvitationStatus'>
+  readonly tokenHash: Prisma.FieldRef<"EmployeeInvitation", 'String'>
   readonly expiresAt: Prisma.FieldRef<"EmployeeInvitation", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"EmployeeInvitation", 'DateTime'>
   readonly acceptedAt: Prisma.FieldRef<"EmployeeInvitation", 'DateTime'>

@@ -147,3 +147,8 @@ export type EmployeeRequest = Prisma.EmployeeRequestModel
  * 
  */
 export type EmployeeNotification = Prisma.EmployeeNotificationModel
+/**
+ * Model InvitationDelivery
+ * 
+ */
+export type InvitationDelivery = Prisma.InvitationDeliveryModel

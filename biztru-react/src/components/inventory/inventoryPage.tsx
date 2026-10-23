@@ -24,7 +24,7 @@ import {
   executeProductImport,
 } from "../../ingestion/ProductImportService";
 import ProductCard from "./cards/ProductCard";
-import ProductSheet from "./dialogs/ProductSheet";
+import ProductSheet, { type ProductFormData } from "./dialogs/ProductSheet";
 import AdjustStockSheet from "./dialogs/AdjustStockSheet";
 import ReceiveStockSheet from "./dialogs/ReceivedStockSheet";
 import TransferStockSheet from "./dialogs/TransferStockSheet";
@@ -36,6 +36,7 @@ import ProductImportSheet, {
 } from "./dialogs/ProductImportSheet";
 
 import SellCard from "./cards/SellCard";
+import BarcodeSellPanel from "./cards/BarcodeSellPanel";
 
 import { useCartStore } from "../../Biztru/store/useCartStore";
 import { useApplication } from "../../Biztru/services/ApplicationService/ApplicationContext";
@@ -89,13 +90,6 @@ interface ProductHistoryItem {
   quantity?: number;
   amount?: number;
   description?: string;
-}
-
-interface ProductFormData {
-  name: string;
-  price: number;
-  cost: number;
-  quantity: number;
 }
 
 interface InventoryPageProps {
@@ -256,7 +250,9 @@ export default function InventoryPage({
     return products.filter((product) => {
       const matchSearch =
         normalizedSearch.length === 0 ||
-        product.name.toLowerCase().includes(normalizedSearch);
+        product.name.toLowerCase().includes(normalizedSearch) ||
+        (product.barcode ?? "").toLowerCase().includes(normalizedSearch) ||
+        (product.sku ?? "").toLowerCase().includes(normalizedSearch);
 
       const matchCategory =
         activeCategory === "All" ||
@@ -300,24 +296,39 @@ export default function InventoryPage({
      ========================================================== */
 
   const handleAddToCart = useCallback(
-    (productId: string, quantity: number) => {
+    (
+      productId: string,
+      quantity: number,
+      openCart = true,
+    ): boolean => {
       if (!isPositiveQuantity(quantity)) {
         toast.error("Enter a valid quantity.");
-        return;
+        return false;
       }
 
-      const product = products.find(
-        (item) => item.id === productId,
-      );
+      if (!branchId) {
+        toast.error("Select an active branch before adding products to a sale.");
+        return false;
+      }
+
+      const product = products.find((item) => item.id === productId);
 
       if (!product) {
         toast.error("Product is no longer available.");
-        return;
+        return false;
       }
 
-      if (!Number.isFinite(product.quantity)) {
+      if (
+        !Number.isSafeInteger(product.quantity) ||
+        product.quantity < 0
+      ) {
         toast.error("The product stock quantity is invalid.");
-        return;
+        return false;
+      }
+
+      if (!isValidMoney(product.price) || !isValidMoney(product.costPrice)) {
+        toast.error("The product pricing is invalid.");
+        return false;
       }
 
       const existing = cartItems.find(
@@ -329,9 +340,9 @@ export default function InventoryPage({
 
       if (requestedQuantity > product.quantity) {
         toast.error(
-          `Only ${product.quantity} units are currently available.`,
+          `Only ${Math.max(0, product.quantity - currentQuantity)} more units can be added.`,
         );
-        return;
+        return false;
       }
 
       cartStore.addItem({
@@ -342,9 +353,10 @@ export default function InventoryPage({
         costPrice: product.costPrice,
       });
 
-      setCartOpen(true);
+      if (openCart) setCartOpen(true);
+      return true;
     },
-    [products, cartItems, cartStore],
+    [branchId, products, cartItems, cartStore],
   );
 
   /* ==========================================================
@@ -371,6 +383,11 @@ export default function InventoryPage({
         toast.error(
           "This product is no longer in the current inventory.",
         );
+        return;
+      }
+
+      if (!Number.isSafeInteger(product.quantity) || product.quantity < 0) {
+        toast.error("The product stock quantity is invalid.");
         return;
       }
 
@@ -411,6 +428,11 @@ export default function InventoryPage({
         !isValidMoney(product.costPrice)
       ) {
         toast.error("The product pricing is invalid.");
+        return;
+      }
+
+      if (!Number.isSafeInteger(product.quantity) || product.quantity < 0) {
+        toast.error("The product stock quantity is invalid.");
         return;
       }
 
@@ -498,6 +520,11 @@ export default function InventoryPage({
         toast.error(
           `${item.name} is no longer available.`,
         );
+        return;
+      }
+
+      if (!Number.isSafeInteger(product.quantity) || product.quantity < 0) {
+        toast.error(`The stock quantity for ${item.name} is invalid.`);
         return;
       }
 
@@ -758,14 +785,29 @@ export default function InventoryPage({
           const activeBranchId = requireBranchId();
 
           if (activeSheet === "edit") {
-            /*
-             * Do not report success for an edit that is not
-             * connected to the product update command.
-             */
-            throw new Error(
-              "Product editing is not connected to the update service yet.",
-            );
+          if (!selectedProduct) {
+            throw new Error("Select a product to edit.");
           }
+
+          // Preserve the identity of the existing product.
+          await app.product.update({
+            id: selectedProduct.id,
+            name,
+            price: data.price,
+            costPrice: data.cost,
+            description: data.description || null,
+            sku: data.sku || null,
+            barcode: data.barcode || null,
+            reorderLevel: data.reorderLevel,
+            imageUrl: data.imageUrl || null,
+            category: data.category || null,
+            mode,
+          });
+
+          toast.success("Product updated.");
+          setActiveSheet(null);
+          return;
+        }
 
           if (activeSheet !== "create") {
             throw new Error(
@@ -791,12 +833,12 @@ export default function InventoryPage({
             name,
             price: data.price,
             costPrice: data.cost,
-            description: null,
-            sku: null,
-            barcode: null,
-            reorderLevel: null,
-            imageUrl: null,
-            category: null,
+            description: data.description ?? null,
+            sku:  data.sku ?? null,
+            barcode: data.barcode ?? null,
+            reorderLevel: data.reorderLevel ??  null,
+            imageUrl: data.imageUrl ?? null,
+            category: data.category ??  null,
             mode,
           });
 
@@ -955,6 +997,16 @@ export default function InventoryPage({
               )}
             </div>
           </div>
+
+          {context === "sell" && (
+            <BarcodeSellPanel
+              products={products}
+              disabled={loader || productsLoading || !branchId}
+              onConfirmAdd={(productId, quantity) =>
+                handleAddToCart(productId, quantity, false)
+              }
+            />
+          )}
 
           <GlassInput
             icon={<Search className="h-4 w-4" />}
@@ -1326,6 +1378,9 @@ export default function InventoryPage({
         open={activeSheet === "create" || activeSheet === "edit"}
         mode={activeSheet === "create" ? "create" : "edit"}
         initialData={selectedProduct}
+        categories={categories.filter(
+          (category) => category !== "All" && category !== "Uncategorized",
+        )}
         loading={loader}
         onClose={() => {
           if (!loader) setActiveSheet(null);

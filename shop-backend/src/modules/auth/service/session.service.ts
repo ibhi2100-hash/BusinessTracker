@@ -76,6 +76,7 @@ async refresh(
     this.tokenService.verifyRefreshToken(
       refreshToken
     );
+  console.log("This is the Payload for refreshed: ", payload)
 
   const tokenHash =
     hashToken(refreshToken);

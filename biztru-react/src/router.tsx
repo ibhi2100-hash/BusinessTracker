@@ -29,6 +29,8 @@ import YearlyReportsPage from "./pages/reports/yearly/page";
 
 import SyncMgtpage from "./pages/sync/SyncMgtPage";
 
+import EmployeeSignupPage from "./pages/team/EmployeeSignupPage";
+
 import {
   AuthGuard,
 } from "./hooks/useAuthGuard";
@@ -71,6 +73,12 @@ export function AppRouter() {
         path="/login"
         element={<LoginPage />}
       />
+
+      <Route
+        path="/employee-signup"
+        element={<EmployeeSignupPage />}
+      />
+
 
       {/* ============================================================ */}
       {/* AUTHENTICATED — NO BUSINESS REQUIRED                         */}
