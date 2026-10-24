@@ -135,7 +135,7 @@ export const QuickActions = () => {
       label: "Employees",
       description: "Manage branch personnel",
       icon: Users,
-      path: "/management/employees",
+      path: "/team",
       priority: "admin",
     },
 

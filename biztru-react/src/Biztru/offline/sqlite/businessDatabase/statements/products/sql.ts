@@ -9,6 +9,8 @@ INSERT INTO products (
     costPrice,
     price,
     category,
+    sku,
+    barcode,
     reorderLevel,
     isActive,
     isDeleted,
@@ -17,7 +19,7 @@ INSERT INTO products (
     deletedAt
 )
 VALUES (
-    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
 )
 
 ON CONFLICT(id)
@@ -30,6 +32,8 @@ DO UPDATE SET
     costPrice = excluded.costPrice,
     price = excluded.price,
     category = excluded.category,
+    sku = excluded.sku,
+    barcode = excluded.barcode,
     reorderLevel = excluded.reorderLevel,
     isActive = excluded.isActive,
     isDeleted = excluded.isDeleted,
@@ -57,6 +61,8 @@ export const PRODUCTS =
         p.price,
         p.costPrice,
         p.category,
+        p.sku,
+        p.barcode,
         p.imageUrl,
         p.isActive,
         p.branchId,

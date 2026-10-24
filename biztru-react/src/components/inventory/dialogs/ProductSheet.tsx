@@ -56,6 +56,7 @@ interface Props {
   open: boolean;
   mode: "create" | "edit" | "manage";
   initialData?: LiveProduct | null;
+  initialBarcode?: string;
   categories: string[];
   loading?: boolean;
   onClose: () => void;
@@ -93,6 +94,7 @@ export default function ProductSheet({
   open,
   mode,
   initialData,
+  initialBarcode,
   categories,
   loading = false,
   onClose,
@@ -171,19 +173,25 @@ export default function ProductSheet({
   };
 
   /*
-   * ==========================================================
-   * HYDRATE FORM
-   * ==========================================================
-   */
+ * HYDRATE FORM
+ *
+ * Create mode:
+ *   Prefill the barcode from inventory quick lookup.
+ *
+ * Edit mode:
+ *   Populate all fields from the existing product.
+ *
+ * Reopening the sheet:
+ *   Reinitialize the form for the current product/barcode.
+ */
+useEffect(() => {
+  if (!open) return;
 
-  useEffect(() => {
-  if (mode !== "create" && initialData) {
+  if (mode === "edit" && initialData) {
     setForm({
       name: initialData.name ?? "",
       costPrice: formatNumber(initialData.costPrice),
       sellingPrice: formatNumber(initialData.price),
-      // Keep the existing stock value in the payload; this field is hidden in edit mode.
-      // The parent should still avoid changing stock as part of a product-metadata update.
       quantity: formatNumber(initialData.quantity ?? 0),
       sku: initialData.sku ?? "",
       barcode: initialData.barcode ?? "",
@@ -192,14 +200,19 @@ export default function ProductSheet({
       description: initialData.description ?? "",
       imageUrl: initialData.imageUrl ?? "",
       reorderLevel: formatNumber(
-        initialData.reorderLevel ?? 0
+        initialData.reorderLevel ?? 0,
       ),
     });
+
     return;
   }
 
-  setForm(EMPTY_FORM);
-}, [mode, initialData, open]);
+  // New product: preserve the barcode that triggered creation.
+  setForm({
+    ...EMPTY_FORM,
+    barcode: initialBarcode?.trim() ?? "",
+  });
+}, [open, mode, initialData, initialBarcode]);
 
 useEffect(() => {
   if (!scanning || !open) return;

@@ -29,6 +29,10 @@ export const migration008: Migration = {
 
                         category TEXT,
 
+                        sku       TEXT,
+
+                        barcode   TEXT,
+
                         reorderLevel INTEGER DEFAULT 0,
 
                         isActive INTEGER DEFAULT 0,
@@ -55,6 +59,20 @@ export const migration008: Migration = {
                 sql: `
                     CREATE INDEX IF NOT EXISTS idx_product_created
                     ON products(createdAt);
+                `,
+            },
+
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_product_barcode
+                    ON products(barcode);
+                `,
+            },
+
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_product_sku_barcode
+                    ON products(sku,barcode);
                 `,
             },
 

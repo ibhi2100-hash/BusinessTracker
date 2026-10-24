@@ -177,6 +177,10 @@ export class ProductMapper {
 
             product.category ?? "",
 
+            product.sku ?? "",
+
+            product.barcode ?? "",
+
             product.reorderLevel,
 
             product.isActive,

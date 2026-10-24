@@ -4,7 +4,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { Server } from "socket.io";
-
+import employeeInvitationRouter from
+  "../routes/employee-invitation.route.js";
 import authRoutes from "../routes/auth.route.js";
 import subscriptionRoute from "../routes/subscription.route.js";
 import { BusinessComposer } from "../Composer/BusinessComposer.js";
@@ -123,6 +124,11 @@ async function startServer() {
         "/sync",
         sync.router
     );
+
+    app.use(
+        "/employee-invitations",
+        employeeInvitationRouter,
+        );
 
         setInterval(
             async () => {

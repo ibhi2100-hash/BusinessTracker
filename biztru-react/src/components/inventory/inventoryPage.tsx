@@ -17,7 +17,10 @@ import {
   Minus,
   Trash2,
   CreditCard,
-} from "lucide-react";
+  ScanBarcode,
+  ArrowUpRight,
+  Barcode,
+} from "lucide-react";3
 import {
   prepareProductImportFile,
   validateProductImportRows,
@@ -166,6 +169,46 @@ export default function InventoryPage({
 
   const [activeSheet, setActiveSheet] =
     useState<ActiveSheet>(null);
+
+
+  const [barcodeLookup, setBarcodeLookup] = useState("");
+const [barcodeLookupOpen, setBarcodeLookupOpen] = useState(false);
+const [pendingBarcode, setPendingBarcode] = useState("");
+
+const handleBarcodeLookup = useCallback(
+  (rawBarcode: string) => {
+    const barcode = rawBarcode.trim();
+
+    if (!barcode) {
+      toast.error("Enter or scan a product barcode.");
+      return;
+    }
+
+    const existingProduct = products.find(
+      (product) =>
+        (product.barcode ?? "").trim().toLowerCase() ===
+        barcode.toLowerCase()
+    );
+
+    setPendingBarcode(barcode);
+    setBarcodeLookupOpen(false);
+
+    if (existingProduct) {
+      setSelectedProduct(existingProduct);
+      setActiveSheet("manage");
+      toast.success(`Found ${existingProduct.name}.`);
+      return;
+    }
+
+    setSelectedProduct(null);
+    setActiveSheet("create");
+
+    toast.info(
+      "Product not found. Enter its details to create it."
+    );
+  },
+  [products]
+);
 
   // React state alone does not synchronously prevent double-clicks.
   const actionInProgressRef = useRef(false);
@@ -921,133 +964,372 @@ export default function InventoryPage({
      ========================================================== */
 
   return (
-    <div className="min-h-screen bg-neutral-950 pb-32 text-white">
-      {/* HEADER */}
+<div className="min-h-screen bg-[#09090b] pb-28 text-white sm:pb-10">
+      
+{/* HEADER — iOS-inspired responsive command center */}
 
-      <div
-        className="
-          sticky top-0 z-40
-          border-b border-white/10
-          bg-neutral-950/85 backdrop-blur-2xl
-        "
-      >
-        <div className="space-y-4 px-4 pb-3 pt-4">
-          <div className="flex min-w-0 items-center justify-between gap-3">
-            <h1 className="flex min-w-0 items-center gap-2.5 text-xl font-semibold">
-              <GlassIcon size="sm" variant="primary">
-                <LayoutGrid className="h-4 w-4" />
-              </GlassIcon>
+<header
+  className="
+    z-40
+    border-b border-white/[0.08]
+    bg-neutral-950/90
+    backdrop-blur-2xl
+    supports-[backdrop-filter]:bg-neutral-950/75
+  "
+>
+  <div className="mx-auto max-w-[1800px] space-y-4 px-4 pb-4 pt-4 sm:px-6 sm:pt-6">
 
-              <span className="truncate">
-                {context === "sell" ? "Quick Sell" : "Inventory"}
-              </span>
-            </h1>
+    {/* Title and primary actions */}
 
-            <div className="flex shrink-0 items-center gap-2">
-              {context === "admin" && (
-                <div className="hidden items-center gap-2 sm:flex">
-                  <GlassButton
-                    type="button"
-                    variant="secondary"
-                    onClick={handleOpenImport}
-                    className="h-10 px-3.5"
-                    icon={<Upload className="h-4 w-4" />}
-                  >
-                    Import
-                  </GlassButton>
+    <div className="flex items-center justify-between gap-3">
+      <div className="flex min-w-0 items-center gap-3">
+        <div
+          className="
+            flex h-11 w-11 shrink-0 items-center justify-center
+            rounded-[16px] border border-teal-300/15
+            bg-gradient-to-br from-teal-400/20 to-teal-600/5
+            shadow-inner shadow-white/[0.04]
+          "
+        >
+          <LayoutGrid className="h-5 w-5 text-teal-300" />
+        </div>
 
-                  <GlassButton
-                    type="button"
-                    onClick={openCreate}
-                    className="h-10 px-3.5"
-                    icon={<Plus className="h-4 w-4" />}
-                  >
-                    Add product
-                  </GlassButton>
-                </div>
-              )}
+        <div className="min-w-0">
+          <h1 className="truncate text-[20px] font-semibold tracking-tight text-white sm:text-2xl">
+            {context === "sell" ? "Quick Sell" : "Inventory"}
+          </h1>
 
-              {context === "sell" && (
-                <button
-                  type="button"
-                  onClick={() => setCartOpen(true)}
-                  aria-label="Open cart"
-                  className="
-                    relative flex h-10 w-10 shrink-0
-                    items-center justify-center rounded-xl
-                    border border-white/10 bg-white/5
-                    transition hover:bg-white/10 active:scale-95
-                  "
-                >
-                  <ShoppingCart className="h-5 w-5" />
-
-                  {cartQuantity > 0 && (
-                    <span
-                      className="
-                        absolute -right-1.5 -top-1.5
-                        flex h-5 min-w-5 items-center
-                        justify-center rounded-full bg-teal-500
-                        px-1 text-[10px] font-bold text-white
-                      "
-                    >
-                      {cartQuantity > 99 ? "99+" : cartQuantity}
-                    </span>
-                  )}
-                </button>
-              )}
-            </div>
-          </div>
-
-          {context === "sell" && (
-            <BarcodeSellPanel
-              products={products}
-              disabled={loader || productsLoading || !branchId}
-              onConfirmAdd={(productId, quantity) =>
-                handleAddToCart(productId, quantity, false)
-              }
-            />
-          )}
-
-          <GlassInput
-            icon={<Search className="h-4 w-4" />}
-            placeholder="Search products..."
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-          />
-
-          <div className="no-scrollbar flex gap-2 overflow-x-auto pb-1">
-            {categories.map((category) => (
-              <button
-                key={category}
-                type="button"
-                onClick={() => setActiveCategory(category)}
-                aria-pressed={activeCategory === category}
-                className={cn(
-                  `
-                    flex shrink-0 items-center gap-1.5
-                    whitespace-nowrap rounded-full border
-                    px-4 py-2 text-sm transition-all
-                  `,
-                  activeCategory === category
-                    ? `
-                      border-teal-500/40 bg-teal-500/20
-                      text-teal-300
-                      shadow-[0_0_20px_rgba(20,184,166,0.15)]
-                    `
-                    : `
-                      border-white/10 bg-white/4
-                      text-gray-400 hover:bg-white/8
-                      hover:text-gray-200
-                    `,
-                )}
-              >
-                <Package className="h-3.5 w-3.5" />
-                {category}
-              </button>
-            ))}
-          </div>
+          <p className="mt-0.5 text-xs text-white/45">
+            {context === "sell"
+              ? `${products.length} products available`
+              : `${products.length} products in your inventory`}
+          </p>
         </div>
       </div>
+
+      {context === "sell" && (
+        <button
+          type="button"
+          onClick={() => setCartOpen(true)}
+          aria-label="Open cart"
+          className="
+            relative flex h-11 w-11 shrink-0 items-center justify-center
+            rounded-2xl border border-white/10 bg-white/[0.06]
+            text-white transition-all
+            hover:bg-white/10 active:scale-95
+          "
+        >
+          <ShoppingCart className="h-5 w-5" />
+
+          {cartQuantity > 0 && (
+            <span
+              className="
+                absolute -right-1.5 -top-1.5 flex h-5 min-w-5
+                items-center justify-center rounded-full
+                bg-teal-400 px-1 text-[10px] font-bold text-neutral-950
+              "
+            >
+              {cartQuantity > 99 ? "99+" : cartQuantity}
+            </span>
+          )}
+        </button>
+      )}
+    </div>
+
+    {/* Mobile product actions — positioned at the TOP */}
+
+    {context === "admin" && (
+      <div className="grid grid-cols-[minmax(0,1fr)_auto_auto] gap-2 sm:hidden">
+
+        <button
+          type="button"
+          onClick={openCreate}
+          className="
+            flex h-[48px] min-w-0 items-center justify-center gap-2
+            rounded-2xl bg-teal-400 px-3
+            text-sm font-semibold text-neutral-950
+            shadow-[0_4px_18px_rgba(45,212,191,0.16)]
+            transition-all hover:bg-teal-300
+            active:scale-[0.97]
+          "
+        >
+          <Plus className="h-[18px] w-[18px] shrink-0" />
+          <span className="truncate">Add product</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setBarcodeLookupOpen(true)}
+          aria-label="Scan or look up product barcode"
+          title="Scan or look up product"
+          className="
+            flex h-[48px] w-[48px] items-center justify-center
+            rounded-2xl border border-teal-300/20
+            bg-teal-400/[0.10] text-teal-200
+            transition-all hover:bg-teal-400/15
+            active:scale-95
+          "
+        >
+          <ScanBarcode className="h-[21px] w-[21px]" />
+        </button>
+
+        <button
+          type="button"
+          onClick={handleOpenImport}
+          aria-label="Import products"
+          title="Import products"
+          className="
+            flex h-[48px] w-[48px] items-center justify-center
+            rounded-2xl border border-white/10
+            bg-white/[0.06] text-white/80
+            transition-all hover:bg-white/10
+            active:scale-95
+          "
+        >
+          <Upload className="h-[19px] w-[19px]" />
+        </button>
+      </div>
+    )}
+
+    {/* Desktop product actions */}
+
+    {context === "admin" && (
+      <div className="hidden items-center gap-2 sm:flex">
+        <GlassButton
+          type="button"
+          variant="secondary"
+          onClick={handleOpenImport}
+          className="h-10 px-4"
+          icon={<Upload className="h-4 w-4" />}
+        >
+          Import products
+        </GlassButton>
+
+        <GlassButton
+          type="button"
+          variant="secondary"
+          onClick={() => setBarcodeLookupOpen(true)}
+          className="h-10 px-4"
+          icon={<ScanBarcode className="h-4 w-4" />}
+        >
+          Scan / Lookup
+        </GlassButton>
+
+        <GlassButton
+          type="button"
+          onClick={openCreate}
+          className="h-10 px-4"
+          icon={<Plus className="h-4 w-4" />}
+        >
+          Add product
+        </GlassButton>
+      </div>
+    )}
+
+    {/* Fast barcode lookup input */}
+
+    {context === "admin" && (
+      <form
+        className="
+          flex h-[46px] items-center gap-2 rounded-2xl
+          border border-white/[0.09] bg-white/[0.035]
+          p-1.5 transition-colors
+          focus-within:border-teal-400/30
+          focus-within:bg-white/[0.05]
+        "
+        onSubmit={(event) => {
+          event.preventDefault();
+          handleBarcodeLookup(barcodeLookup);
+        }}
+      >
+        <Barcode className="ml-2 h-[18px] w-[18px] shrink-0 text-white/40" />
+
+        <input
+          type="text"
+          value={barcodeLookup}
+          onChange={(event) => setBarcodeLookup(event.target.value)}
+          placeholder="Scan or enter product barcode..."
+          aria-label="Product barcode lookup"
+          autoComplete="off"
+          className="
+            h-full min-w-0 flex-1 bg-transparent px-1
+            text-sm text-white outline-none
+            placeholder:text-white/35
+          "
+        />
+
+        {barcodeLookup.trim() && (
+          <button
+            type="button"
+            onClick={() => setBarcodeLookup("")}
+            aria-label="Clear barcode"
+            className="
+              rounded-lg px-2 py-1 text-xs text-white/45
+              hover:bg-white/[0.06] hover:text-white
+            "
+          >
+            Clear
+          </button>
+        )}
+
+        <button
+          type="submit"
+          disabled={!barcodeLookup.trim()}
+          className="
+            flex h-[34px] shrink-0 items-center gap-1
+            rounded-xl bg-white/[0.09] px-3
+            text-xs font-semibold text-white
+            transition hover:bg-white/[0.14]
+            disabled:cursor-not-allowed disabled:opacity-30
+          "
+        >
+          Find
+          <ArrowUpRight className="h-3.5 w-3.5" />
+        </button>
+      </form>
+    )}
+
+    {context === "sell" && (
+      <BarcodeSellPanel
+        products={products}
+        disabled={loader || productsLoading || !branchId}
+        onConfirmAdd={(productId, quantity) =>
+          handleAddToCart(productId, quantity, false)
+        }
+      />
+    )}
+
+    {/* Search */}
+
+    <GlassInput
+      icon={<Search className="h-4 w-4" />}
+      placeholder="Search name, SKU or barcode..."
+      value={search}
+      onChange={(event) => setSearch(event.target.value)}
+    />
+
+    {/* Category filters */}
+
+    <div className="no-scrollbar flex gap-2 overflow-x-auto pb-0.5">
+      {categories.map((category) => (
+        <button
+          key={category}
+          type="button"
+          onClick={() => setActiveCategory(category)}
+          aria-pressed={activeCategory === category}
+          className={cn(
+            `
+              flex shrink-0 items-center gap-1.5
+              rounded-full border px-3.5 py-2
+              text-xs font-medium transition-all
+              sm:text-sm
+            `,
+            activeCategory === category
+              ? `
+                border-teal-300/25 bg-teal-300/[0.12]
+                text-teal-200
+              `
+              : `
+                border-white/[0.07] bg-white/[0.025]
+                text-white/55 hover:bg-white/[0.06]
+                hover:text-white/85
+              `
+          )}
+        >
+          <Package className="h-3.5 w-3.5" />
+          {category}
+        </button>
+      ))}
+    </div>
+  </div>
+</header>
+
+
+{/* BARCODE LOOKUP */}
+
+<GlassSheet
+  open={barcodeLookupOpen}
+  onClose={() => setBarcodeLookupOpen(false)}
+  title="Find a product"
+  subtitle="Look up an existing item or register a new barcode."
+  size="md"
+  className="w-full sm:max-w-lg"
+>
+  <div className="space-y-4">
+    <div
+      className="
+        flex items-start gap-3 rounded-2xl
+        border border-teal-300/10 bg-teal-300/[0.05] p-4
+      "
+    >
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-teal-300/10 text-teal-200">
+        <ScanBarcode className="h-5 w-5" />
+      </div>
+
+      <div>
+        <p className="text-sm font-semibold text-white">
+          Product barcode
+        </p>
+        <p className="mt-1 text-xs leading-5 text-white/50">
+          Enter the barcode below. A matching product opens its
+          management screen; an unknown barcode starts a new product.
+        </p>
+      </div>
+    </div>
+
+    <form
+      className="space-y-3"
+      onSubmit={(event) => {
+        event.preventDefault();
+        handleBarcodeLookup(barcodeLookup);
+      }}
+    >
+      <label
+        htmlFor="inventory-barcode-lookup"
+        className="text-xs font-medium text-white/65"
+      >
+        Barcode / EAN / UPC
+      </label>
+
+      <input
+        id="inventory-barcode-lookup"
+        type="text"
+        value={barcodeLookup}
+        onChange={(event) => setBarcodeLookup(event.target.value)}
+        placeholder="Enter or scan barcode"
+        autoComplete="off"
+        autoFocus
+        className="
+          h-12 w-full rounded-2xl border border-white/10
+          bg-white/[0.04] px-4 text-base text-white
+          outline-none transition
+          focus:border-teal-300/40 focus:ring-2
+          focus:ring-teal-300/10
+        "
+      />
+
+      <button
+        type="submit"
+        disabled={!barcodeLookup.trim() || productsLoading || !branchId}
+        className="
+          flex h-12 w-full items-center justify-center gap-2
+          rounded-2xl bg-teal-400 text-sm font-semibold
+          text-neutral-950 transition hover:bg-teal-300
+          active:scale-[0.99]
+          disabled:cursor-not-allowed disabled:opacity-40
+        "
+      >
+        <Search className="h-4 w-4" />
+        Find or create product
+      </button>
+    </form>
+
+    <p className="text-center text-[11px] leading-5 text-white/35">
+      Existing product metadata is reused. Unknown barcodes need
+      product details before they can be saved.
+    </p>
+  </div>
+</GlassSheet>
 
       {/* PRODUCT GRID */}
 
@@ -1111,57 +1393,6 @@ export default function InventoryPage({
           </div>
         )}
       </div>
-
-      {/* MOBILE ADMIN ACTIONS */}
-
-      {context === "admin" && (
-        <div
-          className="
-            pointer-events-none fixed inset-x-0 bottom-0 z-40
-            px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3
-            sm:hidden
-          "
-        >
-          <div className="flex justify-end">
-            <div
-              className="
-                pointer-events-auto flex items-center gap-2
-                rounded-2xl border border-white/10
-                bg-neutral-950/90 p-1.5 shadow-2xl
-                shadow-black/50 backdrop-blur-2xl
-              "
-            >
-              <button
-                type="button"
-                onClick={handleOpenImport}
-                aria-label="Import products"
-                className="
-                  flex h-12 w-12 shrink-0 items-center
-                  justify-center rounded-xl border border-white/10
-                  bg-white/5 text-white/80 transition
-                  hover:bg-white/10 active:scale-95
-                "
-              >
-                <Upload className="h-5 w-5" />
-              </button>
-
-              <button
-                type="button"
-                onClick={openCreate}
-                aria-label="Add product"
-                className="
-                  flex h-12 w-12 shrink-0 items-center
-                  justify-center rounded-xl bg-teal-500
-                  text-white shadow-lg shadow-teal-500/25
-                  transition hover:bg-teal-400 active:scale-95
-                "
-              >
-                <Plus className="h-6 w-6" />
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* MOBILE CART BAR */}
 
@@ -1378,6 +1609,9 @@ export default function InventoryPage({
         open={activeSheet === "create" || activeSheet === "edit"}
         mode={activeSheet === "create" ? "create" : "edit"}
         initialData={selectedProduct}
+        initialBarcode={
+          activeSheet === "create" ? pendingBarcode : ""
+        }
         categories={categories.filter(
           (category) => category !== "All" && category !== "Uncategorized",
         )}

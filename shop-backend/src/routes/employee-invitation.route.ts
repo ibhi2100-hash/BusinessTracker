@@ -2,14 +2,14 @@
 import express from "express";
 
 import { EmployeeInvitationRepository } from "../modules/employeeInvitations/repository/EmployeeInvitationRepository.js";
-import { EmployeeInvitationService } from "../modules/employeeInvitations/service/employeeInvitation.controller.js";
+import { EmployeeInvitationService } from "../modules/employeeInvitations/service/employeeInvitation.service.js";
 import { EmployeeInvitationController } from "../modules/employeeInvitations/controller/employee-invitation.controller.js";
 
 const router = express.Router();
 
 const invitationRepository = new EmployeeInvitationRepository();
 const invitationService = new EmployeeInvitationService(
-    
+
 );
 const invitationController = new EmployeeInvitationController(
   invitationService,

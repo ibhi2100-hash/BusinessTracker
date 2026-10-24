@@ -13,6 +13,7 @@ import {
 import type {InviteEmployeeRequest } from "./EmployeeRequests";
 import type { CommandIntent } from "../../../../BizTru_Karnel/CommandFactory/CommandIntent";
 import { AggregateType } from "../../../../../offline/domain/aggregate";
+import { random } from "nanoid";
 
 export interface InviteEmployeeInput {
     fullName: string;
@@ -124,6 +125,7 @@ export class EmployeeApi {
                 role: input.role ?? "STAFF",
                 branchId: input.branchId,
                 employeeNumber: input.employeeNumber ?? null,
+                tokenHash: crypto.randomUUID(),
                 reportsToEmployeeId: input.employeeNumber ?? null,
                 userId: null,
                 expiresAt: 3000 + Date.now()

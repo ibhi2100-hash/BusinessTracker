@@ -67,6 +67,9 @@ export class ProductReducer {
             name: payload.name,
             price: payload.price,
             costPrice: payload.costPrice,
+            sku: payload.sku,
+            barcode: payload.barcode,
+            category: payload.category,
             imageUrl: payload.imageUrl ??
                 state.imageUrl,
             description: payload.description ??
