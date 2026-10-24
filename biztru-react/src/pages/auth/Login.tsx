@@ -1,14 +1,11 @@
+
 import { useState } from "react";
+import type React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  loginSchema
-} from "../../lib/validations/auth.schema"
-
+import { loginSchema } from "../../lib/validations/auth.schema";
 import type { LoginInput } from "../../lib/validations/auth.schema";
-
 import { Link, useNavigate } from "react-router-dom";
-
 
 import {
   ArrowRight,
@@ -20,16 +17,92 @@ import {
   EyeOff,
 } from "lucide-react";
 
-import { useAuthStore } from "../../Biztru/store/useAuthStore"
+import { useAuthStore } from "../../Biztru/store/useAuthStore";
 import { useApplication } from "../../Biztru/services/ApplicationService/ApplicationContext";
 import { useApplicationSession } from "../../Biztru/context/AplicationSessionContext";
 
+/* -------------------------------------------------------------------------- */
+/* Authentication response types                                              */
+/* -------------------------------------------------------------------------- */
+
+interface LoginUser {
+  id: string;
+  role: string;
+  businessId?: string | null;
+  branchId?: string | null;
+  onboardingCompleted?: boolean;
+}
+
+interface LoginResponse {
+  user?: LoginUser;
+  accessToken?: string;
+  expiresIn?: number;
+  message?: string;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Role-aware post-login routing                                              */
+/* -------------------------------------------------------------------------- */
+
+function getPostLoginPath(user: LoginUser): string {
+  const role = user.role?.trim().toUpperCase();
+
+  if (!role) {
+    throw new Error(
+      "Your account has no assigned role. Contact your business administrator."
+    );
+  }
+
+  const isAdmin = role === "ADMIN";
+  const isStaff = role === "STAFF";
+
+  if (!isAdmin && !isStaff) {
+    throw new Error(
+      `Your account role (${role}) is not configured for application access. Contact your administrator.`
+    );
+  }
+
+  // Only an administrator can initialize a new business.
+  if (!user.businessId) {
+    if (isAdmin) {
+      return "/onboarding-business";
+    }
+
+    throw new Error(
+      "Your staff account is not linked to a business. Ask your administrator to check your employee membership."
+    );
+  }
+
+  // Business onboarding is an administrator responsibility.
+  // Never redirect staff into the business owner's onboarding flow.
+  if (isAdmin && user.onboardingCompleted !== true) {
+    return "/onboarding";
+  }
+
+  // Existing business members need an assigned branch.
+  if (!user.branchId) {
+    throw new Error(
+      "Your account has no assigned branch. Ask your business administrator to assign you to a branch."
+    );
+  }
+
+  if (isStaff) {
+    return "/sales";
+  }
+
+  return "/dashboard";
+}
+
+/* -------------------------------------------------------------------------- */
+/* Login page                                                                 */
+/* -------------------------------------------------------------------------- */
+
 export default function LoginPage() {
- const app = useApplication();
+  const app = useApplication();
   const navigate = useNavigate();
   const login = useAuthStore((state) => state.setLogin);
-
   const { refreshSession } = useApplicationSession();
+
   const [submit, setSubmit] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -46,32 +119,75 @@ export default function LoginPage() {
     },
   });
 
+  /**
+   * Persist the server-authenticated session using the existing BizTru
+   * application services. Keep the order consistent with your existing
+   * session architecture.
+   */
+  async function persistSession(
+    result: LoginResponse,
+    user: LoginUser
+  ) {
+    if (!result.accessToken) {
+      throw new Error(
+        "Login response is missing the access token."
+      );
+    }
+
+    await app.client.services.registration.register(result);
+    await app.client.services.registration.saveSession(result);
+    await app.client.services.registration.saveApplicationState(user.id);
+
+    login(user, result.accessToken, result.expiresIn);
+
+    await refreshSession();
+  }
+
   const onSubmit = async (data: LoginInput) => {
+    if (submit) return;
+
+    setSubmit(true);
+    setServerError(null);
+
     try {
-      setSubmit(true);
-      setServerError(null);
+      const apiUrl = import.meta.env.VITE_API_URL;
+
+      if (!apiUrl) {
+        throw new Error(
+          "The API URL is not configured. Check VITE_API_URL in your frontend environment."
+        );
+      }
 
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/auth/login`,
+        `${apiUrl.replace(/\/+$/, "")}/auth/login`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Accept: "application/json",
           },
           credentials: "include",
           body: JSON.stringify(data),
         }
       );
 
-      const result = await res.json();
+      const result = (await res.json().catch(() => null)) as
+        | LoginResponse
+        | null;
 
-      
       if (!res.ok) {
-        throw new Error(result.message || "Login failed");
+        throw new Error(
+          result?.message ||
+            (res.status === 401
+              ? "Invalid email or password."
+              : res.status === 403
+                ? "Your account is not permitted to sign in."
+                : "Login failed. Please try again.")
+        );
       }
 
       // Validate the minimum authentication contract.
-      if (!result?.user?.id || !result?.accessToken) {
+      if (!result?.user?.id || !result.accessToken) {
         throw new Error(
           "Login response is missing the user or access token."
         );
@@ -79,75 +195,58 @@ export default function LoginPage() {
 
       const user = result.user;
 
-      // Handle accounts that do not have a business yet.
-      if (!user.businessId) {
-        await app.client.services.registration.register(result);
-        await app.client.services.registration.saveSession(result);
-        await app.client.services.registration.saveApplicationState(
-          user.id
-        );
+      // Determine the role-specific destination before changing local state.
+      const destination = getPostLoginPath(user);
+      const role = user.role.trim().toUpperCase();
+      const isAdmin = role === "ADMIN";
 
-        login(user, result.accessToken, result.expiresIn);
-        await refreshSession()
-        navigate("/onboarding-business");
+      /*
+       * ADMIN: no business yet, or business onboarding incomplete.
+       *
+       * Persist the authenticated session so protected onboarding routes
+       * can recognize the administrator.
+       */
+      if (
+        isAdmin &&
+        (destination === "/onboarding-business" ||
+          destination === "/onboarding")
+      ) {
+        await persistSession(result, user);
+
+        navigate(destination, { replace: true });
         return;
-      }
-
-      // Handle businesses that are still onboarding.
-      if (!user.onboardingCompleted) {
-        await app.client.services.registration.register(result);
-        await app.client.services.registration.saveSession(result);
-        await app.client.services.registration.saveApplicationState(
-          user.id
-        );
-
-        login(user, result.accessToken, result.expiresIn);
-        await refreshSession()
-        navigate("/onboarding");
-        return;
-      }
-
-      // A fully onboarded business must have an active branch.
-      if (!user.branchId) {
-        throw new Error(
-          "Your business is configured but no active branch is assigned."
-        );
       }
 
       /*
-       * IMPORTANT:
-       * Install the local business replica BEFORE persisting the
-       * authenticated user/session state.
+       * STAFF and fully configured ADMIN:
+       *
+       * Restore the existing business replica and assigned branch before
+       * committing the in-memory authenticated session.
+       *
+       * STAFF -> /sales
+       * ADMIN -> /dashboard
        */
+      if (!user.businessId || !user.branchId) {
+        // Defensive validation; getPostLoginPath should catch this first.
+        throw new Error(
+          "Your account is missing its business or branch assignment. Contact your administrator."
+        );
+      }
+
       await app.business.BootstrapBusiness({
         businessId: user.businessId,
         branchId: user.branchId,
         accessToken: result.accessToken,
       });
 
-      /*
-       * These methods must be idempotent.
-       * register() must not blindly INSERT an existing user.
-       */
-      await app.client.services.registration.register(result);
-      await app.client.services.registration.saveSession(result);
-      await app.client.services.registration.saveApplicationState(
-        user.id
-      );
+      await persistSession(result, user);
 
-      // Commit in-memory authentication only after persistence succeeds.
-      login(user, result.accessToken, result.expiresIn);
-      await refreshSession()
-
-      navigate("/dashboard");
-
+      navigate(destination, { replace: true });
     } catch (error: unknown) {
-      console.error("Login error:", error);
+      console.error("[LoginPage] Login error:", error);
 
       setServerError(
-        error instanceof Error
-          ? error.message
-          : "Login failed"
+        error instanceof Error ? error.message : "Login failed."
       );
     } finally {
       setSubmit(false);
@@ -188,25 +287,10 @@ export default function LoginPage() {
 
           {/* Feature chips */}
           <div className="grid grid-cols-4 gap-2 text-center text-[10px] text-gray-400">
-            <Chip
-              icon={<BarChart3 />}
-              label="Analytics"
-            />
-
-            <Chip
-              icon={<Cloud />}
-              label="Offline"
-            />
-
-            <Chip
-              icon={<ShieldCheck />}
-              label="Secure"
-            />
-
-            <Chip
-              icon={<Lock />}
-              label="Session"
-            />
+            <Chip icon={<BarChart3 />} label="Analytics" />
+            <Chip icon={<Cloud />} label="Offline" />
+            <Chip icon={<ShieldCheck />} label="Secure" />
+            <Chip icon={<Lock />} label="Session" />
           </div>
 
           {/* Login card */}
@@ -227,9 +311,7 @@ export default function LoginPage() {
               aria-label="Or continue with email"
             >
               <div className="h-px flex-1 bg-white/10" />
-              <span className="text-[11px] text-gray-500">
-                OR
-              </span>
+              <span className="text-[11px] text-gray-500">OR</span>
               <div className="h-px flex-1 bg-white/10" />
             </div>
 
@@ -237,6 +319,7 @@ export default function LoginPage() {
             {serverError && (
               <div
                 role="alert"
+                aria-live="polite"
                 className="mb-4 rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-xs leading-5 text-red-400"
               >
                 {serverError}
@@ -307,8 +390,7 @@ export default function LoginPage() {
 
           {/* Security note */}
           <p className="px-4 text-center text-[10px] leading-5 text-gray-600">
-            Your password remains hidden unless you choose to
-            reveal it.
+            Your password remains hidden unless you choose to reveal it.
           </p>
         </div>
       </div>
@@ -343,7 +425,13 @@ function Chip({ icon, label }: ChipProps) {
 
 interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
-  register: any;
+  register: ReturnType<
+    typeof useForm<LoginInput>
+  >["register"] extends (...args: never[]) => infer _Result
+    ? ReturnType<typeof useForm<LoginInput>>["register"] extends never
+      ? never
+      : any
+    : any;
   error?: string;
 }
 
