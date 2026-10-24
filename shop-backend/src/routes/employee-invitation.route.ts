@@ -9,7 +9,7 @@ const router = express.Router();
 
 const invitationRepository = new EmployeeInvitationRepository();
 const invitationService = new EmployeeInvitationService(
-
+    invitationRepository
 );
 const invitationController = new EmployeeInvitationController(
   invitationService,

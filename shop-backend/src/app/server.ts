@@ -1,184 +1,323 @@
+// src/app/server.ts
+
 import express, { Request, Response } from "express";
-import http from "http";
+import http from "node:http";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { Server } from "socket.io";
-import employeeInvitationRouter from
-  "../routes/employee-invitation.route.js";
+
+import employeeInvitationRouter from "../routes/employee-invitation.route.js";
 import authRoutes from "../routes/auth.route.js";
 import subscriptionRoute from "../routes/subscription.route.js";
+
 import { BusinessComposer } from "../Composer/BusinessComposer.js";
 
+import { InvitationDeliveryWorker } from
+  "../modules/employeeInvitations/worker/InvitationDeliveryWorker.js";
+
+import { prisma } from
+  "../infrastructure/postgresql/prismaClient.js";
+
+// Load environment variables before starting the application.
 dotenv.config();
 
-async function startServer() {
+const PORT = Number(process.env.PORT ?? 2100);
+const FRONTEND_URL =
+  process.env.FRONTEND_URL ?? "http://localhost:3000";
 
-    const app = express();
+async function startServer(): Promise<void> {
+  console.log("[SERVER] Starting BizTru backend...");
 
-    const server =
-        http.createServer(app);
+  const app = express();
+  const server = http.createServer(app);
 
-    const PORT =
-        process.env.PORT || 2100;
+  let shuttingDown = false;
+  let projectionRunning = false;
+  let invitationDeliveryRunning = false;
 
-    // --------------------
-    // Middleware
-    // --------------------
+  let projectionInterval:
+    ReturnType<typeof setInterval> | undefined;
 
-    app.use(
-        cors({
-            origin:
-                process.env.FRONTEND_URL ||
-                "http://localhost:3000",
-            credentials: true,
-        })
-    );
+  let invitationDeliveryInterval:
+    ReturnType<typeof setInterval> | undefined;
 
-    app.use(express.json());
+  // --------------------------------------------------
+  // Middleware
+  // --------------------------------------------------
 
-    app.use(cookieParser());
+  app.use(
+    cors({
+      origin: FRONTEND_URL,
+      credentials: true,
+    }),
+  );
 
-    // --------------------
-    // Test route
-    // --------------------
+  app.use(express.json({ limit: "1mb" }));
+  app.use(cookieParser());
 
-    app.get(
-        "/",
-        (req: Request, res: Response) => {
-            res.send(
-                "Shop Backend is running"
-            );
-        }
-    );
+  // --------------------------------------------------
+  // Health check
+  // --------------------------------------------------
 
-    // --------------------
-    // Socket.IO
-    // --------------------
+  app.get("/", (_req: Request, res: Response) => {
+    res.status(200).json({
+      success: true,
+      service: "BizTru Backend",
+      status: "running",
+      timestamp: new Date().toISOString(),
+    });
+  });
 
-    const io =
-        new Server(server, {
-            cors: {
-                origin: "*",
-                methods: ["GET", "POST"],
-            },
-        });
+  app.get("/health", (_req: Request, res: Response) => {
+    res.status(200).json({
+      success: true,
+      status: "healthy",
+      timestamp: new Date().toISOString(),
+    });
+  });
 
-    (global as any).io = io;
+  // --------------------------------------------------
+  // Socket.IO
+  // --------------------------------------------------
 
-    io.on("connection", (socket) => {
+  const io = new Server(server, {
+    cors: {
+      origin: FRONTEND_URL,
+      methods: ["GET", "POST"],
+      credentials: true,
+    },
+  });
 
-        console.log(
-            "Client connected:",
-            socket.id
-        );
+  // Keep compatibility with existing modules using global.io.
+  (globalThis as typeof globalThis & { io?: Server }).io = io;
 
-        socket.on(
-            "joinBranch",
-            (branchId: string) => {
+  io.on("connection", (socket) => {
+    console.log("[SOCKET] Client connected:", socket.id);
 
-                socket.join(branchId);
+    socket.on("joinBranch", (branchId: string) => {
+      if (
+        typeof branchId !== "string" ||
+        branchId.trim().length === 0
+      ) {
+        return;
+      }
 
-                console.log(
-                    `Socket ${socket.id} joined branch ${branchId}`
-                );
-            }
-        );
-
-        socket.on(
-            "disconnect",
-            () => {
-                console.log(
-                    "Client disconnected:",
-                    socket.id
-                );
-            }
-        );
+      socket.join(branchId);
+      console.log(
+        `[SOCKET] Client ${socket.id} joined branch ${branchId}`,
+      );
     });
 
-    // --------------------
-    // Application Composition
-    // --------------------
+    socket.on("disconnect", (reason) => {
+      console.log(
+        `[SOCKET] Client ${socket.id} disconnected: ${reason}`,
+      );
+    });
+  });
 
-    const businessComposer =
-        new BusinessComposer();
+  // --------------------------------------------------
+  // Application composition
+  // --------------------------------------------------
 
-    const sync =
-        await businessComposer.boot();
-    
-    // --------------------
-    // Routes
-    // --------------------
+  console.log("[SERVER] Booting BusinessComposer...");
 
-    app.use(
-        "/auth",
-        authRoutes
+  const businessComposer = new BusinessComposer();
+  const sync = await businessComposer.boot();
+
+  console.log("[SERVER] BusinessComposer booted successfully");
+
+  const invitationDeliveryWorker =
+    new InvitationDeliveryWorker();
+
+  // --------------------------------------------------
+  // Routes
+  // --------------------------------------------------
+
+  app.use("/auth", authRoutes);
+  app.use("/subscription", subscriptionRoute);
+  app.use("/sync", sync.router);
+
+  app.use(
+    "/employee-invitations",
+    employeeInvitationRouter,
+  );
+
+  // --------------------------------------------------
+  // Background worker runners
+  // --------------------------------------------------
+
+  async function runProjectionWorker(): Promise<void> {
+    if (shuttingDown || projectionRunning) {
+      return;
+    }
+
+    projectionRunning = true;
+
+    try {
+      await sync.projectionWorker.processPending();
+    } catch (error) {
+      console.error(
+        "[PROJECTION WORKER] Processing failed:",
+        error,
+      );
+    } finally {
+      projectionRunning = false;
+    }
+  }
+
+  async function runInvitationDeliveryWorker(): Promise<void> {
+    if (shuttingDown || invitationDeliveryRunning) {
+      return;
+    }
+
+    invitationDeliveryRunning = true;
+
+    try {
+      await invitationDeliveryWorker.processPending();
+    } catch (error) {
+      console.error(
+        "[INVITATION DELIVERY WORKER] Processing failed:",
+        error,
+      );
+    } finally {
+      invitationDeliveryRunning = false;
+    }
+  }
+
+  // --------------------------------------------------
+  // Graceful shutdown
+  // --------------------------------------------------
+
+  async function shutdown(signal: string): Promise<void> {
+    if (shuttingDown) {
+      return;
+    }
+
+    shuttingDown = true;
+
+    console.log(
+      `[SERVER] Received ${signal}; shutting down...`,
     );
 
-    app.use(
-        "/subscription",
-        subscriptionRoute
-    );
+    if (projectionInterval) {
+      clearInterval(projectionInterval);
+    }
 
-    app.use(
-        "/sync",
-        sync.router
-    );
+    if (invitationDeliveryInterval) {
+      clearInterval(invitationDeliveryInterval);
+    }
 
-    app.use(
-        "/employee-invitations",
-        employeeInvitationRouter,
-        );
+    const forceExitTimer = setTimeout(() => {
+      console.error(
+        "[SERVER] Graceful shutdown timed out; forcing exit",
+      );
+      process.exit(1);
+    }, 15_000);
 
-        setInterval(
-            async () => {
+    forceExitTimer.unref();
 
-                try {
+    try {
+      // Socket.IO closes its attached HTTP server as well.
+      await new Promise<void>((resolve, reject) => {
+        io.close((error?: Error) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve();
+          }
+        });
+      });
 
-                    console.log(
-                        "[PROJECTION WORKER] Processing pending events..."
-                    );
+      console.log("[SERVER] Socket.IO and HTTP server closed");
+    } catch (error) {
+      console.error("[SERVER] Error closing HTTP server:", error);
+    }
 
-                    await sync
-                        .projectionWorker
-                        .processPending();
+    try {
+      await prisma.$disconnect();
+      console.log("[SERVER] Database disconnected");
+    } catch (error) {
+      console.error("[SERVER] Database disconnect failed:", error);
+      process.exitCode = 1;
+    } finally {
+      clearTimeout(forceExitTimer);
+    }
+  }
 
-                    console.log(
-                        "[PROJECTION WORKER] Done processing pending events."
-                    );
-                    
+  process.once("SIGINT", () => {
+    void shutdown("SIGINT");
+  });
 
-                } catch (error) {
+  process.once("SIGTERM", () => {
+    void shutdown("SIGTERM");
+  });
 
-                    console.error(
-                        "[PROJECTION WORKER]",
-                        error
-                    );
-                }
+  // --------------------------------------------------
+  // Start HTTP server
+  // --------------------------------------------------
 
-            },
-            10000
-        );
-    // --------------------
-    // Start server
-    // --------------------
+  await new Promise<void>((resolve, reject) => {
+    const onError = (error: Error) => {
+      server.off("listening", onListening);
+      reject(error);
+    };
 
-    server.listen(
-        PORT,
-        () => {
-            console.log(
-                `Server running at http://localhost:${PORT}`
-            );
-        }
-    );
+    const onListening = () => {
+      server.off("error", onError);
+      resolve();
+    };
+
+    server.once("error", onError);
+    server.once("listening", onListening);
+
+    server.listen(PORT);
+  });
+
+  console.log(
+    `[SERVER] BizTru backend listening at http://localhost:${PORT}`,
+  );
+
+  console.log(
+    `[SERVER] Frontend origin configured as ${FRONTEND_URL}`,
+  );
+
+  // --------------------------------------------------
+  // Start background processing
+  // --------------------------------------------------
+
+  // Start polling after HTTP is listening so that a worker
+  // failure does not prevent the API from becoming available.
+  projectionInterval = setInterval(() => {
+    void runProjectionWorker();
+  }, 10_000);
+
+  invitationDeliveryInterval = setInterval(() => {
+    void runInvitationDeliveryWorker();
+  }, 5_000);
+
+  // Process already-persisted work immediately.
+  void runProjectionWorker();
+  void runInvitationDeliveryWorker();
+
+  console.log("[SERVER] Background workers scheduled");
 }
 
-startServer().catch((error) => {
+// --------------------------------------------------
+// Application entry point
+// --------------------------------------------------
 
+startServer().catch(async (error: unknown) => {
+  console.error("[SERVER] Startup failed:", error);
+
+  try {
+    await prisma.$disconnect();
+  } catch (disconnectError) {
     console.error(
-        "Failed to start server:",
-        error
+      "[SERVER] Database cleanup failed:",
+      disconnectError,
     );
+  }
 
-    process.exit(1);
+  process.exitCode = 1;
 });

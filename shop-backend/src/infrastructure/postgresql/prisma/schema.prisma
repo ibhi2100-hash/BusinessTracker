@@ -910,6 +910,9 @@ model EmployeeInvitation {
 
   branch Branch? @relation(fields: [branchId], references: [id], onDelete: SetNull)
 
+
+  deliveries InvitationDelivery[]
+  
   @@index([businessId])
   @@index([employeeId])
   @@index([businessId, status])
@@ -1054,6 +1057,11 @@ model InvitationDelivery {
   sentAt         DateTime?
   deliveredAt    DateTime?
   failedAt       DateTime?
+
+   // Encrypted raw invitation token for the delivery worker.
+  encryptedToken    String?
+
+  invitation        EmployeeInvitation        @relation(fields: [invitationId], references: [id],onDelete: Cascade)
 
   @@index([status, nextAttemptAt])
   @@index([invitationId])

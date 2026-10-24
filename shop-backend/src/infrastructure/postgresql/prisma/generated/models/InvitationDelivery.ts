@@ -54,6 +54,7 @@ export type InvitationDeliveryMinAggregateOutputType = {
   sentAt: Date | null
   deliveredAt: Date | null
   failedAt: Date | null
+  encryptedToken: string | null
 }
 
 export type InvitationDeliveryMaxAggregateOutputType = {
@@ -74,6 +75,7 @@ export type InvitationDeliveryMaxAggregateOutputType = {
   sentAt: Date | null
   deliveredAt: Date | null
   failedAt: Date | null
+  encryptedToken: string | null
 }
 
 export type InvitationDeliveryCountAggregateOutputType = {
@@ -94,6 +96,7 @@ export type InvitationDeliveryCountAggregateOutputType = {
   sentAt: number
   deliveredAt: number
   failedAt: number
+  encryptedToken: number
   _all: number
 }
 
@@ -126,6 +129,7 @@ export type InvitationDeliveryMinAggregateInputType = {
   sentAt?: true
   deliveredAt?: true
   failedAt?: true
+  encryptedToken?: true
 }
 
 export type InvitationDeliveryMaxAggregateInputType = {
@@ -146,6 +150,7 @@ export type InvitationDeliveryMaxAggregateInputType = {
   sentAt?: true
   deliveredAt?: true
   failedAt?: true
+  encryptedToken?: true
 }
 
 export type InvitationDeliveryCountAggregateInputType = {
@@ -166,6 +171,7 @@ export type InvitationDeliveryCountAggregateInputType = {
   sentAt?: true
   deliveredAt?: true
   failedAt?: true
+  encryptedToken?: true
   _all?: true
 }
 
@@ -273,6 +279,7 @@ export type InvitationDeliveryGroupByOutputType = {
   sentAt: Date | null
   deliveredAt: Date | null
   failedAt: Date | null
+  encryptedToken: string | null
   _count: InvitationDeliveryCountAggregateOutputType | null
   _avg: InvitationDeliveryAvgAggregateOutputType | null
   _sum: InvitationDeliverySumAggregateOutputType | null
@@ -316,6 +323,8 @@ export type InvitationDeliveryWhereInput = {
   sentAt?: Prisma.DateTimeNullableFilter<"InvitationDelivery"> | Date | string | null
   deliveredAt?: Prisma.DateTimeNullableFilter<"InvitationDelivery"> | Date | string | null
   failedAt?: Prisma.DateTimeNullableFilter<"InvitationDelivery"> | Date | string | null
+  encryptedToken?: Prisma.StringNullableFilter<"InvitationDelivery"> | string | null
+  invitation?: Prisma.XOR<Prisma.EmployeeInvitationScalarRelationFilter, Prisma.EmployeeInvitationWhereInput>
 }
 
 export type InvitationDeliveryOrderByWithRelationInput = {
@@ -336,6 +345,8 @@ export type InvitationDeliveryOrderByWithRelationInput = {
   sentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   deliveredAt?: Prisma.SortOrderInput | Prisma.SortOrder
   failedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  encryptedToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  invitation?: Prisma.EmployeeInvitationOrderByWithRelationInput
 }
 
 export type InvitationDeliveryWhereUniqueInput = Prisma.AtLeast<{
@@ -359,6 +370,8 @@ export type InvitationDeliveryWhereUniqueInput = Prisma.AtLeast<{
   sentAt?: Prisma.DateTimeNullableFilter<"InvitationDelivery"> | Date | string | null
   deliveredAt?: Prisma.DateTimeNullableFilter<"InvitationDelivery"> | Date | string | null
   failedAt?: Prisma.DateTimeNullableFilter<"InvitationDelivery"> | Date | string | null
+  encryptedToken?: Prisma.StringNullableFilter<"InvitationDelivery"> | string | null
+  invitation?: Prisma.XOR<Prisma.EmployeeInvitationScalarRelationFilter, Prisma.EmployeeInvitationWhereInput>
 }, "id">
 
 export type InvitationDeliveryOrderByWithAggregationInput = {
@@ -379,6 +392,7 @@ export type InvitationDeliveryOrderByWithAggregationInput = {
   sentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   deliveredAt?: Prisma.SortOrderInput | Prisma.SortOrder
   failedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  encryptedToken?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.InvitationDeliveryCountOrderByAggregateInput
   _avg?: Prisma.InvitationDeliveryAvgOrderByAggregateInput
   _max?: Prisma.InvitationDeliveryMaxOrderByAggregateInput
@@ -407,11 +421,11 @@ export type InvitationDeliveryScalarWhereWithAggregatesInput = {
   sentAt?: Prisma.DateTimeNullableWithAggregatesFilter<"InvitationDelivery"> | Date | string | null
   deliveredAt?: Prisma.DateTimeNullableWithAggregatesFilter<"InvitationDelivery"> | Date | string | null
   failedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"InvitationDelivery"> | Date | string | null
+  encryptedToken?: Prisma.StringNullableWithAggregatesFilter<"InvitationDelivery"> | string | null
 }
 
 export type InvitationDeliveryCreateInput = {
   id: string
-  invitationId: string
   businessId: string
   channel: $Enums.InvitationDeliveryChannel
   recipient: string
@@ -427,6 +441,8 @@ export type InvitationDeliveryCreateInput = {
   sentAt?: Date | string | null
   deliveredAt?: Date | string | null
   failedAt?: Date | string | null
+  encryptedToken?: string | null
+  invitation: Prisma.EmployeeInvitationCreateNestedOneWithoutDeliveriesInput
 }
 
 export type InvitationDeliveryUncheckedCreateInput = {
@@ -447,11 +463,11 @@ export type InvitationDeliveryUncheckedCreateInput = {
   sentAt?: Date | string | null
   deliveredAt?: Date | string | null
   failedAt?: Date | string | null
+  encryptedToken?: string | null
 }
 
 export type InvitationDeliveryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  invitationId?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   channel?: Prisma.EnumInvitationDeliveryChannelFieldUpdateOperationsInput | $Enums.InvitationDeliveryChannel
   recipient?: Prisma.StringFieldUpdateOperationsInput | string
@@ -467,6 +483,8 @@ export type InvitationDeliveryUpdateInput = {
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  encryptedToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  invitation?: Prisma.EmployeeInvitationUpdateOneRequiredWithoutDeliveriesNestedInput
 }
 
 export type InvitationDeliveryUncheckedUpdateInput = {
@@ -487,6 +505,7 @@ export type InvitationDeliveryUncheckedUpdateInput = {
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  encryptedToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type InvitationDeliveryCreateManyInput = {
@@ -507,11 +526,11 @@ export type InvitationDeliveryCreateManyInput = {
   sentAt?: Date | string | null
   deliveredAt?: Date | string | null
   failedAt?: Date | string | null
+  encryptedToken?: string | null
 }
 
 export type InvitationDeliveryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  invitationId?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   channel?: Prisma.EnumInvitationDeliveryChannelFieldUpdateOperationsInput | $Enums.InvitationDeliveryChannel
   recipient?: Prisma.StringFieldUpdateOperationsInput | string
@@ -527,6 +546,7 @@ export type InvitationDeliveryUpdateManyMutationInput = {
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  encryptedToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type InvitationDeliveryUncheckedUpdateManyInput = {
@@ -547,6 +567,17 @@ export type InvitationDeliveryUncheckedUpdateManyInput = {
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  encryptedToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type InvitationDeliveryListRelationFilter = {
+  every?: Prisma.InvitationDeliveryWhereInput
+  some?: Prisma.InvitationDeliveryWhereInput
+  none?: Prisma.InvitationDeliveryWhereInput
+}
+
+export type InvitationDeliveryOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type InvitationDeliveryCountOrderByAggregateInput = {
@@ -567,6 +598,7 @@ export type InvitationDeliveryCountOrderByAggregateInput = {
   sentAt?: Prisma.SortOrder
   deliveredAt?: Prisma.SortOrder
   failedAt?: Prisma.SortOrder
+  encryptedToken?: Prisma.SortOrder
 }
 
 export type InvitationDeliveryAvgOrderByAggregateInput = {
@@ -592,6 +624,7 @@ export type InvitationDeliveryMaxOrderByAggregateInput = {
   sentAt?: Prisma.SortOrder
   deliveredAt?: Prisma.SortOrder
   failedAt?: Prisma.SortOrder
+  encryptedToken?: Prisma.SortOrder
 }
 
 export type InvitationDeliveryMinOrderByAggregateInput = {
@@ -612,11 +645,54 @@ export type InvitationDeliveryMinOrderByAggregateInput = {
   sentAt?: Prisma.SortOrder
   deliveredAt?: Prisma.SortOrder
   failedAt?: Prisma.SortOrder
+  encryptedToken?: Prisma.SortOrder
 }
 
 export type InvitationDeliverySumOrderByAggregateInput = {
   attempts?: Prisma.SortOrder
   maxAttempts?: Prisma.SortOrder
+}
+
+export type InvitationDeliveryCreateNestedManyWithoutInvitationInput = {
+  create?: Prisma.XOR<Prisma.InvitationDeliveryCreateWithoutInvitationInput, Prisma.InvitationDeliveryUncheckedCreateWithoutInvitationInput> | Prisma.InvitationDeliveryCreateWithoutInvitationInput[] | Prisma.InvitationDeliveryUncheckedCreateWithoutInvitationInput[]
+  connectOrCreate?: Prisma.InvitationDeliveryCreateOrConnectWithoutInvitationInput | Prisma.InvitationDeliveryCreateOrConnectWithoutInvitationInput[]
+  createMany?: Prisma.InvitationDeliveryCreateManyInvitationInputEnvelope
+  connect?: Prisma.InvitationDeliveryWhereUniqueInput | Prisma.InvitationDeliveryWhereUniqueInput[]
+}
+
+export type InvitationDeliveryUncheckedCreateNestedManyWithoutInvitationInput = {
+  create?: Prisma.XOR<Prisma.InvitationDeliveryCreateWithoutInvitationInput, Prisma.InvitationDeliveryUncheckedCreateWithoutInvitationInput> | Prisma.InvitationDeliveryCreateWithoutInvitationInput[] | Prisma.InvitationDeliveryUncheckedCreateWithoutInvitationInput[]
+  connectOrCreate?: Prisma.InvitationDeliveryCreateOrConnectWithoutInvitationInput | Prisma.InvitationDeliveryCreateOrConnectWithoutInvitationInput[]
+  createMany?: Prisma.InvitationDeliveryCreateManyInvitationInputEnvelope
+  connect?: Prisma.InvitationDeliveryWhereUniqueInput | Prisma.InvitationDeliveryWhereUniqueInput[]
+}
+
+export type InvitationDeliveryUpdateManyWithoutInvitationNestedInput = {
+  create?: Prisma.XOR<Prisma.InvitationDeliveryCreateWithoutInvitationInput, Prisma.InvitationDeliveryUncheckedCreateWithoutInvitationInput> | Prisma.InvitationDeliveryCreateWithoutInvitationInput[] | Prisma.InvitationDeliveryUncheckedCreateWithoutInvitationInput[]
+  connectOrCreate?: Prisma.InvitationDeliveryCreateOrConnectWithoutInvitationInput | Prisma.InvitationDeliveryCreateOrConnectWithoutInvitationInput[]
+  upsert?: Prisma.InvitationDeliveryUpsertWithWhereUniqueWithoutInvitationInput | Prisma.InvitationDeliveryUpsertWithWhereUniqueWithoutInvitationInput[]
+  createMany?: Prisma.InvitationDeliveryCreateManyInvitationInputEnvelope
+  set?: Prisma.InvitationDeliveryWhereUniqueInput | Prisma.InvitationDeliveryWhereUniqueInput[]
+  disconnect?: Prisma.InvitationDeliveryWhereUniqueInput | Prisma.InvitationDeliveryWhereUniqueInput[]
+  delete?: Prisma.InvitationDeliveryWhereUniqueInput | Prisma.InvitationDeliveryWhereUniqueInput[]
+  connect?: Prisma.InvitationDeliveryWhereUniqueInput | Prisma.InvitationDeliveryWhereUniqueInput[]
+  update?: Prisma.InvitationDeliveryUpdateWithWhereUniqueWithoutInvitationInput | Prisma.InvitationDeliveryUpdateWithWhereUniqueWithoutInvitationInput[]
+  updateMany?: Prisma.InvitationDeliveryUpdateManyWithWhereWithoutInvitationInput | Prisma.InvitationDeliveryUpdateManyWithWhereWithoutInvitationInput[]
+  deleteMany?: Prisma.InvitationDeliveryScalarWhereInput | Prisma.InvitationDeliveryScalarWhereInput[]
+}
+
+export type InvitationDeliveryUncheckedUpdateManyWithoutInvitationNestedInput = {
+  create?: Prisma.XOR<Prisma.InvitationDeliveryCreateWithoutInvitationInput, Prisma.InvitationDeliveryUncheckedCreateWithoutInvitationInput> | Prisma.InvitationDeliveryCreateWithoutInvitationInput[] | Prisma.InvitationDeliveryUncheckedCreateWithoutInvitationInput[]
+  connectOrCreate?: Prisma.InvitationDeliveryCreateOrConnectWithoutInvitationInput | Prisma.InvitationDeliveryCreateOrConnectWithoutInvitationInput[]
+  upsert?: Prisma.InvitationDeliveryUpsertWithWhereUniqueWithoutInvitationInput | Prisma.InvitationDeliveryUpsertWithWhereUniqueWithoutInvitationInput[]
+  createMany?: Prisma.InvitationDeliveryCreateManyInvitationInputEnvelope
+  set?: Prisma.InvitationDeliveryWhereUniqueInput | Prisma.InvitationDeliveryWhereUniqueInput[]
+  disconnect?: Prisma.InvitationDeliveryWhereUniqueInput | Prisma.InvitationDeliveryWhereUniqueInput[]
+  delete?: Prisma.InvitationDeliveryWhereUniqueInput | Prisma.InvitationDeliveryWhereUniqueInput[]
+  connect?: Prisma.InvitationDeliveryWhereUniqueInput | Prisma.InvitationDeliveryWhereUniqueInput[]
+  update?: Prisma.InvitationDeliveryUpdateWithWhereUniqueWithoutInvitationInput | Prisma.InvitationDeliveryUpdateWithWhereUniqueWithoutInvitationInput[]
+  updateMany?: Prisma.InvitationDeliveryUpdateManyWithWhereWithoutInvitationInput | Prisma.InvitationDeliveryUpdateManyWithWhereWithoutInvitationInput[]
+  deleteMany?: Prisma.InvitationDeliveryScalarWhereInput | Prisma.InvitationDeliveryScalarWhereInput[]
 }
 
 export type EnumInvitationDeliveryChannelFieldUpdateOperationsInput = {
@@ -625,6 +701,176 @@ export type EnumInvitationDeliveryChannelFieldUpdateOperationsInput = {
 
 export type EnumInvitationDeliveryStatusFieldUpdateOperationsInput = {
   set?: $Enums.InvitationDeliveryStatus
+}
+
+export type InvitationDeliveryCreateWithoutInvitationInput = {
+  id: string
+  businessId: string
+  channel: $Enums.InvitationDeliveryChannel
+  recipient: string
+  status?: $Enums.InvitationDeliveryStatus
+  attempts?: number
+  maxAttempts?: number
+  nextAttemptAt?: Date | string
+  provider?: string | null
+  providerMessageId?: string | null
+  lastError?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sentAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  failedAt?: Date | string | null
+  encryptedToken?: string | null
+}
+
+export type InvitationDeliveryUncheckedCreateWithoutInvitationInput = {
+  id: string
+  businessId: string
+  channel: $Enums.InvitationDeliveryChannel
+  recipient: string
+  status?: $Enums.InvitationDeliveryStatus
+  attempts?: number
+  maxAttempts?: number
+  nextAttemptAt?: Date | string
+  provider?: string | null
+  providerMessageId?: string | null
+  lastError?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sentAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  failedAt?: Date | string | null
+  encryptedToken?: string | null
+}
+
+export type InvitationDeliveryCreateOrConnectWithoutInvitationInput = {
+  where: Prisma.InvitationDeliveryWhereUniqueInput
+  create: Prisma.XOR<Prisma.InvitationDeliveryCreateWithoutInvitationInput, Prisma.InvitationDeliveryUncheckedCreateWithoutInvitationInput>
+}
+
+export type InvitationDeliveryCreateManyInvitationInputEnvelope = {
+  data: Prisma.InvitationDeliveryCreateManyInvitationInput | Prisma.InvitationDeliveryCreateManyInvitationInput[]
+  skipDuplicates?: boolean
+}
+
+export type InvitationDeliveryUpsertWithWhereUniqueWithoutInvitationInput = {
+  where: Prisma.InvitationDeliveryWhereUniqueInput
+  update: Prisma.XOR<Prisma.InvitationDeliveryUpdateWithoutInvitationInput, Prisma.InvitationDeliveryUncheckedUpdateWithoutInvitationInput>
+  create: Prisma.XOR<Prisma.InvitationDeliveryCreateWithoutInvitationInput, Prisma.InvitationDeliveryUncheckedCreateWithoutInvitationInput>
+}
+
+export type InvitationDeliveryUpdateWithWhereUniqueWithoutInvitationInput = {
+  where: Prisma.InvitationDeliveryWhereUniqueInput
+  data: Prisma.XOR<Prisma.InvitationDeliveryUpdateWithoutInvitationInput, Prisma.InvitationDeliveryUncheckedUpdateWithoutInvitationInput>
+}
+
+export type InvitationDeliveryUpdateManyWithWhereWithoutInvitationInput = {
+  where: Prisma.InvitationDeliveryScalarWhereInput
+  data: Prisma.XOR<Prisma.InvitationDeliveryUpdateManyMutationInput, Prisma.InvitationDeliveryUncheckedUpdateManyWithoutInvitationInput>
+}
+
+export type InvitationDeliveryScalarWhereInput = {
+  AND?: Prisma.InvitationDeliveryScalarWhereInput | Prisma.InvitationDeliveryScalarWhereInput[]
+  OR?: Prisma.InvitationDeliveryScalarWhereInput[]
+  NOT?: Prisma.InvitationDeliveryScalarWhereInput | Prisma.InvitationDeliveryScalarWhereInput[]
+  id?: Prisma.StringFilter<"InvitationDelivery"> | string
+  invitationId?: Prisma.StringFilter<"InvitationDelivery"> | string
+  businessId?: Prisma.StringFilter<"InvitationDelivery"> | string
+  channel?: Prisma.EnumInvitationDeliveryChannelFilter<"InvitationDelivery"> | $Enums.InvitationDeliveryChannel
+  recipient?: Prisma.StringFilter<"InvitationDelivery"> | string
+  status?: Prisma.EnumInvitationDeliveryStatusFilter<"InvitationDelivery"> | $Enums.InvitationDeliveryStatus
+  attempts?: Prisma.IntFilter<"InvitationDelivery"> | number
+  maxAttempts?: Prisma.IntFilter<"InvitationDelivery"> | number
+  nextAttemptAt?: Prisma.DateTimeFilter<"InvitationDelivery"> | Date | string
+  provider?: Prisma.StringNullableFilter<"InvitationDelivery"> | string | null
+  providerMessageId?: Prisma.StringNullableFilter<"InvitationDelivery"> | string | null
+  lastError?: Prisma.StringNullableFilter<"InvitationDelivery"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"InvitationDelivery"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"InvitationDelivery"> | Date | string
+  sentAt?: Prisma.DateTimeNullableFilter<"InvitationDelivery"> | Date | string | null
+  deliveredAt?: Prisma.DateTimeNullableFilter<"InvitationDelivery"> | Date | string | null
+  failedAt?: Prisma.DateTimeNullableFilter<"InvitationDelivery"> | Date | string | null
+  encryptedToken?: Prisma.StringNullableFilter<"InvitationDelivery"> | string | null
+}
+
+export type InvitationDeliveryCreateManyInvitationInput = {
+  id: string
+  businessId: string
+  channel: $Enums.InvitationDeliveryChannel
+  recipient: string
+  status?: $Enums.InvitationDeliveryStatus
+  attempts?: number
+  maxAttempts?: number
+  nextAttemptAt?: Date | string
+  provider?: string | null
+  providerMessageId?: string | null
+  lastError?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sentAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  failedAt?: Date | string | null
+  encryptedToken?: string | null
+}
+
+export type InvitationDeliveryUpdateWithoutInvitationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  channel?: Prisma.EnumInvitationDeliveryChannelFieldUpdateOperationsInput | $Enums.InvitationDeliveryChannel
+  recipient?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumInvitationDeliveryStatusFieldUpdateOperationsInput | $Enums.InvitationDeliveryStatus
+  attempts?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  nextAttemptAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  encryptedToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type InvitationDeliveryUncheckedUpdateWithoutInvitationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  channel?: Prisma.EnumInvitationDeliveryChannelFieldUpdateOperationsInput | $Enums.InvitationDeliveryChannel
+  recipient?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumInvitationDeliveryStatusFieldUpdateOperationsInput | $Enums.InvitationDeliveryStatus
+  attempts?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  nextAttemptAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  encryptedToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type InvitationDeliveryUncheckedUpdateManyWithoutInvitationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  channel?: Prisma.EnumInvitationDeliveryChannelFieldUpdateOperationsInput | $Enums.InvitationDeliveryChannel
+  recipient?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumInvitationDeliveryStatusFieldUpdateOperationsInput | $Enums.InvitationDeliveryStatus
+  attempts?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  nextAttemptAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  provider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  encryptedToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -647,6 +893,8 @@ export type InvitationDeliverySelect<ExtArgs extends runtime.Types.Extensions.In
   sentAt?: boolean
   deliveredAt?: boolean
   failedAt?: boolean
+  encryptedToken?: boolean
+  invitation?: boolean | Prisma.EmployeeInvitationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["invitationDelivery"]>
 
 export type InvitationDeliverySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -667,6 +915,8 @@ export type InvitationDeliverySelectCreateManyAndReturn<ExtArgs extends runtime.
   sentAt?: boolean
   deliveredAt?: boolean
   failedAt?: boolean
+  encryptedToken?: boolean
+  invitation?: boolean | Prisma.EmployeeInvitationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["invitationDelivery"]>
 
 export type InvitationDeliverySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -687,6 +937,8 @@ export type InvitationDeliverySelectUpdateManyAndReturn<ExtArgs extends runtime.
   sentAt?: boolean
   deliveredAt?: boolean
   failedAt?: boolean
+  encryptedToken?: boolean
+  invitation?: boolean | Prisma.EmployeeInvitationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["invitationDelivery"]>
 
 export type InvitationDeliverySelectScalar = {
@@ -707,13 +959,25 @@ export type InvitationDeliverySelectScalar = {
   sentAt?: boolean
   deliveredAt?: boolean
   failedAt?: boolean
+  encryptedToken?: boolean
 }
 
-export type InvitationDeliveryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "invitationId" | "businessId" | "channel" | "recipient" | "status" | "attempts" | "maxAttempts" | "nextAttemptAt" | "provider" | "providerMessageId" | "lastError" | "createdAt" | "updatedAt" | "sentAt" | "deliveredAt" | "failedAt", ExtArgs["result"]["invitationDelivery"]>
+export type InvitationDeliveryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "invitationId" | "businessId" | "channel" | "recipient" | "status" | "attempts" | "maxAttempts" | "nextAttemptAt" | "provider" | "providerMessageId" | "lastError" | "createdAt" | "updatedAt" | "sentAt" | "deliveredAt" | "failedAt" | "encryptedToken", ExtArgs["result"]["invitationDelivery"]>
+export type InvitationDeliveryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  invitation?: boolean | Prisma.EmployeeInvitationDefaultArgs<ExtArgs>
+}
+export type InvitationDeliveryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  invitation?: boolean | Prisma.EmployeeInvitationDefaultArgs<ExtArgs>
+}
+export type InvitationDeliveryIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  invitation?: boolean | Prisma.EmployeeInvitationDefaultArgs<ExtArgs>
+}
 
 export type $InvitationDeliveryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "InvitationDelivery"
-  objects: {}
+  objects: {
+    invitation: Prisma.$EmployeeInvitationPayload<ExtArgs>
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     invitationId: string
@@ -732,6 +996,7 @@ export type $InvitationDeliveryPayload<ExtArgs extends runtime.Types.Extensions.
     sentAt: Date | null
     deliveredAt: Date | null
     failedAt: Date | null
+    encryptedToken: string | null
   }, ExtArgs["result"]["invitationDelivery"]>
   composites: {}
 }
@@ -1126,6 +1391,7 @@ readonly fields: InvitationDeliveryFieldRefs;
  */
 export interface Prisma__InvitationDeliveryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  invitation<T extends Prisma.EmployeeInvitationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EmployeeInvitationDefaultArgs<ExtArgs>>): Prisma.Prisma__EmployeeInvitationClient<runtime.Types.Result.GetResult<Prisma.$EmployeeInvitationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1172,6 +1438,7 @@ export interface InvitationDeliveryFieldRefs {
   readonly sentAt: Prisma.FieldRef<"InvitationDelivery", 'DateTime'>
   readonly deliveredAt: Prisma.FieldRef<"InvitationDelivery", 'DateTime'>
   readonly failedAt: Prisma.FieldRef<"InvitationDelivery", 'DateTime'>
+  readonly encryptedToken: Prisma.FieldRef<"InvitationDelivery", 'String'>
 }
     
 
@@ -1188,6 +1455,10 @@ export type InvitationDeliveryFindUniqueArgs<ExtArgs extends runtime.Types.Exten
    * Omit specific fields from the InvitationDelivery
    */
   omit?: Prisma.InvitationDeliveryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvitationDeliveryInclude<ExtArgs> | null
   /**
    * Filter, which InvitationDelivery to fetch.
    */
@@ -1207,6 +1478,10 @@ export type InvitationDeliveryFindUniqueOrThrowArgs<ExtArgs extends runtime.Type
    */
   omit?: Prisma.InvitationDeliveryOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvitationDeliveryInclude<ExtArgs> | null
+  /**
    * Filter, which InvitationDelivery to fetch.
    */
   where: Prisma.InvitationDeliveryWhereUniqueInput
@@ -1224,6 +1499,10 @@ export type InvitationDeliveryFindFirstArgs<ExtArgs extends runtime.Types.Extens
    * Omit specific fields from the InvitationDelivery
    */
   omit?: Prisma.InvitationDeliveryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvitationDeliveryInclude<ExtArgs> | null
   /**
    * Filter, which InvitationDelivery to fetch.
    */
@@ -1273,6 +1552,10 @@ export type InvitationDeliveryFindFirstOrThrowArgs<ExtArgs extends runtime.Types
    */
   omit?: Prisma.InvitationDeliveryOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvitationDeliveryInclude<ExtArgs> | null
+  /**
    * Filter, which InvitationDelivery to fetch.
    */
   where?: Prisma.InvitationDeliveryWhereInput
@@ -1320,6 +1603,10 @@ export type InvitationDeliveryFindManyArgs<ExtArgs extends runtime.Types.Extensi
    * Omit specific fields from the InvitationDelivery
    */
   omit?: Prisma.InvitationDeliveryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvitationDeliveryInclude<ExtArgs> | null
   /**
    * Filter, which InvitationDeliveries to fetch.
    */
@@ -1369,6 +1656,10 @@ export type InvitationDeliveryCreateArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.InvitationDeliveryOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvitationDeliveryInclude<ExtArgs> | null
+  /**
    * The data needed to create a InvitationDelivery.
    */
   data: Prisma.XOR<Prisma.InvitationDeliveryCreateInput, Prisma.InvitationDeliveryUncheckedCreateInput>
@@ -1402,6 +1693,10 @@ export type InvitationDeliveryCreateManyAndReturnArgs<ExtArgs extends runtime.Ty
    */
   data: Prisma.InvitationDeliveryCreateManyInput | Prisma.InvitationDeliveryCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvitationDeliveryIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1416,6 +1711,10 @@ export type InvitationDeliveryUpdateArgs<ExtArgs extends runtime.Types.Extension
    * Omit specific fields from the InvitationDelivery
    */
   omit?: Prisma.InvitationDeliveryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvitationDeliveryInclude<ExtArgs> | null
   /**
    * The data needed to update a InvitationDelivery.
    */
@@ -1468,6 +1767,10 @@ export type InvitationDeliveryUpdateManyAndReturnArgs<ExtArgs extends runtime.Ty
    * Limit how many InvitationDeliveries to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvitationDeliveryIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1482,6 +1785,10 @@ export type InvitationDeliveryUpsertArgs<ExtArgs extends runtime.Types.Extension
    * Omit specific fields from the InvitationDelivery
    */
   omit?: Prisma.InvitationDeliveryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvitationDeliveryInclude<ExtArgs> | null
   /**
    * The filter to search for the InvitationDelivery to update in case it exists.
    */
@@ -1508,6 +1815,10 @@ export type InvitationDeliveryDeleteArgs<ExtArgs extends runtime.Types.Extension
    * Omit specific fields from the InvitationDelivery
    */
   omit?: Prisma.InvitationDeliveryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvitationDeliveryInclude<ExtArgs> | null
   /**
    * Filter which InvitationDelivery to delete.
    */
@@ -1540,4 +1851,8 @@ export type InvitationDeliveryDefaultArgs<ExtArgs extends runtime.Types.Extensio
    * Omit specific fields from the InvitationDelivery
    */
   omit?: Prisma.InvitationDeliveryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvitationDeliveryInclude<ExtArgs> | null
 }

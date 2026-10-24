@@ -14,7 +14,9 @@ import { LedgerConsumer } from "../modules/sync/projection/ledgerConsumer.js";
 import { ProjectionWorker } from "../modules/sync/projection/ProjectionWorker.js"
 import { ExpenseConsumer } from "../modules/sync/projection/expenseConsumer.js";
 import { UserConsumer } from "../modules/sync/projection/userConsumer.js";
-import { EmployeeInvitationConsumer } from "../modules/sync/projection/employeeInvitation.js";
+import { EmployeeInvitationConsumer } from "../modules/sync/projection/employee/employeeInvitation.js";
+import { EmployeeInvitationIssuanceService } from "../modules/employeeInvitations/service/EmployeeInvitationIssuanceService.js";
+import { EmployeeConsumer } from "../modules/sync/projection/employee/EmployeeConsumer.js";
 
 export interface SyncModule {
     router: Router;
@@ -29,7 +31,7 @@ export class BusinessComposer {
 
         const repositories =
             new RepositoryRegistry();
-
+        const invitationIssuanceService = new EmployeeInvitationIssuanceService()
         const eventValidator =
             new EventValidator();
 
@@ -85,9 +87,20 @@ export class BusinessComposer {
             )
         )
 
+         projectionBus.subscribe(
+            new EmployeeConsumer(
+                repositories.employees
+            )
+        )
         projectionBus.subscribe(
             new EmployeeInvitationConsumer(
-                repositories.employeeInvitation
+                invitationIssuanceService
+            )
+        )
+
+        projectionBus.subscribe(
+            new EmployeeConsumer(
+                repositories.employees
             )
         )
 

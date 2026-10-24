@@ -184,13 +184,6 @@ export class OfflineSyncService {
                         async (tx) => {
 
                             try {
-
-                                console.log(
-                                    "[TX] Starting transaction for event:",
-                                    event.id
-                                );
-
-
                                 /*
                                  * =================================================
                                  * 1. ADVANCE / CREATE AGGREGATE

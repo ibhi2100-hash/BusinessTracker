@@ -13,8 +13,6 @@ import {
 import type {InviteEmployeeRequest } from "./EmployeeRequests";
 import type { CommandIntent } from "../../../../BizTru_Karnel/CommandFactory/CommandIntent";
 import { AggregateType } from "../../../../../offline/domain/aggregate";
-import { random } from "nanoid";
-
 export interface InviteEmployeeInput {
     fullName: string;
     phone: string;
@@ -112,27 +110,40 @@ export class EmployeeApi {
             throw new Error("Only STAFF and MANAGER invitations are allowed here.");
         }
         const app = this.manager.current();
+        
+        const employeeId = crypto.randomUUID();
+        const invitationId = crypto.randomUUID();
+
         const employeeIntent: CommandIntent<EmployeeInvitedPayload> = {
-            aggregateId: crypto.randomUUID(),
-            aggregateType: AggregateType.EMPLOYEE,
-            type: EmployeeEventType.EMPLOYEE_INVITED,
-            payload: {
-                invitationId: crypto.randomUUID(),
-                employeeId: crypto.randomUUID(),
-                phone: input.phone,
-                fullName: input.fullName,
-                email: input.email ?? null,
-                role: input.role ?? "STAFF",
-                branchId: input.branchId,
-                employeeNumber: input.employeeNumber ?? null,
-                tokenHash: crypto.randomUUID(),
-                reportsToEmployeeId: input.employeeNumber ?? null,
-                userId: null,
-                expiresAt: 3000 + Date.now()
-            },
-            mode: "LIVE"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+        // The employee aggregate ID must match the employee record ID.
+        aggregateId: employeeId,
+        aggregateType: AggregateType.EMPLOYEE,
+        type: EmployeeEventType.EMPLOYEE_INVITED,
+
+        payload: {
+            invitationId,
+            employeeId,
+
+            phone,
+            fullName,
+            email,
+            role: input.role,
+            branchId: input.branchId,
+            employeeNumber: input.employeeNumber ?? null,
+
+            // This should be a real employee ID, not an employee number.
+            reportsToEmployeeId: null,
+
+            userId: null,
+
+            // Keep this metadata consistent with the invitation lifecycle.
+            // The backend issuance service should enforce its own expiry.
+            expiresAt: Date.now() + 72 * 60 * 60 * 1000,
+        },
+
+        mode: "LIVE",
         };
+
         const command = await app?.domain.commandFactory.create(employeeIntent);
         if(!command){
             throw new Error("Command can not be created")

@@ -299,6 +299,7 @@ export type EmployeeInvitationWhereInput = {
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
   employee?: Prisma.XOR<Prisma.EmployeeScalarRelationFilter, Prisma.EmployeeWhereInput>
   branch?: Prisma.XOR<Prisma.BranchNullableScalarRelationFilter, Prisma.BranchWhereInput> | null
+  deliveries?: Prisma.InvitationDeliveryListRelationFilter
 }
 
 export type EmployeeInvitationOrderByWithRelationInput = {
@@ -320,6 +321,7 @@ export type EmployeeInvitationOrderByWithRelationInput = {
   business?: Prisma.BusinessOrderByWithRelationInput
   employee?: Prisma.EmployeeOrderByWithRelationInput
   branch?: Prisma.BranchOrderByWithRelationInput
+  deliveries?: Prisma.InvitationDeliveryOrderByRelationAggregateInput
 }
 
 export type EmployeeInvitationWhereUniqueInput = Prisma.AtLeast<{
@@ -344,6 +346,7 @@ export type EmployeeInvitationWhereUniqueInput = Prisma.AtLeast<{
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
   employee?: Prisma.XOR<Prisma.EmployeeScalarRelationFilter, Prisma.EmployeeWhereInput>
   branch?: Prisma.XOR<Prisma.BranchNullableScalarRelationFilter, Prisma.BranchWhereInput> | null
+  deliveries?: Prisma.InvitationDeliveryListRelationFilter
 }, "id" | "tokenHash">
 
 export type EmployeeInvitationOrderByWithAggregationInput = {
@@ -406,6 +409,7 @@ export type EmployeeInvitationCreateInput = {
   business: Prisma.BusinessCreateNestedOneWithoutEmployeeInvitationsInput
   employee: Prisma.EmployeeCreateNestedOneWithoutInvitationsInput
   branch?: Prisma.BranchCreateNestedOneWithoutEmployeeInvitationsInput
+  deliveries?: Prisma.InvitationDeliveryCreateNestedManyWithoutInvitationInput
 }
 
 export type EmployeeInvitationUncheckedCreateInput = {
@@ -424,6 +428,7 @@ export type EmployeeInvitationUncheckedCreateInput = {
   revokedAt?: Date | string | null
   updatedAt?: Date | string
   version?: number
+  deliveries?: Prisma.InvitationDeliveryUncheckedCreateNestedManyWithoutInvitationInput
 }
 
 export type EmployeeInvitationUpdateInput = {
@@ -442,6 +447,7 @@ export type EmployeeInvitationUpdateInput = {
   business?: Prisma.BusinessUpdateOneRequiredWithoutEmployeeInvitationsNestedInput
   employee?: Prisma.EmployeeUpdateOneRequiredWithoutInvitationsNestedInput
   branch?: Prisma.BranchUpdateOneWithoutEmployeeInvitationsNestedInput
+  deliveries?: Prisma.InvitationDeliveryUpdateManyWithoutInvitationNestedInput
 }
 
 export type EmployeeInvitationUncheckedUpdateInput = {
@@ -460,6 +466,7 @@ export type EmployeeInvitationUncheckedUpdateInput = {
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
+  deliveries?: Prisma.InvitationDeliveryUncheckedUpdateManyWithoutInvitationNestedInput
 }
 
 export type EmployeeInvitationCreateManyInput = {
@@ -583,6 +590,11 @@ export type EmployeeInvitationMinOrderByAggregateInput = {
 
 export type EmployeeInvitationSumOrderByAggregateInput = {
   version?: Prisma.SortOrder
+}
+
+export type EmployeeInvitationScalarRelationFilter = {
+  is?: Prisma.EmployeeInvitationWhereInput
+  isNot?: Prisma.EmployeeInvitationWhereInput
 }
 
 export type EmployeeInvitationCreateNestedManyWithoutBusinessInput = {
@@ -715,6 +727,20 @@ export type EnumEmployeeInvitationStatusFieldUpdateOperationsInput = {
   set?: $Enums.EmployeeInvitationStatus
 }
 
+export type EmployeeInvitationCreateNestedOneWithoutDeliveriesInput = {
+  create?: Prisma.XOR<Prisma.EmployeeInvitationCreateWithoutDeliveriesInput, Prisma.EmployeeInvitationUncheckedCreateWithoutDeliveriesInput>
+  connectOrCreate?: Prisma.EmployeeInvitationCreateOrConnectWithoutDeliveriesInput
+  connect?: Prisma.EmployeeInvitationWhereUniqueInput
+}
+
+export type EmployeeInvitationUpdateOneRequiredWithoutDeliveriesNestedInput = {
+  create?: Prisma.XOR<Prisma.EmployeeInvitationCreateWithoutDeliveriesInput, Prisma.EmployeeInvitationUncheckedCreateWithoutDeliveriesInput>
+  connectOrCreate?: Prisma.EmployeeInvitationCreateOrConnectWithoutDeliveriesInput
+  upsert?: Prisma.EmployeeInvitationUpsertWithoutDeliveriesInput
+  connect?: Prisma.EmployeeInvitationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EmployeeInvitationUpdateToOneWithWhereWithoutDeliveriesInput, Prisma.EmployeeInvitationUpdateWithoutDeliveriesInput>, Prisma.EmployeeInvitationUncheckedUpdateWithoutDeliveriesInput>
+}
+
 export type EmployeeInvitationCreateWithoutBusinessInput = {
   id: string
   email?: string | null
@@ -730,6 +756,7 @@ export type EmployeeInvitationCreateWithoutBusinessInput = {
   version?: number
   employee: Prisma.EmployeeCreateNestedOneWithoutInvitationsInput
   branch?: Prisma.BranchCreateNestedOneWithoutEmployeeInvitationsInput
+  deliveries?: Prisma.InvitationDeliveryCreateNestedManyWithoutInvitationInput
 }
 
 export type EmployeeInvitationUncheckedCreateWithoutBusinessInput = {
@@ -747,6 +774,7 @@ export type EmployeeInvitationUncheckedCreateWithoutBusinessInput = {
   revokedAt?: Date | string | null
   updatedAt?: Date | string
   version?: number
+  deliveries?: Prisma.InvitationDeliveryUncheckedCreateNestedManyWithoutInvitationInput
 }
 
 export type EmployeeInvitationCreateOrConnectWithoutBusinessInput = {
@@ -811,6 +839,7 @@ export type EmployeeInvitationCreateWithoutBranchInput = {
   version?: number
   business: Prisma.BusinessCreateNestedOneWithoutEmployeeInvitationsInput
   employee: Prisma.EmployeeCreateNestedOneWithoutInvitationsInput
+  deliveries?: Prisma.InvitationDeliveryCreateNestedManyWithoutInvitationInput
 }
 
 export type EmployeeInvitationUncheckedCreateWithoutBranchInput = {
@@ -828,6 +857,7 @@ export type EmployeeInvitationUncheckedCreateWithoutBranchInput = {
   revokedAt?: Date | string | null
   updatedAt?: Date | string
   version?: number
+  deliveries?: Prisma.InvitationDeliveryUncheckedCreateNestedManyWithoutInvitationInput
 }
 
 export type EmployeeInvitationCreateOrConnectWithoutBranchInput = {
@@ -871,6 +901,7 @@ export type EmployeeInvitationCreateWithoutEmployeeInput = {
   version?: number
   business: Prisma.BusinessCreateNestedOneWithoutEmployeeInvitationsInput
   branch?: Prisma.BranchCreateNestedOneWithoutEmployeeInvitationsInput
+  deliveries?: Prisma.InvitationDeliveryCreateNestedManyWithoutInvitationInput
 }
 
 export type EmployeeInvitationUncheckedCreateWithoutEmployeeInput = {
@@ -888,6 +919,7 @@ export type EmployeeInvitationUncheckedCreateWithoutEmployeeInput = {
   revokedAt?: Date | string | null
   updatedAt?: Date | string
   version?: number
+  deliveries?: Prisma.InvitationDeliveryUncheckedCreateNestedManyWithoutInvitationInput
 }
 
 export type EmployeeInvitationCreateOrConnectWithoutEmployeeInput = {
@@ -914,6 +946,94 @@ export type EmployeeInvitationUpdateWithWhereUniqueWithoutEmployeeInput = {
 export type EmployeeInvitationUpdateManyWithWhereWithoutEmployeeInput = {
   where: Prisma.EmployeeInvitationScalarWhereInput
   data: Prisma.XOR<Prisma.EmployeeInvitationUpdateManyMutationInput, Prisma.EmployeeInvitationUncheckedUpdateManyWithoutEmployeeInput>
+}
+
+export type EmployeeInvitationCreateWithoutDeliveriesInput = {
+  id: string
+  email?: string | null
+  phone?: string | null
+  role: $Enums.EmployeeRole
+  status: $Enums.EmployeeInvitationStatus
+  tokenHash: string
+  expiresAt?: Date | string | null
+  createdAt?: Date | string
+  acceptedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  updatedAt?: Date | string
+  version?: number
+  business: Prisma.BusinessCreateNestedOneWithoutEmployeeInvitationsInput
+  employee: Prisma.EmployeeCreateNestedOneWithoutInvitationsInput
+  branch?: Prisma.BranchCreateNestedOneWithoutEmployeeInvitationsInput
+}
+
+export type EmployeeInvitationUncheckedCreateWithoutDeliveriesInput = {
+  id: string
+  businessId: string
+  employeeId: string
+  branchId?: string | null
+  email?: string | null
+  phone?: string | null
+  role: $Enums.EmployeeRole
+  status: $Enums.EmployeeInvitationStatus
+  tokenHash: string
+  expiresAt?: Date | string | null
+  createdAt?: Date | string
+  acceptedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  updatedAt?: Date | string
+  version?: number
+}
+
+export type EmployeeInvitationCreateOrConnectWithoutDeliveriesInput = {
+  where: Prisma.EmployeeInvitationWhereUniqueInput
+  create: Prisma.XOR<Prisma.EmployeeInvitationCreateWithoutDeliveriesInput, Prisma.EmployeeInvitationUncheckedCreateWithoutDeliveriesInput>
+}
+
+export type EmployeeInvitationUpsertWithoutDeliveriesInput = {
+  update: Prisma.XOR<Prisma.EmployeeInvitationUpdateWithoutDeliveriesInput, Prisma.EmployeeInvitationUncheckedUpdateWithoutDeliveriesInput>
+  create: Prisma.XOR<Prisma.EmployeeInvitationCreateWithoutDeliveriesInput, Prisma.EmployeeInvitationUncheckedCreateWithoutDeliveriesInput>
+  where?: Prisma.EmployeeInvitationWhereInput
+}
+
+export type EmployeeInvitationUpdateToOneWithWhereWithoutDeliveriesInput = {
+  where?: Prisma.EmployeeInvitationWhereInput
+  data: Prisma.XOR<Prisma.EmployeeInvitationUpdateWithoutDeliveriesInput, Prisma.EmployeeInvitationUncheckedUpdateWithoutDeliveriesInput>
+}
+
+export type EmployeeInvitationUpdateWithoutDeliveriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
+  status?: Prisma.EnumEmployeeInvitationStatusFieldUpdateOperationsInput | $Enums.EmployeeInvitationStatus
+  tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  business?: Prisma.BusinessUpdateOneRequiredWithoutEmployeeInvitationsNestedInput
+  employee?: Prisma.EmployeeUpdateOneRequiredWithoutInvitationsNestedInput
+  branch?: Prisma.BranchUpdateOneWithoutEmployeeInvitationsNestedInput
+}
+
+export type EmployeeInvitationUncheckedUpdateWithoutDeliveriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumEmployeeRoleFieldUpdateOperationsInput | $Enums.EmployeeRole
+  status?: Prisma.EnumEmployeeInvitationStatusFieldUpdateOperationsInput | $Enums.EmployeeInvitationStatus
+  tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type EmployeeInvitationCreateManyBusinessInput = {
@@ -948,6 +1068,7 @@ export type EmployeeInvitationUpdateWithoutBusinessInput = {
   version?: Prisma.IntFieldUpdateOperationsInput | number
   employee?: Prisma.EmployeeUpdateOneRequiredWithoutInvitationsNestedInput
   branch?: Prisma.BranchUpdateOneWithoutEmployeeInvitationsNestedInput
+  deliveries?: Prisma.InvitationDeliveryUpdateManyWithoutInvitationNestedInput
 }
 
 export type EmployeeInvitationUncheckedUpdateWithoutBusinessInput = {
@@ -965,6 +1086,7 @@ export type EmployeeInvitationUncheckedUpdateWithoutBusinessInput = {
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
+  deliveries?: Prisma.InvitationDeliveryUncheckedUpdateManyWithoutInvitationNestedInput
 }
 
 export type EmployeeInvitationUncheckedUpdateManyWithoutBusinessInput = {
@@ -1016,6 +1138,7 @@ export type EmployeeInvitationUpdateWithoutBranchInput = {
   version?: Prisma.IntFieldUpdateOperationsInput | number
   business?: Prisma.BusinessUpdateOneRequiredWithoutEmployeeInvitationsNestedInput
   employee?: Prisma.EmployeeUpdateOneRequiredWithoutInvitationsNestedInput
+  deliveries?: Prisma.InvitationDeliveryUpdateManyWithoutInvitationNestedInput
 }
 
 export type EmployeeInvitationUncheckedUpdateWithoutBranchInput = {
@@ -1033,6 +1156,7 @@ export type EmployeeInvitationUncheckedUpdateWithoutBranchInput = {
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
+  deliveries?: Prisma.InvitationDeliveryUncheckedUpdateManyWithoutInvitationNestedInput
 }
 
 export type EmployeeInvitationUncheckedUpdateManyWithoutBranchInput = {
@@ -1084,6 +1208,7 @@ export type EmployeeInvitationUpdateWithoutEmployeeInput = {
   version?: Prisma.IntFieldUpdateOperationsInput | number
   business?: Prisma.BusinessUpdateOneRequiredWithoutEmployeeInvitationsNestedInput
   branch?: Prisma.BranchUpdateOneWithoutEmployeeInvitationsNestedInput
+  deliveries?: Prisma.InvitationDeliveryUpdateManyWithoutInvitationNestedInput
 }
 
 export type EmployeeInvitationUncheckedUpdateWithoutEmployeeInput = {
@@ -1101,6 +1226,7 @@ export type EmployeeInvitationUncheckedUpdateWithoutEmployeeInput = {
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
+  deliveries?: Prisma.InvitationDeliveryUncheckedUpdateManyWithoutInvitationNestedInput
 }
 
 export type EmployeeInvitationUncheckedUpdateManyWithoutEmployeeInput = {
@@ -1120,6 +1246,35 @@ export type EmployeeInvitationUncheckedUpdateManyWithoutEmployeeInput = {
   version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
+
+/**
+ * Count Type EmployeeInvitationCountOutputType
+ */
+
+export type EmployeeInvitationCountOutputType = {
+  deliveries: number
+}
+
+export type EmployeeInvitationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  deliveries?: boolean | EmployeeInvitationCountOutputTypeCountDeliveriesArgs
+}
+
+/**
+ * EmployeeInvitationCountOutputType without action
+ */
+export type EmployeeInvitationCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EmployeeInvitationCountOutputType
+   */
+  select?: Prisma.EmployeeInvitationCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * EmployeeInvitationCountOutputType without action
+ */
+export type EmployeeInvitationCountOutputTypeCountDeliveriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvitationDeliveryWhereInput
+}
 
 
 export type EmployeeInvitationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1141,6 +1296,8 @@ export type EmployeeInvitationSelect<ExtArgs extends runtime.Types.Extensions.In
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.EmployeeInvitation$branchArgs<ExtArgs>
+  deliveries?: boolean | Prisma.EmployeeInvitation$deliveriesArgs<ExtArgs>
+  _count?: boolean | Prisma.EmployeeInvitationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["employeeInvitation"]>
 
 export type EmployeeInvitationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1208,6 +1365,8 @@ export type EmployeeInvitationInclude<ExtArgs extends runtime.Types.Extensions.I
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.EmployeeInvitation$branchArgs<ExtArgs>
+  deliveries?: boolean | Prisma.EmployeeInvitation$deliveriesArgs<ExtArgs>
+  _count?: boolean | Prisma.EmployeeInvitationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type EmployeeInvitationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
@@ -1226,6 +1385,7 @@ export type $EmployeeInvitationPayload<ExtArgs extends runtime.Types.Extensions.
     business: Prisma.$BusinessPayload<ExtArgs>
     employee: Prisma.$EmployeePayload<ExtArgs>
     branch: Prisma.$BranchPayload<ExtArgs> | null
+    deliveries: Prisma.$InvitationDeliveryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1640,6 +1800,7 @@ export interface Prisma__EmployeeInvitationClient<T, Null = never, ExtArgs exten
   business<T extends Prisma.BusinessDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BusinessDefaultArgs<ExtArgs>>): Prisma.Prisma__BusinessClient<runtime.Types.Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   employee<T extends Prisma.EmployeeDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EmployeeDefaultArgs<ExtArgs>>): Prisma.Prisma__EmployeeClient<runtime.Types.Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   branch<T extends Prisma.EmployeeInvitation$branchArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EmployeeInvitation$branchArgs<ExtArgs>>): Prisma.Prisma__BranchClient<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  deliveries<T extends Prisma.EmployeeInvitation$deliveriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EmployeeInvitation$deliveriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvitationDeliveryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2101,6 +2262,30 @@ export type EmployeeInvitation$branchArgs<ExtArgs extends runtime.Types.Extensio
    */
   include?: Prisma.BranchInclude<ExtArgs> | null
   where?: Prisma.BranchWhereInput
+}
+
+/**
+ * EmployeeInvitation.deliveries
+ */
+export type EmployeeInvitation$deliveriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InvitationDelivery
+   */
+  select?: Prisma.InvitationDeliverySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InvitationDelivery
+   */
+  omit?: Prisma.InvitationDeliveryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvitationDeliveryInclude<ExtArgs> | null
+  where?: Prisma.InvitationDeliveryWhereInput
+  orderBy?: Prisma.InvitationDeliveryOrderByWithRelationInput | Prisma.InvitationDeliveryOrderByWithRelationInput[]
+  cursor?: Prisma.InvitationDeliveryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvitationDeliveryScalarFieldEnum | Prisma.InvitationDeliveryScalarFieldEnum[]
 }
 
 /**

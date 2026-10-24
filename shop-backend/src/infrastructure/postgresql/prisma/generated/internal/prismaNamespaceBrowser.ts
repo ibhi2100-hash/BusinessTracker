@@ -604,7 +604,8 @@ export const InvitationDeliveryScalarFieldEnum = {
   updatedAt: 'updatedAt',
   sentAt: 'sentAt',
   deliveredAt: 'deliveredAt',
-  failedAt: 'failedAt'
+  failedAt: 'failedAt',
+  encryptedToken: 'encryptedToken'
 } as const
 
 export type InvitationDeliveryScalarFieldEnum = (typeof InvitationDeliveryScalarFieldEnum)[keyof typeof InvitationDeliveryScalarFieldEnum]

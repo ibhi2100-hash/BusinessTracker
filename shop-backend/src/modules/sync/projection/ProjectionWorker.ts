@@ -17,12 +17,6 @@ export class ProjectionWorker {
                 .outbox
                 .getPending(100);
 
-        console.log(
-            "[PROJECTION WORKER] Processing pending events...",
-            pending.length
-        );
-
-
         for (const item of pending) {
 
             try {
@@ -55,7 +49,6 @@ export class ProjectionWorker {
                  */
 
                 const domainEvent = BackendToDomainEventTransformer(event);
-
                 await this.projectionBus.publish(
                     domainEvent
                 );

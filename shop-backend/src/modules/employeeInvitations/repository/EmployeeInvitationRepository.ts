@@ -8,6 +8,7 @@ import {
   EmployeeInvitationStatus,
   Prisma,
   EmploymentStatus,
+  Role,
 } from "../../../infrastructure/postgresql/prisma/generated/client.js";
 
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
@@ -160,32 +161,6 @@ export class EmployeeInvitationRepository {
       };
     });
   }
-
-  async create(
-    invitation: DomainEmployeeInvitation,
-    tx: Prisma.TransactionClient = prisma,
-  ): Promise<void> {
-    await tx.employeeInvitation.create({
-      data: EmployeeInvitationMapper.toCreateInput(invitation),
-    });
-  }
-
-  /**
-   * Creates or updates an invitation using its domain ID.
-   *
-   * The original createdAt timestamp is preserved when updating.
-   */
-  async upsert(
-    invitation: DomainEmployeeInvitation,
-    tx: Prisma.TransactionClient = prisma,
-  ): Promise<void> {
-    await tx.employeeInvitation.upsert({
-      where: { id: invitation.id },
-      create: EmployeeInvitationMapper.toCreateInput(invitation),
-      update: EmployeeInvitationMapper.toUpdateInput(invitation),
-    });
-  }
-
   async findById(
     id: string,
     tx: Prisma.TransactionClient = prisma,
@@ -336,31 +311,6 @@ export class EmployeeInvitationMapper {
    */
   static fromNullableDate(date: Date | null): number | null {
     return date === null ? null : date.getTime();
-  }
-
-  /**
-   * Maps the domain invitation into Prisma's create input.
-   */
-  static toCreateInput(
-    invitation: DomainEmployeeInvitation,
-  ): Prisma.EmployeeInvitationUncheckedCreateInput {
-    return {
-      id: invitation.id,
-      businessId: invitation.businessId,
-      employeeId: invitation.employeeId,
-      branchId: invitation.branchId,
-      email: invitation.email,
-      phone: invitation.phone,
-      role: invitation.role,
-      status: invitation.status,
-      tokenHash: invitation.tokenHash,
-      expiresAt: this.toNullableDate(invitation.expiresAt),
-      createdAt: this.toDate(invitation.createdAt),
-      acceptedAt: this.toNullableDate(invitation.acceptedAt),
-      revokedAt: this.toNullableDate(invitation.revokedAt),
-      updatedAt: this.toDate(invitation.updatedAt),
-      version: invitation.version,
-    };
   }
 
   /**
