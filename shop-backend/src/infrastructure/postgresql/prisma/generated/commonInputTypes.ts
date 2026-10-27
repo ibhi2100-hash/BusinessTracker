@@ -396,13 +396,6 @@ export type BigIntFilter<$PrismaModel = never> = {
   not?: Prisma.NestedBigIntFilter<$PrismaModel> | bigint | number
 }
 
-export type EnumModeFilter<$PrismaModel = never> = {
-  equals?: $Enums.Mode | Prisma.EnumModeFieldRefInput<$PrismaModel>
-  in?: $Enums.Mode[] | Prisma.ListEnumModeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.Mode[] | Prisma.ListEnumModeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumModeFilter<$PrismaModel> | $Enums.Mode
-}
-
 export type BigIntWithAggregatesFilter<$PrismaModel = never> = {
   equals?: bigint | number | Prisma.BigIntFieldRefInput<$PrismaModel>
   in?: bigint[] | number[] | Prisma.ListBigIntFieldRefInput<$PrismaModel>
@@ -417,6 +410,13 @@ export type BigIntWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedBigIntFilter<$PrismaModel>
   _min?: Prisma.NestedBigIntFilter<$PrismaModel>
   _max?: Prisma.NestedBigIntFilter<$PrismaModel>
+}
+
+export type EnumModeFilter<$PrismaModel = never> = {
+  equals?: $Enums.Mode | Prisma.EnumModeFieldRefInput<$PrismaModel>
+  in?: $Enums.Mode[] | Prisma.ListEnumModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Mode[] | Prisma.ListEnumModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumModeFilter<$PrismaModel> | $Enums.Mode
 }
 
 export type EnumModeWithAggregatesFilter<$PrismaModel = never> = {
@@ -1123,13 +1123,6 @@ export type NestedBigIntFilter<$PrismaModel = never> = {
   not?: Prisma.NestedBigIntFilter<$PrismaModel> | bigint | number
 }
 
-export type NestedEnumModeFilter<$PrismaModel = never> = {
-  equals?: $Enums.Mode | Prisma.EnumModeFieldRefInput<$PrismaModel>
-  in?: $Enums.Mode[] | Prisma.ListEnumModeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.Mode[] | Prisma.ListEnumModeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumModeFilter<$PrismaModel> | $Enums.Mode
-}
-
 export type NestedBigIntWithAggregatesFilter<$PrismaModel = never> = {
   equals?: bigint | number | Prisma.BigIntFieldRefInput<$PrismaModel>
   in?: bigint[] | number[] | Prisma.ListBigIntFieldRefInput<$PrismaModel>
@@ -1144,6 +1137,13 @@ export type NestedBigIntWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedBigIntFilter<$PrismaModel>
   _min?: Prisma.NestedBigIntFilter<$PrismaModel>
   _max?: Prisma.NestedBigIntFilter<$PrismaModel>
+}
+
+export type NestedEnumModeFilter<$PrismaModel = never> = {
+  equals?: $Enums.Mode | Prisma.EnumModeFieldRefInput<$PrismaModel>
+  in?: $Enums.Mode[] | Prisma.ListEnumModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Mode[] | Prisma.ListEnumModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumModeFilter<$PrismaModel> | $Enums.Mode
 }
 
 export type NestedEnumModeWithAggregatesFilter<$PrismaModel = never> = {

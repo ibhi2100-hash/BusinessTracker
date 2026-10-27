@@ -73,6 +73,11 @@ export type Inventory = Prisma.InventoryModel
  */
 export type ProcessedSyncEvent = Prisma.ProcessedSyncEventModel
 /**
+ * Model BusinessEventStream
+ * 
+ */
+export type BusinessEventStream = Prisma.BusinessEventStreamModel
+/**
  * Model Event
  * 
  */
@@ -152,3 +157,8 @@ export type EmployeeNotification = Prisma.EmployeeNotificationModel
  * 
  */
 export type InvitationDelivery = Prisma.InvitationDeliveryModel
+/**
+ * Model DeviceSyncCursor
+ * 
+ */
+export type DeviceSyncCursor = Prisma.DeviceSyncCursorModel

@@ -483,11 +483,18 @@ model ProcessedSyncEvent {
   @@index([branchId])
 }
 
+model BusinessEventStream {
+  businessId   String @id
+  lastPosition BigInt @default(0)
+}
+
+
 model Event {
   id String   @id
 
   businessId String
 
+  businessPosition BigInt
   branchId         String?
 
   aggregateId   String
@@ -527,6 +534,10 @@ model Event {
   @@index([createdAt])
 
   @@index([globalPosition])
+
+  @@unique([businessId, businessPosition])
+
+  @@index([businessId, businessPosition])
 }
 model DeviceClock {
   deviceId   String @id
@@ -912,7 +923,7 @@ model EmployeeInvitation {
 
 
   deliveries InvitationDelivery[]
-  
+
   @@index([businessId])
   @@index([employeeId])
   @@index([businessId, status])
@@ -1067,4 +1078,15 @@ model InvitationDelivery {
   @@index([invitationId])
   @@index([businessId, createdAt])
   @@index([providerMessageId])
+}
+
+model DeviceSyncCursor {
+  id                String   @id @default(uuid())
+  deviceId          String
+  businessId        String
+  lastPosition      BigInt   @default(0)
+  updatedAt         DateTime @updatedAt
+
+  @@unique([deviceId, businessId])
+  @@index([businessId])
 }

@@ -80,6 +80,8 @@ async refresh(
   const tokenHash =
     hashToken(refreshToken);
 
+  console.log("This is the User Harshed Token",  tokenHash, "And this is the refreshed Token:", refreshToken)
+
   const session =
     await this.sessionRepo.findByHash(
       tokenHash

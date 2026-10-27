@@ -1,14 +1,12 @@
 import type{
     BackendEventPayload,
     SyncPushResult,
-    SyncPullResult,
-    SyncTransport,
+    SyncPullResult
 } from "@business/shared-types";
 
 import { apiFetch } from "../../../../../lib/api"; 
 
-export class HttpSyncTransport
-    implements SyncTransport {
+export class HttpSyncTransport{
     private readonly baseUrl: string
     constructor(
         baseUrl: string
@@ -58,25 +56,28 @@ export class HttpSyncTransport
         return result;
     }
 
+async pull(
+  businessId: string,
+  cursor: string,
+  limit = 100
+): Promise<SyncPullResult> {
+  const params = new URLSearchParams({
+    businessId,
+    cursor,
+    limit: String(limit),
+  });
 
-    async pull(
-        cursor: number,
-        limit = 100
-    ): Promise<SyncPullResult> {
-        const response =
-            await apiFetch(
-                `${this.baseUrl}/sync/pull?cursor=${cursor}&limit=${limit}`,
-                {
-                    method: "GET"
-                }
-            );
+  const response = await apiFetch(
+    `${this.baseUrl}/sync/pull?${params}`,
+    { method: "GET" }
+  );
 
-        if (!response.ok) {
-            throw new Error(
-                `Sync pull failed: ${response.status}`
-            );
-        }
+  if (!response.ok) {
+    throw new Error(
+      `Sync pull failed: ${response.status}`
+    );
+  }
 
-        return await response.json();
-    }
+  return await response.json() as SyncPullResult;
+}
 }

@@ -1,3 +1,4 @@
+import { BackendEvent } from "../events/BackendEvent.js";
 import { DomainEvent } from "../events/DomainEvents.js";
 import { SyncActivity } from "./Activities.js";
 import { Conflict } from "./Conflicts.js";
@@ -116,11 +117,11 @@ export interface SyncPushResult {
  * Result of pulling events from the global event stream.
  */
 export interface SyncPullResult {
-    events: BackendAcceptedEvent[];
+    events: BackendEvent[];
     /**
      * Cursor after the returned events.
      */
-    cursor: number;
+    cursor: string;
     hasMore: boolean;
 }
 /**

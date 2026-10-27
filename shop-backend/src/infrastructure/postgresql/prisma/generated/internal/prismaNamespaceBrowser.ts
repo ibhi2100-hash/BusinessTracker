@@ -62,6 +62,7 @@ export const ModelName = {
   Aggregate: 'Aggregate',
   Inventory: 'Inventory',
   ProcessedSyncEvent: 'ProcessedSyncEvent',
+  BusinessEventStream: 'BusinessEventStream',
   Event: 'Event',
   DeviceClock: 'DeviceClock',
   LedgerEntry: 'LedgerEntry',
@@ -77,7 +78,8 @@ export const ModelName = {
   EmployeeCompensationHistory: 'EmployeeCompensationHistory',
   EmployeeRequest: 'EmployeeRequest',
   EmployeeNotification: 'EmployeeNotification',
-  InvitationDelivery: 'InvitationDelivery'
+  InvitationDelivery: 'InvitationDelivery',
+  DeviceSyncCursor: 'DeviceSyncCursor'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -275,9 +277,18 @@ export const ProcessedSyncEventScalarFieldEnum = {
 export type ProcessedSyncEventScalarFieldEnum = (typeof ProcessedSyncEventScalarFieldEnum)[keyof typeof ProcessedSyncEventScalarFieldEnum]
 
 
+export const BusinessEventStreamScalarFieldEnum = {
+  businessId: 'businessId',
+  lastPosition: 'lastPosition'
+} as const
+
+export type BusinessEventStreamScalarFieldEnum = (typeof BusinessEventStreamScalarFieldEnum)[keyof typeof BusinessEventStreamScalarFieldEnum]
+
+
 export const EventScalarFieldEnum = {
   id: 'id',
   businessId: 'businessId',
+  businessPosition: 'businessPosition',
   branchId: 'branchId',
   aggregateId: 'aggregateId',
   aggregateType: 'aggregateType',
@@ -609,6 +620,17 @@ export const InvitationDeliveryScalarFieldEnum = {
 } as const
 
 export type InvitationDeliveryScalarFieldEnum = (typeof InvitationDeliveryScalarFieldEnum)[keyof typeof InvitationDeliveryScalarFieldEnum]
+
+
+export const DeviceSyncCursorScalarFieldEnum = {
+  id: 'id',
+  deviceId: 'deviceId',
+  businessId: 'businessId',
+  lastPosition: 'lastPosition',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DeviceSyncCursorScalarFieldEnum = (typeof DeviceSyncCursorScalarFieldEnum)[keyof typeof DeviceSyncCursorScalarFieldEnum]
 
 
 export const SortOrder = {

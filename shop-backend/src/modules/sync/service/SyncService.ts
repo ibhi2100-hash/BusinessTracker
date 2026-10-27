@@ -1,4 +1,4 @@
-import { DomainEvent } from "@business/shared-types";
+import { BackendEvent, DomainEvent } from "@business/shared-types";
 
 import { RepositoryRegistry } from "../repositories/RepositoryRegistry.js";
 import { EventValidator } from "./EventValidator.js";
@@ -9,12 +9,17 @@ import {
     ConflictEventResult,
     RejectedEventResult,
 } from "./SyncProtocol.js";
+import { EventMapper } from "../repositories/eventRepository.js";
 
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
-
+import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
 import {
     AggregateVersionConflictError,
 } from "../conflict/conflictError.js";
+
+const DEFAULT_PULL_LIMIT = 100;
+const MAX_PULL_LIMIT = 500;
+const ZERO_CURSOR = "0";
 
 
 export interface BootstrapSnapshot {
@@ -35,7 +40,28 @@ export interface BootstrapSnapshot {
     snapshotPosition: bigint;
 }
 
+export interface PullInput {
+  businessId: string;
+  cursor: string;
+  limit?: number;
+}
+export interface SyncPullResult {
+  businessId: string;
+  events: BackendEvent[];
+  cursor: string;
+  hasMore: boolean;
+  limit: number;
+}
 
+export class SyncInputError extends Error {
+  constructor(
+    message: string,
+    public readonly statusCode: number = 400,
+  ) {
+    super(message);
+    this.name = "SyncInputError";
+  }
+}
 export class OfflineSyncService {
 
     constructor(
@@ -431,19 +457,109 @@ export class OfflineSyncService {
      * =========================================================
      */
 
-    async pull() {
+   async pull(input: PullInput): Promise<SyncPullResult> {
+    const businessId = this.validateBusinessId(input.businessId);
+    const cursor = this.parseCursor(input.cursor);
+    const limit = this.parseLimit(input.limit);
 
-        /*
-         * Implement after bootstrap.
-         *
-         * Expected semantics:
-         *
-         *     events where globalPosition > clientPosition
-         *
-         * ordered by globalPosition ASC.
-         */
+    return prisma.$transaction(
+        async (tx) => {
+        // Capture the business stream boundary and event page in one snapshot.
+        const checkpoint =
+            await this.repositories.events.getBusinessPosition(
+            tx,
+            businessId,
+            );
+
+        if (cursor > checkpoint) {
+            throw new SyncInputError(
+            "Cursor is ahead of the business stream. Bootstrap or resynchronize this device.",
+            409,
+            );
+        }
+
+        const rows = await this.repositories.events.getEventsAfter(
+            tx,
+            businessId,
+            cursor,
+            limit,
+            checkpoint,
+        );
+
+        const hasMore = rows.length > limit;
+        const page = hasMore ? rows.slice(0, limit) : rows;
+
+        // Advance only as far as the last returned event when more remain.
+        // Otherwise, advance to the checkpoint captured in this transaction.
+        const nextCursor = hasMore
+            ? page[page.length - 1]?.businessPosition
+            : checkpoint;
+
+        return {
+            businessId,
+            events: page.map((row) => EventMapper.fromRow(row)),
+            cursor: nextCursor?.toString() ?? "",
+            hasMore,
+            limit,
+        };
+        },
+        {
+        isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead,
+        },
+    );
     }
 
+    private validateBusinessId(value: unknown): string {
+    if (typeof value !== "string" || value.trim().length === 0) {
+        throw new SyncInputError("businessId is required.");
+    }
+
+    const businessId = value.trim();
+
+    if (businessId.length > 128) {
+        throw new SyncInputError("businessId is invalid.");
+    }
+
+    return businessId;
+    }
+
+    private parseCursor(value: unknown): bigint {
+    if (
+        typeof value !== "string" ||
+        !/^(0|[1-9]\d*)$/.test(value)
+    ) {
+        throw new SyncInputError(
+        "cursor must be a non-negative decimal integer string.",
+        );
+    }
+
+    return BigInt(value);
+    }
+
+    private parseLimit(value: unknown): number {
+    if (value === undefined || value === null) {
+        return DEFAULT_PULL_LIMIT;
+    }
+
+    const limit =
+        typeof value === "number"
+        ? value
+        : typeof value === "string" && /^\d+$/.test(value)
+            ? Number(value)
+            : Number.NaN;
+
+    if (
+        !Number.isSafeInteger(limit) ||
+        limit < 1 ||
+        limit > MAX_PULL_LIMIT
+    ) {
+        throw new SyncInputError(
+        `limit must be an integer between 1 and ${MAX_PULL_LIMIT}.`,
+        );
+    }
+
+    return limit;
+    }
 
     /*
      * =========================================================
@@ -543,12 +659,10 @@ export class OfflineSyncService {
                 */
 
                 const snapshotPosition =
-                    await this.repositories
-                        .events
-                        .getGlobalPosition(
-                            tx
-                        );
-
+                    await this.repositories.events.getBusinessPosition(
+                        tx,
+                        businessId,
+                    );
 
                 /*
                 * ---------------------------------------------------------

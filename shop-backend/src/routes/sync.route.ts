@@ -35,7 +35,7 @@ export function createSyncRouter(
     router.get(
         "/pull",
         authMiddleware,
-        offlineSyncController.getAggregateEvents.bind(
+        offlineSyncController.pullEvent.bind(
             offlineSyncController
         )
     );

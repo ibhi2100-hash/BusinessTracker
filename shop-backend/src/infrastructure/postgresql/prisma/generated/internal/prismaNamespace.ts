@@ -395,6 +395,7 @@ export const ModelName = {
   Aggregate: 'Aggregate',
   Inventory: 'Inventory',
   ProcessedSyncEvent: 'ProcessedSyncEvent',
+  BusinessEventStream: 'BusinessEventStream',
   Event: 'Event',
   DeviceClock: 'DeviceClock',
   LedgerEntry: 'LedgerEntry',
@@ -410,7 +411,8 @@ export const ModelName = {
   EmployeeCompensationHistory: 'EmployeeCompensationHistory',
   EmployeeRequest: 'EmployeeRequest',
   EmployeeNotification: 'EmployeeNotification',
-  InvitationDelivery: 'InvitationDelivery'
+  InvitationDelivery: 'InvitationDelivery',
+  DeviceSyncCursor: 'DeviceSyncCursor'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -426,7 +428,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "business" | "branch" | "user" | "session" | "passwordResetToken" | "subscriptionPlan" | "businessSubscription" | "product" | "aggregate" | "inventory" | "processedSyncEvent" | "event" | "deviceClock" | "ledgerEntry" | "sale" | "expense" | "outboxEvent" | "snapshot" | "alert" | "outbox" | "employee" | "employeeInvitation" | "employeeCompensation" | "employeeCompensationHistory" | "employeeRequest" | "employeeNotification" | "invitationDelivery"
+    modelProps: "business" | "branch" | "user" | "session" | "passwordResetToken" | "subscriptionPlan" | "businessSubscription" | "product" | "aggregate" | "inventory" | "processedSyncEvent" | "businessEventStream" | "event" | "deviceClock" | "ledgerEntry" | "sale" | "expense" | "outboxEvent" | "snapshot" | "alert" | "outbox" | "employee" | "employeeInvitation" | "employeeCompensation" | "employeeCompensationHistory" | "employeeRequest" | "employeeNotification" | "invitationDelivery" | "deviceSyncCursor"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1241,6 +1243,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ProcessedSyncEventCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ProcessedSyncEventCountAggregateOutputType> | number
+        }
+      }
+    }
+    BusinessEventStream: {
+      payload: Prisma.$BusinessEventStreamPayload<ExtArgs>
+      fields: Prisma.BusinessEventStreamFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BusinessEventStreamFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BusinessEventStreamPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BusinessEventStreamFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BusinessEventStreamPayload>
+        }
+        findFirst: {
+          args: Prisma.BusinessEventStreamFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BusinessEventStreamPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BusinessEventStreamFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BusinessEventStreamPayload>
+        }
+        findMany: {
+          args: Prisma.BusinessEventStreamFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BusinessEventStreamPayload>[]
+        }
+        create: {
+          args: Prisma.BusinessEventStreamCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BusinessEventStreamPayload>
+        }
+        createMany: {
+          args: Prisma.BusinessEventStreamCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BusinessEventStreamCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BusinessEventStreamPayload>[]
+        }
+        delete: {
+          args: Prisma.BusinessEventStreamDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BusinessEventStreamPayload>
+        }
+        update: {
+          args: Prisma.BusinessEventStreamUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BusinessEventStreamPayload>
+        }
+        deleteMany: {
+          args: Prisma.BusinessEventStreamDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BusinessEventStreamUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BusinessEventStreamUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BusinessEventStreamPayload>[]
+        }
+        upsert: {
+          args: Prisma.BusinessEventStreamUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BusinessEventStreamPayload>
+        }
+        aggregate: {
+          args: Prisma.BusinessEventStreamAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBusinessEventStream>
+        }
+        groupBy: {
+          args: Prisma.BusinessEventStreamGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BusinessEventStreamGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BusinessEventStreamCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BusinessEventStreamCountAggregateOutputType> | number
         }
       }
     }
@@ -2428,6 +2504,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DeviceSyncCursor: {
+      payload: Prisma.$DeviceSyncCursorPayload<ExtArgs>
+      fields: Prisma.DeviceSyncCursorFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DeviceSyncCursorFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCursorPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DeviceSyncCursorFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCursorPayload>
+        }
+        findFirst: {
+          args: Prisma.DeviceSyncCursorFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCursorPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DeviceSyncCursorFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCursorPayload>
+        }
+        findMany: {
+          args: Prisma.DeviceSyncCursorFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCursorPayload>[]
+        }
+        create: {
+          args: Prisma.DeviceSyncCursorCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCursorPayload>
+        }
+        createMany: {
+          args: Prisma.DeviceSyncCursorCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DeviceSyncCursorCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCursorPayload>[]
+        }
+        delete: {
+          args: Prisma.DeviceSyncCursorDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCursorPayload>
+        }
+        update: {
+          args: Prisma.DeviceSyncCursorUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCursorPayload>
+        }
+        deleteMany: {
+          args: Prisma.DeviceSyncCursorDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DeviceSyncCursorUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DeviceSyncCursorUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCursorPayload>[]
+        }
+        upsert: {
+          args: Prisma.DeviceSyncCursorUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCursorPayload>
+        }
+        aggregate: {
+          args: Prisma.DeviceSyncCursorAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDeviceSyncCursor>
+        }
+        groupBy: {
+          args: Prisma.DeviceSyncCursorGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DeviceSyncCursorGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DeviceSyncCursorCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DeviceSyncCursorCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2646,9 +2796,18 @@ export const ProcessedSyncEventScalarFieldEnum = {
 export type ProcessedSyncEventScalarFieldEnum = (typeof ProcessedSyncEventScalarFieldEnum)[keyof typeof ProcessedSyncEventScalarFieldEnum]
 
 
+export const BusinessEventStreamScalarFieldEnum = {
+  businessId: 'businessId',
+  lastPosition: 'lastPosition'
+} as const
+
+export type BusinessEventStreamScalarFieldEnum = (typeof BusinessEventStreamScalarFieldEnum)[keyof typeof BusinessEventStreamScalarFieldEnum]
+
+
 export const EventScalarFieldEnum = {
   id: 'id',
   businessId: 'businessId',
+  businessPosition: 'businessPosition',
   branchId: 'branchId',
   aggregateId: 'aggregateId',
   aggregateType: 'aggregateType',
@@ -2980,6 +3139,17 @@ export const InvitationDeliveryScalarFieldEnum = {
 } as const
 
 export type InvitationDeliveryScalarFieldEnum = (typeof InvitationDeliveryScalarFieldEnum)[keyof typeof InvitationDeliveryScalarFieldEnum]
+
+
+export const DeviceSyncCursorScalarFieldEnum = {
+  id: 'id',
+  deviceId: 'deviceId',
+  businessId: 'businessId',
+  lastPosition: 'lastPosition',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DeviceSyncCursorScalarFieldEnum = (typeof DeviceSyncCursorScalarFieldEnum)[keyof typeof DeviceSyncCursorScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -3499,6 +3669,7 @@ export type GlobalOmitConfig = {
   aggregate?: Prisma.AggregateOmit
   inventory?: Prisma.InventoryOmit
   processedSyncEvent?: Prisma.ProcessedSyncEventOmit
+  businessEventStream?: Prisma.BusinessEventStreamOmit
   event?: Prisma.EventOmit
   deviceClock?: Prisma.DeviceClockOmit
   ledgerEntry?: Prisma.LedgerEntryOmit
@@ -3515,6 +3686,7 @@ export type GlobalOmitConfig = {
   employeeRequest?: Prisma.EmployeeRequestOmit
   employeeNotification?: Prisma.EmployeeNotificationOmit
   invitationDelivery?: Prisma.InvitationDeliveryOmit
+  deviceSyncCursor?: Prisma.DeviceSyncCursorOmit
 }
 
 /* Types for Logging */

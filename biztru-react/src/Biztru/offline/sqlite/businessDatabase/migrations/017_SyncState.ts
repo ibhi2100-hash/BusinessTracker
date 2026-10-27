@@ -8,11 +8,6 @@ export const migration017: Migration = {
 
     up(): readonly SQLiteMigrationOperation[] {
         return [
-            {
-                sql: `
-                    DROP TABLE IF EXISTS sync;
-                `,
-            },
 
             {
                 sql: `

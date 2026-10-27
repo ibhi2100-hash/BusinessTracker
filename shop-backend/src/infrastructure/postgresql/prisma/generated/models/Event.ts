@@ -27,12 +27,14 @@ export type AggregateEvent = {
 }
 
 export type EventAvgAggregateOutputType = {
+  businessPosition: number | null
   aggregateVersion: number | null
   globalPosition: number | null
   logicClock: number | null
 }
 
 export type EventSumAggregateOutputType = {
+  businessPosition: bigint | null
   aggregateVersion: number | null
   globalPosition: bigint | null
   logicClock: bigint | null
@@ -41,6 +43,7 @@ export type EventSumAggregateOutputType = {
 export type EventMinAggregateOutputType = {
   id: string | null
   businessId: string | null
+  businessPosition: bigint | null
   branchId: string | null
   aggregateId: string | null
   aggregateType: string | null
@@ -60,6 +63,7 @@ export type EventMinAggregateOutputType = {
 export type EventMaxAggregateOutputType = {
   id: string | null
   businessId: string | null
+  businessPosition: bigint | null
   branchId: string | null
   aggregateId: string | null
   aggregateType: string | null
@@ -79,6 +83,7 @@ export type EventMaxAggregateOutputType = {
 export type EventCountAggregateOutputType = {
   id: number
   businessId: number
+  businessPosition: number
   branchId: number
   aggregateId: number
   aggregateType: number
@@ -99,12 +104,14 @@ export type EventCountAggregateOutputType = {
 
 
 export type EventAvgAggregateInputType = {
+  businessPosition?: true
   aggregateVersion?: true
   globalPosition?: true
   logicClock?: true
 }
 
 export type EventSumAggregateInputType = {
+  businessPosition?: true
   aggregateVersion?: true
   globalPosition?: true
   logicClock?: true
@@ -113,6 +120,7 @@ export type EventSumAggregateInputType = {
 export type EventMinAggregateInputType = {
   id?: true
   businessId?: true
+  businessPosition?: true
   branchId?: true
   aggregateId?: true
   aggregateType?: true
@@ -132,6 +140,7 @@ export type EventMinAggregateInputType = {
 export type EventMaxAggregateInputType = {
   id?: true
   businessId?: true
+  businessPosition?: true
   branchId?: true
   aggregateId?: true
   aggregateType?: true
@@ -151,6 +160,7 @@ export type EventMaxAggregateInputType = {
 export type EventCountAggregateInputType = {
   id?: true
   businessId?: true
+  businessPosition?: true
   branchId?: true
   aggregateId?: true
   aggregateType?: true
@@ -258,6 +268,7 @@ export type EventGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type EventGroupByOutputType = {
   id: string
   businessId: string
+  businessPosition: bigint
   branchId: string | null
   aggregateId: string
   aggregateType: string
@@ -301,6 +312,7 @@ export type EventWhereInput = {
   NOT?: Prisma.EventWhereInput | Prisma.EventWhereInput[]
   id?: Prisma.StringFilter<"Event"> | string
   businessId?: Prisma.StringFilter<"Event"> | string
+  businessPosition?: Prisma.BigIntFilter<"Event"> | bigint | number
   branchId?: Prisma.StringNullableFilter<"Event"> | string | null
   aggregateId?: Prisma.StringFilter<"Event"> | string
   aggregateType?: Prisma.StringFilter<"Event"> | string
@@ -322,6 +334,7 @@ export type EventWhereInput = {
 export type EventOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
+  businessPosition?: Prisma.SortOrder
   branchId?: Prisma.SortOrderInput | Prisma.SortOrder
   aggregateId?: Prisma.SortOrder
   aggregateType?: Prisma.SortOrder
@@ -343,10 +356,12 @@ export type EventOrderByWithRelationInput = {
 export type EventWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   aggregateType_aggregateId_aggregateVersion?: Prisma.EventAggregateTypeAggregateIdAggregateVersionCompoundUniqueInput
+  businessId_businessPosition?: Prisma.EventBusinessIdBusinessPositionCompoundUniqueInput
   AND?: Prisma.EventWhereInput | Prisma.EventWhereInput[]
   OR?: Prisma.EventWhereInput[]
   NOT?: Prisma.EventWhereInput | Prisma.EventWhereInput[]
   businessId?: Prisma.StringFilter<"Event"> | string
+  businessPosition?: Prisma.BigIntFilter<"Event"> | bigint | number
   branchId?: Prisma.StringNullableFilter<"Event"> | string | null
   aggregateId?: Prisma.StringFilter<"Event"> | string
   aggregateType?: Prisma.StringFilter<"Event"> | string
@@ -363,11 +378,12 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   checksum?: Prisma.StringFilter<"Event"> | string
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   ledgerEntries?: Prisma.LedgerEntryListRelationFilter
-}, "id" | "aggregateType_aggregateId_aggregateVersion">
+}, "id" | "aggregateType_aggregateId_aggregateVersion" | "businessId_businessPosition">
 
 export type EventOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
+  businessPosition?: Prisma.SortOrder
   branchId?: Prisma.SortOrderInput | Prisma.SortOrder
   aggregateId?: Prisma.SortOrder
   aggregateType?: Prisma.SortOrder
@@ -396,6 +412,7 @@ export type EventScalarWhereWithAggregatesInput = {
   NOT?: Prisma.EventScalarWhereWithAggregatesInput | Prisma.EventScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Event"> | string
   businessId?: Prisma.StringWithAggregatesFilter<"Event"> | string
+  businessPosition?: Prisma.BigIntWithAggregatesFilter<"Event"> | bigint | number
   branchId?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   aggregateId?: Prisma.StringWithAggregatesFilter<"Event"> | string
   aggregateType?: Prisma.StringWithAggregatesFilter<"Event"> | string
@@ -416,6 +433,7 @@ export type EventScalarWhereWithAggregatesInput = {
 export type EventCreateInput = {
   id: string
   businessId: string
+  businessPosition: bigint | number
   branchId?: string | null
   aggregateId: string
   aggregateType: string
@@ -437,6 +455,7 @@ export type EventCreateInput = {
 export type EventUncheckedCreateInput = {
   id: string
   businessId: string
+  businessPosition: bigint | number
   branchId?: string | null
   aggregateId: string
   aggregateType: string
@@ -458,6 +477,7 @@ export type EventUncheckedCreateInput = {
 export type EventUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  businessPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -479,6 +499,7 @@ export type EventUpdateInput = {
 export type EventUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  businessPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -500,6 +521,7 @@ export type EventUncheckedUpdateInput = {
 export type EventCreateManyInput = {
   id: string
   businessId: string
+  businessPosition: bigint | number
   branchId?: string | null
   aggregateId: string
   aggregateType: string
@@ -520,6 +542,7 @@ export type EventCreateManyInput = {
 export type EventUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  businessPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -540,6 +563,7 @@ export type EventUpdateManyMutationInput = {
 export type EventUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  businessPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -563,9 +587,15 @@ export type EventAggregateTypeAggregateIdAggregateVersionCompoundUniqueInput = {
   aggregateVersion: number
 }
 
+export type EventBusinessIdBusinessPositionCompoundUniqueInput = {
+  businessId: string
+  businessPosition: bigint | number
+}
+
 export type EventCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
+  businessPosition?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
   aggregateId?: Prisma.SortOrder
   aggregateType?: Prisma.SortOrder
@@ -584,6 +614,7 @@ export type EventCountOrderByAggregateInput = {
 }
 
 export type EventAvgOrderByAggregateInput = {
+  businessPosition?: Prisma.SortOrder
   aggregateVersion?: Prisma.SortOrder
   globalPosition?: Prisma.SortOrder
   logicClock?: Prisma.SortOrder
@@ -592,6 +623,7 @@ export type EventAvgOrderByAggregateInput = {
 export type EventMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
+  businessPosition?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
   aggregateId?: Prisma.SortOrder
   aggregateType?: Prisma.SortOrder
@@ -611,6 +643,7 @@ export type EventMaxOrderByAggregateInput = {
 export type EventMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   businessId?: Prisma.SortOrder
+  businessPosition?: Prisma.SortOrder
   branchId?: Prisma.SortOrder
   aggregateId?: Prisma.SortOrder
   aggregateType?: Prisma.SortOrder
@@ -628,6 +661,7 @@ export type EventMinOrderByAggregateInput = {
 }
 
 export type EventSumOrderByAggregateInput = {
+  businessPosition?: Prisma.SortOrder
   aggregateVersion?: Prisma.SortOrder
   globalPosition?: Prisma.SortOrder
   logicClock?: Prisma.SortOrder
@@ -636,14 +670,6 @@ export type EventSumOrderByAggregateInput = {
 export type EventScalarRelationFilter = {
   is?: Prisma.EventWhereInput
   isNot?: Prisma.EventWhereInput
-}
-
-export type BigIntFieldUpdateOperationsInput = {
-  set?: bigint | number
-  increment?: bigint | number
-  decrement?: bigint | number
-  multiply?: bigint | number
-  divide?: bigint | number
 }
 
 export type EnumModeFieldUpdateOperationsInput = {
@@ -667,6 +693,7 @@ export type EventUpdateOneRequiredWithoutLedgerEntriesNestedInput = {
 export type EventCreateWithoutLedgerEntriesInput = {
   id: string
   businessId: string
+  businessPosition: bigint | number
   branchId?: string | null
   aggregateId: string
   aggregateType: string
@@ -687,6 +714,7 @@ export type EventCreateWithoutLedgerEntriesInput = {
 export type EventUncheckedCreateWithoutLedgerEntriesInput = {
   id: string
   businessId: string
+  businessPosition: bigint | number
   branchId?: string | null
   aggregateId: string
   aggregateType: string
@@ -723,6 +751,7 @@ export type EventUpdateToOneWithWhereWithoutLedgerEntriesInput = {
 export type EventUpdateWithoutLedgerEntriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  businessPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -743,6 +772,7 @@ export type EventUpdateWithoutLedgerEntriesInput = {
 export type EventUncheckedUpdateWithoutLedgerEntriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  businessPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
   aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
@@ -794,6 +824,7 @@ export type EventCountOutputTypeCountLedgerEntriesArgs<ExtArgs extends runtime.T
 export type EventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   businessId?: boolean
+  businessPosition?: boolean
   branchId?: boolean
   aggregateId?: boolean
   aggregateType?: boolean
@@ -816,6 +847,7 @@ export type EventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type EventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   businessId?: boolean
+  businessPosition?: boolean
   branchId?: boolean
   aggregateId?: boolean
   aggregateType?: boolean
@@ -836,6 +868,7 @@ export type EventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   businessId?: boolean
+  businessPosition?: boolean
   branchId?: boolean
   aggregateId?: boolean
   aggregateType?: boolean
@@ -856,6 +889,7 @@ export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type EventSelectScalar = {
   id?: boolean
   businessId?: boolean
+  businessPosition?: boolean
   branchId?: boolean
   aggregateId?: boolean
   aggregateType?: boolean
@@ -873,7 +907,7 @@ export type EventSelectScalar = {
   createdAt?: boolean
 }
 
-export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "branchId" | "aggregateId" | "aggregateType" | "aggregateVersion" | "globalPosition" | "type" | "payload" | "mode" | "userId" | "deviceId" | "causationId" | "correlationId" | "logicClock" | "checksum" | "createdAt", ExtArgs["result"]["event"]>
+export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "businessPosition" | "branchId" | "aggregateId" | "aggregateType" | "aggregateVersion" | "globalPosition" | "type" | "payload" | "mode" | "userId" | "deviceId" | "causationId" | "correlationId" | "logicClock" | "checksum" | "createdAt", ExtArgs["result"]["event"]>
 export type EventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ledgerEntries?: boolean | Prisma.Event$ledgerEntriesArgs<ExtArgs>
   _count?: boolean | Prisma.EventCountOutputTypeDefaultArgs<ExtArgs>
@@ -889,6 +923,7 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     businessId: string
+    businessPosition: bigint
     branchId: string | null
     aggregateId: string
     aggregateType: string
@@ -1330,6 +1365,7 @@ export interface Prisma__EventClient<T, Null = never, ExtArgs extends runtime.Ty
 export interface EventFieldRefs {
   readonly id: Prisma.FieldRef<"Event", 'String'>
   readonly businessId: Prisma.FieldRef<"Event", 'String'>
+  readonly businessPosition: Prisma.FieldRef<"Event", 'BigInt'>
   readonly branchId: Prisma.FieldRef<"Event", 'String'>
   readonly aggregateId: Prisma.FieldRef<"Event", 'String'>
   readonly aggregateType: Prisma.FieldRef<"Event", 'String'>
