@@ -42,7 +42,6 @@ export interface PersistPushResultInput {
 
 export interface PersistPullResultInput {
     pulled: number;
-    cursor: number;
     completedAt: number;
 }
 
@@ -85,12 +84,6 @@ export class SQLiteSyncStateRepository {
         return rows[0] ?? null;
     }
 
-    async getCursor(): Promise<number> {
-        const state = await this.get();
-
-        return state?.deviceCursor ?? 0;
-    }
-
     async getState(): Promise<PersistedSyncState> {
         const [
             stateRows,
@@ -128,11 +121,8 @@ export class SQLiteSyncStateRepository {
             conflictEvents:
                 row?.conflictEvents ?? 0,
 
-            deviceCursor:
-                row?.deviceCursor ?? 0,
-
             lastPulledGlobalPosition:
-                row?.lastPulledGlobalPosition ?? 0,
+                row?.lastPulledGlobalPosition ?? "0",
 
             lastSyncAt:
                 row?.lastSyncAt ?? null,
@@ -179,25 +169,6 @@ export class SQLiteSyncStateRepository {
         changeNotifier.notify(["sync_state"]);
     }
 
-    async setDeviceCursor(
-        cursor: number,
-        updatedAt: number
-    ): Promise<void> {
-        await this.statements.setDeviceCursor.execute([
-            cursor,
-            updatedAt,
-        ]);
-
-        changeNotifier.notify(["sync_state"]);
-    }
-
-    async setCursor(cursor: number): Promise<void> {
-        await this.setDeviceCursor(
-            cursor,
-            Date.now()
-        );
-    }
-
     async setError(
         error: string,
         updatedAt: number
@@ -242,9 +213,8 @@ export class SQLiteSyncStateRepository {
 
         conflictEvents: number;
 
-        deviceCursor: number;
 
-        lastPulledGlobalPosition: number;
+        lastPulledGlobalPosition: string;
 
         lastSyncAt: number | null;
 
@@ -276,8 +246,6 @@ export class SQLiteSyncStateRepository {
 
                 params.conflictEvents,
 
-                params.deviceCursor,
-
                 params.lastPulledGlobalPosition,
 
                 params.lastSyncAt,
@@ -293,19 +261,6 @@ export class SQLiteSyncStateRepository {
         };
     }
 
-    setDeviceCursorOperation(
-        cursor: number,
-        updatedAt: number
-    ): SQLiteStatementOperation {
-        return {
-            statementKey: syncStateKeys.setDeviceCursor,
-
-            params: [
-                cursor,
-                updatedAt,
-            ],
-        };
-    }
 
     // =========================================================
     // COUNTERS
@@ -328,9 +283,7 @@ export class SQLiteSyncStateRepository {
 
         conflictEvents: number;
 
-        deviceCursor: number;
-
-        lastPulledGlobalPosition: number;
+        lastPulledGlobalPosition: string;
 
         lastSyncAt: number;
 
@@ -358,8 +311,6 @@ export class SQLiteSyncStateRepository {
             params.rejectedEvents,
 
             params.conflictEvents,
-
-            params.deviceCursor,
 
             params.lastPulledGlobalPosition,
 
@@ -459,11 +410,8 @@ export class SQLiteSyncStateRepository {
             conflictEvents:
                 current?.conflictEvents ?? 0,
 
-            deviceCursor:
-                current?.deviceCursor ?? 0,
-
             lastPulledGlobalPosition:
-                current?.lastPulledGlobalPosition ?? 0,
+                current?.lastPulledGlobalPosition ?? "0",
 
             lastSyncAt:
                 current?.lastSyncAt ?? null,
@@ -606,11 +554,8 @@ export class SQLiteSyncStateRepository {
                     (current?.conflictEvents ?? 0) +
                     summary.conflicts,
 
-                deviceCursor:
-                    current?.deviceCursor ?? 0,
-
                 lastPulledGlobalPosition:
-                    current?.lastPulledGlobalPosition ?? 0,
+                    current?.lastPulledGlobalPosition ?? "0",
 
                 lastSyncAt:
                     current?.lastSyncAt ?? now,
@@ -652,7 +597,6 @@ export class SQLiteSyncStateRepository {
     ): Promise<void> {
         const {
             pulled,
-            cursor,
             completedAt,
         } = input;
 
@@ -662,17 +606,6 @@ export class SQLiteSyncStateRepository {
         const current = await this.get();
 
         const operations: SQLiteStatementOperation[] = [];
-
-        /*
-         * Cursor must always be persisted,
-         * including when pulled === 0.
-         */
-        operations.push(
-            this.setDeviceCursorOperation(
-                cursor,
-                completedAt
-            )
-        );
 
         /*
          * Only update pull counters when events
@@ -706,11 +639,8 @@ export class SQLiteSyncStateRepository {
                     conflictEvents:
                         current?.conflictEvents ?? 0,
 
-                    deviceCursor:
-                        cursor,
-
                     lastPulledGlobalPosition:
-                        cursor,
+                        current?.lastPulledGlobalPosition ?? "",
 
                     lastSyncAt:
                         completedAt,
@@ -774,10 +704,10 @@ export class SQLiteSyncStateRepository {
          */
         const [
             pendingEvents,
-            cursor,
+            currentState
         ] = await Promise.all([
             this.outboxRepo.getPendingCount(now),
-            this.getCursor(),
+            this.get(),
         ]);
 
         const operations: SQLiteStatementOperation[] = [];
@@ -873,11 +803,8 @@ export class SQLiteSyncStateRepository {
                 conflictEvents:
                     summary.conflicts,
 
-                deviceCursor:
-                    cursor,
-
                 lastPulledGlobalPosition:
-                    result.cursor ?? cursor,
+                    currentState?.lastPulledGlobalPosition?? "0",
 
                 lastSyncAt:
                     completedAt,
@@ -942,8 +869,6 @@ export class SyncStateMapper {
             state.rejectedEvents,
 
             state.conflictEvents,
-
-            state.deviceCursor,
 
             state.lastPulledGlobalPosition,
 

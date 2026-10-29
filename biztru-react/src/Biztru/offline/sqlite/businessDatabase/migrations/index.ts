@@ -8,7 +8,6 @@ import { migration007 } from "./007_Branch";
 import { migration008 } from "./008_Products";
 import { migration009 } from "./009_Inventory";
 import { migration010 } from "./010_Ledger";
-import { migration011 } from "./011_CheckPoint";
 import { migration012 } from "./012_Outbox";
 import { migration013 } from "./0013_logicClock";
 import { migration016 } from "./016_Sales";
@@ -19,6 +18,7 @@ import { migration018 } from "./018_Expenses";
 import { migration019 } from "./019_SyncActivity";
 import { migration020 } from "./020_syncState";
 import { migration021 } from "./021_EmployeeSystem";
+import { migration022 } from "./022_EventInbox";
 
 
 
@@ -33,7 +33,6 @@ export const migrations = [
     migration008,
     migration009,
     migration010,
-    migration011,
     migration012,
     migration013,
     migration014,
@@ -43,5 +42,6 @@ export const migrations = [
     migration018,
     migration019,
     migration020,
-    migration021
+    migration021,
+    migration022
 ]

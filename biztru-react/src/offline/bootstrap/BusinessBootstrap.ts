@@ -37,6 +37,7 @@ import { NetworkSyncConnector } from "../../Biztru/offline/sqlite/businessDataba
 import type{ DatabaseId } from "../../Biztru/storage/statement/worker/DatabaseId"; 
 import { EmployeeInvitationConsumer } from "../../Biztru/offline/sqlite/businessDatabase/projections/employee/EmployeeInvitaionConsumer";
 import { EmployeeConsumer } from "../../Biztru/offline/sqlite/businessDatabase/projections/employee/EmployeeProjection";
+import { EventInboxProcessor } from "../../Biztru/offline/sqlite/businessDatabase/processors/EventInboxProcessors";
 
 
 export class BusinessBootstrapper
@@ -254,7 +255,7 @@ private async createSynchronization(
             import.meta.env.VITE_API_URL
         );
 
-
+    const eventInboxProcessor = new EventInboxProcessor() 
     const engine =
         new SyncEngine(
 
@@ -264,7 +265,12 @@ private async createSynchronization(
 
             storage.repositories.syncState,
 
-            storage.repositories.events,
+            storage.repositories.cursor,
+
+            storage.repositories.eventInbox,
+
+            eventInboxProcessor,
+            
 
             {
                 pushBatchSize: 50,

@@ -67,9 +67,7 @@ const DEFAULT_SYNC_STATE: PersistedSyncState = {
 
     pulledEvents: 0,
 
-    lastPulledGlobalPosition: 0,
-
-    deviceCursor: 0,
+    lastPulledGlobalPosition: "0",
 
     lastSyncAt: null,
 
@@ -117,7 +115,7 @@ export interface SyncContextValue {
         number;
 
     lastPulledGlobalPosition:
-        number;
+        string;
 
     lastSyncAt:
         number | null;

@@ -27,7 +27,7 @@ export const migration019: Migration = {
 
                         aggregateId TEXT,
 
-                        sequenceNumber INTEGER,
+                        sequenceNumber TEXT,
 
                         createdAt INTEGER NOT NULL,
 

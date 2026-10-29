@@ -45,7 +45,6 @@ implements PipelineKernel {
     await this.validator.validate(command);
 
     const logicalClock = await this.clock.next();
-    console.log("Logical clock value: ", logicalClock)
     const context = await this.businessContext.current();
 
     const aggregateVersion =
@@ -64,8 +63,7 @@ implements PipelineKernel {
             logicalClock,
             expectedAggregateVersion
         );
-    console.log("Tranformd event: ", event)
-        
+           
         const operations: SQLiteStatementOperation[] = [
             ...this.eventStore.appendOperations([event]),
 

@@ -1079,14 +1079,19 @@ model InvitationDelivery {
   @@index([businessId, createdAt])
   @@index([providerMessageId])
 }
+model DeviceSyncCheckpoint {
+  businessId             String
+  deviceId               String
 
-model DeviceSyncCursor {
-  id                String   @id @default(uuid())
-  deviceId          String
-  businessId        String
-  lastPosition      BigInt   @default(0)
-  updatedAt         DateTime @updatedAt
+  // Latest stream position the server has recorded as acknowledged
+  // by this device after durable local receipt.
+  lastAcknowledgedPosition BigInt @default(0)
 
-  @@unique([deviceId, businessId])
-  @@index([businessId])
+  lastSeenAt              DateTime?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  @@id([businessId, deviceId])
+  @@index([businessId, lastAcknowledgedPosition])
+  @@index([deviceId])
 }

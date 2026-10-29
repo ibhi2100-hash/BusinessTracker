@@ -5,6 +5,8 @@ export class SyncEventMapper {
     static toBackendPayload(event) {
         return {
             id: event.id,
+            businessId: event.businessId,
+            branchId: event.branchId,
             aggregateId: event.aggregateId,
             aggregateType: event.aggregateType,
             expectedAggregateVersion: event.expectedAggregateVersion,

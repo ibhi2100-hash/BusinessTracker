@@ -22,13 +22,13 @@ import {
 } from "../repositories/SQLiteOutboxRepository/SQLiteOutboxRepository";
 
 import {
-  SQLiteEventRepository,
-} from "../repositories/SQLiteEventRepository/eventStore";
-
+  SQLiteEventInboxRepository,
+} from "../repositories/EventInboxRepository/SQLiteEventInboxRepository";
+import { SQLiteSyncCursorRepository } from "../repositories/Cursor/CursorRepository";
 import {
   SQLiteSyncStateRepository,
 } from "../repositories/SQLiteSyncRepository/SQLiteSyncRepository";
-
+import { EventInboxProcessor } from "../processors/EventInboxProcessors"; 
 import type { HttpSyncTransport } from "./SyncTransport";
 
 const DEFAULT_LOCK_DURATION_MS = 30_000;
@@ -39,7 +39,7 @@ const MAX_PULL_BATCH_SIZE = 500;
 const MAX_PUSH_BATCH_SIZE = 500;
 const MAX_BACKOFF_MS = 5 * 60 * 1_000;
 
-type Cursor = number;
+type Cursor = string;
 
 export class SyncEngine {
   private readonly lockDurationMs: number;
@@ -50,7 +50,10 @@ export class SyncEngine {
   private readonly outbox: SQLiteOutboxRepository;
   private readonly transport: HttpSyncTransport;
   private readonly syncState: SQLiteSyncStateRepository;
-  private readonly eventStore: SQLiteEventRepository;
+  private readonly syncCursor: SQLiteSyncCursorRepository;
+
+  private readonly eventInbox: SQLiteEventInboxRepository;
+  private readonly inboxProcessor: EventInboxProcessor;
   private readonly businessId: string;
 
   /**
@@ -63,7 +66,9 @@ export class SyncEngine {
     outbox: SQLiteOutboxRepository,
     transport: HttpSyncTransport,
     syncState: SQLiteSyncStateRepository,
-    eventStore: SQLiteEventRepository,
+    syncCursor: SQLiteSyncCursorRepository,
+    eventInbox: SQLiteEventInboxRepository,
+    eventInboxProcessor: EventInboxProcessor,
     options: SyncEngineOptions = {},
     businessId: string,
   ) {
@@ -88,7 +93,9 @@ export class SyncEngine {
     this.outbox = outbox;
     this.transport = transport;
     this.syncState = syncState;
-    this.eventStore = eventStore;
+    this.syncCursor = syncCursor;
+    this.eventInbox = eventInbox;
+    this.inboxProcessor = eventInboxProcessor
     this.businessId = businessId;
   }
 
@@ -122,20 +129,20 @@ export class SyncEngine {
 
     let cursor: Cursor;
 
-    try {
+   try {
       await this.outbox.resetStaleInFlight(startedAt);
 
-      // IMPORTANT:
-      // SQLiteSyncStateRepository must scope this cursor to this.businessId.
-      cursor = this.validateCursor(
-        await this.syncState.getCursor(this.businessId),
-      );
+      console.log("[SyncEngine] Business ID:", this.businessId);
+      console.log("[SyncEngine] Reading persisted cursor...");
+
+      cursor = await this.syncCursor.getCursor();
+
+      console.log("[SyncEngine] Cursor before pull:", cursor);
+      console.log("[SyncEngine] Cursor type:", typeof cursor);
     } catch (error) {
-      return this.transientResult(
-        error,
-        0,
-        0,
-      );
+      console.error("[SyncEngine] Failed to read cursor:", error);
+
+      return this.transientResult(error, 0, "0");
     }
 
     let pending: PendingOutboxEvent[];
@@ -228,6 +235,17 @@ export class SyncEngine {
           Date.now(),
         );
 
+        /*
+         * A push acknowledgement proves that our own event was accepted,
+         * but it does not prove that every earlier server event is present
+         * locally. Advance the pull checkpoint only across a contiguous
+         * sequence of positions acknowledged for events already applied
+         * locally. Any gap is left for the pull phase to fill.
+         */
+        await this.advanceCursorAcrossAcknowledgedEvents(
+          pushResult.accepted,
+        );
+
         const pendingAfterPush =
           await this.outbox.getPendingCount(Date.now());
 
@@ -262,16 +280,39 @@ export class SyncEngine {
     // PHASE 2 — PULL REMOTE EVENTS
     // =========================================================
 
+     try {
+      await this.inboxProcessor.processPending(
+        this.pullBatchSize
+      );
+      
+    } catch (error) {
+      return this.transientResult(
+        new Error(
+          `Failed to process previously staged inbox events: ${
+            this.errorMessage(error)
+          }`,
+        ),
+        pending.length,
+        cursor
+      );
+    }
+
     let pullResult: SyncPullResult;
 
     try {
+
+      const persistedCursor =
+        await this.syncCursor.getCursor();
+
+    cursor = persistedCursor;
+
       pullResult = await this.transport.pull(
         this.businessId,
-        cursor.toString(),
+        cursor,
         this.pullBatchSize,
       );
 
-      this.validatePullResult(pullResult, cursor);
+      this.validatePullResult(pullResult);
     } catch (error) {
       const message = this.errorMessage(error);
 
@@ -300,36 +341,53 @@ export class SyncEngine {
         cursor,
       };
     }
-
-    const nextCursor = this.validateCursor(pullResult.cursor);
+    const cursorBeforePull = cursor;
+    const nextCursor = pullResult.cursor;
 
     try {
-      /*
-       * Apply remote events before persisting the new cursor.
-       * applyRemoteEvents must be idempotent.
-       *
-       * PRODUCTION REQUIREMENT:
-       * Event application and cursor persistence should be committed in
-       * the same SQLite transaction. Separate repository calls cannot
-       * guarantee crash-safe checkpoint advancement.
-       */
+      // 1. Persist the complete received batch in the inbox first.
+      // EventInboxRepository.stage should deduplicate by eventId.
+       
       if (pullResult.events.length > 0) {
-        await this.eventStore.applyRemoteEvents(
-          pullResult.events,
-        );
+        await this.eventInbox.stage(pullResult.events)
       }
+      // 2. Advance the checkpoint only after staging has succeeded.
+      // This must NOT be derived from push acknowledgements.
+      await this.syncCursor.advanceCursor(nextCursor);
 
       await this.syncState.persistPullResult({
         pulled: pullResult.events.length,
-        cursor: nextCursor,
         completedAt: Date.now(),
       });
 
-      cursor = nextCursor;
+      cursor = await this.syncCursor.getCursor();
     } catch (error) {
       return this.transientResult(
         new Error(
           `Failed to apply pulled events or persist the cursor: ${
+            this.errorMessage(error)
+          }`,
+        ),
+        pending.length,
+        cursor,
+      );
+    }
+    //STEP 3.
+    //Process Event only after the batch has been staged.
+    // 
+    //Failed Events remain in the inbox for later retry
+
+    try {
+      await this.inboxProcessor.processPending(
+          this.pullBatchSize,
+      );
+
+    } catch (error) {
+      // The pull cursor may already be advanced because the
+      // batch is safely staged. Do not roll it back.
+      return this.transientResult(
+        new Error(
+          `Events were staged, but inbox processing failed: ${
             this.errorMessage(error)
           }`,
         ),
@@ -375,9 +433,8 @@ export class SyncEngine {
     if (
       pending.length === 0 &&
       pullResult.events.length === 0 &&
-      nextCursor === this.validateCursor(
-        await this.syncState.getCursor(this.businessId),
-      ) &&
+      nextCursor ===  cursorBeforePull
+       &&
       !pullResult.hasMore
     ) {
       return {
@@ -457,6 +514,92 @@ export class SyncEngine {
     }
   }
 
+  /**
+   * Advance the pull cursor over contiguous global positions occupied by
+   * events this device has just pushed and already applied locally.
+   *
+   * Example: cursor=689 and accepted positions=[690, 692] advances only
+   * to 690. Position 691 must still be pulled before position 692 can be
+   * safely skipped.
+   *
+   * This relies on the backend contract that globalPosition is a
+   * monotonically increasing, gap-free business event-log position and
+   * that accepted events are committed at the acknowledged position.
+   * If that contract does not hold, do not advance the pull cursor from
+   * push acknowledgements; use the pull response as the only checkpoint.
+   */
+  private async advanceCursorAcrossAcknowledgedEvents(
+    acceptedEvents: BackendAcceptedEvent[],
+  ): Promise<void> {
+    if (acceptedEvents.length === 0) {
+      return;
+    }
+
+    const persistedCursor = await this.syncCursor.getCursor();
+    const currentPosition = Number(persistedCursor);
+
+    // The current cursor contract is a decimal string backed by a safe
+    // integer global position. Never guess or coerce an opaque cursor.
+    if (
+      !Number.isSafeInteger(currentPosition) ||
+      currentPosition < 0
+    ) {
+      console.warn(
+        "[SyncEngine] Skipping push-ack cursor advancement: " +
+          "persisted cursor is not a non-negative safe integer.",
+      );
+      return;
+    }
+
+    const acknowledgedPositions = new Set<number>();
+
+    for (const accepted of acceptedEvents) {
+      const position = Number(accepted.globalPosition);
+
+      if (
+        Number.isSafeInteger(position) &&
+        position > 0 &&
+        position > currentPosition
+      ) {
+        acknowledgedPositions.add(position);
+      }
+    }
+
+    let contiguousPosition = currentPosition;
+
+    while (acknowledgedPositions.has(contiguousPosition + 1)) {
+      contiguousPosition += 1;
+    }
+
+    if (contiguousPosition === currentPosition) {
+      return;
+    }
+
+    await this.syncCursor.advanceCursor(String(contiguousPosition));
+
+    // Read back the persisted value rather than assuming the write worked.
+    // A higher value is valid if another sync context advanced it further.
+    const verifiedCursor = await this.syncCursor.getCursor();
+    const verifiedPosition = Number(verifiedCursor);
+
+    if (
+      !Number.isSafeInteger(verifiedPosition) ||
+      verifiedPosition < contiguousPosition
+    ) {
+      throw new Error(
+        `Failed to persist push-ack cursor checkpoint ${contiguousPosition}; ` +
+          `repository returned ${verifiedCursor}.`,
+      );
+    }
+
+    console.log(
+      "[SyncEngine] Cursor advanced from push acknowledgements:",
+      currentPosition,
+      "->",
+      verifiedPosition,
+    );
+  }
+
   // =========================================================
   // CURSOR AND RESPONSE VALIDATION
   // =========================================================
@@ -468,29 +611,8 @@ export class SyncEngine {
    * For full BigInt support, migrate SyncPullResult, SyncResult, the local
    * sync-state repository, and API response contracts to decimal strings.
    */
-  private validateCursor(value: unknown): number {
-    const parsed =
-      typeof value === "number"
-        ? value
-        : typeof value === "string" && /^\d+$/.test(value)
-          ? Number(value)
-          : NaN;
-
-    if (
-      !Number.isSafeInteger(parsed) ||
-      parsed < 0
-    ) {
-      throw new Error(
-        `Invalid synchronization cursor: ${String(value)}`,
-      );
-    }
-
-    return parsed;
-  }
-
   private validatePullResult(
     result: SyncPullResult,
-    currentCursor: number,
   ): void {
     if (!result || typeof result !== "object") {
       throw new Error("Invalid pull response.");
@@ -508,14 +630,6 @@ export class SyncEngine {
 
     if (typeof result.hasMore !== "boolean") {
       throw new Error("Pull response hasMore must be a boolean.");
-    }
-
-    const returnedCursor = this.validateCursor(result.cursor);
-
-    if (returnedCursor < currentCursor) {
-      throw new Error(
-        "Server returned a cursor older than the local cursor.",
-      );
     }
 
     if (result.events.length > this.pullBatchSize) {
@@ -580,10 +694,8 @@ export class SyncEngine {
   // PUBLIC HELPERS
   // =========================================================
 
-  async getCurrentCursor(): Promise<number> {
-    return this.validateCursor(
-      await this.syncState.getCursor(this.businessId),
-    );
+  async getCurrentCursor(): Promise<string> {
+    return await this.syncCursor.getCursor();
   }
 
   // =========================================================
@@ -663,7 +775,7 @@ export class SyncEngine {
   private transientResult(
     error: unknown,
     attempted: number,
-    cursor: number,
+    cursor: string,
   ): SyncResult {
     return {
       kind: "transient",

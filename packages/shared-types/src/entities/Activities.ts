@@ -29,7 +29,7 @@ export type SyncActivitySeverity =
     | "ERROR";
 export interface SyncActivityMetadata {
   aggregateVersion?: number;
-  globalPosition?: number;
+  globalPosition?: string;
   [key: string]: unknown;
 }
 
@@ -52,7 +52,7 @@ export interface SyncActivity {
 
   aggregateId?: string | null;
 
-  sequenceNumber?: number | null;
+  sequenceNumber?: string | null;
 
   createdAt: number;
 

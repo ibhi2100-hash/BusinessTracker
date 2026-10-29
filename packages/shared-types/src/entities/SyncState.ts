@@ -26,8 +26,9 @@ export interface SyncState {
   acceptedEvents: number;
   rejectedEvents: number;
   conflictEvents: number;
-  deviceCursor: number;
-  lastPulledGlobalPosition: number;
+
+  lastPulledGlobalPosition: string;
+
   lastSyncAt: number | null;
   lastSyncDurationMs: number | null;
   lastResult: string | null;
@@ -53,9 +54,7 @@ export interface PersistedSyncState {
 
     conflictEvents: number;
 
-    deviceCursor: number;
-
-    lastPulledGlobalPosition: number;
+    lastPulledGlobalPosition: string;
 
     lastSyncAt: number | null;
 
@@ -127,7 +126,8 @@ export interface BackendAcceptedEvent {
     aggregateId: string;
     aggregateType: string;
     aggregateVersion: number;
-    globalPosition: number;
+    globalPosition: string;
+    businessPosition: string;
     status:
         | "ACCEPTED"
         | "ALREADY_ACCEPTED";
@@ -184,6 +184,7 @@ export interface SyncPushResult {
  * Result of pulling events from the global event stream.
  */
 export interface SyncPullResult {
+    businessId: string;
 
     events: BackendEvent[];
 
@@ -210,7 +211,7 @@ export interface SyncBatchResult {
 
     pulled: BackendAcceptedEvent[];
 
-    cursor: number;
+    cursor: string;
 
     hasMore: boolean;
 }
@@ -228,7 +229,7 @@ export interface SyncTransport {
     push(events: BackendEventPayload[]): Promise<SyncPushResult>;
 
     pull(
-        cursor: number,
+        cursor: string,
         limit: number
     ): Promise<SyncPullResult>
 }
@@ -244,6 +245,10 @@ export class SyncEventMapper {
 
         return {
             id: event.id,
+
+            businessId: event.businessId,
+
+            branchId: event.branchId,
 
             aggregateId:
                 event.aggregateId,
@@ -293,16 +298,8 @@ export interface SyncRunResult {
 
     completedAt: number;
 
-    finalCursor: number;
+    finalCursor: string;
 }
-
-export interface SyncStateRepository {
-
-    getCursor(): Promise<number>;
-
-    setCursor(cursor: number): Promise<void>;
-}
-
 
 export interface LocalEventStore {
 
@@ -346,7 +343,7 @@ export type SyncResult =
 
         pulled: number;
 
-        cursor: number;
+        cursor: string;
     }
 
     | {
@@ -360,7 +357,7 @@ export type SyncResult =
 
         pulled: number;
 
-        cursor: number;
+        cursor: string;
 
         hasMore: boolean;
     }
@@ -378,7 +375,7 @@ export type SyncResult =
 
         pulled: number;
 
-        cursor: number;
+        cursor: string;
 
         hasMore: boolean;
     }
@@ -394,7 +391,7 @@ export type SyncResult =
 
         pulled: number;
 
-        cursor: number;
+        cursor: string;
 
         hasMore: boolean;
     }
@@ -406,7 +403,7 @@ export type SyncResult =
 
         attempted: number;
 
-        cursor: number;
+        cursor: string;
     };
 
 

@@ -42,7 +42,7 @@ export interface OutboxRow {
 
     syncedAt: number | null;
 
-    globalPosition: number | null;
+    globalPosition: string | null;
 
     outboxAggregateVersion: number | null;
 
@@ -98,7 +98,7 @@ export interface NewOutboxEntry {
 
     syncedAt?: number | null;
 
-    globalPosition?: number | null;
+    globalPosition?: string | null;
 
     aggregateVersion?: number | null;
 
@@ -230,7 +230,7 @@ export class SQLiteOutboxRepository {
     async markSynced(
         outboxId: string,
         syncedAt: number,
-        globalPosition: number,
+        globalPosition: string,
         aggregateVersion: number,
         serverCommitTime: number
     ): Promise<void> {

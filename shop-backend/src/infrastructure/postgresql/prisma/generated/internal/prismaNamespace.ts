@@ -412,7 +412,7 @@ export const ModelName = {
   EmployeeRequest: 'EmployeeRequest',
   EmployeeNotification: 'EmployeeNotification',
   InvitationDelivery: 'InvitationDelivery',
-  DeviceSyncCursor: 'DeviceSyncCursor'
+  DeviceSyncCheckpoint: 'DeviceSyncCheckpoint'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -428,7 +428,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "business" | "branch" | "user" | "session" | "passwordResetToken" | "subscriptionPlan" | "businessSubscription" | "product" | "aggregate" | "inventory" | "processedSyncEvent" | "businessEventStream" | "event" | "deviceClock" | "ledgerEntry" | "sale" | "expense" | "outboxEvent" | "snapshot" | "alert" | "outbox" | "employee" | "employeeInvitation" | "employeeCompensation" | "employeeCompensationHistory" | "employeeRequest" | "employeeNotification" | "invitationDelivery" | "deviceSyncCursor"
+    modelProps: "business" | "branch" | "user" | "session" | "passwordResetToken" | "subscriptionPlan" | "businessSubscription" | "product" | "aggregate" | "inventory" | "processedSyncEvent" | "businessEventStream" | "event" | "deviceClock" | "ledgerEntry" | "sale" | "expense" | "outboxEvent" | "snapshot" | "alert" | "outbox" | "employee" | "employeeInvitation" | "employeeCompensation" | "employeeCompensationHistory" | "employeeRequest" | "employeeNotification" | "invitationDelivery" | "deviceSyncCheckpoint"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2504,77 +2504,77 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    DeviceSyncCursor: {
-      payload: Prisma.$DeviceSyncCursorPayload<ExtArgs>
-      fields: Prisma.DeviceSyncCursorFieldRefs
+    DeviceSyncCheckpoint: {
+      payload: Prisma.$DeviceSyncCheckpointPayload<ExtArgs>
+      fields: Prisma.DeviceSyncCheckpointFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.DeviceSyncCursorFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCursorPayload> | null
+          args: Prisma.DeviceSyncCheckpointFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCheckpointPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.DeviceSyncCursorFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCursorPayload>
+          args: Prisma.DeviceSyncCheckpointFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCheckpointPayload>
         }
         findFirst: {
-          args: Prisma.DeviceSyncCursorFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCursorPayload> | null
+          args: Prisma.DeviceSyncCheckpointFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCheckpointPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.DeviceSyncCursorFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCursorPayload>
+          args: Prisma.DeviceSyncCheckpointFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCheckpointPayload>
         }
         findMany: {
-          args: Prisma.DeviceSyncCursorFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCursorPayload>[]
+          args: Prisma.DeviceSyncCheckpointFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCheckpointPayload>[]
         }
         create: {
-          args: Prisma.DeviceSyncCursorCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCursorPayload>
+          args: Prisma.DeviceSyncCheckpointCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCheckpointPayload>
         }
         createMany: {
-          args: Prisma.DeviceSyncCursorCreateManyArgs<ExtArgs>
+          args: Prisma.DeviceSyncCheckpointCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.DeviceSyncCursorCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCursorPayload>[]
+          args: Prisma.DeviceSyncCheckpointCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCheckpointPayload>[]
         }
         delete: {
-          args: Prisma.DeviceSyncCursorDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCursorPayload>
+          args: Prisma.DeviceSyncCheckpointDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCheckpointPayload>
         }
         update: {
-          args: Prisma.DeviceSyncCursorUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCursorPayload>
+          args: Prisma.DeviceSyncCheckpointUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCheckpointPayload>
         }
         deleteMany: {
-          args: Prisma.DeviceSyncCursorDeleteManyArgs<ExtArgs>
+          args: Prisma.DeviceSyncCheckpointDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.DeviceSyncCursorUpdateManyArgs<ExtArgs>
+          args: Prisma.DeviceSyncCheckpointUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.DeviceSyncCursorUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCursorPayload>[]
+          args: Prisma.DeviceSyncCheckpointUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCheckpointPayload>[]
         }
         upsert: {
-          args: Prisma.DeviceSyncCursorUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCursorPayload>
+          args: Prisma.DeviceSyncCheckpointUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSyncCheckpointPayload>
         }
         aggregate: {
-          args: Prisma.DeviceSyncCursorAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateDeviceSyncCursor>
+          args: Prisma.DeviceSyncCheckpointAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDeviceSyncCheckpoint>
         }
         groupBy: {
-          args: Prisma.DeviceSyncCursorGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.DeviceSyncCursorGroupByOutputType>[]
+          args: Prisma.DeviceSyncCheckpointGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DeviceSyncCheckpointGroupByOutputType>[]
         }
         count: {
-          args: Prisma.DeviceSyncCursorCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.DeviceSyncCursorCountAggregateOutputType> | number
+          args: Prisma.DeviceSyncCheckpointCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DeviceSyncCheckpointCountAggregateOutputType> | number
         }
       }
     }
@@ -3141,15 +3141,16 @@ export const InvitationDeliveryScalarFieldEnum = {
 export type InvitationDeliveryScalarFieldEnum = (typeof InvitationDeliveryScalarFieldEnum)[keyof typeof InvitationDeliveryScalarFieldEnum]
 
 
-export const DeviceSyncCursorScalarFieldEnum = {
-  id: 'id',
-  deviceId: 'deviceId',
+export const DeviceSyncCheckpointScalarFieldEnum = {
   businessId: 'businessId',
-  lastPosition: 'lastPosition',
+  deviceId: 'deviceId',
+  lastAcknowledgedPosition: 'lastAcknowledgedPosition',
+  lastSeenAt: 'lastSeenAt',
+  createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type DeviceSyncCursorScalarFieldEnum = (typeof DeviceSyncCursorScalarFieldEnum)[keyof typeof DeviceSyncCursorScalarFieldEnum]
+export type DeviceSyncCheckpointScalarFieldEnum = (typeof DeviceSyncCheckpointScalarFieldEnum)[keyof typeof DeviceSyncCheckpointScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -3686,7 +3687,7 @@ export type GlobalOmitConfig = {
   employeeRequest?: Prisma.EmployeeRequestOmit
   employeeNotification?: Prisma.EmployeeNotificationOmit
   invitationDelivery?: Prisma.InvitationDeliveryOmit
-  deviceSyncCursor?: Prisma.DeviceSyncCursorOmit
+  deviceSyncCheckpoint?: Prisma.DeviceSyncCheckpointOmit
 }
 
 /* Types for Logging */

@@ -33,10 +33,6 @@ export class SyncStateStatements {
     return this.manager.get(syncStateKeys.resetCounters);
   }
 
-  get setDeviceCursor() {
-    return this.manager.get(syncStateKeys.setDeviceCursor);
-  }
-
   get setError() {
     return this.manager.get(syncStateKeys.setError);
   }

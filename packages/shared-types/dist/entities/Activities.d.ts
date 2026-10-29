@@ -3,7 +3,7 @@ export type SyncActivityOutcome = "ACCEPTED" | "ALREADY_ACCEPTED" | "REJECTED" |
 export type SyncActivitySeverity = "INFO" | "SUCCESS" | "WARNING" | "ERROR";
 export interface SyncActivityMetadata {
     aggregateVersion?: number;
-    globalPosition?: number;
+    globalPosition?: string;
     [key: string]: unknown;
 }
 export interface SyncActivity {
@@ -16,7 +16,7 @@ export interface SyncActivity {
     eventId?: string | null;
     aggregateType?: string | null;
     aggregateId?: string | null;
-    sequenceNumber?: number | null;
+    sequenceNumber?: string | null;
     createdAt: number;
     metadata?: SyncActivityMetadata | null;
 }

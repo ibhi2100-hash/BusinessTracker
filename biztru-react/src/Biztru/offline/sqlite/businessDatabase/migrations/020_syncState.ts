@@ -34,9 +34,7 @@ export const migration020: Migration = {
 
                         conflictEvents INTEGER NOT NULL DEFAULT 0,
 
-                        deviceCursor INTEGER NOT NULL DEFAULT 0,
-
-                        lastPulledGlobalPosition INTEGER NOT NULL DEFAULT 0,
+                        lastPulledGlobalPosition TEXT NOT NULL DEFAULT "0",
 
                         lastSyncAt INTEGER,
 
@@ -51,86 +49,50 @@ export const migration020: Migration = {
                 `,
             },
 
+            
             {
-                sql: `
-                    INSERT INTO sync_state (
-                        id,
-
-                        status,
-
-                        pendingEvents,
-                        uploadedEvents,
-                        alreadyAcceptedEvents,
-                        pulledEvents,
-
-                        acceptedEvents,
-                        rejectedEvents,
-                        conflictEvents,
-
-                        deviceCursor,
-                        lastPulledGlobalPosition,
-
-                        lastSyncAt,
-                        lastSyncDurationMs,
-
-                        lastResult,
-
-                        error,
-
-                        updatedAt
-                    )
-                    VALUES (
-                        ?,
-
-                        ?,
-
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-
-                        ?,
-                        ?,
-                        ?,
-
-                        ?,
-                        ?,
-
-                        ?,
-                        ?,
-
-                        ?,
-
-                        ?,
-
-                        CAST(strftime('%s', 'now') AS INTEGER) * 1000
-                    )
-                    ON CONFLICT(id) DO NOTHING;
-                `,
-                params: [
-                    1,
-                    "IDLE",
-
-                    0,
-                    0,
-                    0,
-                    0,
-
-                    0,
-                    0,
-                    0,
-
-                    0,
-                    0,
-
-                    null,
-                    null,
-
-                    null,
-
-                    null,
-                ],
+            sql: `
+                INSERT INTO sync_state (
+                id,
+                status,
+                pendingEvents,
+                uploadedEvents,
+                alreadyAcceptedEvents,
+                pulledEvents,
+                acceptedEvents,
+                rejectedEvents,
+                conflictEvents,
+                lastPulledGlobalPosition,
+                lastSyncAt,
+                lastSyncDurationMs,
+                lastResult,
+                error,
+                updatedAt
+                )
+                VALUES (
+                ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+                CAST(strftime('%s', 'now') AS INTEGER) * 1000
+                )
+                ON CONFLICT(id) DO NOTHING;
+            `,
+            params: [
+                1,
+                "IDLE",
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                "0",
+                null,
+                null,
+                null,
+                null,
+            ],
             },
+
         ];
     },
 };

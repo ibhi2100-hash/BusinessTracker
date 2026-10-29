@@ -147,7 +147,7 @@ async refreshPendingAndCursor(): Promise<void> {
 
   const now = Date.now();
   await app.storage.repositories.outbox.getPendingCount(now);
-  await app.storage.repositories.syncState.getCursor();
+  await app.storage.repositories.cursor.getCursor()
 } 
 
    

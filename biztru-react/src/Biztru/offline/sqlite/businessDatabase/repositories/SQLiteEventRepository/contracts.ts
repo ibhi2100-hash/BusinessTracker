@@ -1,5 +1,5 @@
-import type{ DomainEvent } from "@business/shared-types";
-import type{ BackendAcceptedEvent } from "@business/shared-types";
+import type{ BackendEvent, DomainEvent } from "@business/shared-types";
+
 export interface EventRepository {
 
     append(
@@ -7,6 +7,6 @@ export interface EventRepository {
     ): Promise<void>;
 
     applyRemoteEvents(
-        events: BackendAcceptedEvent[]
+        events: BackendEvent[]
     ): Promise<void>;
 }

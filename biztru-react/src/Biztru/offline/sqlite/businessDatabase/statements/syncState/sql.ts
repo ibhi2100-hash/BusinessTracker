@@ -9,7 +9,6 @@ export const SYNC_STATE_UPSERT = `
     acceptedEvents,
     rejectedEvents,
     conflictEvents,
-    deviceCursor,
     lastPulledGlobalPosition,
     lastSyncAt,
     lastSyncDurationMs,
@@ -17,7 +16,7 @@ export const SYNC_STATE_UPSERT = `
     error,
     updatedAt
   )
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   ON CONFLICT(id)
   DO UPDATE SET
     status                   = excluded.status,
@@ -28,7 +27,6 @@ export const SYNC_STATE_UPSERT = `
     acceptedEvents           = excluded.acceptedEvents,
     rejectedEvents           = excluded.rejectedEvents,
     conflictEvents           = excluded.conflictEvents,
-    deviceCursor             = excluded.deviceCursor,
     lastPulledGlobalPosition = excluded.lastPulledGlobalPosition,
     lastSyncAt               = excluded.lastSyncAt,
     lastSyncDurationMs       = excluded.lastSyncDurationMs,
@@ -63,7 +61,6 @@ export const UPDATE_AFTER_SYNC = `
     acceptedEvents           = ?,
     rejectedEvents           = ?,
     conflictEvents           = ?,
-    deviceCursor             = ?,
     lastPulledGlobalPosition = ?,
     lastSyncAt               = ?,
     lastSyncDurationMs       = ?,
@@ -100,15 +97,6 @@ export const RESET_COUNTERS = `
     updatedAt             = ?
   WHERE id = 1
 `;
-
-export const SET_DEVICE_CURSOR = `
-  UPDATE sync_state
-  SET
-    deviceCursor = ?,
-    updatedAt    = ?
-  WHERE id = 1
-`;
-
 export const SET_ERROR = `
   UPDATE sync_state
   SET

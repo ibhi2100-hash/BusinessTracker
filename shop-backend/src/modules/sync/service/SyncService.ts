@@ -307,6 +307,9 @@ export class OfflineSyncService {
                     globalPosition:
                         saved.globalPosition,
 
+                    businessPosition: 
+                        saved.businessPosition,
+
                     status:
                         "ACCEPTED",
                 });

@@ -182,7 +182,7 @@ export type EmployeeNotification = Prisma.EmployeeNotificationModel
  */
 export type InvitationDelivery = Prisma.InvitationDeliveryModel
 /**
- * Model DeviceSyncCursor
+ * Model DeviceSyncCheckpoint
  * 
  */
-export type DeviceSyncCursor = Prisma.DeviceSyncCursorModel
+export type DeviceSyncCheckpoint = Prisma.DeviceSyncCheckpointModel

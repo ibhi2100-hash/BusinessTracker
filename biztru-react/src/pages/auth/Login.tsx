@@ -20,21 +20,14 @@ import {
 import { useAuthStore } from "../../Biztru/store/useAuthStore";
 import { useApplication } from "../../Biztru/services/ApplicationService/ApplicationContext";
 import { useApplicationSession } from "../../Biztru/context/AplicationSessionContext";
+import type { User } from "@business/shared-types";
 
 /* -------------------------------------------------------------------------- */
 /* Authentication response types                                              */
 /* -------------------------------------------------------------------------- */
 
-interface LoginUser {
-  id: string;
-  role: string;
-  businessId?: string | null;
-  branchId?: string | null;
-  onboardingCompleted?: boolean;
-}
-
 interface LoginResponse {
-  user?: LoginUser;
+  user?: User;
   accessToken?: string;
   expiresIn?: number;
   message?: string;
@@ -44,7 +37,7 @@ interface LoginResponse {
 /* Role-aware post-login routing                                              */
 /* -------------------------------------------------------------------------- */
 
-function getPostLoginPath(user: LoginUser): string {
+function getPostLoginPath(user: User): string {
   const role = user.role?.trim().toUpperCase();
 
   if (!role) {
@@ -126,7 +119,7 @@ export default function LoginPage() {
    */
   async function persistSession(
     result: LoginResponse,
-    user: LoginUser
+    user: User
   ) {
     if (!result.accessToken) {
       throw new Error(

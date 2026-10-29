@@ -32,7 +32,7 @@ export const migration012: Migration = {
 
                         syncedAt INTEGER,
 
-                        globalPosition INTEGER,
+                        globalPosition TEXT,
 
                         aggregateVersion INTEGER,
 

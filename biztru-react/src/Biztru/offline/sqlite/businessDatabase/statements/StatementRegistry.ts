@@ -17,8 +17,11 @@ import { ExpenseStatement } from "./expense/expenseStatements";
 import { ConflictsStatements } from "./conflicts/conflictsStatement";
 import { SyncActivityStatements } from "./syncActivities/ActivityStatements";
 import { EmployeeStatements } from "./employees/employeesStatements";
+import { EventInboxStatements } from "./eventInbox/EventInboxStatements";
+import { SyncCursorStatements } from "./cursor/CursorStatement";
 export class BusinessStatementRegistry {
     readonly events: EventStatements;
+    readonly eventInbox: EventInboxStatements;
     readonly inventory: InventoryStatements;
     readonly products: ProductStatements;
     readonly sales: SalesStatement;
@@ -35,7 +38,7 @@ export class BusinessStatementRegistry {
     readonly syncState: SyncStateStatements;
     readonly conflict: ConflictsStatements;
     readonly syncActivity: SyncActivityStatements;
-
+    readonly cursor: SyncCursorStatements
     constructor(
         manager: PreparedStatementManager
     ){
@@ -90,6 +93,10 @@ export class BusinessStatementRegistry {
         this.employees = 
             new EmployeeStatements(manager)
 
-        
+        this.eventInbox = 
+            new EventInboxStatements(manager)
+
+        this.cursor = 
+            new SyncCursorStatements(manager)
     }
 }

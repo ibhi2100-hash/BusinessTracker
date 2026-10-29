@@ -20,6 +20,8 @@ import { SQLiteConflictRepository } from "./SQLiteSyncRepository/SQLiteConflictR
 import { TransactionManager } from "../../../../storage/transaction/TransactionManager"; 
 import { SQLiteEmployeeInvitationRepository } from "./EmployeeRepositories/SQLiteEmployeeInvitationRepository";
 import { SQLiteEmployeeRepository } from "./EmployeeRepositories/SQLiteEmployeeRepository";
+import { SQLiteEventInboxRepository } from "./EventInboxRepository/SQLiteEventInboxRepository";
+import { SQLiteSyncCursorRepository } from "./Cursor/CursorRepository";
 
 export class BusinessRepositoryRegistry {
     readonly events: SQLiteEventRepository;
@@ -59,6 +61,9 @@ export class BusinessRepositoryRegistry {
 
     readonly syncState: SQLiteSyncStateRepository;
 
+    readonly cursor: SQLiteSyncCursorRepository;
+
+    readonly eventInbox: SQLiteEventInboxRepository
     readonly queryRunner: QueryRunner;
     readonly transaction: TransactionManager
     
@@ -145,6 +150,11 @@ export class BusinessRepositoryRegistry {
                 statements.syncActivity
             )
 
+        this.cursor =
+            new SQLiteSyncCursorRepository(
+                statements.cursor
+            )
+
         this.conflict = 
              new SQLiteConflictRepository(
                 statements.conflict
@@ -159,6 +169,8 @@ export class BusinessRepositoryRegistry {
 
              )
 
+        this.eventInbox = new SQLiteEventInboxRepository(statements.eventInbox);
+        
         this.transaction = transaction;
 
         this.queryRunner = queryRunner

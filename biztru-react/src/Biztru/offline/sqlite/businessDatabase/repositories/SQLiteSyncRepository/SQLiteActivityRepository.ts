@@ -28,7 +28,7 @@ interface SyncActivityRow {
     aggregateType: string;
     aggregateId: string;
 
-    sequenceNumber: number | null;
+    sequenceNumber: string | null;
 
     createdAt: number;
 

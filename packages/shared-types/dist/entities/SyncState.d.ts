@@ -14,8 +14,7 @@ export interface SyncState {
     acceptedEvents: number;
     rejectedEvents: number;
     conflictEvents: number;
-    deviceCursor: number;
-    lastPulledGlobalPosition: number;
+    lastPulledGlobalPosition: string;
     lastSyncAt: number | null;
     lastSyncDurationMs: number | null;
     lastResult: string | null;
@@ -31,8 +30,7 @@ export interface PersistedSyncState {
     acceptedEvents: number;
     rejectedEvents: number;
     conflictEvents: number;
-    deviceCursor: number;
-    lastPulledGlobalPosition: number;
+    lastPulledGlobalPosition: string;
     lastSyncAt: number | null;
     lastSyncDurationMs: number | null;
     lastResult: SyncResult | null;
@@ -82,7 +80,8 @@ export interface BackendAcceptedEvent {
     aggregateId: string;
     aggregateType: string;
     aggregateVersion: number;
-    globalPosition: number;
+    globalPosition: string;
+    businessPosition: string;
     status: "ACCEPTED" | "ALREADY_ACCEPTED";
 }
 /**
@@ -117,6 +116,7 @@ export interface SyncPushResult {
  * Result of pulling events from the global event stream.
  */
 export interface SyncPullResult {
+    businessId: string;
     events: BackendEvent[];
     /**
      * Cursor after the returned events.
@@ -135,7 +135,7 @@ export interface SyncPullResult {
 export interface SyncBatchResult {
     pushed: SyncPushResult;
     pulled: BackendAcceptedEvent[];
-    cursor: number;
+    cursor: string;
     hasMore: boolean;
 }
 /**
@@ -146,7 +146,7 @@ export interface PushEventsRequest {
 }
 export interface SyncTransport {
     push(events: BackendEventPayload[]): Promise<SyncPushResult>;
-    pull(cursor: number, limit: number): Promise<SyncPullResult>;
+    pull(cursor: string, limit: number): Promise<SyncPullResult>;
 }
 /**
  * Maps a domain event into the wire format expected by the backend.
@@ -159,11 +159,7 @@ export interface SyncRunResult {
     cycles: SyncResult[];
     startedAt: number;
     completedAt: number;
-    finalCursor: number;
-}
-export interface SyncStateRepository {
-    getCursor(): Promise<number>;
-    setCursor(cursor: number): Promise<void>;
+    finalCursor: string;
 }
 export interface LocalEventStore {
 }
@@ -191,14 +187,14 @@ export type SyncResult = {
     accepted: BackendAcceptedEvent[];
     rejected: SyncRejected[];
     pulled: number;
-    cursor: number;
+    cursor: string;
 } | {
     kind: "synced";
     pushed: number;
     accepted: BackendAcceptedEvent[];
     rejected: SyncRejected[];
     pulled: number;
-    cursor: number;
+    cursor: string;
     hasMore: boolean;
 } | {
     kind: "conflict";
@@ -207,7 +203,7 @@ export type SyncResult = {
     conflicts: Conflict[];
     pushed: number;
     pulled: number;
-    cursor: number;
+    cursor: string;
     hasMore: boolean;
 } | {
     kind: "rejected";
@@ -215,13 +211,13 @@ export type SyncResult = {
     rejected: SyncRejected[];
     pushed: number;
     pulled: number;
-    cursor: number;
+    cursor: string;
     hasMore: boolean;
 } | {
     kind: "transient";
     error: string;
     attempted: number;
-    cursor: number;
+    cursor: string;
 };
 export type SyncTrigger = "NETWORK" | "INTERVAL" | "MANUAL" | "STARTUP";
 export interface SyncCoordinatorEvent {

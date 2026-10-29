@@ -79,7 +79,7 @@ export const ModelName = {
   EmployeeRequest: 'EmployeeRequest',
   EmployeeNotification: 'EmployeeNotification',
   InvitationDelivery: 'InvitationDelivery',
-  DeviceSyncCursor: 'DeviceSyncCursor'
+  DeviceSyncCheckpoint: 'DeviceSyncCheckpoint'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -622,15 +622,16 @@ export const InvitationDeliveryScalarFieldEnum = {
 export type InvitationDeliveryScalarFieldEnum = (typeof InvitationDeliveryScalarFieldEnum)[keyof typeof InvitationDeliveryScalarFieldEnum]
 
 
-export const DeviceSyncCursorScalarFieldEnum = {
-  id: 'id',
-  deviceId: 'deviceId',
+export const DeviceSyncCheckpointScalarFieldEnum = {
   businessId: 'businessId',
-  lastPosition: 'lastPosition',
+  deviceId: 'deviceId',
+  lastAcknowledgedPosition: 'lastAcknowledgedPosition',
+  lastSeenAt: 'lastSeenAt',
+  createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type DeviceSyncCursorScalarFieldEnum = (typeof DeviceSyncCursorScalarFieldEnum)[keyof typeof DeviceSyncCursorScalarFieldEnum]
+export type DeviceSyncCheckpointScalarFieldEnum = (typeof DeviceSyncCheckpointScalarFieldEnum)[keyof typeof DeviceSyncCheckpointScalarFieldEnum]
 
 
 export const SortOrder = {
