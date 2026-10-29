@@ -3,18 +3,14 @@ import type {
   DomainEvent,
 } from "@business/shared-types";
 
-import type { SQLiteStatementOperation } from
-  "../../storage/statement/worker/WorkerProtocol";
-
-import type { SQLiteEventRepository } from
-  "../../offline/sqlite/businessDatabase/repositories/SQLiteEventRepository/eventStore";
-
-import type { TransactionManager } from
-  "../../storage/transaction/TransactionManager";
-
-import {
-  backendEventToDomainEvent,
-} from "./BackendEventTransformer";
+import type { SQLiteStatementOperation } from "../../../../storage/statement/worker/WorkerProtocol"; 
+import type { SQLiteEventRepository } from "../repositories/SQLiteEventRepository/eventStore"; 
+import type { TransactionManager } from "../../../../storage/transaction/TransactionManager"; 
+import { backendEventToDomainEvent } from "../../../../BizTru_Karnel/Transformers/BackendToDomainTransformer";
+import type { ProjectionEventBus } from "@business/event-bus";
+import type { SQLiteAggregateRepository } from "../repositories/SQLiteAggregateRepository/SQLiteAggregateRepository";
+import type { SQLiteEventInboxRepository } from "../repositories/EventInboxRepository/SQLiteEventInboxRepository";
+import type { SQLiteSyncCursorRepository } from "../repositories/Cursor/CursorRepository";
 
 
 /**
@@ -60,29 +56,6 @@ export interface RemoteAggregateVersionRepository {
   ): SQLiteStatementOperation[];
 }
 
-export interface EventProjectionPlanner {
-  /**
-   * Calculates projection writes without committing them.
-   */
-  operationsForEvents(
-    events: readonly DomainEvent[],
-  ): Promise<SQLiteStatementOperation[]>;
-
-  /**
-   * Runs only after the transaction has committed.
-   */
-  notifyCommitted(events: readonly DomainEvent[]): void;
-}
-
-export interface EventInboxProcessorDependencies {
-  eventStore: SQLiteEventRepository;
-  transaction: TransactionManager;
-  pullClient: EventPullClient;
-  cursor: EventCursorRepository;
-  aggregates: RemoteAggregateVersionRepository;
-  projections: EventProjectionPlanner;
-}
-
 export interface ProcessPendingResult {
   pulled: number;
   persisted: number;
@@ -94,22 +67,27 @@ export interface ProcessPendingResult {
 export class EventInboxProcessor {
   private readonly eventStore: SQLiteEventRepository;
   private readonly transaction: TransactionManager;
-  private readonly pullClient: EventPullClient;
-  private readonly cursor: EventCursorRepository;
-  private readonly aggregates: RemoteAggregateVersionRepository;
-  private readonly projections: EventProjectionPlanner;
+  private readonly pullClient: SQLiteEventInboxRepository;
+  private readonly cursor: SQLiteSyncCursorRepository;
+  private readonly aggregates: SQLiteAggregateRepository;
+  private readonly projections: ProjectionEventBus
 
   private processing = false;
 
   constructor(
-    dependencies: EventInboxProcessorDependencies,
+    eventStore: SQLiteEventRepository,
+    transaction: TransactionManager,
+    pullClient: SQLiteEventInboxRepository,
+    cursor: SQLiteSyncCursorRepository,
+    aggregates: SQLiteAggregateRepository,
+    projections: ProjectionEventBus
   ) {
-    this.eventStore = dependencies.eventStore;
-    this.transaction = dependencies.transaction;
-    this.pullClient = dependencies.pullClient;
-    this.cursor = dependencies.cursor;
-    this.aggregates = dependencies.aggregates;
-    this.projections = dependencies.projections;
+    this.eventStore = eventStore;
+    this.transaction = transaction;
+    this.pullClient = pullClient;
+    this.cursor = cursor;
+    this.aggregates = aggregates;
+    this.projections = projections;
   }
 
   async processPending(

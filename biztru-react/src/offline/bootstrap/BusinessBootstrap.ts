@@ -91,7 +91,8 @@ implements Lifecycle {
         
         const synchronization = 
             await this.createSynchronization(
-                storage
+                storage,
+                projectionBus
             )
         const application = 
             new BusinessApplication(
@@ -248,6 +249,7 @@ implements Lifecycle {
 
 private async createSynchronization(
     storage: BusinessStorage,
+    bus: ProjectionEventBus
 ): Promise<BusinessSynchronization> {
 
     const transport =
@@ -255,7 +257,15 @@ private async createSynchronization(
             import.meta.env.VITE_API_URL
         );
 
-    const eventInboxProcessor = new EventInboxProcessor() 
+    const eventInboxProcessor = new EventInboxProcessor(
+        storage.repositories.events,
+        storage.runtime.transactionManager,
+        storage.repositories.eventInbox,
+        storage.repositories.cursor,
+        storage.repositories.aggregates,
+        bus
+        
+    ) 
     const engine =
         new SyncEngine(
 
