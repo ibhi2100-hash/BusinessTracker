@@ -20,7 +20,7 @@ import {
   ScanBarcode,
   ArrowUpRight,
   Barcode,
-} from "lucide-react";3
+} from "lucide-react";
 import {
   prepareProductImportFile,
   validateProductImportRows,
@@ -127,6 +127,24 @@ function formatNaira(value: number): string {
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   })}`;
+}
+
+/**
+ * Resolve and validate the effective unit selling price.
+ * This is client-side input validation only. The sales command/domain
+ * must remain the authoritative enforcement boundary for pricing policy.
+ */
+function resolveSellingPrice(
+  benchmarkPrice: number,
+  negotiatedPrice?: number,
+): number {
+  const price = negotiatedPrice ?? benchmarkPrice;
+
+  if (!isValidMoney(price) || !Number.isSafeInteger(price) || price <= 0) {
+    throw new Error("Enter a valid whole-naira selling price greater than zero.");
+  }
+
+  return price;
 }
 
 /* ============================================================
@@ -334,15 +352,17 @@ const handleBarcodeLookup = useCallback(
     [],
   );
 
-  /* ==========================================================
-     ADD TO CART
-     ========================================================== */
+  
+/* ==========================================================
+   ADD TO CART
+   ========================================================== */
 
   const handleAddToCart = useCallback(
     (
       productId: string,
       quantity: number,
       openCart = true,
+      negotiatedPrice?: number,
     ): boolean => {
       if (!isPositiveQuantity(quantity)) {
         toast.error("Enter a valid quantity.");
@@ -355,36 +375,39 @@ const handleBarcodeLookup = useCallback(
       }
 
       const product = products.find((item) => item.id === productId);
-
       if (!product) {
         toast.error("Product is no longer available.");
         return false;
       }
 
-      if (
-        !Number.isSafeInteger(product.quantity) ||
-        product.quantity < 0
-      ) {
+      if (!Number.isSafeInteger(product.quantity) || product.quantity < 0) {
         toast.error("The product stock quantity is invalid.");
         return false;
       }
 
-      if (!isValidMoney(product.price) || !isValidMoney(product.costPrice)) {
+      if (!isValidMoney(product.price) || product.price <= 0 ||
+          !isValidMoney(product.costPrice)) {
         toast.error("The product pricing is invalid.");
         return false;
       }
 
-      const existing = cartItems.find(
-        (item) => item.productId === productId,
-      );
+      let actualSellingPrice: number;
+      try {
+        actualSellingPrice = resolveSellingPrice(product.price, negotiatedPrice);
+      } catch (error) {
+        toast.error(getErrorMessage(error, "Enter a valid selling price."));
+        return false;
+      }
 
-      const currentQuantity = existing?.quantity ?? 0;
-      const requestedQuantity = currentQuantity + quantity;
+      // A product may have multiple cart lines when the agreed unit prices differ.
+      // Stock validation must therefore sum every line for this product.
+      const currentProductQuantity = cartItems
+        .filter((item) => item.productId === productId)
+        .reduce((total, item) => total + item.quantity, 0);
 
-      if (requestedQuantity > product.quantity) {
-        toast.error(
-          `Only ${Math.max(0, product.quantity - currentQuantity)} more units can be added.`,
-        );
+      if (currentProductQuantity + quantity > product.quantity) {
+        const remaining = Math.max(0, product.quantity - currentProductQuantity);
+        toast.error(`Only ${remaining} more units can be added.`);
         return false;
       }
 
@@ -392,7 +415,7 @@ const handleBarcodeLookup = useCallback(
         productId: product.id,
         name: product.name,
         quantity,
-        price: product.price,
+        price: actualSellingPrice,
         costPrice: product.costPrice,
       });
 
@@ -403,29 +426,30 @@ const handleBarcodeLookup = useCallback(
   );
 
   /* ==========================================================
-     CHANGE CART QUANTITY
+     CHANGE / REMOVE CART LINE
      ========================================================== */
 
   const handleChangeCartQuantity = useCallback(
-    (productId: string, quantity: number) => {
+    (lineId: string, quantity: number) => {
       if (!Number.isSafeInteger(quantity)) {
         toast.error("Enter a valid quantity.");
         return;
       }
 
-      if (quantity <= 0) {
-        cartStore.removeItem(productId);
+      const line = cartItems.find((item) => item.lineId === lineId);
+      if (!line) {
+        toast.error("This cart line no longer exists.");
         return;
       }
 
-      const product = products.find(
-        (item) => item.id === productId,
-      );
+      if (quantity <= 0) {
+        cartStore.removeItem(lineId);
+        return;
+      }
 
+      const product = products.find((item) => item.id === line.productId);
       if (!product) {
-        toast.error(
-          "This product is no longer in the current inventory.",
-        );
+        toast.error("This product is no longer in the current inventory.");
         return;
       }
 
@@ -434,16 +458,19 @@ const handleBarcodeLookup = useCallback(
         return;
       }
 
-      if (quantity > product.quantity) {
-        toast.error(
-          `Only ${product.quantity} units are currently available.`,
-        );
+      const otherLinesQuantity = cartItems
+        .filter((item) => item.productId === line.productId && item.lineId !== lineId)
+        .reduce((total, item) => total + item.quantity, 0);
+
+      const availableForThisLine = product.quantity - otherLinesQuantity;
+      if (quantity > availableForThisLine) {
+        toast.error(`Only ${Math.max(0, availableForThisLine)} units are available for this cart line.`);
         return;
       }
 
-      cartStore.updateQty(productId, quantity);
+      cartStore.updateQty(lineId, quantity);
     },
-    [products, cartStore],
+    [cartItems, products, cartStore],
   );
 
   /* ==========================================================
@@ -451,25 +478,20 @@ const handleBarcodeLookup = useCallback(
      ========================================================== */
 
   const handleQuickSell = useCallback(
-    async (productId: string, quantity: number) => {
+    async (productId: string, quantity: number, negotiatedPrice?: number) => {
       if (!isPositiveQuantity(quantity)) {
         toast.error("Enter a valid sale quantity.");
         return;
       }
 
-      const product = products.find(
-        (item) => item.id === productId,
-      );
-
+      const product = products.find((item) => item.id === productId);
       if (!product) {
         toast.error("Product is no longer available.");
         return;
       }
 
-      if (
-        !isValidMoney(product.price) ||
-        !isValidMoney(product.costPrice)
-      ) {
+      if (!isValidMoney(product.price) || product.price <= 0 ||
+          !isValidMoney(product.costPrice)) {
         toast.error("The product pricing is invalid.");
         return;
       }
@@ -479,52 +501,47 @@ const handleBarcodeLookup = useCallback(
         return;
       }
 
-      if (quantity > product.quantity) {
-        toast.error("Insufficient stock.");
+      const alreadyInCart = cartItems
+        .filter((item) => item.productId === productId)
+        .reduce((total, item) => total + item.quantity, 0);
+      if (alreadyInCart + quantity > product.quantity) {
+        toast.error("Insufficient stock after accounting for the current cart.");
+        return;
+      }
+
+      let actualSellingPrice: number;
+      try {
+        actualSellingPrice = resolveSellingPrice(product.price, negotiatedPrice);
+      } catch (error) {
+        toast.error(getErrorMessage(error, "Enter a valid selling price."));
         return;
       }
 
       try {
         await runExclusiveAction(async () => {
           const activeBranchId = requireBranchId();
-
           await app.sales.createSale({
             type: salesEventType.SALE_ADDED,
             mode,
             payload: {
+              branchId: activeBranchId,
               productId: product.id,
               productName: product.name,
               quantity,
-              amount: product.price * quantity,
+              amount: actualSellingPrice * quantity,
               costPrice: product.costPrice * quantity,
               unitCostPrice: product.costPrice,
-              unitPrice: product.price,
-              // Include branchId here only if the existing event
-              // payload contract explicitly supports this field.
+              unitPrice: actualSellingPrice,
             },
           });
-
-          toast.success(
-            `Sale completed for ${product.name}.`,
-          );
-
-          return activeBranchId;
+          toast.success(`Sale completed for ${product.name} at ${formatNaira(actualSellingPrice)} each.`);
         });
       } catch (error) {
         console.error("Quick sale failed:", error);
-
-        toast.error(
-          getErrorMessage(error, "Sale failed."),
-        );
+        toast.error(getErrorMessage(error, "Sale failed."));
       }
     },
-    [
-      products,
-      app.sales,
-      mode,
-      requireBranchId,
-      runExclusiveAction,
-    ],
+    [products, cartItems, app.sales, mode, requireBranchId, runExclusiveAction],
   );
 
   /* ==========================================================
@@ -543,10 +560,22 @@ const handleBarcodeLookup = useCallback(
       ...item,
     }));
 
+    // Validate aggregate quantity per product, not each negotiated-price line
+    // independently. Several lines can represent the same physical stock.
+    const checkoutQuantityByProduct = new Map<string, number>();
+    for (const item of checkoutItems) {
+      checkoutQuantityByProduct.set(
+        item.productId,
+        (checkoutQuantityByProduct.get(item.productId) ?? 0) + item.quantity,
+      );
+    }
+
     for (const item of checkoutItems) {
       if (
         !isPositiveQuantity(item.quantity) ||
         !isValidMoney(item.price) ||
+        item.price <= 0 ||
+        !Number.isSafeInteger(item.price) ||
         !isValidMoney(item.costPrice)
       ) {
         toast.error(
@@ -571,9 +600,10 @@ const handleBarcodeLookup = useCallback(
         return;
       }
 
-      if (item.quantity > product.quantity) {
+      const totalRequested = checkoutQuantityByProduct.get(item.productId) ?? 0;
+      if (totalRequested > product.quantity) {
         toast.error(
-          `Insufficient stock for ${item.name}. Available: ${product.quantity}.`,
+          `Insufficient stock for ${item.name}. Requested: ${totalRequested}; available: ${product.quantity}.`,
         );
         return;
       }
@@ -581,7 +611,7 @@ const handleBarcodeLookup = useCallback(
 
     try {
       await runExclusiveAction(async () => {
-        requireBranchId();
+        const activeBranchId = requireBranchId();
 
         /*
          * IMPORTANT:
@@ -596,6 +626,7 @@ const handleBarcodeLookup = useCallback(
             type: salesEventType.SALE_ADDED,
             mode,
             payload: {
+              branchId: activeBranchId,
               productId: item.productId,
               productName: item.name,
               quantity: item.quantity,
@@ -1362,7 +1393,7 @@ const handleBarcodeLookup = useCallback(
             className="
               grid grid-cols-1 gap-3
               sm:grid-cols-2 sm:gap-4
-              lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5
+              lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4
             "
           >
             {filteredProducts.map((product) =>
@@ -1370,11 +1401,9 @@ const handleBarcodeLookup = useCallback(
                 <SellCard
                   key={product.id}
                   product={product}
-                  cartQuantity={
-                    cartItems.find(
-                      (item) => item.productId === product.id,
-                    )?.quantity ?? 0
-                  }
+                  cartQuantity={cartItems
+                    .filter((item) => item.productId === product.id)
+                    .reduce((total, item) => total + item.quantity, 0)}
                   disabled={loader}
                   onAddToCart={handleAddToCart}
                   onChangeCartQuantity={handleChangeCartQuantity}
@@ -1499,7 +1528,7 @@ const handleBarcodeLookup = useCallback(
           <div className="space-y-2.5">
             {cartItems.map((item) => (
               <GlassCard
-                key={item.productId}
+                key={item.lineId}
                 variant="default"
                 className="border-white/10 p-3.5"
               >
@@ -1518,7 +1547,7 @@ const handleBarcodeLookup = useCallback(
                     type="button"
                     disabled={loader}
                     onClick={() =>
-                      cartStore.removeItem(item.productId)
+                      cartStore.removeItem(item.lineId)
                     }
                     aria-label={`Remove ${item.name} from cart`}
                     className="
@@ -1543,7 +1572,7 @@ const handleBarcodeLookup = useCallback(
                       disabled={loader}
                       onClick={() =>
                         handleChangeCartQuantity(
-                          item.productId,
+                          item.lineId,
                           item.quantity - 1,
                         )
                       }
@@ -1566,7 +1595,7 @@ const handleBarcodeLookup = useCallback(
                       disabled={loader}
                       onClick={() =>
                         handleChangeCartQuantity(
-                          item.productId,
+                          item.lineId,
                           item.quantity + 1,
                         )
                       }

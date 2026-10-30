@@ -1,7 +1,10 @@
-// /store/cartStore.ts
 import { create } from "zustand";
 
-interface CartItem {
+/** A cart line is identified independently from its product.
+ * The same product can appear on multiple lines at different negotiated prices.
+ */
+export interface CartItem {
+  lineId: string;
   productId: string;
   name: string;
   price: number;
@@ -9,14 +12,16 @@ interface CartItem {
   quantity: number;
 }
 
+export interface NewCartItem extends Omit<CartItem, "lineId"> {
+  lineId?: string;
+}
+
 interface CartState {
   items: CartItem[];
-
-  addItem: (item: CartItem) => void;
-  removeItem: (productId: string) => void;
-  updateQty: (productId: string, qty: number) => void;
+  addItem: (item: NewCartItem) => void;
+  removeItem: (lineId: string) => void;
+  updateQty: (lineId: string, qty: number) => void;
   clear: () => void;
-
   total: () => number;
 }
 
@@ -25,40 +30,46 @@ export const useCartStore = create<CartState>((set, get) => ({
 
   addItem: (item) =>
     set((state) => {
+      // Merge only when product, actual unit price, and cost basis all match.
       const existing = state.items.find(
-        (i) => i.productId === item.productId
+        (line) =>
+          line.productId === item.productId &&
+          line.price === item.price &&
+          line.costPrice === item.costPrice,
       );
 
       if (existing) {
         return {
-          items: state.items.map((i) =>
-            i.productId === item.productId
-              ? { ...i, quantity: i.quantity + item.quantity }
-              : i
+          items: state.items.map((line) =>
+            line.lineId === existing.lineId
+              ? { ...line, quantity: line.quantity + item.quantity }
+              : line,
           ),
         };
       }
 
-      return { items: [...state.items, item] };
+      return {
+        items: [
+          ...state.items,
+          { ...item, lineId: item.lineId ?? crypto.randomUUID() },
+        ],
+      };
     }),
 
-  removeItem: (productId) =>
+  removeItem: (lineId) =>
     set((state) => ({
-      items: state.items.filter((i) => i.productId !== productId),
+      items: state.items.filter((line) => line.lineId !== lineId),
     })),
 
-  updateQty: (productId, qty) =>
+  updateQty: (lineId, qty) =>
     set((state) => ({
-      items: state.items.map((i) =>
-        i.productId === productId ? { ...i, quantity: qty } : i
+      items: state.items.map((line) =>
+        line.lineId === lineId ? { ...line, quantity: qty } : line,
       ),
     })),
 
   clear: () => set({ items: [] }),
 
   total: () =>
-    get().items.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    ),
+    get().items.reduce((sum, item) => sum + item.price * item.quantity, 0),
 }));

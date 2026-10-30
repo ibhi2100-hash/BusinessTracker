@@ -32,8 +32,9 @@ interface SellCardProps {
   onAddToCart?: (
     productId: string,
     quantity: number,
+    openCart?: boolean,
     negotiatedPrice?: number,
-  ) => void;
+  ) => boolean | void;
 
   onChangeCartQuantity?: (
     productId: string,
@@ -279,6 +280,7 @@ export default function SellCard({
     onAddToCart?.(
       product.id,
       quantity,
+      true,
       price,
     );
 
