@@ -1,31 +1,36 @@
 import type{ PreparedStatementManager } from "../../../PreparedStatement/PreparedStatementManager";
 import { aggregateStatementsKeys } from "./aggregateStatementsKeys";
 
-export  class AggregateStatements {
+// AggregateStatements.ts
+
+export class AggregateStatements {
     private readonly manager: PreparedStatementManager;
-    constructor(
-        manager: PreparedStatementManager
-    ){
-        this.manager = manager
+
+    constructor(manager: PreparedStatementManager) {
+        this.manager = manager;
     }
 
-    get insert(){
-        return this.manager.get(aggregateStatementsKeys.insert)
+    get insert() {
+        return this.manager.get(aggregateStatementsKeys.insert);
     }
 
-    get getAggregate(){
-        return this.manager.get(aggregateStatementsKeys.getAggregate)
+    get getAggregate() {
+        return this.manager.get(aggregateStatementsKeys.getAggregate);
     }
 
-    get getVersion(){
-        return this.manager.get(aggregateStatementsKeys.getVersion)
+    get getVersion() {
+        return this.manager.get(aggregateStatementsKeys.getVersion);
     }
 
-    get getAllAggregate(){
-        return this.manager.get(aggregateStatementsKeys.getAllAggregates)
+    get getAllAggregate() {
+        return this.manager.get(aggregateStatementsKeys.getAllAggregates);
     }
 
-    get advanceLocal(){
-        return this.manager.get(aggregateStatementsKeys.advanceLocal)
+    get advanceLocal() {
+        return this.manager.get(aggregateStatementsKeys.advanceLocal);
+    }
+
+    get advanceRemote() {
+        return this.manager.get(aggregateStatementsKeys.advanceRemote);
     }
 }

@@ -1,5 +1,3 @@
-"use client";
-
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Search,
@@ -24,22 +22,56 @@ import { GlassInput } from "../ui/GlassInput";
 import { GlassIcon } from "../ui/GlassIcon";
 import { GlassSheet } from "../ui/GlassSheet";
 import { cn } from "../../lib/utils";
+
 import { useApplication } from "../../Biztru/services/ApplicationService/ApplicationContext";
 import { useBusinessContext } from "../../Biztru/context/BusinessContext";
+
 import type { SaleFilters } from "../../Biztru/services/ApplicationService/API/Sales/SalesApi";
-import type { Sales } from "@business/shared-types";
+import type {
+  Sales,
+  Business,
+  Branch,
+} from "@business/shared-types";
+
+import { useBusinessLiveQuery } from "../../hooks/useBusinessLiveQuery";
+import { useBranchLiveQuery } from "../../hooks/useBranches";
 
 type StatusFilter = "all" | "completed" | "voided" | "refunded";
+type DateRangeFilter = "all" | "today" | "7days" | "30days" | "yearly";
 
 type RefundFormState = {
   quantity: string;
   reason: string;
 };
 
+type SaleWithBranch = Sales & {
+  branchId?: string | null;
+};
+
+type ReceiptDetails = {
+  receiptNumber: string;
+
+  businessId: string;
+  businessName: string;
+  businessAddress: string;
+
+  branchId: string;
+  branchName: string;
+  branchAddress: string;
+  branchPhone: string;
+
+  employeeName: string;
+  employeeId: string;
+};
+
 const EMPTY_REFUND_FORM: RefundFormState = {
   quantity: "1",
   reason: "",
 };
+
+// ---------------------------------------------------------
+// Formatting
+// ---------------------------------------------------------
 
 function formatNaira(value: number) {
   const amount = Number.isFinite(value) ? value : 0;
@@ -66,69 +98,85 @@ function formatDate(value: string | number) {
   });
 }
 
-function StatusPill({ status }: { status: string }) {
-  const styles: Record<string, string> = {
-    completed:
-      "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-    voided: "bg-red-500/10 text-red-400 border-red-500/20",
-    refunded:
-      "bg-amber-500/10 text-amber-400 border-amber-500/20",
+/**
+ * Builds inclusive local-calendar date boundaries and converts them to ISO.
+ * "7 days" and "30 days" include today plus the preceding 6 or 29 days.
+ * "Yearly" means the current calendar year through the end of today.
+ */
+function getLocalDateRange(
+  range: DateRangeFilter,
+  now: Date = new Date()
+): { from?: string; to?: string } {
+  if (range === "all") return {};
+
+  const start = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    0,
+    0,
+    0,
+    0
+  );
+
+  const end = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    23,
+    59,
+    59,
+    999
+  );
+
+  switch (range) {
+    case "today":
+      break;
+    case "7days":
+      start.setDate(start.getDate() - 6);
+      break;
+    case "30days":
+      start.setDate(start.getDate() - 29);
+      break;
+    case "yearly":
+      start.setMonth(0, 1);
+      break;
+    default:
+      return {};
+  }
+
+  return {
+    from: start.toISOString(),
+    to: end.toISOString(),
   };
-
-  return (
-    <span
-      className={cn(
-        "inline-flex items-center px-2 py-0.5 rounded-full",
-        "text-[10px] font-medium border capitalize whitespace-nowrap",
-        styles[status] ?? "bg-white/5 text-gray-400 border-white/10"
-      )}
-    >
-      {status}
-    </span>
-  );
 }
 
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div>
-      <label className="block text-xs text-gray-400 mb-1.5">
-        {label}
-      </label>
-      {children}
-    </div>
-  );
+function readText(...values: unknown[]): string {
+  for (const value of values) {
+    if (typeof value === "string" && value.trim()) {
+      return value.trim();
+    }
+
+    if (typeof value === "number" && Number.isFinite(value)) {
+      return String(value);
+    }
+  }
+
+  return "";
 }
 
-function Row({
-  label,
-  value,
-  mono,
-}: {
-  label: string;
-  value: string;
-  mono?: boolean;
-}) {
-  return (
-    <div className="flex items-start justify-between gap-4 border-b border-white/5 pb-2">
-      <span className="text-gray-400 shrink-0">{label}</span>
-
-      <span
-        className={cn(
-          "text-right text-white break-words min-w-0",
-          mono && "font-mono text-xs"
-        )}
-      >
-        {value}
-      </span>
-    </div>
-  );
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
+
+// ---------------------------------------------------------
+// Sale calculations
+// ---------------------------------------------------------
 
 function getSaleCost(sale: Sales): number {
   const cost = Number((sale as any).costPrice ?? 0);
@@ -164,46 +212,42 @@ function getUnitAmount(sale: Sales): number {
   return quantity > 0 ? getSaleTotal(sale) / quantity : 0;
 }
 
-function readText(...values: unknown[]): string {
-  for (const value of values) {
-    if (typeof value === "string" && value.trim()) return value.trim();
-    if (typeof value === "number" && Number.isFinite(value)) return String(value);
-  }
+// ---------------------------------------------------------
+// Receipt details
+// ---------------------------------------------------------
 
-  return "";
-}
-
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
-
-type ReceiptDetails = {
-  receiptNumber: string;
-  businessId: string;
-  businessName: string;
-  businessAddress: string;
-  businessPhone: string;
-  businessEmail: string;
-  branchName: string;
-  employeeName: string;
-  employeeId: string;
-};
-
+/**
+ * Resolves receipt information using authoritative live-query
+ * business and branch records.
+ *
+ * IMPORTANT:
+ * The branch is resolved using the branchId stored on the sale.
+ * This ensures historical receipts show the correct branch,
+ * even if the user has switched to another branch.
+ */
 function getReceiptDetails(
-  sale: Sales,
-  businessId: string,
-  branchId?: string | null
+  sale: SaleWithBranch,
+  business: Business | null | undefined,
+  branches: Branch[] | null,
+  currentBranchId?: string | null
 ): ReceiptDetails {
-  // Sales may carry denormalized business/cashier snapshots. If your domain
-  // stores these separately, replace these lookups with your repository read.
   const record = sale as any;
-  const business = record.business ?? record.businessDetails ?? {};
-  const branch = record.branch ?? record.branchDetails ?? {};
+
+  // Prefer the branch recorded on the actual sale.
+  // Only fall back to the currently selected branch when
+  // the sale does not contain a branchId.
+  const actualBranchId =
+    sale.branchId ?? currentBranchId ?? "";
+
+  // Find the exact branch belonging to this business.
+  const branch =
+    branches?.find(
+      (item) =>
+        item.id === actualBranchId &&
+        item.businessId === sale.businessId
+    ) ?? null;
+
+  // Employee information remains sourced from the sale.
   const employee =
     record.employee ??
     record.cashier ??
@@ -220,88 +264,211 @@ function getReceiptDetails(
       record.transactionNumber,
       record.id
     ),
-    businessId,
-    businessName: readText(
-      record.businessName,
-      business.name,
-      business.businessName,
-      record.merchantName
-    ) || "Business name not available",
-    businessAddress: readText(
-      record.businessAddress,
-      business.address,
-      business.fullAddress,
-      business.location
-    ),
-    businessPhone: readText(
-      record.businessPhone,
-      business.phone,
-      business.phoneNumber
-    ),
-    businessEmail: readText(
-      record.businessEmail,
-      business.email,
-      business.emailAddress
-    ),
-    branchName: readText(
-      record.branchName,
-      branch.name,
-      branch.branchName,
-      branchId
-    ),
-    employeeName: readText(
-      record.employeeName,
-      record.cashierName,
-      record.soldByName,
-      record.createdByName,
-      employee.name,
-      employee.fullName,
-      employee.displayName
-    ) || "Employee details not available",
-    employeeId: readText(
-      record.employeeId,
-      record.cashierId,
-      record.soldById,
-      record.createdById,
-      employee.id,
-      employee.userId
-    ),
+
+    businessId: business?.id ?? sale.businessId ?? "",
+
+    businessName:
+      readText(business?.name) ||
+      "Business name not available",
+
+    businessAddress:
+      readText(business?.address),
+
+    branchId: actualBranchId,
+
+    branchName:
+      readText(branch?.name) ||
+      "Branch details not available",
+
+    branchAddress:
+      readText(branch?.address),
+
+    branchPhone:
+      readText(branch?.phone),
+
+    employeeName:
+      readText(
+        record.employeeName,
+        record.cashierName,
+        record.soldByName,
+        record.createdByName,
+        employee.name,
+        employee.fullName,
+        employee.displayName
+      ) || "Employee details not available",
+
+    employeeId:
+      readText(
+        record.employeeId,
+        record.cashierId,
+        record.soldById,
+        record.createdById,
+        employee.id,
+        employee.userId
+      ),
   };
 }
 
+// ---------------------------------------------------------
+// Status
+// ---------------------------------------------------------
+
+function StatusPill({ status }: { status: string }) {
+  const styles: Record<string, string> = {
+    completed:
+      "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    voided:
+      "bg-red-500/10 text-red-400 border-red-500/20",
+    refunded:
+      "bg-amber-500/10 text-amber-400 border-amber-500/20",
+  };
+
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center px-2 py-0.5 rounded-full",
+        "text-[10px] font-medium border capitalize whitespace-nowrap",
+        styles[status] ??
+          "bg-white/5 text-gray-400 border-white/10"
+      )}
+    >
+      {status}
+    </span>
+  );
+}
+
+// ---------------------------------------------------------
+// Reusable fields
+// ---------------------------------------------------------
+
+function Field({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <label className="block text-xs text-gray-400 mb-1.5">
+        {label}
+      </label>
+      {children}
+    </div>
+  );
+}
+
+function Row({
+  label,
+  value,
+  mono,
+}: {
+  label: string;
+  value: string;
+  mono?: boolean;
+}) {
+  return (
+    <div className="flex items-start justify-between gap-4 border-b border-white/5 pb-2">
+      <span className="text-gray-400 shrink-0">
+        {label}
+      </span>
+
+      <span
+        className={cn(
+          "text-right text-white break-words min-w-0",
+          mono && "font-mono text-xs"
+        )}
+      >
+        {value}
+      </span>
+    </div>
+  );
+}
+
+// =========================================================
+// SALES PAGE
+// =========================================================
+
 export default function SalesListPage() {
   const app = useApplication();
+
   const { businessId, branchId } = useBusinessContext();
+
+  // -------------------------------------------------------
+  // IMPORTANT: Live query hooks MUST be at component level.
+  // Never call these inside load(), useEffect(), or callbacks.
+  // -------------------------------------------------------
+
+  const { data: business } = useBusinessLiveQuery(
+    businessId
+  );
+
+  const { data: branches } = useBranchLiveQuery(
+    businessId
+  );
+
+  // -------------------------------------------------------
+  // State
+  // -------------------------------------------------------
 
   const [sales, setSales] = useState<Sales[]>([]);
   const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(
+    null
+  );
 
   const [search, setSearch] = useState("");
-  const [status, setStatus] = useState<StatusFilter>("all");
+  const [status, setStatus] =
+    useState<StatusFilter>("all");
+
+  const [dateRange, setDateRange] =
+    useState<DateRangeFilter>("all");
+
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
 
-  const [selected, setSelected] = useState<Sales | null>(null);
+  const [selected, setSelected] = useState<Sales | null>(
+    null
+  );
+
   const [filterOpen, setFilterOpen] = useState(false);
 
   const [refundOpen, setRefundOpen] = useState(false);
+
   const [refundForm, setRefundForm] =
     useState<RefundFormState>(EMPTY_REFUND_FORM);
 
-  const [refundError, setRefundError] = useState<string | null>(null);
-  const [refundSuccess, setRefundSuccess] = useState<string | null>(null);
+  const [refundError, setRefundError] = useState<
+    string | null
+  >(null);
+
+  const [refundSuccess, setRefundSuccess] = useState<
+    string | null
+  >(null);
+
   const [isRefunding, setIsRefunding] = useState(false);
 
   const [copied, setCopied] = useState(false);
+
   const [receiptOpen, setReceiptOpen] = useState(false);
-  const [receiptError, setReceiptError] = useState<string | null>(null);
+
+  const [receiptError, setReceiptError] = useState<
+    string | null
+  >(null);
+
+  // -------------------------------------------------------
+  // Load sales
+  // -------------------------------------------------------
 
   const load = useCallback(async () => {
     if (!businessId) {
       setSales([]);
       setLoading(false);
-      setLoadError("A business must be selected before loading sales.");
+
+      setLoadError(
+        "A business must be selected before loading sales."
+      );
+
       return;
     }
 
@@ -309,12 +476,15 @@ export default function SalesListPage() {
       setLoading(true);
       setLoadError(null);
 
+      const quickDateRange = getLocalDateRange(dateRange);
+
       const filters: SaleFilters = {
         branchId: branchId ?? undefined,
         businessId,
         status,
-        from: from || undefined,
-        to: to || undefined,
+        // Explicit custom dates take precedence over quick date filters.
+        from: from || quickDateRange.from,
+        to: to || quickDateRange.to,
         limit: 200,
       };
 
@@ -322,7 +492,10 @@ export default function SalesListPage() {
 
       setSales(rows);
     } catch (error) {
-      console.error("[SalesListPage] Failed to load sales:", error);
+      console.error(
+        "[SalesListPage] Failed to load sales:",
+        error
+      );
 
       setLoadError(
         "Unable to load sales. Check your local database and try again."
@@ -330,11 +503,23 @@ export default function SalesListPage() {
     } finally {
       setLoading(false);
     }
-  }, [app, businessId, branchId, status, from, to]);
+  }, [
+    app,
+    businessId,
+    branchId,
+    status,
+    dateRange,
+    from,
+    to,
+  ]);
 
   useEffect(() => {
     void load();
   }, [load]);
+
+  // -------------------------------------------------------
+  // Filter sales
+  // -------------------------------------------------------
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -355,53 +540,114 @@ export default function SalesListPage() {
     () =>
       filtered
         .filter((sale) => sale.status === "completed")
-        .reduce((sum, sale) => sum + getSaleTotal(sale), 0),
+        .reduce(
+          (sum, sale) => sum + getSaleTotal(sale),
+          0
+        ),
     [filtered]
   );
 
+  // Always use the latest local sale projection.
   const selectedSale = useMemo(() => {
     if (!selected) return null;
 
-    // Use the newest local projection when the list has been refreshed.
-    return sales.find((sale) => sale.id === selected.id) ?? selected;
+    return (
+      sales.find((sale) => sale.id === selected.id) ??
+      selected
+    );
   }, [sales, selected]);
 
+  // -------------------------------------------------------
+  // Resolve receipt details from live business and branches.
+  // -------------------------------------------------------
+
   const receiptDetails = useMemo(() => {
-    if (!selectedSale || !businessId) return null;
-    return getReceiptDetails(selectedSale, businessId, branchId);
-  }, [selectedSale, businessId, branchId]);
+    if (!selectedSale || !businessId) {
+      return null;
+    }
+
+    return getReceiptDetails(
+      selectedSale as SaleWithBranch,
+      business,
+      branches,
+      branchId
+    );
+  }, [
+    selectedSale,
+    businessId,
+    business,
+    branches,
+    branchId,
+  ]);
+
+  // -------------------------------------------------------
+  // Receipt preview
+  // -------------------------------------------------------
 
   const openReceiptPreview = useCallback(() => {
     if (!selectedSale) return;
+
     setReceiptError(null);
     setReceiptOpen(true);
   }, [selectedSale]);
 
+  // -------------------------------------------------------
+  // Print receipt
+  // -------------------------------------------------------
+
   const printReceipt = useCallback(() => {
     if (!selectedSale || !receiptDetails) return;
 
-    // Open synchronously from the click handler to avoid popup blockers.
-    const printWindow = window.open("", "_blank", "width=480,height=760");
+    // Do not print incomplete business information.
+    if (
+      !business ||
+      !business.name ||
+      !receiptDetails.businessName ||
+      receiptDetails.businessName ===
+        "Business name not available"
+    ) {
+      setReceiptError(
+        "Business information is still loading or unavailable. Please refresh and try again."
+      );
+
+      return;
+    }
+
+    // Open synchronously inside the click handler.
+    const printWindow = window.open(
+      "",
+      "_blank",
+      "width=480,height=760"
+    );
+
     if (!printWindow) {
       setReceiptError(
         "The receipt window was blocked. Allow pop-ups for this app and try again."
       );
+
       return;
     }
 
     const sale = selectedSale;
-    const itemName = readText(sale.productName, sale.productId);
-    const receiptNumber = receiptDetails.receiptNumber;
+
+    const itemName = readText(
+      sale.productName,
+      sale.productId
+    );
+
+    const details = receiptDetails;
+
     const businessLines = [
-      receiptDetails.businessAddress,
-      receiptDetails.businessPhone
-        ? `Tel: ${receiptDetails.businessPhone}`
+      details.businessAddress,
+      details.branchName &&
+      details.branchName !== "Branch details not available"
+        ? `Branch: ${details.branchName}`
         : "",
-      receiptDetails.businessEmail
-        ? `Email: ${receiptDetails.businessEmail}`
+      details.branchAddress
+        ? `Branch address: ${details.branchAddress}`
         : "",
-      receiptDetails.branchName
-        ? `Branch: ${receiptDetails.branchName}`
+      details.branchPhone
+        ? `Tel: ${details.branchPhone}`
         : "",
     ].filter(Boolean);
 
@@ -410,22 +656,77 @@ export default function SalesListPage() {
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Receipt ${escapeHtml(receiptNumber)}</title>
+<title>Receipt ${escapeHtml(details.receiptNumber)}</title>
+
 <style>
   * { box-sizing: border-box; }
-  body { margin: 0; padding: 24px; color: #111; background: #fff; font: 13px/1.45 Arial, Helvetica, sans-serif; }
-  .receipt { max-width: 360px; margin: 0 auto; }
+
+  body {
+    margin: 0;
+    padding: 24px;
+    color: #111;
+    background: #fff;
+    font: 13px/1.45 Arial, Helvetica, sans-serif;
+  }
+
+  .receipt {
+    max-width: 360px;
+    margin: 0 auto;
+  }
+
   .center { text-align: center; }
-  h1 { font-size: 20px; margin: 0 0 5px; overflow-wrap: anywhere; }
+
+  h1 {
+    font-size: 20px;
+    margin: 0 0 5px;
+    overflow-wrap: anywhere;
+  }
+
   .muted { color: #555; }
-  .rule { border: 0; border-top: 1px dashed #999; margin: 14px 0; }
-  .row { display: flex; justify-content: space-between; gap: 16px; margin: 7px 0; }
-  .row span:last-child { text-align: right; overflow-wrap: anywhere; }
+
+  .rule {
+    border: 0;
+    border-top: 1px dashed #999;
+    margin: 14px 0;
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 7px 0;
+  }
+
+  .row span:last-child {
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+
   .item { margin: 14px 0; }
-  .total { font-weight: 700; font-size: 17px; }
+
+  .total {
+    font-weight: 700;
+    font-size: 17px;
+  }
+
   .small { font-size: 11px; }
-  .actions { display: flex; justify-content: center; gap: 8px; margin: 24px auto 0; }
-  button { border: 0; border-radius: 8px; padding: 10px 16px; background: #111; color: #fff; cursor: pointer; }
+
+  .actions {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 24px auto 0;
+  }
+
+  button {
+    border: 0;
+    border-radius: 8px;
+    padding: 10px 16px;
+    background: #111;
+    color: #fff;
+    cursor: pointer;
+  }
+
   @media print {
     body { padding: 0; }
     .actions { display: none !important; }
@@ -433,49 +734,131 @@ export default function SalesListPage() {
   }
 </style>
 </head>
+
 <body>
   <main class="receipt">
+
     <header class="center">
-      <h1>${escapeHtml(receiptDetails.businessName)}</h1>
-      ${receiptDetails.businessName === "Business name not available" ? `<div class="muted small">Business ID: ${escapeHtml(receiptDetails.businessId)}</div>` : ""}
-      ${businessLines.map((line) => `<div class="muted small">${escapeHtml(line)}</div>`).join("")}
+      <h1>${escapeHtml(details.businessName)}</h1>
+
+      ${businessLines
+        .map(
+          (line) =>
+            `<div class="muted small">${escapeHtml(line)}</div>`
+        )
+        .join("")}
+
       <p><strong>SALES RECEIPT</strong></p>
     </header>
+
     <hr class="rule" />
-    <div class="row"><span>Receipt no.</span><span>${escapeHtml(receiptNumber)}</span></div>
-    <div class="row"><span>Date</span><span>${escapeHtml(formatDate(sale.createdAt))}</span></div>
-    <div class="row"><span>Sale status</span><span>${escapeHtml(String(sale.status))}</span></div>
-    <div class="row"><span>Employee</span><span>${escapeHtml(receiptDetails.employeeName)}</span></div>
-    ${receiptDetails.employeeId ? `<div class="row"><span>Employee ID</span><span>${escapeHtml(receiptDetails.employeeId)}</span></div>` : ""}
-    ${sale.customerRef ? `<div class="row"><span>Customer</span><span>${escapeHtml(String(sale.customerRef))}</span></div>` : ""}
-    ${sale.paymentMethod ? `<div class="row"><span>Payment</span><span>${escapeHtml(String(sale.paymentMethod))}</span></div>` : ""}
+
+    <div class="row">
+      <span>Receipt no.</span>
+      <span>${escapeHtml(details.receiptNumber)}</span>
+    </div>
+
+    <div class="row">
+      <span>Date</span>
+      <span>${escapeHtml(formatDate(sale.createdAt))}</span>
+    </div>
+
+    <div class="row">
+      <span>Sale status</span>
+      <span>${escapeHtml(String(sale.status))}</span>
+    </div>
+
+    <div class="row">
+      <span>Employee</span>
+      <span>${escapeHtml(details.employeeName)}</span>
+    </div>
+
+    ${
+      details.employeeId
+        ? `<div class="row">
+            <span>Employee ID</span>
+            <span>${escapeHtml(details.employeeId)}</span>
+          </div>`
+        : ""
+    }
+
+    ${
+      sale.customerRef
+        ? `<div class="row">
+            <span>Customer</span>
+            <span>${escapeHtml(String(sale.customerRef))}</span>
+          </div>`
+        : ""
+    }
+
+    ${
+      sale.paymentMethod
+        ? `<div class="row">
+            <span>Payment</span>
+            <span>${escapeHtml(String(sale.paymentMethod))}</span>
+          </div>`
+        : ""
+    }
+
     <hr class="rule" />
+
     <div class="item">
       <div><strong>${escapeHtml(itemName)}</strong></div>
-      <div class="row"><span>${escapeHtml(String(sale.quantity))} × ${escapeHtml(formatNaira(getUnitAmount(sale)))}</span><span>${escapeHtml(formatNaira(getSaleTotal(sale)))}</span></div>
+
+      <div class="row">
+        <span>
+          ${escapeHtml(String(sale.quantity))}
+          ×
+          ${escapeHtml(formatNaira(getUnitAmount(sale)))}
+        </span>
+
+        <span>${escapeHtml(formatNaira(getSaleTotal(sale)))}</span>
+      </div>
     </div>
+
     <hr class="rule" />
-    <div class="row total"><span>Total</span><span>${escapeHtml(formatNaira(getSaleTotal(sale)))}</span></div>
+
+    <div class="row total">
+      <span>Total</span>
+      <span>${escapeHtml(formatNaira(getSaleTotal(sale)))}</span>
+    </div>
+
     <hr class="rule" />
-    <p class="center small">Thank you for your business.</p>
-    <p class="center small muted">Sale reference: ${escapeHtml(sale.id)}</p>
+
+    <p class="center small">
+      Thank you for your business.
+    </p>
+
+    <p class="center small muted">
+      Sale reference: ${escapeHtml(sale.id)}
+    </p>
+
     <div class="actions">
       <button onclick="window.print()">Print receipt</button>
       <button onclick="window.close()">Close</button>
     </div>
+
   </main>
 </body>
 </html>`;
+
+    printWindow.document.open();
+    printWindow.document.write(html);
+    printWindow.document.close();
 
     printWindow.onload = () => {
       printWindow.focus();
       printWindow.print();
     };
-    printWindow.document.open();
-    printWindow.document.write(html);
-    printWindow.document.close();
-    printWindow.focus();
-  }, [selectedSale, receiptDetails]);
+  }, [
+    selectedSale,
+    receiptDetails,
+    business,
+  ]);
+
+  // -------------------------------------------------------
+  // Refund calculations
+  // -------------------------------------------------------
 
   const canRefund =
     selectedSale?.status === "completed" &&
@@ -483,6 +866,7 @@ export default function SalesListPage() {
     getSaleTotal(selectedSale) > 0;
 
   const refundQuantity = Number(refundForm.quantity);
+
   const availableQuantity = selectedSale
     ? getSaleQuantity(selectedSale)
     : 0;
@@ -504,6 +888,10 @@ export default function SalesListPage() {
         (refundQuantity / Math.max(availableQuantity, 1))
       : 0;
 
+  // -------------------------------------------------------
+  // Close details
+  // -------------------------------------------------------
+
   const closeDetails = useCallback(() => {
     if (isRefunding) return;
 
@@ -515,8 +903,17 @@ export default function SalesListPage() {
     setRefundForm(EMPTY_REFUND_FORM);
   }, [isRefunding]);
 
+  // -------------------------------------------------------
+  // Open refund form
+  // -------------------------------------------------------
+
   const openRefundForm = useCallback(() => {
-    if (!selectedSale || selectedSale.status !== "completed") return;
+    if (
+      !selectedSale ||
+      selectedSale.status !== "completed"
+    ) {
+      return;
+    }
 
     setRefundError(null);
     setRefundSuccess(null);
@@ -529,13 +926,20 @@ export default function SalesListPage() {
     setRefundOpen(true);
   }, [selectedSale]);
 
+  // -------------------------------------------------------
+  // Submit refund
+  // -------------------------------------------------------
+
   const submitRefund = useCallback(async () => {
-    if (!selectedSale || !businessId || isRefunding) return;
+    if (!selectedSale || !businessId || isRefunding) {
+      return;
+    }
 
     if (selectedSale.status !== "completed") {
       setRefundError(
-        "Only completed sales can be refunded. Refresh the sale and try again."
+        "Only completed sales can be refunded."
       );
+
       return;
     }
 
@@ -550,34 +954,52 @@ export default function SalesListPage() {
       quantity <= 0 ||
       quantity > available
     ) {
-      setRefundError("Enter a valid quantity within the remaining sale quantity.");
+      setRefundError(
+        "Enter a valid quantity within the remaining sale quantity."
+      );
+
       return;
     }
 
     if (!reason) {
-      setRefundError("A refund reason is required for the audit trail.");
+      setRefundError(
+        "A refund reason is required for the audit trail."
+      );
+
       return;
     }
 
     if (reason.length > 500) {
-      setRefundError("The refund reason cannot exceed 500 characters.");
+      setRefundError(
+        "The refund reason cannot exceed 500 characters."
+      );
+
       return;
     }
 
     if (total <= 0 || available <= 0) {
-      setRefundError("This sale has no refundable quantity or amount.");
+      setRefundError(
+        "This sale has no refundable quantity or amount."
+      );
+
       return;
     }
 
-    // Values represent the portion of the current sale being returned.
-    // The sales service remains responsible for constructing and executing
-    // the canonical SALE_REFUNDED command.
     const fraction = quantity / available;
-    const amount = Number((total * fraction).toFixed(2));
-    const costPrice = Number((cost * fraction).toFixed(2));
+
+    const amount = Number(
+      (total * fraction).toFixed(2)
+    );
+
+    const costPrice = Number(
+      (cost * fraction).toFixed(2)
+    );
 
     if (amount <= 0) {
-      setRefundError("The calculated refund amount must be greater than zero.");
+      setRefundError(
+        "The calculated refund amount must be greater than zero."
+      );
+
       return;
     }
 
@@ -593,8 +1015,11 @@ export default function SalesListPage() {
         quantity,
         productId: selectedSale.productId,
         reason,
-        branchId: branchId ?? undefined,
-        mode: "LIVE"
+        branchId:
+          (selectedSale as SaleWithBranch).branchId ??
+          branchId ??
+          undefined,
+        mode: "LIVE",
       });
 
       setRefundSuccess(
@@ -604,16 +1029,12 @@ export default function SalesListPage() {
       setRefundOpen(false);
       setRefundForm(EMPTY_REFUND_FORM);
 
-      // Read the updated local projection after the command has completed.
-      // A failed refresh does not undo the already-committed refund event.
       await load();
-
-      setSelected((current) => {
-        if (!current || current.id !== selectedSale.id) return current;
-        return current;
-      });
     } catch (error) {
-      console.error("[SalesListPage] Failed to process refund:", error);
+      console.error(
+        "[SalesListPage] Failed to process refund:",
+        error
+      );
 
       setRefundError(
         "The refund could not be completed. Check the sale and event history before retrying."
@@ -622,27 +1043,38 @@ export default function SalesListPage() {
       setIsRefunding(false);
     }
   }, [
-    app,
-    businessId,
-    branchId,
     selectedSale,
-    refundForm,
+    businessId,
     isRefunding,
+    refundForm,
+    branchId,
+    app,
     load,
   ]);
+
+  // -------------------------------------------------------
+  // Copy sale ID
+  // -------------------------------------------------------
 
   const copySaleId = useCallback(async () => {
     if (!selectedSale) return;
 
     try {
-      await navigator.clipboard.writeText(selectedSale.id);
+      await navigator.clipboard.writeText(
+        selectedSale.id
+      );
+
       setCopied(true);
 
       window.setTimeout(() => {
         setCopied(false);
       }, 1800);
     } catch (error) {
-      console.error("[SalesListPage] Could not copy sale ID:", error);
+      console.error(
+        "[SalesListPage] Could not copy sale ID:",
+        error
+      );
+
       setRefundError(
         "Could not copy the sale ID. Please select and copy it manually."
       );
@@ -654,6 +1086,7 @@ export default function SalesListPage() {
       ...current,
       quantity: value,
     }));
+
     setRefundError(null);
   };
 
@@ -662,14 +1095,22 @@ export default function SalesListPage() {
       ...current,
       reason: value,
     }));
+
     setRefundError(null);
   };
 
+  // =======================================================
+  // RENDER
+  // =======================================================
+
   return (
     <div className="min-h-screen pb-28 bg-neutral-950 text-white">
+
       {/* Header */}
+
       <div className="sticky top-0 z-40 backdrop-blur-2xl border-b border-white/10 bg-white/[0.03]">
         <div className="px-4 pt-4 pb-3 space-y-3">
+
           <div className="flex items-center justify-between gap-3">
             <h1 className="text-xl font-semibold flex items-center gap-2.5">
               <GlassIcon size="sm" variant="primary">
@@ -693,7 +1134,10 @@ export default function SalesListPage() {
                 disabled={loading}
                 icon={
                   <RefreshCw
-                    className={cn("w-4 h-4", loading && "animate-spin")}
+                    className={cn(
+                      "w-4 h-4",
+                      loading && "animate-spin"
+                    )}
                   />
                 }
               />
@@ -704,12 +1148,19 @@ export default function SalesListPage() {
             icon={<Search className="w-4 h-4" />}
             placeholder="Search product, customer, ID..."
             value={search}
-            onChange={(event) => setSearch(event.target.value)}
+            onChange={(event) =>
+              setSearch(event.target.value)
+            }
           />
 
           <div className="flex gap-2 overflow-x-auto no-scrollbar">
             {(
-              ["all", "completed", "voided", "refunded"] as StatusFilter[]
+              [
+                "all",
+                "completed",
+                "voided",
+                "refunded",
+              ] as StatusFilter[]
             ).map((value) => (
               <button
                 key={value}
@@ -727,24 +1178,65 @@ export default function SalesListPage() {
               </button>
             ))}
           </div>
+
+          {/* Quick date filters */}
+          <div className="flex gap-2 overflow-x-auto no-scrollbar">
+            {(
+              [
+                { value: "all", label: "All time" },
+                { value: "today", label: "Today" },
+                { value: "7days", label: "7 days" },
+                { value: "30days", label: "30 days" },
+                { value: "yearly", label: "Yearly" },
+              ] as const
+            ).map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => {
+                  setDateRange(option.value);
+                  setFrom("");
+                  setTo("");
+                }}
+                aria-pressed={dateRange === option.value}
+                className={cn(
+                  "px-3.5 py-1.5 rounded-full text-xs",
+                  "border whitespace-nowrap transition",
+                  dateRange === option.value
+                    ? "bg-blue-500/20 text-blue-300 border-blue-500/40"
+                    : "bg-white/[0.04] text-gray-400 border-white/10"
+                )}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* Summary */}
+
       <div className="px-4 pt-4">
         <GlassCard
           variant="accent"
           className="px-4 py-3 flex items-center justify-between gap-4"
         >
           <div>
-            <p className="text-xs text-gray-400">Showing</p>
+            <p className="text-xs text-gray-400">
+              Showing
+            </p>
+
             <p className="text-sm font-semibold">
-              {filtered.length} sale{filtered.length === 1 ? "" : "s"}
+              {filtered.length} sale
+              {filtered.length === 1 ? "" : "s"}
             </p>
           </div>
 
           <div className="text-right">
-            <p className="text-xs text-gray-400">Completed total</p>
+            <p className="text-xs text-gray-400">
+              Completed total
+            </p>
+
             <p className="text-lg font-bold text-emerald-400">
               {formatNaira(pageTotal)}
             </p>
@@ -753,6 +1245,7 @@ export default function SalesListPage() {
       </div>
 
       {/* Sales list */}
+
       <div className="px-4 pt-4 space-y-2.5">
         {loading && sales.length === 0 ? (
           <div className="py-20 text-center text-gray-500 text-sm">
@@ -761,7 +1254,10 @@ export default function SalesListPage() {
         ) : loadError && sales.length === 0 ? (
           <div className="py-16 text-center space-y-3">
             <AlertTriangle className="w-8 h-8 text-amber-400 mx-auto" />
-            <p className="text-sm text-gray-300">{loadError}</p>
+
+            <p className="text-sm text-gray-300">
+              {loadError}
+            </p>
 
             <GlassButton
               variant="secondary"
@@ -777,7 +1273,9 @@ export default function SalesListPage() {
               <ShoppingBag className="w-6 h-6" />
             </GlassIcon>
 
-            <p className="mt-4 text-sm">No sales found</p>
+            <p className="mt-4 text-sm">
+              No sales found
+            </p>
 
             {search.trim() && (
               <button
@@ -792,7 +1290,9 @@ export default function SalesListPage() {
         ) : (
           <>
             {loadError && (
-              <p className="text-xs text-amber-300 px-1">{loadError}</p>
+              <p className="text-xs text-amber-300 px-1">
+                {loadError}
+              </p>
             )}
 
             {filtered.map((sale) => (
@@ -825,7 +1325,9 @@ export default function SalesListPage() {
                       <p className="mt-1 text-xs text-gray-400">
                         {sale.quantity} ×{" "}
                         {formatNaira(getUnitAmount(sale))}
-                        {sale.customerRef ? ` · ${sale.customerRef}` : ""}
+                        {sale.customerRef
+                          ? ` · ${sale.customerRef}`
+                          : ""}
                       </p>
 
                       <p className="mt-1 text-[10px] text-gray-500">
@@ -852,28 +1354,37 @@ export default function SalesListPage() {
         )}
       </div>
 
-      {/* Sale details and actions */}
+      {/* Sale details */}
+
       <GlassSheet
         open={!!selectedSale}
         onClose={closeDetails}
-        title={refundOpen ? "Return / refund" : "Sale details"}
+        title={
+          refundOpen
+            ? "Return / refund"
+            : "Sale details"
+        }
         subtitle={
-          selectedSale ? formatDate(selectedSale.createdAt) : undefined
+          selectedSale
+            ? formatDate(selectedSale.createdAt)
+            : undefined
         }
         size="md"
         className="w-full sm:max-w-xl lg:max-w-2xl xl:max-w-3xl"
       >
         {selectedSale && (
           <div className="space-y-5">
+
             {!refundOpen ? (
               <>
-                {/* Sale status */}
                 <div className="flex items-center justify-between gap-3">
-                  <span className="text-sm text-gray-400">Status</span>
+                  <span className="text-sm text-gray-400">
+                    Status
+                  </span>
+
                   <StatusPill status={selectedSale.status} />
                 </div>
 
-                {/* Successful operation feedback */}
                 {refundSuccess && (
                   <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-3">
                     <p className="text-sm text-emerald-300">
@@ -883,12 +1394,12 @@ export default function SalesListPage() {
                   </div>
                 )}
 
-                {/* Sale information */}
                 <div className="space-y-3 text-sm">
                   <Row
                     label="Product"
                     value={
-                      selectedSale.productName || selectedSale.productId
+                      selectedSale.productName ||
+                      selectedSale.productId
                     }
                   />
 
@@ -899,17 +1410,23 @@ export default function SalesListPage() {
 
                   <Row
                     label="Sale total"
-                    value={formatNaira(getSaleTotal(selectedSale))}
+                    value={formatNaira(
+                      getSaleTotal(selectedSale)
+                    )}
                   />
 
                   <Row
                     label="Cost"
-                    value={formatNaira(getSaleCost(selectedSale))}
+                    value={formatNaira(
+                      getSaleCost(selectedSale)
+                    )}
                   />
 
                   <Row
                     label="Profit"
-                    value={formatNaira(getSaleProfit(selectedSale))}
+                    value={formatNaira(
+                      getSaleProfit(selectedSale)
+                    )}
                   />
 
                   {selectedSale.paymentMethod && (
@@ -920,17 +1437,37 @@ export default function SalesListPage() {
                   )}
 
                   {selectedSale.customerRef && (
-                    <Row label="Customer" value={selectedSale.customerRef} />
+                    <Row
+                      label="Customer"
+                      value={selectedSale.customerRef}
+                    />
                   )}
 
-                  <Row label="Sale ID" value={selectedSale.id} mono />
+                  <Row
+                    label="Sale ID"
+                    value={selectedSale.id}
+                    mono
+                  />
 
                   {selectedSale.mode && (
-                    <Row label="Mode" value={selectedSale.mode} />
+                    <Row
+                      label="Mode"
+                      value={selectedSale.mode}
+                    />
                   )}
+
+                  <Row
+                    label="Sale branch ID"
+                    value={
+                      (selectedSale as SaleWithBranch).branchId ||
+                      "Not recorded"
+                    }
+                    mono
+                  />
                 </div>
 
-                {/* Sales actions */}
+                {/* Actions */}
+
                 <div className="border-t border-white/10 pt-4 space-y-3">
                   <p className="text-xs uppercase tracking-wider text-gray-500">
                     Sale actions
@@ -944,14 +1481,17 @@ export default function SalesListPage() {
                     <div className="rounded-xl bg-blue-500/10 p-2">
                       <Printer className="w-4 h-4 text-blue-300" />
                     </div>
+
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium text-blue-100">
                         Preview / print receipt
                       </p>
+
                       <p className="text-xs text-gray-400 mt-0.5">
-                        Review business, receipt, sale, and employee details before printing.
+                        Review business, branch, receipt, sale, and employee details.
                       </p>
                     </div>
+
                     <ChevronRight className="w-4 h-4 text-gray-500" />
                   </button>
 
@@ -970,8 +1510,11 @@ export default function SalesListPage() {
 
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium">
-                        {copied ? "Sale ID copied" : "Copy sale reference"}
+                        {copied
+                          ? "Sale ID copied"
+                          : "Copy sale reference"}
                       </p>
+
                       <p className="text-xs text-gray-500 mt-0.5">
                         Copy the transaction ID for support or reconciliation.
                       </p>
@@ -992,9 +1535,9 @@ export default function SalesListPage() {
                         <p className="text-sm font-medium text-amber-200">
                           Return items / issue refund
                         </p>
+
                         <p className="text-xs text-gray-400 mt-0.5">
-                          Record returned quantity and initiate the refund
-                          event.
+                          Record returned quantity and initiate the refund event.
                         </p>
                       </div>
 
@@ -1008,9 +1551,9 @@ export default function SalesListPage() {
                         <PackageCheck className="w-4 h-4 inline mr-2" />
                         This sale is marked as refunded.
                       </p>
+
                       <p className="mt-1 text-xs text-gray-400">
-                        Review the event history and refund records for the
-                        amount and quantity returned.
+                        Review the event history and refund records for the amount and quantity returned.
                       </p>
                     </div>
                   )}
@@ -1018,8 +1561,7 @@ export default function SalesListPage() {
                   {selectedSale.status === "voided" && (
                     <div className="rounded-2xl border border-red-500/20 bg-red-500/[0.06] p-3">
                       <p className="text-sm text-red-300">
-                        This sale has been voided and cannot be refunded from
-                        this screen.
+                        This sale has been voided and cannot be refunded from this screen.
                       </p>
                     </div>
                   )}
@@ -1035,7 +1577,8 @@ export default function SalesListPage() {
               </>
             ) : (
               <>
-                {/* Return form */}
+                {/* Refund form */}
+
                 <div className="rounded-2xl border border-amber-500/20 bg-amber-500/[0.05] p-4">
                   <div className="flex items-start gap-3">
                     <div className="rounded-xl bg-amber-500/10 p-2">
@@ -1046,11 +1589,9 @@ export default function SalesListPage() {
                       <p className="text-sm font-semibold text-amber-100">
                         Return items and reverse the sale
                       </p>
+
                       <p className="mt-1 text-xs leading-relaxed text-gray-400">
-                        This records a refund against the original sale. The
-                        refund command must update the relevant local
-                        projections and synchronize through your event
-                        pipeline.
+                        This records a refund against the original sale. The refund command must update the relevant local projections and synchronize through your event pipeline.
                       </p>
                     </div>
                   </div>
@@ -1059,51 +1600,16 @@ export default function SalesListPage() {
                 <div className="space-y-4">
                   <Field label="Product">
                     <div className="rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-3 text-sm">
-                      {selectedSale.productName || selectedSale.productId}
+                      {selectedSale.productName ||
+                        selectedSale.productId}
                     </div>
                   </Field>
 
-                  <Field label={`Quantity to return (1–${availableQuantity})`}>
-                    <div
-                      className="
-                        relative
-                        overflow-hidden
-                        rounded-[26px]
-                        border
-                        border-blue-400/20
-                        bg-black/20
-                        shadow-inner
-                        shadow-linear
-                        transition-all
-                        duration-200
-                        focus-within:border-blue-400/50
-                        focus-within:shadow-[0_0_0_1px_rgba(59,130,246,0.10),0_20px_70px_rgba(59,130,246,0.10)]
-                      "
-                    >
-                      <div
-                        className="
-                          pointer-events-none
-                          absolute
-                          inset-x-0
-                          top-0
-                          h-px
-                          bg-blue-300/30
-                        "
-                      />
-
-                      <span
-                        className="
-                          absolute
-                          left-5
-                          top-1/2
-                          z-10
-                          -translate-y-1/2
-                          text-2xl
-                          font-medium
-                          text-blue-300
-                          sm:text-3xl
-                        "
-                      >
+                  <Field
+                    label={`Quantity to return (1–${availableQuantity})`}
+                  >
+                    <div className="relative overflow-hidden rounded-[26px] border border-blue-400/20 bg-black/20 transition-all focus-within:border-blue-400/50">
+                      <span className="absolute left-5 top-1/2 -translate-y-1/2 text-2xl font-medium text-blue-300">
                         #
                       </span>
 
@@ -1112,8 +1618,10 @@ export default function SalesListPage() {
                         onChange={(event) => {
                           const value = event.target.value;
 
-                          // Allow an empty field while the user is editing.
-                          if (value === "" || /^\d+$/.test(value)) {
+                          if (
+                            value === "" ||
+                            /^\d+$/.test(value)
+                          ) {
                             setRefundQuantity(value);
                           }
                         }}
@@ -1121,20 +1629,7 @@ export default function SalesListPage() {
                         inputMode="numeric"
                         autoComplete="off"
                         disabled={isRefunding}
-                        className="
-                          w-full
-                          border-0
-                          bg-transparent
-                          pl-14
-                          pr-5
-                          py-5
-                          text-2xl
-                          font-medium
-                          text-white
-                          outline-none
-                          focus:ring-0
-                          sm:text-3xl
-                        "
+                        className="w-full border-0 bg-transparent pl-14 pr-5 py-5 text-2xl text-white"
                         aria-label="Quantity to return"
                       />
                     </div>
@@ -1152,11 +1647,13 @@ export default function SalesListPage() {
                       )}
                     </div>
 
-                    {refundForm.quantity !== "" && !validRefundQuantity && (
-                      <p className="mt-1 px-1 text-xs text-red-400">
-                        Enter a whole quantity between 1 and {availableQuantity}.
-                      </p>
-                    )}
+                    {refundForm.quantity !== "" &&
+                      !validRefundQuantity && (
+                        <p className="mt-1 px-1 text-xs text-red-400">
+                          Enter a whole quantity between 1 and{" "}
+                          {availableQuantity}.
+                        </p>
+                      )}
                   </Field>
 
                   <Field label="Reason for return">
@@ -1179,6 +1676,7 @@ export default function SalesListPage() {
                 </div>
 
                 {/* Refund preview */}
+
                 <div className="rounded-2xl border border-white/10 bg-white/[0.025] p-4 space-y-3">
                   <p className="text-xs uppercase tracking-wider text-gray-500">
                     Reversal preview
@@ -1203,12 +1701,7 @@ export default function SalesListPage() {
                     <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
 
                     <p className="text-xs text-gray-400 leading-relaxed">
-                      Verify the actual amount to return and the original
-                      payment method before confirming. This preview
-                      allocates the current sale total proportionally by
-                      quantity; discounts, taxes, and payment fees may require
-                      your domain service to calculate the authoritative
-                      refund amount.
+                      This preview allocates the current sale total proportionally by quantity. Discounts, taxes, and payment fees may require your domain service to calculate the authoritative refund amount.
                     </p>
                   </div>
                 </div>
@@ -1254,7 +1747,9 @@ export default function SalesListPage() {
                       )
                     }
                   >
-                    {isRefunding ? "Processing return..." : "Confirm refund"}
+                    {isRefunding
+                      ? "Processing return..."
+                      : "Confirm refund"}
                   </GlassButton>
                 </div>
               </>
@@ -1263,9 +1758,16 @@ export default function SalesListPage() {
         )}
       </GlassSheet>
 
-      {/* Receipt preview */}
+      {/* ===================================================
+          RECEIPT PREVIEW
+      =================================================== */}
+
       <GlassSheet
-        open={receiptOpen && !!selectedSale && !!receiptDetails}
+        open={
+          receiptOpen &&
+          !!selectedSale &&
+          !!receiptDetails
+        }
         onClose={() => setReceiptOpen(false)}
         title="Receipt preview"
         subtitle="Review the details before printing"
@@ -1280,9 +1782,16 @@ export default function SalesListPage() {
             >
               Back
             </GlassButton>
+
             <GlassButton
               variant="primary"
               className="flex-1"
+              disabled={
+                !business ||
+                !receiptDetails ||
+                receiptDetails.businessName ===
+                  "Business name not available"
+              }
               onClick={printReceipt}
               icon={<Printer className="w-4 h-4" />}
             >
@@ -1293,86 +1802,128 @@ export default function SalesListPage() {
       >
         {selectedSale && receiptDetails && (
           <div className="space-y-4">
+
             {receiptError && (
-              <div role="alert" className="rounded-xl border border-red-500/20 bg-red-500/[0.06] p-3 text-sm text-red-300">
+              <div
+                role="alert"
+                className="rounded-xl border border-red-500/20 bg-red-500/[0.06] p-3 text-sm text-red-300"
+              >
                 <AlertTriangle className="mr-2 inline h-4 w-4" />
                 {receiptError}
               </div>
             )}
+
+            {/* Actual receipt */}
+
             <div className="rounded-2xl border border-white/10 bg-white p-5 text-neutral-900 shadow-xl">
+
+              {/* Business and branch information */}
+
               <div className="text-center border-b border-dashed border-neutral-300 pb-4">
                 <Building2 className="w-6 h-6 mx-auto mb-2 text-neutral-500" />
+
                 <h2 className="text-lg font-bold break-words">
                   {receiptDetails.businessName}
                 </h2>
-                {receiptDetails.businessName === "Business name not available" && (
-                  <p className="mt-1 text-xs text-neutral-600">
-                    Business ID: {receiptDetails.businessId}
-                  </p>
-                )}
+
                 {receiptDetails.businessAddress && (
                   <p className="mt-1 text-xs text-neutral-600">
                     {receiptDetails.businessAddress}
                   </p>
                 )}
-                {receiptDetails.businessPhone && (
-                  <p className="text-xs text-neutral-600">
-                    Tel: {receiptDetails.businessPhone}
+
+                <div className="mt-3 border-t border-dashed border-neutral-200 pt-3">
+                  <p className="text-sm font-semibold">
+                    {receiptDetails.branchName}
                   </p>
-                )}
-                {receiptDetails.businessEmail && (
-                  <p className="text-xs text-neutral-600">
-                    {receiptDetails.businessEmail}
-                  </p>
-                )}
-                {receiptDetails.branchName && (
-                  <p className="mt-1 text-xs text-neutral-600">
-                    Branch: {receiptDetails.branchName}
-                  </p>
-                )}
+
+                  {receiptDetails.branchAddress && (
+                    <p className="mt-1 text-xs text-neutral-600">
+                      {receiptDetails.branchAddress}
+                    </p>
+                  )}
+
+                  {receiptDetails.branchPhone && (
+                    <p className="mt-1 text-xs text-neutral-600">
+                      Tel: {receiptDetails.branchPhone}
+                    </p>
+                  )}
+
+                  {receiptDetails.branchId && (
+                    <p className="mt-1 text-[10px] font-mono text-neutral-400">
+                      Branch ID: {receiptDetails.branchId}
+                    </p>
+                  )}
+                </div>
+
                 <p className="mt-3 text-xs font-bold tracking-[0.2em]">
                   SALES RECEIPT
                 </p>
               </div>
 
+              {/* Transaction information */}
+
               <div className="space-y-2 py-4 text-xs">
                 <div className="flex justify-between gap-3">
-                  <span className="text-neutral-500">Receipt number</span>
+                  <span className="text-neutral-500">
+                    Receipt number
+                  </span>
+
                   <span className="font-mono text-right break-all">
                     {receiptDetails.receiptNumber}
                   </span>
                 </div>
+
                 <div className="flex justify-between gap-3">
-                  <span className="text-neutral-500">Date</span>
+                  <span className="text-neutral-500">
+                    Date
+                  </span>
+
                   <span className="text-right">
                     {formatDate(selectedSale.createdAt)}
                   </span>
                 </div>
+
                 <div className="flex justify-between gap-3">
-                  <span className="text-neutral-500">Employee</span>
+                  <span className="text-neutral-500">
+                    Employee
+                  </span>
+
                   <span className="text-right">
                     {receiptDetails.employeeName}
                   </span>
                 </div>
+
                 {receiptDetails.employeeId && (
                   <div className="flex justify-between gap-3">
-                    <span className="text-neutral-500">Employee ID</span>
+                    <span className="text-neutral-500">
+                      Employee ID
+                    </span>
+
                     <span className="font-mono text-right break-all">
                       {receiptDetails.employeeId}
                     </span>
                   </div>
                 )}
+
                 {selectedSale.customerRef && (
                   <div className="flex justify-between gap-3">
-                    <span className="text-neutral-500">Customer</span>
+                    <span className="text-neutral-500">
+                      Customer
+                    </span>
+
                     <span className="text-right break-all">
                       {selectedSale.customerRef}
                     </span>
                   </div>
                 )}
+
                 {selectedSale.paymentMethod && (
                   <div className="flex justify-between gap-3">
-                    <span className="text-neutral-500">Payment</span>
+                    <span className="text-neutral-500">
+                      Payment
+                    </span>
+
                     <span className="text-right">
                       {selectedSale.paymentMethod}
                     </span>
@@ -1380,56 +1931,85 @@ export default function SalesListPage() {
                 )}
               </div>
 
+              {/* Purchased item */}
+
               <div className="border-y border-dashed border-neutral-300 py-3">
                 <div className="flex justify-between gap-3 text-xs font-semibold">
                   <span>Item</span>
                   <span>Amount</span>
                 </div>
+
                 <div className="mt-3 flex justify-between gap-3 text-sm">
                   <div className="min-w-0">
                     <p className="font-semibold break-words">
-                      {selectedSale.productName || selectedSale.productId}
+                      {selectedSale.productName ||
+                        selectedSale.productId}
                     </p>
+
                     <p className="mt-1 text-xs text-neutral-500">
                       {selectedSale.quantity} ×{" "}
-                      {formatNaira(getUnitAmount(selectedSale))}
+                      {formatNaira(
+                        getUnitAmount(selectedSale)
+                      )}
                     </p>
                   </div>
+
                   <p className="font-semibold whitespace-nowrap">
-                    {formatNaira(getSaleTotal(selectedSale))}
+                    {formatNaira(
+                      getSaleTotal(selectedSale)
+                    )}
                   </p>
                 </div>
               </div>
 
+              {/* Total */}
+
               <div className="flex justify-between gap-3 pt-4 text-base font-bold">
                 <span>Total</span>
-                <span>{formatNaira(getSaleTotal(selectedSale))}</span>
+
+                <span>
+                  {formatNaira(
+                    getSaleTotal(selectedSale)
+                  )}
+                </span>
               </div>
 
               <p className="mt-5 text-center text-xs text-neutral-500">
                 Thank you for your business.
               </p>
+
               <p className="mt-1 text-center font-mono text-[10px] text-neutral-400 break-all">
                 Sale reference: {selectedSale.id}
               </p>
             </div>
 
-            {receiptDetails.businessName === "Business name not available" ||
-            receiptDetails.employeeName === "Employee details not available" ? (
+            {/* Missing information warnings */}
+
+            {(
+              receiptDetails.businessName ===
+                "Business name not available" ||
+              receiptDetails.branchName ===
+                "Branch details not available" ||
+              receiptDetails.employeeName ===
+                "Employee details not available"
+            ) && (
               <div className="rounded-xl border border-amber-500/20 bg-amber-500/[0.06] p-3 text-xs leading-relaxed text-amber-200">
                 <AlertTriangle className="mr-2 inline h-4 w-4" />
-                Some business or employee details are not present on this sale
-                record. Connect the receipt to your authoritative business and
-                employee repositories to populate those fields. The sale ID is
-                used as the receipt-number fallback when no receipt number is
-                stored.
+
+                {receiptDetails.branchName ===
+                "Branch details not available"
+                  ? "The branch recorded on this sale could not be found in the current business branch collection. Verify that the sale has the correct branchId and that the branch belongs to this business."
+                  : "Some business or employee details are unavailable. Verify the corresponding live-query records and sale employee information."}
               </div>
-            ) : null}
+            )}
           </div>
         )}
       </GlassSheet>
 
-      {/* Filters */}
+      {/* ===================================================
+          FILTERS
+      =================================================== */}
+
       <GlassSheet
         open={filterOpen}
         onClose={() => setFilterOpen(false)}
@@ -1444,6 +2024,7 @@ export default function SalesListPage() {
                 setFrom("");
                 setTo("");
                 setStatus("all");
+                setDateRange("all");
               }}
             >
               Reset
@@ -1470,8 +2051,13 @@ export default function SalesListPage() {
               onChange={(event) => {
                 const value = event.target.value;
 
+                setDateRange("all");
                 setFrom(
-                  value ? new Date(`${value}T00:00:00`).toISOString() : ""
+                  value
+                    ? new Date(
+                        `${value}T00:00:00`
+                      ).toISOString()
+                    : ""
                 );
               }}
               className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none focus:border-teal-500"
@@ -1485,8 +2071,13 @@ export default function SalesListPage() {
               onChange={(event) => {
                 const value = event.target.value;
 
+                setDateRange("all");
                 setTo(
-                  value ? new Date(`${value}T23:59:59.999`).toISOString() : ""
+                  value
+                    ? new Date(
+                        `${value}T23:59:59.999`
+                      ).toISOString()
+                    : ""
                 );
               }}
               className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none focus:border-teal-500"

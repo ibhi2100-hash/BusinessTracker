@@ -384,9 +384,6 @@ export default function ProductImportSheet({
 }: ProductImportSheetProps) {
   const [step, setStep] = useState<ImportStep>("UPLOAD");
 
-  const [status, setStatus] =
-    useState<ProductImportStatus>("UPLOADED");
-  console.log(status)
   const [source, setSource] =
     useState<ProductImportSource | null>(null);
 
@@ -465,7 +462,6 @@ export default function ProductImportSheet({
     busyRef.current = false;
 
     setStep("UPLOAD");
-    setStatus("UPLOADED");
     setSource(null);
     setHeaders([]);
     setRawRows([]);
@@ -501,7 +497,6 @@ export default function ProductImportSheet({
       }
 
       setError(null);
-      setStatus("PARSING");
 
       try {
         if (
@@ -539,7 +534,7 @@ export default function ProductImportSheet({
           totalOperations: prepared.rows.length,
         });
 
-        setStatus("MAPPING");
+     
         setStep("MAPPING");
       } catch (cause) {
         if (!isCurrentOperation(operation)) {
@@ -552,8 +547,6 @@ export default function ProductImportSheet({
             "Unable to prepare the selected file.",
           ),
         );
-
-        setStatus("FAILED");
       } finally {
         endOperation(operation);
       }
@@ -583,7 +576,6 @@ export default function ProductImportSheet({
       }
 
       setError(null);
-      setStatus("VALIDATING");
 
       try {
         const validation = validateRows({
@@ -625,7 +617,6 @@ export default function ProductImportSheet({
           totalOperations: validation.results.length,
         });
 
-        setStatus("READY");
         setStep("REVIEW");
       } catch (cause) {
         if (!isCurrentOperation(operation)) {
@@ -638,8 +629,6 @@ export default function ProductImportSheet({
             "Unable to validate the mapped import.",
           ),
         );
-
-        setStatus("FAILED");
       } finally {
         endOperation(operation);
       }
@@ -669,7 +658,6 @@ export default function ProductImportSheet({
 
     setError(null);
     setStep("MAPPING");
-    setStatus("MAPPING");
   }, []);
 
   /* ==========================================================
@@ -694,7 +682,6 @@ export default function ProductImportSheet({
 
     setError(null);
     setStep("IMPORTING");
-    setStatus("IMPORTING");
     setImportResult(null);
 
     setProgress({
@@ -754,12 +741,6 @@ export default function ProductImportSheet({
             : null,
       }));
 
-      setStatus(
-        result.failedOperations > 0
-          ? "FAILED"
-          : "COMPLETED",
-      );
-
       setStep("COMPLETE");
     } catch (cause) {
       if (!isCurrentOperation(operation)) {
@@ -772,7 +753,6 @@ export default function ProductImportSheet({
       );
 
       setError(message);
-      setStatus("FAILED");
 
       setProgress((current) => ({
         ...current,

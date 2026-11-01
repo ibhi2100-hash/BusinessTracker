@@ -1,9 +1,10 @@
 
 export const EventInboxStatementKeys = {
     insert: "eventInbox.insert",
-    exists: "eventInbox.exists",
-    loadPending: "eventInbox.loadPending",
     delete: "eventInbox.delete",
     recordFailure: "eventInbox.recordFailure",
-    count: "eventInbox.count"
+    count: "eventInbox.count",
+    allInbox: "eventInbox.all",
+    claimPending: "eventInbox.claimPending",
+    recoverStale: "eventInbox.recoverStale",
 } as const;

@@ -2,6 +2,12 @@ import type{ AggregateRecord } from "../../../../../../offline/domain/aggregate"
 import { AggregateStatements } from "../../statements/aggregates/aggregateStatements";
 import type{ SQLiteStatementOperation } from "../../../../../storage/statement/worker/WorkerProtocol"; 
 import { aggregateStatementsKeys } from "../../statements/aggregates/aggregateStatementsKeys";
+import type { DomainEvent } from "@business/shared-types";
+
+export interface RemoteAggregateEvent {
+    event: DomainEvent;
+    globalPosition: string;
+}
 
 interface AggregateVersion {
     localVersion: number;
@@ -196,6 +202,52 @@ export class SQLiteAggregateRepository {
         const aggregates = await this.statements.getAllAggregate.query<AggregateRecord>();
         return aggregates
     }
+
+    remoteVersionOperations(
+  events: readonly RemoteAggregateEvent[],
+): SQLiteStatementOperation[] {
+  const operations: SQLiteStatementOperation[] = [];
+
+  for (const item of events) {
+    const { event, globalPosition } = item;
+
+    const expectedVersion = event.expectedAggregateVersion;
+
+    if (
+      !Number.isSafeInteger(expectedVersion) ||
+      expectedVersion < 0
+    ) {
+      throw new Error(
+        `Invalid expected aggregate version for ` +
+        `${event.aggregateType}:${event.aggregateId}.`,
+      );
+    }
+
+    const nextVersion = expectedVersion + 1;
+
+    if (!Number.isSafeInteger(nextVersion)) {
+      throw new Error(
+        `Aggregate version overflow for ` +
+        `${event.aggregateType}:${event.aggregateId}.`,
+      );
+    }
+
+    operations.push({
+      statementKey: aggregateStatementsKeys.advanceRemote,
+      params: [
+        crypto.randomUUID(),
+        event.aggregateId,
+        event.aggregateType,
+        nextVersion,
+        event.id,
+        globalPosition,
+        event.createdAt,
+      ],
+    });
+  }
+
+  return operations;
+}
 }
 
 class AggregateMapper {

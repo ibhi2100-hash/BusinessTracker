@@ -72,3 +72,31 @@ export const ADVANCE_LOCAL_VERSION = `
         AND aggregateId = ?
         AND localVersion = ?
 `;
+
+
+// aggregateStatements/sql.ts
+
+export const ADVANCE_REMOTE_VERSION = `
+    INSERT INTO aggregates (
+        id,
+        aggregateId,
+        aggregateType,
+        localVersion,
+        version,
+        lastEventId,
+        lastGlobalPosition,
+        lastSnapshotVersion,
+        isDeleted,
+        updatedAt
+    )
+    VALUES (?, ?, ?, 0, ?, ?, ?, NULL, 0, ?)
+
+    ON CONFLICT(aggregateType, aggregateId)
+    DO UPDATE SET
+        version = excluded.version,
+        lastEventId = excluded.lastEventId,
+        lastGlobalPosition = excluded.lastGlobalPosition,
+        updatedAt = excluded.updatedAt
+
+    WHERE aggregates.version = excluded.version - 1;
+`;

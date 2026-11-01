@@ -132,13 +132,9 @@ export class SyncEngine {
    try {
       await this.outbox.resetStaleInFlight(startedAt);
 
-      console.log("[SyncEngine] Business ID:", this.businessId);
-      console.log("[SyncEngine] Reading persisted cursor...");
-
       cursor = await this.syncCursor.getCursor();
 
       console.log("[SyncEngine] Cursor before pull:", cursor);
-      console.log("[SyncEngine] Cursor type:", typeof cursor);
     } catch (error) {
       console.error("[SyncEngine] Failed to read cursor:", error);
 
@@ -284,7 +280,6 @@ export class SyncEngine {
       await this.inboxProcessor.processPending(
         this.pullBatchSize
       );
-      
     } catch (error) {
       return this.transientResult(
         new Error(
@@ -311,7 +306,8 @@ export class SyncEngine {
         cursor,
         this.pullBatchSize,
       );
-
+      
+     
       this.validatePullResult(pullResult);
     } catch (error) {
       const message = this.errorMessage(error);
@@ -347,10 +343,12 @@ export class SyncEngine {
     try {
       // 1. Persist the complete received batch in the inbox first.
       // EventInboxRepository.stage should deduplicate by eventId.
-       
       if (pullResult.events.length > 0) {
         await this.eventInbox.stage(pullResult.events)
       }
+
+      const allEventInbox = await this.eventInbox.allInbox();
+      console.log("This are all Staged Inbox Events: ", allEventInbox)
       // 2. Advance the checkpoint only after staging has succeeded.
       // This must NOT be derived from push acknowledgements.
       await this.syncCursor.advanceCursor(nextCursor);
@@ -385,6 +383,7 @@ export class SyncEngine {
     } catch (error) {
       // The pull cursor may already be advanced because the
       // batch is safely staged. Do not roll it back.
+      console.error("[SyncEngine] Inbox Processing failure: ", error)
       return this.transientResult(
         new Error(
           `Events were staged, but inbox processing failed: ${

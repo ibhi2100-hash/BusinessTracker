@@ -72,10 +72,6 @@ implements BusinessManagerContract, Lifecycle{
         
     }
     async bootstrap(businessId: string): Promise<BusinessApplication> {
-            console.log(
-                "[BUSINESS MANAGER BOOTSTRAP]",
-                businessId
-            );
             const existing = this.applications.get(businessId);
 
             if(existing){

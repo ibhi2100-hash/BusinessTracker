@@ -81,16 +81,6 @@ export class HttpSyncTransport{
 });
 
 const url = `${this.baseUrl}/sync/pull?${params.toString()}`;
-
-console.log("[HttpSyncTransport] Pull arguments:", {
-  businessId,
-  cursor,
-  cursorType: typeof cursor,
-  limit,
-});
-
-console.log("[HttpSyncTransport] Final URL:", url);
-
 const response = await apiFetch(url, { method: "GET" });
 
         if (!response.ok) {

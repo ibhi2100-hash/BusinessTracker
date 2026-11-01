@@ -162,17 +162,6 @@ export class WorkerDatabaseRegistry {
 
     const key = databaseIdToKey(database);
 
-    console.log(
-        "[SQLite Registry] OPEN REQUEST",
-        {
-            database,
-            key,
-            filename,
-            existing: this.databases.has(key),
-            registrySize: this.databases.size,
-        }
-    );
-
     const existing = this.databases.get(key);
 
     if (existing) {

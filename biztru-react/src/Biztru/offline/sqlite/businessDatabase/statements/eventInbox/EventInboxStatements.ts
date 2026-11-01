@@ -14,12 +14,8 @@ export class EventInboxStatements {
         return this.manager.get(EventInboxStatementKeys.insert);
     }
 
-    get exists() {
-        return this.manager.get(EventInboxStatementKeys.exists);
-    }
-
     get loadPending() {
-        return this.manager.get(EventInboxStatementKeys.loadPending);
+        return this.manager.get(EventInboxStatementKeys.claimPending);
     }
 
     get delete() {
@@ -32,5 +28,13 @@ export class EventInboxStatements {
 
     get count() {
         return this.manager.get(EventInboxStatementKeys.count);
+    }
+
+    get allInbox(){
+        return this.manager.get(EventInboxStatementKeys.allInbox)
+    }
+
+    get recoverStale() {
+        return this.manager.get(EventInboxStatementKeys.recoverStale)
     }
 }

@@ -9,14 +9,6 @@ export const EventInboxStatementsDefinition: StatementDefinition[] = [
         sql: SQL.INSERT_INBOX_EVENT
     },
     {
-        key: EventInboxStatementKeys.exists,
-        sql: SQL.EXISTS_INBOX_EVENT
-    },
-    {
-        key: EventInboxStatementKeys.loadPending,
-        sql: SQL.LOAD_PENDING_INBOX_EVENTS
-    },
-    {
         key: EventInboxStatementKeys.delete,
         sql: SQL.DELETE_INBOX_EVENT
     },
@@ -26,6 +18,19 @@ export const EventInboxStatementsDefinition: StatementDefinition[] = [
     },
     {
         key: EventInboxStatementKeys.count,
-        sql: SQL.COUNT_INBOX_EVENTS
+        sql: SQL.COUNT_PENDING_INBOX_EVENTS
+    },
+    {
+        key: EventInboxStatementKeys.allInbox,
+        sql: SQL.FIND_ALL_INBOX
+    },
+    {
+        key: EventInboxStatementKeys.claimPending,
+        sql: SQL.CLAIM_PENDING_INBOX_EVENTS,
+    },
+
+    {
+        key: EventInboxStatementKeys.recoverStale,
+        sql: SQL.RECOVER_STALE_INBOX_EVENTS
     }
 ];

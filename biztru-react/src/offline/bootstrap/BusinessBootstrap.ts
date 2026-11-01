@@ -261,7 +261,6 @@ private async createSynchronization(
         storage.repositories.events,
         storage.runtime.transactionManager,
         storage.repositories.eventInbox,
-        storage.repositories.cursor,
         storage.repositories.aggregates,
         bus
         

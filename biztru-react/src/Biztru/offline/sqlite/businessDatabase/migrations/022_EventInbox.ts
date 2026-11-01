@@ -38,6 +38,9 @@ export const migration022: Migration = {
 
                         receivedAt INTEGER NOT NULL,
 
+                        status TEXT NOT NULL DEFAULT 'PENDING',
+                        processingAt INTEGER,
+
                         attempts INTEGER NOT NULL DEFAULT 0,
                         lastError TEXT
                     );
@@ -48,6 +51,13 @@ export const migration022: Migration = {
                     CREATE INDEX IF NOT EXISTS
                     idx_event_inbox_global_position
                     ON event_inbox(globalPosition);
+                `
+            },
+             {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS
+                    idx_event_inbox_status_position
+                    ON event_inbox(status, globalPosition);
                 `
             }
         ];
