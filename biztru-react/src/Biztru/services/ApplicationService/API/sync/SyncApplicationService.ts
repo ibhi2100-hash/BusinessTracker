@@ -134,6 +134,20 @@ export class SyncApplicationService {
     }
 
 
+    async getCursor(): Promise<string>{
+            const app = await this.manager.current();
+        if(!app){
+                    throw new Error("Business Does not exist")
+                }
+                
+
+        const cursor = await  app.storage.repositories.cursor.getCursor();
+        
+
+        return cursor
+    }
+
+
     /*
      * ========================================================
      * Internal state projection

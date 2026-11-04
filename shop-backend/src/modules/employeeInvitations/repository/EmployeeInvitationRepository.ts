@@ -147,6 +147,27 @@ export class EmployeeInvitationRepository {
         },
       });
 
+      // 4. Advance EMPLOYEE aggregate version.
+  const aggregateVersion =
+    await aggregateRepository.advanceVersion(
+      employee.id,
+      "EMPLOYEE",
+      expectedVersion,
+      tx,
+    );
+
+  // 5. Persist EMPLOYEE_ACTIVATED.
+  const savedEvent =
+    await eventRepository.append(
+      activationEvent,
+      aggregateVersion,
+      tx,
+    );
+
+  // 6. Persist outbox.
+  await outboxRepository.append(savedEvent, tx);
+
+
       // Return only the fields the API needs.
       return {
         user: {

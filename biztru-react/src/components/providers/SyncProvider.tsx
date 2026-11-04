@@ -67,8 +67,6 @@ const DEFAULT_SYNC_STATE: PersistedSyncState = {
 
     pulledEvents: 0,
 
-    lastPulledGlobalPosition: "0",
-
     lastSyncAt: null,
 
     lastSyncDurationMs: null,
@@ -113,10 +111,6 @@ export interface SyncContextValue {
 
     conflictEvents:
         number;
-
-    lastPulledGlobalPosition:
-        string;
-
     lastSyncAt:
         number | null;
 
@@ -363,10 +357,6 @@ export function SyncProvider({
 
                 conflictEvents:
                     currentSyncState.conflictEvents,
-
-                lastPulledGlobalPosition:
-                    currentSyncState.lastPulledGlobalPosition,
-
                 lastSyncAt:
                     currentSyncState.lastSyncAt,
 

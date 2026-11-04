@@ -11,7 +11,6 @@ import {
   RotateCcw,
   TrendingDown,
   ChevronDown,
-  Tag,
 } from "lucide-react";
 
 import { GlassCard } from "../../ui/GlassCard";

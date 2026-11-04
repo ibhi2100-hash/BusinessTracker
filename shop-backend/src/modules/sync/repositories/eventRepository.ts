@@ -91,7 +91,7 @@ export class EventRepository {
         lastPosition: true,
       },
     });
-
+ 
     const businessPosition = stream.lastPosition;
 
     const data = EventMapper.toCreateInput(event, aggregateVersion);

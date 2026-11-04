@@ -1,5 +1,3 @@
-"use client";
-
 import {
   CheckCircle2,
   Cloud,
@@ -33,6 +31,7 @@ import type{
 
 import { useLiveSyncManagement } from "../../hooks/useLiveSyncManagement"; 
 import { useCallback, useEffect, useState } from "react";
+import { useLiveCursor } from "../../hooks/useLiveCursor";
 
 export interface SyncManagementState {
 
@@ -266,6 +265,8 @@ const app = useApplication();
   const {
     data: syncState,
 } = useLiveSyncManagement();
+
+  const { data: cursor, } = useLiveCursor();
   const [online, setOnline] = useState(
     typeof navigator !== "undefined" ? navigator.onLine : true
   );
@@ -392,7 +393,7 @@ const app = useApplication();
           <div className="flex flex-col sm:items-end gap-1">
             <span className="text-xs text-gray-500">Server position</span>
             <span className="text-lg font-semibold text-white">
-              {(syncState?.lastPulledGlobalPosition ?? 0).toLocaleString()}
+              {"0"}
             </span>
           </div>
         </div>
@@ -683,7 +684,7 @@ const app = useApplication();
                 {
                     label: "Cursor",
                     value:
-                        syncState?.deviceCursor.toLocaleString()!,
+                        cursor ?? "0",
                 },
                 {
                     label: "Pending",
@@ -706,7 +707,7 @@ const app = useApplication();
                 {
                     label: "Position",
                     value:
-                        syncState?.lastPulledGlobalPosition.toLocaleString()!,
+                        cursor ?? "0",
                 },
             ]}
             badge={

@@ -1,5 +1,5 @@
 // SQLiteEventRepository.ts
-import type{ BackendAcceptedEvent, BackendEvent, DomainEvent } from "@business/shared-types";
+import type{ BackendEvent, DomainEvent } from "@business/shared-types";
 import type{ EventRepository } from "./contracts";
 import { EventStatements } from "../../statements/events/EventStatements";
 import type{ ProjectionRebuildOptions } from "../../projections/rebuild/types";

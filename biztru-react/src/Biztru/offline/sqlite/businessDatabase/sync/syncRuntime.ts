@@ -14,6 +14,7 @@ import {
     HttpSyncTransport,
 } from "./SyncTransport";
 import { NetworkSyncConnector } from "./NetworkSyncConnector";
+import type { EventInboxProcessor } from "../processors/EventInboxProcessors";
 
 
 export interface SyncRuntimeOptions {
@@ -48,8 +49,12 @@ export class SyncRuntime {
         repositories:
             BusinessRepositoryRegistry,
 
+        inboxProcessor: EventInboxProcessor,
+
         options:
-            SyncRuntimeOptions
+            SyncRuntimeOptions,
+
+        businessId: string
     ) {
 
         this.transport =
@@ -67,7 +72,10 @@ export class SyncRuntime {
 
                 repositories.syncState,
 
-                repositories.events,
+                repositories.cursor,
+                repositories.eventInbox,
+
+                inboxProcessor,
 
                 {
                     pushBatchSize:
@@ -85,7 +93,8 @@ export class SyncRuntime {
                     baseBackoffMs:
                         options.baseBackoffMs ??
                         1_000,
-                }
+                },
+                businessId
             );
 
 

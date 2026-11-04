@@ -121,9 +121,6 @@ export class SQLiteSyncStateRepository {
             conflictEvents:
                 row?.conflictEvents ?? 0,
 
-            lastPulledGlobalPosition:
-                row?.lastPulledGlobalPosition ?? "0",
-
             lastSyncAt:
                 row?.lastSyncAt ?? null,
 
@@ -213,9 +210,6 @@ export class SQLiteSyncStateRepository {
 
         conflictEvents: number;
 
-
-        lastPulledGlobalPosition: string;
-
         lastSyncAt: number | null;
 
         lastSyncDurationMs: number | null;
@@ -245,8 +239,6 @@ export class SQLiteSyncStateRepository {
                 params.rejectedEvents,
 
                 params.conflictEvents,
-
-                params.lastPulledGlobalPosition,
 
                 params.lastSyncAt,
 
@@ -283,8 +275,6 @@ export class SQLiteSyncStateRepository {
 
         conflictEvents: number;
 
-        lastPulledGlobalPosition: string;
-
         lastSyncAt: number;
 
         lastSyncDurationMs: number;
@@ -311,8 +301,6 @@ export class SQLiteSyncStateRepository {
             params.rejectedEvents,
 
             params.conflictEvents,
-
-            params.lastPulledGlobalPosition,
 
             params.lastSyncAt,
 
@@ -409,9 +397,6 @@ export class SQLiteSyncStateRepository {
 
             conflictEvents:
                 current?.conflictEvents ?? 0,
-
-            lastPulledGlobalPosition:
-                current?.lastPulledGlobalPosition ?? "0",
 
             lastSyncAt:
                 current?.lastSyncAt ?? null,
@@ -554,9 +539,6 @@ export class SQLiteSyncStateRepository {
                     (current?.conflictEvents ?? 0) +
                     summary.conflicts,
 
-                lastPulledGlobalPosition:
-                    current?.lastPulledGlobalPosition ?? "0",
-
                 lastSyncAt:
                     current?.lastSyncAt ?? now,
 
@@ -639,9 +621,6 @@ export class SQLiteSyncStateRepository {
                     conflictEvents:
                         current?.conflictEvents ?? 0,
 
-                    lastPulledGlobalPosition:
-                        current?.lastPulledGlobalPosition ?? "",
-
                     lastSyncAt:
                         completedAt,
 
@@ -703,8 +682,7 @@ export class SQLiteSyncStateRepository {
          * They happen before the transaction.
          */
         const [
-            pendingEvents,
-            currentState
+            pendingEvents
         ] = await Promise.all([
             this.outboxRepo.getPendingCount(now),
             this.get(),
@@ -803,9 +781,6 @@ export class SQLiteSyncStateRepository {
                 conflictEvents:
                     summary.conflicts,
 
-                lastPulledGlobalPosition:
-                    currentState?.lastPulledGlobalPosition?? "0",
-
                 lastSyncAt:
                     completedAt,
 
@@ -869,8 +844,6 @@ export class SyncStateMapper {
             state.rejectedEvents,
 
             state.conflictEvents,
-
-            state.lastPulledGlobalPosition,
 
             state.lastSyncAt ?? null,
 

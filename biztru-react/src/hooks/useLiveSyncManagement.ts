@@ -41,10 +41,6 @@ export function useLiveSyncManagement() {
 
             conflictEvents: 0,
 
-            deviceCursor: 0,
-
-            lastPulledGlobalPosition: 0,
-
             lastSyncAt: null,
 
             lastSyncDurationMs: null,

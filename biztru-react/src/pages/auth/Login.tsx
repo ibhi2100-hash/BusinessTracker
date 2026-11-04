@@ -26,8 +26,8 @@ import type { User } from "@business/shared-types";
 /* Authentication response types                                              */
 /* -------------------------------------------------------------------------- */
 
-interface LoginResponse {
-  user?: User;
+export interface LoginResponse {
+  user: User;
   accessToken?: string;
   expiresIn?: number;
   message?: string;

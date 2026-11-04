@@ -246,20 +246,6 @@ export default function InventoryPage({
       ).length,
     [products],
   );
-
-  /*
-   * Products with stock greater than zero.
-   */
-  const inStockProductsCount = useMemo(
-    () =>
-      products.filter(
-        (product) =>
-          Number.isFinite(product.quantity) &&
-          product.quantity > 0,
-      ).length,
-    [products],
-  );
-
   /* ==========================================================
      BARCODE LOOKUP
      ========================================================== */

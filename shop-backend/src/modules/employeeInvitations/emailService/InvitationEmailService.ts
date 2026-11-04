@@ -28,7 +28,7 @@ export async function sendEmployeeInvitationEmail(
     );
 
     const result = await resend.emails.send({
-        from: fromEmail,
+        from: fromEmail!,
         to: recipient,
         subject: `You're invited to join ${props.businessName} on BizTru`,
         html,

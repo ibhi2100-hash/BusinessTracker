@@ -4,15 +4,8 @@ import { SQLiteSessionRepository } from "../repositories/SQLiteSessionRepository
 import { SQLiteAuthRepository } from "../repositories/SQLiteAuthRepository/SQLiteAuthRepository";
 import { SQLiteApplicationStateRepository } from "../repositories/ApplicationStateRepository.ts/SQLiteApplicationStateRepository";
 import type { CurrentSessionRepository } from "../repositories/currentSessionRepository/currentSessionRepository";
+import type { LoginResponse } from "../../../../../pages/auth/Login";
 
-
-interface RegisterResponse {
-  user: any;
-  accessToken: string;
-  refreshToken: string;
-  accessExpiresIn: number;
-  refreshExpiresIn: number;
-}
 export class RegistrationService {
     private readonly repository: SQLiteAuthRepository;
     private readonly session: SQLiteSessionRepository;
@@ -32,7 +25,7 @@ export class RegistrationService {
         this.currentSessionRepository = currentSessionRepository;
     }
 
-    async register(result: RegisterResponse): Promise<User> {
+    async register(result: LoginResponse): Promise<User> {
 
         const user: User = {
 

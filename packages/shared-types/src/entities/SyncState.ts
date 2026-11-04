@@ -27,8 +27,6 @@ export interface SyncState {
   rejectedEvents: number;
   conflictEvents: number;
 
-  lastPulledGlobalPosition: string;
-
   lastSyncAt: number | null;
   lastSyncDurationMs: number | null;
   lastResult: string | null;
@@ -53,8 +51,6 @@ export interface PersistedSyncState {
     rejectedEvents: number;
 
     conflictEvents: number;
-
-    lastPulledGlobalPosition: string;
 
     lastSyncAt: number | null;
 

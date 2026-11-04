@@ -12,7 +12,6 @@ import {
 import type {
   ProductImportRow,
   ProductImportSource,
-  ProductImportStatus,
   ProductImportSummary,
   ValidatedProductImportRow,
 } from "@business/shared-types";
