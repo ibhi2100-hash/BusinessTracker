@@ -28,6 +28,7 @@ export interface ExistingEvent {
   aggregateType: string;
   aggregateVersion: number;
   globalPosition: string;
+  businessPosition: string;
 }
 
 export class DuplicateEventIdError extends Error {
@@ -94,13 +95,11 @@ export class EventRepository {
  
     const businessPosition = stream.lastPosition;
 
-    const data = EventMapper.toCreateInput(event, aggregateVersion);
+    const data = EventMapper.toCreateInput(event, aggregateVersion, businessPosition);
 
     const saved = await tx.event.create({
-      data: {
-        ...data,
-        businessPosition,
-      },
+      data,
+
       select: {
         id: true,
         aggregateId: true,
@@ -275,6 +274,7 @@ export class EventRepository {
         aggregateId: true,
         aggregateType: true,
         aggregateVersion: true,
+        businessPosition: true,
         globalPosition: true,
       },
     });
@@ -288,6 +288,7 @@ export class EventRepository {
       aggregateId: event.aggregateId,
       aggregateType: event.aggregateType,
       aggregateVersion: event.aggregateVersion,
+      businessPosition: event.businessPosition.toString(),
       globalPosition: event.globalPosition.toString(),
     };
   }
@@ -429,7 +430,8 @@ export class EventMapper {
 
     static toCreateInput(
         event: DomainEvent,
-        aggregateVersion: number
+        aggregateVersion: number,
+        businessPosition: bigint,
     ): Prisma.EventCreateInput {
 
         return {
@@ -449,6 +451,8 @@ export class EventMapper {
                 event.aggregateType,
 
             aggregateVersion,
+
+            businessPosition,
 
             type:
                 event.type,
@@ -487,7 +491,8 @@ export class EventMapper {
 
     static toUpsertArgs(
         event: DomainEvent,
-        aggregateVersion: number
+        aggregateVersion: number,
+        businessPosition: bigint,
     ): Prisma.EventUpsertArgs {
 
         return {
@@ -499,7 +504,8 @@ export class EventMapper {
             create:
                 EventMapper.toCreateInput(
                     event,
-                    aggregateVersion
+                    aggregateVersion,
+                    businessPosition
                 ),
 
             update: {},
@@ -540,7 +546,7 @@ export class EventMapper {
                 row.payload,
 
             mode:
-                row.mode as Mode,
+                row.mode,
 
             userId:
                 row.userId,

@@ -1158,7 +1158,6 @@ export default function InventoryPage({
             mode,
           });
 
-          if (data.quantity > 0) {
             await app.inventory.createStock({
               id: inventoryId,
               productId,
@@ -1166,7 +1165,7 @@ export default function InventoryPage({
               costPrice: data.cost,
               mode,
             });
-          }
+          
 
           toast.success("Product created.");
           setActiveSheet(null);

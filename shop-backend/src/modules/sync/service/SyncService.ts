@@ -172,30 +172,25 @@ export class OfflineSyncService {
 
             if (existing) {
 
-                accepted.push({
+            accepted.push({
 
-                    eventId:
-                        existing.id,
+                eventId: existing.id,
 
-                    aggregateId:
-                        existing.aggregateId,
+                aggregateId: existing.aggregateId,
 
-                    aggregateType:
-                        existing.aggregateType,
+                aggregateType: existing.aggregateType,
 
-                    aggregateVersion:
-                        existing.aggregateVersion,
+                aggregateVersion: existing.aggregateVersion,
 
-                    globalPosition:
-                        existing.globalPosition,
+                globalPosition: existing.globalPosition,
 
-                    status:
-                        "ALREADY_ACCEPTED",
-                });
+                businessPosition: existing.businessPosition,
 
-                continue;
-            }
+                status: "ALREADY_ACCEPTED",
+            });
 
+            continue;
+        }
 
             /*
              * =====================================================

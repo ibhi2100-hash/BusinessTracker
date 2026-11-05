@@ -13,7 +13,9 @@ export interface AcceptedEventResult {
     aggregateType: string;
 
     aggregateVersion: number;
-    globalPosition: number;
+    businessPosition: string;
+    globalPosition: string;
+
 
     status:
         | "ACCEPTED"

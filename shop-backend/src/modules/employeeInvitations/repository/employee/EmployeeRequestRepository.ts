@@ -46,22 +46,21 @@ export class EmployeeRequestRepository {
   }
 
   async updateResolution(
-    id: string,
-    status: string,
-    resolution: string | null,
-    resolvedAt: Date | null,
-    tx: Prisma.TransactionClient = prisma,
-  ): Promise<void> {
-    await tx.employeeRequest.update({
-      where: { id },
-      data: {
-        status,
-        resolution,
-        resolvedAt,
-      },
-    });
-  }
-
+  id: string,
+  status: string,
+  resolutionNote: string | null,
+  resolvedAt: Date | null,
+  tx: Prisma.TransactionClient = prisma,
+): Promise<void> {
+  await tx.employeeRequest.update({
+    where: { id },
+    data: {
+      status,
+      resolutionNote,
+      resolvedAt,
+    },
+  });
+}
   async findById(
     id: string,
     tx: Prisma.TransactionClient = prisma,

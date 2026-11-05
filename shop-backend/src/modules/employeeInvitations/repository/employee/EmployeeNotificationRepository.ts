@@ -1,7 +1,6 @@
+import { Prisma } from "../../../../infrastructure/postgresql/prisma/generated/client.js";
 
-import { Prisma } from "../../../../infrastructure/postgresql/prisma/generated/client.js"; 
-
-import { prisma } from "../../../../infrastructure/postgresql/prismaClient.js"; 
+import { prisma } from "../../../../infrastructure/postgresql/prismaClient.js";
 
 export class EmployeeNotificationRepository {
   async create(
@@ -19,8 +18,8 @@ export class EmployeeNotificationRepository {
     await tx.employeeNotification.update({
       where: { id },
       data: {
+        read: true,
         readAt,
-        isRead: true,
       },
     });
   }
@@ -42,7 +41,7 @@ export class EmployeeNotificationRepository {
     return tx.employeeNotification.findMany({
       where: {
         employeeId,
-        isRead: false,
+        read: false,
       },
       orderBy: { createdAt: "desc" },
     });
