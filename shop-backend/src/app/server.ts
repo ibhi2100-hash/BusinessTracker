@@ -271,7 +271,7 @@ async function startServer(): Promise<void> {
     server.once("error", onError);
     server.once("listening", onListening);
 
-    server.listen(PORT);
+    server.listen(PORT, "0.0.0.0");
   });
 
   console.log(

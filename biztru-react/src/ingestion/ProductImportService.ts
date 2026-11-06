@@ -1,3 +1,4 @@
+
 import type {
   ProductImportRow,
   ProductImportSource,
@@ -27,8 +28,10 @@ export interface ExecuteProductImportArgs {
 }
 
 /**
- * These request shapes match the calls already used in InventoryPage.
- * Product and stock writes still go through the application APIs.
+ * Product and inventory application APIs.
+ *
+ * Inventory aggregates are created whenever quantity is provided,
+ * including when quantity is exactly zero.
  */
 export interface ProductImportApplication {
   product: {
@@ -40,7 +43,7 @@ export interface ProductImportApplication {
       description: string | null;
       sku: string | null;
       barcode: string | null;
-      reorderLevel: number| null;
+      reorderLevel: number | null;
       imageUrl: string | null;
       category: string | null;
       mode: InventoryMode;
@@ -84,7 +87,7 @@ function toProductImportMapping(
 }
 
 /**
- * Stage 1: parse, auto-map, and validate the uploaded file.
+ * Stage 1: Parse, auto-map, and validate the uploaded file.
  */
 export async function prepareProductImportFile(
   file: File,
@@ -104,7 +107,7 @@ export async function prepareProductImportFile(
 }
 
 /**
- * Stage 2: apply the user's selected mapping to the original raw rows.
+ * Stage 2: Apply the user's selected mapping to the original raw rows.
  */
 export function validateProductImportRows(args: {
   rows: ProductImportRow[];
@@ -150,9 +153,17 @@ export function validateProductImportRows(args: {
 }
 
 /**
- * Stage 3: create products and optional opening stock.
+ * Stage 3: Create products and optional inventory aggregates.
  *
- * Existing products are not updated by this implementation.
+ * Rules:
+ * - Existing products are not updated.
+ * - Quantity > 0 creates an inventory aggregate.
+ * - Quantity === 0 also creates an inventory aggregate.
+ * - Quantity === null skips inventory aggregate creation.
+ * - Invalid quantities are rejected.
+ *
+ * Each successful product creation is followed by its inventory
+ * aggregate creation when a quantity was provided.
  */
 export async function executeProductImport(
   app: ProductImportApplication,
@@ -175,10 +186,16 @@ export async function executeProductImport(
     );
   }
 
+  /**
+   * IMPORTANT:
+   * Check for null, NOT quantity > 0.
+   *
+   * A quantity of zero still requires an inventory aggregate.
+   */
   const totalOperations = rows.reduce((total, item) => {
-    const quantity = item.row.quantity;
+    const hasInventoryRecord = item.row.quantity !== null;
 
-    return total + 1 + (quantity !== null && quantity > 0 ? 1 : 0);
+    return total + 1 + (hasInventoryRecord ? 1 : 0);
   }, 0);
 
   let completedOperations = 0;
@@ -206,34 +223,54 @@ export async function executeProductImport(
 
   for (const item of rows) {
     const row = item.row;
-    const hasOpeningStock =
-      row.quantity !== null && row.quantity > 0;
 
-    // Defensive checks: the validator should already enforce these.
-    if (
-      !row.name?.trim() ||
-      row.sellingPrice === null ||
-      row.costPrice === null ||
-      !Number.isFinite(row.sellingPrice) ||
-      !Number.isFinite(row.costPrice) ||
-      row.sellingPrice < 0 ||
-      row.costPrice < 0
-    ) {
-      failedOperations += 1;
-      completedOperations += 1;
+    /**
+     * An inventory aggregate must be created whenever quantity
+     * is explicitly provided, including quantity = 0.
+     */
+    const hasInventoryRecord = row.quantity !== null;
 
-      // If stock was planned, it cannot proceed without its product.
-      if (hasOpeningStock) {
-        failedOperations += 1;
-        completedOperations += 1;
-      }
+    const productName = row.name?.trim() ?? "";
+
+    /**
+     * Defensive product validation.
+     */
+    const validProduct =
+      Boolean(productName) &&
+      row.sellingPrice !== null &&
+      row.costPrice !== null &&
+      Number.isFinite(row.sellingPrice) &&
+      Number.isFinite(row.costPrice) &&
+      row.sellingPrice >= 0 &&
+      row.costPrice >= 0;
+
+    /**
+     * Defensive inventory quantity validation.
+     *
+     * Zero is valid.
+     * Negative, NaN, and Infinity are invalid.
+     * Null means no inventory aggregate is requested.
+     */
+    const validQuantity =
+      row.quantity === null ||
+      (
+        Number.isFinite(row.quantity) &&
+        row.quantity >= 0
+      );
+
+    if (!validProduct || !validQuantity) {
+      const invalidOperations =
+        1 + (hasInventoryRecord ? 1 : 0);
+
+      failedOperations += invalidOperations;
+      completedOperations += invalidOperations;
 
       report(
         "CREATING_PRODUCTS",
-        `Row ${row.rowNumber} is missing valid product data. ${
-          hasOpeningStock
-            ? "Its stock operation was skipped."
-            : ""
+        `Row ${row.rowNumber} contains invalid product or inventory data. ${
+          hasInventoryRecord
+            ? "Product and inventory creation were skipped."
+            : "Product creation was skipped."
         }`,
       );
 
@@ -242,14 +279,17 @@ export async function executeProductImport(
 
     const productId = crypto.randomUUID();
 
+    /**
+     * STEP 1: Create product.
+     */
     report("CREATING_PRODUCTS");
 
     try {
       await app.product.create({
         id: productId,
-        name: row.name.trim(),
-        price: row.sellingPrice,
-        costPrice: row.costPrice,
+        name: productName,
+        price: row.sellingPrice!,
+        costPrice: row.costPrice!,
         description: row.description,
         sku: row.sku,
         barcode: row.barcode,
@@ -261,14 +301,19 @@ export async function executeProductImport(
 
       createdProducts += 1;
       completedOperations += 1;
+
       report("CREATING_PRODUCTS");
     } catch (error) {
       failedOperations += 1;
       completedOperations += 1;
 
-      // Count the planned stock operation as failed/skipped too,
-      // otherwise progress would never reach totalOperations.
-      if (hasOpeningStock) {
+      /**
+       * If product creation fails, its inventory aggregate
+       * cannot be created.
+       *
+       * Count the skipped operation so progress remains accurate.
+       */
+      if (hasInventoryRecord) {
         failedOperations += 1;
         completedOperations += 1;
       }
@@ -276,20 +321,28 @@ export async function executeProductImport(
       report(
         "CREATING_PRODUCTS",
         `Product creation failed on row ${row.rowNumber}. ${
-          hasOpeningStock
-            ? "Its stock operation was skipped."
+          hasInventoryRecord
+            ? "Its inventory aggregate was skipped."
             : ""
-        } ${error instanceof Error ? error.message : "Unknown error"}`,
+        } ${
+          error instanceof Error
+            ? error.message
+            : "Unknown error"
+        }`,
       );
 
       continue;
     }
 
-    if (!hasOpeningStock) {
+    /**
+     * STEP 2: Create inventory aggregate.
+     *
+     * Do not skip this operation when quantity is zero.
+     */
+    if (!hasInventoryRecord) {
       continue;
     }
 
-    // The product exists, so create its opening stock.
     report("CREATING_STOCK");
 
     try {
@@ -297,12 +350,13 @@ export async function executeProductImport(
         id: inventoryKey(productId, branchId),
         productId,
         quantity: row.quantity!,
-        costPrice: row.costPrice,
+        costPrice: row.costPrice!,
         mode,
       });
 
       createdStock += 1;
       completedOperations += 1;
+
       report("CREATING_STOCK");
     } catch (error) {
       failedOperations += 1;
@@ -310,13 +364,18 @@ export async function executeProductImport(
 
       report(
         "CREATING_STOCK",
-        `Product "${row.name}" was created, but stock creation failed. ${
-          error instanceof Error ? error.message : "Unknown error"
+        `Product "${row.name}" was created, but its inventory aggregate creation failed. ${
+          error instanceof Error
+            ? error.message
+            : "Unknown error"
         }`,
       );
     }
   }
 
+  /**
+   * STEP 3: Finalize.
+   */
   report("FINALIZING");
 
   const result: ProductImportResult = {

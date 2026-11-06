@@ -71,6 +71,7 @@ import { GlassSheet } from "../ui/GlassSheet";
 import { GlassIcon } from "../ui/GlassIcon";
 
 import { cn } from "../../lib/utils";
+import StockAnalysisPage from "./StockAnalysisPage";
 
 /* ============================================================
    CONTRACTS
@@ -79,6 +80,7 @@ import { cn } from "../../lib/utils";
 type InventoryMode = "OPENING" | "LIVE";
 
 type InventoryContext = "sell" | "admin";
+type InventoryView = "inventory" | "analysis";
 
 type ActiveSheet =
   | null
@@ -206,6 +208,10 @@ export default function InventoryPage({
    */
   const [showZeroStockOnly, setShowZeroStockOnly] =
     useState(false);
+
+  // Stock analysis is an admin-only view over the same branch-scoped data.
+  const [activeView, setActiveView] =
+    useState<InventoryView>("inventory");
 
   const [history] = useState<ProductHistoryItem[]>([]);
 
@@ -1321,6 +1327,46 @@ export default function InventoryPage({
             )}
           </div>
 
+          {/* Admin view switcher: inventory operations and stock intelligence. */}
+          {context === "admin" && (
+            <div
+              role="group"
+              aria-label="Inventory view"
+              className="grid grid-cols-2 gap-1 rounded-2xl border border-white/[0.08] bg-white/[0.035] p-1 sm:inline-grid sm:w-auto"
+            >
+              <button
+                type="button"
+                aria-pressed={activeView === "inventory"}
+                onClick={() => setActiveView("inventory")}
+                className={cn(
+                  "flex min-h-10 items-center justify-center gap-2 rounded-xl px-4 text-xs font-semibold transition sm:text-sm",
+                  activeView === "inventory"
+                    ? "bg-teal-300/[0.14] text-teal-200 shadow-sm"
+                    : "text-white/55 hover:bg-white/[0.05] hover:text-white",
+                )}
+              >
+                <Package className="h-4 w-4" />
+                Inventory
+              </button>
+              <button
+                type="button"
+                aria-pressed={activeView === "analysis"}
+                onClick={() => setActiveView("analysis")}
+                className={cn(
+                  "flex min-h-10 items-center justify-center gap-2 rounded-xl px-4 text-xs font-semibold transition sm:text-sm",
+                  activeView === "analysis"
+                    ? "bg-teal-300/[0.14] text-teal-200 shadow-sm"
+                    : "text-white/55 hover:bg-white/[0.05] hover:text-white",
+                )}
+              >
+                <LayoutGrid className="h-4 w-4" />
+                Stock analysis
+              </button>
+            </div>
+          )}
+
+          {context === "sell" || activeView === "inventory" ? (
+            <>
           {/* ==================================================
               BRANCH INVENTORY METRICS AND ZERO-STOCK FILTER
               ================================================== */}
@@ -1693,6 +1739,8 @@ export default function InventoryPage({
               </button>
             ))}
           </div>
+          </>
+          ) : null}
         </div>
       </header>
 
@@ -1793,126 +1841,107 @@ export default function InventoryPage({
       </GlassSheet>
 
       {/* ======================================================
-          PRODUCT GRID
+          INVENTORY / STOCK ANALYSIS CONTENT
           ====================================================== */}
 
-      <div className="px-3 pb-6 pt-4 sm:px-4 lg:px-6">
-        {!branchId ? (
-          <div className="flex items-center justify-center py-24 text-gray-400">
-            Select a branch to view inventory.
-          </div>
-        ) : productsLoading ? (
-          <div
-            role="status"
-            className="flex items-center justify-center py-24 text-gray-400"
-          >
-            Loading products...
-          </div>
-        ) : filteredProducts.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-24 text-gray-500">
-            <GlassIcon size="lg" variant="primary">
-              {showZeroStockOnly ? (
-                <AlertTriangle className="h-6 w-6" />
-              ) : (
-                <Package className="h-6 w-6" />
-              )}
-            </GlassIcon>
-
-            <p className="mt-4 text-sm text-center">
-              {showZeroStockOnly &&
-              zeroStockProductsCount === 0
-                ? "There are no zero-stock products in this branch."
-                : showZeroStockOnly
-                  ? "No zero-stock products match your search or category filters."
-                  : search.trim() ||
-                    activeCategory !== "All"
-                    ? "No products match your filters."
-                    : "No products found."}
-            </p>
-
-            {showZeroStockOnly && (
-              <button
-                type="button"
-                onClick={() => {
-                  setShowZeroStockOnly(false);
-                  setSearch("");
-                  setActiveCategory("All");
-                }}
-                className="
-                  mt-3 rounded-xl border border-white/10
-                  bg-white/[0.04] px-4 py-2
-                  text-xs font-medium text-white/70
-                  transition hover:bg-white/[0.08]
-                "
-              >
-                Clear all filters
-              </button>
+      {context === "admin" && activeView === "analysis" ? (
+        <main className="mx-auto w-full max-w-[1800px] px-3 pb-8 pt-4 sm:px-4 sm:pt-6 lg:px-6">
+          {!branchId ? (
+            <div className="flex min-h-64 items-center justify-center text-center text-sm text-white/45">
+              Select an active branch to analyse its stock.
+            </div>
+          ) : (
+            <StockAnalysisPage
+              products={products}
+              loading={productsLoading}
+              onProductSelect={openManage}
+            />
+          )}
+        </main>
+      ) : (
+        <>
+          {/* PRODUCT GRID */}
+          <main className="mx-auto w-full max-w-[1800px] px-3 pb-6 pt-4 sm:px-4 lg:px-6">
+            {!branchId ? (
+              <div className="flex items-center justify-center py-24 text-gray-400">
+                Select a branch to view inventory.
+              </div>
+            ) : productsLoading ? (
+              <div role="status" aria-live="polite" className="flex items-center justify-center py-24 text-gray-400">
+                Loading products...
+              </div>
+            ) : filteredProducts.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-24 text-gray-500">
+                <GlassIcon size="lg" variant="primary">
+                  {showZeroStockOnly ? (
+                    <AlertTriangle className="h-6 w-6" />
+                  ) : (
+                    <Package className="h-6 w-6" />
+                  )}
+                </GlassIcon>
+                <p className="mt-4 text-center text-sm">
+                  {showZeroStockOnly && zeroStockProductsCount === 0
+                    ? "There are no zero-stock products in this branch."
+                    : showZeroStockOnly
+                      ? "No zero-stock products match your search or category filters."
+                      : search.trim() || activeCategory !== "All"
+                        ? "No products match your filters."
+                        : "No products found."}
+                </p>
+                {showZeroStockOnly && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowZeroStockOnly(false);
+                      setSearch("");
+                      setActiveCategory("All");
+                    }}
+                    className="mt-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-medium text-white/70 transition hover:bg-white/[0.08]"
+                  >
+                    Clear all filters
+                  </button>
+                )}
+              </div>
+            ) : (
+              <>
+                <div className="mb-3 flex items-center justify-between gap-3 px-1">
+                  <p className="text-xs text-white/40">
+                    {showZeroStockOnly ? "Zero-stock products" : "Products"}
+                  </p>
+                  <p className="text-xs font-medium tabular-nums text-white/55">
+                    {filteredProducts.length.toLocaleString("en-NG")} {filteredProducts.length === 1 ? "product" : "products"}
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 2xl:grid-cols-4">
+                  {filteredProducts.map((product) =>
+                    context === "sell" ? (
+                      <SellCard
+                        key={product.id}
+                        product={product}
+                        cartQuantity={cartItems
+                          .filter((item) => item.productId === product.id)
+                          .reduce((total, item) => total + item.quantity, 0)}
+                        disabled={loader}
+                        onAddToCart={handleAddToCart}
+                        onChangeCartQuantity={handleChangeCartQuantity}
+                        onQuickSell={handleQuickSell}
+                      />
+                    ) : (
+                      <ProductCard
+                        key={product.id}
+                        product={product}
+                        context={context}
+                        onManage={openManage}
+                        onDelete={handleDelete}
+                      />
+                    ),
+                  )}
+                </div>
+              </>
             )}
-          </div>
-        ) : (
-          <>
-            {/* Result count */}
-
-            <div className="mb-3 flex items-center justify-between gap-3 px-1">
-              <p className="text-xs text-white/40">
-                {showZeroStockOnly
-                  ? "Zero-stock products"
-                  : "Products"}
-              </p>
-
-              <p className="text-xs font-medium tabular-nums text-white/55">
-                {filteredProducts.length.toLocaleString(
-                  "en-NG",
-                )}{" "}
-                {filteredProducts.length === 1
-                  ? "product"
-                  : "products"}
-              </p>
-            </div>
-
-            <div
-              className="
-                grid grid-cols-1 gap-3
-                sm:grid-cols-2 sm:gap-4
-                lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4
-              "
-            >
-              {filteredProducts.map((product) =>
-                context === "sell" ? (
-                  <SellCard
-                    key={product.id}
-                    product={product}
-                    cartQuantity={cartItems
-                      .filter(
-                        (item) =>
-                          item.productId === product.id,
-                      )
-                      .reduce(
-                        (total, item) =>
-                          total + item.quantity,
-                        0,
-                      )}
-                    disabled={loader}
-                    onAddToCart={handleAddToCart}
-                    onChangeCartQuantity={
-                      handleChangeCartQuantity
-                    }
-                    onQuickSell={handleQuickSell}
-                  />
-                ) : (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    context={context}
-                    onManage={openManage}
-                    onDelete={handleDelete}
-                  />
-                ),
-              )}
-            </div>
-          </>
-        )}
-      </div>
+          </main>
+        </>
+      )}
 
       {/* ======================================================
           MOBILE CART BAR

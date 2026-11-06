@@ -2,7 +2,6 @@
   "name": "business-tracker",
   "private": true,
   "workspaces": [
-    "shop-frontend",
     "shop-backend",
     "biztru-react",
     "packages/*"
@@ -17,3 +16,4 @@
     "lightningcss": "^1.32.0"
   }
 }
+       
