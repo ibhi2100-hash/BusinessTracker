@@ -1459,7 +1459,7 @@ export default function StockAnalysisPage({
               "
             >
               <div className="flex items-start gap-3">
-                <GlassIcon size="md" variant="warning">
+                <GlassIcon size="md" variant="danger">
                   <AlertTriangle className="h-5 w-5" />
                 </GlassIcon>
 
