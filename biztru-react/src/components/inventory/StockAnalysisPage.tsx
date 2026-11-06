@@ -184,7 +184,7 @@ function MetricCard({
   value: string;
   description: string;
   icon: React.ReactNode;
-  iconVariant?: "primary" | "success" | "warning" | "danger";
+  iconVariant?: "primary" | "success" | "danger";
   accent?: "teal" | "blue" | "purple" | "amber";
 }) {
   const accentClasses = {
