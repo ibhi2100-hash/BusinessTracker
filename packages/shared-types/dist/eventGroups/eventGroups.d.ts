@@ -21,6 +21,7 @@ export declare const InventoryEventType: {
     PRODUCT_CREATED: string;
     PRODUCT_UPDATED: string;
     PRODUCT_DELETED: string;
+    PRODUCT_BARCODE_ASSIGN: string;
     INVENTORY_ADDED: string;
     INVENTORY_UPDATED: string;
     INVENTORY_SOLD: string;

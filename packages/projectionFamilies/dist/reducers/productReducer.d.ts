@@ -18,5 +18,6 @@ export declare class ProductReducer implements ProjectionReducer<Product, Domain
     private update;
     private deleted;
     private inventoryReceived;
+    private assignBarcode;
     private requireState;
 }

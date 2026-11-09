@@ -22,6 +22,8 @@ export class ProductReducer {
             // =====================================================
             case InventoryEventType.INVENTORY_RECEIVED:
                 return this.inventoryReceived(state, event);
+            case InventoryEventType.PRODUCT_BARCODE_ASSIGN:
+                return this.assignBarcode(state, event);
             // =====================================================
             // UNKNOWN EVENT
             // =====================================================
@@ -105,6 +107,15 @@ export class ProductReducer {
         return {
             ...state,
             costPrice: newCost,
+            updatedAt: event.createdAt
+        };
+    }
+    assignBarcode(current, event) {
+        const state = this.requireState(current, event);
+        const payload = event.payload;
+        return {
+            ...state,
+            barcode: payload.barcode,
             updatedAt: event.createdAt
         };
     }

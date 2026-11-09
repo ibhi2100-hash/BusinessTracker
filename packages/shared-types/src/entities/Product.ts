@@ -1,3 +1,5 @@
+import { Mode } from "../index.js";
+
 export type Product = {
   id: string;
   businessId: string;
@@ -25,7 +27,34 @@ export type Product = {
 
   deletedAt: number | null;
 }
+export type BarcodeFormat =
+  | "CODE128"
+  | "EAN13"
+  | "EAN8"
+  | "UPCA";
 
+export type BarcodeSource =
+  | "INTERNAL"
+  | "MANUFACTURER";
+
+export interface ProductBarcode {
+  value: string;
+  format: BarcodeFormat;
+  source: BarcodeSource;
+}
+
+export interface BarcodeAssignment {
+  productId: string;
+  barcode: ProductBarcode;
+}
+
+export type ProductBarcodePayload = {
+  barcode: string;
+    barcodeFormat: BarcodeFormat
+    barcodeSource: string;
+    mode: Mode;
+    productId: string;
+}
 
 export type ProductImportRow = {
   rowNumber: number;

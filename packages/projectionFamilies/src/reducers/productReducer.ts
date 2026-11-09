@@ -1,7 +1,9 @@
 import {
+    BarcodeAssignment,
     DomainEvent,
     InventoryEventType,
     Product,
+    ProductBarcodePayload,
     
 } from "@business/shared-types";
 
@@ -87,6 +89,13 @@ implements ProjectionReducer<Product, DomainEvent> {
             case InventoryEventType.INVENTORY_RECEIVED:
 
                 return this.inventoryReceived(
+                    state,
+                    event
+                );
+
+            case InventoryEventType.PRODUCT_BARCODE_ASSIGN:
+
+                return this.assignBarcode(
                     state,
                     event
                 );
@@ -303,6 +312,28 @@ implements ProjectionReducer<Product, DomainEvent> {
                 event.createdAt
 
         };
+
+    }
+
+    private assignBarcode(
+        current: Product | null,
+        event: DomainEvent
+    ): Product {
+        const state =
+            this.requireState(
+                current,
+                event
+            );
+
+        const payload =
+            event.payload as ProductBarcodePayload
+
+
+        return {
+            ...state,
+            barcode: payload.barcode,
+            updatedAt: event.createdAt
+        }
 
     }
 

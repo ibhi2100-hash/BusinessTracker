@@ -46,7 +46,7 @@ export class InventoryConsumer
             await this.repository.findProductId(
               event.payload.productId
             );
-
+            
           const received =
             new InventoryReducer().reduce(
               current,

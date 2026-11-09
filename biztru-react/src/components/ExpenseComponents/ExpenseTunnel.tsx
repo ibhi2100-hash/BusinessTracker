@@ -15,6 +15,7 @@ import { PageHeader } from "../ui/PageHeader";
 
 import { useApplication } from "../../Biztru/services/ApplicationService/ApplicationContext"; 
 import { useBusinessContext } from "../../Biztru/context/BusinessContext";
+import { useLiveExpenses } from "../../hooks/useLiveExpenses";
 
 interface ExpenseTunnelProps {
   mode: "OPENING" | "LIVE";
@@ -88,7 +89,7 @@ export default function ExpenseTunnel({
       businessId,
       branchId,
     } = useBusinessContext();
-
+  
   const [loading, setLoading] = useState(false);
   const [entries, setEntries] = useState<Expense[]>([]);
 
@@ -100,6 +101,10 @@ export default function ExpenseTunnel({
   const [paymentMethod, setPaymentMethod] =
     useState<UiPaymentMethod>("CASH");
   const [reference, setReference] = useState("");
+
+  const {data} = useLiveExpenses(branchId);
+
+
 
   const formatNumber = (value: string | number) => {
     if (value === "" || value === null || value === undefined) return "";
@@ -436,7 +441,7 @@ export default function ExpenseTunnel({
             </div>
           </GlassCard>
         ) : (
-          entries.map((entry) => (
+          data?.map((entry) => (
             <GlassCard
               key={entry.id}
               className="rounded-2xl border-white/6 p-4 transition hover:bg-white/2.5"

@@ -14,6 +14,8 @@ import {
   ChevronRight,
   Printer,
   Building2,
+  BarChart3,
+  ListFilter,
 } from "lucide-react";
 
 import { GlassCard } from "../ui/GlassCard";
@@ -21,6 +23,7 @@ import { GlassButton } from "../ui/GlassButton";
 import { GlassInput } from "../ui/GlassInput";
 import { GlassIcon } from "../ui/GlassIcon";
 import { GlassSheet } from "../ui/GlassSheet";
+import SalesAnalysisPage from "./SalesAnalysisPage";
 import { cn } from "../../lib/utils";
 
 import { useApplication } from "../../Biztru/services/ApplicationService/ApplicationContext";
@@ -412,6 +415,10 @@ export default function SalesListPage() {
   // -------------------------------------------------------
 
   const [sales, setSales] = useState<Sales[]>([]);
+  const [activeView, setActiveView] = useState<"sales" | "analysis">("sales");
+  const [analysisSales, setAnalysisSales] = useState<Sales[]>([]);
+  const [analysisLoading, setAnalysisLoading] = useState(false);
+  const [analysisError, setAnalysisError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(
     null
@@ -516,6 +523,77 @@ export default function SalesListPage() {
   useEffect(() => {
     void load();
   }, [load]);
+
+
+  // Analysis always loads all sale statuses so refunded and voided
+  // transactions are not accidentally hidden by the list status filter.
+  const loadAnalysis = useCallback(async () => {
+    if (!businessId) {
+      setAnalysisSales([]);
+      setAnalysisError("A business must be selected before loading sales analysis.");
+      setAnalysisLoading(false);
+      return;
+    }
+
+    try {
+      setAnalysisLoading(true);
+      setAnalysisError(null);
+      const quickDateRange = getLocalDateRange(dateRange);
+      const rows = await app.sales.listSales({
+        branchId: branchId ?? undefined,
+        businessId,
+        status: "all",
+        from: from || quickDateRange.from,
+        to: to || quickDateRange.to,
+        limit: 200,
+      });
+      setAnalysisSales(rows);
+    } catch (error) {
+      console.error("[SalesListPage] Failed to load sales analysis:", error);
+      setAnalysisError("Unable to load sales analysis. Check your local database and try again.");
+    } finally {
+      setAnalysisLoading(false);
+    }
+  }, [app, businessId, branchId, dateRange, from, to]);
+
+  useEffect(() => {
+    if (activeView !== "analysis") return;
+    let cancelled = false;
+
+    const run = async () => {
+      if (!businessId) {
+        setAnalysisSales([]);
+        setAnalysisError("A business must be selected before loading sales analysis.");
+        return;
+      }
+      try {
+        setAnalysisLoading(true);
+        setAnalysisError(null);
+        const quickDateRange = getLocalDateRange(dateRange);
+        const rows = await app.sales.listSales({
+          branchId: branchId ?? undefined,
+          businessId,
+          status: "all",
+          from: from || quickDateRange.from,
+          to: to || quickDateRange.to,
+          limit: 200,
+        });
+        if (!cancelled) setAnalysisSales(rows);
+      } catch (error) {
+        console.error("[SalesListPage] Failed to load sales analysis:", error);
+        if (!cancelled) setAnalysisError("Unable to load sales analysis. Check your local database and try again.");
+      } finally {
+        if (!cancelled) setAnalysisLoading(false);
+      }
+    };
+
+    void run();
+    return () => { cancelled = true; };
+  }, [activeView, app, businessId, branchId, dateRange, from, to]);
+
+  const activeBranchName = branchId
+    ? branches?.find((branch) => branch.id === branchId)?.name ?? "Selected branch"
+    : "All branches";
 
   // -------------------------------------------------------
   // Filter sales
@@ -1130,13 +1208,17 @@ export default function SalesListPage() {
 
               <GlassButton
                 variant="tertiary"
-                onClick={() => void load()}
-                disabled={loading}
+                onClick={() =>
+                  activeView === "analysis"
+                    ? void loadAnalysis()
+                    : void load()
+                }
+                disabled={activeView === "analysis" ? analysisLoading : loading}
                 icon={
                   <RefreshCw
                     className={cn(
                       "w-4 h-4",
-                      loading && "animate-spin"
+                      (activeView === "analysis" ? analysisLoading : loading) && "animate-spin"
                     )}
                   />
                 }
@@ -1144,6 +1226,33 @@ export default function SalesListPage() {
             </div>
           </div>
 
+          <div className="grid grid-cols-2 gap-1 rounded-2xl border border-white/10 bg-black/20 p-1">
+            <button
+              type="button"
+              onClick={() => setActiveView("sales")}
+              aria-pressed={activeView === "sales"}
+              className={cn(
+                "flex min-h-10 items-center justify-center gap-2 rounded-xl px-3 text-xs font-medium transition",
+                activeView === "sales" ? "bg-white/10 text-white shadow-sm" : "text-gray-500 hover:text-gray-200"
+              )}
+            >
+              <ListFilter className="h-4 w-4" /> Sales list
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveView("analysis")}
+              aria-pressed={activeView === "analysis"}
+              className={cn(
+                "flex min-h-10 items-center justify-center gap-2 rounded-xl px-3 text-xs font-medium transition",
+                activeView === "analysis" ? "bg-teal-400/15 text-teal-200 shadow-sm" : "text-gray-500 hover:text-gray-200"
+              )}
+            >
+              <BarChart3 className="h-4 w-4" /> Analysis
+            </button>
+          </div>
+
+          {activeView === "sales" && (
+            <>
           <GlassInput
             icon={<Search className="w-4 h-4" />}
             placeholder="Search product, customer, ID..."
@@ -1179,7 +1288,10 @@ export default function SalesListPage() {
             ))}
           </div>
 
-          {/* Quick date filters */}
+            </>
+          )}
+
+          {/* Quick date filters apply to both the list and analysis views. */}
           <div className="flex gap-2 overflow-x-auto no-scrollbar">
             {(
               [
@@ -1214,6 +1326,16 @@ export default function SalesListPage() {
         </div>
       </div>
 
+      {activeView === "analysis" ? (
+        <SalesAnalysisPage
+          sales={analysisSales}
+          loading={analysisLoading}
+          error={analysisError}
+          branchName={activeBranchName}
+          onRetry={() => void loadAnalysis()}
+        />
+      ) : (
+        <>
       {/* Summary */}
 
       <div className="px-4 pt-4">
@@ -1353,6 +1475,9 @@ export default function SalesListPage() {
           </>
         )}
       </div>
+
+        </>
+      )}
 
       {/* Sale details */}
 

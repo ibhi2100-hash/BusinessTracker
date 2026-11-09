@@ -42,17 +42,25 @@ export class ProductConsumer
           }
           const product =
             new ProductReducer().reduce(previousProduct, event);
-          console.log("This is the Reduced Products: ", product, "and this the event that created it: ", event)
+
           await this.repository.upsert(product);
-
-          const updatedProduct = await this.repository.findById(product.id);
-
-          console.log("This is the updated product: ", updatedProduct)
-
           changeNotifier.notify(["products"]);
           break;
         }
 
+        case InventoryEventType.PRODUCT_BARCODE_ASSIGN: {
+          const previousProduct = await this.repository.findById(event.payload.productId)
+          if(!previousProduct){
+            throw new Error("Please this product does not exist in local database")
+          }
+          const product =
+            new ProductReducer().reduce(previousProduct, event);
+          
+          await this.repository.upsert(product);
+          
+          changeNotifier.notify(["products"]);
+          break;
+        }
 
         default:
           break;

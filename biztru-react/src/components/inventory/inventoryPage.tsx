@@ -1,5 +1,6 @@
 import {
   useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -21,6 +22,7 @@ import {
   ArrowUpRight,
   Barcode,
   AlertTriangle,
+  Printer,
 } from "lucide-react";
 
 import {
@@ -72,6 +74,15 @@ import { GlassIcon } from "../ui/GlassIcon";
 
 import { cn } from "../../lib/utils";
 import StockAnalysisPage from "./StockAnalysisPage";
+import { generateInternalBarcode, generateBarcodeCanvas } from "./barcodes/barcodeGenerator";
+
+function renderBarcodeDataUrl(value: string): string {
+  const canvas = document.createElement("canvas");
+  // InventoryPage only assigns internal CODE128 barcodes. The product
+  // projection currently exposes the value, not its original symbology.
+  generateBarcodeCanvas(canvas, value, "CODE128");
+  return canvas.toDataURL("image/png");
+}
 
 /* ============================================================
    CONTRACTS
@@ -90,7 +101,9 @@ type ActiveSheet =
   | "receive"
   | "adjust"
   | "transfer"
-  | "history";
+  | "history"
+  | "barcode-label"
+  | "bulk-label";
 
 interface ProductHistoryItem {
   id: string;
@@ -132,6 +145,12 @@ function formatNaira(value: number): string {
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   })}`;
+}
+
+function escapeLabelText(value: string): string {
+  return value.replace(/[&<>"']/g, (character) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+  })[character] ?? character);
 }
 
 /**
@@ -231,6 +250,37 @@ export default function InventoryPage({
   const [pendingBarcode, setPendingBarcode] =
     useState("");
 
+
+  const [labelPrintBusy, setLabelPrintBusy] = useState(false);
+
+  // Global keyboard-wedge scanner buffer and duplicate-scan protection.
+  const scannerBufferRef = useRef("");
+  const scannerLastKeyAtRef = useRef(0);
+  const scannerStartAtRef = useRef(0);
+  const lastHandledScanRef = useRef({ value: "", at: 0 });
+
+  const resetBarcodeSession = useCallback(() => {
+    scannerBufferRef.current = "";
+    scannerLastKeyAtRef.current = 0;
+    scannerStartAtRef.current = 0;
+    setBarcodeLookup("");
+    setPendingBarcode("");
+    setBarcodeLookupOpen(false);
+  }, []);
+
+  const closeActiveSheet = useCallback(() => {
+    setActiveSheet(null);
+    resetBarcodeSession();
+  }, [resetBarcodeSession]);
+
+  const closeBarcodeLookup = useCallback(() => {
+    resetBarcodeSession();
+  }, [resetBarcodeSession]);
+
+
+  //Lebels State
+
+
   /* ==========================================================
      BRANCH PRODUCT METRICS
      ========================================================== */
@@ -271,30 +321,31 @@ export default function InventoryPage({
           barcode.toLowerCase(),
       );
 
-      setPendingBarcode(barcode);
+      // Clear the lookup immediately. Preserve only an unknown barcode
+      // for the product-registration form.
+      setBarcodeLookup("");
       setBarcodeLookupOpen(false);
+      scannerBufferRef.current = "";
+      scannerLastKeyAtRef.current = 0;
+      scannerStartAtRef.current = 0;
 
       if (existingProduct) {
+        setPendingBarcode("");
         setSelectedProduct(existingProduct);
         setActiveSheet("manage");
-
         toast.success(`Found ${existingProduct.name}.`);
         return;
       }
 
+      setPendingBarcode(barcode);
       setSelectedProduct(null);
       setActiveSheet("create");
-
       toast.info(
-        "Product not found. Enter its details to create it.",
+        "Product not found. Complete the product details to register this barcode.",
       );
     },
     [products],
   );
-
-  /* ==========================================================
-     EXCLUSIVE ACTION HANDLER
-     ========================================================== */
 
   // React state alone does not synchronously prevent double-clicks.
   const actionInProgressRef = useRef(false);
@@ -440,6 +491,7 @@ export default function InventoryPage({
     async (_productId: string) => {
       // Do not display success or mutate local state until a
       // real delete command exists in the application service.
+      await app.product.delete(_productId, mode)
       toast.error(
         "Product deletion is not connected to the application service.",
       );
@@ -563,6 +615,497 @@ export default function InventoryPage({
       cartStore,
     ],
   );
+
+
+  //BarCode Generator 
+  const handleGenerateBarcode = useCallback(
+  async (product: LiveProduct) => {
+    if (product.barcode?.trim()) {
+      toast.info("This product already has a barcode.");
+      return;
+    }
+
+    try {
+      await runExclusiveAction(async () => {
+        let assignedBarcode: string | null = null;
+
+        // Retry only a confirmed uniqueness conflict. All other
+        // application/domain errors must be surfaced immediately.
+        for (let attempt = 0; attempt < 5; attempt += 1) {
+          const candidate = generateInternalBarcode();
+
+          try {
+            await app.product.assignBarcode({
+              productId: product.id,
+              barcode: candidate,
+              barcodeFormat: "CODE128",
+              barcodeSource: "INTERNAL",
+              mode,
+            });
+            assignedBarcode = candidate;
+            break;
+          } catch (error) {
+            const isUniqueConflict =
+              error instanceof Error &&
+              error.message.includes("BARCODE_UNIQUE_CONFLICT");
+
+            if (!isUniqueConflict || attempt === 4) {
+              throw error;
+            }
+          }
+        }
+
+        if (!assignedBarcode) {
+          throw new Error("Unable to allocate a unique product barcode.");
+        }
+
+        toast.success(`Barcode assigned to ${product.name}.`);
+      });
+    } catch (error) {
+      toast.error(
+        getErrorMessage(
+          error,
+          "Unable to assign barcode.",
+        ),
+      );
+    }
+  },
+  [
+    app.product,
+    mode,
+    runExclusiveAction,
+  ],
+);
+  const handleScannedBarcode = useCallback(
+    (rawValue: string) => {
+      const value = rawValue.trim();
+      if (!value || !branchId) return;
+
+      if (context === "sell") {
+        const product = products.find(
+          (item) => (item.barcode ?? "").trim().toLowerCase() === value.toLowerCase(),
+        );
+        if (!product) {
+          toast.error(`No product found for barcode ${value}.`);
+          return;
+        }
+        if (handleAddToCart(product.id, 1, false)) {
+          toast.success(`${product.name} added to the sale.`);
+        }
+        return;
+      }
+
+      handleBarcodeLookup(value);
+    },
+    [branchId, context, products, handleAddToCart, handleBarcodeLookup],
+  );
+
+  useEffect(() => {
+    if (!branchId || productsLoading) return;
+
+    const resetBuffer = () => {
+      scannerBufferRef.current = "";
+      scannerLastKeyAtRef.current = 0;
+      scannerStartAtRef.current = 0;
+    };
+
+    const clearAccidentalInput = (target: EventTarget | null) => {
+      if (!(target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement)) return;
+      if (target.readOnly || target.disabled) return;
+      const prototype = target instanceof HTMLTextAreaElement
+        ? HTMLTextAreaElement.prototype
+        : HTMLInputElement.prototype;
+      const setter = Object.getOwnPropertyDescriptor(prototype, "value")?.set;
+      setter?.call(target, "");
+      target.dispatchEvent(new Event("input", { bubbles: true }));
+    };
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey || event.altKey || event.metaKey) return;
+      const now = event.timeStamp || performance.now();
+      const gap = now - scannerLastKeyAtRef.current;
+      if (scannerLastKeyAtRef.current && gap > 90) resetBuffer();
+
+      if (event.key === "Enter") {
+        const value = scannerBufferRef.current.trim();
+        const duration = scannerLastKeyAtRef.current - scannerStartAtRef.current;
+        const averageGap = value.length > 1 ? duration / (value.length - 1) : Infinity;
+        const scannerBurst = value.length >= 4 && averageGap <= 55;
+        resetBuffer();
+        if (!scannerBurst) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+
+        const previous = lastHandledScanRef.current;
+        if (previous.value === value && now - previous.at < 350) return;
+        lastHandledScanRef.current = { value, at: now };
+        clearAccidentalInput(event.target);
+        handleScannedBarcode(value);
+        return;
+      }
+
+      if (event.key === "Escape") {
+        resetBuffer();
+        return;
+      }
+      if (event.key.length !== 1) return;
+
+      if (!scannerBufferRef.current) scannerStartAtRef.current = now;
+      scannerBufferRef.current += event.key;
+      scannerLastKeyAtRef.current = now;
+
+      // Stop the rest of the barcode from entering whichever input has focus.
+      if (scannerBufferRef.current.length >= 2 && gap <= 55) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown, true);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown, true);
+      resetBuffer();
+    };
+  }, [branchId, productsLoading, handleScannedBarcode]);
+
+  
+const printProductLabels = useCallback(async (items: LiveProduct[]) => {
+  const printable = items.filter((item) => item.barcode?.trim());
+
+  if (!printable.length) {
+    toast.error("No products with saved barcodes are available to print.");
+    return;
+  }
+
+  // Open synchronously inside the click event.
+  const printWindow = window.open("", "_blank");
+
+  if (!printWindow) {
+    toast.error("Allow pop-ups to print labels.");
+    return;
+  }
+
+  setLabelPrintBusy(true);
+
+  try {
+    const labels = printable.map((product) => {
+      const barcode = product.barcode!.trim();
+      const image = renderBarcodeDataUrl(barcode);
+
+      return `
+        <article class="label-page">
+          <div class="label">
+
+            <div class="name">
+              ${escapeLabelText(product.name)}
+            </div>
+
+            ${
+              product.sku?.trim()
+                ? `<div class="sku">
+                    SKU: ${escapeLabelText(product.sku)}
+                  </div>`
+                : ""
+            }
+
+            <img
+              class="barcode"
+              src="${image}"
+              alt="Product barcode"
+            />
+
+            <div class="value">
+              ${escapeLabelText(barcode)}
+            </div>
+
+          </div>
+        </article>
+      `;
+    });
+
+    printWindow.document.open();
+
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="UTF-8" />
+
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1"
+          />
+
+          <title>BizTru Product Labels</title>
+
+          <style>
+
+            /* PHYSICAL PRINTER PAPER */
+            @page {
+              size: 58mm 40mm;
+              margin: 0;
+            }
+
+            * {
+              box-sizing: border-box;
+            }
+
+            html,
+            body {
+              width: 58mm;
+              margin: 0 !important;
+              padding: 0 !important;
+              background: #fff;
+              color: #000;
+              font-family: Arial, sans-serif;
+            }
+
+            body {
+              overflow: visible;
+            }
+
+            /* ONE PHYSICAL PAGE PER PRODUCT */
+            .label-page {
+              width: 58mm;
+              height: 40mm;
+
+              min-width: 58mm;
+              min-height: 40mm;
+
+              max-width: 58mm;
+              max-height: 40mm;
+
+              margin: 0;
+              padding: 0;
+
+              display: flex;
+              align-items: center;
+              justify-content: center;
+
+              overflow: hidden;
+
+              break-inside: avoid;
+              page-break-inside: avoid;
+            }
+
+            /* ACTUAL PRINTABLE LABEL CONTENT */
+            .label {
+              width: 50mm;
+              height: 30mm;
+
+              min-width: 50mm;
+              min-height: 30mm;
+
+              max-width: 50mm;
+              max-height: 30mm;
+
+              margin: 0;
+              padding: 1mm 1.5mm;
+
+              display: flex;
+              flex-direction: column;
+
+              align-items: center;
+              justify-content: center;
+
+              gap: 0.5mm;
+
+              overflow: hidden;
+
+              background: #fff;
+              color: #000;
+
+              text-align: center;
+
+              break-inside: avoid;
+              page-break-inside: avoid;
+            }
+
+            /* PRODUCT NAME */
+            .name {
+              width: 100%;
+              flex: 0 0 auto;
+
+              font-size: 8pt;
+              font-weight: 700;
+
+              line-height: 1.1;
+
+              text-align: center;
+
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+
+            /* SKU */
+            .sku {
+              width: 100%;
+              flex: 0 0 auto;
+
+              font-size: 6pt;
+              line-height: 1.1;
+
+              text-align: center;
+
+              white-space: nowrap;
+              overflow: hidden;
+            }
+
+            /* BARCODE */
+            .barcode {
+              display: block;
+
+              width: 38mm;
+              height: 18mm;
+
+              min-width: 38mm;
+              max-width: 38mm;
+
+              flex: 0 0 11mm;
+
+              object-fit: contain;
+              object-position: center;
+
+              margin: 0 auto;
+              padding: 0;
+            }
+
+            /* BARCODE NUMBER */
+            .value {
+              width: 100%;
+              flex: 0 0 auto;
+
+              font-family: monospace;
+
+              font-size: 5.5pt;
+              line-height: 1.1;
+
+              letter-spacing: 0.2px;
+
+              text-align: center;
+
+              white-space: nowrap;
+              overflow: hidden;
+            }
+
+            /* PRICE */
+            .price {
+              width: 100%;
+              flex: 0 0 auto;
+
+              font-size: 7pt;
+              font-weight: 700;
+
+              line-height: 1.1;
+
+              text-align: center;
+
+              white-space: nowrap;
+              overflow: hidden;
+            }
+
+            /* SCREEN PREVIEW */
+            @media screen {
+              html,
+              body {
+                width: 100%;
+                background: #ddd;
+              }
+
+              .label-page {
+                margin: 8px auto;
+                background: #fff;
+              }
+            }
+
+            /* PHYSICAL PRINT */
+            @media print {
+              html,
+              body {
+                width: 58mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: #fff !important;
+              }
+
+              .label-page {
+                margin: 0 !important;
+              }
+            }
+
+          </style>
+        </head>
+
+        <body>
+          ${labels.join("")}
+
+          <script>
+            window.onload = async () => {
+              try {
+                await Promise.all(
+                  Array.from(document.images).map((img) => {
+                    if (img.complete && img.naturalWidth > 0) {
+                      return Promise.resolve();
+                    }
+
+                    return img.decode().catch(() => {});
+                  })
+                );
+
+                await document.fonts.ready;
+
+                requestAnimationFrame(() => {
+                  requestAnimationFrame(() => {
+                    window.print();
+                  });
+                });
+
+              } catch (error) {
+                console.error("Label printing error:", error);
+                window.print();
+              }
+            };
+
+            window.onafterprint = () => {
+              window.close();
+            };
+          <\/script>
+        </body>
+      </html>
+    `);
+
+    printWindow.document.close();
+
+    toast.success(
+      `${printable.length} label(s) prepared. Select the Y50 printer and print at 100%.`
+    );
+
+  } catch (error) {
+    printWindow.close();
+
+    toast.error(
+      getErrorMessage(error, "Unable to prepare product labels.")
+    );
+  } finally {
+    setLabelPrintBusy(false);
+  }
+}, []);
+
+
+  const handlePrintLabel = useCallback(() => {
+    if (!selectedProduct) {
+      toast.error("Select a product first.");
+      return;
+    }
+    void printProductLabels([selectedProduct]);
+  }, [selectedProduct, printProductLabels]);
+
+  const handlePrintAllLabels = useCallback(() => {
+    void printProductLabels(products.filter((product) => product.barcode?.trim()));
+  }, [products, printProductLabels]);
 
   /* ==========================================================
      CHANGE / REMOVE CART LINE
@@ -943,12 +1486,14 @@ export default function InventoryPage({
 
       toast.success("Stock received.");
       setActiveSheet(null);
+      resetBarcodeSession();
     },
     [
       selectedProduct,
       requireBranchId,
       app.inventory,
       mode,
+      resetBarcodeSession,
     ],
   );
 
@@ -999,12 +1544,14 @@ export default function InventoryPage({
 
       toast.success("Inventory adjusted.");
       setActiveSheet(null);
+      resetBarcodeSession();
     },
     [
       selectedProduct,
       requireBranchId,
       app.inventory,
       mode,
+      resetBarcodeSession,
     ],
   );
 
@@ -1060,12 +1607,14 @@ export default function InventoryPage({
 
       toast.success("Stock transfer submitted.");
       setActiveSheet(null);
+      resetBarcodeSession();
     },
     [
       selectedProduct,
       requireBranchId,
       app.inventory,
       mode,
+      resetBarcodeSession,
     ],
   );
 
@@ -1128,6 +1677,7 @@ export default function InventoryPage({
 
             toast.success("Product updated.");
             setActiveSheet(null);
+            resetBarcodeSession();
             return;
           }
 
@@ -1175,6 +1725,7 @@ export default function InventoryPage({
 
           toast.success("Product created.");
           setActiveSheet(null);
+          resetBarcodeSession();
         });
       } catch (error) {
         console.error(
@@ -1198,6 +1749,7 @@ export default function InventoryPage({
       mode,
       requireBranchId,
       runExclusiveAction,
+      resetBarcodeSession,
     ],
   );
 
@@ -1541,7 +2093,7 @@ export default function InventoryPage({
 
               <button
                 type="button"
-                onClick={() => setBarcodeLookupOpen(true)}
+                onClick={() => { resetBarcodeSession(); setBarcodeLookupOpen(true); }}
                 aria-label="Scan or look up product barcode"
                 title="Scan or look up product"
                 className="
@@ -1553,6 +2105,17 @@ export default function InventoryPage({
                 "
               >
                 <ScanBarcode className="h-[21px] w-[21px]" />
+              </button>
+
+              <button
+                type="button"
+                onClick={handlePrintAllLabels}
+                disabled={labelPrintBusy || products.every((product) => !product.barcode?.trim())}
+                aria-label="Print all product labels"
+                title="Print all product labels"
+                className="flex h-[48px] w-[48px] items-center justify-center rounded-2xl border border-teal-300/20 bg-teal-400/[0.08] text-teal-200 transition hover:bg-teal-400/15 active:scale-95 disabled:opacity-40"
+              >
+                <Printer className="h-[19px] w-[19px]" />
               </button>
 
               <button
@@ -1580,6 +2143,17 @@ export default function InventoryPage({
               <GlassButton
                 type="button"
                 variant="secondary"
+                onClick={handlePrintAllLabels}
+                disabled={labelPrintBusy || products.every((product) => !product.barcode?.trim())}
+                className="h-10 px-4"
+                icon={<Printer className="h-4 w-4" />}
+              >
+                Print labels
+              </GlassButton>
+
+              <GlassButton
+                type="button"
+                variant="secondary"
                 onClick={handleOpenImport}
                 className="h-10 px-4"
                 icon={<Upload className="h-4 w-4" />}
@@ -1590,7 +2164,7 @@ export default function InventoryPage({
               <GlassButton
                 type="button"
                 variant="secondary"
-                onClick={() => setBarcodeLookupOpen(true)}
+                onClick={() => { resetBarcodeSession(); setBarcodeLookupOpen(true); }}
                 className="h-10 px-4"
                 icon={<ScanBarcode className="h-4 w-4" />}
               >
@@ -1674,21 +2248,25 @@ export default function InventoryPage({
           )}
 
           {context === "sell" && (
-            <BarcodeSellPanel
-              products={products}
-              disabled={
-                loader ||
-                productsLoading ||
-                !branchId
-              }
-              onConfirmAdd={(productId, quantity) =>
-                handleAddToCart(
-                  productId,
-                  quantity,
-                  false,
-                )
-              }
-            />
+            <div className="w-full">
+              <BarcodeSellPanel
+                products={products}
+                disabled={
+                  loader ||
+                  productsLoading ||
+                  !branchId
+                }
+                onConfirmAdd={(productId, quantity) => {
+                  const added = handleAddToCart(
+                    productId,
+                    quantity,
+                    false,
+                  );
+
+                  return added;
+                }}
+              />
+            </div>
           )}
 
           {/* Search */}
@@ -1750,7 +2328,7 @@ export default function InventoryPage({
 
       <GlassSheet
         open={barcodeLookupOpen}
-        onClose={() => setBarcodeLookupOpen(false)}
+        onClose={closeBarcodeLookup}
         title="Find a product"
         subtitle="Look up an existing item or register a new barcode."
         size="md"
@@ -1773,9 +2351,9 @@ export default function InventoryPage({
               </p>
 
               <p className="mt-1 text-xs leading-5 text-white/50">
-                Enter the barcode below. A matching product
-                opens its management screen; an unknown
-                barcode starts a new product.
+                Scan a barcode at any time, or enter it below.
+                A matching product opens its management screen;
+                an unknown barcode starts a new product.
               </p>
             </div>
           </div>
@@ -2204,6 +2782,7 @@ export default function InventoryPage({
         onClose={() => {
           if (!loader) {
             setActiveSheet(null);
+            resetBarcodeSession();
           }
         }}
         onSubmit={handleSubmit}
@@ -2215,7 +2794,7 @@ export default function InventoryPage({
 
       <ProductDetailsSheet
         open={activeSheet === "manage"}
-        onclose={() => setActiveSheet(null)}
+        onClose={closeActiveSheet}
         product={selectedProduct}
         onEditDetails={() => {
           if (!selectedProduct) return;
@@ -2233,6 +2812,9 @@ export default function InventoryPage({
         onViewHistory={() =>
           setActiveSheet("history")
         }
+
+        onPrintLabel={handlePrintLabel}
+        onGenerateBarcode={() => selectedProduct && void handleGenerateBarcode(selectedProduct)}
       />
 
       {/* ======================================================
@@ -2242,7 +2824,7 @@ export default function InventoryPage({
       <ReceiveStockSheet
         open={activeSheet === "receive"}
         product={selectedProduct}
-        onClose={() => setActiveSheet(null)}
+        onClose={closeActiveSheet}
         onSubmit={handleReceiveStock}
       />
 
@@ -2253,7 +2835,7 @@ export default function InventoryPage({
       <AdjustStockSheet
         open={activeSheet === "adjust"}
         product={selectedProduct}
-        onClose={() => setActiveSheet(null)}
+        onClose={closeActiveSheet}
         onSubmit={handleAdjustStock}
       />
 
@@ -2265,7 +2847,7 @@ export default function InventoryPage({
         open={activeSheet === "transfer"}
         product={selectedProduct}
         branches={branches}
-        onClose={() => setActiveSheet(null)}
+        onClose={closeActiveSheet}
         onSubmit={handleTransferStock}
       />
 
@@ -2277,7 +2859,7 @@ export default function InventoryPage({
         open={activeSheet === "history"}
         product={selectedProduct}
         history={history}
-        onClose={() => setActiveSheet(null)}
+        onClose={closeActiveSheet}
       />
     </div>
   );

@@ -229,6 +229,15 @@ export class ExpenseApi {
     return app.storage.repositories.expenses.findById(expenseId);
   }
 
+  async getExpenseByBranch(branchId: string): Promise<Expense[] | null> {
+    const app = await this.manager.current();
+     if(!app){
+            throw new Error("Business Does not exist")
+        }
+    return app.storage.repositories.expenses.findByBranch(branchId);
+  }
+
+
   async listExpenses(filters: ExpenseFilters): Promise<Expense[]> {
     const app = await this.manager.current();
      if(!app){

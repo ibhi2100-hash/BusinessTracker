@@ -1,4 +1,5 @@
 import type{ Mode } from "@business/shared-types";
+import type { BarcodeFormat } from "../../../../../components/inventory/barcodes/barcodeTypes";
 
 export interface ProductRequest {
     id: string;
@@ -26,4 +27,17 @@ export interface ProductPayload {
     barcode: string | null;
     reorderLevel: number  | null;
 
+}
+
+export interface ProductDeletePayload {
+    productId: string,
+    createdAt: number
+}
+
+export interface ProductBarcodeAssign {
+    barcode: string;
+    barcodeFormat: BarcodeFormat
+    barcodeSource: string;
+    mode: Mode;
+    productId: string;
 }

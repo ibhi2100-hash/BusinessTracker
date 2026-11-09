@@ -1113,12 +1113,12 @@ export default function StockAnalysisPage({
       ">
         <div className="
           mx-auto max-w-[1800px]
-          space-y-4 px-4 py-5
-          sm:px-6 sm:py-6
+          space-y-2 px-2py-3
+          sm:px-6 sm:py-4
         ">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <div className="
-              flex h-11 w-11 shrink-0 items-center justify-center
+              flex h-8 w-11 shrink-0 items-center justify-center
               rounded-[16px] border border-teal-300/15
               bg-gradient-to-br from-teal-400/20 to-teal-600/5
             ">
@@ -1176,7 +1176,7 @@ export default function StockAnalysisPage({
           <div className="
             grid grid-cols-1 gap-3
             sm:grid-cols-2
-            xl:grid-cols-4
+            xl:grid-cols-3
           ">
             <MetricCard
               title="Capital invested"
