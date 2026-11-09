@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
@@ -76,10 +76,11 @@ export default defineConfig({
                  * available before the application can initialize
                  * the local database.
                  */
-                globPatterns: [
-                    "**/*.{js,css,html,ico,png,svg,woff,woff2,wasm}",
-                ],
+                 globPatterns: [
+                    "**/*.{js,mjs,css,html,ico,png,svg,woff,woff2,wasm,data,json}",
+                 ],
 
+                 maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
                 /*
                  * SPA fallback.
                  *
