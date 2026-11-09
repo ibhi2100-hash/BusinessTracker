@@ -80,7 +80,7 @@ export default defineConfig({
                     "**/*.{js,mjs,css,html,ico,png,svg,woff,woff2,wasm,data,json}",
                  ],
 
-                 maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
+                 maximumFileSizeToCacheInBytes: 500 * 1024 * 1024,
                 /*
                  * SPA fallback.
                  *
