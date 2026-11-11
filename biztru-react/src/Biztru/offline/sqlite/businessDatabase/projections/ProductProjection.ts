@@ -36,7 +36,7 @@ export class ProductConsumer
         }
 
          case InventoryEventType.PRODUCT_UPDATED: {
-          const previousProduct = await this.repository.findById(event.payload.id)
+          const previousProduct = await this.repository.findById(event.aggregateId)
           if(!previousProduct){
             throw new Error("Please this product does not exist in local database")
           }
@@ -49,7 +49,7 @@ export class ProductConsumer
         }
 
         case InventoryEventType.PRODUCT_BARCODE_ASSIGN: {
-          const previousProduct = await this.repository.findById(event.payload.productId)
+          const previousProduct = await this.repository.findById(event.aggregateId)
           if(!previousProduct){
             throw new Error("Please this product does not exist in local database")
           }

@@ -844,7 +844,7 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
 
             /* PHYSICAL PRINTER PAPER */
             @page {
-              size: 58mm 40mm;
+              size: 58mm 30mm;
               margin: 0;
             }
 
@@ -869,13 +869,13 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
             /* ONE PHYSICAL PAGE PER PRODUCT */
             .label-page {
               width: 58mm;
-              height: 40mm;
+              height: 30mm;
 
               min-width: 58mm;
-              min-height: 40mm;
+              min-height: 30mm;
 
               max-width: 58mm;
-              max-height: 40mm;
+              max-height: 30mm;
 
               margin: 0;
               padding: 0;
@@ -893,13 +893,13 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
             /* ACTUAL PRINTABLE LABEL CONTENT */
             .label {
               width: 50mm;
-              height: 30mm;
+              height: 25mm;
 
               min-width: 50mm;
-              min-height: 30mm;
+              min-height: 25mm;
 
               max-width: 50mm;
-              max-height: 30mm;
+              max-height: 25mm;
 
               margin: 0;
               padding: 1mm 1.5mm;
@@ -959,7 +959,7 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
               display: block;
 
               width: 38mm;
-              height: 18mm;
+              height: 16mm;
 
               min-width: 38mm;
               max-width: 38mm;
