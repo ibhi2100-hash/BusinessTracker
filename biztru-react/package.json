@@ -27,6 +27,8 @@
     "clsx": "^2.1.1",
     "dexie": "^4.4.3",
     "dexie-react-hooks": "^4.4.0",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.9",
     "lightningcss": "^1.32.0",
     "localforage": "^1.10.0",
     "lucide-react": "^0.563.0",

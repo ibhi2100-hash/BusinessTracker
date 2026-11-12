@@ -46,6 +46,7 @@ import {
 } from "./components/navigation/RoleHomeRedirect";
 import TeamPage from "./pages/team/TeamPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import BusinessReportPage from "./components/reports/BusinessReportPage";
 
 /* ------------------------------------------------------------------ */
 /* Router                                                             */
@@ -282,6 +283,11 @@ export function AppRouter() {
                   <YearlyReportsPage />
                 }
               />
+
+              <Route
+                  path="/reports/business"
+                  element={<BusinessReportPage />}
+                />
 
               <Route
                 path="/sync-management"

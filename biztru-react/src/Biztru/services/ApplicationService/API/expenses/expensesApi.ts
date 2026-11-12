@@ -243,6 +243,9 @@ export class ExpenseApi {
      if(!app){
             throw new Error("Business Does not exist")
         }
+
+      const allExpense =await app.storage.repositories.expenses.getAllExpenses();
+      console.log("All Expenses", allExpense);
     return app.storage.repositories.expenses.list({
       businessId: filters.businessId,
       branchId: filters.branchId,

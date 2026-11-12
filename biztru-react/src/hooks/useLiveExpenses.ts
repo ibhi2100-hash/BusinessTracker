@@ -1,34 +1,52 @@
-// hooks/useLiveEmployees.ts
 
 import { useCallback } from "react";
 
 import { useApplication } from "../Biztru/services/ApplicationService/ApplicationContext";
-
 import { useLiveQuery } from "./useLiveQuery";
 
-import type { Employee, Expense } from "@business/shared-types";
+import type { Expense } from "@business/shared-types";
 
 export function useLiveExpenses(
+  businessId: string | null,
   branchId: string | null
 ) {
   const app = useApplication();
 
   const query = useCallback(
-    async (): Promise<Expense[] | null> => {
-      if (!branchId) {
+    async (): Promise<Expense[]> => {
+      if (!businessId || !branchId) {
         return [];
       }
 
-      // Replace this with the actual employee read contract.
-      return app.expense.getExpenseByBranch(
-        branchId
-      );
+      console.log("[LiveExpenses] Loading expenses", {
+        businessId,
+        branchId,
+      });
+
+      const expenses = await app.expense.listExpenses({
+        businessId,
+        branchId,
+        status: "all",
+        limit: 10,
+        offset: 0,
+      });
+
+      console.log("[LiveExpenses] Loaded expenses", {
+        count: expenses.length,
+        expenses,
+      });
+
+      return expenses;
     },
-    [app, branchId]
+    [app, businessId, branchId]
   );
 
   return useLiveQuery<Expense[]>(
-    ["employees", branchId ?? "no-branch"],
+    [
+      "expenses",
+      businessId ?? "no-business",
+      branchId ?? "no-branch",
+    ],
     query,
     []
   );

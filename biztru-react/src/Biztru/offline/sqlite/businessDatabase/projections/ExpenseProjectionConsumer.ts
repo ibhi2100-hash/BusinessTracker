@@ -33,7 +33,7 @@ export class ExpenseConsumer
         case expenseEventType.EXPENSE_RECORDED: {
           const expense =
             new ExpenseReducer().reduce(null, event);
-
+          console.log("Expense Recorded", expense);
           await this.repository.upsert(expense);
 
           changeNotifier.notify(["expenses"]);

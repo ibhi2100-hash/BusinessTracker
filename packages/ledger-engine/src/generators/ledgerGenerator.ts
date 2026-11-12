@@ -108,17 +108,69 @@ export function generateLedgerEntries(event: DomainEvent<any>): LedgerEntry[] {
     /**
      * INVENTORY (Opening or Purchase)
      */
-    case InventoryEventType.INVENTORY_ADJUSTED: {
-      const value = payload.costPrice * payload.quantity;
-      
-        entries = [
-          buildEntry(event, 0, Account.INVENTORY, "DEBIT", value),
-          buildEntry(event, 1, Account.OWNER_CAPITAL, "CREDIT", value),
-        ];
-      
+   
+  case InventoryEventType.INVENTORY_ADJUSTED: {
+    const value = payload.costPrice * payload.quantity;
 
-      break;
+    if (!Number.isFinite(value) || value <= 0) {
+      throw new Error(
+        `Invalid inventory adjustment value: ${value}`
+      );
     }
+
+    if (payload.direction === "increase") {
+      // Inventory discovered or added through stock correction.
+      // Dr Inventory
+      // Cr Inventory Adjustment Gain
+
+      entries = [
+        buildEntry(
+          event,
+          0,
+          Account.INVENTORY,
+          "DEBIT",
+          value
+        ),
+        buildEntry(
+          event,
+          1,
+          Account.OWNER_CAPITAL,
+          "CREDIT",
+          value
+        ),
+      ];
+
+    } else if (payload.direction === "decrease") {
+      // Inventory missing, damaged or written off.
+      // Dr Inventory Adjustment Expense
+      // Cr Inventory
+
+      entries = [
+        buildEntry(
+          event,
+          0,
+          Account.EXPENSE,
+          "DEBIT",
+          value
+        ),
+        buildEntry(
+          event,
+          1,
+          Account.INVENTORY,
+          "CREDIT",
+          value
+        ),
+      ];
+
+    } else {
+      throw new Error(
+        `Invalid inventory adjustment direction: ${payload.direction}`
+      );
+    }
+
+    break;
+  }
+
     case InventoryEventType.PRODUCT_CREATED:
       return []; // ✅ NO financial impact
     /**
