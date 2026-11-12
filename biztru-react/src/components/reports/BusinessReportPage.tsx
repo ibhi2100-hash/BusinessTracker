@@ -36,7 +36,7 @@ import {
   downloadBusinessReport,
   printBusinessReport,
   type BusinessReportData,
-} from "./BusinessReportPdf";
+} from "./businessReportPdf";
 
 import { cn } from "../../lib/utils";
 
