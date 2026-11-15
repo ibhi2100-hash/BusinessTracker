@@ -36,3 +36,10 @@ FROM inventories
 WHERE productId = ?
 LIMIT 1
 `;
+
+export const FIND_BY_BRANCH_ID = `
+  SELECT *
+  FROM inventories
+  WHERE branchId = ?
+    AND businessId = ?
+`;

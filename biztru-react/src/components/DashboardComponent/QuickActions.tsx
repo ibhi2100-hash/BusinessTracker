@@ -16,8 +16,7 @@ import {
 } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../../Biztru/store/useAuthStore"; 
-
+import { useAuthStore } from "../../Biztru/store/useAuthStore";
 
 type Action = {
   label: string;
@@ -28,7 +27,7 @@ type Action = {
 };
 
 export const QuickActions = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const role = useAuthStore((s) => s.user?.role);
 
@@ -36,14 +35,8 @@ export const QuickActions = () => {
    * ------------------------------------------------------------
    * FREQUENT BRANCH LEVERS
    * ------------------------------------------------------------
-   *
-   * These are deliberately separated from the other actions.
-   *
-   * They represent actions a branch manager may need repeatedly
-   * during ordinary branch operation.
-   *
-   * Keep this section small.
    */
+
   const frequentActions: Action[] = [
     {
       label: "Record Expense",
@@ -52,7 +45,6 @@ export const QuickActions = () => {
       path: "/expenses/new",
       priority: "frequent",
     },
-
     {
       label: "Add Capital / Gain",
       description: "Add extra branch capital",
@@ -64,12 +56,10 @@ export const QuickActions = () => {
 
   /*
    * ------------------------------------------------------------
-   * BRANCH OPERATING LEVERS
+   * BRANCH OPERATING ACTIONS
    * ------------------------------------------------------------
-   *
-   * These are legitimate business operations but normally occur
-   * less frequently than expenses and capital adjustments.
    */
+
   const operatingActions: Action[] = [
     {
       label: "Add Asset",
@@ -78,7 +68,6 @@ export const QuickActions = () => {
       path: "/assets/new",
       priority: "normal",
     },
-
     {
       label: "Dispose Asset",
       description: "Remove or sell an asset",
@@ -86,7 +75,6 @@ export const QuickActions = () => {
       path: "/assets/disposed",
       priority: "normal",
     },
-
     {
       label: "Add Liability",
       description: "Record a new obligation",
@@ -94,7 +82,6 @@ export const QuickActions = () => {
       path: "/liabilities/new",
       priority: "normal",
     },
-
     {
       label: "Repayment",
       description: "Repay a liability",
@@ -102,7 +89,6 @@ export const QuickActions = () => {
       path: "/liabilities/repayment",
       priority: "normal",
     },
-
     {
       label: "Cash Adjustment",
       description: "Correct an approved cash position",
@@ -110,12 +96,39 @@ export const QuickActions = () => {
       path: "/cash/adjustment",
       priority: "normal",
     },
-
     {
       label: "Stock Adjustment",
       description: "Correct an approved inventory position",
       icon: Package,
       path: "/inventory/adjustment",
+      priority: "normal",
+    },
+    {
+      label: "Withdraw Capital",
+      description: "Remove owner/business capital",
+      icon: ArrowUpCircle,
+      path: "/capital/withdraw",
+      priority: "normal",
+    },
+    {
+      label: "Transfer",
+      description: "Move capital between branches",
+      icon: Repeat,
+      path: "/capital/transfer",
+      priority: "normal",
+    },
+    {
+      label: "Branch Settings",
+      description: "Configure branch operations",
+      icon: Building2,
+      path:"/owner-dashboard" ,
+      priority: "normal",
+    },
+    {
+      label: "Controls & Audit",
+      description: "Review operational controls",
+      icon: ShieldCheck,
+      path: "/management/controls",
       priority: "normal",
     },
   ];
@@ -125,11 +138,10 @@ export const QuickActions = () => {
    * MANAGEMENT / ADMINISTRATION
    * ------------------------------------------------------------
    *
-   * These are deliberately secondary.
-   *
-   * A manager may need them, but they should not compete visually
-   * with the actions required to operate the branch every day.
+   * Billing is temporarily exposed here for first-branch testing.
+   * It can later be moved to the CEO/business-owner dashboard.
    */
+
   const managementActions: Action[] = [
     {
       label: "Employees",
@@ -138,69 +150,26 @@ export const QuickActions = () => {
       path: "/settings/team",
       priority: "admin",
     },
-
-    {
-      label: "Transfer",
-      description: "Move capital between branches",
-      icon: Repeat,
-      path: "/capital/transfer",
-      priority: "admin",
-    },
-
-    {
-      label: "Withdraw Capital",
-      description: "Remove owner/business capital",
-      icon: ArrowUpCircle,
-      path: "/capital/withdraw",
-      priority: "admin",
-    },
-
-    {
-      label: "Branch Settings",
-      description: "Configure branch operations",
-      icon: Building2,
-      path: "/management/branch",
-      priority: "admin",
-    },
-
-    {
-      label: "Controls & Audit",
-      description: "Review operational controls",
-      icon: ShieldCheck,
-      path: "/management/controls",
-      priority: "admin",
-    },
+   
   ];
 
   /*
    * ------------------------------------------------------------
-   * ROLE FILTERING
+   * ROLE VISIBILITY
    * ------------------------------------------------------------
    *
-   * The UI should never be the security boundary.
-   * Your backend/domain authorization must independently enforce
-   * these permissions.
-   *
-   * This only determines what the user sees.
+   * All listed actions are displayed.
+   * Actual authorization must still be enforced by routes
+   * and domain-level permission checks.
    */
 
-  const visibleManagementActions =
-    role === "ADMIN"
-      ? managementActions
-      : managementActions.filter(
-          (action) =>
-            ![
-              "Transfer",
-              "Withdraw Capital",
-              "Branch Settings",
-              "Controls & Audit",
-            ].includes(action.label)
-        );
+  const visibleManagementActions = managementActions;
 
   return (
     <section className="space-y-6">
+
       {/* ========================================================
-          FREQUENT LEVERS
+          FREQUENT BRANCH LEVERS
       ========================================================= */}
 
       <div>
@@ -234,7 +203,7 @@ export const QuickActions = () => {
       </div>
 
       {/* ========================================================
-          OTHER OPERATING LEVERS
+          OPERATING ACTIONS
       ========================================================= */}
 
       <div>
@@ -244,7 +213,7 @@ export const QuickActions = () => {
           </h3>
 
           <p className="mt-0.5 text-[11px] text-gray-500">
-            Less frequent branch operations
+            Branch financial, asset and operational controls
           </p>
         </div>
 
@@ -273,7 +242,7 @@ export const QuickActions = () => {
             </h3>
 
             <p className="mt-0.5 text-[11px] text-gray-500">
-              Administrative and control operations
+              Employee and business administration
             </p>
           </div>
 
@@ -290,6 +259,7 @@ export const QuickActions = () => {
           </div>
         </div>
       )}
+
     </section>
   );
 };
@@ -343,7 +313,6 @@ function FrequentActionTile({
         lg:min-h-43.75
       "
     >
-      {/* Frequency indicator */}
       <span
         className="
           absolute

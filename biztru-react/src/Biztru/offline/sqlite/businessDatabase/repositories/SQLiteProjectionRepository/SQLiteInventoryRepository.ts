@@ -117,6 +117,15 @@ export class SQLiteInventoryRepository
         return rows[0] ?? null;
     }
 
+    async findByBranchId(
+        branchId: string,
+        businessId: string
+    ): Promise<Inventory[]> {
+        return this.statements.findByBranchId.query<Inventory>([
+            branchId,
+            businessId,
+        ]);
+        }
 
     async findAll(): Promise<Inventory[]> {
 

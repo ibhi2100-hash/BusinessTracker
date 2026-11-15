@@ -24,6 +24,8 @@ interface ProductDetailsSheetProps {
 
     product: LiveProduct | null;
 
+    readOnly?: boolean;
+
     onEditDetails?: () => void;
     onReceiveStock?: () => void;
     onAdjustStock?: () => void;
@@ -56,6 +58,7 @@ export default function ProductDetailsSheet({
     open,
     onClose,
     product,
+    readOnly = false,
     onEditDetails,
     onReceiveStock,
     onAdjustStock,
@@ -81,11 +84,13 @@ export default function ProductDetailsSheet({
     const hasBarcode = barcode.length > 0;
 
     const hasManagementActions = Boolean(
-        onEditDetails ||
-        onReceiveStock ||
-        onAdjustStock ||
-        onTransferStock ||
-        onViewHistory
+        onViewHistory ||
+        (!readOnly && (
+            onEditDetails ||
+            onReceiveStock ||
+            onAdjustStock ||
+            onTransferStock
+        ))
     );
 
     return (
@@ -93,7 +98,7 @@ export default function ProductDetailsSheet({
             open={open}
             onClose={onClose}
             title={product.name}
-            subtitle="Product Management"
+            subtitle={readOnly ? "Product Overview" : "Product Management"}
             className="
                 w-full
                 sm:max-w-xl
@@ -169,7 +174,7 @@ export default function ProductDetailsSheet({
                                 Generate one before printing a product label.
                             </p>
 
-                            {onGenerateBarcode && (
+                            {!readOnly && onGenerateBarcode && (
                                 <GlassButton
                                     onClick={onGenerateBarcode}
                                     className="w-full justify-center"
@@ -191,7 +196,7 @@ export default function ProductDetailsSheet({
                         </h3>
 
                         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                            {onEditDetails && (
+                            {!readOnly && onEditDetails && (
                                 <GlassButton
                                     variant="secondary"
                                     onClick={onEditDetails}
@@ -202,7 +207,7 @@ export default function ProductDetailsSheet({
                                 </GlassButton>
                             )}
 
-                            {onReceiveStock && (
+                            {!readOnly && onReceiveStock && (
                                 <GlassButton
                                     onClick={onReceiveStock}
                                     className="justify-start"
@@ -212,7 +217,7 @@ export default function ProductDetailsSheet({
                                 </GlassButton>
                             )}
 
-                            {onAdjustStock && (
+                            {!readOnly && onAdjustStock && (
                                 <GlassButton
                                     variant="secondary"
                                     onClick={onAdjustStock}
@@ -223,7 +228,7 @@ export default function ProductDetailsSheet({
                                 </GlassButton>
                             )}
 
-                            {onTransferStock && (
+                            {!readOnly && onTransferStock && (
                                 <GlassButton
                                     variant="secondary"
                                     onClick={onTransferStock}

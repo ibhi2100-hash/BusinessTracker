@@ -8,6 +8,8 @@ export const inventoryKeys = {
 
     inventoryDelete: "inventory_delete",
 
-    inventoryUpdate: "inventory_update"
+    inventoryUpdate: "inventory_update",
+
+    findByBranchId: "find_by_branchId"
 
 }

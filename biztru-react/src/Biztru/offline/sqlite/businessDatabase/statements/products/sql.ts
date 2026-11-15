@@ -53,31 +53,27 @@ DELETE FROM products
 WHERE id = ?
 `;
 
-export const PRODUCTS = 
-`
-      SELECT
-        p.id,
-        p.name,
-        p.price,
-        p.costPrice,
-        p.category,
-        p.sku,
-        p.barcode,
-        p.imageUrl,
-        p.isActive,
-        p.branchId,
-        COALESCE(i.quantity, 0) AS quantity
-      FROM products p
-      LEFT JOIN inventories i
-        ON i.productId = p.id
-       AND i.branchId = ?
-      WHERE p.isDeleted = 0
-        AND p.isActive = 1
-        AND (p.branchId = ? OR p.branchId IS NULL)
-      ORDER BY p.name ASC
-    `
-
-
-
-
-
+export const PRODUCTS = `
+  SELECT
+    p.id,
+    p.name,
+    p.price,
+    p.costPrice,
+    p.category,
+    p.sku,
+    p.barcode,
+    p.imageUrl,
+    p.isActive,
+    p.branchId,
+    COALESCE(i.quantity, 0) AS quantity
+  FROM products p
+  LEFT JOIN inventories i
+    ON i.productId = p.id
+   AND i.branchId = ?
+   AND i.businessId = ?
+  WHERE p.businessId = ?
+    AND p.isDeleted = 0
+    AND p.isActive = 1
+    AND (p.branchId = ? OR p.branchId IS NULL)
+  ORDER BY p.name ASC
+`;

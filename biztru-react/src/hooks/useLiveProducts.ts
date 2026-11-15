@@ -5,7 +5,8 @@ import { useLiveQuery } from "./useLiveQuery";
 import type { LiveProduct } from "../Biztru/offline/sqlite/businessDatabase/repositories/SQLiteProjectionRepository/SQLiteProductRepository";
 
 export function useLiveProducts(
-  branchId: string | null | undefined
+  branchId: string | null | undefined,
+  businessId: string
 ) {
   const app = useApplication();
 
@@ -14,8 +15,8 @@ export function useLiveProducts(
       return [];
     }
 
-    return app.product.getProducts(branchId);
-  }, [app, branchId]);
+    return app.product.getProducts(branchId, businessId);
+  }, [app, branchId, businessId]);
 
   return useLiveQuery<LiveProduct[]>(
     ["products", "inventories", `branch:${branchId ?? "pending"}`],

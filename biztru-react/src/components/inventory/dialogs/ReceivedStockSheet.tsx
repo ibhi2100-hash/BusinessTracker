@@ -78,7 +78,7 @@ export default function ReceiveStockSheet({
     isValidStockQuantity(receivedQuantity) &&
     Number.isSafeInteger(projectedStock) &&
     Number.isFinite(totalPurchaseCost) &&
-    totalPurchaseCost >= 0 &&
+    totalPurchaseCost > 0 &&
     Number.isSafeInteger(purchaseCost);
 
   const handleClose = () => {

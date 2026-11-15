@@ -10,6 +10,7 @@ export * from "./entities/Activities.js";
 export * from "./entities/Conflicts.js";
 export * from "./entities/SyncState.js"
 export * from "./entities/Employee.js"
+export * from "./entities/Subscription.js"
 
 export * from "./events/DomainEvents.js";
 export * from "./events/OutboxEntry.js"

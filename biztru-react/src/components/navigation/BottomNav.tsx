@@ -54,6 +54,7 @@ import {
 import {
   useApplicationSession,
 } from "../../Biztru/context/AplicationSessionContext";
+import type { Role } from "@business/shared-types";
 
 /* ------------------------------------------------------------------ */
 /* Types                                                              */
@@ -63,7 +64,8 @@ type IconComponent = ComponentType<{
   className?: string;
 }>;
 
-type UserRole = "ADMIN" | "STAFF";
+
+type UserRole =  Role;
 
 type MoreItem = {
   label: string;
@@ -78,30 +80,10 @@ type MoreGroup = {
   items: MoreItem[];
 };
 
-type UpdateStatus =
-  | "idle"
-  | "updating"
-  | "success"
-  | "error";
+/* ================================================================
+   STAFF NAVIGATION
+================================================================ */
 
-type UpdateResult = {
-  fromVersion?: number;
-  toVersion?: number;
-  applied?: string[];
-};
-
-/* ------------------------------------------------------------------ */
-/* Navigation configuration                                            */
-/* ------------------------------------------------------------------ */
-
-/**
- * STAFF
- *
- * Staff members operate from the sales workspace.
- *
- * Their application navigation intentionally contains only
- * sales-related destinations.
- */
 const staffPrimaryNav = [
   {
     label: "Sell",
@@ -115,12 +97,32 @@ const staffPrimaryNav = [
   },
 ] as const;
 
-/**
- * ADMIN
- *
- * Administrators receive the complete Business OS navigation.
- */
-const adminPrimaryNav = [
+const staffMoreGroups: MoreGroup[] = [
+  {
+    title: "Sales",
+    items: [
+      {
+        label: "Quick Sell",
+        description: "Ring up a sale",
+        href: "/sales",
+        icon: Zap,
+      },
+      {
+        label: "Sales list",
+        description: "History and receipts",
+        href: "/sales/list",
+        icon: Receipt,
+      },
+    ],
+  },
+];
+
+/* ================================================================
+   MANAGER NAVIGATION
+   This is your previous ADMIN navigation.
+================================================================ */
+
+const managerPrimaryNav = [
   {
     label: "Home",
     icon: Home,
@@ -143,11 +145,7 @@ const adminPrimaryNav = [
   },
 ] as const;
 
-/* ------------------------------------------------------------------ */
-/* ADMIN: More navigation                                              */
-/* ------------------------------------------------------------------ */
-
-const adminMoreGroups: MoreGroup[] = [
+const managerMoreGroups: MoreGroup[] = [
   {
     title: "Sales",
     items: [
@@ -159,43 +157,41 @@ const adminMoreGroups: MoreGroup[] = [
       },
       {
         label: "Sales list",
-        description: "History & receipts",
+        description: "History and receipts",
         href: "/sales/list",
         icon: Receipt,
       },
       {
         label: "Sales analysis",
-        description: "Revenue & margins",
+        description: "Revenue and margins",
         href: "/sales/analysis",
         icon: TrendingUp,
       },
     ],
   },
-
   {
     title: "Finance",
     items: [
       {
         label: "Record expense",
-        description: "Cash leaving the business",
+        description: "Cash leaving the branch",
         href: "/expenses",
         icon: ArrowDownCircle,
       },
       {
-        label: "Cash & bank",
-        description: "Money on hand",
+        label: "Cash and bank",
+        description: "Branch money on hand",
         href: "/finance/cash",
         icon: Wallet,
       },
     ],
   },
-
   {
     title: "Reports",
     items: [
       {
         label: "Dashboard",
-        description: "Balances & P&L",
+        description: "Branch balances and P&L",
         href: "/reports",
         icon: LayoutGrid,
       },
@@ -213,13 +209,12 @@ const adminMoreGroups: MoreGroup[] = [
       },
     ],
   },
-
   {
     title: "Operations",
     items: [
       {
         label: "Inventory",
-        description: "Stock & products",
+        description: "Stock and products",
         href: "/inventory",
         icon: Package,
       },
@@ -231,68 +226,155 @@ const adminMoreGroups: MoreGroup[] = [
       },
       {
         label: "Sync Management",
-        description: "Sync device & server",
+        description: "Branch synchronization",
         href: "/sync-management",
         icon: RefreshCw,
       },
     ],
   },
-
   {
-    title: "Business",
+    title: "Management",
+    items: [
+      {
+        label: "Team",
+        description: "Branch personnel",
+        href: "/settings/team",
+        icon: Users,
+      },
+    ],
+  },
+];
+
+/* ================================================================
+   CEO / ADMIN NAVIGATION
+   Business-wide management and branch supervision.
+================================================================ */
+
+const ownerPrimaryNav = [
+  {
+    label: "Overview",
+    icon: Home,
+    href: "/owner-dashboard",
+  },
+  {
+    label: "Branches",
+    icon: Building2,
+    href: "/settings/branches",
+  },
+  {
+    label: "Reports",
+    icon: BarChart2,
+    href: "/owner-dashboard/reports",
+  },
+  {
+    label: "Finance",
+    icon: Wallet,
+    href: "/owner-dashboard/finance",
+  },
+] as const;
+
+const ownerMoreGroups: MoreGroup[] = [
+  {
+    title: "Business Intelligence",
+    items: [
+      {
+        label: "Business overview",
+        description: "Consolidated business performance",
+        href: "/owner-dashboard",
+        icon: LayoutGrid,
+      },
+      {
+        label: "Branch performance",
+        description: "Compare all branches",
+        href: "/owner-dashboard/branches",
+        icon: Building2,
+      },
+      {
+        label: "Financial reports",
+        description: "Business-wide financial position",
+        href: "/owner-dashboard/reports",
+        icon: BarChart2,
+      },
+      {
+        label: "Period comparison",
+        description: "Compare business performance",
+        href: "/owner-dashboard/reports/comparison",
+        icon: GitCompare,
+      },
+    ],
+  },
+  {
+    title: "Branch Supervision",
     items: [
       {
         label: "Branches",
-        description: "Locations",
+        description: "Inspect and supervise branches",
         href: "/settings/branches",
         icon: Building2,
       },
       {
-        label: "Team",
-        description: "Users & roles",
+        label: "Branch employees",
+        description: "Employees across branches",
+        href: "/owner-dashboard/employees",
+        icon: Users,
+      },
+      {
+        label: "Business alerts",
+        description: "Review business-wide alerts",
+        href: "/owner-dashboard/alerts",
+        icon: ShieldCheck,
+      },
+    ],
+  },
+  {
+    title: "Finance",
+    items: [
+      {
+        label: "Cash and bank",
+        description: "Consolidated cash position",
+        href: "/owner-dashboard/finance",
+        icon: Wallet,
+      },
+      {
+        label: "Liabilities",
+        description: "Business obligations",
+        href: "/owner-dashboard/liabilities",
+        icon: CreditCard,
+      },
+      {
+        label: "Invoices",
+        description: "Business documents",
+        href: "/invoices",
+        icon: FileText,
+      },
+    ],
+  },
+  {
+    title: "Business Administration",
+    items: [
+      {
+        label: "Team and permissions",
+        description: "Manage users and roles",
         href: "/settings/team",
         icon: Users,
       },
       {
-        label: "Invoices",
-        description: "Documents",
-        href: "/invoices",
-        icon: FileText,
-      },
-      {
-        label: "Settings",
+        label: "Business settings",
         description: "Business configuration",
         href: "/settings",
         icon: Settings,
         action: "settings",
       },
-    ],
-  },
-];
-
-/* ------------------------------------------------------------------ */
-/* STAFF: More navigation                                              */
-/* ------------------------------------------------------------------ */
-
-const staffMoreGroups: MoreGroup[] = [
-  {
-    title: "Sales",
-    items: [
       {
-        label: "Quick Sell",
-        description: "Ring up a sale",
-        href: "/sales",
-        icon: Zap,
-      },
-      {
-        label: "Sales list",
-        description: "History & receipts",
-        href: "/sales/list",
-        icon: Receipt,
+        label: "Sync Management",
+        description: "Monitor branch synchronization",
+        href: "/sync-management",
+        icon: RefreshCw,
       },
     ],
   },
 ];
+
 
 /* ------------------------------------------------------------------ */
 /* Helpers                                                            */
@@ -451,33 +533,41 @@ export default function AppNav() {
   /* Role                                                             */
   /* ---------------------------------------------------------------- */
 
-  const role: UserRole | undefined =
-    session.user?.role === "ADMIN" || session.user?.role === "STAFF"
-      ? session.user?.role
-      : undefined;
+ 
+const rawRole = session.user?.role;
 
-  const isStaff = role === "STAFF";
-  const isAdmin = role === "ADMIN";
+const role: UserRole |  undefined  =
+  rawRole === "CEO" ||
+  rawRole === "ADMIN" ||
+  rawRole === "MANAGER" ||
+  rawRole === "STAFF" ||
+  rawRole === "SALES_REPS" ||
+  rawRole === "CLEANER"
+    ? rawRole
+    : undefined;
 
-  /* ---------------------------------------------------------------- */
-  /* Role-aware navigation                                            */
-  /* ---------------------------------------------------------------- */
+const isCEO = role === "CEO";
+const isAdmin = role === "ADMIN";
+const isOwner = isCEO || isAdmin;
 
-  const primaryNav = useMemo(
-    () =>
-      isStaff
-        ? staffPrimaryNav
-        : adminPrimaryNav,
-    [isStaff],
-  );
+const isManager = role === "MANAGER";
+const isStaff = role === "STAFF";
 
-  const moreGroups = useMemo(
-    () =>
-      isStaff
-        ? staffMoreGroups
-        : adminMoreGroups,
-    [isStaff],
-  );
+const primaryNav = useMemo(() => {
+  if (isOwner) return ownerPrimaryNav;
+  if (isManager) return managerPrimaryNav;
+  if (isStaff) return staffPrimaryNav;
+
+  return [];
+}, [isOwner, isManager, isStaff]);
+
+const moreGroups = useMemo(() => {
+  if (isOwner) return ownerMoreGroups;
+  if (isManager) return managerMoreGroups;
+  if (isStaff) return staffMoreGroups;
+
+  return [];
+}, [isOwner, isManager, isStaff]);
 
   /* ---------------------------------------------------------------- */
   /* Overlay state                                                    */
@@ -493,10 +583,10 @@ export default function AppNav() {
     useState(false);
 
   const [updateStatus, setUpdateStatus] =
-    useState<UpdateStatus>("idle");
+    useState("idle");
 
   const [updateResult, setUpdateResult] =
-    useState<UpdateResult | null>(null);
+    useState(null);
 
   const [updateError, setUpdateError] =
     useState<string | null>(null);
@@ -607,11 +697,11 @@ export default function AppNav() {
    * Connects to the application runtime update pipeline.
    */
   const runAppUpdate = useCallback(
-    async (): Promise<UpdateResult> => {
+    async () => {
       const system = (
         app as {
           system?: {
-            update?: () => Promise<UpdateResult>;
+            update?: () =>{}
           };
         }
       )?.system;
@@ -642,8 +732,6 @@ export default function AppNav() {
       try {
         const result =
           await runAppUpdate();
-
-        setUpdateResult(result);
         setUpdateStatus("success");
       } catch (error) {
         console.error(
@@ -1304,7 +1392,7 @@ export default function AppNav() {
                   description="Sales behavior and defaults"
                   onClick={() =>
                     navigateTo(
-                      "/settings/sales",
+                      "/sales",
                     )
                   }
                 />
@@ -1315,7 +1403,7 @@ export default function AppNav() {
                   description="Inventory rules and defaults"
                   onClick={() =>
                     navigateTo(
-                      "/settings/inventory",
+                      "/inventory",
                     )
                   }
                 />

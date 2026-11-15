@@ -136,14 +136,16 @@ export class SQLiteProductRepository
 
 
     async products(
-        branchId: string
+        branchId: string,
+        businessId: string
     ): Promise<LiveProduct[]> {
-
         return this.statements.products.query<LiveProduct>([
             branchId,
+            businessId,
+            businessId,
             branchId,
         ]);
-    }
+        }
 }
 
 

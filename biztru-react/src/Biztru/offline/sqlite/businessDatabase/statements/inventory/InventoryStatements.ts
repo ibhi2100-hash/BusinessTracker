@@ -37,4 +37,9 @@ export class InventoryStatements {
         );
     }
 
+    get findByBranchId() {
+        return this.manager.get(
+            inventoryKeys.findByBranchId
+        );
+     }
 }

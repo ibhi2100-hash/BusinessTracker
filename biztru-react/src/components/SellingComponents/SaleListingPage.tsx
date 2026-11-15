@@ -38,6 +38,7 @@ import type {
 
 import { useBusinessLiveQuery } from "../../hooks/useBusinessLiveQuery";
 import { useBranchLiveQuery } from "../../hooks/useBranches";
+import { useRouteAccess } from "../../hooks/useAuthGuard";
 
 type StatusFilter = "all" | "completed" | "voided" | "refunded";
 type DateRangeFilter = "all" | "today" | "7days" | "30days" | "yearly";
@@ -396,7 +397,10 @@ export default function SalesListPage() {
   const app = useApplication();
 
   const { businessId, branchId } = useBusinessContext();
+  const { readOnly, can, canMutate } = useRouteAccess();
 
+  const canViewSales = can("sales:read");
+  const canIssueRefund = canMutate("sales:refund")
   // -------------------------------------------------------
   // IMPORTANT: Live query hooks MUST be at component level.
   // Never call these inside load(), useEffect(), or callbacks.
@@ -939,10 +943,10 @@ export default function SalesListPage() {
   // -------------------------------------------------------
 
   const canRefund =
+    canIssueRefund &&
     selectedSale?.status === "completed" &&
     getSaleQuantity(selectedSale) > 0 &&
     getSaleTotal(selectedSale) > 0;
-
   const refundQuantity = Number(refundForm.quantity);
 
   const availableQuantity = selectedSale
@@ -986,10 +990,9 @@ export default function SalesListPage() {
   // -------------------------------------------------------
 
   const openRefundForm = useCallback(() => {
-    if (
-      !selectedSale ||
-      selectedSale.status !== "completed"
-    ) {
+    if (!canIssueRefund || !selectedSale) return;
+
+    if (selectedSale.status !== "completed") {
       return;
     }
 
@@ -1002,13 +1005,20 @@ export default function SalesListPage() {
     });
 
     setRefundOpen(true);
-  }, [selectedSale]);
-
-  // -------------------------------------------------------
+  }, [canIssueRefund, selectedSale]);
+    // -------------------------------------------------------
   // Submit refund
   // -------------------------------------------------------
 
   const submitRefund = useCallback(async () => {
+
+    if (!canIssueRefund) {
+    setRefundError(
+      "You do not have permission to process refunds."
+    );
+    return;
+  }
+
     if (!selectedSale || !businessId || isRefunding) {
       return;
     }
@@ -1121,6 +1131,7 @@ export default function SalesListPage() {
       setIsRefunding(false);
     }
   }, [
+    canIssueRefund,
     selectedSale,
     businessId,
     isRefunding,
@@ -1129,6 +1140,14 @@ export default function SalesListPage() {
     app,
     load,
   ]);
+
+  useEffect(() => {
+  if (!canIssueRefund && refundOpen) {
+    setRefundOpen(false);
+    setRefundError(null);
+    setRefundForm(EMPTY_REFUND_FORM);
+  }
+}, [canIssueRefund, refundOpen]);
 
   // -------------------------------------------------------
   // Copy sale ID

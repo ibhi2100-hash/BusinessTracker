@@ -1,7 +1,7 @@
 import { AggregateType } from "../../../../../offline/domain/aggregate";
 import type{ CommandIntent } from "../../../../BizTru_Karnel/CommandFactory/CommandIntent"; 
 import { BusinessManager } from "../../../../Composer/BusinessManager"; 
-import { InventoryEventType } from "@business/shared-types";
+import { InventoryEventType, type Inventory } from "@business/shared-types";
 
 import type{ AdjustInventoryPayload, AdjustInventoryRequest, InventoryPayload, InventoryRequest, ReceivedInventoryPayload, ReceiveInventoryRequest, TransferInventoryPayload, TransferInventoryRequest } from "./InventoryRequest";
 
@@ -98,5 +98,13 @@ export class InventoryApi {
             throw new Error("Business Does not exist")
         }
         await app.domain.kernel.execute(transferCommand)
+    }
+
+    async getInventoryByBranchId(branchId: string, businessId: string): Promise<Inventory[]> {
+        const app = await this.manager.current();
+        if (!app) {
+            throw new Error("Business Does not exist");
+        }
+        return await app.storage.repositories.inventory.findByBranchId(branchId, businessId)
     }
 }

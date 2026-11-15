@@ -149,7 +149,7 @@ export function generateLedgerEntries(event: DomainEvent<any>): LedgerEntry[] {
         buildEntry(
           event,
           0,
-          Account.EXPENSE,
+          Account.OWNER_CAPITAL,
           "DEBIT",
           value
         ),

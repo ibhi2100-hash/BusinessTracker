@@ -135,13 +135,13 @@ export class ProductApi {
     }
 
 
-    async getProducts(branchId: string): Promise<LiveProduct[]>{
+    async getProducts(branchId: string, businessId: string): Promise<LiveProduct[]>{
         const app = await this.manager.current();
 
          if(!app){
             throw new Error("Business Does not exist")
         }
-        return await app.storage.repositories.products.products(branchId)
+        return await app.storage.repositories.products.products(branchId, businessId)
     }
 
     async assignBarcode(request: ProductBarcodeAssign): Promise<void>{

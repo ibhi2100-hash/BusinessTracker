@@ -1,1 +1,1 @@
-export type Role = "ADMIN" | "STAFF";
+export type Role = "CEO" | "ADMIN" | "MANAGER" | "STAFF" | "SALES_REPS" | "CLEANER";

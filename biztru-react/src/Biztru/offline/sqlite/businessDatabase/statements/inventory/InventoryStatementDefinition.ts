@@ -22,6 +22,11 @@ export const InventoryStatementDefinition: StatementDefinition[] = [
     {
         key: inventoryKeys.findByProductId,
         sql: SQL.FIND_BY_PRODUCTID
-    }
+    },
+
+    {
+        key: inventoryKeys.findByBranchId,
+        sql: SQL.FIND_BY_BRANCH_ID,
+    },
 
 ];

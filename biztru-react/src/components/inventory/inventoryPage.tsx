@@ -75,6 +75,8 @@ import { GlassIcon } from "../ui/GlassIcon";
 import { cn } from "../../lib/utils";
 import StockAnalysisPage from "./StockAnalysisPage";
 import { generateInternalBarcode, generateBarcodeCanvas } from "./barcodes/barcodeGenerator";
+import { useRouteAccess } from "../../hooks/useAuthGuard";
+
 
 function renderBarcodeDataUrl(value: string): string {
   const canvas = document.createElement("canvas");
@@ -185,20 +187,26 @@ export default function InventoryPage({
   context,
   mode,
 }: InventoryPageProps) {
-  const app = useApplication();
-  const { branchId } = useBusinessContext();
+ const app = useApplication();
+const { branchId, businessId } = useBusinessContext();
+const { readOnly, canMutate } = useRouteAccess();
 
-  /*
-   * useLiveProducts is scoped to the active branch.
-   * All product metrics and filters below therefore operate
-   * on the currently selected branch's products.
-   */
-  const {
-    data,
-    loading: productsLoading,
-  } = useLiveProducts(branchId);
+const canManageInventory =
+  context === "admin" &&
+  !readOnly &&
+  canMutate("inventory:write");
 
-  const products = data ?? [];
+const canCreateSale =
+  context === "sell" &&
+  !readOnly &&
+  canMutate("sales:create");
+
+const {
+  data,
+  loading: productsLoading,
+} = useLiveProducts(branchId ?? "", businessId ?? "");
+
+const products = data ?? [];
 
   const branches = useBranchStore(
     (state) => state.branches,
@@ -470,6 +478,23 @@ export default function InventoryPage({
     showZeroStockOnly,
   ]);
 
+  const requireInventoryWrite = useCallback(() => {
+  if (!canManageInventory) {
+    toast.error("You do not have permission to modify inventory.");
+    return false;
+  }
+
+  return true;
+}, [canManageInventory]);
+
+const requireSalesWrite = useCallback(() => {
+  if (!canCreateSale) {
+    toast.error("You do not have permission to create sales.");
+    return false;
+  }
+
+  return true;
+}, [canCreateSale]);
   /* ==========================================================
      PRODUCT SHEET ACTIONS
      ========================================================== */
@@ -489,6 +514,7 @@ export default function InventoryPage({
 
   const handleDelete = useCallback(
     async (_productId: string) => {
+      if(!requireInventoryWrite()) return;
       // Do not display success or mutate local state until a
       // real delete command exists in the application service.
       await app.product.delete(_productId, mode)
@@ -510,6 +536,7 @@ export default function InventoryPage({
       openCart = true,
       negotiatedPrice?: number,
     ): boolean => {
+      if(!requireSalesWrite()) return false
       if (!isPositiveQuantity(quantity)) {
         toast.error("Enter a valid quantity.");
         return false;
@@ -1198,6 +1225,7 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
       quantity: number,
       negotiatedPrice?: number,
     ) => {
+      if(!requireSalesWrite()) return;
       if (!isPositiveQuantity(quantity)) {
         toast.error("Enter a valid sale quantity.");
         return;
@@ -1301,6 +1329,7 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
     },
     [
       products,
+      requireSalesWrite,
       cartItems,
       app.sales,
       mode,
@@ -1314,6 +1343,7 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
      ========================================================== */
 
   const handleCheckout = useCallback(async () => {
+    if(!requireSalesWrite()) return;
     if (cartItems.length === 0) {
       toast.error("Your cart is empty.");
       return;
@@ -1434,6 +1464,7 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
     }
   }, [
     cartItems,
+    requireSalesWrite,
     products,
     app.sales,
     cartStore,
@@ -1452,6 +1483,7 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
       costPrice: number,
       note?: string,
     ) => {
+      if(!requireInventoryWrite()) return;
       if (!selectedProduct) {
         throw new Error("Select a product first.");
       }
@@ -1490,6 +1522,7 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
     },
     [
       selectedProduct,
+      requireInventoryWrite,
       requireBranchId,
       app.inventory,
       mode,
@@ -1507,6 +1540,7 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
       quantity: number,
       reason: string,
     ) => {
+      if(!requireInventoryWrite()) return;
       if (!selectedProduct) {
         throw new Error("Select a product first.");
       }
@@ -1548,6 +1582,7 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
     },
     [
       selectedProduct,
+      requireInventoryWrite,
       requireBranchId,
       app.inventory,
       mode,
@@ -1565,6 +1600,7 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
       quantity: number,
       note?: string,
     ) => {
+      if(!requireInventoryWrite()) return;
       if (!selectedProduct) {
         throw new Error("Select a product first.");
       }
@@ -1611,6 +1647,7 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
     },
     [
       selectedProduct,
+      requireInventoryWrite,
       requireBranchId,
       app.inventory,
       mode,
@@ -1624,6 +1661,8 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
 
   const handleSubmit = useCallback(
     async (data: ProductFormData) => {
+      if(!requireInventoryWrite())return;
+
       const name = data.name.trim();
 
       if (!name) {
@@ -1747,6 +1786,7 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
       app.product,
       app.inventory,
       mode,
+      requireInventoryWrite,
       requireBranchId,
       runExclusiveAction,
       resetBarcodeSession,
@@ -1764,6 +1804,10 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
         update: ProductImportProgressUpdate,
       ) => void,
     ): Promise<ProductImportResult> => {
+      if (!requireInventoryWrite()) {
+      throw new Error("You do not have permission to import products.");
+    }
+
       const activeBranchId = requireBranchId();
 
       // Delegate all writes to the application-level service.
@@ -1781,6 +1825,7 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
       app,
       mode,
       requireBranchId,
+      requireInventoryWrite
     ],
   );
 
@@ -1795,6 +1840,10 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
   const handleCloseImport = useCallback(() => {
     setProductImportOpen(false);
   }, []);
+
+  if (!branchId || !businessId) {
+    return null;
+  }
 
   /* ==========================================================
      UI
@@ -1880,7 +1929,7 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
           </div>
 
           {/* Admin view switcher: inventory operations and stock intelligence. */}
-          {context === "admin" && (
+          {context === "admin" && canManageInventory && (
             <div
               role="group"
               aria-label="Inventory view"
@@ -2073,7 +2122,7 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
 
           {/* Mobile product actions */}
 
-          {context === "admin" && (
+          {context === "admin" && canManageInventory && (
             <div className="grid grid-cols-[minmax(0,1fr)_auto_auto] gap-2 sm:hidden">
               <button
                 type="button"
@@ -2138,7 +2187,7 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
 
           {/* Desktop product actions */}
 
-          {context === "admin" && (
+          {context === "admin" && canManageInventory && (
             <div className="hidden items-center gap-2 sm:flex">
               <GlassButton
                 type="button"
@@ -2796,23 +2845,28 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
         open={activeSheet === "manage"}
         onClose={closeActiveSheet}
         product={selectedProduct}
+        readOnly={!canManageInventory}
         onEditDetails={() => {
+          if (!requireInventoryWrite()) return;
           if (!selectedProduct) return;
+
           setActiveSheet("edit");
         }}
-        onReceiveStock={() =>
-          setActiveSheet("receive")
-        }
-        onAdjustStock={() =>
-          setActiveSheet("adjust")
-        }
-        onTransferStock={() =>
-          setActiveSheet("transfer")
-        }
-        onViewHistory={() =>
-          setActiveSheet("history")
-        }
 
+        onReceiveStock={() => {
+          if (!requireInventoryWrite()) return;
+          setActiveSheet("receive");
+        }}
+
+        onAdjustStock={() => {
+          if (!requireInventoryWrite()) return;
+          setActiveSheet("adjust");
+        }}
+
+        onTransferStock={() => {
+          if (!requireInventoryWrite()) return;
+          setActiveSheet("transfer");
+        }}
         onPrintLabel={handlePrintLabel}
         onGenerateBarcode={() => selectedProduct && void handleGenerateBarcode(selectedProduct)}
       />

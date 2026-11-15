@@ -9,10 +9,10 @@ import {
 
 import { MetricCard } from "../ui/MetricCard"; 
 import { useLiveDashboard } from "../../hooks/useLiveDashboard"; 
-import { useBusinessContext } from "../../Biztru/context/BusinessContext"; 
+import { useParams } from "next/navigation";
 
 export function FinancialCarousel() {
-   const { branchId} = useBusinessContext()
+   const { branchId} = useParams()
   const  { data } =  useLiveDashboard(branchId)
   const summary = data
 

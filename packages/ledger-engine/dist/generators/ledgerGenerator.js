@@ -104,7 +104,7 @@ export function generateLedgerEntries(event) {
                 // Dr Inventory Adjustment Expense
                 // Cr Inventory
                 entries = [
-                    buildEntry(event, 0, Account.EXPENSE, "DEBIT", value),
+                    buildEntry(event, 0, Account.OWNER_CAPITAL, "DEBIT", value),
                     buildEntry(event, 1, Account.INVENTORY, "CREDIT", value),
                 ];
             }

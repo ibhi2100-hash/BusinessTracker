@@ -131,6 +131,156 @@ enum InvitationDeliveryStatus {
   CANCELLED
 }
 
+enum BillingPlanStatus {
+  DRAFT
+  PUBLISHED
+  RETIRED
+  ARCHIVED
+}
+
+enum BillingCycle {
+  MONTHLY
+  QUARTERLY
+  YEARLY
+  LIFETIME
+}
+
+enum BillingSubscriptionStatus {
+  PENDING
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  GRACE_PERIOD
+  SUSPENDED
+  CANCELLED
+  EXPIRED
+}
+
+enum BillingRequestType {
+  NEW
+  UPGRADE
+  DOWNGRADE
+  RENEWAL
+}
+
+enum BillingRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+enum BillingEntitlementSource {
+  PLAN
+  OVERRIDE
+}
+
+enum BillingRecordStatus {
+  ACTIVE
+  REVOKED
+  EXPIRED
+}
+
+enum BillingInvoiceStatus {
+  DRAFT
+  ISSUED
+  PARTIALLY_PAID
+  PAID
+  OVERDUE
+  VOIDED
+  CANCELLED
+}
+
+enum BillingPaymentStatus {
+  INITIATED
+  PENDING
+  CONFIRMED
+  FAILED
+  REVERSED
+  REFUNDED
+  PARTIALLY_REFUNDED
+}
+
+enum BillingPaymentAttemptStatus {
+  INITIATED
+  PENDING
+  SUCCESS
+  FAILED
+  ABANDONED
+}
+
+enum BillingPaymentMethod {
+  CARD
+  BANK_TRANSFER
+  USSD
+  BANK
+  MOBILE_MONEY
+  OTHER
+}
+
+enum BillingRefundStatus {
+  PENDING
+  PROCESSING
+  SUCCESS
+  FAILED
+  REVERSED
+}
+
+enum BillingProvider {
+  PAYSTACK
+  FLUTTERWAVE
+  MANUAL
+}
+
+enum BillingProviderOperationStatus {
+  PENDING
+  PROCESSING
+  SUCCEEDED
+  FAILED
+  REQUIRES_RECONCILIATION
+}
+
+enum BillingWebhookStatus {
+  RECEIVED
+  PROCESSING
+  PROCESSED
+  FAILED
+  IGNORED
+}
+
+enum BillingEventStatus {
+  PENDING
+  PUBLISHED
+  FAILED
+}
+
+enum BillingCommandStatus {
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum BillingLeaseStatus {
+  ACTIVE
+  EXPIRED
+  REVOKED
+}
+
+enum BillingAuditAction {
+  CREATED
+  UPDATED
+  APPROVED
+  REJECTED
+  SUSPENDED
+  ACTIVATED
+  CANCELLED
+  REVOKED
+  REFUNDED
+  OVERRIDE_GRANTED
+  OVERRIDE_REVOKED
+  MANUAL_ADJUSTMENT
+}
+
 /////**** MODELS ****/////
 
 model Business {
@@ -168,7 +318,23 @@ model Business {
   employeeRequests            EmployeeRequest[]
   employeeNotifications       EmployeeNotification[]
 
-  subscriptions BusinessSubscription[]
+  // Billing
+billingSubscriptions       BillingSubscription[]
+billingSubscriptionRequests BillingSubscriptionRequest[]
+billingEntitlements        BillingEntitlement[]
+billingEntitlementOverrides BillingEntitlementOverride[]
+
+billingInvoices            BillingInvoice[]
+billingPayments            BillingPayment[]
+billingPaymentAttempts     BillingPaymentAttempt[]
+billingPaymentAllocations  BillingPaymentAllocation[]
+billingRefunds             BillingRefund[]
+
+billingProviderCustomers   BillingProviderCustomer[]
+billingSubscriptionLeases  BillingSubscriptionLease[]
+
+billingEvents              BillingEvent[]
+billingAuditLogs           BillingAuditLog[]
 
   @@index([userId])
 }
@@ -204,7 +370,7 @@ model Branch {
   ledgerEntries LedgerEntry[]
   sale          Sale[]
   expenses      Expense[]
-
+  billingSubscriptionLeases BillingSubscriptionLease[]
   
 
   @@unique([businessId, name])
@@ -296,48 +462,714 @@ model PasswordResetToken {
 
   @@index([expiresAt])
 }
+model BillingPlan {
+  id          String @id
+  code        String @unique
+  name        String
+  description String?
 
-model SubscriptionPlan {
-  id String @id
+  status      BillingPlanStatus @default(DRAFT)
 
-  name String
+  displayOrder Int @default(0)
+  isFeatured   Boolean @default(false)
 
-  price Decimal @db.Decimal(18, 6)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  billingCycle String
+  versions BillingPlanVersion[]
 
-  maxUsers   Int
+  @@index([status, displayOrder])
+}
+
+model BillingPlanVersion {
+  id          String @id
+  planId      String
+  planVersion Int
+
+  priceMinor BigInt
+  currency   String @default("NGN")
+
+  billingCycle BillingCycle
+  intervalCount Int @default(1)
+  trialDays     Int @default(0)
+
+  maxStaff   Int
   maxBranch  Int
   maxProduct Int
-  maxStaff   Int
 
   features Json
 
-  createdAt DateTime @default(now())
+  publishedAt DateTime?
+  createdAt   DateTime @default(now())
 
-  subscriptions BusinessSubscription[]
+  plan BillingPlan @relation(fields: [planId], references: [id], onDelete: Restrict )
+
+  subscriptions BillingSubscription[]
+  requests      BillingSubscriptionRequest[]
+
+  @@unique([planId, planVersion])
+  @@index([planId])
+  @@index([publishedAt])
 }
 
-model BusinessSubscription {
+model BillingSubscription {
+  id         String @id
+  businessId String
+
+  planId      String
+  planVersion Int
+
+  status BillingSubscriptionStatus @default(PENDING)
+
+  billingCycle BillingCycle
+  currency     String @default("NGN")
+  priceMinor   BigInt
+
+  trialStart DateTime?
+  trialEnd   DateTime?
+
+  currentPeriodStart DateTime?
+  currentPeriodEnd   DateTime?
+
+  gracePeriodEnd DateTime?
+
+  cancelAtPeriodEnd Boolean @default(false)
+
+  activatedAt DateTime?
+  cancelledAt DateTime?
+  expiredAt   DateTime?
+
+  aggregateVersion Int @default(1)
+  lastEventId      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  business Business @relation( fields: [businessId], references: [id], onDelete: Restrict)
+
+  planVersionRecord BillingPlanVersion @relation(fields: [planId, planVersion], references: [planId, planVersion], onDelete: Restrict)
+
+  requests   BillingSubscriptionRequest[]
+  entitlements BillingEntitlement[]
+  overrides BillingEntitlementOverride[]
+
+  invoices BillingInvoice[]
+  payments BillingPayment[]
+
+  providerSubscriptions BillingProviderSubscription[]
+  leases BillingSubscriptionLease[]
+
+  @@index([businessId])
+  @@index([businessId, status])
+  @@index([businessId, currentPeriodEnd])
+  @@index([planId, planVersion])
+  @@index([status, currentPeriodEnd])
+}
+
+model BillingSubscriptionRequest {
+  id         String @id
+  businessId String
+
+  requestedPlanId      String
+  requestedPlanVersion Int
+
+  requestType BillingRequestType
+  status      BillingRequestStatus @default(PENDING)
+
+  requestedBy String
+  reviewedBy  String?
+
+  reviewedAt      DateTime?
+  rejectionReason String?
+
+  effectiveAt DateTime?
+
+  subscriptionId String?
+
+  aggregateVersion Int @default(1)
+  lastEventId      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Restrict)
+
+  requestedPlanVersionRecord BillingPlanVersion @relation(fields: [requestedPlanId, requestedPlanVersion], references: [planId, planVersion], onDelete: Restrict)
+
+  subscription BillingSubscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+
+  @@index([businessId, status])
+  @@index([businessId, createdAt])
+  @@index([requestedPlanId, requestedPlanVersion])
+  @@index([subscriptionId])
+}
+
+
+model BillingEntitlement {
+  id             String @id
+  businessId     String
+  subscriptionId String?
+
+  entitlementKey String
+  value          Json
+
+  source BillingEntitlementSource @default(PLAN)
+  status BillingRecordStatus @default(ACTIVE)
+
+  validFrom  DateTime
+  validUntil DateTime?
+
+  aggregateVersion Int @default(1)
+  lastEventId      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Restrict)
+
+  subscription BillingSubscription? @relation( fields: [subscriptionId], references: [id], onDelete: SetNull)
+
+  @@unique([businessId, entitlementKey])
+  @@index([businessId, status])
+  @@index([subscriptionId])
+  @@index([validUntil])
+}
+
+model BillingEntitlementOverride {
+  id             String @id
+  businessId     String
+  subscriptionId String?
+
+  entitlementKey String
+  value          Json
+
+  status BillingRecordStatus @default(ACTIVE)
+
+  reason    String
+  createdBy String
+
+  startsAt  DateTime
+  expiresAt DateTime?
+
+  aggregateVersion Int @default(1)
+  lastEventId      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  business Business @relation( fields: [businessId], references: [id], onDelete: Restrict )
+
+  subscription BillingSubscription? @relation( fields: [subscriptionId], references: [id], onDelete: SetNull)
+
+  @@index([businessId, entitlementKey])
+  @@index([businessId, status])
+  @@index([subscriptionId])
+  @@index([expiresAt])
+}
+
+model BillingInvoice {
+  id             String @id
+  businessId     String
+  subscriptionId String?
+
+  invoiceNumber String
+
+  status BillingInvoiceStatus @default(DRAFT)
+
+  currency String @default("NGN")
+
+  subtotalMinor  BigInt
+  taxMinor       BigInt @default(0)
+  discountMinor  BigInt @default(0)
+  totalMinor     BigInt
+
+  amountPaidMinor BigInt @default(0)
+  amountDueMinor  BigInt
+
+  periodStart DateTime?
+  periodEnd   DateTime?
+
+  issuedAt DateTime?
+  dueAt    DateTime?
+  paidAt   DateTime?
+
+  aggregateVersion Int @default(1)
+  lastEventId      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  business Business @relation( fields: [businessId], references: [id], onDelete: Restrict )
+
+  subscription BillingSubscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+
+  items        BillingInvoiceItem[]
+  allocations  BillingPaymentAllocation[]
+
+  @@unique([businessId, invoiceNumber])
+  @@index([businessId, createdAt])
+  @@index([businessId, status])
+  @@index([subscriptionId])
+  @@index([status, dueAt])
+}
+
+model BillingInvoiceItem {
+  id        String @id
+  invoiceId String
+
+  description String
+
+  quantity       Decimal @db.Decimal(18, 6)
+  unitPriceMinor BigInt
+  lineTotalMinor BigInt
+
+  metadata Json?
+
+  createdAt DateTime @default(now())
+
+  invoice BillingInvoice @relation(fields: [invoiceId], references: [id], onDelete: Restrict)
+
+  @@index([invoiceId])
+}
+
+model BillingPayment {
+  id             String @id
+  businessId     String
+  subscriptionId String?
+  invoiceId      String?
+
+  provider BillingProvider
+
+  providerReference String?
+
+  method BillingPaymentMethod?
+
+  status BillingPaymentStatus @default(INITIATED)
+
+  currency String @default("NGN")
+
+  amountMinor       BigInt
+  providerFeeMinor  BigInt @default(0)
+  netAmountMinor    BigInt?
+  refundedMinor     BigInt @default(0)
+
+  initiatedAt DateTime @default(now())
+  confirmedAt DateTime?
+  failedAt    DateTime?
+  reversedAt  DateTime?
+  refundedAt  DateTime?
+
+  failureReason String?
+
+  aggregateVersion Int @default(1)
+  lastEventId      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Restrict)
+
+  subscription BillingSubscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+
+  attempts    BillingPaymentAttempt[]
+  allocations BillingPaymentAllocation[]
+  refunds     BillingRefund[]
+  operations  BillingProviderOperation[]
+
+  @@index([businessId, createdAt])
+  @@index([businessId, status])
+  @@index([subscriptionId])
+  @@index([invoiceId])
+  @@index([provider, providerReference])
+}
+
+model BillingPaymentAttempt {
+  id        String @id
+
+  businessId  String
+  paymentId String
+
+  provider BillingProvider
+
+  providerReference String?
+
+  attemptNumber Int
+
+  status BillingPaymentAttemptStatus @default(INITIATED)
+
+  failureReason String?
+
+  startedAt   DateTime @default(now())
+  completedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Restrict)
+
+  payment BillingPayment @relation(fields: [paymentId], references: [id], onDelete: Restrict)
+
+  operations BillingProviderOperation[]
+
+  @@unique([paymentId, attemptNumber])
+  @@index([paymentId])
+  @@index([provider, providerReference])
+  @@index([status])
+}
+
+model BillingPaymentAllocation {
+  id        String @id
+  businessId String 
+  paymentId String
+  invoiceId String
+
+  amountMinor BigInt
+
+  createdAt DateTime @default(now())
+
+  payment BillingPayment @relation(fields: [paymentId], references: [id], onDelete: Restrict)
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Restrict)
+
+  invoice BillingInvoice @relation( fields: [invoiceId], references: [id], onDelete: Restrict)
+
+  @@unique([paymentId, invoiceId])
+  @@index([invoiceId])
+  @@index([paymentId])
+}
+
+model BillingRefund {
+  id        String @id
+  businessId String
+  paymentId String
+
+  providerRefundReference String?
+
+  amountMinor BigInt
+  currency    String @default("NGN")
+
+  status BillingRefundStatus @default(PENDING)
+
+  reason String?
+
+  requestedAt DateTime @default(now())
+  processedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Restrict)
+
+  payment BillingPayment @relation(fields: [paymentId], references: [id], onDelete: Restrict)
+
+  @@index([paymentId])
+  @@index([status])
+  @@index([providerRefundReference])
+}
+
+model BillingProviderAccount {
   id String @id
 
-  businessId String @unique
+  provider BillingProvider
+
+  name String
+
+  environment String @default("LIVE")
+
+  isActive Boolean @default(true)
+
+  // Reference to a secret in environment configuration
+  // or a secrets manager. Never store the secret itself here.
+  credentialsRef String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  customers  BillingProviderCustomer[]
+  subscriptions BillingProviderSubscription[]
+  webhooks   BillingProviderWebhookEvent[]
+  operations BillingProviderOperation[]
+
+  @@unique([provider, name, environment])
+  @@index([provider, isActive])
+}
+
+model BillingProviderCustomer {
+  id String @id
+
+  businessId String
+  accountId  String
+
+  providerCustomerId String
+
+  email String?
+  metadata Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Restrict)
+
+  account BillingProviderAccount @relation( fields: [accountId], references: [id], onDelete: Restrict)
+
+  @@unique([accountId, providerCustomerId])
+  @@unique([businessId, accountId])
+  @@index([businessId])
+}
+
+model BillingProviderSubscription {
+  id String @id
 
   subscriptionId String
+  accountId      String
 
-  startedAt DateTime @default(now())
+  providerSubscriptionId String
+  providerCustomerId     String?
+
+  providerPlanCode String?
+
+  status String
+
+  authorizationCodeRef String?
+
+  nextPaymentDate DateTime?
+
+  metadata Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  subscription BillingSubscription @relation( fields: [subscriptionId], references: [id], onDelete: Restrict)
+
+  account BillingProviderAccount @relation( fields: [accountId], references: [id], onDelete: Restrict)
+
+  @@unique([accountId, providerSubscriptionId])
+  @@index([subscriptionId])
+  @@index([providerCustomerId])
+  @@index([status])
+}
+
+model BillingProviderWebhookEvent {
+  id String @id
+
+  accountId String?
+
+  provider BillingProvider
+
+  providerEventId String
+  eventType       String
+
+  payload Json
+
+  status BillingWebhookStatus @default(RECEIVED)
+
+  receivedAt  DateTime @default(now())
+  processedAt DateTime?
+
+  processingAttempts Int @default(0)
+
+  lastError String?
+
+  account BillingProviderAccount? @relation(fields: [accountId], references: [id], onDelete: SetNull)
+
+  @@unique([provider, providerEventId])
+  @@index([status, receivedAt])
+  @@index([provider, eventType])
+}
+
+model BillingProviderOperation {
+  id String @id
+
+  accountId String
+
+  paymentId String?
+  attemptId String?
+
+  provider BillingProvider
+
+  operationType String
+
+  idempotencyKey String
+
+  requestPayload  Json?
+  responsePayload Json?
+
+  providerReference String?
+
+  status BillingProviderOperationStatus @default(PENDING)
+
+  attempts Int @default(0)
+
+  lastError String?
+
+  nextAttemptAt DateTime?
+  completedAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  account BillingProviderAccount @relation( fields: [accountId], references: [id], onDelete: Restrict)
+
+  payment BillingPayment? @relation( fields: [paymentId], references: [id], onDelete: SetNull )
+
+  paymentAttempt BillingPaymentAttempt? @relation( fields: [attemptId], references: [id], onDelete: SetNull)
+
+  @@unique([accountId, idempotencyKey])
+  @@index([status, nextAttemptAt])
+  @@index([paymentId])
+  @@index([attemptId])
+  @@index([provider, providerReference])
+}
+
+model BillingEvent {
+  id String @id
+
+  businessId String?
+
+  aggregateType String
+  aggregateId   String
+  aggregateVersion Int
+
+  eventType String
+
+  payload Json
+
+  occurredAt DateTime @default(now())
+
+  business Business? @relation( fields: [businessId], references: [id], onDelete: SetNull)
+
+  outboxRecords BillingOutbox[]
+
+  @@unique([aggregateType, aggregateId, aggregateVersion])
+  @@index([businessId, occurredAt])
+  @@index([aggregateType, aggregateId])
+  @@index([eventType, occurredAt])
+}
+
+model BillingOutbox {
+  id String @id
+
+  eventId String
+
+  destination String @default("BILLING_SYNC")
+
+  status BillingEventStatus @default(PENDING)
+
+  attempts Int @default(0)
+
+  nextAttemptAt DateTime?
+
+  publishedAt DateTime?
+
+  lastError String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  event BillingEvent @relation(fields: [eventId], references: [id], onDelete: Restrict)
+
+  @@unique([eventId, destination])
+  @@index([status, nextAttemptAt])
+  @@index([status, createdAt])
+}
+
+model BillingCommandIdempotency {
+  id String @id
+
+  scope String
+
+  idempotencyKey String
+
+  commandType String
+
+  requestHash String
+
+  status BillingCommandStatus @default(PROCESSING)
+
+  resultReference String?
+
+  response Json?
+
+  error String?
+
+  createdAt DateTime @default(now())
+  completedAt DateTime?
+
+  @@unique([scope, idempotencyKey])
+  @@index([status, createdAt])
+}
+
+model BillingSubscriptionLease {
+  id String @id
+
+  businessId     String
+  subscriptionId String
+
+  branchId String?
+  deviceId String
+
+  issuedAt DateTime @default(now())
 
   expiresAt DateTime
 
-  trialEndDate DateTime?
+  gracePeriodEnd DateTime?
 
-  status String @default("ACTIVE")
+  status BillingLeaseStatus @default(ACTIVE)
 
-  business Business @relation(fields: [businessId],references: [id],onDelete: Cascade)
+  entitlementSnapshot Json
 
-  subscription SubscriptionPlan @relation(fields: [subscriptionId],references: [id])
+  signedToken String
 
+  revokedAt DateTime?
+
+  aggregateVersion Int @default(1)
+  lastEventId      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  business Business @relation( fields: [businessId], references: [id], onDelete: Restrict)
+
+  subscription BillingSubscription @relation( fields: [subscriptionId], references: [id], onDelete: Restrict)
+
+  branch Branch? @relation( fields: [branchId], references: [id], onDelete: Restrict)
+
+  @@index([businessId, status])
+  @@index([businessId, branchId, deviceId])
   @@index([subscriptionId])
+  @@index([deviceId])
+  @@index([expiresAt])
+}
+
+model BillingAuditLog {
+  id String @id
+
+  businessId String?
+
+  actorUserId String?
+
+  action BillingAuditAction
+
+  entityType String
+  entityId   String
+
+  reason String?
+
+  beforeData Json?
+  afterData  Json?
+
+  metadata Json?
+
+  ipAddress String?
+  userAgent String?
+
+  createdAt DateTime @default(now())
+
+  business Business? @relation( fields: [businessId], references: [id], onDelete: SetNull)
+
+  @@index([businessId, createdAt])
+  @@index([actorUserId, createdAt])
+  @@index([entityType, entityId])
+  @@index([action, createdAt])
 }
 
 model Product {

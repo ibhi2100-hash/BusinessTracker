@@ -1,5 +1,6 @@
 import type{ StatementDefinition } from "../../PreparedStatement/StatementRegistry/statementDefinition";
 import { AggregateStatementDefinition } from "./aggregates/aggregateStatementDefinition";
+import { BillingStatementDefinition } from "./billing/billingStatementDefinition";
 import { BranchStatementDefinition } from "./branch/BranchStatementDefintion";
 import { BusinessStatementDefinition } from "./business/BusinessDefiinition";
 import { ConflictStatementDefinition } from "./conflicts/conflictsStatementDefinition";

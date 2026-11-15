@@ -1,3 +1,4 @@
+
 export const BusinessEventTypes = {
     BUSINESS_CREATED: "BUSINESS_CREATED",
     BUSINESS_ACTIVATION: "BUSINESS_ACTIVATION",
@@ -27,7 +28,7 @@ export const financeEventType = {
 export const InventoryEventType = {
     PRODUCT_CREATED: "PRODUCT_CREATED",
     PRODUCT_UPDATED: "PRODUCT_UPDATED",
-    PRODUCT_DELETED: "PRODUCT_DELETED", 
+    PRODUCT_DELETED: "PRODUCT_DELETED",
     PRODUCT_BARCODE_ASSIGN: "PRODUCT_BARCODE_ASSIGN",
     INVENTORY_ADDED: "INVENTORY_ADDED",
     INVENTORY_UPDATED: "INVENTORY_UPDATED",
@@ -42,28 +43,31 @@ export const OpeningEventType = {
     OPENING_INVENTORY_CREATED: "OPENING_INVENTORY_CREATED",
     OPENING_INVENTORY_UPDATED: "OPENING_INVENTORY_UPDATED",
     OPENING_INVENTORY_DELETED: "OPENING_INVENTORY_DELETED",
-    OPENING_ASSET : "OPENING_ASSET",
+    OPENING_ASSET: "OPENING_ASSET",
     OPENING_LIABILITIES: "OPENING_LIABILITIES",
     OPENING_CASH_ADDED: "OPENING_CASH"
 }
 
 
 export const salesEventType = {
-        SALE_ADDED: "SALE_ADDED",
-        SALE_VOIDED: "SALE_VOIDED",
-        SALE_REFUNDED: "SALE_REFUNDED"
+    SALE_ADDED: "SALE_ADDED",
+    SALE_VOIDED: "SALE_VOIDED",
+    SALE_REFUNDED: "SALE_REFUNDED"
 }
 
+
 export const expenseEventType = {
-  EXPENSE_RECORDED: "EXPENSE_RECORDED",
-  EXPENSE_VOIDED: "EXPENSE_VOIDED",
-  EXPENSE_REIMBURSED: "EXPENSE_REIMBURSED",
+    EXPENSE_RECORDED: "EXPENSE_RECORDED",
+    EXPENSE_VOIDED: "EXPENSE_VOIDED",
+    EXPENSE_REIMBURSED: "EXPENSE_REIMBURSED",
 } as const;
+
 
 export const userEventTypes = {
     CREATE_USER: "CREATE_USER",
     LOGIN_USER: "LOGIN_USER"
 }
+
 
 export const EmployeeEventType = {
 
@@ -123,4 +127,203 @@ export const EmployeeEventType = {
 export type EmployeeEventType =
     typeof EmployeeEventType[
         keyof typeof EmployeeEventType
+    ];
+
+
+/**
+ * BILLING — PLAN CATALOG EVENTS
+ *
+ * Plans are versioned catalog definitions.
+ * Publishing a new version must not mutate existing subscription history.
+ */
+export const PlanEventType = {
+
+    PLAN_CREATED: "PLAN_CREATED",
+
+    PLAN_UPDATED: "PLAN_UPDATED",
+
+    PLAN_PUBLISHED: "PLAN_PUBLISHED",
+
+    PLAN_RETIRED: "PLAN_RETIRED",
+
+    PLAN_ARCHIVED: "PLAN_ARCHIVED",
+
+} as const;
+
+export type PlanEventType =
+    typeof PlanEventType[
+        keyof typeof PlanEventType
+    ];
+
+
+/**
+ * BILLING — SUBSCRIPTION EVENTS
+ *
+ * A subscription belongs to a business, not an individual branch or device.
+ * Each branch/device maintains a replicated local projection of this state.
+ */
+export const SubscriptionEventType = {
+
+    SUBSCRIPTION_CREATED: "SUBSCRIPTION_CREATED",
+
+    SUBSCRIPTION_ACTIVATED: "SUBSCRIPTION_ACTIVATED",
+
+    SUBSCRIPTION_RENEWED: "SUBSCRIPTION_RENEWED",
+
+    SUBSCRIPTION_UPGRADED: "SUBSCRIPTION_UPGRADED",
+
+    SUBSCRIPTION_DOWNGRADED: "SUBSCRIPTION_DOWNGRADED",
+
+    SUBSCRIPTION_PLAN_CHANGED: "SUBSCRIPTION_PLAN_CHANGED",
+
+    SUBSCRIPTION_CANCELLED: "SUBSCRIPTION_CANCELLED",
+
+    SUBSCRIPTION_EXPIRED: "SUBSCRIPTION_EXPIRED",
+
+    SUBSCRIPTION_SUSPENDED: "SUBSCRIPTION_SUSPENDED",
+
+    SUBSCRIPTION_REACTIVATED: "SUBSCRIPTION_REACTIVATED",
+
+    SUBSCRIPTION_GRACE_PERIOD_STARTED: "SUBSCRIPTION_GRACE_PERIOD_STARTED",
+
+    SUBSCRIPTION_GRACE_PERIOD_ENDED: "SUBSCRIPTION_GRACE_PERIOD_ENDED",
+
+} as const;
+
+export type SubscriptionEventType =
+    typeof SubscriptionEventType[
+        keyof typeof SubscriptionEventType
+    ];
+
+
+/**
+ * BILLING — ENTITLEMENT EVENTS
+ *
+ * Entitlements describe the capabilities and limits a business
+ * is allowed to use under its effective subscription.
+ */
+export const EntitlementEventType = {
+
+    ENTITLEMENT_GRANTED: "ENTITLEMENT_GRANTED",
+
+    ENTITLEMENT_REVOKED: "ENTITLEMENT_REVOKED",
+
+    ENTITLEMENT_UPDATED: "ENTITLEMENT_UPDATED",
+
+    ENTITLEMENT_OVERRIDE_CREATED: "ENTITLEMENT_OVERRIDE_CREATED",
+
+    ENTITLEMENT_OVERRIDE_UPDATED: "ENTITLEMENT_OVERRIDE_UPDATED",
+
+    ENTITLEMENT_OVERRIDE_REMOVED: "ENTITLEMENT_OVERRIDE_REMOVED",
+
+    ENTITLEMENT_QUOTA_CHANGED: "ENTITLEMENT_QUOTA_CHANGED",
+
+} as const;
+
+export type EntitlementEventType =
+    typeof EntitlementEventType[
+        keyof typeof EntitlementEventType
+    ];
+
+
+/**
+ * BILLING — INVOICE EVENTS
+ *
+ * Invoice events represent billing obligations and their lifecycle.
+ */
+export const InvoiceEventType = {
+
+    INVOICE_CREATED: "INVOICE_CREATED",
+
+    INVOICE_UPDATED: "INVOICE_UPDATED",
+
+    INVOICE_ISSUED: "INVOICE_ISSUED",
+
+    INVOICE_VOIDED: "INVOICE_VOIDED",
+
+    INVOICE_OVERDUE: "INVOICE_OVERDUE",
+
+    INVOICE_SETTLED: "INVOICE_SETTLED",
+
+    INVOICE_CANCELLED: "INVOICE_CANCELLED",
+
+} as const;
+
+export type InvoiceEventType =
+    typeof InvoiceEventType[
+        keyof typeof InvoiceEventType
+    ];
+
+
+/**
+ * BILLING — PAYMENT EVENTS
+ *
+ * Payment records should only be confirmed through a trusted payment
+ * verification process, not merely because a device is offline.
+ */
+export const PaymentEventType = {
+
+    PAYMENT_INITIATED: "PAYMENT_INITIATED",
+
+    PAYMENT_RECORDED: "PAYMENT_RECORDED",
+
+    PAYMENT_CONFIRMED: "PAYMENT_CONFIRMED",
+
+    PAYMENT_FAILED: "PAYMENT_FAILED",
+
+    PAYMENT_REVERSED: "PAYMENT_REVERSED",
+
+    PAYMENT_REFUNDED: "PAYMENT_REFUNDED",
+
+} as const;
+
+export type PaymentEventType =
+    typeof PaymentEventType[
+        keyof typeof PaymentEventType
+    ];
+
+
+/**
+ * BILLING — SUBSCRIPTION REQUEST EVENTS
+ *
+ * Used when a device requests a subscription action while offline
+ * or while awaiting trusted payment confirmation.
+ */
+export const SubscriptionRequestEventType = {
+
+    SUBSCRIPTION_REQUESTED: "SUBSCRIPTION_REQUESTED",
+
+    SUBSCRIPTION_REQUEST_APPROVED: "SUBSCRIPTION_REQUEST_APPROVED",
+
+    SUBSCRIPTION_REQUEST_REJECTED: "SUBSCRIPTION_REQUEST_REJECTED",
+
+    SUBSCRIPTION_REQUEST_CANCELLED: "SUBSCRIPTION_REQUEST_CANCELLED",
+
+} as const;
+
+export type SubscriptionRequestEventType =
+    typeof SubscriptionRequestEventType[
+        keyof typeof SubscriptionRequestEventType
+    ];
+
+
+/**
+ * BILLING — OFFLINE SUBSCRIPTION AUTHORITY EVENTS
+ *
+ * These events represent the issuance, renewal, or revocation
+ * of authority-signed offline entitlement leases.
+ */
+export const SubscriptionLeaseEventType = {
+
+    SUBSCRIPTION_LEASE_ISSUED: "SUBSCRIPTION_LEASE_ISSUED",
+
+    SUBSCRIPTION_LEASE_RENEWED: "SUBSCRIPTION_LEASE_RENEWED",
+
+    SUBSCRIPTION_LEASE_REVOKED: "SUBSCRIPTION_LEASE_REVOKED",
+
+} as const;
+
+export type SubscriptionLeaseEventType =
+    typeof SubscriptionLeaseEventType[
+        keyof typeof SubscriptionLeaseEventType
     ];
