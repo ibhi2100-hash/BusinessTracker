@@ -16,6 +16,7 @@ import { SyncApplicationService } from "./API/sync/SyncApplicationService";
 import { ExpenseApi } from "./API/expenses/expensesApi";
 import { SessionApi } from "./API/session/ApplicationSession";
 import { EmployeeApi } from "./API/employee/EmployeeApi";
+import { BusinessDashboardApi } from "./API/dashboard/BusinessDashboardApi"
 
 export class Application {
     readonly onboarding: OnboardingApi;
@@ -30,6 +31,7 @@ export class Application {
     readonly capital: CapitalApi;
     readonly expense: ExpenseApi;
     readonly dashboard: DashboardApi;
+    readonly businessDashboard: BusinessDashboardApi;
     readonly report: ReportApi;
     readonly sync: SyncApi;
     readonly syncService: SyncApplicationService
@@ -87,6 +89,11 @@ export class Application {
 
         this.dashboard = 
             new DashboardApi(
+                manager
+            )
+
+        this.businessDashboard = 
+            new BusinessDashboardApi(
                 manager
             )
 

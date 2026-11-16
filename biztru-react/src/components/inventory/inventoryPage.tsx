@@ -119,6 +119,10 @@ interface ProductHistoryItem {
 interface InventoryPageProps {
   context: InventoryContext;
   mode: InventoryMode;
+
+  businessId?: string;
+
+  branchId?: string
 }
 
 /* ============================================================
@@ -186,27 +190,70 @@ function resolveSellingPrice(
 export default function InventoryPage({
   context,
   mode,
-}: InventoryPageProps) {
- const app = useApplication();
-const { branchId, businessId } = useBusinessContext();
-const { readOnly, canMutate } = useRouteAccess();
 
-const canManageInventory =
-  context === "admin" &&
-  !readOnly &&
+  businessId,
+  branchId
+}: InventoryPageProps) {
+  const app = useApplication();
+  const {
+    context: routeContext,
+    readOnly,
+    canMutate,
+  } = useRouteAccess();
+
+const isOpeningInventory = mode === "OPENING";
+
+const isBusinessRegistration =
+  routeContext.type === "BUSINESS";
+
+const isBranchSetup =
+  routeContext.type === "BRANCH_SETUP";
+
+const isBranchOperations =
+  routeContext.type === "BRANCH_OPERATIONS";
+
+const canCreateBusinessProducts =
+  isBusinessRegistration && !readOnly;
+
+const canInitializeBranchProducts =
+  isOpeningInventory &&
+  isBranchSetup &&
+  canMutate("branch:initialize");
+
+const canCreateLiveProducts =
+  !isOpeningInventory &&
+  isBranchOperations &&
   canMutate("inventory:write");
 
-const canCreateSale =
-  context === "sell" &&
-  !readOnly &&
-  canMutate("sales:create");
+const canCreateProducts =
+  canCreateBusinessProducts ||
+  canInitializeBranchProducts ||
+  canCreateLiveProducts;
 
-const {
-  data,
-  loading: productsLoading,
-} = useLiveProducts(branchId ?? "", businessId ?? "");
+const canManageInventory =
+  isBranchOperations &&
+  !isOpeningInventory &&
+  canMutate("inventory:write");
 
-const products = data ?? [];
+  const canImportProducts =
+  canCreateProducts &&
+  Boolean(businessId) &&
+  Boolean(branchId);
+  const canCreateSale =
+    context === "sell" &&
+    !readOnly &&
+    canMutate("sales:create");
+  /*
+   * useLiveProducts is scoped to the active branch.
+   * All product metrics and filters below therefore operate
+   * on the currently selected branch's products.
+   */
+  const {
+    data,
+    loading: productsLoading,
+  } = useLiveProducts(branchId ?? "", businessId ?? "");
+
+  const products = data ?? [];
 
   const branches = useBranchStore(
     (state) => state.branches,
@@ -345,6 +392,11 @@ const products = data ?? [];
         return;
       }
 
+      if (!canCreateProducts) {
+        toast.error("This barcode is not registered, and product creation is not permitted in this context.");
+        return;
+      }
+
       setPendingBarcode(barcode);
       setSelectedProduct(null);
       setActiveSheet("create");
@@ -352,7 +404,7 @@ const products = data ?? [];
         "Product not found. Complete the product details to register this barcode.",
       );
     },
-    [products],
+    [products, canCreateProducts],
   );
 
   // React state alone does not synchronously prevent double-clicks.
@@ -382,12 +434,28 @@ const products = data ?? [];
   const requireBranchId = useCallback((): string => {
     if (!branchId) {
       throw new Error(
-        "Select an active branch before performing this operation.",
+        "Select a branch before performing this operation.",
       );
     }
 
     return branchId;
   }, [branchId]);
+
+  const requireProductCreation = useCallback(() => {
+    if (!canCreateProducts) {
+      throw new Error(
+        "Product creation is only available during branch setup or with live inventory permission.",
+      );
+    }
+  }, [canCreateProducts]);
+
+  const requireInventoryWrite = useCallback(() => {
+    if (!canManageInventory) {
+      throw new Error(
+        "This operation requires live branch inventory permission.",
+      );
+    }
+  }, [canManageInventory]);
 
   /* ==========================================================
      CART
@@ -478,31 +546,19 @@ const products = data ?? [];
     showZeroStockOnly,
   ]);
 
-  const requireInventoryWrite = useCallback(() => {
-  if (!canManageInventory) {
-    toast.error("You do not have permission to modify inventory.");
-    return false;
-  }
-
-  return true;
-}, [canManageInventory]);
-
-const requireSalesWrite = useCallback(() => {
-  if (!canCreateSale) {
-    toast.error("You do not have permission to create sales.");
-    return false;
-  }
-
-  return true;
-}, [canCreateSale]);
   /* ==========================================================
      PRODUCT SHEET ACTIONS
      ========================================================== */
 
   const openCreate = useCallback(() => {
+    if (!canCreateProducts) {
+      toast.error("You do not have permission to create products here.");
+      return;
+    }
+
     setSelectedProduct(null);
     setActiveSheet("create");
-  }, []);
+  }, [canCreateProducts]);
 
   const openManage = useCallback(
     (product: LiveProduct) => {
@@ -514,15 +570,15 @@ const requireSalesWrite = useCallback(() => {
 
   const handleDelete = useCallback(
     async (_productId: string) => {
-      if(!requireInventoryWrite()) return;
-      // Do not display success or mutate local state until a
-      // real delete command exists in the application service.
-      await app.product.delete(_productId, mode)
-      toast.error(
-        "Product deletion is not connected to the application service.",
-      );
+      try {
+        requireInventoryWrite();
+        await app.product.delete(_productId, mode);
+        toast.success("Product deleted.");
+      } catch (error) {
+        toast.error(getErrorMessage(error, "Unable to delete product."));
+      }
     },
-    [],
+    [app.product, mode, requireInventoryWrite],
   );
 
   /* ==========================================================
@@ -536,7 +592,6 @@ const requireSalesWrite = useCallback(() => {
       openCart = true,
       negotiatedPrice?: number,
     ): boolean => {
-      if(!requireSalesWrite()) return false
       if (!isPositiveQuantity(quantity)) {
         toast.error("Enter a valid quantity.");
         return false;
@@ -1225,7 +1280,6 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
       quantity: number,
       negotiatedPrice?: number,
     ) => {
-      if(!requireSalesWrite()) return;
       if (!isPositiveQuantity(quantity)) {
         toast.error("Enter a valid sale quantity.");
         return;
@@ -1329,7 +1383,6 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
     },
     [
       products,
-      requireSalesWrite,
       cartItems,
       app.sales,
       mode,
@@ -1343,7 +1396,6 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
      ========================================================== */
 
   const handleCheckout = useCallback(async () => {
-    if(!requireSalesWrite()) return;
     if (cartItems.length === 0) {
       toast.error("Your cart is empty.");
       return;
@@ -1464,7 +1516,6 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
     }
   }, [
     cartItems,
-    requireSalesWrite,
     products,
     app.sales,
     cartStore,
@@ -1483,7 +1534,6 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
       costPrice: number,
       note?: string,
     ) => {
-      if(!requireInventoryWrite()) return;
       if (!selectedProduct) {
         throw new Error("Select a product first.");
       }
@@ -1522,7 +1572,6 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
     },
     [
       selectedProduct,
-      requireInventoryWrite,
       requireBranchId,
       app.inventory,
       mode,
@@ -1540,7 +1589,6 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
       quantity: number,
       reason: string,
     ) => {
-      if(!requireInventoryWrite()) return;
       if (!selectedProduct) {
         throw new Error("Select a product first.");
       }
@@ -1582,7 +1630,6 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
     },
     [
       selectedProduct,
-      requireInventoryWrite,
       requireBranchId,
       app.inventory,
       mode,
@@ -1600,7 +1647,6 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
       quantity: number,
       note?: string,
     ) => {
-      if(!requireInventoryWrite()) return;
       if (!selectedProduct) {
         throw new Error("Select a product first.");
       }
@@ -1647,7 +1693,6 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
     },
     [
       selectedProduct,
-      requireInventoryWrite,
       requireBranchId,
       app.inventory,
       mode,
@@ -1661,8 +1706,6 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
 
   const handleSubmit = useCallback(
     async (data: ProductFormData) => {
-      if(!requireInventoryWrite())return;
-
       const name = data.name.trim();
 
       if (!name) {
@@ -1693,6 +1736,8 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
           const activeBranchId = requireBranchId();
 
           if (activeSheet === "edit") {
+            requireInventoryWrite();
+
             if (!selectedProduct) {
               throw new Error(
                 "Select a product to edit.",
@@ -1725,6 +1770,8 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
               "The product form is not in create mode.",
             );
           }
+
+          requireProductCreation();
 
           const productId = crypto.randomUUID();
 
@@ -1786,8 +1833,9 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
       app.product,
       app.inventory,
       mode,
-      requireInventoryWrite,
       requireBranchId,
+      requireProductCreation,
+      requireInventoryWrite,
       runExclusiveAction,
       resetBarcodeSession,
     ],
@@ -1804,13 +1852,11 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
         update: ProductImportProgressUpdate,
       ) => void,
     ): Promise<ProductImportResult> => {
-      if (!requireInventoryWrite()) {
-      throw new Error("You do not have permission to import products.");
-    }
-
+      
       const activeBranchId = requireBranchId();
 
-      // Delegate all writes to the application-level service.
+      // Bulk import remains a live-inventory operation. Branch setup
+      // uses the explicit product + opening-stock creation flow instead.
       return executeProductImport(
         app,
         {
@@ -1825,7 +1871,7 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
       app,
       mode,
       requireBranchId,
-      requireInventoryWrite
+      requireInventoryWrite,
     ],
   );
 
@@ -1833,21 +1879,23 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
      HEADER ACTIONS
      ========================================================== */
 
-  const handleOpenImport = useCallback(() => {
-    setProductImportOpen(true);
-  }, []);
+ const handleOpenImport = useCallback(() => {
+  if (!canImportProducts) {
+    toast.error("Product import is not available in this context.");
+    return;
+  }
+
+  setProductImportOpen(true);
+}, [canImportProducts]);
 
   const handleCloseImport = useCallback(() => {
     setProductImportOpen(false);
   }, []);
 
-  if (!branchId || !businessId) {
-    return null;
-  }
-
   /* ==========================================================
      UI
      ========================================================== */
+
 
   return (
     <div className="min-h-screen bg-[#09090b] pb-28 text-white sm:pb-10">
@@ -1929,7 +1977,7 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
           </div>
 
           {/* Admin view switcher: inventory operations and stock intelligence. */}
-          {context === "admin" && canManageInventory && (
+          {context === "admin" && (
             <div
               role="group"
               aria-label="Inventory view"
@@ -2122,7 +2170,7 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
 
           {/* Mobile product actions */}
 
-          {context === "admin" && canManageInventory && (
+          {context === "admin" && canCreateProducts && (
             <div className="grid grid-cols-[minmax(0,1fr)_auto_auto] gap-2 sm:hidden">
               <button
                 type="button"
@@ -2167,27 +2215,29 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
                 <Printer className="h-[19px] w-[19px]" />
               </button>
 
-              <button
-                type="button"
-                onClick={handleOpenImport}
-                aria-label="Import products"
-                title="Import products"
-                className="
-                  flex h-[48px] w-[48px] items-center justify-center
-                  rounded-2xl border border-white/10
-                  bg-white/[0.06] text-white/80
-                  transition-all hover:bg-white/10
-                  active:scale-95
-                "
-              >
-                <Upload className="h-[19px] w-[19px]" />
-              </button>
+              {canImportProducts && (
+                <button
+                  type="button"
+                  onClick={handleOpenImport}
+                  aria-label="Import products"
+                  title="Import products"
+                  className="
+                    flex h-[48px] w-[48px] items-center justify-center
+                    rounded-2xl border border-white/10
+                    bg-white/[0.06] text-white/80
+                    transition-all hover:bg-white/10
+                    active:scale-95
+                  "
+                >
+                  <Upload className="h-[19px] w-[19px]" />
+                </button>
+              )}
             </div>
           )}
 
           {/* Desktop product actions */}
 
-          {context === "admin" && canManageInventory && (
+          {context === "admin" && canCreateProducts && (
             <div className="hidden items-center gap-2 sm:flex">
               <GlassButton
                 type="button"
@@ -2200,15 +2250,17 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
                 Print labels
               </GlassButton>
 
-              <GlassButton
-                type="button"
-                variant="secondary"
-                onClick={handleOpenImport}
-                className="h-10 px-4"
-                icon={<Upload className="h-4 w-4" />}
-              >
-                Import products
-              </GlassButton>
+              {canImportProducts && (
+                <GlassButton
+                  type="button"
+                  variant="secondary"
+                  onClick={handleOpenImport}
+                  className="h-10 px-4"
+                  icon={<Upload className="h-4 w-4" />}
+                >
+                  Import products
+                </GlassButton>
+              )}
 
               <GlassButton
                 type="button"
@@ -2837,38 +2889,34 @@ const printProductLabels = useCallback(async (items: LiveProduct[]) => {
         onSubmit={handleSubmit}
       />
 
-      {/* ======================================================
-          PRODUCT MANAGEMENT
-          ====================================================== */}
-
       <ProductDetailsSheet
         open={activeSheet === "manage"}
         onClose={closeActiveSheet}
         product={selectedProduct}
         readOnly={!canManageInventory}
+        inventoryMode={mode}
         onEditDetails={() => {
-          if (!requireInventoryWrite()) return;
-          if (!selectedProduct) return;
-
+          if (!selectedProduct || !canManageInventory) return;
           setActiveSheet("edit");
         }}
-
         onReceiveStock={() => {
-          if (!requireInventoryWrite()) return;
+          if (!canManageInventory) return;
           setActiveSheet("receive");
         }}
-
         onAdjustStock={() => {
-          if (!requireInventoryWrite()) return;
+          if (!canManageInventory) return;
           setActiveSheet("adjust");
         }}
-
         onTransferStock={() => {
-          if (!requireInventoryWrite()) return;
+          if (!canManageInventory) return;
           setActiveSheet("transfer");
         }}
+        onViewHistory={() => setActiveSheet("history")}
         onPrintLabel={handlePrintLabel}
-        onGenerateBarcode={() => selectedProduct && void handleGenerateBarcode(selectedProduct)}
+        onGenerateBarcode={() => {
+          if (!canManageInventory || !selectedProduct) return;
+          void handleGenerateBarcode(selectedProduct);
+        }}
       />
 
       {/* ======================================================

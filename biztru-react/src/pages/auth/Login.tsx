@@ -38,7 +38,7 @@ export interface LoginResponse {
 /* -------------------------------------------------------------------------- */
 
 function getPostLoginPath(user: User): string {
-  const role = user.role?.trim().toUpperCase();
+  const role = user.role
 
   if (!role) {
     throw new Error(
@@ -47,9 +47,13 @@ function getPostLoginPath(user: User): string {
   }
 
   const isAdmin = role === "ADMIN";
+  const isCEO = role === "CEO"
+  const isManager = role === "MANAGER";
+  const isSales_Reps = role === "SALES_REPS";
+  const isCleaner = role === "CLEANER"
   const isStaff = role === "STAFF";
 
-  if (!isAdmin && !isStaff) {
+  if (!isAdmin && !isStaff && !isCEO && !isManager && !isSales_Reps && !isCleaner) {
     throw new Error(
       `Your account role (${role}) is not configured for application access. Contact your administrator.`
     );
@@ -57,8 +61,11 @@ function getPostLoginPath(user: User): string {
 
   // Only an administrator can initialize a new business.
   if (!user.businessId) {
-    if (isAdmin) {
+    if (isAdmin || isCEO) {
       return "/onboarding-business";
+    }
+    if(isCleaner && isManager && isSales_Reps && isStaff){
+      return "/login"
     }
 
     throw new Error(
@@ -68,7 +75,7 @@ function getPostLoginPath(user: User): string {
 
   // Business onboarding is an administrator responsibility.
   // Never redirect staff into the business owner's onboarding flow.
-  if (isAdmin && user.onboardingCompleted !== true) {
+  if (isAdmin || isCEO && user.onboardingCompleted !== true) {
     return "/onboarding";
   }
 
@@ -81,6 +88,9 @@ function getPostLoginPath(user: User): string {
 
   if (isStaff) {
     return "/sales";
+  }
+  if(isAdmin || isCEO){
+    return "/owner-dashboard"
   }
 
   return "/dashboard";

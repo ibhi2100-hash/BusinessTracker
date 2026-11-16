@@ -2,8 +2,8 @@
 import type { Migration } from "../../clientDatabase/migrations/migrationContracts";
 import type { SQLiteMigrationOperation } from "../../../../storage/statement/worker/WorkerProtocol";
 
-export const migration021: Migration = {
-    version: 21,
+export const migration023: Migration = {
+    version: 23,
 
     name: "Billing",
 

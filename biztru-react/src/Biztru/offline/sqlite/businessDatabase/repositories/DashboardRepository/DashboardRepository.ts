@@ -1,7 +1,7 @@
 // repositories/SQLiteProjectionRepository/SQLiteDashboardRepository.ts
 import type{ DashboardRepository } from "./DashboardRepositoryContracts";
 import type{ DashboardSummary, PeriodFilter } from "@business/shared-types";
-import { DashboardStatements } from "../../statements/dashboard/dashboardStatements";
+import { DashboardStatements } from "../../statements/dashboard/branch/dashboardStatements";
 
 
 export class SQLiteDashboardRepository implements DashboardRepository {

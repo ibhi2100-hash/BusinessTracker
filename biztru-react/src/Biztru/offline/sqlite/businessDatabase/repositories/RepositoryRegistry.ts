@@ -22,6 +22,7 @@ import { SQLiteEmployeeInvitationRepository } from "./EmployeeRepositories/SQLit
 import { SQLiteEmployeeRepository } from "./EmployeeRepositories/SQLiteEmployeeRepository";
 import { SQLiteEventInboxRepository } from "./EventInboxRepository/SQLiteEventInboxRepository";
 import { SQLiteSyncCursorRepository } from "./Cursor/CursorRepository";
+import { SQLiteBusinessDashboardRepository } from "./DashboardRepository/BusinessDashbaordRepositories";
 
 export class BusinessRepositoryRegistry {
     readonly events: SQLiteEventRepository;
@@ -47,6 +48,8 @@ export class BusinessRepositoryRegistry {
 
     readonly dashboard: SQLiteDashboardRepository;
 
+    readonly businessDashboard: SQLiteBusinessDashboardRepository;
+    
     readonly report: SQLiteReportRepository;
 
     readonly outbox: SQLiteOutboxRepository;
@@ -125,6 +128,11 @@ export class BusinessRepositoryRegistry {
         this.dashboard = 
             new SQLiteDashboardRepository(
                 statements.dashboard
+            )
+
+        this.businessDashboard = 
+            new SQLiteBusinessDashboardRepository(
+                statements.businessDashboard
             )
 
         this.report = 

@@ -1,3 +1,4 @@
+// pages/OwnerDashboardPage.tsx
 
 import {
   Bell,
@@ -8,181 +9,223 @@ import {
   ShoppingCart,
   TrendingUp,
   Wallet,
+  AlertTriangle,
+  PackageX,
 } from "lucide-react";
+
 import { useNavigate } from "react-router-dom";
+
 import {
   BranchPerformanceCard,
   type BranchPerformance,
 } from "../../components/BusinessDashboard/BranchPerformanceCard";
 
 import { CEOActionCentre } from "../../components/BusinessDashboard/CEOActionCentre";
-import { BusinessAlerts } from "../../components/BusinessDashboard/BusinessAlerts";
 
 import { GlassCard } from "../../components/ui/GlassCard";
 import { GlassIcon } from "../../components/ui/GlassIcon";
 import { MetricCard } from "../../components/ui/MetricCard";
 import { GlassButton } from "../../components/ui/GlassButton";
+
 import { useBusinessContext } from "../../Biztru/context/BusinessContext";
 import { useBusinessLiveQuery } from "../../hooks/useBusinessLiveQuery";
+import { useLiveBusinessDashboard } from "../../hooks/Business/useLiveBusinessDashboard";
 
-/* -------------------------------------------------------------------------- */
-/* Demo data                                                                  */
-/* -------------------------------------------------------------------------- */
-
-const branches: BranchPerformance[] = [
-  {
-    id: "branch-001",
-    name: "Wuse Branch",
-    location: "Wuse 2, Abuja",
-    status: "ACTIVE",
-    manager: "John Ibrahim",
-    todaySales: 1_240_000,
-    revenue: 1_240_000,
-    netProfit: 218_000,
-    inventoryValue: 6_850_000,
-    cash: 2_450_000,
-    salesCount: 32,
-  },
-  {
-    id: "branch-002",
-    name: "Garki Branch",
-    location: "Garki Area 11, Abuja",
-    status: "ACTIVE",
-    manager: "Mary James",
-    todaySales: 890_000,
-    revenue: 890_000,
-    netProfit: 154_000,
-    inventoryValue: 4_650_000,
-    cash: 1_950_000,
-    salesCount: 24,
-  },
-  {
-    id: "branch-003",
-    name: "Maitama Branch",
-    location: "Maitama, Abuja",
-    status: "ACTIVE",
-    manager: "David Musa",
-    todaySales: 510_000,
-    revenue: 510_000,
-    netProfit: 82_500,
-    inventoryValue: 4_200_000,
-    cash: 2_150_000,
-    salesCount: 15,
-  },
-  {
-    id: "branch-004",
-    name: "Kubwa Branch",
-    location: "Kubwa, Abuja",
-    status: "ATTENTION",
-    manager: "Peter Daniel",
-    todaySales: 200_000,
-    revenue: 200_000,
-    netProfit: 32_000,
-    inventoryValue: 2_750_000,
-    cash: 1_700_000,
-    salesCount: 8,
-  },
-];
-
-/**
- * Monthly business-level figures.
- * These are demo values and will later come from consolidated projections.
- */
-const monthlyOverview = {
-  revenue: 42_680_000,
-  netProfit: 7_650_000,
-};
-
-/* -------------------------------------------------------------------------- */
-/* Derived business figures                                                   */
-/* -------------------------------------------------------------------------- */
-
-const businessOverview = {
-  inventoryValue: branches.reduce(
-    (total, branch) => total + branch.inventoryValue,
-    0
-  ),
-
-  availableCash: branches.reduce(
-    (total, branch) => total + branch.cash,
-    0
-  ),
-
-  todaySales: branches.reduce(
-    (total, branch) => total + branch.todaySales,
-    0
-  ),
-
-  todayRevenue: branches.reduce(
-    (total, branch) => total + branch.revenue,
-    0
-  ),
-
-  todayNetProfit: branches.reduce(
-    (total, branch) => total + branch.netProfit,
-    0
-  ),
-};
-
-const activeBranches = branches.filter(
-  (branch) => branch.status === "ACTIVE"
-).length;
-
-/* -------------------------------------------------------------------------- */
-/* Formatting                                                                 */
-/* -------------------------------------------------------------------------- */
+/* ============================================================
+   FORMATTING
+   ============================================================ */
 
 const formatCurrency = (amount: number) =>
   new Intl.NumberFormat("en-NG", {
     style: "currency",
     currency: "NGN",
     maximumFractionDigits: 0,
-  }).format(amount);
+  }).format(amount ?? 0);
 
 const formatCompactCurrency = (amount: number) => {
-  if (amount >= 1_000_000) {
-    return `₦${(amount / 1_000_000).toFixed(2)}m`;
+  const value = amount ?? 0;
+
+  if (value >= 1_000_000) {
+    return `₦${(value / 1_000_000).toFixed(2)}m`;
   }
 
-  if (amount >= 1_000) {
-    return `₦${(amount / 1_000).toFixed(0)}k`;
+  if (value >= 1_000) {
+    return `₦${(value / 1_000).toFixed(0)}k`;
   }
 
-  return formatCurrency(amount);
+  return formatCurrency(value);
 };
 
-/* -------------------------------------------------------------------------- */
-/* Page                                                                       */
-/* -------------------------------------------------------------------------- */
+/* ============================================================
+   PAGE
+   ============================================================ */
 
 export default function OwnerDashboardPage() {
+  const { businessId } = useBusinessContext();
+  const navigate = useNavigate();
 
-      const {
-        businessId,
-      } = useBusinessContext();
-    
-      const {
-        data: business,
-        loading: businessLoading,
-        error: businessError,
-    } = useBusinessLiveQuery(businessId);
-    const navigate = useNavigate();
+  // Business profile.
+  const {
+    data: business,
+    loading: businessLoading,
+    error: businessError,
+  } = useBusinessLiveQuery(businessId);
+
+  // Consolidated business dashboard data.
+  const {
+    data: dashboard,
+    loading: dashboardLoading,
+    error: dashboardError,
+  } = useLiveBusinessDashboard(businessId);
+
+  const summary = dashboard?.summary;
+  const monthlyOverview = dashboard?.monthlyPerformance;
+  const branches = dashboard?.branches ?? [];
+
+  const loading = businessLoading || dashboardLoading;
+  const error = businessError || dashboardError;
+
+  // Cash and bank are separate balances in the repository.
+  const availableCash =
+    (summary?.cash ?? 0) + (summary?.bank ?? 0);
 
   const monthlyProfitMargin =
-    monthlyOverview.revenue > 0
-      ? (monthlyOverview.netProfit / monthlyOverview.revenue) * 100
+    (monthlyOverview?.revenue ?? 0) > 0
+      ? ((monthlyOverview?.netProfit ?? 0) /
+          monthlyOverview!.revenue) *
+        100
       : 0;
+
+  const activeBranches = branches.filter(
+    (branch) => branch.status === "ACTIVE"
+  ).length;
+
+  /*
+   * Convert the repository branch rows to the card contract.
+   * A branch without an assigned manager displays "Unassigned".
+   */
+  const branchCards: BranchPerformance[] = branches.map(
+    (branch) => ({
+      id: branch.id,
+      name: branch.name,
+      location: branch.location || "Location not provided",
+      status: branch.status,
+      manager: branch.manager || "Unassigned",
+      todaySales: branch.todaySales ?? 0,
+      revenue: branch.revenue ?? 0,
+      netProfit: branch.netProfit ?? 0,
+      inventoryValue: branch.inventoryValue ?? 0,
+      cash: branch.cash ?? 0,
+      salesCount: branch.salesCount ?? 0,
+    })
+  );
+
+  // Derive operational alerts only from actual branch data.
+  const branchAlerts = branches.flatMap((branch) => {
+    const alerts = [];
+
+    if (branch.status === "ATTENTION") {
+      alerts.push({
+        id: `${branch.id}-attention`,
+        title: "Branch requires attention",
+        description:
+          "The branch has been flagged by its current operational or financial status.",
+        branch: branch.name,
+        severity: "warning" as const,
+      });
+    }
+
+    if ((branch.outOfStockRows ?? 0) > 0) {
+      alerts.push({
+        id: `${branch.id}-stock`,
+        title: "Out-of-stock products detected",
+        description: `${branch.outOfStockRows} inventory records are out of stock.`,
+        branch: branch.name,
+        severity: "warning" as const,
+      });
+    }
+
+    return alerts;
+  });
+
+  /* ============================================================
+     LOADING
+     ============================================================ */
+
+  if (loading) {
+    return (
+      <div className="px-4 pb-24 space-y-5 animate-pulse">
+        <div className="h-28 rounded-3xl bg-white/5 border border-white/10" />
+
+        <div className="grid grid-cols-2 gap-3">
+          {Array.from({ length: 5 }).map((_, index) => (
+            <div
+              key={index}
+              className="h-28 rounded-2xl bg-white/5 border border-white/10"
+            />
+          ))}
+        </div>
+
+        <div className="h-40 rounded-3xl bg-white/5 border border-white/10" />
+
+        <div className="h-48 rounded-3xl bg-white/5 border border-white/10" />
+      </div>
+    );
+  }
+
+  /* ============================================================
+     ERROR
+     ============================================================ */
+
+  if (error) {
+    return (
+      <div className="px-4 py-8">
+        <GlassCard className="p-5 space-y-2">
+          <h2 className="font-semibold text-red-400">
+            Unable to load business dashboard
+          </h2>
+
+          <p className="text-sm text-white/60">
+            {error instanceof Error
+              ? error.message
+              : "An unexpected error occurred while loading business data."}
+          </p>
+        </GlassCard>
+      </div>
+    );
+  }
+
+  /* ============================================================
+     EMPTY STATE
+     ============================================================ */
+
+  if (!businessId || !dashboard) {
+    return (
+      <div className="px-4 py-8">
+        <GlassCard className="p-5">
+          <h2 className="font-semibold">
+            Business dashboard unavailable
+          </h2>
+
+          <p className="text-sm text-white/50 mt-2">
+            No business dashboard data is currently available.
+          </p>
+        </GlassCard>
+      </div>
+    );
+  }
+
+  /* ============================================================
+     RENDER
+     ============================================================ */
 
   return (
     <div className="px-4 pb-24 space-y-6">
 
-      {/* ------------------------------------------------------------------ */}
-      {/* Header                                                             */}
-      {/* ------------------------------------------------------------------ */}
+      {/* BUSINESS HEADER */}
 
       <GlassCard variant="elevated" className="p-4">
         <div className="flex items-center justify-between gap-3">
-
           <div className="flex items-center gap-3 min-w-0">
             <GlassIcon size="lg">
               <Building2 size={23} />
@@ -194,7 +237,7 @@ export default function OwnerDashboardPage() {
               </p>
 
               <h1 className="text-lg font-semibold truncate">
-                {`${business?.name} Overview`}
+                {business?.name || "Business Overview"}
               </h1>
 
               <p className="text-xs text-white/50">
@@ -212,7 +255,6 @@ export default function OwnerDashboardPage() {
         </div>
 
         <div className="flex items-center justify-between mt-5 pt-4 border-t border-white/10">
-
           <div>
             <p className="text-xs text-white/50">
               Business performance
@@ -227,16 +269,12 @@ export default function OwnerDashboardPage() {
             <CalendarDays size={14} />
             Today
           </div>
-
         </div>
       </GlassCard>
 
-      {/* ------------------------------------------------------------------ */}
-      {/* Business Financial Position                                        */}
-      {/* ------------------------------------------------------------------ */}
+      {/* BUSINESS FINANCIAL POSITION */}
 
       <section className="space-y-3">
-
         <div>
           <h2 className="text-base font-semibold">
             Business Financial Position
@@ -248,27 +286,24 @@ export default function OwnerDashboardPage() {
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-
           <MetricCard
             title="Inventory Value"
             value={formatCompactCurrency(
-              businessOverview.inventoryValue
+              summary?.inventoryValue ?? 0
             )}
             icon={<Package size={19} />}
           />
 
           <MetricCard
             title="Available Cash"
-            value={formatCompactCurrency(
-              businessOverview.availableCash
-            )}
+            value={formatCompactCurrency(availableCash)}
             icon={<Wallet size={19} />}
           />
 
           <MetricCard
             title="Today's Sales"
             value={formatCompactCurrency(
-              businessOverview.todaySales
+              summary?.todaySales ?? 0
             )}
             icon={<ShoppingCart size={19} />}
           />
@@ -276,7 +311,7 @@ export default function OwnerDashboardPage() {
           <MetricCard
             title="Today's Revenue"
             value={formatCompactCurrency(
-              businessOverview.todayRevenue
+              summary?.revenue ?? 0
             )}
             icon={<CircleDollarSign size={19} />}
           />
@@ -284,30 +319,22 @@ export default function OwnerDashboardPage() {
           <MetricCard
             title="Today's Net Profit"
             value={formatCompactCurrency(
-              businessOverview.todayNetProfit
+              summary?.netProfit ?? 0
             )}
             icon={<TrendingUp size={19} />}
           />
-
         </div>
       </section>
 
-      {/* ------------------------------------------------------------------ */}
-      {/* CEO Action Centre                                                   */}
-      {/* ------------------------------------------------------------------ */}
+      {/* CEO ACTION CENTRE */}
 
       <CEOActionCentre
-        onAction={(action) => {
-          navigate(action)
-        }}
+        onAction={(action) => navigate(action)}
       />
 
-      {/* ------------------------------------------------------------------ */}
-      {/* Monthly Business Performance                                        */}
-      {/* ------------------------------------------------------------------ */}
+      {/* MONTHLY BUSINESS PERFORMANCE */}
 
       <section className="space-y-3">
-
         <div>
           <h2 className="text-base font-semibold">
             Business Performance
@@ -319,41 +346,40 @@ export default function OwnerDashboardPage() {
         </div>
 
         <GlassCard className="p-4 space-y-4">
-
           <div className="flex justify-between items-center">
-
             <div>
               <p className="text-xs text-white/50">
                 Monthly Revenue
               </p>
 
               <p className="text-2xl font-semibold mt-1">
-                {formatCompactCurrency(monthlyOverview.revenue)}
+                {formatCompactCurrency(
+                  monthlyOverview?.revenue ?? 0
+                )}
               </p>
             </div>
 
             <GlassIcon variant="success" size="lg">
               <CircleDollarSign size={22} />
             </GlassIcon>
-
           </div>
 
           <div className="h-px bg-white/10" />
 
           <div className="flex justify-between items-center">
-
             <div>
               <p className="text-xs text-white/50">
                 Monthly Net Profit
               </p>
 
               <p className="text-xl font-semibold text-emerald-400 mt-1">
-                {formatCompactCurrency(monthlyOverview.netProfit)}
+                {formatCompactCurrency(
+                  monthlyOverview?.netProfit ?? 0
+                )}
               </p>
             </div>
 
             <div className="text-right">
-
               <p className="text-xs text-white/50">
                 Profit Margin
               </p>
@@ -361,62 +387,121 @@ export default function OwnerDashboardPage() {
               <p className="text-sm font-medium mt-1">
                 {monthlyProfitMargin.toFixed(1)}%
               </p>
-
             </div>
           </div>
-
         </GlassCard>
       </section>
 
-      {/* ------------------------------------------------------------------ */}
-      {/* Branch Performance                                                  */}
-      {/* ------------------------------------------------------------------ */}
+      {/* BRANCH PERFORMANCE */}
 
       <section className="space-y-3">
-
         <div className="flex justify-between items-end">
-
           <div>
             <h2 className="text-base font-semibold">
               Branch Performance
             </h2>
 
             <p className="text-xs text-white/50 mt-1">
-              Today's branch-level economics
+              Consolidated branch economics
             </p>
           </div>
 
           <span className="text-xs text-white/50">
             {activeBranches}/{branches.length} active
           </span>
-
         </div>
 
-        <div className="space-y-3">
-
-          {branches.map((branch) => (
-            <BranchPerformanceCard
-              key={branch.id}
-              branch={branch}
-              onClick={(selectedBranch) => {
-                console.log("Selected branch:", selectedBranch);
-              }}
+        {branchCards.length === 0 ? (
+          <GlassCard className="p-5 text-center">
+            <Building2
+              size={25}
+              className="mx-auto text-white/40"
             />
-          ))}
 
-        </div>
+            <p className="text-sm font-medium mt-3">
+              No branches found
+            </p>
+
+            <p className="text-xs text-white/50 mt-1">
+              Your business branches will appear here.
+            </p>
+          </GlassCard>
+        ) : (
+          <div className="space-y-3">
+            {branchCards.map((branch) => (
+              <BranchPerformanceCard
+                key={branch.id}
+                branch={branch}
+                onClick={(selectedBranch) => {
+                  navigate(`/branch/${selectedBranch.id}`);
+                }}
+              />
+            ))}
+          </div>
+        )}
       </section>
 
-      {/* ------------------------------------------------------------------ */}
-      {/* Business Alerts                                                     */}
-      {/* ------------------------------------------------------------------ */}
+      {/* REAL BUSINESS ALERTS */}
 
-      <BusinessAlerts
-        onAlertClick={(alert) => {
-          console.log("Selected business alert:", alert);
-        }}
-      />
+      <section className="space-y-3">
+        <div>
+          <h2 className="text-base font-semibold">
+            Business Alerts
+          </h2>
 
+          <p className="text-xs text-white/50 mt-1">
+            Operational issues detected across your branches
+          </p>
+        </div>
+
+        {branchAlerts.length === 0 ? (
+          <GlassCard className="p-4">
+            <p className="text-sm text-white/60">
+              No branch alerts detected from the available dashboard data.
+            </p>
+          </GlassCard>
+        ) : (
+          <div className="space-y-2">
+            {branchAlerts.map((alert) => (
+              <GlassCard
+                key={alert.id}
+                className="p-3"
+              >
+                <div className="flex items-start gap-3">
+                  <GlassIcon
+                    size="md"
+                    variant="primary"
+                  >
+                    {alert.title.includes("stock") ? (
+                      <PackageX size={19} />
+                    ) : (
+                      <AlertTriangle size={19} />
+                    )}
+                  </GlassIcon>
+
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium">
+                      {alert.title}
+                    </p>
+
+                    <p className="text-xs text-white/50 mt-1">
+                      {alert.description}
+                    </p>
+
+                    <p className="text-xs text-white/60 mt-2">
+                      {alert.branch}
+                    </p>
+                  </div>
+
+                  <span className="text-[10px] px-2 py-1 rounded-full bg-amber-500/15 text-amber-400">
+                    Warning
+                  </span>
+                </div>
+              </GlassCard>
+            ))}
+          </div>
+        )}
+      </section>
     </div>
   );
-};
+}

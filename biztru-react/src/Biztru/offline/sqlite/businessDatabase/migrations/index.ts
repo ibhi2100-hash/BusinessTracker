@@ -19,6 +19,9 @@ import { migration019 } from "./019_SyncActivity";
 import { migration020 } from "./020_syncState";
 import { migration021 } from "./021_EmployeeSystem";
 import { migration022 } from "./022_EventInbox";
+import { migration023 } from "./023_BillingSystem";
+import { migration024 } from "./024_Customers";
+import { migration025 } from "./025_Suppliers";
 
 
 
@@ -43,5 +46,8 @@ export const migrations = [
     migration019,
     migration020,
     migration021,
-    migration022
+    migration022,
+    migration023,
+    migration024,
+    migration025,
 ]

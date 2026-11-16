@@ -5,7 +5,8 @@ import { BranchStatementDefinition } from "./branch/BranchStatementDefintion";
 import { BusinessStatementDefinition } from "./business/BusinessDefiinition";
 import { ConflictStatementDefinition } from "./conflicts/conflictsStatementDefinition";
 import { SyncCursorStatementsDefinition } from "./cursor/CursorStatementsDefinition";
-import { DashboardStatementDefinition } from "./dashboard/dashboardStatementsDefinition";
+import { BranchDashboardStatementDefinition } from "./dashboard/branch/dashboardStatementsDefinition";
+import { BusinessDashboardStatementDefinition } from "./dashboard/business/BusinessDashboardStatementDefinition";
 import { EmployeeStatementDefinitions } from "./employees/employeeStatementDefinition";
 import { EventInboxStatementsDefinition } from "./eventInbox/EventInboxStatementsDefinition";
 import { EventStatementsDefinition } from "./events/EventDefinitions";
@@ -31,7 +32,8 @@ export const BusinessStatementsDefinitions: StatementDefinition[] = [
     ...SalesStatementDefinition,
     ...ExpenseStatementDefinition,
     ...LedgerStatementDefinition,
-    ...DashboardStatementDefinition,
+    ...BranchDashboardStatementDefinition,
+    ...BusinessDashboardStatementDefinition,
     ...ReportStatementDefinition,
     ...OutboxStatementsDefinition,
     ...AggregateStatementDefinition,
@@ -42,4 +44,5 @@ export const BusinessStatementsDefinitions: StatementDefinition[] = [
     ...EmployeeStatementDefinitions,
     ...SyncCursorStatementsDefinition,
     ...EventInboxStatementsDefinition
+
 ]

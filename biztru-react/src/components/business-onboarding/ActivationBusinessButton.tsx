@@ -30,7 +30,7 @@ export function ActivateBusinessButton() {
       await app.onboarding.activateBusiness(businessId);
       await refreshSession()
       toast.success("Business activated successfully");
-      navigate("/dashboard");
+      navigate("/owner-dashboard");
     } catch (err: unknown) {
       const message =
         err instanceof Error ? err.message : "Failed to activate business";

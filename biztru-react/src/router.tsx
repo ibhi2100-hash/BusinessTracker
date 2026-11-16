@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 
 /* ------------------------------------------------------------------ */
-/* Public pages                                                       */
+/* PUBLIC PAGES                                                       */
 /* ------------------------------------------------------------------ */
 
 import HomePage from "./pages/HomePage";
@@ -15,7 +15,7 @@ import LoginPage from "./pages/auth/Login";
 import EmployeeSignupPage from "./pages/team/EmployeeSignupPage";
 
 /* ------------------------------------------------------------------ */
-/* Onboarding                                                         */
+/* ONBOARDING                                                         */
 /* ------------------------------------------------------------------ */
 
 import OnboardingPage from "./pages/onboarding/Onboard";
@@ -24,14 +24,14 @@ import OnboardingInventoryPage from "./pages/onboarding/OnboardingInventory";
 import OpeningCashPage from "./pages/onboarding/OnboardingCash";
 
 /* ------------------------------------------------------------------ */
-/* Dashboards                                                         */
+/* DASHBOARDS                                                         */
 /* ------------------------------------------------------------------ */
 
 import DashboardPage from "./pages/Dashboard";
 import OwnerDashboardPage from "./pages/owner/OwnerDashboardPage";
 
 /* ------------------------------------------------------------------ */
-/* Sales and operations                                               */
+/* SALES AND OPERATIONS                                               */
 /* ------------------------------------------------------------------ */
 
 import SalesPage from "./pages/SalesPage";
@@ -44,7 +44,7 @@ import CapitalWithdrawPage from "./pages/CapitalWithdraw";
 import ExpensePage from "./pages/ExpensePage";
 
 /* ------------------------------------------------------------------ */
-/* Reports                                                            */
+/* REPORTS                                                            */
 /* ------------------------------------------------------------------ */
 
 import ReportsDashboardPage from "./components/reports/ReportDashboardPage";
@@ -53,7 +53,7 @@ import YearlyReportsPage from "./pages/reports/yearly/page";
 import BusinessReportPage from "./components/reports/BusinessReportPage";
 
 /* ------------------------------------------------------------------ */
-/* Administration                                                    */
+/* ADMINISTRATION                                                     */
 /* ------------------------------------------------------------------ */
 
 import SyncMgtpage from "./pages/sync/SyncMgtPage";
@@ -64,7 +64,7 @@ import {
 } from "./components/pricing/BillingManagementPage";
 
 /* ------------------------------------------------------------------ */
-/* Layout and guards                                                  */
+/* LAYOUT AND GUARDS                                                  */
 /* ------------------------------------------------------------------ */
 
 import {
@@ -86,7 +86,7 @@ import {
 import NotFoundPage from "./pages/NotFoundPage";
 
 /* ------------------------------------------------------------------ */
-/* Router                                                             */
+/* ROUTER                                                             */
 /* ------------------------------------------------------------------ */
 
 export function AppRouter() {
@@ -128,14 +128,16 @@ export function AppRouter() {
           />
         }
       >
+
         <Route
           path="/onboarding-business"
           element={<OnboardingBusinessPage />}
         />
+
       </Route>
 
       {/* ============================================================ */}
-      {/* AUTHENTICATED — ONBOARDING                                   */}
+      {/* BUSINESS ONBOARDING                                          */}
       {/* ============================================================ */}
 
       <Route
@@ -144,9 +146,13 @@ export function AppRouter() {
             requireAuth
             requireBusiness
             requireOnboarding
+            context={{
+              type: "BUSINESS",
+            }}
           />
         }
       >
+
         <Route
           path="/onboarding"
           element={<OnboardingPage />}
@@ -161,10 +167,11 @@ export function AppRouter() {
           path="/onboarding-opening-cash"
           element={<OpeningCashPage />}
         />
+
       </Route>
 
       {/* ============================================================ */}
-      {/* APPLICATION SHELL                                            */}
+      {/* AUTHENTICATED APPLICATION                                    */}
       {/* ============================================================ */}
 
       <Route
@@ -173,15 +180,20 @@ export function AppRouter() {
             requireAuth
             requireBusiness
             blockIfOnboarding
+            context={{
+              type: "BUSINESS",
+            }}
           />
         }
       >
+
         <Route element={<AppShell />}>
+
           <Route element={<ApplicationShell />}>
 
-            {/* ------------------------------------------------------ */}
+            {/* ====================================================== */}
             {/* APPLICATION ENTRY                                      */}
-            {/* ------------------------------------------------------ */}
+            {/* ====================================================== */}
 
             <Route
               path="/app"
@@ -189,7 +201,8 @@ export function AppRouter() {
             />
 
             {/* ====================================================== */}
-            {/* CEO + ADMIN — OWNER WORKSPACE                           */}
+            {/* BUSINESS ADMINISTRATION                                */}
+            {/* CEO + ADMIN                                            */}
             {/* ====================================================== */}
 
             <Route
@@ -199,9 +212,15 @@ export function AppRouter() {
                     "CEO",
                     "ADMIN",
                   ]}
+                  context={{
+                    type: "BUSINESS",
+                  }}
                 />
               }
             >
+
+              {/* OWNER DASHBOARD */}
+
               <Route
                 path="/owner-dashboard"
                 element={
@@ -213,174 +232,324 @@ export function AppRouter() {
                     permissions={[
                       "business:read",
                     ]}
-                    readOnly
+                    context={{
+                      type: "BUSINESS",
+                    }}
                   >
                     <OwnerDashboardPage />
                   </AuthGuard>
                 }
               />
-            </Route>
 
-            {/* ====================================================== */}
-            {/* CEO + ADMIN + MANAGER — BRANCH DASHBOARD                */}
-            {/* ====================================================== */}
+              {/* TEAM MANAGEMENT */}
 
-            <Route
-              element={
-                <AuthGuard
-                  roles={[
-                    "CEO",
-                    "ADMIN",
-                    "MANAGER",
-                  ]}
-                  permissions={[
-                    "branch:read",
-                  ]}
-                  readOnlyRoles={[
-                    "CEO",
-                    "ADMIN",
-                  ]}
-                />
-              }
-            >
               <Route
-                path="/dashboard"
-                element={<DashboardPage />}
+                path="/settings/team"
+                element={
+                  <AuthGuard
+                    roles={[
+                      "CEO",
+                      "ADMIN",
+                    ]}
+                    permissions={[
+                      "team:manage",
+                    ]}
+                    context={{
+                      type: "BUSINESS",
+                    }}
+                  >
+                    <TeamPage />
+                  </AuthGuard>
+                }
               />
-            </Route>
 
-            {/* ====================================================== */}
-            {/* CEO + ADMIN + MANAGER — BRANCH SALES HISTORY            */}
-            {/* ====================================================== */}
+              {/* BILLING */}
 
-            <Route
-              element={
-                <AuthGuard
-                  roles={[
-                    "CEO",
-                    "ADMIN",
-                    "MANAGER",
-                    "STAFF",
-                    "SALES_REPS",
-                  ]}
-                  permissions={[
-                    "sales:read",
-                  ]}
-                  readOnlyRoles={[
-                    "CEO",
-                    "ADMIN",
-                  ]}
-                />
-              }
-            >
               <Route
-                path="/sales/list"
-                element={<ListSalesPage />}
+                path="/settings/billing"
+                element={
+                  <AuthGuard
+                    roles={[
+                      "CEO",
+                      "ADMIN",
+                    ]}
+                    permissions={[
+                      "billing:manage",
+                    ]}
+                    context={{
+                      type: "BUSINESS",
+                    }}
+                  >
+                    <BillingManagementPage />
+                  </AuthGuard>
+                }
               />
+
             </Route>
 
             {/* ====================================================== */}
-            {/* MANAGER + STAFF + SALES REPS — SALES OPERATIONS         */}
+            {/* BRANCH OPERATIONS CONTEXT                               */}
+            {/*                                                         */}
+            {/* IMPORTANT:                                             */}
+            {/* No role restriction at this parent level.              */}
+            {/* Each individual route controls its own access.         */}
             {/* ====================================================== */}
 
             <Route
               element={
                 <AuthGuard
-                  roles={[
-                    "MANAGER",
-                    "STAFF",
-                    "SALES_REPS",
-                  ]}
-                  permissions={[
-                    "sales:create",
-                  ]}
+                  context={{
+                    type: "BRANCH_OPERATIONS",
+                  }}
                 />
               }
             >
-              <Route
-                path="/sales"
-                element={<SalesPage />}
-              />
-            </Route>
 
-            {/* ====================================================== */}
-            {/* CEO + ADMIN + MANAGER — INVENTORY VIEW                  */}
-            {/* ====================================================== */}
+              {/* -------------------------------------------------- */}
+              {/* BRANCH DASHBOARD                                    */}
+              {/* CEO + ADMIN + MANAGER                               */}
+              {/* -------------------------------------------------- */}
 
-            <Route
-              element={
-                <AuthGuard
-                  roles={[
-                    "CEO",
-                    "ADMIN",
-                    "MANAGER",
-                  ]}
-                  permissions={[
-                    "inventory:read",
-                  ]}
-                  readOnlyRoles={[
-                    "CEO",
-                    "ADMIN",
-                  ]}
+              {/* NORMAL BRANCH DASHBOARD */}
+                <Route
+                  path="/dashboard"
+                  element={
+                    <AuthGuard
+                      roles={["CEO", "ADMIN", "MANAGER"]}
+                      permissions={["branch:read"]}
+                      context={{ type: "BRANCH_OPERATIONS" }}
+                    >
+                      <DashboardPage />
+                    </AuthGuard>
+                  }
                 />
-              }
-            >
+
+                {/* OWNER-SELECTED BRANCH DASHBOARD */}
+                <Route
+                  path="/branch/:branchId"
+                  element={
+                    <AuthGuard
+                      roles={["CEO", "ADMIN", "MANAGER"]}
+                      permissions={["branch:read"]}
+                      context={{ type: "BRANCH_OPERATIONS" }}
+                    >
+                      <DashboardPage />
+                    </AuthGuard>
+                  }
+                />
+
+              {/* -------------------------------------------------- */}
+              {/* INVENTORY                                           */}
+              {/* CEO + ADMIN + MANAGER                               */}
+              {/* -------------------------------------------------- */}
+
               <Route
                 path="/inventory"
-                element={<InventoriesPage />}
+                element={
+                  <AuthGuard
+                    roles={[
+                      "CEO",
+                      "ADMIN",
+                      "MANAGER",
+                    ]}
+                    permissions={[
+                      "inventory:read",
+                    ]}
+                    context={{
+                      type: "BRANCH_OPERATIONS",
+                    }}
+                  >
+                    <InventoriesPage />
+                  </AuthGuard>
+                }
               />
-            </Route>
 
-            {/* ====================================================== */}
-            {/* MANAGER — BRANCH OPERATIONS                             */}
-            {/* ====================================================== */}
+              {/* -------------------------------------------------- */}
+              {/* SALES HISTORY                                       */}
+              {/* CEO + ADMIN + MANAGER + STAFF + SALES_REPS          */}
+              {/* -------------------------------------------------- */}
 
-            <Route
-              element={
-                <AuthGuard
-                  roles={[
-                    "MANAGER",
-                  ]}
-                  permissions={[
-                    "branch:write",
-                  ]}
-                />
-              }
-            >
-              {/* Buying analysis */}
+              <Route
+                path="/sales/list"
+                element={
+                  <AuthGuard
+                    roles={[
+                      "CEO",
+                      "ADMIN",
+                      "MANAGER",
+                      "STAFF",
+                      "SALES_REPS",
+                    ]}
+                    permissions={[
+                      "sales:read",
+                    ]}
+                    context={{
+                      type: "BRANCH_OPERATIONS",
+                    }}
+                  >
+                    <ListSalesPage />
+                  </AuthGuard>
+                }
+              />
+
+              {/* -------------------------------------------------- */}
+              {/* SALES CREATION                                      */}
+              {/* CEO + ADMIN + MANAGER + STAFF + SALES_REPS          */}
+              {/* -------------------------------------------------- */}
+
+              <Route
+                path="/sales"
+                element={
+                  <AuthGuard
+                    roles={[
+                      "CEO",
+                      "ADMIN",
+                      "MANAGER",
+                      "STAFF",
+                      "SALES_REPS",
+                    ]}
+                    permissions={[
+                      "sales:create",
+                    ]}
+                    context={{
+                      type: "BRANCH_OPERATIONS",
+                    }}
+                  >
+                    <SalesPage />
+                  </AuthGuard>
+                }
+              />
+
+              {/* -------------------------------------------------- */}
+              {/* BUYING ANALYSIS                                     */}
+              {/* CEO + ADMIN + MANAGER                               */}
+              {/* -------------------------------------------------- */}
 
               <Route
                 path="/sales/analysis"
-                element={<AnalysisBuyPage />}
+                element={
+                  <AuthGuard
+                    roles={[
+                      "CEO",
+                      "ADMIN",
+                      "MANAGER",
+                    ]}
+                    permissions={[
+                      "inventory:read",
+                    ]}
+                    context={{
+                      type: "BRANCH_OPERATIONS",
+                    }}
+                  >
+                    <AnalysisBuyPage />
+                  </AuthGuard>
+                }
               />
 
-              {/* Capital management */}
+              {/* -------------------------------------------------- */}
+              {/* CAPITAL INJECTION                                   */}
+              {/* CEO + ADMIN + MANAGER                               */}
+              {/* -------------------------------------------------- */}
 
               <Route
                 path="/capital/inject"
-                element={<CapitalInjectPage />}
+                element={
+                  <AuthGuard
+                    roles={[
+                      "CEO",
+                      "ADMIN",
+                      "MANAGER",
+                    ]}
+                    permissions={[
+                      "finance:write",
+                    ]}
+                    context={{
+                      type: "BRANCH_OPERATIONS",
+                    }}
+                  >
+                    <CapitalInjectPage />
+                  </AuthGuard>
+                }
               />
+
+              {/* -------------------------------------------------- */}
+              {/* CAPITAL WITHDRAWAL                                  */}
+              {/* CEO + ADMIN + MANAGER                               */}
+              {/* -------------------------------------------------- */}
 
               <Route
                 path="/capital/withdraw"
-                element={<CapitalWithdrawPage />}
+                element={
+                  <AuthGuard
+                    roles={[
+                      "CEO",
+                      "ADMIN",
+                      "MANAGER",
+                    ]}
+                    permissions={[
+                      "finance:write",
+                    ]}
+                    context={{
+                      type: "BRANCH_OPERATIONS",
+                    }}
+                  >
+                    <CapitalWithdrawPage />
+                  </AuthGuard>
+                }
               />
 
-              {/* Expenses */}
+              {/* -------------------------------------------------- */}
+              {/* EXPENSES                                            */}
+              {/* CEO + ADMIN + MANAGER                               */}
+              {/* -------------------------------------------------- */}
 
               <Route
                 path="/expenses"
-                element={<ExpensePage />}
+                element={
+                  <AuthGuard
+                    roles={[
+                      "CEO",
+                      "ADMIN",
+                      "MANAGER",
+                    ]}
+                    permissions={[
+                      "finance:write",
+                    ]}
+                    context={{
+                      type: "BRANCH_OPERATIONS",
+                    }}
+                  >
+                    <ExpensePage />
+                  </AuthGuard>
+                }
               />
 
               <Route
                 path="/expenses/new"
-                element={<ExpensePage />}
+                element={
+                  <AuthGuard
+                    roles={[
+                      "CEO",
+                      "ADMIN",
+                      "MANAGER",
+                    ]}
+                    permissions={[
+                      "finance:write",
+                    ]}
+                    context={{
+                      type: "BRANCH_OPERATIONS",
+                    }}
+                  >
+                    <ExpensePage />
+                  </AuthGuard>
+                }
               />
+
             </Route>
 
             {/* ====================================================== */}
-            {/* CEO + ADMIN + MANAGER — REPORTS                         */}
+            {/* BRANCH REPORTS                                         */}
+            {/* CEO + ADMIN + MANAGER                                  */}
             {/* ====================================================== */}
 
             <Route
@@ -394,13 +563,13 @@ export function AppRouter() {
                   permissions={[
                     "reports:read",
                   ]}
-                  readOnlyRoles={[
-                    "CEO",
-                    "ADMIN",
-                  ]}
+                  context={{
+                    type: "BRANCH_OPERATIONS",
+                  }}
                 />
               }
             >
+
               <Route
                 path="/reports"
                 element={<ReportsDashboardPage />}
@@ -416,80 +585,41 @@ export function AppRouter() {
                 element={<YearlyReportsPage />}
               />
 
-              <Route
-                path="/reports/business"
-                element={
-                  <AuthGuard
-                    roles={[
-                      "CEO",
-                      "ADMIN",
-                    ]}
-                    permissions={[
-                      "business:read",
-                    ]}
-                    readOnly
-                  >
-                    <BusinessReportPage />
-                  </AuthGuard>
-                }
-              />
             </Route>
 
             {/* ====================================================== */}
-            {/* CEO + ADMIN — BUSINESS ADMINISTRATION                  */}
+            {/* BUSINESS REPORT                                        */}
+            {/* CEO + ADMIN                                            */}
             {/* ====================================================== */}
 
             <Route
+              path="/reports/business"
               element={
                 <AuthGuard
                   roles={[
                     "CEO",
                     "ADMIN",
                   ]}
-                />
+                  permissions={[
+                    "business:read",
+                  ]}
+                  context={{
+                    type: "BUSINESS",
+                  }}
+                >
+                  <BusinessReportPage />
+                </AuthGuard>
               }
-            >
-              <Route
-                path="/settings/team"
-                element={
-                  <AuthGuard
-                    roles={[
-                      "CEO",
-                      "ADMIN",
-                    ]}
-                    permissions={[
-                      "team:manage",
-                    ]}
-                  >
-                    <TeamPage />
-                  </AuthGuard>
-                }
-              />
-
-              <Route
-                path="/settings/billing"
-                element={
-                  <AuthGuard
-                    roles={[
-                      "CEO",
-                      "ADMIN",
-                    ]}
-                    permissions={[
-                      "billing:manage",
-                    ]}
-                  >
-                    <BillingManagementPage />
-                  </AuthGuard>
-                }
-              />
-            </Route>
+            />
 
             {/* ====================================================== */}
-            {/* ADMIN + MANAGER — SYNCHRONIZATION                       */}
-            {/* CEO can observe but cannot manage sync                  */}
+            {/* SYNCHRONIZATION                                        */}
+            {/* CEO + ADMIN + MANAGER                                  */}
+            {/* CEO READ-ONLY                                          */}
             {/* ====================================================== */}
 
             <Route
+              path="/sync-management"
               element={
                 <AuthGuard
                   roles={[
@@ -503,14 +633,14 @@ export function AppRouter() {
                   readOnlyRoles={[
                     "CEO",
                   ]}
-                />
+                  context={{
+                    type: "BRANCH_OPERATIONS",
+                  }}
+                >
+                  <SyncMgtpage />
+                </AuthGuard>
               }
-            >
-              <Route
-                path="/sync-management"
-                element={<SyncMgtpage />}
-              />
-            </Route>
+            />
 
           </Route>
         </Route>
@@ -538,7 +668,7 @@ export function AppRouter() {
       />
 
       {/* ============================================================ */}
-      {/* FALLBACK                                                     */}
+      {/* NOT FOUND                                                    */}
       {/* ============================================================ */}
 
       <Route

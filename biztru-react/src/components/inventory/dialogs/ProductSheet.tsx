@@ -97,6 +97,7 @@ export interface ProductFormData {
 interface Props {
   open: boolean;
   mode: "create" | "edit" | "manage";
+  inventoryMode?: "OPENING" | "LIVE";
   initialData?: LiveProduct | null;
   initialBarcode?: string;
   categories: string[];
@@ -272,6 +273,7 @@ const EMPTY_FORM: FormState = {
 export default function ProductSheet({
   open,
   mode,
+  inventoryMode = "LIVE",
   initialData,
   initialBarcode,
   categories,
@@ -1660,7 +1662,9 @@ export default function ProductSheet({
               mb-2 block text-xs font-medium
               uppercase tracking-wider text-gray-500
             ">
-              Initial quantity
+              {inventoryMode === "OPENING"
+                ? "Opening stock quantity"
+                : "Initial quantity"}
             </label>
 
             <div className="
@@ -1708,7 +1712,9 @@ export default function ProductSheet({
               justify-between px-1
             ">
               <p className="text-[11px] text-gray-600">
-                Units entering inventory
+                {inventoryMode === "OPENING"
+                  ? "Units allocated to this branch during branch initialization."
+                  : "Units entering inventory."}
               </p>
 
               {quantity > 0 && (
@@ -1736,7 +1742,9 @@ export default function ProductSheet({
               flex items-center justify-between
             ">
               <span className="text-xs text-gray-500">
-                Initial inventory cost
+                {inventoryMode === "OPENING"
+                  ? "Opening inventory cost"
+                  : "Initial inventory cost"}
               </span>
 
               <span className="

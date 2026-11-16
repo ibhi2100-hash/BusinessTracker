@@ -8,7 +8,7 @@ import type{ PreparedStatementManager } from "../../PreparedStatement/PreparedSt
 import { LogicClockStatements } from "./logicClock/logicClockStatements"
 import { SalesStatement } from "./sales/salesStatements";
 import { LedgerStatements } from "./ledger/LedgerStatements";
-import { DashboardStatements } from "./dashboard/dashboardStatements";
+import { DashboardStatements } from "./dashboard/branch/dashboardStatements";
 import { ReportStatements } from "./report/reportStatements";
 import { OutboxStatments } from "./outbox/outboxStatements";
 import { AggregateStatements } from "./aggregates/aggregateStatements";
@@ -19,6 +19,11 @@ import { SyncActivityStatements } from "./syncActivities/ActivityStatements";
 import { EmployeeStatements } from "./employees/employeesStatements";
 import { EventInboxStatements } from "./eventInbox/EventInboxStatements";
 import { SyncCursorStatements } from "./cursor/CursorStatement";
+import { BusinessDashboardStatements } from "./dashboard/business/BusinessStatements";
+
+
+
+
 export class BusinessStatementRegistry {
     readonly events: EventStatements;
     readonly eventInbox: EventInboxStatements;
@@ -31,6 +36,7 @@ export class BusinessStatementRegistry {
     readonly business: BusinessStatements;
     readonly branches: BranchStatements;
     readonly dashboard: DashboardStatements;
+    readonly businessDashboard: BusinessDashboardStatements
     readonly report: ReportStatements;
     readonly outbox: OutboxStatments;
     readonly aggregates: AggregateStatements;
@@ -66,6 +72,8 @@ export class BusinessStatementRegistry {
         this.dashboard  = 
             new DashboardStatements(manager);
 
+        this.businessDashboard = 
+            new BusinessDashboardStatements(manager);
         this.report = 
             new ReportStatements(manager);
 
