@@ -95,12 +95,12 @@ export default function BranchesPage() {
      ---------------------------------------------------------- */
 
     const handleBranchSelection = (branch: BranchPerformance) => {
-        navigate(`/branch/${encodeURIComponent(branch.id)}`);
+        navigate(`/owner/branches/${branch.id}`);
     };
 
     const handleControlRoomSelection = (branch: BranchPerformance) => {
         navigate(
-            `/owner/branches/${encodeURIComponent(branch.id)}/control-room`
+            `/owner/branches/${branch.id}/control-room`
         );
         };
   const handleAddBranch = () => {

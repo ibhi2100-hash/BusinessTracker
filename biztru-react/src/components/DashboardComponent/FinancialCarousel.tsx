@@ -19,15 +19,16 @@ export function FinancialCarousel() {
   }>();
 
   // Branch ID supplied by the normal manager branch context
-  const { branchId: contextBranchId } = useBusinessContext();
+  const { branchId: contextBranchId, businessId } = useBusinessContext();
 
   // URL branch takes priority; otherwise use the active branch context.
   const branchId = routeBranchId ?? contextBranchId;
 
-  const { data, loading, error } = useLiveDashboard(branchId);
+  const { data, loading, error } = useLiveDashboard(businessId, branchId);
 
   const summary = data;
 
+  console.log("This is the Branch Summary: ", summary)
   if (loading || !summary) {
     return (
       <div className="flex gap-4 overflow-x-auto py-4 scrollbar-hide">
@@ -61,7 +62,7 @@ export function FinancialCarousel() {
     {
       id: "todaySales",
       title: "Today's Sales",
-      value: `₦${(summary.todaySales ?? 0).toLocaleString()}`,
+      value: `₦${(summary.revenue ?? 0).toLocaleString()}`,
       trend: "Sales recorded today",
       icon: <ShoppingCart className="w-5 h-5" />,
     },

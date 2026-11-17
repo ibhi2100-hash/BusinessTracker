@@ -173,6 +173,9 @@ export const ROLE_PERMISSIONS: Record<
     "team:read",
     "team:manage",
 
+    // Business settings
+    "settings:manage",
+    "billing:manage",
     // Synchronization visibility
     "sync:read",
   ],

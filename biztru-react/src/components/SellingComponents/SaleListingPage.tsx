@@ -37,7 +37,7 @@ import type {
 } from "@business/shared-types";
 
 import { useBusinessLiveQuery } from "../../hooks/useBusinessLiveQuery";
-import { useBranchLiveQuery } from "../../hooks/useBranches";
+import { useBranchesLiveQuery } from "../../hooks/useBranches";
 import { useRouteAccess } from "../../hooks/useAuthGuard";
 
 type StatusFilter = "all" | "completed" | "voided" | "refunded";
@@ -410,7 +410,7 @@ export default function SalesListPage() {
     businessId
   );
 
-  const { data: branches } = useBranchLiveQuery(
+  const { data: branches } = useBranchesLiveQuery(
     businessId
   );
 

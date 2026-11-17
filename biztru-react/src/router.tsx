@@ -342,7 +342,20 @@ export function AppRouter() {
               {/* OWNER-SELECTED BRANCH DASHBOARD */}
 
               <Route
-                path="/branch/:branchId"
+                path="owner/branches/:branchId"
+                element={
+                  <AuthGuard
+                    roles={["CEO", "ADMIN", "MANAGER"]}
+                    permissions={["branch:read"]}
+                    context={{ type: "BRANCH_OPERATIONS" }}
+                  >
+                    <DashboardPage />
+                  </AuthGuard>
+                }
+              />
+
+              <Route
+                path="owner/branches/:branchId/dashboard"
                 element={
                   <AuthGuard
                     roles={["CEO", "ADMIN", "MANAGER"]}

@@ -4,13 +4,14 @@ import { useApplication } from "../Biztru/services/ApplicationService/Applicatio
 import { useLiveQuery } from "./useLiveQuery";
 import type{ DashboardSummary } from "@business/shared-types";
 
-export function useLiveDashboard(branchId: string | null | undefined) {
+export function useLiveDashboard(businessId: string | null | undefined, branchId: string | null | undefined) {
   const app = useApplication();
 
   const query = useCallback(async (): Promise<DashboardSummary | null> => {
-    if (!branchId) return null;
-    return await app.dashboard.getSummary(branchId);
-  }, [app, branchId]);
+    if (!businessId && !branchId) return null;
+
+    return await app.dashboard.getSummary(businessId ?? "", branchId ?? "");
+  }, [app, businessId, branchId]);
 
   return useLiveQuery<DashboardSummary>(
     ["ledger", "inventories", "sales"],

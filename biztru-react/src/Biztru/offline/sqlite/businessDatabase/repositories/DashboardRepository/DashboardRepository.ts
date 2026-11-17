@@ -10,10 +10,11 @@ export class SQLiteDashboardRepository implements DashboardRepository {
     this.statements = statements
   }
 
-  async getSummary(
-    branchId: string,
-    period?: PeriodFilter
-  ): Promise<DashboardSummary> {
+ async getSummary(
+  businessId: string,
+  branchId: string,
+  period?: PeriodFilter
+): Promise<DashboardSummary> {
     const now = Date.now();
     const from = period?.from ?? this.startOfToday();
     const to   = period?.to   ?? now;
@@ -28,8 +29,17 @@ export class SQLiteDashboardRepository implements DashboardRepository {
       revenue: number;
       cogs: number;
       expenses: number;
-    }>([branchId, branchId, from, to]);
-
+      stockedProducts: number;
+      totalUnits: number;
+      outOfStockRows: number;
+    }>([
+      businessId,  // 1
+      branchId,    // 2
+      from,        // 3
+      to,          // 4
+      businessId,  // 5
+      branchId     // 6
+    ]);
     const row = rows[0] ?? {
       cash: 0, bank: 0, inventoryValue: 0,
       liabilities: 0, ownerCapital: 0, ownerDrawings: 0,

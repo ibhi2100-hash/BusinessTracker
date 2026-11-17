@@ -17,7 +17,7 @@ import { GlassButton } from "../../components/ui/GlassButton";
 import StaffInvitationSheet from "../../components/employeeComponent/StaffInvitationSheet";
 import StaffCard from "../../components/employeeComponent/StaffCard";
 
-import { useBranchLiveQuery } from "../../hooks/useBranches";
+import { useBranchesLiveQuery } from "../../hooks/useBranches";
 import { useLiveEmployees } from "../../hooks/useLiveEmployees";
 import { useLiveAuth } from "../../hooks/useLiveAuth";
 
@@ -51,7 +51,7 @@ export default function TeamPage() {
   const [invitationLoading, setInvitationLoading] = useState(false);
   const [invitationError, setInvitationError] = useState<string | null>(null);
 
-  const { data: branchData } = useBranchLiveQuery(businessId);
+  const { data: branchData } = useBranchesLiveQuery(businessId);
   const allBranches = branchData ?? [];
 
   const {

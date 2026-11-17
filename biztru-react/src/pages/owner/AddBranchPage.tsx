@@ -20,7 +20,6 @@ import { GlassInput } from "../../components/ui/GlassInput";
 import { useBusinessContext } from "../../Biztru/context/BusinessContext";
 import { useApplication } from "../../Biztru/services/ApplicationService/ApplicationContext";
 import { toast } from "sonner";
-import { AggregateType } from "../../offline/domain/aggregate";
 import { BusinessEventTypes } from "@business/shared-types";
 
 type BranchForm = {

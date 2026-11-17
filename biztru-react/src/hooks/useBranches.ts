@@ -8,7 +8,7 @@ import { useLiveQuery } from "./useLiveQuery";
 
 import type { Branch } from "@business/shared-types";
 
-export function useBranchLiveQuery(
+export function useBranchesLiveQuery(
   businessId: string | null
 ) {
   const app = useApplication();

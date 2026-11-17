@@ -2,6 +2,7 @@ import type{ DashboardSummary } from "@business/shared-types";
 
 export interface DashboardRepository {
   getSummary(
+    businessId: string,
     branchId: string
   ): Promise<DashboardSummary>;
 

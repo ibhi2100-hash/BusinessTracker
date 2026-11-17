@@ -181,7 +181,7 @@ export default function OwnerDashboardPage() {
    * Do not overwrite the operational BusinessContext here.
    */
   const handleBranchSelection = (branch: BranchPerformance) => {
-    navigate(`/branch/${encodeURIComponent(branch.id)}`);
+    navigate(`/owner/branches/${branch.id}`);
   };
 
   /* ============================================================
