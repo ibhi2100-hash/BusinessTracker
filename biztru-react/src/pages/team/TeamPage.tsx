@@ -8,7 +8,6 @@ import {
   Plus,
   ShieldCheck,
   Users,
-  UserRound,
 } from "lucide-react";
 
 import { GlassCard } from "../../components/ui/GlassCard";
@@ -16,159 +15,179 @@ import { GlassIcon } from "../../components/ui/GlassIcon";
 import { GlassButton } from "../../components/ui/GlassButton";
 
 import StaffInvitationSheet from "../../components/employeeComponent/StaffInvitationSheet";
-
 import StaffCard from "../../components/employeeComponent/StaffCard";
 
 import { useBranchLiveQuery } from "../../hooks/useBranches";
 import { useLiveEmployees } from "../../hooks/useLiveEmployees";
+import { useLiveAuth } from "../../hooks/useLiveAuth";
 
 import { useBusinessContext } from "../../Biztru/context/BusinessContext";
 import { useApplication } from "../../Biztru/services/ApplicationService/ApplicationContext";
+import { useRouteAccess } from "../../hooks/useAuthGuard";
 
 import type { InviteEmployeeRequest } from "../../Biztru/services/ApplicationService/API/employee/EmployeeRequests";
 import type { StaffInvitationData } from "../../schemas/staff.schema";
 import type { Employee } from "@business/shared-types";
 
-/* ================================================================
-   TEAM PAGE
-================================================================ */
+import type { StaffRole } from "../../components/employeeComponent/StaffInvitationSheet";
 
 export default function TeamPage() {
   const app = useApplication();
   const { businessId } = useBusinessContext();
 
+  const { data: auth, loading: authLoading } = useLiveAuth();
+  const routeAccess = useRouteAccess();
+
+  const user = auth?.user;
+  const actorRole = routeAccess.role;
+const actorBranchId = user?.branchId;
+
+  const canManageTeam = routeAccess.canMutate("team:manage");
+
   const [inviteOpen, setInviteOpen] = useState(false);
   const [invitationLoading, setInvitationLoading] = useState(false);
-  const [invitationError, setInvitationError] = useState<string | null>(
-    null,
-  );
+  const [invitationError, setInvitationError] = useState<string | null>(null);
 
-  /*
-   * ==============================================================
-   * LIVE BRANCH PROJECTION
-   * ==============================================================
-   */
+  const { data: branchData } = useBranchLiveQuery(businessId);
+  const allBranches = branchData ?? [];
 
-  const {
-    data: branchData,
-  } = useBranchLiveQuery(businessId);
-
-  const branches = branchData ?? [];
-
-  /*
-   * ==============================================================
-   * LIVE EMPLOYEE PROJECTION
-   * ==============================================================
-   */
-
-  const {
-    data: staffData,
-    loading: staffLoading,
-    error: staffError,
-  } = useLiveEmployees(businessId);
+  const { data: staffData, loading: staffLoading, error: staffError } =
+    useLiveEmployees(businessId);
 
   const staff = staffData ?? [];
-  console.log("This is the Staff i gets: ", staff)
 
   /*
-   * ==============================================================
-   * DERIVED TEAM METRICS
-   * ==============================================================
+   * Resolve the invitation policy from the authenticated actor.
+   *
+   * CEO:
+   *   - MANAGER only
+   *   - Any branch in this business
+   *
+   * MANAGER:
+   *   - STAFF only
+   *   - Their assigned branch only
    */
 
+const invitationPolicy = useMemo(() => {
+  if (!canManageTeam) {
+    return {
+      allowedRoles: [] as StaffRole[],
+      permittedBranches: [],
+    };
+  }
+
+  // CEO and ADMIN can manage employees across the business.
+  if (actorRole === "CEO" || actorRole === "ADMIN") {
+    return {
+      allowedRoles: ["MANAGER", "STAFF"] as StaffRole[],
+      permittedBranches: allBranches,
+    };
+  }
+
+  // Managers can only invite staff into their assigned branch.
+  if (actorRole === "MANAGER" && actorBranchId) {
+    return {
+      allowedRoles: ["STAFF"] as StaffRole[],
+      permittedBranches: allBranches.filter(
+        (branch) => branch.id === actorBranchId
+      ),
+    };
+  }
+
+  return {
+    allowedRoles: [] as StaffRole[],
+    permittedBranches: [],
+  };
+}, [canManageTeam, actorRole, actorBranchId, allBranches]);
+// Permission to invite, independent of branch loading.
+const canInvite =
+  !authLoading &&
+  canManageTeam &&
+  invitationPolicy.allowedRoles.length > 0;
+
+const hasInvitationBranch =
+  invitationPolicy.permittedBranches.length > 0;
+
   const activeCount = useMemo(
-    () =>
-      staff.filter(
-        (member) => member.employmentStatus === "ACTIVE",
-      ).length,
+    () => staff.filter((member) => member.employmentStatus === "ACTIVE").length,
     [staff],
   );
+
   const invitedCount = useMemo(
-    () =>
-      staff.filter(
-        (member) => member.employmentStatus === "INVITED",
-      ).length,
+    () => staff.filter((member) => member.employmentStatus === "INVITED").length,
     [staff],
   );
 
   const managerCount = useMemo(
-    () =>
-      staff.filter(
-        (member) => member.role === "MANAGER",
-      ).length,
+    () => staff.filter((member) => member.role === "MANAGER").length,
     [staff],
   );
 
-  /*
-   * ==============================================================
-   * OPEN INVITATION SHEET
-   * ==============================================================
-   */
-
   const openInvitationSheet = useCallback(() => {
-    if (!businessId || invitationLoading) {
-      return;
-    }
+    if (!businessId || !canInvite || invitationLoading) return;
 
     setInvitationError(null);
     setInviteOpen(true);
-  }, [businessId, invitationLoading]);
+  }, [businessId, canInvite, invitationLoading]);
 
   const closeInvitationSheet = useCallback(() => {
-    if (invitationLoading) {
-      return;
-    }
+    if (invitationLoading) return;
 
     setInviteOpen(false);
     setInvitationError(null);
   }, [invitationLoading]);
 
-  /*
-   * ==============================================================
-   * CREATE STAFF INVITATION
-   * ==============================================================
-   *
-   * The sheet validates form fields.
-   * The application service handles the invitation command.
-   * The live employee projection supplies the rendered staff list.
-   *
-   * Do not manually append an employee to `staff` here.
-   * The local projection should update through the application's
-   * normal command/event/projection workflow.
-   */
-
   const handleInvite = useCallback(
     async (data: StaffInvitationData): Promise<void> => {
       if (invitationLoading) {
-        throw new Error(
-          "An invitation is already being processed.",
-        );
+        throw new Error("An invitation is already being processed.");
       }
 
-      if (!businessId) {
-        throw new Error(
-          "A business must be selected before inviting staff.",
-        );
+      if (!businessId || !user) {
+        throw new Error("Your authenticated business session is unavailable.");
+      }
+
+      if (!routeAccess.canMutate("team:manage")) {
+        throw new Error("You are not authorized to invite team members.");
+      }
+
+      /*
+       * Re-evaluate the actor policy at submission time.
+       * Do not rely only on the sheet's hidden role options.
+       */
+      
+      let permittedRoles: readonly StaffRole[];
+      let permittedBranchId: string | undefined;
+
+      if (routeAccess.role === "CEO" || routeAccess.role === "ADMIN") {
+        permittedRoles = ["MANAGER", "STAFF"];
+      } else if (routeAccess.role === "MANAGER" && user.branchId) {
+        permittedRoles = ["STAFF"];
+        permittedBranchId = user.branchId;
+      } else {
+        throw new Error("Your role cannot invite team members.");
+      }
+
+      if (!permittedRoles.includes(data.role)) {
+        throw new Error("You are not authorized to assign this employee role.");
+      }
+
+      if (permittedBranchId && data.branchId !== permittedBranchId) {
+        throw new Error("You can only invite staff into your assigned branch.");
+      }
+
+      const branch = allBranches.find(
+        (item) => item.id === data.branchId
+      );
+
+      if (!branch) {
+        throw new Error("The selected branch is not available.");
       }
 
       setInvitationLoading(true);
       setInvitationError(null);
 
       try {
-        /*
-         * Revalidate branch existence immediately before
-         * submitting the invitation command.
-         */
-        const branch = branches.find(
-          (item) => item.id === data.branchId,
-        );
-
-        if (!branch) {
-          throw new Error(
-            "The selected branch is no longer available. Please select another branch.",
-          );
-        }
-
         const request: InviteEmployeeRequest = {
           fullName: data.fullName.trim(),
           phone: data.phone.trim(),
@@ -179,31 +198,17 @@ export default function TeamPage() {
           employmentStatus: "INVITED",
         };
 
-        /*
-         * Keep the application's existing service boundary.
-         * Errors propagate to the sheet, which displays them.
-         */
         await app.employee.inviteEmployee(request);
 
-        /*
-         * Close only after the service reports success.
-         * The live query is responsible for reflecting the
-         * resulting employee projection.
-         */
         setInviteOpen(false);
         setInvitationError(null);
       } catch (error: unknown) {
         const message =
           error instanceof Error
             ? error.message
-            : "Unable to create the staff invitation. Please try again.";
+            : "Unable to create the employee invitation.";
 
         setInvitationError(message);
-
-        /*
-         * Rethrow so StaffInvitationSheet can display the error.
-         * Do not silently swallow invitation failures.
-         */
         throw error;
       } finally {
         setInvitationLoading(false);
@@ -212,63 +217,38 @@ export default function TeamPage() {
     [
       app,
       businessId,
-      branches,
+      user,
+      allBranches,
       invitationLoading,
+      routeAccess,
     ],
   );
 
-  /*
-   * ==============================================================
-   * MANAGE STAFF
-   * ==============================================================
-   */
+  const handleManage = useCallback((member: Employee) => {
+    console.info("Staff management requested", {
+      employeeId: member.id,
+    });
+  }, []);
 
-  const handleManage = useCallback(
-    (member: Employee) => {
-      /*
-       * Connect this handler to StaffManagementSheet when
-       * the management workflow is implemented.
-       */
-      console.info("Staff management requested", {
-        employeeId: member.id,
-      });
-    },
-    [],
-  );
+  const invitationTitle =
+    actorRole === "CEO" ? "Add Manager" : "Add Staff";
 
-  /*
-   * ==============================================================
-   * RENDER
-   * ==============================================================
-   */
-
+    console.log("TEAM PAGE ACCESS", {
+      role: routeAccess.role,
+      context: routeAccess.context.type,
+      readOnly: routeAccess.readOnly,
+      permissions: routeAccess.permissions,
+      canReadTeam: routeAccess.can("team:read"),
+      canManageTeam: routeAccess.can("team:manage"),
+      canMutateTeam: routeAccess.canMutate("team:manage"),
+      businessId,
+      userRole: user?.role,
+      branchId: user?.branchId,
+    });
   return (
-    <div
-      className="
-        min-h-screen
-        px-4
-        pb-28
-        pt-6
-        sm:px-6
-        lg:px-8
-        lg:pb-10
-      "
-    >
+    <div className="min-h-screen px-4 pb-28 pt-6 sm:px-6 lg:px-8 lg:pb-10">
       <div className="mx-auto max-w-7xl">
-        {/* ======================================================
-            PAGE HEADER
-        ======================================================= */}
-
-        <header
-          className="
-            flex
-            flex-col
-            gap-4
-            sm:flex-row
-            sm:items-center
-            sm:justify-between
-          "
-        >
+        <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
             <GlassIcon size="md" variant="primary">
               <Users size={21} />
@@ -278,361 +258,171 @@ export default function TeamPage() {
               <h1 className="text-2xl font-semibold tracking-tight text-white">
                 Team
               </h1>
-
               <p className="mt-1 text-sm text-gray-500">
-                Manage your staff and business roles.
+                Manage your team and employee assignments.
               </p>
             </div>
           </div>
 
+          
+        { canManageTeam && (
           <GlassButton
             type="button"
             onClick={openInvitationSheet}
             disabled={
-              !businessId ||
-              invitationLoading
+              !canInvite ||
+              invitationLoading ||
+              !branchData ||
+              !hasInvitationBranch
             }
-            className="
-              h-12
-              rounded-2xl
-              px-5
-              font-semibold
-              shadow-[0_8px_30px_rgba(20,184,166,0.10)]
-              disabled:cursor-not-allowed
-              disabled:opacity-50
-            "
+            className="flex items-center gap-2"
           >
-            <span className="flex items-center gap-2">
-              <Plus size={18} />
-              Add Staff
-            </span>
+            <Plus size={17} />
+            Add Employee
           </GlassButton>
+        )}
+
+        {!authLoading && !canManageTeam && (
+          <p className="text-xs text-amber-400">
+            You do not have permission to manage employees.
+          </p>
+        )}
+
+        {canManageTeam && !branchData && (
+          <p className="text-xs text-gray-400">
+            Loading branch information...
+          </p>
+        )}
+
+        {canManageTeam && branchData && !hasInvitationBranch && (
+          <p className="text-xs text-amber-400">
+            No eligible branch is available for employee assignment.
+          </p>
+        )}
+
         </header>
 
-        {/* ======================================================
-            BUSINESS CONTEXT VALIDATION
-        ======================================================= */}
-
-        {!businessId && (
+        {invitationError && (
           <div
             role="alert"
-            className="
-              mt-6
-              flex
-              items-start
-              gap-3
-              rounded-2xl
-              border
-              border-amber-500/20
-              bg-amber-500/5
-              p-4
-            "
+            className="mb-5 flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-xs text-red-400"
           >
-            <AlertCircle
-              size={18}
-              className="mt-0.5 shrink-0 text-amber-400"
-            />
-
-            <div>
-              <p className="text-sm font-medium text-amber-300">
-                Business context unavailable
-              </p>
-
-              <p className="mt-1 text-xs leading-5 text-gray-500">
-                Select or initialize a business before managing
-                team members.
-              </p>
-            </div>
+            <AlertCircle size={16} />
+            <span>{invitationError}</span>
           </div>
         )}
 
-        {/* ======================================================
-            INVITATION ERROR
-        ======================================================= */}
-
-        {invitationError && !inviteOpen && (
-          <div
-            role="alert"
-            className="
-              mt-6
-              flex
-              items-start
-              gap-3
-              rounded-2xl
-              border
-              border-red-500/20
-              bg-red-500/5
-              p-4
-            "
-          >
-            <AlertCircle
-              size={18}
-              className="mt-0.5 shrink-0 text-red-400"
-            />
-
-            <div>
-              <p className="text-sm font-medium text-red-300">
-                Invitation failed
-              </p>
-
-              <p className="mt-1 text-xs leading-5 text-red-400/80">
-                {invitationError}
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* ======================================================
-            SUMMARY METRICS
-        ======================================================= */}
-
-        <section
-          aria-label="Team summary"
-          className="
-            mt-7
-            grid
-            grid-cols-2
-            gap-3
-            lg:grid-cols-4
-          "
-        >
-          <MetricCard
-            label="Team"
-            value={staff.length}
-            icon={<Users size={17} />}
-            variant="primary"
-          />
-
-          <MetricCard
-            label="Active"
-            value={activeCount}
-            icon={<CheckCircle2 size={17} />}
-            variant="success"
-          />
-
-          <MetricCard
-            label="Managers"
-            value={managerCount}
-            icon={<ShieldCheck size={17} />}
-            variant="primary"
-          />
-
-          <MetricCard
-            label="Pending"
-            value={invitedCount}
-            icon={<Clock3 size={17} />}
-            variant="primary"
-          />
-        </section>
-
-        {/* ======================================================
-            TEAM MEMBERS
-        ======================================================= */}
-
-        <section className="mt-8">
-          <div
-            className="
-              mb-4
-              flex
-              items-center
-              justify-between
-              gap-3
-            "
-          >
-            <div>
-              <h2 className="text-base font-semibold text-white">
-                Team members
-              </h2>
-
-              <p className="mt-1 text-xs text-gray-600">
-                People with access to this business.
-              </p>
-            </div>
-
-            <span
-              className="
-                shrink-0
-                rounded-full
-                border
-                border-white/10
-                bg-white/5
-                px-3
-                py-1
-                text-[10px]
-                font-medium
-                text-gray-500
-              "
-            >
-              {staff.length} members
-            </span>
-          </div>
-
-          {/* LOADING */}
-
-          {staffLoading ? (
-            <GlassCard className="p-8 text-center">
-              <div
-                className="
-                  mx-auto
-                  h-6
-                  w-6
-                  animate-spin
-                  rounded-full
-                  border-2
-                  border-white/10
-                  border-t-teal-400
-                "
-                aria-hidden="true"
-              />
-
-              <p className="mt-4 text-sm text-gray-400">
-                Loading team members...
-              </p>
-            </GlassCard>
-          ) : staffError ? (
-            /* QUERY ERROR */
-
-            <GlassCard className="p-8 text-center">
-              <AlertCircle
-                size={24}
-                className="mx-auto text-red-400"
-              />
-
-              <h3 className="mt-4 text-sm font-semibold text-white">
-                Unable to load team members
-              </h3>
-
-              <p className="mt-2 text-xs leading-5 text-gray-500">
-                The employee query encountered an error.
-                Check the local database and live-query
-                subscription before trying again.
-              </p>
-            </GlassCard>
-          ) : staff.length > 0 ? (
-            /* STAFF GRID */
-
-            <div
-              className="
-                grid
-                gap-4
-                md:grid-cols-2
-                xl:grid-cols-3
-              "
-            >
-            {staff.map((member) => {
-              const branch =
-                branches.find(
-                  (item) => item.id === member.branchId
-                ) ?? null;
-
-              return (
-                <StaffCard
-                  key={member.id}
-                  member={member}
-                  branch={branch}
-                  onManage={handleManage}
-                />
-              );
-            })}
-          </div>
-          ) : (
-            /* EMPTY STATE */
-
-            <GlassCard
-              className="
-                flex
-                flex-col
-                items-center
-                justify-center
-                px-6
-                py-16
-                text-center
-              "
-            >
-              <GlassIcon size="lg" variant="primary">
-                <UserRound size={25} />
+        <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <GlassCard className="p-5">
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-gray-500">Active employees</p>
+              <GlassIcon size="sm" variant="success">
+                <CheckCircle2 size={17} />
               </GlassIcon>
+            </div>
+            <p className="mt-3 text-3xl font-semibold text-white">
+              {staffLoading ? "—" : activeCount}
+            </p>
+          </GlassCard>
 
-              <h3 className="mt-5 text-base font-semibold text-white">
-                No team members yet
-              </h3>
+          <GlassCard className="p-5">
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-gray-500">Pending invitations</p>
+              <GlassIcon size="sm" variant="primary">
+                <Clock3 size={17} />
+              </GlassIcon>
+            </div>
+            <p className="mt-3 text-3xl font-semibold text-white">
+              {staffLoading ? "—" : invitedCount}
+            </p>
+          </GlassCard>
 
-              <p className="mt-2 max-w-sm text-sm text-gray-500">
-                Invite your first staff member to start
-                building your team.
+          <GlassCard className="p-5">
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-gray-500">Branch managers</p>
+              <GlassIcon size="sm" variant="primary">
+                <ShieldCheck size={17} />
+              </GlassIcon>
+            </div>
+            <p className="mt-3 text-3xl font-semibold text-white">
+              {staffLoading ? "—" : managerCount}
+            </p>
+          </GlassCard>
+        </div>
+
+        <section>
+          <div className="mb-5 flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-white">
+                Employees
+              </h2>
+              <p className="mt-1 text-xs text-gray-500">
+                {staff.length} employee records
               </p>
+            </div>
+          </div>
 
-              <GlassButton
-                type="button"
-                onClick={openInvitationSheet}
-                disabled={!businessId || invitationLoading}
-                className="
-                  mt-6
-                  h-11
-                  rounded-xl
-                  px-5
-                  disabled:opacity-50
-                "
-              >
-                <span className="flex items-center gap-2">
-                  <Plus size={16} />
-                  Add Staff
-                </span>
-              </GlassButton>
+          {Boolean(staffError) && (
+            <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-400">
+              Unable to load employees.
+            </div>
+          )}
+
+          {staffLoading && (
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              {[1, 2, 3].map((item) => (
+                <div
+                  key={item}
+                  className="h-44 animate-pulse rounded-2xl border border-white/5 bg-white/[0.03]"
+                />
+              ))}
+            </div>
+          )}
+
+          {!staffLoading && !staffError && staff.length === 0 && (
+            <GlassCard className="p-10 text-center">
+              <Users className="mx-auto text-gray-500" size={32} />
+              <h3 className="mt-4 text-base font-semibold text-white">
+                No employees yet
+              </h3>
+              <p className="mt-2 text-sm text-gray-500">
+                Your employee records will appear here after invitations are created.
+              </p>
             </GlassCard>
           )}
+
+          {!staffLoading && !staffError && staff.length > 0 && (
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              {staff.map((member) => {
+                const employeeBranch =
+                  allBranches.find(
+                    (branch) => branch.id === member.branchId
+                  ) ?? null;
+
+                return (
+                  <StaffCard
+                    key={member.id}
+                    member={member}
+                    branch={employeeBranch}
+                    onManage={() => handleManage(member)}
+                  />
+                );
+              })}
+            </div>
+          )}
         </section>
+
+        {canInvite && (
+          <StaffInvitationSheet
+            open={inviteOpen}
+            branches={invitationPolicy.permittedBranches}
+            allowedRoles={invitationPolicy.allowedRoles}
+            loading={invitationLoading}
+            onClose={closeInvitationSheet}
+            onSubmit={handleInvite}
+          />
+        )}
       </div>
-
-      {/* ========================================================
-          STAFF INVITATION SHEET
-      ========================================================= */}
-
-      <StaffInvitationSheet
-        open={inviteOpen}
-        branches={branches}
-        loading={invitationLoading}
-        onClose={closeInvitationSheet}
-        onSubmit={handleInvite}
-      />
     </div>
-  );
-}
-
-/* ================================================================
-   METRIC CARD
-================================================================ */
-
-interface MetricCardProps {
-  label: string;
-  value: number;
-  icon: React.ReactNode;
-  variant: "primary" | "success";
-}
-
-function MetricCard({
-  label,
-  value,
-  icon,
-  variant,
-}: MetricCardProps) {
-  return (
-    <GlassCard className="p-4">
-      <div className="flex items-center gap-3">
-        <GlassIcon size="sm" variant={variant}>
-          {icon}
-        </GlassIcon>
-
-        <div>
-          <p className="text-[11px] uppercase tracking-wider text-gray-600">
-            {label}
-          </p>
-
-          <p className="mt-1 text-xl font-semibold text-white">
-            {value}
-          </p>
-        </div>
-      </div>
-    </GlassCard>
   );
 }

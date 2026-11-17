@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 
 import {
   ArrowDownToLine,
@@ -15,18 +16,18 @@ interface CEOAction {
   path: string;
   label: string;
   description: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
   variant?: "primary" | "success" | "danger";
 }
 
 interface CEOActionCentreProps {
-  onAction: (action: string) => void;
+  onAction: (path: string) => void;
 }
 
 const actions: CEOAction[] = [
   {
     id: "inject-capital",
-    path: "inject-capital",
+    path: "/inject-capital",
     label: "Add Business Capital",
     description: "Increase business working capital",
     icon: <ArrowDownToLine size={20} />,
@@ -49,7 +50,7 @@ const actions: CEOAction[] = [
   },
   {
     id: "cash-position",
-    path: "cash-position",
+    path: "/cash-position",
     label: "Business Cash Position",
     description: "Review consolidated cash balances",
     icon: <Wallet size={20} />,
@@ -66,18 +67,13 @@ const actions: CEOAction[] = [
 export function CEOActionCentre({
   onAction,
 }: CEOActionCentreProps) {
-  const iconVariants = {
-    primary: "primary",
-    success: "success",
-    danger: "danger",
-  } as const;
-
   return (
     <section className="space-y-3">
       <div>
         <h2 className="text-base font-semibold">
           Business Management
         </h2>
+
         <p className="text-xs text-white/50 mt-1">
           Business-wide management and financial controls
         </p>
@@ -89,14 +85,12 @@ export function CEOActionCentre({
             key={action.id}
             type="button"
             onClick={() => onAction(action.path)}
-            className="text-left"
+            className="text-left rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
           >
             <GlassCard className="h-full p-4 flex flex-col gap-3 hover:bg-white/[0.06] transition-colors">
               <GlassIcon
                 size="md"
-                variant={
-                  iconVariants[action.variant ?? "primary"]
-                }
+                variant={action.variant ?? "primary"}
               >
                 {action.icon}
               </GlassIcon>

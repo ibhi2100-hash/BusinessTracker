@@ -27,6 +27,11 @@ export const ProductStatementDefinition: StatementDefinition[] = [
     {
         key: productKeys.products,
         sql: SQL.PRODUCTS
+    },
+
+    {
+        key: productKeys.productsByBusiness,
+        sql: SQL.PRODUCTS_BY_BUSINESS
     }
 
 ];

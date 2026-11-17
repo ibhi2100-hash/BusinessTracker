@@ -1,5 +1,3 @@
-// pages/OwnerDashboardPage.tsx
-
 import {
   Bell,
   Building2,
@@ -11,6 +9,7 @@ import {
   Wallet,
   AlertTriangle,
   PackageX,
+  Plus,
 } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
@@ -40,10 +39,10 @@ const formatCurrency = (amount: number) =>
     style: "currency",
     currency: "NGN",
     maximumFractionDigits: 0,
-  }).format(amount ?? 0);
+  }).format(Number.isFinite(amount) ? amount : 0);
 
 const formatCompactCurrency = (amount: number) => {
-  const value = amount ?? 0;
+  const value = Number.isFinite(amount) ? amount : 0;
 
   if (value >= 1_000_000) {
     return `₦${(value / 1_000_000).toFixed(2)}m`;
@@ -64,14 +63,20 @@ export default function OwnerDashboardPage() {
   const { businessId } = useBusinessContext();
   const navigate = useNavigate();
 
-  // Business profile.
+  /* ----------------------------------------------------------
+     BUSINESS PROFILE
+     ---------------------------------------------------------- */
+
   const {
     data: business,
     loading: businessLoading,
     error: businessError,
   } = useBusinessLiveQuery(businessId);
 
-  // Consolidated business dashboard data.
+  /* ----------------------------------------------------------
+     CONSOLIDATED BUSINESS DASHBOARD
+     ---------------------------------------------------------- */
+
   const {
     data: dashboard,
     loading: dashboardLoading,
@@ -85,25 +90,29 @@ export default function OwnerDashboardPage() {
   const loading = businessLoading || dashboardLoading;
   const error = businessError || dashboardError;
 
-  // Cash and bank are separate balances in the repository.
+  /* ----------------------------------------------------------
+     FINANCIAL CALCULATIONS
+     ---------------------------------------------------------- */
+
   const availableCash =
     (summary?.cash ?? 0) + (summary?.bank ?? 0);
 
+  const monthlyRevenue = monthlyOverview?.revenue ?? 0;
+  const monthlyNetProfit = monthlyOverview?.netProfit ?? 0;
+
   const monthlyProfitMargin =
-    (monthlyOverview?.revenue ?? 0) > 0
-      ? ((monthlyOverview?.netProfit ?? 0) /
-          monthlyOverview!.revenue) *
-        100
+    monthlyRevenue > 0
+      ? (monthlyNetProfit / monthlyRevenue) * 100
       : 0;
 
   const activeBranches = branches.filter(
     (branch) => branch.status === "ACTIVE"
   ).length;
 
-  /*
-   * Convert the repository branch rows to the card contract.
-   * A branch without an assigned manager displays "Unassigned".
-   */
+  /* ----------------------------------------------------------
+     BRANCH CARD DATA
+     ---------------------------------------------------------- */
+
   const branchCards: BranchPerformance[] = branches.map(
     (branch) => ({
       id: branch.id,
@@ -120,9 +129,18 @@ export default function OwnerDashboardPage() {
     })
   );
 
-  // Derive operational alerts only from actual branch data.
+  /* ----------------------------------------------------------
+     BUSINESS ALERTS
+     ---------------------------------------------------------- */
+
   const branchAlerts = branches.flatMap((branch) => {
-    const alerts = [];
+    const alerts: {
+      id: string;
+      title: string;
+      description: string;
+      branch: string;
+      severity: "warning";
+    }[] = [];
 
     if (branch.status === "ATTENTION") {
       alerts.push({
@@ -131,7 +149,7 @@ export default function OwnerDashboardPage() {
         description:
           "The branch has been flagged by its current operational or financial status.",
         branch: branch.name,
-        severity: "warning" as const,
+        severity: "warning",
       });
     }
 
@@ -141,12 +159,30 @@ export default function OwnerDashboardPage() {
         title: "Out-of-stock products detected",
         description: `${branch.outOfStockRows} inventory records are out of stock.`,
         branch: branch.name,
-        severity: "warning" as const,
+        severity: "warning",
       });
     }
 
     return alerts;
   });
+
+  /* ============================================================
+     NAVIGATION
+     ============================================================ */
+
+  const handleBusinessAction = (path: string) => {
+    navigate(path);
+  };
+
+  /**
+   * CEO branch supervision.
+   *
+   * The selected branch ID is passed through the URL.
+   * Do not overwrite the operational BusinessContext here.
+   */
+  const handleBranchSelection = (branch: BranchPerformance) => {
+    navigate(`/branch/${encodeURIComponent(branch.id)}`);
+  };
 
   /* ============================================================
      LOADING
@@ -240,8 +276,8 @@ export default function OwnerDashboardPage() {
                 {business?.name || "Business Overview"}
               </h1>
 
-              <p className="text-xs text-white/50">
-                All branches consolidated
+              <p className="mt-2 text-sm text-slate-400">
+                Monitor your business operations and branch performance.
               </p>
             </div>
           </div>
@@ -328,9 +364,7 @@ export default function OwnerDashboardPage() {
 
       {/* CEO ACTION CENTRE */}
 
-      <CEOActionCentre
-        onAction={(action) => navigate(action)}
-      />
+      <CEOActionCentre onAction={handleBusinessAction} />
 
       {/* MONTHLY BUSINESS PERFORMANCE */}
 
@@ -353,9 +387,7 @@ export default function OwnerDashboardPage() {
               </p>
 
               <p className="text-2xl font-semibold mt-1">
-                {formatCompactCurrency(
-                  monthlyOverview?.revenue ?? 0
-                )}
+                {formatCompactCurrency(monthlyRevenue)}
               </p>
             </div>
 
@@ -373,9 +405,7 @@ export default function OwnerDashboardPage() {
               </p>
 
               <p className="text-xl font-semibold text-emerald-400 mt-1">
-                {formatCompactCurrency(
-                  monthlyOverview?.netProfit ?? 0
-                )}
+                {formatCompactCurrency(monthlyNetProfit)}
               </p>
             </div>
 
@@ -395,7 +425,7 @@ export default function OwnerDashboardPage() {
       {/* BRANCH PERFORMANCE */}
 
       <section className="space-y-3">
-        <div className="flex justify-between items-end">
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-end">
           <div>
             <h2 className="text-base font-semibold">
               Branch Performance
@@ -406,9 +436,20 @@ export default function OwnerDashboardPage() {
             </p>
           </div>
 
-          <span className="text-xs text-white/50">
-            {activeBranches}/{branches.length} active
-          </span>
+          <div className="flex items-center justify-between gap-3 sm:justify-end">
+            <span className="text-xs text-white/50 whitespace-nowrap">
+              {activeBranches}/{branches.length} active
+            </span>
+
+            <GlassButton
+              variant="primary"
+              className="shrink-0"
+              icon={<Plus size={16} />}
+              onClick={() => navigate("/owner/branches/add")}
+            >
+              Add Branch
+            </GlassButton>
+          </div>
         </div>
 
         {branchCards.length === 0 ? (
@@ -424,7 +465,18 @@ export default function OwnerDashboardPage() {
 
             <p className="text-xs text-white/50 mt-1">
               Your business branches will appear here.
+              Create your first branch to expand your operations.
             </p>
+
+            <div className="mt-4 flex justify-center">
+              <GlassButton
+                variant="primary"
+                icon={<Plus size={16} />}
+                onClick={() => navigate("/owner/branches/add")}
+              >
+                Create Your First Branch
+              </GlassButton>
+            </div>
           </GlassCard>
         ) : (
           <div className="space-y-3">
@@ -432,16 +484,14 @@ export default function OwnerDashboardPage() {
               <BranchPerformanceCard
                 key={branch.id}
                 branch={branch}
-                onClick={(selectedBranch) => {
-                  navigate(`/branch/${selectedBranch.id}`);
-                }}
+                onClick={handleBranchSelection}
               />
             ))}
           </div>
         )}
       </section>
 
-      {/* REAL BUSINESS ALERTS */}
+      {/* BUSINESS ALERTS */}
 
       <section className="space-y-3">
         <div>
@@ -472,7 +522,7 @@ export default function OwnerDashboardPage() {
                     size="md"
                     variant="primary"
                   >
-                    {alert.title.includes("stock") ? (
+                    {alert.id.includes("-stock") ? (
                       <PackageX size={19} />
                     ) : (
                       <AlertTriangle size={19} />

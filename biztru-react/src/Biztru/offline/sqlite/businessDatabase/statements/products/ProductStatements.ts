@@ -40,5 +40,11 @@ export class ProductStatements {
         )
     }
 
+    get productsByBusiness(){
+        return this.manager.get(
+            productKeys.productsByBusiness
+        )
+    }
+
 
 }

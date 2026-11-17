@@ -11,6 +11,7 @@ import {
   Link,
   useLocation,
   useNavigate,
+  useMatch
 } from "react-router-dom";
 
 import {
@@ -41,19 +42,16 @@ import {
   ShieldCheck,
   CreditCard,
   ArrowDownCircle,
+  ArrowLeft
 } from "lucide-react";
 
 import { GlassCard } from "../ui/GlassCard";
 import { GlassIcon } from "../ui/GlassIcon";
 import { cn } from "../../lib/utils";
 
-import {
-  useApplication,
-} from "../../Biztru/services/ApplicationService/ApplicationContext";
+import { useApplication } from "../../Biztru/services/ApplicationService/ApplicationContext";
+import { useApplicationSession } from "../../Biztru/context/AplicationSessionContext";
 
-import {
-  useApplicationSession,
-} from "../../Biztru/context/AplicationSessionContext";
 import type { Role } from "@business/shared-types";
 
 /* ------------------------------------------------------------------ */
@@ -64,8 +62,13 @@ type IconComponent = ComponentType<{
   className?: string;
 }>;
 
+type UserRole = Role;
 
-type UserRole =  Role;
+type NavigationItem = {
+  label: string;
+  icon: IconComponent;
+  href: string;
+};
 
 type MoreItem = {
   label: string;
@@ -80,11 +83,29 @@ type MoreGroup = {
   items: MoreItem[];
 };
 
-/* ================================================================
-   STAFF NAVIGATION
-================================================================ */
+type UpdateStatus =
+  | "idle"
+  | "updating"
+  | "success"
+  | "error";
 
-const staffPrimaryNav = [
+interface AppUpdateResult {
+  fromVersion?: number;
+  toVersion?: number;
+  applied?: unknown[];
+}
+
+function scopeNavigationToBranch(
+  href: string,
+  branchId: string
+): string {
+  return `/owner/branches/${branchId}${href}`;
+}
+/* ------------------------------------------------------------------ */
+/* Staff navigation                                                   */
+/* ------------------------------------------------------------------ */
+
+const staffPrimaryNav: NavigationItem[] = [
   {
     label: "Sell",
     icon: ShoppingCart,
@@ -95,7 +116,7 @@ const staffPrimaryNav = [
     icon: Receipt,
     href: "/sales/list",
   },
-] as const;
+];
 
 const staffMoreGroups: MoreGroup[] = [
   {
@@ -117,12 +138,11 @@ const staffMoreGroups: MoreGroup[] = [
   },
 ];
 
-/* ================================================================
-   MANAGER NAVIGATION
-   This is your previous ADMIN navigation.
-================================================================ */
+/* ------------------------------------------------------------------ */
+/* Manager navigation                                                 */
+/* ------------------------------------------------------------------ */
 
-const managerPrimaryNav = [
+const managerPrimaryNav: NavigationItem[] = [
   {
     label: "Home",
     icon: Home,
@@ -143,7 +163,7 @@ const managerPrimaryNav = [
     icon: BarChart2,
     href: "/reports",
   },
-] as const;
+];
 
 const managerMoreGroups: MoreGroup[] = [
   {
@@ -245,12 +265,11 @@ const managerMoreGroups: MoreGroup[] = [
   },
 ];
 
-/* ================================================================
-   CEO / ADMIN NAVIGATION
-   Business-wide management and branch supervision.
-================================================================ */
+/* ------------------------------------------------------------------ */
+/* CEO / ADMIN navigation                                             */
+/* ------------------------------------------------------------------ */
 
-const ownerPrimaryNav = [
+const ownerPrimaryNav: NavigationItem[] = [
   {
     label: "Overview",
     icon: Home,
@@ -271,7 +290,7 @@ const ownerPrimaryNav = [
     icon: Wallet,
     href: "/owner-dashboard/finance",
   },
-] as const;
+];
 
 const ownerMoreGroups: MoreGroup[] = [
   {
@@ -375,7 +394,6 @@ const ownerMoreGroups: MoreGroup[] = [
   },
 ];
 
-
 /* ------------------------------------------------------------------ */
 /* Helpers                                                            */
 /* ------------------------------------------------------------------ */
@@ -384,16 +402,50 @@ function isActive(
   pathname: string,
   href: string,
 ): boolean {
-  if (href === "/dashboard") {
-    return (
-      pathname === "/dashboard" ||
-      pathname === "/"
-    );
+  /*
+   * These routes must match exactly.
+   *
+   * For example:
+   * /sales/list must not activate /sales.
+   * /owner-dashboard/reports must not activate
+   * the main owner overview.
+   */
+  const exactMatchRoutes = [
+    "/",
+    "/dashboard",
+    "/sales",
+    "/owner-dashboard",
+  ];
+
+  if (exactMatchRoutes.includes(href)) {
+    return pathname === href;
   }
 
   return (
     pathname === href ||
     pathname.startsWith(`${href}/`)
+  );
+}
+
+function isUpdateResult(
+  value: unknown,
+): value is AppUpdateResult {
+  if (
+    typeof value !== "object" ||
+    value === null
+  ) {
+    return false;
+  }
+
+  const result = value as Record<string, unknown>;
+
+  return (
+    (result.fromVersion === undefined ||
+      typeof result.fromVersion === "number") &&
+    (result.toVersion === undefined ||
+      typeof result.toVersion === "number") &&
+    (result.applied === undefined ||
+      Array.isArray(result.applied))
   );
 }
 
@@ -448,10 +500,7 @@ function SettingsItem({
         active:scale-[0.98]
       "
     >
-      <GlassIcon
-        size="sm"
-        variant="primary"
-      >
+      <GlassIcon size="sm" variant="primary">
         <Icon className="h-4 w-4" />
       </GlassIcon>
 
@@ -493,9 +542,7 @@ function NavLinkRow({
       aria-current={active ? "page" : undefined}
       className={cn(
         "flex items-center gap-3 rounded-xl text-sm transition-all",
-        compact
-          ? "px-3 py-2"
-          : "px-3 py-2.5",
+        compact ? "px-3 py-2" : "px-3 py-2.5",
         active
           ? "bg-teal-500/15 text-teal-300"
           : "text-gray-400 hover:bg-white/5 hover:text-gray-200",
@@ -518,7 +565,7 @@ function NavLinkRow({
 }
 
 /* ------------------------------------------------------------------ */
-/* Component                                                          */
+/* Main component                                                     */
 /* ------------------------------------------------------------------ */
 
 export default function AppNav() {
@@ -526,67 +573,142 @@ export default function AppNav() {
   const navigate = useNavigate();
 
   const { session } = useApplicationSession();
-
   const app = useApplication();
 
   /* ---------------------------------------------------------------- */
-  /* Role                                                             */
+  /* Role resolution                                                  */
   /* ---------------------------------------------------------------- */
 
- 
-const rawRole = session.user?.role;
+  const rawRole = session.user?.role;
 
-const role: UserRole |  undefined  =
-  rawRole === "CEO" ||
-  rawRole === "ADMIN" ||
-  rawRole === "MANAGER" ||
-  rawRole === "STAFF" ||
-  rawRole === "SALES_REPS" ||
-  rawRole === "CLEANER"
-    ? rawRole
-    : undefined;
+  const role: UserRole | undefined =
+    rawRole === "CEO" ||
+    rawRole === "ADMIN" ||
+    rawRole === "MANAGER" ||
+    rawRole === "STAFF" ||
+    rawRole === "SALES_REPS" ||
+    rawRole === "CLEANER"
+      ? rawRole
+      : undefined;
 
-const isCEO = role === "CEO";
-const isAdmin = role === "ADMIN";
-const isOwner = isCEO || isAdmin;
+  const isCEO = role === "CEO";
+  const isAdmin = role === "ADMIN";
 
-const isManager = role === "MANAGER";
-const isStaff = role === "STAFF";
+  /*
+   * CEO and ADMIN both have owner-level navigation.
+   * This is a navigation decision only.
+   * Your route guards must still enforce actual permissions.
+   */
+  const isOwner = isCEO || isAdmin;
 
-const primaryNav = useMemo(() => {
-  if (isOwner) return ownerPrimaryNav;
-  if (isManager) return managerPrimaryNav;
-  if (isStaff) return staffPrimaryNav;
+  const isManager = role === "MANAGER";
 
-  return [];
-}, [isOwner, isManager, isStaff]);
+  const isStaff =
+    role === "STAFF" ||
+    role === "SALES_REPS";
 
-const moreGroups = useMemo(() => {
-  if (isOwner) return ownerMoreGroups;
-  if (isManager) return managerMoreGroups;
-  if (isStaff) return staffMoreGroups;
+  const branchMatch = useMatch(
+  "/owner/branches/:branchId/*"
+);
 
-  return [];
-}, [isOwner, isManager, isStaff]);
+const activeBranchId = isOwner
+  ? branchMatch?.params.branchId
+  : undefined;
 
+ const branchPrimaryNav = useMemo<NavigationItem[]>(() => {
+    if (!activeBranchId) return [];
+
+    return managerPrimaryNav.map((item) => ({
+      ...item,
+      href: scopeNavigationToBranch(
+        item.href,
+        activeBranchId
+      ),
+    }));
+  }, [activeBranchId]);
+
+  const branchMoreGroups = useMemo<MoreGroup[]>(() => {
+    if (!activeBranchId) return [];
+
+    const groups = managerMoreGroups.map((group) => ({
+      ...group,
+      items: group.items.map((item) => ({
+        ...item,
+        href: scopeNavigationToBranch(
+          item.href,
+          activeBranchId
+        ),
+      })),
+    }));
+
+    return [
+      ...groups,
+      {
+        title: "Business Workspace",
+        items: [
+          {
+            label: "Return to Business",
+            description: "Back to business-wide management",
+            href: "/owner-dashboard",
+            icon: Building2,
+          },
+        ],
+      },
+    ];
+  }, [activeBranchId]);
+
+const isOwnerInBranch = Boolean(activeBranchId);
+
+  const primaryNav = useMemo<NavigationItem[]>(() => {
+    // CEO/ADMIN inside a branch.
+    if (isOwnerInBranch) return branchPrimaryNav;
+
+    // CEO/ADMIN in the business workspace.
+    if (isOwner) return ownerPrimaryNav;
+
+    if (isManager) return managerPrimaryNav;
+
+    if (isStaff) return staffPrimaryNav;
+
+    return [];
+  }, [
+    isOwnerInBranch,
+    branchPrimaryNav,
+    isOwner,
+    isManager,
+    isStaff,
+  ]);
+
+  const moreGroups = useMemo<MoreGroup[]>(() => {
+    if (isOwnerInBranch) return branchMoreGroups;
+
+    if (isOwner) return ownerMoreGroups;
+
+    if (isManager) return managerMoreGroups;
+
+    if (isStaff) return staffMoreGroups;
+
+    return [];
+  }, [
+    isOwnerInBranch,
+    branchMoreGroups,
+    isOwner,
+    isManager,
+    isStaff,
+  ]);
   /* ---------------------------------------------------------------- */
   /* Overlay state                                                    */
   /* ---------------------------------------------------------------- */
 
-  const [moreOpen, setMoreOpen] =
-    useState(false);
-
-  const [settingsOpen, setSettingsOpen] =
-    useState(false);
-
-  const [updateOpen, setUpdateOpen] =
-    useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [updateOpen, setUpdateOpen] = useState(false);
 
   const [updateStatus, setUpdateStatus] =
-    useState("idle");
+    useState<UpdateStatus>("idle");
 
   const [updateResult, setUpdateResult] =
-    useState(null);
+    useState<AppUpdateResult | null>(null);
 
   const [updateError, setUpdateError] =
     useState<string | null>(null);
@@ -602,15 +724,15 @@ const moreGroups = useMemo(() => {
   }, [pathname]);
 
   /* ---------------------------------------------------------------- */
-  /* Staff must never retain admin overlays                           */
+  /* Close owner-only overlays when role changes                      */
   /* ---------------------------------------------------------------- */
 
   useEffect(() => {
-    if (!isAdmin) {
+    if (!isOwner) {
       setSettingsOpen(false);
       setUpdateOpen(false);
     }
-  }, [isAdmin]);
+  }, [isOwner]);
 
   /* ---------------------------------------------------------------- */
   /* Body scroll lock                                                 */
@@ -642,7 +764,7 @@ const moreGroups = useMemo(() => {
   ]);
 
   /* ---------------------------------------------------------------- */
-  /* Navigation                                                       */
+  /* Navigation helpers                                               */
   /* ---------------------------------------------------------------- */
 
   const closeAllOverlays = useCallback(() => {
@@ -656,10 +778,7 @@ const moreGroups = useMemo(() => {
       closeAllOverlays();
       navigate(href);
     },
-    [
-      closeAllOverlays,
-      navigate,
-    ],
+    [closeAllOverlays, navigate],
   );
 
   /* ---------------------------------------------------------------- */
@@ -667,22 +786,19 @@ const moreGroups = useMemo(() => {
   /* ---------------------------------------------------------------- */
 
   const openSettings = useCallback(() => {
-    if (!isAdmin) {
-      return;
-    }
+    if (!isOwner) return;
 
     setMoreOpen(false);
+    setUpdateOpen(false);
     setSettingsOpen(true);
-  }, [isAdmin]);
+  }, [isOwner]);
 
   /* ---------------------------------------------------------------- */
   /* App update                                                       */
   /* ---------------------------------------------------------------- */
 
   const openUpdate = useCallback(() => {
-    if (!isAdmin) {
-      return;
-    }
+    if (!isOwner) return;
 
     setSettingsOpen(false);
 
@@ -691,106 +807,105 @@ const moreGroups = useMemo(() => {
     setUpdateError(null);
 
     setUpdateOpen(true);
-  }, [isAdmin]);
+  }, [isOwner]);
 
-  /**
-   * Connects to the application runtime update pipeline.
-   */
-  const runAppUpdate = useCallback(
-    async () => {
-      const system = (
-        app as {
-          system?: {
-            update?: () =>{}
-          };
-        }
-      )?.system;
-
-      if (!system?.update) {
-        throw new Error(
-          "App update is not available on this device yet. Connect app.system.update().",
-        );
+  const runAppUpdate = useCallback(async (): Promise<unknown> => {
+    const system = (
+      app as unknown as {
+        system?: {
+          update?: () => Promise<unknown>;
+        };
       }
+    )?.system;
 
-      return system.update();
-    },
-    [app],
-  );
+    if (typeof system?.update !== "function") {
+      throw new Error(
+        "App update is not available on this device yet. Connect app.system.update().",
+      );
+    }
 
-  const handleAppUpdate =
-    useCallback(async () => {
-      if (
-        updateStatus === "updating"
-      ) {
+    return system.update();
+  }, [app]);
+
+  const handleAppUpdate = useCallback(async () => {
+    if (
+      !isOwner ||
+      updateStatus === "updating"
+    ) {
+      return;
+    }
+
+    setUpdateStatus("updating");
+    setUpdateResult(null);
+    setUpdateError(null);
+
+    try {
+      const result = await runAppUpdate();
+
+      setUpdateResult(
+        isUpdateResult(result) ? result : null,
+      );
+
+      setUpdateStatus("success");
+    } catch (error) {
+      console.error("[App Update] Failed:", error);
+
+      setUpdateError(
+        error instanceof Error
+          ? error.message
+          : String(error),
+      );
+
+      setUpdateStatus("error");
+    }
+  }, [
+    isOwner,
+    runAppUpdate,
+    updateStatus,
+  ]);
+
+  /* ---------------------------------------------------------------- */
+  /* More menu                                                        */
+  /* ---------------------------------------------------------------- */
+
+  const handleMoreItem = useCallback(
+    (item: MoreItem) => {
+      if (item.action === "settings") {
+        openSettings();
         return;
       }
 
-      setUpdateStatus("updating");
-      setUpdateResult(null);
-      setUpdateError(null);
+      navigateTo(item.href);
+    },
+    [navigateTo, openSettings],
+  );
 
-      try {
-        const result =
-          await runAppUpdate();
-        setUpdateStatus("success");
-      } catch (error) {
-        console.error(
-          "[App Update] Failed:",
-          error,
-        );
-
-        setUpdateError(
-          error instanceof Error
-            ? error.message
-            : String(error),
-        );
-
-        setUpdateStatus("error");
-      }
-    }, [
-      runAppUpdate,
-      updateStatus,
-    ]);
-
+ 
   /* ---------------------------------------------------------------- */
-  /* More menu                                                       */
+  /* Labels                                                           */
   /* ---------------------------------------------------------------- */
 
-  const handleMoreItem =
-    useCallback(
-      (item: MoreItem) => {
-        if (
-          item.action === "settings"
-        ) {
-          openSettings();
-          return;
-        }
+  const workspaceLabel = isOwnerInBranch
+    ? "BRANCH WORKSPACE"
+    : isStaff
+      ? "Sales Workspace"
+      : "Business OS";
 
-        navigateTo(item.href);
-      },
-      [
-        navigateTo,
-        openSettings,
-      ],
-    );
+  const workspaceTitle = isOwnerInBranch
+    ? "Branch Operations"
+    : isStaff
+      ? "Sales"
+      : isManager
+        ? "Branch Workspace"
+        : "Workspace";
 
-  /* ---------------------------------------------------------------- */
-  /* Labels                                                          */
-  /* ---------------------------------------------------------------- */
-
-  const workspaceLabel = isStaff
-    ? "Sales Workspace"
-    : "Business OS";
-
-  const workspaceTitle = isStaff
-    ? "Sales"
-    : "Workspace";
-
-  const mobileMoreDescription =
-    isStaff
+  const mobileMoreDescription = isOwnerInBranch
+    ? "Branch operations and business workspace"
+    : isStaff
       ? "Sales tools"
-      : "Sales, finance, reports & settings";
-
+      : isManager
+        ? "Branch sales, finance, reports and operations"
+        : "Business intelligence, branches, finance and settings";
   /* ---------------------------------------------------------------- */
   /* Render                                                           */
   /* ---------------------------------------------------------------- */
@@ -803,16 +918,9 @@ const moreGroups = useMemo(() => {
 
       <aside
         className="
-          fixed
-          bottom-0
-          left-0
-          top-0
-          z-40
-          hidden
-          w-64
-          flex-col
-          border-r
-          border-white/10
+          fixed bottom-0 left-0 top-0 z-40
+          hidden w-64 flex-col
+          border-r border-white/10
           bg-neutral-950/90
           backdrop-blur-2xl
           lg:flex
@@ -820,7 +928,9 @@ const moreGroups = useMemo(() => {
         aria-label={
           isStaff
             ? "Sales navigation"
-            : "Business navigation"
+            : isManager
+              ? "Branch navigation"
+              : "Business navigation"
         }
       >
         {/* Header */}
@@ -839,12 +949,48 @@ const moreGroups = useMemo(() => {
               Sales operations
             </p>
           )}
+
+          {isManager && (
+            <p className="mt-1 text-[11px] text-gray-500">
+              Branch operations
+            </p>
+          )}
+
+          {isCEO && (
+            <p className="mt-1 text-[11px] text-gray-500">
+              CEO workspace
+            </p>
+          )}
+
+          {isOwnerInBranch && (
+            <div className="mt-3 space-y-2">
+              <div className="rounded-xl border border-teal-500/20 bg-teal-500/10 p-2">
+                <p className="text-[10px] text-teal-400">
+                  ACTIVE BRANCH
+                </p>
+
+                <p className="mt-1 truncate text-xs font-medium text-white">
+                  {activeBranchId}
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => navigateTo("/owner-dashboard")}
+                className="flex w-full items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-gray-300 transition hover:bg-white/10 hover:text-white"
+              >
+                <ArrowLeft size={14} />
+                Return to Business
+              </button>
+            </div>
+          )}
         </div>
+
 
         {/* Navigation */}
 
         <nav className="flex-1 space-y-6 overflow-y-auto px-3 py-4">
-          {/* Primary */}
+          {/* Primary navigation */}
 
           <div className="space-y-1">
             {primaryNav.map((item) => (
@@ -853,15 +999,12 @@ const moreGroups = useMemo(() => {
                 to={item.href}
                 label={item.label}
                 icon={item.icon}
-                active={isActive(
-                  pathname,
-                  item.href,
-                )}
+                active={isActive(pathname, item.href)}
               />
             ))}
           </div>
 
-          {/* Secondary */}
+          {/* Secondary navigation */}
 
           {moreGroups.map((group) => (
             <div key={group.title}>
@@ -870,71 +1013,53 @@ const moreGroups = useMemo(() => {
               </p>
 
               <div className="space-y-0.5">
-                {group.items.map(
-                  (item) => {
-                    /*
-                     * Settings is an admin-only
-                     * interactive action.
-                     */
-                    if (
-                      item.action ===
-                      "settings"
-                    ) {
-                      if (!isAdmin) {
-                        return null;
-                      }
+                {group.items.map((item) => {
+                  const Icon = item.icon;
 
-                      const Icon =
-                        item.icon;
+                  /*
+                   * Settings is an owner-only action.
+                   * CEO and ADMIN can both open it.
+                   */
+                  if (item.action === "settings") {
+                    if (!isOwner) return null;
 
-                      const active =
-                        isActive(
-                          pathname,
-                          item.href,
-                        );
-
-                      return (
-                        <button
-                          key={`${item.href}-settings`}
-                          type="button"
-                          onClick={
-                            openSettings
-                          }
-                          className={cn(
-                            "flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm transition-all",
-                            active
-                              ? "bg-teal-500/15 text-teal-300"
-                              : "text-gray-400 hover:bg-white/5 hover:text-gray-200",
-                          )}
-                        >
-                          <Icon className="h-4 w-4 shrink-0 opacity-80" />
-
-                          <span className="truncate">
-                            {item.label}
-                          </span>
-                        </button>
-                      );
-                    }
+                    const active = isActive(
+                      pathname,
+                      item.href,
+                    );
 
                     return (
-                      <NavLinkRow
-                        key={item.href}
-                        to={item.href}
-                        label={
-                          item.label
-                        }
-                        icon={
-                          item.icon
-                        }
-                        active={isActive(
-                          pathname,
-                          item.href,
+                      <button
+                        key={`${item.href}-settings`}
+                        type="button"
+                        onClick={openSettings}
+                        className={cn(
+                          "flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm transition-all",
+                          active
+                            ? "bg-teal-500/15 text-teal-300"
+                            : "text-gray-400 hover:bg-white/5 hover:text-gray-200",
                         )}
-                        compact
-                      />
+                      >
+                        <Icon className="h-4 w-4 shrink-0 opacity-80" />
+
+                        <span className="truncate">
+                          {item.label}
+                        </span>
+                      </button>
                     );
-                  },
-                )}
+                  }
+
+                  return (
+                    <NavLinkRow
+                      key={`${group.title}-${item.href}-${item.label}`}
+                      to={item.href}
+                      label={item.label}
+                      icon={item.icon}
+                      active={isActive(pathname, item.href)}
+                      compact
+                    />
+                  );
+                })}
               </div>
             </div>
           ))}
@@ -947,11 +1072,7 @@ const moreGroups = useMemo(() => {
 
       <div
         className="
-          fixed
-          bottom-4
-          left-3
-          right-3
-          z-50
+          fixed bottom-4 left-3 right-3 z-50
           pb-[env(safe-area-inset-bottom)]
           lg:hidden
         "
@@ -971,31 +1092,21 @@ const moreGroups = useMemo(() => {
             {primaryNav.map((item) => {
               const Icon = item.icon;
 
-              const active =
-                isActive(
-                  pathname,
-                  item.href,
-                );
+              const active = isActive(
+                pathname,
+                item.href,
+              );
 
               return (
                 <Link
                   key={item.href}
                   to={item.href}
-                  aria-current={
-                    active
-                      ? "page"
-                      : undefined
-                  }
+                  aria-current={active ? "page" : undefined}
                   className="
-                    flex flex-1
-                    flex-col
-                    items-center
-                    justify-center
-                    gap-0.5
-                    rounded-2xl
-                    py-1.5
-                    transition-all
-                    active:scale-95
+                    flex flex-1 flex-col
+                    items-center justify-center
+                    gap-0.5 rounded-2xl py-1.5
+                    transition-all active:scale-95
                   "
                 >
                   <div
@@ -1026,22 +1137,13 @@ const moreGroups = useMemo(() => {
             <button
               type="button"
               aria-label="Open more navigation"
-              aria-expanded={
-                moreOpen
-              }
-              onClick={() =>
-                setMoreOpen(true)
-              }
+              aria-expanded={moreOpen}
+              onClick={() => setMoreOpen(true)}
               className="
-                flex flex-1
-                flex-col
-                items-center
-                justify-center
-                gap-0.5
-                rounded-2xl
-                py-1.5
-                transition-all
-                active:scale-95
+                flex flex-1 flex-col
+                items-center justify-center
+                gap-0.5 rounded-2xl py-1.5
+                transition-all active:scale-95
               "
             >
               <div
@@ -1077,10 +1179,8 @@ const moreGroups = useMemo(() => {
       {moreOpen && (
         <div
           className="
-            fixed inset-0
-            z-60
-            flex items-end
-            justify-center
+            fixed inset-0 z-[60]
+            flex items-end justify-center
             lg:hidden
           "
           role="dialog"
@@ -1098,29 +1198,20 @@ const moreGroups = useMemo(() => {
               bg-black/60
               backdrop-blur-md
             "
-            onClick={() =>
-              setMoreOpen(false)
-            }
+            onClick={() => setMoreOpen(false)}
           />
 
           {/* Sheet */}
 
           <div
             className="
-              relative
-              flex
-              max-h-[85dvh]
-              w-full
-              animate-in
-              flex-col
+              relative flex max-h-[85dvh] w-full
+              animate-in flex-col
               rounded-t-[28px]
-              border
-              border-b-0
-              border-white/10
+              border border-b-0 border-white/10
               bg-neutral-950/95
               shadow-[0_-20px_60px_rgba(0,0,0,0.5)]
-              duration-300
-              slide-in-from-bottom
+              duration-300 slide-in-from-bottom
               backdrop-blur-2xl
             "
           >
@@ -1146,16 +1237,11 @@ const moreGroups = useMemo(() => {
               <button
                 type="button"
                 aria-label="Close more navigation"
-                onClick={() =>
-                  setMoreOpen(false)
-                }
+                onClick={() => setMoreOpen(false)}
                 className="
-                  flex h-9 w-9
-                  items-center
-                  justify-center
-                  rounded-xl
-                  bg-white/5
-                  transition
+                  flex h-9 w-9 items-center
+                  justify-center rounded-xl
+                  bg-white/5 transition
                   hover:bg-white/10
                 "
               >
@@ -1166,102 +1252,88 @@ const moreGroups = useMemo(() => {
             {/* Content */}
 
             <div className="flex-1 space-y-6 overflow-y-auto px-4 py-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
-              {moreGroups.map(
-                (group) => (
-                  <div
-                    key={
-                      group.title
-                    }
-                  >
-                    <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-wider text-gray-500">
-                      {group.title}
-                    </p>
+              {moreGroups.map((group) => (
+                <div key={group.title}>
+                  <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-wider text-gray-500">
+                    {group.title}
+                  </p>
 
-                    <div className="space-y-1.5">
-                      {group.items.map(
-                        (item) => {
-                          const Icon =
-                            item.icon;
+                  <div className="space-y-1.5">
+                    {group.items.map((item) => {
+                      const Icon = item.icon;
 
-                          const active =
-                            isActive(
-                              pathname,
-                              item.href,
-                            );
+                      const active = isActive(
+                        pathname,
+                        item.href,
+                      );
 
-                          return (
-                            <button
-                              key={`${group.title}-${item.href}-${item.label}`}
-                              type="button"
-                              onClick={() =>
-                                handleMoreItem(
-                                  item,
-                                )
-                              }
+                      if (
+                        item.action === "settings" &&
+                        !isOwner
+                      ) {
+                        return null;
+                      }
+
+                      return (
+                        <button
+                          key={`${group.title}-${item.href}-${item.label}`}
+                          type="button"
+                          onClick={() => handleMoreItem(item)}
+                          className={cn(
+                            "flex w-full items-center gap-3 rounded-2xl border px-3 py-3 text-left transition-all active:scale-[0.98]",
+                            active
+                              ? "border-teal-500/25 bg-teal-500/10"
+                              : "border-white/8 bg-white/3 hover:bg-white/6",
+                          )}
+                        >
+                          <GlassIcon
+                            size="sm"
+                            variant="primary"
+                          >
+                            <Icon className="h-4 w-4" />
+                          </GlassIcon>
+
+                          <div className="min-w-0 flex-1">
+                            <p
                               className={cn(
-                                "flex w-full items-center gap-3 rounded-2xl border px-3 py-3 text-left transition-all active:scale-[0.98]",
+                                "text-sm font-medium",
                                 active
-                                  ? "border-teal-500/25 bg-teal-500/10"
-                                  : "border-white/8 bg-white/3 hover:bg-white/6",
+                                  ? "text-teal-300"
+                                  : "text-white",
                               )}
                             >
-                              <GlassIcon
-                                size="sm"
-                                variant="primary"
-                              >
-                                <Icon className="h-4 w-4" />
-                              </GlassIcon>
+                              {item.label}
+                            </p>
 
-                              <div className="min-w-0 flex-1">
-                                <p
-                                  className={cn(
-                                    "text-sm font-medium",
-                                    active
-                                      ? "text-teal-300"
-                                      : "text-white",
-                                  )}
-                                >
-                                  {
-                                    item.label
-                                  }
-                                </p>
+                            {item.description && (
+                              <p className="truncate text-[11px] text-gray-500">
+                                {item.description}
+                              </p>
+                            )}
+                          </div>
 
-                                {item.description && (
-                                  <p className="truncate text-[11px] text-gray-500">
-                                    {
-                                      item.description
-                                    }
-                                  </p>
-                                )}
-                              </div>
-
-                              <ChevronRight className="h-4 w-4 shrink-0 text-gray-600" />
-                            </button>
-                          );
-                        },
-                      )}
-                    </div>
+                          <ChevronRight className="h-4 w-4 shrink-0 text-gray-600" />
+                        </button>
+                      );
+                    })}
                   </div>
-                ),
-              )}
+                </div>
+              ))}
             </div>
           </div>
         </div>
       )}
 
       {/* ============================================================ */}
-      {/* ADMIN SETTINGS PANEL                                         */}
+      {/* OWNER SETTINGS PANEL                                         */}
       {/* ============================================================ */}
 
-      {isAdmin && settingsOpen && (
+      {isOwner && settingsOpen && (
         <div
           className="
-            fixed inset-0
-            z-70
-            flex
-            items-end
-            lg:items-center
-            lg:justify-end
+            fixed inset-0 z-[70]
+            flex items-end
+            lg:items-center lg:justify-end
           "
           role="dialog"
           aria-modal="true"
@@ -1278,35 +1350,25 @@ const moreGroups = useMemo(() => {
               bg-black/60
               backdrop-blur-md
             "
-            onClick={() =>
-              setSettingsOpen(false)
-            }
+            onClick={() => setSettingsOpen(false)}
           />
 
           {/* Panel */}
 
           <div
             className="
-              relative
-              flex
-              max-h-[88dvh]
-              w-full
-              animate-in
-              flex-col
+              relative flex max-h-[88dvh] w-full
+              animate-in flex-col
               rounded-t-[28px]
-              border
-              border-white/10
+              border border-white/10
               bg-neutral-950/95
               shadow-[0_-20px_60px_rgba(0,0,0,0.5)]
-              duration-300
-              slide-in-from-bottom
+              duration-300 slide-in-from-bottom
               backdrop-blur-2xl
 
-              lg:h-full
-              lg:max-h-none
-              lg:w-107.5
-              lg:rounded-none
-              lg:rounded-l-[28px]
+              lg:h-full lg:max-h-none
+              lg:w-[430px]
+              lg:rounded-none lg:rounded-l-[28px]
               lg:slide-in-from-right
             "
           >
@@ -1330,16 +1392,11 @@ const moreGroups = useMemo(() => {
               <button
                 type="button"
                 aria-label="Close settings"
-                onClick={() =>
-                  setSettingsOpen(false)
-                }
+                onClick={() => setSettingsOpen(false)}
                 className="
-                  flex h-9 w-9
-                  items-center
-                  justify-center
-                  rounded-xl
-                  bg-white/5
-                  transition
+                  flex h-9 w-9 items-center
+                  justify-center rounded-xl
+                  bg-white/5 transition
                   hover:bg-white/10
                 "
               >
@@ -1355,33 +1412,21 @@ const moreGroups = useMemo(() => {
                   icon={Building2}
                   label="Business profile"
                   description="Business identity and information"
-                  onClick={() =>
-                    navigateTo(
-                      "/settings",
-                    )
-                  }
+                  onClick={() => navigateTo("/settings")}
                 />
 
                 <SettingsItem
                   icon={Building2}
                   label="Branches"
                   description="Manage business locations"
-                  onClick={() =>
-                    navigateTo(
-                      "/settings/branches",
-                    )
-                  }
+                  onClick={() => navigateTo("/settings/branches")}
                 />
 
                 <SettingsItem
                   icon={Users}
                   label="Team"
                   description="Users, roles and permissions"
-                  onClick={() =>
-                    navigateTo(
-                      "/settings/team",
-                    )
-                  }
+                  onClick={() => navigateTo("/settings/team")}
                 />
               </SettingsSection>
 
@@ -1390,44 +1435,28 @@ const moreGroups = useMemo(() => {
                   icon={ShoppingCart}
                   label="Sales"
                   description="Sales behavior and defaults"
-                  onClick={() =>
-                    navigateTo(
-                      "/sales",
-                    )
-                  }
+                  onClick={() => navigateTo("/sales")}
                 />
 
                 <SettingsItem
                   icon={Package}
                   label="Inventory"
                   description="Inventory rules and defaults"
-                  onClick={() =>
-                    navigateTo(
-                      "/inventory",
-                    )
-                  }
+                  onClick={() => navigateTo("/inventory")}
                 />
 
                 <SettingsItem
                   icon={ArrowDownCircle}
                   label="Expenses"
                   description="Expense categories and defaults"
-                  onClick={() =>
-                    navigateTo(
-                      "/expenses",
-                    )
-                  }
+                  onClick={() => navigateTo("/expenses")}
                 />
 
                 <SettingsItem
                   icon={CreditCard}
                   label="Payments"
                   description="Payment methods and accounts"
-                  onClick={() =>
-                    navigateTo(
-                      "/settings/payments",
-                    )
-                  }
+                  onClick={() => navigateTo("/settings/payments")}
                 />
               </SettingsSection>
 
@@ -1436,11 +1465,7 @@ const moreGroups = useMemo(() => {
                   icon={FileText}
                   label="Invoices"
                   description="Invoice and document configuration"
-                  onClick={() =>
-                    navigateTo(
-                      "/invoices",
-                    )
-                  }
+                  onClick={() => navigateTo("/invoices")}
                 />
               </SettingsSection>
 
@@ -1449,20 +1474,14 @@ const moreGroups = useMemo(() => {
                   icon={RefreshCw}
                   label="App Update"
                   description="Database migrations and runtime updates"
-                  onClick={
-                    openUpdate
-                  }
+                  onClick={openUpdate}
                 />
 
                 <SettingsItem
                   icon={RefreshCw}
                   label="Sync Management"
                   description="Manage device synchronization"
-                  onClick={() =>
-                    navigateTo(
-                      "/sync-management",
-                    )
-                  }
+                  onClick={() => navigateTo("/sync-management")}
                 />
               </SettingsSection>
             </div>
@@ -1471,18 +1490,15 @@ const moreGroups = useMemo(() => {
       )}
 
       {/* ============================================================ */}
-      {/* ADMIN APP UPDATE PANEL                                       */}
+      {/* OWNER APP UPDATE PANEL                                       */}
       {/* ============================================================ */}
 
-      {isAdmin && updateOpen && (
+      {isOwner && updateOpen && (
         <div
           className="
-            fixed inset-0
-            z-80
-            flex
-            items-end
-            lg:items-center
-            lg:justify-end
+            fixed inset-0 z-[80]
+            flex items-end
+            lg:items-center lg:justify-end
           "
           role="dialog"
           aria-modal="true"
@@ -1493,10 +1509,7 @@ const moreGroups = useMemo(() => {
           <button
             type="button"
             aria-label="Close app update"
-            disabled={
-              updateStatus ===
-              "updating"
-            }
+            disabled={updateStatus === "updating"}
             className="
               absolute inset-0
               cursor-default
@@ -1505,13 +1518,8 @@ const moreGroups = useMemo(() => {
               disabled:cursor-not-allowed
             "
             onClick={() => {
-              if (
-                updateStatus !==
-                "updating"
-              ) {
-                setUpdateOpen(
-                  false,
-                );
+              if (updateStatus !== "updating") {
+                setUpdateOpen(false);
               }
             }}
           />
@@ -1520,25 +1528,17 @@ const moreGroups = useMemo(() => {
 
           <div
             className="
-              relative
-              flex
-              max-h-[88dvh]
-              w-full
-              animate-in
-              flex-col
+              relative flex max-h-[88dvh] w-full
+              animate-in flex-col
               rounded-t-[28px]
-              border
-              border-white/10
+              border border-white/10
               bg-neutral-950/95
               shadow-[0_-20px_60px_rgba(0,0,0,0.5)]
-              duration-300
-              slide-in-from-bottom
+              duration-300 slide-in-from-bottom
               backdrop-blur-2xl
 
-              lg:mr-6
-              lg:h-auto
-              lg:max-h-[90vh]
-              lg:w-107.5
+              lg:mr-6 lg:h-auto
+              lg:max-h-[90vh] lg:w-[430px]
               lg:rounded-[28px]
               lg:slide-in-from-right
             "
@@ -1563,22 +1563,12 @@ const moreGroups = useMemo(() => {
               <button
                 type="button"
                 aria-label="Close app update"
-                disabled={
-                  updateStatus ===
-                  "updating"
-                }
-                onClick={() =>
-                  setUpdateOpen(
-                    false,
-                  )
-                }
+                disabled={updateStatus === "updating"}
+                onClick={() => setUpdateOpen(false)}
                 className="
-                  flex h-9 w-9
-                  items-center
-                  justify-center
-                  rounded-xl
-                  bg-white/5
-                  transition
+                  flex h-9 w-9 items-center
+                  justify-center rounded-xl
+                  bg-white/5 transition
                   hover:bg-white/10
                   disabled:cursor-not-allowed
                   disabled:opacity-40
@@ -1591,19 +1581,13 @@ const moreGroups = useMemo(() => {
             {/* Content */}
 
             <div className="overflow-y-auto p-5">
-              {/* ---------------------------------------------------- */}
               {/* Idle */}
-              {/* ---------------------------------------------------- */}
 
-              {updateStatus ===
-                "idle" && (
+              {updateStatus === "idle" && (
                 <>
                   <div className="rounded-2xl border border-white/10 bg-white/3 p-4">
                     <div className="flex items-start gap-3">
-                      <GlassIcon
-                        size="sm"
-                        variant="primary"
-                      >
+                      <GlassIcon size="sm" variant="primary">
                         <Database className="h-4 w-4" />
                       </GlassIcon>
 
@@ -1613,15 +1597,8 @@ const moreGroups = useMemo(() => {
                         </p>
 
                         <p className="mt-1 text-xs leading-5 text-gray-500">
-                          The app will
-                          apply any
-                          database
-                          migrations
-                          newer than
-                          this
-                          device&apos;s
-                          current
-                          schema
+                          The app will apply any database migrations
+                          newer than this device&apos;s current schema
                           version.
                         </p>
                       </div>
@@ -1630,10 +1607,7 @@ const moreGroups = useMemo(() => {
 
                   <div className="mt-3 rounded-2xl border border-white/10 bg-white/3 p-4">
                     <div className="flex items-start gap-3">
-                      <GlassIcon
-                        size="sm"
-                        variant="primary"
-                      >
+                      <GlassIcon size="sm" variant="primary">
                         <ShieldCheck className="h-4 w-4" />
                       </GlassIcon>
 
@@ -1643,17 +1617,9 @@ const moreGroups = useMemo(() => {
                         </p>
 
                         <p className="mt-1 text-xs leading-5 text-gray-500">
-                          After
-                          migration,
-                          the SQLite
-                          prepared
-                          statement
-                          registry
-                          will be
-                          rebuilt
-                          against the
-                          current
-                          schema.
+                          After migration, the SQLite prepared
+                          statement registry will be rebuilt against
+                          the current schema.
                         </p>
                       </div>
                     </div>
@@ -1661,22 +1627,13 @@ const moreGroups = useMemo(() => {
 
                   <button
                     type="button"
-                    onClick={() =>
-                      void handleAppUpdate()
-                    }
+                    onClick={() => void handleAppUpdate()}
                     className="
-                      mt-5
-                      flex w-full
-                      items-center
-                      justify-center
-                      gap-2
-                      rounded-2xl
-                      bg-teal-500
-                      px-4 py-3
-                      text-sm
-                      font-semibold
-                      text-neutral-950
-                      transition-all
+                      mt-5 flex w-full items-center
+                      justify-center gap-2
+                      rounded-2xl bg-teal-500
+                      px-4 py-3 text-sm font-semibold
+                      text-neutral-950 transition-all
                       hover:bg-teal-400
                       active:scale-[0.98]
                     "
@@ -1687,12 +1644,9 @@ const moreGroups = useMemo(() => {
                 </>
               )}
 
-              {/* ---------------------------------------------------- */}
               {/* Updating */}
-              {/* ---------------------------------------------------- */}
 
-              {updateStatus ===
-                "updating" && (
+              {updateStatus === "updating" && (
                 <div className="py-8">
                   <div className="flex justify-center">
                     <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-teal-500/20 bg-teal-500/10">
@@ -1705,10 +1659,8 @@ const moreGroups = useMemo(() => {
                   </h3>
 
                   <p className="mt-2 text-center text-xs leading-5 text-gray-500">
-                    Applying pending
-                    database migrations
-                    and rebuilding
-                    prepared statements.
+                    Applying pending database migrations and
+                    rebuilding prepared statements.
                   </p>
 
                   <div className="mt-5 rounded-2xl border border-white/10 bg-white/3 px-4 py-3">
@@ -1716,20 +1668,16 @@ const moreGroups = useMemo(() => {
                       <Loader2 className="h-4 w-4 animate-spin text-teal-400" />
 
                       <span className="text-xs text-gray-300">
-                        Updating local
-                        runtime…
+                        Updating local runtime…
                       </span>
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* ---------------------------------------------------- */}
               {/* Success */}
-              {/* ---------------------------------------------------- */}
 
-              {updateStatus ===
-                "success" && (
+              {updateStatus === "success" && (
                 <div className="py-4">
                   <div className="flex justify-center">
                     <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-teal-500/20 bg-teal-500/10">
@@ -1742,52 +1690,35 @@ const moreGroups = useMemo(() => {
                   </h3>
 
                   <p className="mt-2 text-center text-xs leading-5 text-gray-500">
-                    The local database
-                    and prepared
-                    statement registry
-                    are now synchronized
-                    with the current
-                    application schema.
+                    The local database and prepared statement registry
+                    have been synchronized with the application
+                    schema.
                   </p>
 
                   {updateResult && (
                     <div className="mt-5 space-y-3 rounded-2xl border border-white/10 bg-white/3 p-4">
-                      {typeof updateResult.fromVersion ===
-                        "number" &&
-                        typeof updateResult.toVersion ===
-                          "number" && (
+                      {typeof updateResult.fromVersion === "number" &&
+                        typeof updateResult.toVersion === "number" && (
                           <div className="flex items-center justify-between">
                             <span className="text-xs text-gray-500">
                               Schema
                             </span>
 
                             <span className="text-xs font-medium text-white">
-                              v
-                              {
-                                updateResult.fromVersion
-                              }{" "}
-                              →
-                              v
-                              {
-                                updateResult.toVersion
-                              }
+                              v{updateResult.fromVersion} → v
+                              {updateResult.toVersion}
                             </span>
                           </div>
                         )}
 
-                      {updateResult.applied && (
+                      {Array.isArray(updateResult.applied) && (
                         <div>
                           <p className="text-xs text-gray-500">
-                            Migrations
-                            applied
+                            Migrations applied
                           </p>
 
                           <p className="mt-1 text-sm font-medium text-teal-300">
-                            {
-                              updateResult
-                                .applied
-                                .length
-                            }
+                            {updateResult.applied.length}
                           </p>
                         </div>
                       )}
@@ -1796,22 +1727,13 @@ const moreGroups = useMemo(() => {
 
                   <button
                     type="button"
-                    onClick={() =>
-                      window.location.reload()
-                    }
+                    onClick={() => window.location.reload()}
                     className="
-                      mt-5
-                      flex w-full
-                      items-center
-                      justify-center
-                      gap-2
-                      rounded-2xl
-                      bg-teal-500
-                      px-4 py-3
-                      text-sm
-                      font-semibold
-                      text-neutral-950
-                      transition-all
+                      mt-5 flex w-full items-center
+                      justify-center gap-2
+                      rounded-2xl bg-teal-500
+                      px-4 py-3 text-sm font-semibold
+                      text-neutral-950 transition-all
                       hover:bg-teal-400
                       active:scale-[0.98]
                     "
@@ -1822,12 +1744,9 @@ const moreGroups = useMemo(() => {
                 </div>
               )}
 
-              {/* ---------------------------------------------------- */}
               {/* Error */}
-              {/* ---------------------------------------------------- */}
 
-              {updateStatus ===
-                "error" && (
+              {updateStatus === "error" && (
                 <div className="py-4">
                   <div className="flex justify-center">
                     <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-red-500/20 bg-red-500/10">
@@ -1840,9 +1759,7 @@ const moreGroups = useMemo(() => {
                   </h3>
 
                   <p className="mt-2 text-center text-xs leading-5 text-gray-500">
-                    The local update
-                    could not be
-                    completed.
+                    The local update could not be completed.
                   </p>
 
                   {updateError && (
@@ -1855,25 +1772,14 @@ const moreGroups = useMemo(() => {
 
                   <button
                     type="button"
-                    onClick={() =>
-                      void handleAppUpdate()
-                    }
+                    onClick={() => void handleAppUpdate()}
                     className="
-                      mt-5
-                      flex w-full
-                      items-center
-                      justify-center
-                      gap-2
-                      rounded-2xl
-                      border
-                      border-white/10
-                      bg-white/10
-                      px-4 py-3
-                      text-sm
-                      font-semibold
-                      text-white
-                      transition-all
-                      hover:bg-white/15
+                      mt-5 flex w-full items-center
+                      justify-center gap-2
+                      rounded-2xl border border-white/10
+                      bg-white/10 px-4 py-3
+                      text-sm font-semibold text-white
+                      transition-all hover:bg-white/15
                       active:scale-[0.98]
                     "
                   >

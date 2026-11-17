@@ -1,4 +1,4 @@
-import type { Branch } from "@business/shared-types";
+import { BusinessEventTypes, type Branch } from "@business/shared-types";
 import { AggregateType } from "../../../../../offline/domain/aggregate";
 import type{ CommandIntent } from "../../../../BizTru_Karnel/CommandFactory/CommandIntent"; 
 import { BusinessManager } from "../../../../Composer/BusinessManager"; 
@@ -46,8 +46,8 @@ export class BranchApi {
 
     async createBranch(request: any) {
         const branchIntent: CommandIntent<BranchPayload> = {
-            type: request.type,
-            aggregateId: request.aggregateId,
+            type: request.type ?? BusinessEventTypes.BRANCH_CREATED,
+            aggregateId: request.aggregateId ?? request.id,
             aggregateType: AggregateType.BRANCH,
             payload: {
                 id: request.id,

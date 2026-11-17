@@ -4,6 +4,7 @@ import { BusinessManager } from "../../../../Composer/BusinessManager";
 import type{ ProductBarcodeAssign, ProductDeletePayload, ProductPayload, ProductRequest } from "./ProductRequest";
 import { InventoryEventType, type Mode } from "@business/shared-types";
 import type{ LiveProduct } from "../../../../offline/sqlite/businessDatabase/repositories/SQLiteProjectionRepository/SQLiteProductRepository"; 
+import type { CatalogueProduct } from "../../../../../pages/branches/BranchProductAllocationPage";
 
 
 export class ProductApi {
@@ -143,6 +144,20 @@ export class ProductApi {
         }
         return await app.storage.repositories.products.products(branchId, businessId)
     }
+
+    async getBusinessProducts(
+        businessId: string
+        ): Promise<CatalogueProduct[]> {
+        const app = await this.manager.current();
+
+        if (!app) {
+            throw new Error("Business does not exist");
+        }
+
+        return app.storage.repositories.products.productsByBusiness(
+            businessId
+        );
+        }
 
     async assignBarcode(request: ProductBarcodeAssign): Promise<void>{
         console.log("This Is the Barcode to be added to the Products: ", request)

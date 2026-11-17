@@ -8,6 +8,7 @@ export const productKeys = {
 
     productUpdate: "product_update",
 
-    products: "products"
+    products: "products",
+    productsByBusiness: "products_by_business"
 
 }

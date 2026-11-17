@@ -1,4 +1,3 @@
-
 import {
   Building2,
   ChevronRight,
@@ -27,38 +26,41 @@ interface BranchPerformanceCardProps {
 }
 
 const formatCompactCurrency = (amount: number) => {
-  if (amount >= 1_000_000) {
-    return `₦${(amount / 1_000_000).toFixed(2)}m`;
+  const value = Number.isFinite(amount) ? amount : 0;
+
+  if (value >= 1_000_000) {
+    return `₦${(value / 1_000_000).toFixed(2)}m`;
   }
 
-  if (amount >= 1_000) {
-    return `₦${(amount / 1_000).toFixed(0)}k`;
+  if (value >= 1_000) {
+    return `₦${(value / 1_000).toFixed(0)}k`;
   }
 
-  return `₦${amount.toLocaleString("en-NG")}`;
+  return `₦${value.toLocaleString("en-NG")}`;
+};
+
+const statusStyles: Record<BranchPerformance["status"], string> = {
+  ACTIVE: "bg-emerald-500/15 text-emerald-400",
+  ATTENTION: "bg-amber-500/15 text-amber-400",
+  INACTIVE: "bg-red-500/15 text-red-400",
+};
+
+const statusLabels: Record<BranchPerformance["status"], string> = {
+  ACTIVE: "Active",
+  ATTENTION: "Attention",
+  INACTIVE: "Inactive",
 };
 
 export function BranchPerformanceCard({
   branch,
   onClick,
 }: BranchPerformanceCardProps) {
-  const statusStyles = {
-    ACTIVE: "bg-emerald-500/15 text-emerald-400",
-    ATTENTION: "bg-amber-500/15 text-amber-400",
-    INACTIVE: "bg-red-500/15 text-red-400",
-  };
-
-  const statusLabels = {
-    ACTIVE: "Active",
-    ATTENTION: "Attention",
-    INACTIVE: "Inactive",
-  };
-
   return (
     <button
       type="button"
       onClick={() => onClick(branch)}
-      className="w-full text-left"
+      aria-label={`View ${branch.name} branch`}
+      className="w-full text-left rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
     >
       <GlassCard className="p-4 space-y-4 hover:bg-white/[0.06] transition-colors">
         {/* Branch identity */}
@@ -80,14 +82,13 @@ export function BranchPerformanceCard({
           </div>
 
           <span
-            className={`text-[10px] px-2 py-1 rounded-full shrink-0 ${
-              statusStyles[branch.status]
-            }`}
+            className={`text-[10px] px-2 py-1 rounded-full shrink-0 ${statusStyles[branch.status]}`}
           >
             {statusLabels[branch.status]}
           </span>
         </div>
 
+        {/* Manager */}
         <div className="text-xs text-white/50">
           Branch Manager: {branch.manager}
         </div>
@@ -98,6 +99,7 @@ export function BranchPerformanceCard({
             <p className="text-xs text-white/50">
               Today's Sales
             </p>
+
             <p className="font-semibold mt-1">
               {formatCompactCurrency(branch.todaySales)}
             </p>
@@ -107,6 +109,7 @@ export function BranchPerformanceCard({
             <p className="text-xs text-white/50">
               Net Profit
             </p>
+
             <p className="font-semibold text-emerald-400 mt-1">
               {formatCompactCurrency(branch.netProfit)}
             </p>
@@ -116,6 +119,7 @@ export function BranchPerformanceCard({
             <p className="text-xs text-white/50">
               Inventory Value
             </p>
+
             <p className="text-sm font-medium mt-1">
               {formatCompactCurrency(branch.inventoryValue)}
             </p>
@@ -125,6 +129,7 @@ export function BranchPerformanceCard({
             <p className="text-xs text-white/50">
               Available Cash
             </p>
+
             <p className="text-sm font-medium mt-1">
               {formatCompactCurrency(branch.cash)}
             </p>
@@ -132,10 +137,7 @@ export function BranchPerformanceCard({
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between border-t border-white/10 pt-3"
-        onClick={()=> {
-            console.log("i am Going To navigate to this branchId")
-        }}>
+        <div className="flex items-center justify-between border-t border-white/10 pt-3">
           <p className="text-xs text-white/50">
             {branch.salesCount} transactions today
           </p>

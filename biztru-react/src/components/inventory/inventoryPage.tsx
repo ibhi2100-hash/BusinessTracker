@@ -192,9 +192,22 @@ export default function InventoryPage({
   mode,
 
   businessId,
-  branchId
+  branchId: requestedBranchId
 }: InventoryPageProps) {
   const app = useApplication();
+  
+const {
+    businessId: contextBusinessId,
+    branchId: contextBranchId,
+  } = useBusinessContext();
+
+
+  const resolvedBusinessId =
+    businessId ?? contextBusinessId;
+
+  const branchId =
+    requestedBranchId ?? contextBranchId;
+
   const {
     context: routeContext,
     readOnly,
@@ -248,10 +261,11 @@ const canManageInventory =
    * All product metrics and filters below therefore operate
    * on the currently selected branch's products.
    */
+
   const {
     data,
     loading: productsLoading,
-  } = useLiveProducts(branchId ?? "", businessId ?? "");
+  } = useLiveProducts(branchId ?? "", resolvedBusinessId ?? "");
 
   const products = data ?? [];
 

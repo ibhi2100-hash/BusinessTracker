@@ -74,6 +74,36 @@ export const PRODUCTS = `
   WHERE p.businessId = ?
     AND p.isDeleted = 0
     AND p.isActive = 1
-    AND (p.branchId = ? OR p.branchId IS NULL)
+  ORDER BY p.name ASC
+`;
+
+/**
+ * Retrieves the complete active product catalogue for a business.
+ *
+ * Includes:
+ * - Products assigned to existing branches.
+ * - Products not yet assigned to any branch (branchId IS NULL).
+ *
+ * Does not filter by branch because this is a business-wide catalogue.
+ */
+export const PRODUCTS_BY_BUSINESS = `
+  SELECT
+    p.id,
+    p.businessId,
+    p.branchId,
+    p.name,
+    p.price,
+    p.costPrice,
+    p.category,
+    p.sku,
+    p.barcode,
+    p.imageUrl,
+    p.description,
+    p.reorderLevel,
+    p.isActive
+  FROM products p
+  WHERE p.businessId = ?
+    AND p.isDeleted = 0
+    AND p.isActive = 1
   ORDER BY p.name ASC
 `;

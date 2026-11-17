@@ -1,4 +1,6 @@
 
+// hooks/useAuthGuard.tsx
+
 import {
   createContext,
   useContext,
@@ -84,25 +86,36 @@ export type Permission =
 /* ------------------------------------------------------------------ */
 
 /**
- * These are default role permissions.
+ * Default permissions assigned to each role.
  *
- * They are not the complete authorization policy for every user.
+ * These are role defaults, not the complete authorization policy.
+ * Trusted business memberships and branch assignments may extend
+ * these permissions.
  *
- * Additional permissions can be granted through trusted business
- * memberships and branch assignments.
+ * CEO:
+ * Business owner with business-level administrative authority.
  *
- * CEO represents the business owner.
+ * ADMIN:
+ * Business administrator with branch administration authority.
  *
- * CEO does not automatically receive operational write access
- * to every branch.
+ * MANAGER:
+ * Operational authority within assigned branches.
  *
- * ADMIN receives read access by default. Additional administrative
- * permissions must be explicitly assigned.
+ * STAFF / SALES_REPS:
+ * Restricted operational access.
+ *
+ * CLEANER:
+ * Cleaning-specific access.
  */
+
 export const ROLE_PERMISSIONS: Record<
   Role,
   readonly Permission[]
 > = {
+  /* ================================================================ */
+  /* CEO                                                              */
+  /* ================================================================ */
+
   CEO: [
     // Business administration
     "business:read",
@@ -135,10 +148,20 @@ export const ROLE_PERMISSIONS: Record<
     "sync:manage",
   ],
 
+  /* ================================================================ */
+  /* ADMIN                                                            */
+  /* ================================================================ */
+
   ADMIN: [
     // Business visibility
     "business:read",
+
+    // Branch administration
     "branch:read",
+    "branch:create",
+    "branch:manage",
+    "branch:assign-manager",
+    "branch:initialize",
 
     // Operational visibility
     "sales:read",
@@ -146,12 +169,17 @@ export const ROLE_PERMISSIONS: Record<
     "finance:read",
     "reports:read",
 
-    // Team visibility
+    // Team administration
     "team:read",
+    "team:manage",
 
     // Synchronization visibility
     "sync:read",
   ],
+
+  /* ================================================================ */
+  /* MANAGER                                                          */
+  /* ================================================================ */
 
   MANAGER: [
     "branch:read",
@@ -175,11 +203,16 @@ export const ROLE_PERMISSIONS: Record<
     // Reports and team
     "reports:read",
     "team:read",
+    "team:manage",
 
     // Synchronization
     "sync:read",
     "sync:manage",
   ],
+
+  /* ================================================================ */
+  /* STAFF                                                            */
+  /* ================================================================ */
 
   STAFF: [
     "branch:read",
@@ -187,11 +220,19 @@ export const ROLE_PERMISSIONS: Record<
     "sales:create",
   ],
 
+  /* ================================================================ */
+  /* SALES REPRESENTATIVE                                             */
+  /* ================================================================ */
+
   SALES_REPS: [
     "branch:read",
     "sales:read",
     "sales:create",
   ],
+
+  /* ================================================================ */
+  /* CLEANER                                                          */
+  /* ================================================================ */
 
   CLEANER: [
     "branch:read",
@@ -217,12 +258,10 @@ export const ROLE_PERMISSIONS: Record<
  * BRANCH_INSPECTION:
  * Read-only inspection of a branch.
  *
- * Branch IDs are optional here because some router declarations
- * define a context before the active branch is resolved.
- *
  * Actual branch authorization must still validate the resolved
  * businessId and branchId in application commands.
  */
+
 export type AccessContext =
   | {
       type: "BUSINESS";
@@ -253,24 +292,12 @@ export interface RouteAccess {
 
   context: AccessContext;
 
-  /**
-   * Whether the current page is read-only.
-   */
   readOnly: boolean;
 
-  /**
-   * Permissions effective in the current context.
-   */
   permissions: readonly Permission[];
 
-  /**
-   * Checks whether the user has a permission in this context.
-   */
   can: (permission: Permission) => boolean;
 
-  /**
-   * Checks whether the user can actually perform a mutation.
-   */
   canMutate: (permission: Permission) => boolean;
 }
 
@@ -310,32 +337,29 @@ export function useRouteAccess(): RouteAccess {
 /* BUSINESS CONTEXT PERMISSIONS                                       */
 /* ------------------------------------------------------------------ */
 
-/**
- * Permissions available in the business administration workspace.
- *
- * Branch operational transactions are excluded.
- *
- * Branch initialization is also excluded here. It belongs to
- * BRANCH_SETUP.
- */
 const BUSINESS_CONTEXT_PERMISSIONS: readonly Permission[] = [
   "business:read",
   "business:manage",
   "business:setup",
 
+  // Branch administration
   "branch:create",
   "branch:manage",
   "branch:assign-manager",
   "branch:read",
 
+  // Team
   "team:read",
   "team:manage",
 
+  // Settings
   "settings:manage",
   "billing:manage",
 
+  // Reports
   "reports:read",
 
+  // Synchronization
   "sync:read",
   "sync:manage",
 ];
@@ -344,20 +368,10 @@ const BUSINESS_CONTEXT_PERMISSIONS: readonly Permission[] = [
 /* BRANCH SETUP PERMISSIONS                                           */
 /* ------------------------------------------------------------------ */
 
-/**
- * Branch initialization is a controlled process.
- *
- * It must not automatically grant inventory:write.
- *
- * Opening stock and financial balances must be recorded through
- * dedicated initialization commands.
- */
 const BRANCH_SETUP_PERMISSIONS: readonly Permission[] = [
   "business:read",
   "branch:read",
-
   "branch:initialize",
-
   "inventory:read",
 ];
 
@@ -365,12 +379,6 @@ const BRANCH_SETUP_PERMISSIONS: readonly Permission[] = [
 /* BRANCH INSPECTION PERMISSIONS                                      */
 /* ------------------------------------------------------------------ */
 
-/**
- * Inspection is always read-only.
- *
- * Even if a user has operational permissions elsewhere, those
- * permissions cannot be used in this context.
- */
 const BRANCH_INSPECTION_PERMISSIONS: readonly Permission[] = [
   "business:read",
   "branch:read",
@@ -383,7 +391,6 @@ const BRANCH_INSPECTION_PERMISSIONS: readonly Permission[] = [
   "team:read",
 
   "sync:read",
-
   "cleaning:read",
 ];
 
@@ -391,11 +398,6 @@ const BRANCH_INSPECTION_PERMISSIONS: readonly Permission[] = [
 /* BRANCH OPERATIONS PERMISSIONS                                      */
 /* ------------------------------------------------------------------ */
 
-/**
- * Normal operational permissions inside a branch.
- *
- * Business administration permissions are excluded.
- */
 const BRANCH_OPERATIONS_PERMISSIONS: readonly Permission[] = [
   "branch:read",
 
@@ -435,19 +437,31 @@ const BRANCH_OPERATIONS_PERMISSIONS: readonly Permission[] = [
 /* MUTABLE BUSINESS PERMISSIONS                                       */
 /* ------------------------------------------------------------------ */
 
+/**
+ * These permissions represent business-level mutations.
+ *
+ * CEO and ADMIN can manage branches here.
+ *
+ * Branch initialization is deliberately separate.
+ */
+
 const MUTABLE_BUSINESS_PERMISSIONS: readonly Permission[] = [
   "business:manage",
   "business:setup",
 
+  // Branch administration
   "branch:create",
   "branch:manage",
   "branch:assign-manager",
 
+  // Team administration
   "team:manage",
 
+  // Settings
   "settings:manage",
   "billing:manage",
 
+  // Synchronization
   "sync:manage",
 ];
 
@@ -464,20 +478,26 @@ const MUTABLE_SETUP_PERMISSIONS: readonly Permission[] = [
 /* ------------------------------------------------------------------ */
 
 const MUTABLE_OPERATIONAL_PERMISSIONS: readonly Permission[] = [
+  // Sales
   "sales:create",
   "sales:refund",
 
+  // Inventory
   "inventory:write",
   "inventory:receive",
   "inventory:adjust",
   "inventory:transfer",
 
+  // Finance
   "finance:write",
 
+  // Team
   "team:manage",
 
+  // Synchronization
   "sync:manage",
 
+  // Cleaning
   "cleaning:manage",
 ];
 
@@ -573,21 +593,14 @@ interface AuthGuardProps {
   /** Force read-only access for every permitted role. */
   readOnly?: boolean;
 
-  /**
-   * Explicit access context for the route.
-   */
+  /** Explicit access context for the route. */
   context?: AccessContext;
 
   /**
    * Additional permissions from trusted business membership
    * or branch-assignment data.
    *
-   * Examples:
-   * - CEO assigned as manager of a particular branch.
-   * - ADMIN explicitly authorized to create branches.
-   *
-   * These must come from trusted application state.
-   * Never construct them from arbitrary URL parameters or form input.
+   * Never construct these from arbitrary URL parameters or form input.
    */
   grantedPermissions?: readonly Permission[];
 
@@ -627,9 +640,9 @@ export function AuthGuard({
 
   const { session } = useApplicationSession();
 
-  /* -------------------------------------------------------------- */
-  /* AUTHENTICATION                                                  */
-  /* -------------------------------------------------------------- */
+  /* ================================================================ */
+  /* AUTHENTICATION                                                   */
+  /* ================================================================ */
 
   if (requireAuth && !session.user) {
     return (
@@ -643,9 +656,9 @@ export function AuthGuard({
     );
   }
 
-  /* -------------------------------------------------------------- */
-  /* BUSINESS REQUIREMENT                                           */
-  /* -------------------------------------------------------------- */
+  /* ================================================================ */
+  /* BUSINESS REQUIREMENT                                             */
+  /* ================================================================ */
 
   if (requireBusiness && !session.business) {
     return (
@@ -659,9 +672,9 @@ export function AuthGuard({
     );
   }
 
-  /* -------------------------------------------------------------- */
-  /* ONBOARDING REQUIREMENT                                         */
-  /* -------------------------------------------------------------- */
+  /* ================================================================ */
+  /* ONBOARDING REQUIREMENT                                           */
+  /* ================================================================ */
 
   if (
     requireOnboarding &&
@@ -676,9 +689,9 @@ export function AuthGuard({
     );
   }
 
-  /* -------------------------------------------------------------- */
-  /* BLOCK APPLICATION DURING ONBOARDING                            */
-  /* -------------------------------------------------------------- */
+  /* ================================================================ */
+  /* BLOCK APPLICATION DURING ONBOARDING                              */
+  /* ================================================================ */
 
   if (
     blockIfOnboarding &&
@@ -692,9 +705,9 @@ export function AuthGuard({
     );
   }
 
-  /* -------------------------------------------------------------- */
-  /* RESOLVE ROLE                                                    */
-  /* -------------------------------------------------------------- */
+  /* ================================================================ */
+  /* RESOLVE ROLE                                                     */
+  /* ================================================================ */
 
   const userRole = session.user?.role;
 
@@ -702,9 +715,9 @@ export function AuthGuard({
     ? userRole
     : null;
 
-  /* -------------------------------------------------------------- */
-  /* ROLE AUTHORIZATION                                              */
-  /* -------------------------------------------------------------- */
+  /* ================================================================ */
+  /* ROLE AUTHORIZATION                                               */
+  /* ================================================================ */
 
   if (roles && (!role || !roles.includes(role))) {
     return (
@@ -715,27 +728,18 @@ export function AuthGuard({
     );
   }
 
-  /* -------------------------------------------------------------- */
-  /* BASE ROLE PERMISSIONS                                           */
-  /* -------------------------------------------------------------- */
+  /* ================================================================ */
+  /* BASE ROLE PERMISSIONS                                            */
+  /* ================================================================ */
 
   const rolePermissions: readonly Permission[] = role
     ? ROLE_PERMISSIONS[role]
     : [];
 
-  /* -------------------------------------------------------------- */
-  /* MERGE TRUSTED ASSIGNED PERMISSIONS                              */
-  /* -------------------------------------------------------------- */
+  /* ================================================================ */
+  /* MERGE TRUSTED ASSIGNED PERMISSIONS                               */
+  /* ================================================================ */
 
-  /**
-   * Role permissions are the default.
-   *
-   * Branch assignment and business membership permissions
-   * extend the default permissions.
-   *
-   * Context filtering below prevents a permission from being
-   * used outside its permitted context.
-   */
   const assignedPermissions: readonly Permission[] = [
     ...new Set<Permission>([
       ...rolePermissions,
@@ -743,9 +747,9 @@ export function AuthGuard({
     ]),
   ];
 
-  /* -------------------------------------------------------------- */
-  /* CONTEXT PERMISSION FILTER                                       */
-  /* -------------------------------------------------------------- */
+  /* ================================================================ */
+  /* CONTEXT PERMISSION FILTER                                        */
+  /* ================================================================ */
 
   const contextPermissions = getContextPermissions(context);
 
@@ -754,26 +758,18 @@ export function AuthGuard({
       contextPermissions.includes(permission),
     );
 
-  /* -------------------------------------------------------------- */
-  /* READ-ONLY POLICY                                                */
-  /* -------------------------------------------------------------- */
+  /* ================================================================ */
+  /* READ-ONLY POLICY                                                 */
+  /* ================================================================ */
 
-  /**
-   * Branch inspection can never be mutated.
-   *
-   * readOnlyRoles is an additional route-level restriction.
-   *
-   * Do not use readOnlyRoles={["CEO"]} on routes where an owner
-   * might be operating a branch they manage.
-   */
   const isReadOnly =
     readOnly ||
     context.type === "BRANCH_INSPECTION" ||
     (!!role && readOnlyRoles.includes(role));
 
-  /* -------------------------------------------------------------- */
-  /* AUTHORIZATION FUNCTIONS                                        */
-  /* -------------------------------------------------------------- */
+  /* ================================================================ */
+  /* AUTHORIZATION FUNCTIONS                                         */
+  /* ================================================================ */
 
   const can = (
     permission: Permission,
@@ -793,9 +789,9 @@ export function AuthGuard({
     );
   };
 
-  /* -------------------------------------------------------------- */
-  /* ROUTE PERMISSION REQUIREMENTS                                   */
-  /* -------------------------------------------------------------- */
+  /* ================================================================ */
+  /* ROUTE PERMISSION REQUIREMENTS                                    */
+  /* ================================================================ */
 
   if (
     permissions?.length &&
@@ -809,9 +805,9 @@ export function AuthGuard({
     );
   }
 
-  /* -------------------------------------------------------------- */
-  /* ROUTE ACCESS                                                    */
-  /* -------------------------------------------------------------- */
+  /* ================================================================ */
+  /* ROUTE ACCESS                                                     */
+  /* ================================================================ */
 
   const routeAccess: RouteAccess = {
     role,
@@ -827,9 +823,9 @@ export function AuthGuard({
     canMutate,
   };
 
-  /* -------------------------------------------------------------- */
-  /* RENDER                                                          */
-  /* -------------------------------------------------------------- */
+  /* ================================================================ */
+  /* RENDER                                                           */
+  /* ================================================================ */
 
   return (
     <RouteAccessContext.Provider value={routeAccess}>
@@ -837,3 +833,4 @@ export function AuthGuard({
     </RouteAccessContext.Provider>
   );
 }
+  

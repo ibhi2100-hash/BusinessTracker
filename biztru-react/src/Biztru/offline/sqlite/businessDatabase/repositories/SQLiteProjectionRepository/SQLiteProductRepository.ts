@@ -12,6 +12,7 @@ import {
 
 import type { SQLiteStatementOperation } from "../../../../../storage/statement/worker/WorkerProtocol";
 import { productKeys } from "../../statements/products/productStatementKeys";
+import type { CatalogueProduct } from "../../../../../../pages/branches/BranchProductAllocationPage";
 
 
 export interface LiveProduct {
@@ -143,9 +144,22 @@ export class SQLiteProductRepository
             branchId,
             businessId,
             businessId,
-            branchId,
         ]);
         }
+
+    async productsByBusiness(
+        businessId: string
+    ): Promise<CatalogueProduct[]> {
+
+            const rows = await this.statements.productsByBusiness.query<CatalogueProduct>([
+            businessId
+            ]);
+
+            console.log("This are the products that are return from the  Catalogue: ", rows);
+
+            return rows
+
+    }
 }
 
 

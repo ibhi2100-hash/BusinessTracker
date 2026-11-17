@@ -1,19 +1,7 @@
 
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-
-import {
-  Controller,
-  useForm,
-  useWatch,
-} from "react-hook-form";
-
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import {
   BriefcaseBusiness,
   Building2,
@@ -37,52 +25,33 @@ import {
 
 export type StaffRole = "STAFF" | "MANAGER";
 
-export type EmploymentStatus =
-  | "ACTIVE"
-  | "SUSPENDED"
-  | "INVITED";
-
 interface Props {
   open: boolean;
   branches: Branch[];
+  allowedRoles: readonly StaffRole[];
   loading?: boolean;
   onClose: () => void;
-  onSubmit: (
-    data: StaffInvitationData,
-  ) => void | Promise<void>;
+  onSubmit: (data: StaffInvitationData) => void | Promise<void>;
 }
 
 type FormState = StaffInvitationData;
 
-const EMPTY_FORM: FormState = {
-  fullName: "",
-  phone: "",
-  email: "",
-  role: "STAFF",
-  branchId: "",
-};
-
-const FIELD_CLASS =
-  "h-13 rounded-2xl";
+const FIELD_CLASS = "h-13 rounded-2xl";
+const LABEL_CLASS =
+  "block text-xs font-medium uppercase tracking-wider text-gray-500";
 
 const FIELD_ERROR_CLASS =
   "mt-1.5 flex items-start gap-1.5 px-1 text-[11px] leading-4 text-red-400";
 
-const LABEL_CLASS =
-  "block text-xs font-medium uppercase tracking-wider text-gray-500";
-
 export default function StaffInvitationSheet({
   open,
   branches,
+  allowedRoles,
   loading = false,
   onClose,
   onSubmit,
 }: Props) {
-  const [submitError, setSubmitError] =
-    useState<string | null>(null);
-
-  const [submitSucceeded, setSubmitSucceeded] =
-    useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const branchIds = useMemo(
     () => branches.map((branch) => branch.id),
@@ -94,40 +63,46 @@ export default function StaffInvitationSheet({
     [branchIds],
   );
 
+  const defaultRole = allowedRoles[0] ?? "STAFF";
+
   const {
     control,
     handleSubmit,
     reset,
     setValue,
     getValues,
-    formState: {
-      errors,
-      isSubmitting,
-    },
+    trigger,
+    formState: { errors, isSubmitting },
   } = useForm<FormState>({
     resolver: zodResolver(schema),
     mode: "onChange",
-    reValidateMode: "onChange",
-    defaultValues: EMPTY_FORM,
+    defaultValues: {
+      fullName: "",
+      phone: "",
+      email: "",
+      role: defaultRole,
+      branchId: "",
+    },
   });
 
   const form = useWatch({ control });
-
   const busy = loading || isSubmitting;
 
   const selectedBranch = branches.find(
     (branch) => branch.id === form.branchId,
   );
 
-  const isValidRole =
-    form.role === "STAFF" ||
-    form.role === "MANAGER";
+  const hasOneRole = allowedRoles.length === 1;
+
+  const roleIsAllowed =
+    allowedRoles.length > 0 &&
+    allowedRoles.includes(form.role);
 
   const canPreview =
     Boolean(form.fullName?.trim()) &&
     Boolean(form.phone?.trim()) &&
     Boolean(form.branchId) &&
-    isValidRole &&
+    roleIsAllowed &&
     !errors.fullName &&
     !errors.phone &&
     !errors.email &&
@@ -135,132 +110,62 @@ export default function StaffInvitationSheet({
     !errors.branchId &&
     Boolean(selectedBranch);
 
-  /*
-   * Reset the form when the sheet opens.
-   *
-   * The reset effect deliberately does not depend on the
-   * branches array, preventing an ordinary branch-list
-   * refresh from clearing data the user has entered.
-   */
   useEffect(() => {
-    if (!open) {
-      return;
-    }
+    if (!open) return;
 
-    reset(EMPTY_FORM);
+    reset({
+      fullName: "",
+      phone: "",
+      email: "",
+      role: defaultRole,
+      branchId: branches.length === 1 ? branches[0].id : "",
+    });
+
     setSubmitError(null);
-    setSubmitSucceeded(false);
-  }, [open, reset]);
+  }, [open, reset, defaultRole, branches]);
 
-  /*
-   * Automatically assign the only available branch.
-   * Never overwrite a branch the user has already selected.
-   */
   useEffect(() => {
-    if (!open || branches.length !== 1) {
-      return;
-    }
+    if (!open) return;
 
-    if (!getValues("branchId")) {
-      setValue("branchId", branches[0].id, {
+    const currentBranchId = getValues("branchId");
+
+    if (
+      currentBranchId &&
+      !branchIds.includes(currentBranchId)
+    ) {
+      setValue("branchId", "", {
         shouldValidate: true,
+        shouldDirty: true,
       });
     }
-  }, [open, branches, getValues, setValue]);
 
-  /*
-   * If the branch list changes while the sheet is open,
-   * immediately revalidate the selected branch.
-   */
-  useEffect(() => {
-    if (!open) {
-      return;
-    }
-
-    const selectedId = getValues("branchId");
-
-    if (selectedId) {
-      void control._options.resolver;
-      // The schema is also evaluated on submission.
-      // Triggering validation is handled below through
-      // setValue when the selection is changed.
-    }
-  }, [open, branchIds, control, getValues]);
+    void trigger("branchId");
+  }, [open, branchIds, getValues, setValue, trigger]);
 
   const handleClose = useCallback(() => {
-    if (busy) {
-      return;
-    }
-
-    reset(EMPTY_FORM);
+    if (busy) return;
     setSubmitError(null);
-    setSubmitSucceeded(false);
     onClose();
-  }, [busy, reset, onClose]);
+  }, [busy, onClose]);
 
-  const chooseRole = useCallback(
-    (role: StaffRole) => {
-      if (busy) {
-        return;
-      }
+  const handleFormSubmit = async (data: FormState) => {
+    if (busy) return;
 
-      setSubmitError(null);
-      setSubmitSucceeded(false);
+    setSubmitError(null);
 
-      setValue("role", role, {
-        shouldDirty: true,
-        shouldTouch: true,
-        shouldValidate: true,
-      });
-    },
-    [busy, setValue],
-  );
-
-  const handlePhoneChange = useCallback(
-    (
-      value: string,
-      onChange: (value: string) => void,
-    ) => {
-      const digits = value
-        .replace(/\D/g, "")
-        .slice(0, 15);
-
-      onChange(digits);
-      setSubmitError(null);
-      setSubmitSucceeded(false);
-    },
-    [],
-  );
-
-  const handleFormSubmit = async (
-    data: FormState,
-  ) => {
-    if (busy) {
+    // Defense in depth: never trust a role supplied by the form.
+    if (!allowedRoles.includes(data.role)) {
+      setSubmitError("You are not authorized to assign this role.");
       return;
     }
 
-    setSubmitError(null);
-    setSubmitSucceeded(false);
-
-    /*
-     * Defense in depth: the schema validates the branch ID,
-     * and this check ensures it still exists immediately
-     * before invoking the submission callback.
-     */
-    const branchExists = branches.some(
-      (branch) => branch.id === data.branchId,
+    // The selected branch must belong to the permitted branch list.
+    const branch = branches.find(
+      (item) => item.id === data.branchId,
     );
 
-    if (!branchExists) {
-      setValue("branchId", data.branchId, {
-        shouldValidate: true,
-        shouldTouch: true,
-      });
-
-      setSubmitError(
-        "The selected branch is no longer available. Please select a valid branch.",
-      );
-
+    if (!branch) {
+      setSubmitError("Select a valid branch.");
       return;
     }
 
@@ -268,80 +173,56 @@ export default function StaffInvitationSheet({
       fullName: data.fullName.trim(),
       phone: data.phone.trim(),
       email: data.email.trim(),
-      role: data.role,
-      branchId: data.branchId,
+      role: allowedRoles.length === 1 ? defaultRole : data.role,
+      branchId: branch.id,
     };
 
     try {
       await onSubmit(payload);
-      setSubmitSucceeded(true);
-    } catch (error: unknown) {
+    } catch (error) {
       setSubmitError(
         error instanceof Error
           ? error.message
-          : "Unable to create the invitation. Please try again.",
+          : "Unable to create the invitation.",
       );
     }
   };
 
-  if (!open) {
-    return null;
-  }
+  if (!open || allowedRoles.length === 0) return null;
+
+  const fixedRole = allowedRoles[0];
+  const isManagerInvitation = fixedRole === "MANAGER";
 
   return (
     <GlassSheet
       open={open}
       onClose={handleClose}
-      title="Add Staff"
-      subtitle="Invite a team member to your business"
+      title={isManagerInvitation ? "Add Branch Manager" : "Add Staff"}
+      subtitle={
+        isManagerInvitation
+          ? "Invite a manager to oversee a business branch."
+          : "Invite a staff member to your assigned branch."
+      }
       loading={busy}
-      className="w-full sm:max-w-xl lg:max-w-2xl xl:max-w-3xl"
+      className="w-full sm:max-w-xl lg:max-w-2xl"
     >
       <form
         noValidate
         onSubmit={handleSubmit(handleFormSubmit)}
-        className="space-y-7 pb-4"
+        className="space-y-6 pb-4"
       >
-        {/* =====================================================
-            SERVER / SUBMISSION FEEDBACK
-        ====================================================== */}
-
         {submitError && (
           <div
             role="alert"
-            className="flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-xs leading-5 text-red-400"
+            className="flex items-start gap-2 rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-xs text-red-400"
           >
-            <AlertCircle
-              size={16}
-              className="mt-0.5 shrink-0"
-            />
+            <AlertCircle size={16} className="mt-0.5 shrink-0" />
             <span>{submitError}</span>
           </div>
         )}
 
-        {submitSucceeded && (
-          <div
-            role="status"
-            className="rounded-xl border border-teal-500/20 bg-teal-500/10 p-3 text-xs leading-5 text-teal-300"
-          >
-            The submission handler completed successfully.
-            Refresh the staff list or close the sheet as
-            appropriate for your invitation workflow.
-          </div>
-        )}
-
-        {/* =====================================================
-            FULL NAME
-        ====================================================== */}
-
         <section className="space-y-2">
-          <label
-            htmlFor="staff-full-name"
-            className={LABEL_CLASS}
-          >
-            Full name
-          </label>
-
+          <label className={LABEL_CLASS}>Full name</label>
           <Controller
             control={control}
             name="fullName"
@@ -350,47 +231,24 @@ export default function StaffInvitationSheet({
                 <GlassInput
                   name={field.name}
                   value={field.value}
-                  onChange={(
-                    event: React.ChangeEvent<HTMLInputElement>,
-                  ) => {
-                    field.onChange(event);
-                    setSubmitError(null);
-                    setSubmitSucceeded(false);
-                  }}
+                  onChange={field.onChange}
                   onBlur={field.onBlur}
                   icon={<UserRound size={18} />}
                   placeholder="e.g. Musa Ibrahim"
                   disabled={busy}
                   className={[
                     FIELD_CLASS,
-                    fieldState.error
-                      ? "!border-red-500/60"
-                      : "",
+                    fieldState.error ? "!border-red-500/60" : "",
                   ].join(" ")}
-                  autoComplete="name"
                 />
-
-                <FieldError
-                  id="staff-full-name-error"
-                  message={fieldState.error?.message}
-                />
+                <FieldError message={fieldState.error?.message} />
               </>
             )}
           />
         </section>
 
-        {/* =====================================================
-            PHONE
-        ====================================================== */}
-
         <section className="space-y-2">
-          <label
-            htmlFor="staff-phone"
-            className={LABEL_CLASS}
-          >
-            Phone number
-          </label>
-
+          <label className={LABEL_CLASS}>Phone number</label>
           <Controller
             control={control}
             name="phone"
@@ -399,57 +257,35 @@ export default function StaffInvitationSheet({
                 <GlassInput
                   name={field.name}
                   value={field.value}
-                  onChange={(
-                    event: React.ChangeEvent<HTMLInputElement>,
-                  ) =>
-                    handlePhoneChange(
-                      event.target.value,
-                      field.onChange,
-                    )
-                  }
+                  onChange={(event) => {
+                    const digits = event.target.value
+                      .replace(/\D/g, "")
+                      .slice(0, 15);
+                    field.onChange(digits);
+                  }}
                   onBlur={field.onBlur}
                   icon={<Phone size={18} />}
                   placeholder="e.g. 08012345678"
                   disabled={busy}
                   className={[
                     FIELD_CLASS,
-                    fieldState.error
-                      ? "!border-red-500/60"
-                      : "",
+                    fieldState.error ? "!border-red-500/60" : "",
                   ].join(" ")}
                   inputMode="numeric"
-                  autoComplete="tel"
                 />
-
-                <FieldError
-                  id="staff-phone-error"
-                  message={fieldState.error?.message}
-                />
-
+                <FieldError message={fieldState.error?.message} />
                 <p className="px-1 text-[11px] text-gray-600">
-                  Enter 10–15 digits. This number identifies
-                  the staff member for the invitation.
+                  Enter 10–15 digits.
                 </p>
               </>
             )}
           />
         </section>
 
-        {/* =====================================================
-            EMAIL
-        ====================================================== */}
-
         <section className="space-y-2">
-          <label
-            htmlFor="staff-email"
-            className={LABEL_CLASS}
-          >
-            Email
-            <span className="ml-1 normal-case text-gray-700">
-              optional
-            </span>
+          <label className={LABEL_CLASS}>
+            Email <span className="normal-case text-gray-700">optional</span>
           </label>
-
           <Controller
             control={control}
             name="email"
@@ -458,90 +294,74 @@ export default function StaffInvitationSheet({
                 <GlassInput
                   name={field.name}
                   value={field.value}
-                  onChange={(
-                    event: React.ChangeEvent<HTMLInputElement>,
-                  ) => {
-                    field.onChange(event);
-                    setSubmitError(null);
-                    setSubmitSucceeded(false);
-                  }}
+                  onChange={field.onChange}
                   onBlur={field.onBlur}
                   icon={<Mail size={18} />}
                   placeholder="e.g. musa@example.com"
                   disabled={busy}
                   className={[
                     FIELD_CLASS,
-                    fieldState.error
-                      ? "!border-red-500/60"
-                      : "",
+                    fieldState.error ? "!border-red-500/60" : "",
                   ].join(" ")}
                   inputMode="email"
-                  autoComplete="email"
                 />
-
-                <FieldError
-                  id="staff-email-error"
-                  message={fieldState.error?.message}
-                />
+                <FieldError message={fieldState.error?.message} />
               </>
             )}
           />
         </section>
 
-        {/* =====================================================
-            ROLE
-        ====================================================== */}
+        <section className="space-y-2">
+          <p className={LABEL_CLASS}>Assigned role</p>
 
-        <section>
-          <p className={`${LABEL_CLASS} mb-2`}>
-            Role
-          </p>
-
-          <Controller
-            control={control}
-            name="role"
-            render={({ field, fieldState }) => (
-              <>
-                <div
-                  className="grid grid-cols-2 gap-3"
-                  role="group"
-                  aria-label="Staff role"
-                  aria-invalid={Boolean(fieldState.error)}
+          {hasOneRole ? (
+            <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-teal-500/10 text-teal-300">
+                {isManagerInvitation
+                  ? <ShieldCheck size={20} />
+                  : <BriefcaseBusiness size={20} />}
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-white">
+                  {isManagerInvitation ? "Branch Manager" : "Staff"}
+                </p>
+                <p className="mt-1 text-xs text-gray-500">
+                  This role is assigned by your access level.
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-3">
+              {allowedRoles.map((role) => (
+                <button
+                  key={role}
+                  type="button"
+                  disabled={busy}
+                  onClick={() =>
+                    setValue("role", role, {
+                      shouldDirty: true,
+                      shouldValidate: true,
+                    })
+                  }
+                  className={[
+                    "rounded-2xl border p-4 text-left",
+                    form.role === role
+                      ? "border-teal-400/50 bg-teal-400/10"
+                      : "border-white/10 bg-black/20",
+                  ].join(" ")}
                 >
-                  <RoleCard
-                    role="STAFF"
-                    selected={field.value === "STAFF"}
-                    disabled={busy}
-                    onSelect={chooseRole}
-                  />
-
-                  <RoleCard
-                    role="MANAGER"
-                    selected={field.value === "MANAGER"}
-                    disabled={busy}
-                    onSelect={chooseRole}
-                  />
-                </div>
-
-                <FieldError
-                  id="staff-role-error"
-                  message={fieldState.error?.message}
-                />
-              </>
-            )}
-          />
+                  <p className="text-sm font-semibold text-white">
+                    {role === "MANAGER" ? "Manager" : "Staff"}
+                  </p>
+                </button>
+              ))}
+            </div>
+          )}
         </section>
 
-        {/* =====================================================
-            BRANCH
-        ====================================================== */}
-
-        <section>
-          <label
-            htmlFor="staff-branch"
-            className={`${LABEL_CLASS} mb-2`}
-          >
-            Branch
+        <section className="space-y-2">
+          <label htmlFor="staff-branch" className={LABEL_CLASS}>
+            {branches.length === 1 ? "Assigned branch" : "Branch"}
           </label>
 
           <Controller
@@ -552,47 +372,26 @@ export default function StaffInvitationSheet({
                 <div className="relative">
                   <Building2
                     size={18}
-                    aria-hidden="true"
-                    className="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-gray-500"
+                    className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"
                   />
-
                   <select
                     id="staff-branch"
                     name={field.name}
                     ref={field.ref}
                     value={field.value}
                     onBlur={field.onBlur}
-                    onChange={(event) => {
-                      field.onChange(event.target.value);
-                      setSubmitError(null);
-                      setSubmitSucceeded(false);
-                    }}
-                    disabled={busy || branches.length === 0}
-                    aria-invalid={Boolean(fieldState.error)}
-                    aria-describedby={
-                      fieldState.error
-                        ? "staff-branch-error"
-                        : branches.length === 0
-                          ? "staff-branch-help"
-                          : undefined
-                    }
+                    onChange={field.onChange}
+                    disabled={busy || branches.length === 0 || branches.length === 1}
                     className={[
-                      "h-13 w-full appearance-none rounded-2xl border",
-                      "bg-black/20 pl-12 pr-4 text-sm text-white",
-                      "outline-none transition focus:border-teal-400/40",
-                      "disabled:cursor-not-allowed disabled:opacity-50",
+                      "h-13 w-full appearance-none rounded-2xl border bg-black/20 pl-12 pr-4 text-sm text-white outline-none",
                       fieldState.error
                         ? "border-red-500/60"
                         : "border-white/10",
                     ].join(" ")}
                   >
-                    <option
-                      value=""
-                      className="bg-neutral-900"
-                    >
+                    <option value="" className="bg-neutral-900">
                       Select branch
                     </option>
-
                     {branches.map((branch) => (
                       <option
                         key={branch.id}
@@ -604,19 +403,11 @@ export default function StaffInvitationSheet({
                     ))}
                   </select>
                 </div>
-
-                <FieldError
-                  id="staff-branch-error"
-                  message={fieldState.error?.message}
-                />
+                <FieldError message={fieldState.error?.message} />
 
                 {branches.length === 0 && (
-                  <p
-                    id="staff-branch-help"
-                    className="mt-2 px-1 text-[11px] text-amber-400/80"
-                  >
-                    Create or load a branch before assigning
-                    staff.
+                  <p className="text-[11px] text-amber-400">
+                    No permitted branch is available.
                   </p>
                 )}
               </>
@@ -624,102 +415,48 @@ export default function StaffInvitationSheet({
           />
         </section>
 
-        {/* =====================================================
-            INVITATION PREVIEW
-        ====================================================== */}
-
         {canPreview && selectedBranch && (
-          <div className="rounded-2xl border border-white/10 bg-white/[0.025] px-4 py-4">
-            <div className="flex items-start gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-teal-500/10 text-teal-400">
-                <UserRound size={18} />
-              </div>
-
-              <div className="min-w-0 flex-1">
-                <p className="break-words text-sm font-semibold text-white">
-                  {form.fullName?.trim()}
-                </p>
-
-                <p className="mt-1 text-xs text-gray-500">
-                  {form.role === "MANAGER"
-                    ? "Manager"
-                    : "Staff"}
-                  {" • "}
-                  {selectedBranch.name}
-                </p>
-
-                {form.phone && (
-                  <p className="mt-1 text-xs text-gray-500">
-                    {form.phone}
-                  </p>
-                )}
-
-                {form.email?.trim() && (
-                  <p className="mt-1 break-all text-xs text-gray-500">
-                    {form.email.trim()}
-                  </p>
-                )}
-
-                <p className="mt-2 text-[11px] text-gray-600">
-                  An invitation will be created for this
-                  team member.
-                </p>
-              </div>
-            </div>
+          <div className="rounded-2xl border border-white/10 bg-white/[0.025] p-4">
+            <p className="text-sm font-semibold text-white">
+              {form.fullName?.trim()}
+            </p>
+            <p className="mt-1 text-xs text-gray-500">
+              {form.role === "MANAGER" ? "Manager" : "Staff"}
+              {" • "}
+              {selectedBranch.name}
+            </p>
+            <p className="mt-1 text-xs text-gray-500">{form.phone}</p>
+            {form.email?.trim() && (
+              <p className="mt-1 break-all text-xs text-gray-500">
+                {form.email.trim()}
+              </p>
+            )}
           </div>
         )}
 
-        {/* =====================================================
-            ACTION
-        ====================================================== */}
-
-        <div className="pt-1">
-          <GlassButton
-            type="submit"
-            className="h-13 w-full rounded-2xl font-semibold shadow-[0_8px_30px_rgba(255,255,255,0.06)] transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
-            disabled={busy}
-          >
-            {busy
-              ? "Creating Invitation..."
-              : "Send Invitation"}
-          </GlassButton>
-        </div>
+        <GlassButton
+          type="submit"
+          disabled={busy || branches.length === 0}
+          className="h-13 w-full rounded-2xl font-semibold disabled:opacity-40"
+        >
+          {busy ? "Creating Invitation..." : "Send Invitation"}
+        </GlassButton>
       </form>
     </GlassSheet>
   );
 }
 
-/* =============================================================
-   FIELD ERROR
-============================================================= */
-
-interface FieldErrorProps {
-  id: string;
-  message?: string;
-}
-
-function FieldError({
-  id,
-  message,
-}: FieldErrorProps) {
-  if (!message) {
-    return null;
-  }
+function FieldError({ message }: { message?: string }) {
+  if (!message) return null;
 
   return (
-    <p
-      id={id}
-      role="alert"
-      className={FIELD_ERROR_CLASS}
-    >
-      <AlertCircle
-        size={13}
-        className="mt-0.5 shrink-0"
-      />
+    <p role="alert" className={FIELD_ERROR_CLASS}>
+      <AlertCircle size={13} className="mt-0.5 shrink-0" />
       <span>{message}</span>
     </p>
   );
 }
+
 
 /* =============================================================
    ROLE CARD
