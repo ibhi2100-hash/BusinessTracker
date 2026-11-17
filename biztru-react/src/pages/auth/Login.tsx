@@ -92,8 +92,13 @@ function getPostLoginPath(user: User): string {
   if(isAdmin || isCEO){
     return "/owner-dashboard"
   }
-
+  if(isManager){
   return "/dashboard";
+  }
+
+  throw new Error(
+    `Your account role (${role}) does not have a configured destination.`
+  );
 }
 
 /* -------------------------------------------------------------------------- */

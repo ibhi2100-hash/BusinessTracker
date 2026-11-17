@@ -651,9 +651,9 @@ export default function OnboardingBusinessPage() {
 
         legalName: form.legalName.trim() || null,
 
-        businessType: form.businessType,
+        businessType: form.businessType || null,
         industry: form.industry.trim(),
-        legalStructure: form.legalStructure,
+        legalStructure: form.legalStructure || null,
 
         countryCode: form.countryCode,
         countryName,
