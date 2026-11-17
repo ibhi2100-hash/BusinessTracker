@@ -281,6 +281,11 @@ export type AccessContext =
       type: "BRANCH_INSPECTION";
       businessId?: string;
       branchId?: string;
+    }
+  | {
+      type: "BRANCH_CONTROL_ROOM";
+      businessId?: string;
+      branchId?: string;
     };
 
 /* ------------------------------------------------------------------ */
@@ -433,6 +438,26 @@ const BRANCH_OPERATIONS_PERMISSIONS: readonly Permission[] = [
   "cleaning:manage",
 ];
 
+
+/* ------------------------------------------------------------------ */
+/* BRANCH CONTROL ROOM PERMISSIONS                                    */
+/* ------------------------------------------------------------------ */
+
+/**
+ * The Control Room is a business-level administrative workspace
+ * focused on one selected branch.
+ *
+ * It combines business administration visibility with branch
+ * operational visibility.
+ */
+const BRANCH_CONTROL_ROOM_PERMISSIONS: readonly Permission[] = [
+  ...new Set<Permission>([
+    ...BUSINESS_CONTEXT_PERMISSIONS,
+    ...BRANCH_OPERATIONS_PERMISSIONS,
+  ]),
+];
+
+
 /* ------------------------------------------------------------------ */
 /* MUTABLE BUSINESS PERMISSIONS                                       */
 /* ------------------------------------------------------------------ */
@@ -502,8 +527,20 @@ const MUTABLE_OPERATIONAL_PERMISSIONS: readonly Permission[] = [
 ];
 
 /* ------------------------------------------------------------------ */
+/* MUTABLE BRANCH CONTROL ROOM PERMISSIONS                            */
+/* ------------------------------------------------------------------ */
+
+const MUTABLE_CONTROL_ROOM_PERMISSIONS: readonly Permission[] = [
+  ...new Set<Permission>([
+    ...MUTABLE_BUSINESS_PERMISSIONS,
+    ...MUTABLE_OPERATIONAL_PERMISSIONS,
+  ]),
+];
+
+/* ------------------------------------------------------------------ */
 /* CONTEXT HELPERS                                                    */
 /* ------------------------------------------------------------------ */
+
 
 function getContextPermissions(
   context: AccessContext,
@@ -521,10 +558,14 @@ function getContextPermissions(
     case "BRANCH_INSPECTION":
       return BRANCH_INSPECTION_PERMISSIONS;
 
+    case "BRANCH_CONTROL_ROOM":
+      return BRANCH_CONTROL_ROOM_PERMISSIONS;
+
     default:
       return [];
   }
 }
+
 
 function getMutablePermissions(
   context: AccessContext,
@@ -542,10 +583,14 @@ function getMutablePermissions(
     case "BRANCH_INSPECTION":
       return [];
 
+    case "BRANCH_CONTROL_ROOM":
+      return MUTABLE_CONTROL_ROOM_PERMISSIONS;
+
     default:
       return [];
   }
 }
+
 
 /* ------------------------------------------------------------------ */
 /* ROLE VALIDATION                                                    */

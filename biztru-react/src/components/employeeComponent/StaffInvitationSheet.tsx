@@ -1,7 +1,9 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
 import {
   BriefcaseBusiness,
   Building2,
@@ -10,6 +12,8 @@ import {
   ShieldCheck,
   UserRound,
   AlertCircle,
+  Sparkles,
+  UserCog,
 } from "lucide-react";
 
 import type { Branch } from "@business/shared-types";
@@ -23,12 +27,28 @@ import {
   type StaffInvitationData,
 } from "../../schemas/staff.schema";
 
-export type StaffRole = "STAFF" | "MANAGER";
+/* ================================================================
+   TYPES
+================================================================ */
+
+export type StaffRole =
+  | "STAFF"
+  | "MANAGER"
+  | "CLEANER"
+  | "SALES_REPS";
+
+export type InviterRole = "CEO" | "ADMIN" | "MANAGER";
 
 interface Props {
   open: boolean;
   branches: Branch[];
+
+  /** Roles the parent page permits this user to assign. */
   allowedRoles: readonly StaffRole[];
+
+  /** Role of the authenticated user opening this sheet. */
+  inviterRole: InviterRole;
+
   loading?: boolean;
   onClose: () => void;
   onSubmit: (data: StaffInvitationData) => void | Promise<void>;
@@ -37,21 +57,95 @@ interface Props {
 type FormState = StaffInvitationData;
 
 const FIELD_CLASS = "h-13 rounded-2xl";
+
 const LABEL_CLASS =
   "block text-xs font-medium uppercase tracking-wider text-gray-500";
 
 const FIELD_ERROR_CLASS =
   "mt-1.5 flex items-start gap-1.5 px-1 text-[11px] leading-4 text-red-400";
 
+/* ================================================================
+   ROLE POLICY
+================================================================ */
+
+/**
+ * CEO and ADMIN can invite branch managers.
+ *
+ * MANAGER can invite operational team members:
+ * STAFF, CLEANER and SALES_REPS.
+ *
+ * This is a UI-level restriction. The invitation command/API
+ * must enforce the same policy independently.
+ */
+const ROLE_POLICY: Record<InviterRole, readonly StaffRole[]> = {
+  CEO: ["MANAGER"],
+  ADMIN: ["MANAGER"],
+  MANAGER: ["STAFF", "CLEANER", "SALES_REPS"],
+};
+
+const ROLE_DETAILS: Record<
+  StaffRole,
+  {
+    title: string;
+    description: string;
+    icon: typeof BriefcaseBusiness;
+  }
+> = {
+  MANAGER: {
+    title: "Branch Manager",
+    description: "Oversees branch operations",
+    icon: ShieldCheck,
+  },
+
+  STAFF: {
+    title: "Staff",
+    description: "Sales and daily operations",
+    icon: BriefcaseBusiness,
+  },
+
+  CLEANER: {
+    title: "Cleaner",
+    description: "Branch cleaning responsibilities",
+    icon: Sparkles,
+  },
+
+  SALES_REPS: {
+    title: "Sales Representative",
+    description: "Customer sales and selling activities",
+    icon: UserCog,
+  },
+};
+
+/* ================================================================
+   PAGE
+================================================================ */
+
 export default function StaffInvitationSheet({
   open,
   branches,
   allowedRoles,
+  inviterRole,
   loading = false,
   onClose,
   onSubmit,
 }: Props) {
   const [submitError, setSubmitError] = useState<string | null>(null);
+
+  /* --------------------------------------------------------------
+     AUTHORIZED ROLE OPTIONS
+  -------------------------------------------------------------- */
+
+  const visibleRoles = useMemo(() => {
+    const policyRoles = ROLE_POLICY[inviterRole];
+
+    return allowedRoles.filter((role) =>
+      policyRoles.includes(role),
+    );
+  }, [allowedRoles, inviterRole]);
+
+  /* --------------------------------------------------------------
+     BRANCH VALIDATION
+  -------------------------------------------------------------- */
 
   const branchIds = useMemo(
     () => branches.map((branch) => branch.id),
@@ -63,7 +157,11 @@ export default function StaffInvitationSheet({
     [branchIds],
   );
 
-  const defaultRole = allowedRoles[0] ?? "STAFF";
+  const defaultRole = visibleRoles[0] ?? "STAFF";
+
+  /* --------------------------------------------------------------
+     FORM
+  -------------------------------------------------------------- */
 
   const {
     control,
@@ -86,17 +184,22 @@ export default function StaffInvitationSheet({
   });
 
   const form = useWatch({ control });
+
   const busy = loading || isSubmitting;
 
   const selectedBranch = branches.find(
     (branch) => branch.id === form.branchId,
   );
 
-  const hasOneRole = allowedRoles.length === 1;
+  const hasOneRole = visibleRoles.length === 1;
 
-  const roleIsAllowed =
-    allowedRoles.length > 0 &&
-    allowedRoles.includes(form.role);
+  const selectedRole = form.role as StaffRole;
+
+  const roleIsAllowed = visibleRoles.includes(selectedRole);
+
+  /* --------------------------------------------------------------
+     PREVIEW VALIDATION
+  -------------------------------------------------------------- */
 
   const canPreview =
     Boolean(form.fullName?.trim()) &&
@@ -109,6 +212,10 @@ export default function StaffInvitationSheet({
     !errors.role &&
     !errors.branchId &&
     Boolean(selectedBranch);
+
+  /* --------------------------------------------------------------
+     RESET FORM WHEN OPENED
+  -------------------------------------------------------------- */
 
   useEffect(() => {
     if (!open) return;
@@ -123,6 +230,36 @@ export default function StaffInvitationSheet({
 
     setSubmitError(null);
   }, [open, reset, defaultRole, branches]);
+
+  /* --------------------------------------------------------------
+     KEEP ROLE VALID WHEN AUTHORIZATION CHANGES
+  -------------------------------------------------------------- */
+
+  useEffect(() => {
+    if (!open) return;
+
+    const currentRole = getValues("role") as StaffRole;
+
+    if (!visibleRoles.includes(currentRole)) {
+      setValue("role", defaultRole, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
+
+    void trigger("role");
+  }, [
+    open,
+    visibleRoles,
+    defaultRole,
+    getValues,
+    setValue,
+    trigger,
+  ]);
+
+  /* --------------------------------------------------------------
+     KEEP BRANCH SELECTION VALID
+  -------------------------------------------------------------- */
 
   useEffect(() => {
     if (!open) return;
@@ -140,26 +277,50 @@ export default function StaffInvitationSheet({
     }
 
     void trigger("branchId");
-  }, [open, branchIds, getValues, setValue, trigger]);
+  }, [
+    open,
+    branchIds,
+    getValues,
+    setValue,
+    trigger,
+  ]);
+
+  /* --------------------------------------------------------------
+     CLOSE
+  -------------------------------------------------------------- */
 
   const handleClose = useCallback(() => {
     if (busy) return;
+
     setSubmitError(null);
     onClose();
   }, [busy, onClose]);
+
+  /* --------------------------------------------------------------
+     SUBMISSION
+  -------------------------------------------------------------- */
 
   const handleFormSubmit = async (data: FormState) => {
     if (busy) return;
 
     setSubmitError(null);
 
-    // Defense in depth: never trust a role supplied by the form.
-    if (!allowedRoles.includes(data.role)) {
-      setSubmitError("You are not authorized to assign this role.");
+    // Recheck the role against both the page permissions and
+    // the authenticated inviter's role policy.
+    const policyRoles = ROLE_POLICY[inviterRole];
+
+    const isAuthorizedRole =
+      visibleRoles.includes(data.role as StaffRole) &&
+      policyRoles.includes(data.role as StaffRole);
+
+    if (!isAuthorizedRole) {
+      setSubmitError(
+        "You are not authorized to assign this role.",
+      );
       return;
     }
 
-    // The selected branch must belong to the permitted branch list.
+    // Verify that the branch is in the permitted branch list.
     const branch = branches.find(
       (item) => item.id === data.branchId,
     );
@@ -173,7 +334,7 @@ export default function StaffInvitationSheet({
       fullName: data.fullName.trim(),
       phone: data.phone.trim(),
       email: data.email.trim(),
-      role: allowedRoles.length === 1 ? defaultRole : data.role,
+      role: data.role,
       branchId: branch.id,
     };
 
@@ -188,21 +349,34 @@ export default function StaffInvitationSheet({
     }
   };
 
-  if (!open || allowedRoles.length === 0) return null;
+  /* --------------------------------------------------------------
+     VISIBILITY
+  -------------------------------------------------------------- */
 
-  const fixedRole = allowedRoles[0];
-  const isManagerInvitation = fixedRole === "MANAGER";
+  if (!open || visibleRoles.length === 0) return null;
+
+  const managerOnly =
+    visibleRoles.length === 1 &&
+    visibleRoles[0] === "MANAGER";
+
+  const sheetTitle = managerOnly
+    ? "Add Branch Manager"
+    : "Add Team Member";
+
+  const sheetSubtitle = managerOnly
+    ? "Invite a manager to oversee a business branch."
+    : "Invite a team member to your assigned branch.";
+
+  /* ================================================================
+     RENDER
+  ================================================================ */
 
   return (
     <GlassSheet
       open={open}
       onClose={handleClose}
-      title={isManagerInvitation ? "Add Branch Manager" : "Add Staff"}
-      subtitle={
-        isManagerInvitation
-          ? "Invite a manager to oversee a business branch."
-          : "Invite a staff member to your assigned branch."
-      }
+      title={sheetTitle}
+      subtitle={sheetSubtitle}
       loading={busy}
       className="w-full sm:max-w-xl lg:max-w-2xl"
     >
@@ -211,6 +385,8 @@ export default function StaffInvitationSheet({
         onSubmit={handleSubmit(handleFormSubmit)}
         className="space-y-6 pb-4"
       >
+        {/* SUBMISSION ERROR */}
+
         {submitError && (
           <div
             role="alert"
@@ -221,8 +397,11 @@ export default function StaffInvitationSheet({
           </div>
         )}
 
+        {/* FULL NAME */}
+
         <section className="space-y-2">
           <label className={LABEL_CLASS}>Full name</label>
+
           <Controller
             control={control}
             name="fullName"
@@ -241,14 +420,18 @@ export default function StaffInvitationSheet({
                     fieldState.error ? "!border-red-500/60" : "",
                   ].join(" ")}
                 />
+
                 <FieldError message={fieldState.error?.message} />
               </>
             )}
           />
         </section>
 
+        {/* PHONE */}
+
         <section className="space-y-2">
           <label className={LABEL_CLASS}>Phone number</label>
+
           <Controller
             control={control}
             name="phone"
@@ -261,6 +444,7 @@ export default function StaffInvitationSheet({
                     const digits = event.target.value
                       .replace(/\D/g, "")
                       .slice(0, 15);
+
                     field.onChange(digits);
                   }}
                   onBlur={field.onBlur}
@@ -273,7 +457,9 @@ export default function StaffInvitationSheet({
                   ].join(" ")}
                   inputMode="numeric"
                 />
+
                 <FieldError message={fieldState.error?.message} />
+
                 <p className="px-1 text-[11px] text-gray-600">
                   Enter 10–15 digits.
                 </p>
@@ -282,10 +468,16 @@ export default function StaffInvitationSheet({
           />
         </section>
 
+        {/* EMAIL */}
+
         <section className="space-y-2">
           <label className={LABEL_CLASS}>
-            Email <span className="normal-case text-gray-700">optional</span>
+            Email{" "}
+            <span className="normal-case text-gray-700">
+              optional
+            </span>
           </label>
+
           <Controller
             control={control}
             name="email"
@@ -305,59 +497,60 @@ export default function StaffInvitationSheet({
                   ].join(" ")}
                   inputMode="email"
                 />
+
                 <FieldError message={fieldState.error?.message} />
               </>
             )}
           />
         </section>
 
-        <section className="space-y-2">
+        {/* ROLE */}
+
+        <section className="space-y-3">
           <p className={LABEL_CLASS}>Assigned role</p>
 
           {hasOneRole ? (
             <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
               <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-teal-500/10 text-teal-300">
-                {isManagerInvitation
-                  ? <ShieldCheck size={20} />
-                  : <BriefcaseBusiness size={20} />}
+                {(() => {
+                  const Icon = ROLE_DETAILS[visibleRoles[0]].icon;
+                  return <Icon size={20} />;
+                })()}
               </div>
+
               <div>
                 <p className="text-sm font-semibold text-white">
-                  {isManagerInvitation ? "Branch Manager" : "Staff"}
+                  {ROLE_DETAILS[visibleRoles[0]].title}
                 </p>
+
                 <p className="mt-1 text-xs text-gray-500">
                   This role is assigned by your access level.
                 </p>
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-3">
-              {allowedRoles.map((role) => (
-                <button
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {visibleRoles.map((role) => (
+                <RoleCard
                   key={role}
-                  type="button"
+                  role={role}
+                  selected={selectedRole === role}
                   disabled={busy}
-                  onClick={() =>
-                    setValue("role", role, {
+                  onSelect={(selectedRole) => {
+                    setValue("role", selectedRole, {
                       shouldDirty: true,
                       shouldValidate: true,
-                    })
-                  }
-                  className={[
-                    "rounded-2xl border p-4 text-left",
-                    form.role === role
-                      ? "border-teal-400/50 bg-teal-400/10"
-                      : "border-white/10 bg-black/20",
-                  ].join(" ")}
-                >
-                  <p className="text-sm font-semibold text-white">
-                    {role === "MANAGER" ? "Manager" : "Staff"}
-                  </p>
-                </button>
+                    });
+                  }}
+                />
               ))}
             </div>
           )}
+
+          <FieldError message={errors.role?.message} />
         </section>
+
+        {/* BRANCH */}
 
         <section className="space-y-2">
           <label htmlFor="staff-branch" className={LABEL_CLASS}>
@@ -374,6 +567,7 @@ export default function StaffInvitationSheet({
                     size={18}
                     className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"
                   />
+
                   <select
                     id="staff-branch"
                     name={field.name}
@@ -381,7 +575,11 @@ export default function StaffInvitationSheet({
                     value={field.value}
                     onBlur={field.onBlur}
                     onChange={field.onChange}
-                    disabled={busy || branches.length === 0 || branches.length === 1}
+                    disabled={
+                      busy ||
+                      branches.length === 0 ||
+                      branches.length === 1
+                    }
                     className={[
                       "h-13 w-full appearance-none rounded-2xl border bg-black/20 pl-12 pr-4 text-sm text-white outline-none",
                       fieldState.error
@@ -392,6 +590,7 @@ export default function StaffInvitationSheet({
                     <option value="" className="bg-neutral-900">
                       Select branch
                     </option>
+
                     {branches.map((branch) => (
                       <option
                         key={branch.id}
@@ -403,6 +602,7 @@ export default function StaffInvitationSheet({
                     ))}
                   </select>
                 </div>
+
                 <FieldError message={fieldState.error?.message} />
 
                 {branches.length === 0 && (
@@ -415,17 +615,24 @@ export default function StaffInvitationSheet({
           />
         </section>
 
+        {/* INVITATION PREVIEW */}
+
         {canPreview && selectedBranch && (
           <div className="rounded-2xl border border-white/10 bg-white/[0.025] p-4">
             <p className="text-sm font-semibold text-white">
               {form.fullName?.trim()}
             </p>
+
             <p className="mt-1 text-xs text-gray-500">
-              {form.role === "MANAGER" ? "Manager" : "Staff"}
+              {ROLE_DETAILS[selectedRole].title}
               {" • "}
               {selectedBranch.name}
             </p>
-            <p className="mt-1 text-xs text-gray-500">{form.phone}</p>
+
+            <p className="mt-1 text-xs text-gray-500">
+              {form.phone}
+            </p>
+
             {form.email?.trim() && (
               <p className="mt-1 break-all text-xs text-gray-500">
                 {form.email.trim()}
@@ -434,9 +641,15 @@ export default function StaffInvitationSheet({
           </div>
         )}
 
+        {/* SUBMIT */}
+
         <GlassButton
           type="submit"
-          disabled={busy || branches.length === 0}
+          disabled={
+            busy ||
+            branches.length === 0 ||
+            visibleRoles.length === 0
+          }
           className="h-13 w-full rounded-2xl font-semibold disabled:opacity-40"
         >
           {busy ? "Creating Invitation..." : "Send Invitation"}
@@ -446,21 +659,9 @@ export default function StaffInvitationSheet({
   );
 }
 
-function FieldError({ message }: { message?: string }) {
-  if (!message) return null;
-
-  return (
-    <p role="alert" className={FIELD_ERROR_CLASS}>
-      <AlertCircle size={13} className="mt-0.5 shrink-0" />
-      <span>{message}</span>
-    </p>
-  );
-}
-
-
-/* =============================================================
+/* ================================================================
    ROLE CARD
-============================================================= */
+================================================================ */
 
 interface RoleCardProps {
   role: StaffRole;
@@ -475,17 +676,10 @@ function RoleCard({
   disabled,
   onSelect,
 }: RoleCardProps) {
-  const isStaff = role === "STAFF";
+  const details = ROLE_DETAILS[role];
+  const Icon = details.icon;
 
-  const Icon = isStaff
-    ? BriefcaseBusiness
-    : ShieldCheck;
-
-  const title = isStaff ? "Staff" : "Manager";
-
-  const description = isStaff
-    ? "Sales & daily operations"
-    : "Branch operations";
+  const isManager = role === "MANAGER";
 
   return (
     <button
@@ -497,9 +691,9 @@ function RoleCard({
         "relative overflow-hidden rounded-[22px] border p-4 text-left",
         "transition-all duration-200",
         selected
-          ? isStaff
-            ? "border-teal-400/50 bg-teal-400/10 shadow-[0_0_35px_rgba(20,184,166,0.10)]"
-            : "border-amber-400/50 bg-amber-400/10 shadow-[0_0_35px_rgba(245,158,11,0.10)]"
+          ? isManager
+            ? "border-amber-400/50 bg-amber-400/10 shadow-[0_0_35px_rgba(245,158,11,0.10)]"
+            : "border-teal-400/50 bg-teal-400/10 shadow-[0_0_35px_rgba(20,184,166,0.10)]"
           : "border-white/10 bg-black/20 hover:bg-white/5",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400/50",
         "disabled:cursor-not-allowed disabled:opacity-50",
@@ -510,9 +704,7 @@ function RoleCard({
           aria-hidden="true"
           className={[
             "pointer-events-none absolute inset-x-0 top-0 h-px",
-            isStaff
-              ? "bg-teal-300/50"
-              : "bg-amber-300/50",
+            isManager ? "bg-amber-300/50" : "bg-teal-300/50",
           ].join(" ")}
         />
       )}
@@ -522,9 +714,9 @@ function RoleCard({
           className={[
             "flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl",
             selected
-              ? isStaff
-                ? "bg-teal-400/15 text-teal-300"
-                : "bg-amber-400/15 text-amber-300"
+              ? isManager
+                ? "bg-amber-400/15 text-amber-300"
+                : "bg-teal-400/15 text-teal-300"
               : "bg-white/5 text-gray-500",
           ].join(" ")}
         >
@@ -533,14 +725,29 @@ function RoleCard({
 
         <div className="min-w-0">
           <p className="text-sm font-semibold text-white">
-            {title}
+            {details.title}
           </p>
 
           <p className="mt-1 text-[11px] text-gray-500">
-            {description}
+            {details.description}
           </p>
         </div>
       </div>
     </button>
+  );
+}
+
+/* ================================================================
+   FIELD ERROR
+================================================================ */
+
+function FieldError({ message }: { message?: string }) {
+  if (!message) return null;
+
+  return (
+    <p role="alert" className={FIELD_ERROR_CLASS}>
+      <AlertCircle size={13} className="mt-0.5 shrink-0" />
+      <span>{message}</span>
+    </p>
   );
 }

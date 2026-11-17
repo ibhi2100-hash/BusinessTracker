@@ -278,7 +278,7 @@ const ownerPrimaryNav: NavigationItem[] = [
   {
     label: "Branches",
     icon: Building2,
-    href: "/settings/branches",
+    href: "/owner/branches",
   },
   {
     label: "Reports",

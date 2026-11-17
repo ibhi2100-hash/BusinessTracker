@@ -82,6 +82,8 @@ import {
 
 import NotFoundPage from "./pages/NotFoundPage";
 import OwnerBranchSalesPage from "./pages/owner/OwnerSalesPage";
+import BranchesPage from "./components/BusinessDashboard/control/BranchesPage";
+import BranchControlRoomPage from "./pages/owner/BranchControlRoomPage";
 
 /* ------------------------------------------------------------------ */
 /* ROUTER                                                             */
@@ -202,6 +204,19 @@ export function AppRouter() {
                 }
               />
 
+              <Route
+                path="/owner/branches"
+                element={
+                  <AuthGuard
+                    roles={["CEO", "ADMIN"]}
+                    permissions={["business:read"]}
+                    context={{ type: "BUSINESS" }}
+                  >
+                    <BranchesPage />
+                  </AuthGuard>
+                }
+              />
+
               {/* ADD BUSINESS BRANCH */}
 
               <Route
@@ -259,6 +274,26 @@ export function AppRouter() {
                   </AuthGuard>
                 }
               />
+
+              
+              <Route
+                path="/owner/branches/:branchId/control-room"
+                element={
+                  <AuthGuard
+                    roles={["CEO", "ADMIN"]}
+                    permissions={[
+                      "business:read",
+                      "branch:read",
+                      "branch:manage",
+                    ]}
+                    context={{ type: "BRANCH_CONTROL_ROOM" }}
+                  >
+                    <BranchControlRoomPage />
+                  </AuthGuard>
+                }
+              />
+
+
 
               {/* BILLING */}
 
