@@ -43,15 +43,115 @@ export type Session = Prisma.SessionModel
  */
 export type PasswordResetToken = Prisma.PasswordResetTokenModel
 /**
- * Model SubscriptionPlan
+ * Model BillingPlan
  * 
  */
-export type SubscriptionPlan = Prisma.SubscriptionPlanModel
+export type BillingPlan = Prisma.BillingPlanModel
 /**
- * Model BusinessSubscription
+ * Model BillingPlanVersion
  * 
  */
-export type BusinessSubscription = Prisma.BusinessSubscriptionModel
+export type BillingPlanVersion = Prisma.BillingPlanVersionModel
+/**
+ * Model BillingSubscription
+ * 
+ */
+export type BillingSubscription = Prisma.BillingSubscriptionModel
+/**
+ * Model BillingSubscriptionRequest
+ * 
+ */
+export type BillingSubscriptionRequest = Prisma.BillingSubscriptionRequestModel
+/**
+ * Model BillingEntitlement
+ * 
+ */
+export type BillingEntitlement = Prisma.BillingEntitlementModel
+/**
+ * Model BillingEntitlementOverride
+ * 
+ */
+export type BillingEntitlementOverride = Prisma.BillingEntitlementOverrideModel
+/**
+ * Model BillingInvoice
+ * 
+ */
+export type BillingInvoice = Prisma.BillingInvoiceModel
+/**
+ * Model BillingInvoiceItem
+ * 
+ */
+export type BillingInvoiceItem = Prisma.BillingInvoiceItemModel
+/**
+ * Model BillingPayment
+ * 
+ */
+export type BillingPayment = Prisma.BillingPaymentModel
+/**
+ * Model BillingPaymentAttempt
+ * 
+ */
+export type BillingPaymentAttempt = Prisma.BillingPaymentAttemptModel
+/**
+ * Model BillingPaymentAllocation
+ * 
+ */
+export type BillingPaymentAllocation = Prisma.BillingPaymentAllocationModel
+/**
+ * Model BillingRefund
+ * 
+ */
+export type BillingRefund = Prisma.BillingRefundModel
+/**
+ * Model BillingProviderAccount
+ * 
+ */
+export type BillingProviderAccount = Prisma.BillingProviderAccountModel
+/**
+ * Model BillingProviderCustomer
+ * 
+ */
+export type BillingProviderCustomer = Prisma.BillingProviderCustomerModel
+/**
+ * Model BillingProviderSubscription
+ * 
+ */
+export type BillingProviderSubscription = Prisma.BillingProviderSubscriptionModel
+/**
+ * Model BillingProviderWebhookEvent
+ * 
+ */
+export type BillingProviderWebhookEvent = Prisma.BillingProviderWebhookEventModel
+/**
+ * Model BillingProviderOperation
+ * 
+ */
+export type BillingProviderOperation = Prisma.BillingProviderOperationModel
+/**
+ * Model BillingEvent
+ * 
+ */
+export type BillingEvent = Prisma.BillingEventModel
+/**
+ * Model BillingOutbox
+ * 
+ */
+export type BillingOutbox = Prisma.BillingOutboxModel
+/**
+ * Model BillingCommandIdempotency
+ * 
+ */
+export type BillingCommandIdempotency = Prisma.BillingCommandIdempotencyModel
+/**
+ * Model BillingSubscriptionLease
+ * 
+ */
+export type BillingSubscriptionLease = Prisma.BillingSubscriptionLeaseModel
+/**
+ * Model BillingAuditLog
+ * 
+ */
+export type BillingAuditLog = Prisma.BillingAuditLogModel
 /**
  * Model Product
  * 

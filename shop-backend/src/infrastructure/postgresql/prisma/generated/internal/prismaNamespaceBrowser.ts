@@ -56,8 +56,28 @@ export const ModelName = {
   User: 'User',
   Session: 'Session',
   PasswordResetToken: 'PasswordResetToken',
-  SubscriptionPlan: 'SubscriptionPlan',
-  BusinessSubscription: 'BusinessSubscription',
+  BillingPlan: 'BillingPlan',
+  BillingPlanVersion: 'BillingPlanVersion',
+  BillingSubscription: 'BillingSubscription',
+  BillingSubscriptionRequest: 'BillingSubscriptionRequest',
+  BillingEntitlement: 'BillingEntitlement',
+  BillingEntitlementOverride: 'BillingEntitlementOverride',
+  BillingInvoice: 'BillingInvoice',
+  BillingInvoiceItem: 'BillingInvoiceItem',
+  BillingPayment: 'BillingPayment',
+  BillingPaymentAttempt: 'BillingPaymentAttempt',
+  BillingPaymentAllocation: 'BillingPaymentAllocation',
+  BillingRefund: 'BillingRefund',
+  BillingProviderAccount: 'BillingProviderAccount',
+  BillingProviderCustomer: 'BillingProviderCustomer',
+  BillingProviderSubscription: 'BillingProviderSubscription',
+  BillingProviderWebhookEvent: 'BillingProviderWebhookEvent',
+  BillingProviderOperation: 'BillingProviderOperation',
+  BillingEvent: 'BillingEvent',
+  BillingOutbox: 'BillingOutbox',
+  BillingCommandIdempotency: 'BillingCommandIdempotency',
+  BillingSubscriptionLease: 'BillingSubscriptionLease',
+  BillingAuditLog: 'BillingAuditLog',
   Product: 'Product',
   Aggregate: 'Aggregate',
   Inventory: 'Inventory',
@@ -176,33 +196,418 @@ export const PasswordResetTokenScalarFieldEnum = {
 export type PasswordResetTokenScalarFieldEnum = (typeof PasswordResetTokenScalarFieldEnum)[keyof typeof PasswordResetTokenScalarFieldEnum]
 
 
-export const SubscriptionPlanScalarFieldEnum = {
+export const BillingPlanScalarFieldEnum = {
   id: 'id',
+  code: 'code',
   name: 'name',
-  price: 'price',
+  description: 'description',
+  status: 'status',
+  displayOrder: 'displayOrder',
+  isFeatured: 'isFeatured',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BillingPlanScalarFieldEnum = (typeof BillingPlanScalarFieldEnum)[keyof typeof BillingPlanScalarFieldEnum]
+
+
+export const BillingPlanVersionScalarFieldEnum = {
+  id: 'id',
+  planId: 'planId',
+  planVersion: 'planVersion',
+  priceMinor: 'priceMinor',
+  currency: 'currency',
   billingCycle: 'billingCycle',
-  maxUsers: 'maxUsers',
+  intervalCount: 'intervalCount',
+  trialDays: 'trialDays',
+  maxStaff: 'maxStaff',
   maxBranch: 'maxBranch',
   maxProduct: 'maxProduct',
-  maxStaff: 'maxStaff',
   features: 'features',
+  publishedAt: 'publishedAt',
   createdAt: 'createdAt'
 } as const
 
-export type SubscriptionPlanScalarFieldEnum = (typeof SubscriptionPlanScalarFieldEnum)[keyof typeof SubscriptionPlanScalarFieldEnum]
+export type BillingPlanVersionScalarFieldEnum = (typeof BillingPlanVersionScalarFieldEnum)[keyof typeof BillingPlanVersionScalarFieldEnum]
 
 
-export const BusinessSubscriptionScalarFieldEnum = {
+export const BillingSubscriptionScalarFieldEnum = {
+  id: 'id',
+  businessId: 'businessId',
+  planId: 'planId',
+  planVersion: 'planVersion',
+  status: 'status',
+  billingCycle: 'billingCycle',
+  currency: 'currency',
+  priceMinor: 'priceMinor',
+  trialStart: 'trialStart',
+  trialEnd: 'trialEnd',
+  currentPeriodStart: 'currentPeriodStart',
+  currentPeriodEnd: 'currentPeriodEnd',
+  gracePeriodEnd: 'gracePeriodEnd',
+  cancelAtPeriodEnd: 'cancelAtPeriodEnd',
+  activatedAt: 'activatedAt',
+  cancelledAt: 'cancelledAt',
+  expiredAt: 'expiredAt',
+  aggregateVersion: 'aggregateVersion',
+  lastEventId: 'lastEventId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BillingSubscriptionScalarFieldEnum = (typeof BillingSubscriptionScalarFieldEnum)[keyof typeof BillingSubscriptionScalarFieldEnum]
+
+
+export const BillingSubscriptionRequestScalarFieldEnum = {
+  id: 'id',
+  businessId: 'businessId',
+  requestedPlanId: 'requestedPlanId',
+  requestedPlanVersion: 'requestedPlanVersion',
+  requestType: 'requestType',
+  status: 'status',
+  requestedBy: 'requestedBy',
+  reviewedBy: 'reviewedBy',
+  reviewedAt: 'reviewedAt',
+  rejectionReason: 'rejectionReason',
+  effectiveAt: 'effectiveAt',
+  subscriptionId: 'subscriptionId',
+  aggregateVersion: 'aggregateVersion',
+  lastEventId: 'lastEventId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BillingSubscriptionRequestScalarFieldEnum = (typeof BillingSubscriptionRequestScalarFieldEnum)[keyof typeof BillingSubscriptionRequestScalarFieldEnum]
+
+
+export const BillingEntitlementScalarFieldEnum = {
   id: 'id',
   businessId: 'businessId',
   subscriptionId: 'subscriptionId',
-  startedAt: 'startedAt',
-  expiresAt: 'expiresAt',
-  trialEndDate: 'trialEndDate',
-  status: 'status'
+  entitlementKey: 'entitlementKey',
+  value: 'value',
+  source: 'source',
+  status: 'status',
+  validFrom: 'validFrom',
+  validUntil: 'validUntil',
+  aggregateVersion: 'aggregateVersion',
+  lastEventId: 'lastEventId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
-export type BusinessSubscriptionScalarFieldEnum = (typeof BusinessSubscriptionScalarFieldEnum)[keyof typeof BusinessSubscriptionScalarFieldEnum]
+export type BillingEntitlementScalarFieldEnum = (typeof BillingEntitlementScalarFieldEnum)[keyof typeof BillingEntitlementScalarFieldEnum]
+
+
+export const BillingEntitlementOverrideScalarFieldEnum = {
+  id: 'id',
+  businessId: 'businessId',
+  subscriptionId: 'subscriptionId',
+  entitlementKey: 'entitlementKey',
+  value: 'value',
+  status: 'status',
+  reason: 'reason',
+  createdBy: 'createdBy',
+  startsAt: 'startsAt',
+  expiresAt: 'expiresAt',
+  aggregateVersion: 'aggregateVersion',
+  lastEventId: 'lastEventId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BillingEntitlementOverrideScalarFieldEnum = (typeof BillingEntitlementOverrideScalarFieldEnum)[keyof typeof BillingEntitlementOverrideScalarFieldEnum]
+
+
+export const BillingInvoiceScalarFieldEnum = {
+  id: 'id',
+  businessId: 'businessId',
+  subscriptionId: 'subscriptionId',
+  invoiceNumber: 'invoiceNumber',
+  status: 'status',
+  currency: 'currency',
+  subtotalMinor: 'subtotalMinor',
+  taxMinor: 'taxMinor',
+  discountMinor: 'discountMinor',
+  totalMinor: 'totalMinor',
+  amountPaidMinor: 'amountPaidMinor',
+  amountDueMinor: 'amountDueMinor',
+  periodStart: 'periodStart',
+  periodEnd: 'periodEnd',
+  issuedAt: 'issuedAt',
+  dueAt: 'dueAt',
+  paidAt: 'paidAt',
+  aggregateVersion: 'aggregateVersion',
+  lastEventId: 'lastEventId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BillingInvoiceScalarFieldEnum = (typeof BillingInvoiceScalarFieldEnum)[keyof typeof BillingInvoiceScalarFieldEnum]
+
+
+export const BillingInvoiceItemScalarFieldEnum = {
+  id: 'id',
+  invoiceId: 'invoiceId',
+  description: 'description',
+  quantity: 'quantity',
+  unitPriceMinor: 'unitPriceMinor',
+  lineTotalMinor: 'lineTotalMinor',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+} as const
+
+export type BillingInvoiceItemScalarFieldEnum = (typeof BillingInvoiceItemScalarFieldEnum)[keyof typeof BillingInvoiceItemScalarFieldEnum]
+
+
+export const BillingPaymentScalarFieldEnum = {
+  id: 'id',
+  businessId: 'businessId',
+  subscriptionId: 'subscriptionId',
+  invoiceId: 'invoiceId',
+  provider: 'provider',
+  providerReference: 'providerReference',
+  method: 'method',
+  status: 'status',
+  currency: 'currency',
+  amountMinor: 'amountMinor',
+  providerFeeMinor: 'providerFeeMinor',
+  netAmountMinor: 'netAmountMinor',
+  refundedMinor: 'refundedMinor',
+  initiatedAt: 'initiatedAt',
+  confirmedAt: 'confirmedAt',
+  failedAt: 'failedAt',
+  reversedAt: 'reversedAt',
+  refundedAt: 'refundedAt',
+  failureReason: 'failureReason',
+  aggregateVersion: 'aggregateVersion',
+  lastEventId: 'lastEventId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BillingPaymentScalarFieldEnum = (typeof BillingPaymentScalarFieldEnum)[keyof typeof BillingPaymentScalarFieldEnum]
+
+
+export const BillingPaymentAttemptScalarFieldEnum = {
+  id: 'id',
+  businessId: 'businessId',
+  paymentId: 'paymentId',
+  provider: 'provider',
+  providerReference: 'providerReference',
+  attemptNumber: 'attemptNumber',
+  status: 'status',
+  failureReason: 'failureReason',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type BillingPaymentAttemptScalarFieldEnum = (typeof BillingPaymentAttemptScalarFieldEnum)[keyof typeof BillingPaymentAttemptScalarFieldEnum]
+
+
+export const BillingPaymentAllocationScalarFieldEnum = {
+  id: 'id',
+  businessId: 'businessId',
+  paymentId: 'paymentId',
+  invoiceId: 'invoiceId',
+  amountMinor: 'amountMinor',
+  createdAt: 'createdAt'
+} as const
+
+export type BillingPaymentAllocationScalarFieldEnum = (typeof BillingPaymentAllocationScalarFieldEnum)[keyof typeof BillingPaymentAllocationScalarFieldEnum]
+
+
+export const BillingRefundScalarFieldEnum = {
+  id: 'id',
+  businessId: 'businessId',
+  paymentId: 'paymentId',
+  providerRefundReference: 'providerRefundReference',
+  amountMinor: 'amountMinor',
+  currency: 'currency',
+  status: 'status',
+  reason: 'reason',
+  requestedAt: 'requestedAt',
+  processedAt: 'processedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BillingRefundScalarFieldEnum = (typeof BillingRefundScalarFieldEnum)[keyof typeof BillingRefundScalarFieldEnum]
+
+
+export const BillingProviderAccountScalarFieldEnum = {
+  id: 'id',
+  provider: 'provider',
+  name: 'name',
+  environment: 'environment',
+  isActive: 'isActive',
+  credentialsRef: 'credentialsRef',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BillingProviderAccountScalarFieldEnum = (typeof BillingProviderAccountScalarFieldEnum)[keyof typeof BillingProviderAccountScalarFieldEnum]
+
+
+export const BillingProviderCustomerScalarFieldEnum = {
+  id: 'id',
+  businessId: 'businessId',
+  accountId: 'accountId',
+  providerCustomerId: 'providerCustomerId',
+  email: 'email',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BillingProviderCustomerScalarFieldEnum = (typeof BillingProviderCustomerScalarFieldEnum)[keyof typeof BillingProviderCustomerScalarFieldEnum]
+
+
+export const BillingProviderSubscriptionScalarFieldEnum = {
+  id: 'id',
+  subscriptionId: 'subscriptionId',
+  accountId: 'accountId',
+  providerSubscriptionId: 'providerSubscriptionId',
+  providerCustomerId: 'providerCustomerId',
+  providerPlanCode: 'providerPlanCode',
+  status: 'status',
+  authorizationCodeRef: 'authorizationCodeRef',
+  nextPaymentDate: 'nextPaymentDate',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BillingProviderSubscriptionScalarFieldEnum = (typeof BillingProviderSubscriptionScalarFieldEnum)[keyof typeof BillingProviderSubscriptionScalarFieldEnum]
+
+
+export const BillingProviderWebhookEventScalarFieldEnum = {
+  id: 'id',
+  accountId: 'accountId',
+  provider: 'provider',
+  providerEventId: 'providerEventId',
+  eventType: 'eventType',
+  payload: 'payload',
+  status: 'status',
+  receivedAt: 'receivedAt',
+  processedAt: 'processedAt',
+  processingAttempts: 'processingAttempts',
+  lastError: 'lastError'
+} as const
+
+export type BillingProviderWebhookEventScalarFieldEnum = (typeof BillingProviderWebhookEventScalarFieldEnum)[keyof typeof BillingProviderWebhookEventScalarFieldEnum]
+
+
+export const BillingProviderOperationScalarFieldEnum = {
+  id: 'id',
+  accountId: 'accountId',
+  paymentId: 'paymentId',
+  attemptId: 'attemptId',
+  provider: 'provider',
+  operationType: 'operationType',
+  idempotencyKey: 'idempotencyKey',
+  requestPayload: 'requestPayload',
+  responsePayload: 'responsePayload',
+  providerReference: 'providerReference',
+  status: 'status',
+  attempts: 'attempts',
+  lastError: 'lastError',
+  nextAttemptAt: 'nextAttemptAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BillingProviderOperationScalarFieldEnum = (typeof BillingProviderOperationScalarFieldEnum)[keyof typeof BillingProviderOperationScalarFieldEnum]
+
+
+export const BillingEventScalarFieldEnum = {
+  id: 'id',
+  businessId: 'businessId',
+  aggregateType: 'aggregateType',
+  aggregateId: 'aggregateId',
+  aggregateVersion: 'aggregateVersion',
+  eventType: 'eventType',
+  payload: 'payload',
+  occurredAt: 'occurredAt'
+} as const
+
+export type BillingEventScalarFieldEnum = (typeof BillingEventScalarFieldEnum)[keyof typeof BillingEventScalarFieldEnum]
+
+
+export const BillingOutboxScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  destination: 'destination',
+  status: 'status',
+  attempts: 'attempts',
+  nextAttemptAt: 'nextAttemptAt',
+  publishedAt: 'publishedAt',
+  lastError: 'lastError',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BillingOutboxScalarFieldEnum = (typeof BillingOutboxScalarFieldEnum)[keyof typeof BillingOutboxScalarFieldEnum]
+
+
+export const BillingCommandIdempotencyScalarFieldEnum = {
+  id: 'id',
+  scope: 'scope',
+  idempotencyKey: 'idempotencyKey',
+  commandType: 'commandType',
+  requestHash: 'requestHash',
+  status: 'status',
+  resultReference: 'resultReference',
+  response: 'response',
+  error: 'error',
+  createdAt: 'createdAt',
+  completedAt: 'completedAt'
+} as const
+
+export type BillingCommandIdempotencyScalarFieldEnum = (typeof BillingCommandIdempotencyScalarFieldEnum)[keyof typeof BillingCommandIdempotencyScalarFieldEnum]
+
+
+export const BillingSubscriptionLeaseScalarFieldEnum = {
+  id: 'id',
+  businessId: 'businessId',
+  subscriptionId: 'subscriptionId',
+  branchId: 'branchId',
+  deviceId: 'deviceId',
+  issuedAt: 'issuedAt',
+  expiresAt: 'expiresAt',
+  gracePeriodEnd: 'gracePeriodEnd',
+  status: 'status',
+  entitlementSnapshot: 'entitlementSnapshot',
+  signedToken: 'signedToken',
+  revokedAt: 'revokedAt',
+  aggregateVersion: 'aggregateVersion',
+  lastEventId: 'lastEventId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BillingSubscriptionLeaseScalarFieldEnum = (typeof BillingSubscriptionLeaseScalarFieldEnum)[keyof typeof BillingSubscriptionLeaseScalarFieldEnum]
+
+
+export const BillingAuditLogScalarFieldEnum = {
+  id: 'id',
+  businessId: 'businessId',
+  actorUserId: 'actorUserId',
+  action: 'action',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  reason: 'reason',
+  beforeData: 'beforeData',
+  afterData: 'afterData',
+  metadata: 'metadata',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt'
+} as const
+
+export type BillingAuditLogScalarFieldEnum = (typeof BillingAuditLogScalarFieldEnum)[keyof typeof BillingAuditLogScalarFieldEnum]
 
 
 export const ProductScalarFieldEnum = {

@@ -238,7 +238,19 @@ export type BusinessWhereInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryListRelationFilter
   employeeRequests?: Prisma.EmployeeRequestListRelationFilter
   employeeNotifications?: Prisma.EmployeeNotificationListRelationFilter
-  subscriptions?: Prisma.BusinessSubscriptionListRelationFilter
+  billingSubscriptions?: Prisma.BillingSubscriptionListRelationFilter
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestListRelationFilter
+  billingEntitlements?: Prisma.BillingEntitlementListRelationFilter
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideListRelationFilter
+  billingInvoices?: Prisma.BillingInvoiceListRelationFilter
+  billingPayments?: Prisma.BillingPaymentListRelationFilter
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptListRelationFilter
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationListRelationFilter
+  billingRefunds?: Prisma.BillingRefundListRelationFilter
+  billingProviderCustomers?: Prisma.BillingProviderCustomerListRelationFilter
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseListRelationFilter
+  billingEvents?: Prisma.BillingEventListRelationFilter
+  billingAuditLogs?: Prisma.BillingAuditLogListRelationFilter
 }
 
 export type BusinessOrderByWithRelationInput = {
@@ -268,7 +280,19 @@ export type BusinessOrderByWithRelationInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryOrderByRelationAggregateInput
   employeeRequests?: Prisma.EmployeeRequestOrderByRelationAggregateInput
   employeeNotifications?: Prisma.EmployeeNotificationOrderByRelationAggregateInput
-  subscriptions?: Prisma.BusinessSubscriptionOrderByRelationAggregateInput
+  billingSubscriptions?: Prisma.BillingSubscriptionOrderByRelationAggregateInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestOrderByRelationAggregateInput
+  billingEntitlements?: Prisma.BillingEntitlementOrderByRelationAggregateInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideOrderByRelationAggregateInput
+  billingInvoices?: Prisma.BillingInvoiceOrderByRelationAggregateInput
+  billingPayments?: Prisma.BillingPaymentOrderByRelationAggregateInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptOrderByRelationAggregateInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationOrderByRelationAggregateInput
+  billingRefunds?: Prisma.BillingRefundOrderByRelationAggregateInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerOrderByRelationAggregateInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseOrderByRelationAggregateInput
+  billingEvents?: Prisma.BillingEventOrderByRelationAggregateInput
+  billingAuditLogs?: Prisma.BillingAuditLogOrderByRelationAggregateInput
 }
 
 export type BusinessWhereUniqueInput = Prisma.AtLeast<{
@@ -301,7 +325,19 @@ export type BusinessWhereUniqueInput = Prisma.AtLeast<{
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryListRelationFilter
   employeeRequests?: Prisma.EmployeeRequestListRelationFilter
   employeeNotifications?: Prisma.EmployeeNotificationListRelationFilter
-  subscriptions?: Prisma.BusinessSubscriptionListRelationFilter
+  billingSubscriptions?: Prisma.BillingSubscriptionListRelationFilter
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestListRelationFilter
+  billingEntitlements?: Prisma.BillingEntitlementListRelationFilter
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideListRelationFilter
+  billingInvoices?: Prisma.BillingInvoiceListRelationFilter
+  billingPayments?: Prisma.BillingPaymentListRelationFilter
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptListRelationFilter
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationListRelationFilter
+  billingRefunds?: Prisma.BillingRefundListRelationFilter
+  billingProviderCustomers?: Prisma.BillingProviderCustomerListRelationFilter
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseListRelationFilter
+  billingEvents?: Prisma.BillingEventListRelationFilter
+  billingAuditLogs?: Prisma.BillingAuditLogListRelationFilter
 }, "id">
 
 export type BusinessOrderByWithAggregationInput = {
@@ -362,7 +398,19 @@ export type BusinessCreateInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateInput = {
@@ -391,7 +439,19 @@ export type BusinessUncheckedCreateInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUpdateInput = {
@@ -420,7 +480,19 @@ export type BusinessUpdateInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateInput = {
@@ -449,7 +521,19 @@ export type BusinessUncheckedUpdateInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateManyInput = {
@@ -645,18 +729,190 @@ export type BusinessUncheckedUpdateManyWithoutOwnerNestedInput = {
   deleteMany?: Prisma.BusinessScalarWhereInput | Prisma.BusinessScalarWhereInput[]
 }
 
-export type BusinessCreateNestedOneWithoutSubscriptionsInput = {
-  create?: Prisma.XOR<Prisma.BusinessCreateWithoutSubscriptionsInput, Prisma.BusinessUncheckedCreateWithoutSubscriptionsInput>
-  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutSubscriptionsInput
+export type BusinessCreateNestedOneWithoutBillingSubscriptionsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingSubscriptionsInput, Prisma.BusinessUncheckedCreateWithoutBillingSubscriptionsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingSubscriptionsInput
   connect?: Prisma.BusinessWhereUniqueInput
 }
 
-export type BusinessUpdateOneRequiredWithoutSubscriptionsNestedInput = {
-  create?: Prisma.XOR<Prisma.BusinessCreateWithoutSubscriptionsInput, Prisma.BusinessUncheckedCreateWithoutSubscriptionsInput>
-  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutSubscriptionsInput
-  upsert?: Prisma.BusinessUpsertWithoutSubscriptionsInput
+export type BusinessUpdateOneRequiredWithoutBillingSubscriptionsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingSubscriptionsInput, Prisma.BusinessUncheckedCreateWithoutBillingSubscriptionsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingSubscriptionsInput
+  upsert?: Prisma.BusinessUpsertWithoutBillingSubscriptionsInput
   connect?: Prisma.BusinessWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutSubscriptionsInput, Prisma.BusinessUpdateWithoutSubscriptionsInput>, Prisma.BusinessUncheckedUpdateWithoutSubscriptionsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutBillingSubscriptionsInput, Prisma.BusinessUpdateWithoutBillingSubscriptionsInput>, Prisma.BusinessUncheckedUpdateWithoutBillingSubscriptionsInput>
+}
+
+export type BusinessCreateNestedOneWithoutBillingSubscriptionRequestsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingSubscriptionRequestsInput, Prisma.BusinessUncheckedCreateWithoutBillingSubscriptionRequestsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingSubscriptionRequestsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutBillingSubscriptionRequestsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingSubscriptionRequestsInput, Prisma.BusinessUncheckedCreateWithoutBillingSubscriptionRequestsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingSubscriptionRequestsInput
+  upsert?: Prisma.BusinessUpsertWithoutBillingSubscriptionRequestsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutBillingSubscriptionRequestsInput, Prisma.BusinessUpdateWithoutBillingSubscriptionRequestsInput>, Prisma.BusinessUncheckedUpdateWithoutBillingSubscriptionRequestsInput>
+}
+
+export type BusinessCreateNestedOneWithoutBillingEntitlementsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingEntitlementsInput, Prisma.BusinessUncheckedCreateWithoutBillingEntitlementsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingEntitlementsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutBillingEntitlementsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingEntitlementsInput, Prisma.BusinessUncheckedCreateWithoutBillingEntitlementsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingEntitlementsInput
+  upsert?: Prisma.BusinessUpsertWithoutBillingEntitlementsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutBillingEntitlementsInput, Prisma.BusinessUpdateWithoutBillingEntitlementsInput>, Prisma.BusinessUncheckedUpdateWithoutBillingEntitlementsInput>
+}
+
+export type BusinessCreateNestedOneWithoutBillingEntitlementOverridesInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingEntitlementOverridesInput, Prisma.BusinessUncheckedCreateWithoutBillingEntitlementOverridesInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingEntitlementOverridesInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutBillingEntitlementOverridesNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingEntitlementOverridesInput, Prisma.BusinessUncheckedCreateWithoutBillingEntitlementOverridesInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingEntitlementOverridesInput
+  upsert?: Prisma.BusinessUpsertWithoutBillingEntitlementOverridesInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutBillingEntitlementOverridesInput, Prisma.BusinessUpdateWithoutBillingEntitlementOverridesInput>, Prisma.BusinessUncheckedUpdateWithoutBillingEntitlementOverridesInput>
+}
+
+export type BusinessCreateNestedOneWithoutBillingInvoicesInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingInvoicesInput, Prisma.BusinessUncheckedCreateWithoutBillingInvoicesInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingInvoicesInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutBillingInvoicesNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingInvoicesInput, Prisma.BusinessUncheckedCreateWithoutBillingInvoicesInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingInvoicesInput
+  upsert?: Prisma.BusinessUpsertWithoutBillingInvoicesInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutBillingInvoicesInput, Prisma.BusinessUpdateWithoutBillingInvoicesInput>, Prisma.BusinessUncheckedUpdateWithoutBillingInvoicesInput>
+}
+
+export type BusinessCreateNestedOneWithoutBillingPaymentsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingPaymentsInput, Prisma.BusinessUncheckedCreateWithoutBillingPaymentsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingPaymentsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutBillingPaymentsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingPaymentsInput, Prisma.BusinessUncheckedCreateWithoutBillingPaymentsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingPaymentsInput
+  upsert?: Prisma.BusinessUpsertWithoutBillingPaymentsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutBillingPaymentsInput, Prisma.BusinessUpdateWithoutBillingPaymentsInput>, Prisma.BusinessUncheckedUpdateWithoutBillingPaymentsInput>
+}
+
+export type BusinessCreateNestedOneWithoutBillingPaymentAttemptsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingPaymentAttemptsInput, Prisma.BusinessUncheckedCreateWithoutBillingPaymentAttemptsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingPaymentAttemptsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutBillingPaymentAttemptsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingPaymentAttemptsInput, Prisma.BusinessUncheckedCreateWithoutBillingPaymentAttemptsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingPaymentAttemptsInput
+  upsert?: Prisma.BusinessUpsertWithoutBillingPaymentAttemptsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutBillingPaymentAttemptsInput, Prisma.BusinessUpdateWithoutBillingPaymentAttemptsInput>, Prisma.BusinessUncheckedUpdateWithoutBillingPaymentAttemptsInput>
+}
+
+export type BusinessCreateNestedOneWithoutBillingPaymentAllocationsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingPaymentAllocationsInput, Prisma.BusinessUncheckedCreateWithoutBillingPaymentAllocationsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingPaymentAllocationsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutBillingPaymentAllocationsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingPaymentAllocationsInput, Prisma.BusinessUncheckedCreateWithoutBillingPaymentAllocationsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingPaymentAllocationsInput
+  upsert?: Prisma.BusinessUpsertWithoutBillingPaymentAllocationsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutBillingPaymentAllocationsInput, Prisma.BusinessUpdateWithoutBillingPaymentAllocationsInput>, Prisma.BusinessUncheckedUpdateWithoutBillingPaymentAllocationsInput>
+}
+
+export type BusinessCreateNestedOneWithoutBillingRefundsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingRefundsInput, Prisma.BusinessUncheckedCreateWithoutBillingRefundsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingRefundsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutBillingRefundsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingRefundsInput, Prisma.BusinessUncheckedCreateWithoutBillingRefundsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingRefundsInput
+  upsert?: Prisma.BusinessUpsertWithoutBillingRefundsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutBillingRefundsInput, Prisma.BusinessUpdateWithoutBillingRefundsInput>, Prisma.BusinessUncheckedUpdateWithoutBillingRefundsInput>
+}
+
+export type BusinessCreateNestedOneWithoutBillingProviderCustomersInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingProviderCustomersInput, Prisma.BusinessUncheckedCreateWithoutBillingProviderCustomersInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingProviderCustomersInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutBillingProviderCustomersNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingProviderCustomersInput, Prisma.BusinessUncheckedCreateWithoutBillingProviderCustomersInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingProviderCustomersInput
+  upsert?: Prisma.BusinessUpsertWithoutBillingProviderCustomersInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutBillingProviderCustomersInput, Prisma.BusinessUpdateWithoutBillingProviderCustomersInput>, Prisma.BusinessUncheckedUpdateWithoutBillingProviderCustomersInput>
+}
+
+export type BusinessCreateNestedOneWithoutBillingEventsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingEventsInput, Prisma.BusinessUncheckedCreateWithoutBillingEventsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingEventsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneWithoutBillingEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingEventsInput, Prisma.BusinessUncheckedCreateWithoutBillingEventsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingEventsInput
+  upsert?: Prisma.BusinessUpsertWithoutBillingEventsInput
+  disconnect?: Prisma.BusinessWhereInput | boolean
+  delete?: Prisma.BusinessWhereInput | boolean
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutBillingEventsInput, Prisma.BusinessUpdateWithoutBillingEventsInput>, Prisma.BusinessUncheckedUpdateWithoutBillingEventsInput>
+}
+
+export type BusinessCreateNestedOneWithoutBillingSubscriptionLeasesInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingSubscriptionLeasesInput, Prisma.BusinessUncheckedCreateWithoutBillingSubscriptionLeasesInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingSubscriptionLeasesInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutBillingSubscriptionLeasesNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingSubscriptionLeasesInput, Prisma.BusinessUncheckedCreateWithoutBillingSubscriptionLeasesInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingSubscriptionLeasesInput
+  upsert?: Prisma.BusinessUpsertWithoutBillingSubscriptionLeasesInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutBillingSubscriptionLeasesInput, Prisma.BusinessUpdateWithoutBillingSubscriptionLeasesInput>, Prisma.BusinessUncheckedUpdateWithoutBillingSubscriptionLeasesInput>
+}
+
+export type BusinessCreateNestedOneWithoutBillingAuditLogsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingAuditLogsInput, Prisma.BusinessUncheckedCreateWithoutBillingAuditLogsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingAuditLogsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneWithoutBillingAuditLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutBillingAuditLogsInput, Prisma.BusinessUncheckedCreateWithoutBillingAuditLogsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutBillingAuditLogsInput
+  upsert?: Prisma.BusinessUpsertWithoutBillingAuditLogsInput
+  disconnect?: Prisma.BusinessWhereInput | boolean
+  delete?: Prisma.BusinessWhereInput | boolean
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutBillingAuditLogsInput, Prisma.BusinessUpdateWithoutBillingAuditLogsInput>, Prisma.BusinessUncheckedUpdateWithoutBillingAuditLogsInput>
 }
 
 export type BusinessCreateNestedOneWithoutProductsInput = {
@@ -866,7 +1122,19 @@ export type BusinessCreateWithoutBranchesInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBranchesInput = {
@@ -894,7 +1162,19 @@ export type BusinessUncheckedCreateWithoutBranchesInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBranchesInput = {
@@ -938,7 +1218,19 @@ export type BusinessUpdateWithoutBranchesInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBranchesInput = {
@@ -966,7 +1258,19 @@ export type BusinessUncheckedUpdateWithoutBranchesInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutUsersInput = {
@@ -994,7 +1298,19 @@ export type BusinessCreateWithoutUsersInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutUsersInput = {
@@ -1022,7 +1338,19 @@ export type BusinessUncheckedCreateWithoutUsersInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutUsersInput = {
@@ -1055,7 +1383,19 @@ export type BusinessCreateWithoutOwnerInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutOwnerInput = {
@@ -1083,7 +1423,19 @@ export type BusinessUncheckedCreateWithoutOwnerInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutOwnerInput = {
@@ -1132,7 +1484,19 @@ export type BusinessUpdateWithoutUsersInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutUsersInput = {
@@ -1160,7 +1524,19 @@ export type BusinessUncheckedUpdateWithoutUsersInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUpsertWithWhereUniqueWithoutOwnerInput = {
@@ -1195,7 +1571,7 @@ export type BusinessScalarWhereInput = {
   activatedAt?: Prisma.DateTimeNullableFilter<"Business"> | Date | string | null
 }
 
-export type BusinessCreateWithoutSubscriptionsInput = {
+export type BusinessCreateWithoutBillingSubscriptionsInput = {
   id: string
   name: string
   address?: string | null
@@ -1221,9 +1597,21 @@ export type BusinessCreateWithoutSubscriptionsInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
 }
 
-export type BusinessUncheckedCreateWithoutSubscriptionsInput = {
+export type BusinessUncheckedCreateWithoutBillingSubscriptionsInput = {
   id: string
   name: string
   userId?: string | null
@@ -1249,25 +1637,37 @@ export type BusinessUncheckedCreateWithoutSubscriptionsInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
 }
 
-export type BusinessCreateOrConnectWithoutSubscriptionsInput = {
+export type BusinessCreateOrConnectWithoutBillingSubscriptionsInput = {
   where: Prisma.BusinessWhereUniqueInput
-  create: Prisma.XOR<Prisma.BusinessCreateWithoutSubscriptionsInput, Prisma.BusinessUncheckedCreateWithoutSubscriptionsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingSubscriptionsInput, Prisma.BusinessUncheckedCreateWithoutBillingSubscriptionsInput>
 }
 
-export type BusinessUpsertWithoutSubscriptionsInput = {
-  update: Prisma.XOR<Prisma.BusinessUpdateWithoutSubscriptionsInput, Prisma.BusinessUncheckedUpdateWithoutSubscriptionsInput>
-  create: Prisma.XOR<Prisma.BusinessCreateWithoutSubscriptionsInput, Prisma.BusinessUncheckedCreateWithoutSubscriptionsInput>
+export type BusinessUpsertWithoutBillingSubscriptionsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingSubscriptionsInput, Prisma.BusinessUncheckedUpdateWithoutBillingSubscriptionsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingSubscriptionsInput, Prisma.BusinessUncheckedCreateWithoutBillingSubscriptionsInput>
   where?: Prisma.BusinessWhereInput
 }
 
-export type BusinessUpdateToOneWithWhereWithoutSubscriptionsInput = {
+export type BusinessUpdateToOneWithWhereWithoutBillingSubscriptionsInput = {
   where?: Prisma.BusinessWhereInput
-  data: Prisma.XOR<Prisma.BusinessUpdateWithoutSubscriptionsInput, Prisma.BusinessUncheckedUpdateWithoutSubscriptionsInput>
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingSubscriptionsInput, Prisma.BusinessUncheckedUpdateWithoutBillingSubscriptionsInput>
 }
 
-export type BusinessUpdateWithoutSubscriptionsInput = {
+export type BusinessUpdateWithoutBillingSubscriptionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1293,9 +1693,21 @@ export type BusinessUpdateWithoutSubscriptionsInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
 }
 
-export type BusinessUncheckedUpdateWithoutSubscriptionsInput = {
+export type BusinessUncheckedUpdateWithoutBillingSubscriptionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1321,6 +1733,2130 @@ export type BusinessUncheckedUpdateWithoutSubscriptionsInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutBillingSubscriptionRequestsInput = {
+  id: string
+  name: string
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
+  branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutBillingSubscriptionRequestsInput = {
+  id: string
+  name: string
+  userId?: string | null
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutBillingSubscriptionRequestsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingSubscriptionRequestsInput, Prisma.BusinessUncheckedCreateWithoutBillingSubscriptionRequestsInput>
+}
+
+export type BusinessUpsertWithoutBillingSubscriptionRequestsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingSubscriptionRequestsInput, Prisma.BusinessUncheckedUpdateWithoutBillingSubscriptionRequestsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingSubscriptionRequestsInput, Prisma.BusinessUncheckedCreateWithoutBillingSubscriptionRequestsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutBillingSubscriptionRequestsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingSubscriptionRequestsInput, Prisma.BusinessUncheckedUpdateWithoutBillingSubscriptionRequestsInput>
+}
+
+export type BusinessUpdateWithoutBillingSubscriptionRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
+  branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutBillingSubscriptionRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutBillingEntitlementsInput = {
+  id: string
+  name: string
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
+  branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutBillingEntitlementsInput = {
+  id: string
+  name: string
+  userId?: string | null
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutBillingEntitlementsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingEntitlementsInput, Prisma.BusinessUncheckedCreateWithoutBillingEntitlementsInput>
+}
+
+export type BusinessUpsertWithoutBillingEntitlementsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingEntitlementsInput, Prisma.BusinessUncheckedUpdateWithoutBillingEntitlementsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingEntitlementsInput, Prisma.BusinessUncheckedCreateWithoutBillingEntitlementsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutBillingEntitlementsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingEntitlementsInput, Prisma.BusinessUncheckedUpdateWithoutBillingEntitlementsInput>
+}
+
+export type BusinessUpdateWithoutBillingEntitlementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
+  branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutBillingEntitlementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutBillingEntitlementOverridesInput = {
+  id: string
+  name: string
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
+  branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutBillingEntitlementOverridesInput = {
+  id: string
+  name: string
+  userId?: string | null
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutBillingEntitlementOverridesInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingEntitlementOverridesInput, Prisma.BusinessUncheckedCreateWithoutBillingEntitlementOverridesInput>
+}
+
+export type BusinessUpsertWithoutBillingEntitlementOverridesInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingEntitlementOverridesInput, Prisma.BusinessUncheckedUpdateWithoutBillingEntitlementOverridesInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingEntitlementOverridesInput, Prisma.BusinessUncheckedCreateWithoutBillingEntitlementOverridesInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutBillingEntitlementOverridesInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingEntitlementOverridesInput, Prisma.BusinessUncheckedUpdateWithoutBillingEntitlementOverridesInput>
+}
+
+export type BusinessUpdateWithoutBillingEntitlementOverridesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
+  branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutBillingEntitlementOverridesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutBillingInvoicesInput = {
+  id: string
+  name: string
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
+  branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutBillingInvoicesInput = {
+  id: string
+  name: string
+  userId?: string | null
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutBillingInvoicesInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingInvoicesInput, Prisma.BusinessUncheckedCreateWithoutBillingInvoicesInput>
+}
+
+export type BusinessUpsertWithoutBillingInvoicesInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingInvoicesInput, Prisma.BusinessUncheckedUpdateWithoutBillingInvoicesInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingInvoicesInput, Prisma.BusinessUncheckedCreateWithoutBillingInvoicesInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutBillingInvoicesInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingInvoicesInput, Prisma.BusinessUncheckedUpdateWithoutBillingInvoicesInput>
+}
+
+export type BusinessUpdateWithoutBillingInvoicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
+  branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutBillingInvoicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutBillingPaymentsInput = {
+  id: string
+  name: string
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
+  branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutBillingPaymentsInput = {
+  id: string
+  name: string
+  userId?: string | null
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutBillingPaymentsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingPaymentsInput, Prisma.BusinessUncheckedCreateWithoutBillingPaymentsInput>
+}
+
+export type BusinessUpsertWithoutBillingPaymentsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingPaymentsInput, Prisma.BusinessUncheckedUpdateWithoutBillingPaymentsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingPaymentsInput, Prisma.BusinessUncheckedCreateWithoutBillingPaymentsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutBillingPaymentsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingPaymentsInput, Prisma.BusinessUncheckedUpdateWithoutBillingPaymentsInput>
+}
+
+export type BusinessUpdateWithoutBillingPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
+  branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutBillingPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutBillingPaymentAttemptsInput = {
+  id: string
+  name: string
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
+  branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutBillingPaymentAttemptsInput = {
+  id: string
+  name: string
+  userId?: string | null
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutBillingPaymentAttemptsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingPaymentAttemptsInput, Prisma.BusinessUncheckedCreateWithoutBillingPaymentAttemptsInput>
+}
+
+export type BusinessUpsertWithoutBillingPaymentAttemptsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingPaymentAttemptsInput, Prisma.BusinessUncheckedUpdateWithoutBillingPaymentAttemptsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingPaymentAttemptsInput, Prisma.BusinessUncheckedCreateWithoutBillingPaymentAttemptsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutBillingPaymentAttemptsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingPaymentAttemptsInput, Prisma.BusinessUncheckedUpdateWithoutBillingPaymentAttemptsInput>
+}
+
+export type BusinessUpdateWithoutBillingPaymentAttemptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
+  branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutBillingPaymentAttemptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutBillingPaymentAllocationsInput = {
+  id: string
+  name: string
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
+  branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutBillingPaymentAllocationsInput = {
+  id: string
+  name: string
+  userId?: string | null
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutBillingPaymentAllocationsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingPaymentAllocationsInput, Prisma.BusinessUncheckedCreateWithoutBillingPaymentAllocationsInput>
+}
+
+export type BusinessUpsertWithoutBillingPaymentAllocationsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingPaymentAllocationsInput, Prisma.BusinessUncheckedUpdateWithoutBillingPaymentAllocationsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingPaymentAllocationsInput, Prisma.BusinessUncheckedCreateWithoutBillingPaymentAllocationsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutBillingPaymentAllocationsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingPaymentAllocationsInput, Prisma.BusinessUncheckedUpdateWithoutBillingPaymentAllocationsInput>
+}
+
+export type BusinessUpdateWithoutBillingPaymentAllocationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
+  branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutBillingPaymentAllocationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutBillingRefundsInput = {
+  id: string
+  name: string
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
+  branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutBillingRefundsInput = {
+  id: string
+  name: string
+  userId?: string | null
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutBillingRefundsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingRefundsInput, Prisma.BusinessUncheckedCreateWithoutBillingRefundsInput>
+}
+
+export type BusinessUpsertWithoutBillingRefundsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingRefundsInput, Prisma.BusinessUncheckedUpdateWithoutBillingRefundsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingRefundsInput, Prisma.BusinessUncheckedCreateWithoutBillingRefundsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutBillingRefundsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingRefundsInput, Prisma.BusinessUncheckedUpdateWithoutBillingRefundsInput>
+}
+
+export type BusinessUpdateWithoutBillingRefundsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
+  branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutBillingRefundsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutBillingProviderCustomersInput = {
+  id: string
+  name: string
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
+  branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutBillingProviderCustomersInput = {
+  id: string
+  name: string
+  userId?: string | null
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutBillingProviderCustomersInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingProviderCustomersInput, Prisma.BusinessUncheckedCreateWithoutBillingProviderCustomersInput>
+}
+
+export type BusinessUpsertWithoutBillingProviderCustomersInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingProviderCustomersInput, Prisma.BusinessUncheckedUpdateWithoutBillingProviderCustomersInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingProviderCustomersInput, Prisma.BusinessUncheckedCreateWithoutBillingProviderCustomersInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutBillingProviderCustomersInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingProviderCustomersInput, Prisma.BusinessUncheckedUpdateWithoutBillingProviderCustomersInput>
+}
+
+export type BusinessUpdateWithoutBillingProviderCustomersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
+  branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutBillingProviderCustomersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutBillingEventsInput = {
+  id: string
+  name: string
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
+  branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutBillingEventsInput = {
+  id: string
+  name: string
+  userId?: string | null
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutBillingEventsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingEventsInput, Prisma.BusinessUncheckedCreateWithoutBillingEventsInput>
+}
+
+export type BusinessUpsertWithoutBillingEventsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingEventsInput, Prisma.BusinessUncheckedUpdateWithoutBillingEventsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingEventsInput, Prisma.BusinessUncheckedCreateWithoutBillingEventsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutBillingEventsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingEventsInput, Prisma.BusinessUncheckedUpdateWithoutBillingEventsInput>
+}
+
+export type BusinessUpdateWithoutBillingEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
+  branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutBillingEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutBillingSubscriptionLeasesInput = {
+  id: string
+  name: string
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
+  branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutBillingSubscriptionLeasesInput = {
+  id: string
+  name: string
+  userId?: string | null
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutBillingSubscriptionLeasesInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingSubscriptionLeasesInput, Prisma.BusinessUncheckedCreateWithoutBillingSubscriptionLeasesInput>
+}
+
+export type BusinessUpsertWithoutBillingSubscriptionLeasesInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingSubscriptionLeasesInput, Prisma.BusinessUncheckedUpdateWithoutBillingSubscriptionLeasesInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingSubscriptionLeasesInput, Prisma.BusinessUncheckedCreateWithoutBillingSubscriptionLeasesInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutBillingSubscriptionLeasesInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingSubscriptionLeasesInput, Prisma.BusinessUncheckedUpdateWithoutBillingSubscriptionLeasesInput>
+}
+
+export type BusinessUpdateWithoutBillingSubscriptionLeasesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
+  branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutBillingSubscriptionLeasesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutBillingAuditLogsInput = {
+  id: string
+  name: string
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
+  branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutBillingAuditLogsInput = {
+  id: string
+  name: string
+  userId?: string | null
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutBillingAuditLogsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingAuditLogsInput, Prisma.BusinessUncheckedCreateWithoutBillingAuditLogsInput>
+}
+
+export type BusinessUpsertWithoutBillingAuditLogsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingAuditLogsInput, Prisma.BusinessUncheckedUpdateWithoutBillingAuditLogsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutBillingAuditLogsInput, Prisma.BusinessUncheckedCreateWithoutBillingAuditLogsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutBillingAuditLogsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutBillingAuditLogsInput, Prisma.BusinessUncheckedUpdateWithoutBillingAuditLogsInput>
+}
+
+export type BusinessUpdateWithoutBillingAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
+  branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutBillingAuditLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutProductsInput = {
@@ -1348,7 +3884,19 @@ export type BusinessCreateWithoutProductsInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutProductsInput = {
@@ -1376,7 +3924,19 @@ export type BusinessUncheckedCreateWithoutProductsInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutProductsInput = {
@@ -1420,7 +3980,19 @@ export type BusinessUpdateWithoutProductsInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutProductsInput = {
@@ -1448,7 +4020,19 @@ export type BusinessUncheckedUpdateWithoutProductsInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutInventoriesInput = {
@@ -1476,7 +4060,19 @@ export type BusinessCreateWithoutInventoriesInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutInventoriesInput = {
@@ -1504,7 +4100,19 @@ export type BusinessUncheckedCreateWithoutInventoriesInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutInventoriesInput = {
@@ -1548,7 +4156,19 @@ export type BusinessUpdateWithoutInventoriesInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutInventoriesInput = {
@@ -1576,7 +4196,19 @@ export type BusinessUncheckedUpdateWithoutInventoriesInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutLedgerEntriesInput = {
@@ -1604,7 +4236,19 @@ export type BusinessCreateWithoutLedgerEntriesInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutLedgerEntriesInput = {
@@ -1632,7 +4276,19 @@ export type BusinessUncheckedCreateWithoutLedgerEntriesInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutLedgerEntriesInput = {
@@ -1676,7 +4332,19 @@ export type BusinessUpdateWithoutLedgerEntriesInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutLedgerEntriesInput = {
@@ -1704,7 +4372,19 @@ export type BusinessUncheckedUpdateWithoutLedgerEntriesInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutSaleInput = {
@@ -1732,7 +4412,19 @@ export type BusinessCreateWithoutSaleInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutSaleInput = {
@@ -1760,7 +4452,19 @@ export type BusinessUncheckedCreateWithoutSaleInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutSaleInput = {
@@ -1804,7 +4508,19 @@ export type BusinessUpdateWithoutSaleInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutSaleInput = {
@@ -1832,7 +4548,19 @@ export type BusinessUncheckedUpdateWithoutSaleInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutExpenseInput = {
@@ -1860,7 +4588,19 @@ export type BusinessCreateWithoutExpenseInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutExpenseInput = {
@@ -1888,7 +4628,19 @@ export type BusinessUncheckedCreateWithoutExpenseInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutExpenseInput = {
@@ -1932,7 +4684,19 @@ export type BusinessUpdateWithoutExpenseInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutExpenseInput = {
@@ -1960,7 +4724,19 @@ export type BusinessUncheckedUpdateWithoutExpenseInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutSnapshotsInput = {
@@ -1988,7 +4764,19 @@ export type BusinessCreateWithoutSnapshotsInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutSnapshotsInput = {
@@ -2016,7 +4804,19 @@ export type BusinessUncheckedCreateWithoutSnapshotsInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutSnapshotsInput = {
@@ -2060,7 +4860,19 @@ export type BusinessUpdateWithoutSnapshotsInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutSnapshotsInput = {
@@ -2088,7 +4900,19 @@ export type BusinessUncheckedUpdateWithoutSnapshotsInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutAlertsInput = {
@@ -2116,7 +4940,19 @@ export type BusinessCreateWithoutAlertsInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutAlertsInput = {
@@ -2144,7 +4980,19 @@ export type BusinessUncheckedCreateWithoutAlertsInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutAlertsInput = {
@@ -2188,7 +5036,19 @@ export type BusinessUpdateWithoutAlertsInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutAlertsInput = {
@@ -2216,7 +5076,19 @@ export type BusinessUncheckedUpdateWithoutAlertsInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutEmployeesInput = {
@@ -2244,7 +5116,19 @@ export type BusinessCreateWithoutEmployeesInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutEmployeesInput = {
@@ -2272,7 +5156,19 @@ export type BusinessUncheckedCreateWithoutEmployeesInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutEmployeesInput = {
@@ -2316,7 +5212,19 @@ export type BusinessUpdateWithoutEmployeesInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutEmployeesInput = {
@@ -2344,7 +5252,19 @@ export type BusinessUncheckedUpdateWithoutEmployeesInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutEmployeeInvitationsInput = {
@@ -2372,7 +5292,19 @@ export type BusinessCreateWithoutEmployeeInvitationsInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutEmployeeInvitationsInput = {
@@ -2400,7 +5332,19 @@ export type BusinessUncheckedCreateWithoutEmployeeInvitationsInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutEmployeeInvitationsInput = {
@@ -2444,7 +5388,19 @@ export type BusinessUpdateWithoutEmployeeInvitationsInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutEmployeeInvitationsInput = {
@@ -2472,7 +5428,19 @@ export type BusinessUncheckedUpdateWithoutEmployeeInvitationsInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutEmployeeCompensationsInput = {
@@ -2500,7 +5468,19 @@ export type BusinessCreateWithoutEmployeeCompensationsInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutEmployeeCompensationsInput = {
@@ -2528,7 +5508,19 @@ export type BusinessUncheckedCreateWithoutEmployeeCompensationsInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutEmployeeCompensationsInput = {
@@ -2572,7 +5564,19 @@ export type BusinessUpdateWithoutEmployeeCompensationsInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutEmployeeCompensationsInput = {
@@ -2600,7 +5604,19 @@ export type BusinessUncheckedUpdateWithoutEmployeeCompensationsInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutEmployeeCompensationHistoryInput = {
@@ -2628,7 +5644,19 @@ export type BusinessCreateWithoutEmployeeCompensationHistoryInput = {
   employeeCompensations?: Prisma.EmployeeCompensationCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutEmployeeCompensationHistoryInput = {
@@ -2656,7 +5684,19 @@ export type BusinessUncheckedCreateWithoutEmployeeCompensationHistoryInput = {
   employeeCompensations?: Prisma.EmployeeCompensationUncheckedCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutEmployeeCompensationHistoryInput = {
@@ -2700,7 +5740,19 @@ export type BusinessUpdateWithoutEmployeeCompensationHistoryInput = {
   employeeCompensations?: Prisma.EmployeeCompensationUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutEmployeeCompensationHistoryInput = {
@@ -2728,7 +5780,19 @@ export type BusinessUncheckedUpdateWithoutEmployeeCompensationHistoryInput = {
   employeeCompensations?: Prisma.EmployeeCompensationUncheckedUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutEmployeeRequestsInput = {
@@ -2756,7 +5820,19 @@ export type BusinessCreateWithoutEmployeeRequestsInput = {
   employeeCompensations?: Prisma.EmployeeCompensationCreateNestedManyWithoutBusinessInput
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutEmployeeRequestsInput = {
@@ -2784,7 +5860,19 @@ export type BusinessUncheckedCreateWithoutEmployeeRequestsInput = {
   employeeCompensations?: Prisma.EmployeeCompensationUncheckedCreateNestedManyWithoutBusinessInput
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutEmployeeRequestsInput = {
@@ -2828,7 +5916,19 @@ export type BusinessUpdateWithoutEmployeeRequestsInput = {
   employeeCompensations?: Prisma.EmployeeCompensationUpdateManyWithoutBusinessNestedInput
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutEmployeeRequestsInput = {
@@ -2856,7 +5956,19 @@ export type BusinessUncheckedUpdateWithoutEmployeeRequestsInput = {
   employeeCompensations?: Prisma.EmployeeCompensationUncheckedUpdateManyWithoutBusinessNestedInput
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutEmployeeNotificationsInput = {
@@ -2884,7 +5996,19 @@ export type BusinessCreateWithoutEmployeeNotificationsInput = {
   employeeCompensations?: Prisma.EmployeeCompensationCreateNestedManyWithoutBusinessInput
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutEmployeeNotificationsInput = {
@@ -2912,7 +6036,19 @@ export type BusinessUncheckedCreateWithoutEmployeeNotificationsInput = {
   employeeCompensations?: Prisma.EmployeeCompensationUncheckedCreateNestedManyWithoutBusinessInput
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutEmployeeNotificationsInput = {
@@ -2956,7 +6092,19 @@ export type BusinessUpdateWithoutEmployeeNotificationsInput = {
   employeeCompensations?: Prisma.EmployeeCompensationUpdateManyWithoutBusinessNestedInput
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutEmployeeNotificationsInput = {
@@ -2984,7 +6132,19 @@ export type BusinessUncheckedUpdateWithoutEmployeeNotificationsInput = {
   employeeCompensations?: Prisma.EmployeeCompensationUncheckedUpdateManyWithoutBusinessNestedInput
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateManyOwnerInput = {
@@ -3024,7 +6184,19 @@ export type BusinessUpdateWithoutOwnerInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutOwnerInput = {
@@ -3052,7 +6224,19 @@ export type BusinessUncheckedUpdateWithoutOwnerInput = {
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
   employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
-  subscriptions?: Prisma.BusinessSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateManyWithoutOwnerInput = {
@@ -3088,7 +6272,19 @@ export type BusinessCountOutputType = {
   employeeCompensationHistory: number
   employeeRequests: number
   employeeNotifications: number
-  subscriptions: number
+  billingSubscriptions: number
+  billingSubscriptionRequests: number
+  billingEntitlements: number
+  billingEntitlementOverrides: number
+  billingInvoices: number
+  billingPayments: number
+  billingPaymentAttempts: number
+  billingPaymentAllocations: number
+  billingRefunds: number
+  billingProviderCustomers: number
+  billingSubscriptionLeases: number
+  billingEvents: number
+  billingAuditLogs: number
 }
 
 export type BusinessCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3107,7 +6303,19 @@ export type BusinessCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   employeeCompensationHistory?: boolean | BusinessCountOutputTypeCountEmployeeCompensationHistoryArgs
   employeeRequests?: boolean | BusinessCountOutputTypeCountEmployeeRequestsArgs
   employeeNotifications?: boolean | BusinessCountOutputTypeCountEmployeeNotificationsArgs
-  subscriptions?: boolean | BusinessCountOutputTypeCountSubscriptionsArgs
+  billingSubscriptions?: boolean | BusinessCountOutputTypeCountBillingSubscriptionsArgs
+  billingSubscriptionRequests?: boolean | BusinessCountOutputTypeCountBillingSubscriptionRequestsArgs
+  billingEntitlements?: boolean | BusinessCountOutputTypeCountBillingEntitlementsArgs
+  billingEntitlementOverrides?: boolean | BusinessCountOutputTypeCountBillingEntitlementOverridesArgs
+  billingInvoices?: boolean | BusinessCountOutputTypeCountBillingInvoicesArgs
+  billingPayments?: boolean | BusinessCountOutputTypeCountBillingPaymentsArgs
+  billingPaymentAttempts?: boolean | BusinessCountOutputTypeCountBillingPaymentAttemptsArgs
+  billingPaymentAllocations?: boolean | BusinessCountOutputTypeCountBillingPaymentAllocationsArgs
+  billingRefunds?: boolean | BusinessCountOutputTypeCountBillingRefundsArgs
+  billingProviderCustomers?: boolean | BusinessCountOutputTypeCountBillingProviderCustomersArgs
+  billingSubscriptionLeases?: boolean | BusinessCountOutputTypeCountBillingSubscriptionLeasesArgs
+  billingEvents?: boolean | BusinessCountOutputTypeCountBillingEventsArgs
+  billingAuditLogs?: boolean | BusinessCountOutputTypeCountBillingAuditLogsArgs
 }
 
 /**
@@ -3228,8 +6436,92 @@ export type BusinessCountOutputTypeCountEmployeeNotificationsArgs<ExtArgs extend
 /**
  * BusinessCountOutputType without action
  */
-export type BusinessCountOutputTypeCountSubscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.BusinessSubscriptionWhereInput
+export type BusinessCountOutputTypeCountBillingSubscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BillingSubscriptionWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountBillingSubscriptionRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BillingSubscriptionRequestWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountBillingEntitlementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BillingEntitlementWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountBillingEntitlementOverridesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BillingEntitlementOverrideWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountBillingInvoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BillingInvoiceWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountBillingPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BillingPaymentWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountBillingPaymentAttemptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BillingPaymentAttemptWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountBillingPaymentAllocationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BillingPaymentAllocationWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountBillingRefundsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BillingRefundWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountBillingProviderCustomersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BillingProviderCustomerWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountBillingSubscriptionLeasesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BillingSubscriptionLeaseWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountBillingEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BillingEventWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountBillingAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BillingAuditLogWhereInput
 }
 
 
@@ -3260,7 +6552,19 @@ export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   employeeCompensationHistory?: boolean | Prisma.Business$employeeCompensationHistoryArgs<ExtArgs>
   employeeRequests?: boolean | Prisma.Business$employeeRequestsArgs<ExtArgs>
   employeeNotifications?: boolean | Prisma.Business$employeeNotificationsArgs<ExtArgs>
-  subscriptions?: boolean | Prisma.Business$subscriptionsArgs<ExtArgs>
+  billingSubscriptions?: boolean | Prisma.Business$billingSubscriptionsArgs<ExtArgs>
+  billingSubscriptionRequests?: boolean | Prisma.Business$billingSubscriptionRequestsArgs<ExtArgs>
+  billingEntitlements?: boolean | Prisma.Business$billingEntitlementsArgs<ExtArgs>
+  billingEntitlementOverrides?: boolean | Prisma.Business$billingEntitlementOverridesArgs<ExtArgs>
+  billingInvoices?: boolean | Prisma.Business$billingInvoicesArgs<ExtArgs>
+  billingPayments?: boolean | Prisma.Business$billingPaymentsArgs<ExtArgs>
+  billingPaymentAttempts?: boolean | Prisma.Business$billingPaymentAttemptsArgs<ExtArgs>
+  billingPaymentAllocations?: boolean | Prisma.Business$billingPaymentAllocationsArgs<ExtArgs>
+  billingRefunds?: boolean | Prisma.Business$billingRefundsArgs<ExtArgs>
+  billingProviderCustomers?: boolean | Prisma.Business$billingProviderCustomersArgs<ExtArgs>
+  billingSubscriptionLeases?: boolean | Prisma.Business$billingSubscriptionLeasesArgs<ExtArgs>
+  billingEvents?: boolean | Prisma.Business$billingEventsArgs<ExtArgs>
+  billingAuditLogs?: boolean | Prisma.Business$billingAuditLogsArgs<ExtArgs>
   _count?: boolean | Prisma.BusinessCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["business"]>
 
@@ -3323,7 +6627,19 @@ export type BusinessInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   employeeCompensationHistory?: boolean | Prisma.Business$employeeCompensationHistoryArgs<ExtArgs>
   employeeRequests?: boolean | Prisma.Business$employeeRequestsArgs<ExtArgs>
   employeeNotifications?: boolean | Prisma.Business$employeeNotificationsArgs<ExtArgs>
-  subscriptions?: boolean | Prisma.Business$subscriptionsArgs<ExtArgs>
+  billingSubscriptions?: boolean | Prisma.Business$billingSubscriptionsArgs<ExtArgs>
+  billingSubscriptionRequests?: boolean | Prisma.Business$billingSubscriptionRequestsArgs<ExtArgs>
+  billingEntitlements?: boolean | Prisma.Business$billingEntitlementsArgs<ExtArgs>
+  billingEntitlementOverrides?: boolean | Prisma.Business$billingEntitlementOverridesArgs<ExtArgs>
+  billingInvoices?: boolean | Prisma.Business$billingInvoicesArgs<ExtArgs>
+  billingPayments?: boolean | Prisma.Business$billingPaymentsArgs<ExtArgs>
+  billingPaymentAttempts?: boolean | Prisma.Business$billingPaymentAttemptsArgs<ExtArgs>
+  billingPaymentAllocations?: boolean | Prisma.Business$billingPaymentAllocationsArgs<ExtArgs>
+  billingRefunds?: boolean | Prisma.Business$billingRefundsArgs<ExtArgs>
+  billingProviderCustomers?: boolean | Prisma.Business$billingProviderCustomersArgs<ExtArgs>
+  billingSubscriptionLeases?: boolean | Prisma.Business$billingSubscriptionLeasesArgs<ExtArgs>
+  billingEvents?: boolean | Prisma.Business$billingEventsArgs<ExtArgs>
+  billingAuditLogs?: boolean | Prisma.Business$billingAuditLogsArgs<ExtArgs>
   _count?: boolean | Prisma.BusinessCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BusinessIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3352,7 +6668,19 @@ export type $BusinessPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     employeeCompensationHistory: Prisma.$EmployeeCompensationHistoryPayload<ExtArgs>[]
     employeeRequests: Prisma.$EmployeeRequestPayload<ExtArgs>[]
     employeeNotifications: Prisma.$EmployeeNotificationPayload<ExtArgs>[]
-    subscriptions: Prisma.$BusinessSubscriptionPayload<ExtArgs>[]
+    billingSubscriptions: Prisma.$BillingSubscriptionPayload<ExtArgs>[]
+    billingSubscriptionRequests: Prisma.$BillingSubscriptionRequestPayload<ExtArgs>[]
+    billingEntitlements: Prisma.$BillingEntitlementPayload<ExtArgs>[]
+    billingEntitlementOverrides: Prisma.$BillingEntitlementOverridePayload<ExtArgs>[]
+    billingInvoices: Prisma.$BillingInvoicePayload<ExtArgs>[]
+    billingPayments: Prisma.$BillingPaymentPayload<ExtArgs>[]
+    billingPaymentAttempts: Prisma.$BillingPaymentAttemptPayload<ExtArgs>[]
+    billingPaymentAllocations: Prisma.$BillingPaymentAllocationPayload<ExtArgs>[]
+    billingRefunds: Prisma.$BillingRefundPayload<ExtArgs>[]
+    billingProviderCustomers: Prisma.$BillingProviderCustomerPayload<ExtArgs>[]
+    billingSubscriptionLeases: Prisma.$BillingSubscriptionLeasePayload<ExtArgs>[]
+    billingEvents: Prisma.$BillingEventPayload<ExtArgs>[]
+    billingAuditLogs: Prisma.$BillingAuditLogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3775,7 +7103,19 @@ export interface Prisma__BusinessClient<T, Null = never, ExtArgs extends runtime
   employeeCompensationHistory<T extends Prisma.Business$employeeCompensationHistoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$employeeCompensationHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmployeeCompensationHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   employeeRequests<T extends Prisma.Business$employeeRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$employeeRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmployeeRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   employeeNotifications<T extends Prisma.Business$employeeNotificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$employeeNotificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmployeeNotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  subscriptions<T extends Prisma.Business$subscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BusinessSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  billingSubscriptions<T extends Prisma.Business$billingSubscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$billingSubscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BillingSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  billingSubscriptionRequests<T extends Prisma.Business$billingSubscriptionRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$billingSubscriptionRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BillingSubscriptionRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  billingEntitlements<T extends Prisma.Business$billingEntitlementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$billingEntitlementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BillingEntitlementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  billingEntitlementOverrides<T extends Prisma.Business$billingEntitlementOverridesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$billingEntitlementOverridesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BillingEntitlementOverridePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  billingInvoices<T extends Prisma.Business$billingInvoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$billingInvoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BillingInvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  billingPayments<T extends Prisma.Business$billingPaymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$billingPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BillingPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  billingPaymentAttempts<T extends Prisma.Business$billingPaymentAttemptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$billingPaymentAttemptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BillingPaymentAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  billingPaymentAllocations<T extends Prisma.Business$billingPaymentAllocationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$billingPaymentAllocationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BillingPaymentAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  billingRefunds<T extends Prisma.Business$billingRefundsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$billingRefundsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BillingRefundPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  billingProviderCustomers<T extends Prisma.Business$billingProviderCustomersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$billingProviderCustomersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BillingProviderCustomerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  billingSubscriptionLeases<T extends Prisma.Business$billingSubscriptionLeasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$billingSubscriptionLeasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BillingSubscriptionLeasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  billingEvents<T extends Prisma.Business$billingEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$billingEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BillingEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  billingAuditLogs<T extends Prisma.Business$billingAuditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$billingAuditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BillingAuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4595,27 +7935,315 @@ export type Business$employeeNotificationsArgs<ExtArgs extends runtime.Types.Ext
 }
 
 /**
- * Business.subscriptions
+ * Business.billingSubscriptions
  */
-export type Business$subscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Business$billingSubscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the BusinessSubscription
+   * Select specific fields to fetch from the BillingSubscription
    */
-  select?: Prisma.BusinessSubscriptionSelect<ExtArgs> | null
+  select?: Prisma.BillingSubscriptionSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the BusinessSubscription
+   * Omit specific fields from the BillingSubscription
    */
-  omit?: Prisma.BusinessSubscriptionOmit<ExtArgs> | null
+  omit?: Prisma.BillingSubscriptionOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.BusinessSubscriptionInclude<ExtArgs> | null
-  where?: Prisma.BusinessSubscriptionWhereInput
-  orderBy?: Prisma.BusinessSubscriptionOrderByWithRelationInput | Prisma.BusinessSubscriptionOrderByWithRelationInput[]
-  cursor?: Prisma.BusinessSubscriptionWhereUniqueInput
+  include?: Prisma.BillingSubscriptionInclude<ExtArgs> | null
+  where?: Prisma.BillingSubscriptionWhereInput
+  orderBy?: Prisma.BillingSubscriptionOrderByWithRelationInput | Prisma.BillingSubscriptionOrderByWithRelationInput[]
+  cursor?: Prisma.BillingSubscriptionWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.BusinessSubscriptionScalarFieldEnum | Prisma.BusinessSubscriptionScalarFieldEnum[]
+  distinct?: Prisma.BillingSubscriptionScalarFieldEnum | Prisma.BillingSubscriptionScalarFieldEnum[]
+}
+
+/**
+ * Business.billingSubscriptionRequests
+ */
+export type Business$billingSubscriptionRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BillingSubscriptionRequest
+   */
+  select?: Prisma.BillingSubscriptionRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BillingSubscriptionRequest
+   */
+  omit?: Prisma.BillingSubscriptionRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BillingSubscriptionRequestInclude<ExtArgs> | null
+  where?: Prisma.BillingSubscriptionRequestWhereInput
+  orderBy?: Prisma.BillingSubscriptionRequestOrderByWithRelationInput | Prisma.BillingSubscriptionRequestOrderByWithRelationInput[]
+  cursor?: Prisma.BillingSubscriptionRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BillingSubscriptionRequestScalarFieldEnum | Prisma.BillingSubscriptionRequestScalarFieldEnum[]
+}
+
+/**
+ * Business.billingEntitlements
+ */
+export type Business$billingEntitlementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BillingEntitlement
+   */
+  select?: Prisma.BillingEntitlementSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BillingEntitlement
+   */
+  omit?: Prisma.BillingEntitlementOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BillingEntitlementInclude<ExtArgs> | null
+  where?: Prisma.BillingEntitlementWhereInput
+  orderBy?: Prisma.BillingEntitlementOrderByWithRelationInput | Prisma.BillingEntitlementOrderByWithRelationInput[]
+  cursor?: Prisma.BillingEntitlementWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BillingEntitlementScalarFieldEnum | Prisma.BillingEntitlementScalarFieldEnum[]
+}
+
+/**
+ * Business.billingEntitlementOverrides
+ */
+export type Business$billingEntitlementOverridesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BillingEntitlementOverride
+   */
+  select?: Prisma.BillingEntitlementOverrideSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BillingEntitlementOverride
+   */
+  omit?: Prisma.BillingEntitlementOverrideOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BillingEntitlementOverrideInclude<ExtArgs> | null
+  where?: Prisma.BillingEntitlementOverrideWhereInput
+  orderBy?: Prisma.BillingEntitlementOverrideOrderByWithRelationInput | Prisma.BillingEntitlementOverrideOrderByWithRelationInput[]
+  cursor?: Prisma.BillingEntitlementOverrideWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BillingEntitlementOverrideScalarFieldEnum | Prisma.BillingEntitlementOverrideScalarFieldEnum[]
+}
+
+/**
+ * Business.billingInvoices
+ */
+export type Business$billingInvoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BillingInvoice
+   */
+  select?: Prisma.BillingInvoiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BillingInvoice
+   */
+  omit?: Prisma.BillingInvoiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BillingInvoiceInclude<ExtArgs> | null
+  where?: Prisma.BillingInvoiceWhereInput
+  orderBy?: Prisma.BillingInvoiceOrderByWithRelationInput | Prisma.BillingInvoiceOrderByWithRelationInput[]
+  cursor?: Prisma.BillingInvoiceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BillingInvoiceScalarFieldEnum | Prisma.BillingInvoiceScalarFieldEnum[]
+}
+
+/**
+ * Business.billingPayments
+ */
+export type Business$billingPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BillingPayment
+   */
+  select?: Prisma.BillingPaymentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BillingPayment
+   */
+  omit?: Prisma.BillingPaymentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BillingPaymentInclude<ExtArgs> | null
+  where?: Prisma.BillingPaymentWhereInput
+  orderBy?: Prisma.BillingPaymentOrderByWithRelationInput | Prisma.BillingPaymentOrderByWithRelationInput[]
+  cursor?: Prisma.BillingPaymentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BillingPaymentScalarFieldEnum | Prisma.BillingPaymentScalarFieldEnum[]
+}
+
+/**
+ * Business.billingPaymentAttempts
+ */
+export type Business$billingPaymentAttemptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BillingPaymentAttempt
+   */
+  select?: Prisma.BillingPaymentAttemptSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BillingPaymentAttempt
+   */
+  omit?: Prisma.BillingPaymentAttemptOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BillingPaymentAttemptInclude<ExtArgs> | null
+  where?: Prisma.BillingPaymentAttemptWhereInput
+  orderBy?: Prisma.BillingPaymentAttemptOrderByWithRelationInput | Prisma.BillingPaymentAttemptOrderByWithRelationInput[]
+  cursor?: Prisma.BillingPaymentAttemptWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BillingPaymentAttemptScalarFieldEnum | Prisma.BillingPaymentAttemptScalarFieldEnum[]
+}
+
+/**
+ * Business.billingPaymentAllocations
+ */
+export type Business$billingPaymentAllocationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BillingPaymentAllocation
+   */
+  select?: Prisma.BillingPaymentAllocationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BillingPaymentAllocation
+   */
+  omit?: Prisma.BillingPaymentAllocationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BillingPaymentAllocationInclude<ExtArgs> | null
+  where?: Prisma.BillingPaymentAllocationWhereInput
+  orderBy?: Prisma.BillingPaymentAllocationOrderByWithRelationInput | Prisma.BillingPaymentAllocationOrderByWithRelationInput[]
+  cursor?: Prisma.BillingPaymentAllocationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BillingPaymentAllocationScalarFieldEnum | Prisma.BillingPaymentAllocationScalarFieldEnum[]
+}
+
+/**
+ * Business.billingRefunds
+ */
+export type Business$billingRefundsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BillingRefund
+   */
+  select?: Prisma.BillingRefundSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BillingRefund
+   */
+  omit?: Prisma.BillingRefundOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BillingRefundInclude<ExtArgs> | null
+  where?: Prisma.BillingRefundWhereInput
+  orderBy?: Prisma.BillingRefundOrderByWithRelationInput | Prisma.BillingRefundOrderByWithRelationInput[]
+  cursor?: Prisma.BillingRefundWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BillingRefundScalarFieldEnum | Prisma.BillingRefundScalarFieldEnum[]
+}
+
+/**
+ * Business.billingProviderCustomers
+ */
+export type Business$billingProviderCustomersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BillingProviderCustomer
+   */
+  select?: Prisma.BillingProviderCustomerSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BillingProviderCustomer
+   */
+  omit?: Prisma.BillingProviderCustomerOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BillingProviderCustomerInclude<ExtArgs> | null
+  where?: Prisma.BillingProviderCustomerWhereInput
+  orderBy?: Prisma.BillingProviderCustomerOrderByWithRelationInput | Prisma.BillingProviderCustomerOrderByWithRelationInput[]
+  cursor?: Prisma.BillingProviderCustomerWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BillingProviderCustomerScalarFieldEnum | Prisma.BillingProviderCustomerScalarFieldEnum[]
+}
+
+/**
+ * Business.billingSubscriptionLeases
+ */
+export type Business$billingSubscriptionLeasesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BillingSubscriptionLease
+   */
+  select?: Prisma.BillingSubscriptionLeaseSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BillingSubscriptionLease
+   */
+  omit?: Prisma.BillingSubscriptionLeaseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BillingSubscriptionLeaseInclude<ExtArgs> | null
+  where?: Prisma.BillingSubscriptionLeaseWhereInput
+  orderBy?: Prisma.BillingSubscriptionLeaseOrderByWithRelationInput | Prisma.BillingSubscriptionLeaseOrderByWithRelationInput[]
+  cursor?: Prisma.BillingSubscriptionLeaseWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BillingSubscriptionLeaseScalarFieldEnum | Prisma.BillingSubscriptionLeaseScalarFieldEnum[]
+}
+
+/**
+ * Business.billingEvents
+ */
+export type Business$billingEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BillingEvent
+   */
+  select?: Prisma.BillingEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BillingEvent
+   */
+  omit?: Prisma.BillingEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BillingEventInclude<ExtArgs> | null
+  where?: Prisma.BillingEventWhereInput
+  orderBy?: Prisma.BillingEventOrderByWithRelationInput | Prisma.BillingEventOrderByWithRelationInput[]
+  cursor?: Prisma.BillingEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BillingEventScalarFieldEnum | Prisma.BillingEventScalarFieldEnum[]
+}
+
+/**
+ * Business.billingAuditLogs
+ */
+export type Business$billingAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BillingAuditLog
+   */
+  select?: Prisma.BillingAuditLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BillingAuditLog
+   */
+  omit?: Prisma.BillingAuditLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BillingAuditLogInclude<ExtArgs> | null
+  where?: Prisma.BillingAuditLogWhereInput
+  orderBy?: Prisma.BillingAuditLogOrderByWithRelationInput | Prisma.BillingAuditLogOrderByWithRelationInput[]
+  cursor?: Prisma.BillingAuditLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BillingAuditLogScalarFieldEnum | Prisma.BillingAuditLogScalarFieldEnum[]
 }
 
 /**

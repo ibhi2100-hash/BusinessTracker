@@ -228,6 +228,7 @@ export type BranchWhereInput = {
   ledgerEntries?: Prisma.LedgerEntryListRelationFilter
   sale?: Prisma.SaleListRelationFilter
   expenses?: Prisma.ExpenseListRelationFilter
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseListRelationFilter
 }
 
 export type BranchOrderByWithRelationInput = {
@@ -254,6 +255,7 @@ export type BranchOrderByWithRelationInput = {
   ledgerEntries?: Prisma.LedgerEntryOrderByRelationAggregateInput
   sale?: Prisma.SaleOrderByRelationAggregateInput
   expenses?: Prisma.ExpenseOrderByRelationAggregateInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseOrderByRelationAggregateInput
 }
 
 export type BranchWhereUniqueInput = Prisma.AtLeast<{
@@ -284,6 +286,7 @@ export type BranchWhereUniqueInput = Prisma.AtLeast<{
   ledgerEntries?: Prisma.LedgerEntryListRelationFilter
   sale?: Prisma.SaleListRelationFilter
   expenses?: Prisma.ExpenseListRelationFilter
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseListRelationFilter
 }, "id" | "businessId_name">
 
 export type BranchOrderByWithAggregationInput = {
@@ -339,6 +342,7 @@ export type BranchCreateInput = {
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateInput = {
@@ -364,6 +368,7 @@ export type BranchUncheckedCreateInput = {
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUpdateInput = {
@@ -389,6 +394,7 @@ export type BranchUpdateInput = {
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateInput = {
@@ -414,6 +420,7 @@ export type BranchUncheckedUpdateInput = {
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateManyInput = {
@@ -568,6 +575,22 @@ export type BranchUpdateOneWithoutUsersNestedInput = {
   delete?: Prisma.BranchWhereInput | boolean
   connect?: Prisma.BranchWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.BranchUpdateToOneWithWhereWithoutUsersInput, Prisma.BranchUpdateWithoutUsersInput>, Prisma.BranchUncheckedUpdateWithoutUsersInput>
+}
+
+export type BranchCreateNestedOneWithoutBillingSubscriptionLeasesInput = {
+  create?: Prisma.XOR<Prisma.BranchCreateWithoutBillingSubscriptionLeasesInput, Prisma.BranchUncheckedCreateWithoutBillingSubscriptionLeasesInput>
+  connectOrCreate?: Prisma.BranchCreateOrConnectWithoutBillingSubscriptionLeasesInput
+  connect?: Prisma.BranchWhereUniqueInput
+}
+
+export type BranchUpdateOneWithoutBillingSubscriptionLeasesNestedInput = {
+  create?: Prisma.XOR<Prisma.BranchCreateWithoutBillingSubscriptionLeasesInput, Prisma.BranchUncheckedCreateWithoutBillingSubscriptionLeasesInput>
+  connectOrCreate?: Prisma.BranchCreateOrConnectWithoutBillingSubscriptionLeasesInput
+  upsert?: Prisma.BranchUpsertWithoutBillingSubscriptionLeasesInput
+  disconnect?: Prisma.BranchWhereInput | boolean
+  delete?: Prisma.BranchWhereInput | boolean
+  connect?: Prisma.BranchWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BranchUpdateToOneWithWhereWithoutBillingSubscriptionLeasesInput, Prisma.BranchUpdateWithoutBillingSubscriptionLeasesInput>, Prisma.BranchUncheckedUpdateWithoutBillingSubscriptionLeasesInput>
 }
 
 export type BranchCreateNestedOneWithoutProductsInput = {
@@ -780,6 +803,7 @@ export type BranchCreateWithoutBusinessInput = {
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutBusinessInput = {
@@ -804,6 +828,7 @@ export type BranchUncheckedCreateWithoutBusinessInput = {
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutBusinessInput = {
@@ -869,6 +894,7 @@ export type BranchCreateWithoutUsersInput = {
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutUsersInput = {
@@ -893,6 +919,7 @@ export type BranchUncheckedCreateWithoutUsersInput = {
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutUsersInput = {
@@ -933,6 +960,7 @@ export type BranchUpdateWithoutUsersInput = {
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutUsersInput = {
@@ -945,6 +973,123 @@ export type BranchUncheckedUpdateWithoutUsersInput = {
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBranchNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBranchNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedUpdateManyWithoutBranchNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedUpdateManyWithoutBranchNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBranchNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBranchNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBranchNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBranchNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBranchNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBranchNestedInput
+  sale?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBranchNestedInput
+}
+
+export type BranchCreateWithoutBillingSubscriptionLeasesInput = {
+  id: string
+  name: string
+  address?: string | null
+  phone?: string | null
+  isActive?: boolean
+  isDefault?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  business: Prisma.BusinessCreateNestedOneWithoutBranchesInput
+  users?: Prisma.UserCreateNestedManyWithoutBranchInput
+  products?: Prisma.ProductCreateNestedManyWithoutBranchInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutBranchInput
+  employeeInvitations?: Prisma.EmployeeInvitationCreateNestedManyWithoutBranchInput
+  employeeCompensations?: Prisma.EmployeeCompensationCreateNestedManyWithoutBranchInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBranchInput
+  employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBranchInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBranchInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBranchInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBranchInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBranchInput
+  sale?: Prisma.SaleCreateNestedManyWithoutBranchInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutBranchInput
+}
+
+export type BranchUncheckedCreateWithoutBillingSubscriptionLeasesInput = {
+  id: string
+  businessId: string
+  name: string
+  address?: string | null
+  phone?: string | null
+  isActive?: boolean
+  isDefault?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBranchInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBranchInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBranchInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedCreateNestedManyWithoutBranchInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedCreateNestedManyWithoutBranchInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBranchInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBranchInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBranchInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBranchInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBranchInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBranchInput
+  sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBranchInput
+}
+
+export type BranchCreateOrConnectWithoutBillingSubscriptionLeasesInput = {
+  where: Prisma.BranchWhereUniqueInput
+  create: Prisma.XOR<Prisma.BranchCreateWithoutBillingSubscriptionLeasesInput, Prisma.BranchUncheckedCreateWithoutBillingSubscriptionLeasesInput>
+}
+
+export type BranchUpsertWithoutBillingSubscriptionLeasesInput = {
+  update: Prisma.XOR<Prisma.BranchUpdateWithoutBillingSubscriptionLeasesInput, Prisma.BranchUncheckedUpdateWithoutBillingSubscriptionLeasesInput>
+  create: Prisma.XOR<Prisma.BranchCreateWithoutBillingSubscriptionLeasesInput, Prisma.BranchUncheckedCreateWithoutBillingSubscriptionLeasesInput>
+  where?: Prisma.BranchWhereInput
+}
+
+export type BranchUpdateToOneWithWhereWithoutBillingSubscriptionLeasesInput = {
+  where?: Prisma.BranchWhereInput
+  data: Prisma.XOR<Prisma.BranchUpdateWithoutBillingSubscriptionLeasesInput, Prisma.BranchUncheckedUpdateWithoutBillingSubscriptionLeasesInput>
+}
+
+export type BranchUpdateWithoutBillingSubscriptionLeasesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  business?: Prisma.BusinessUpdateOneRequiredWithoutBranchesNestedInput
+  users?: Prisma.UserUpdateManyWithoutBranchNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBranchNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutBranchNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUpdateManyWithoutBranchNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUpdateManyWithoutBranchNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBranchNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBranchNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBranchNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBranchNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBranchNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBranchNestedInput
+  sale?: Prisma.SaleUpdateManyWithoutBranchNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutBranchNestedInput
+}
+
+export type BranchUncheckedUpdateWithoutBillingSubscriptionLeasesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutBranchNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBranchNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBranchNestedInput
   employeeInvitations?: Prisma.EmployeeInvitationUncheckedUpdateManyWithoutBranchNestedInput
@@ -981,6 +1126,7 @@ export type BranchCreateWithoutProductsInput = {
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutProductsInput = {
@@ -1005,6 +1151,7 @@ export type BranchUncheckedCreateWithoutProductsInput = {
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutProductsInput = {
@@ -1045,6 +1192,7 @@ export type BranchUpdateWithoutProductsInput = {
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutProductsInput = {
@@ -1069,6 +1217,7 @@ export type BranchUncheckedUpdateWithoutProductsInput = {
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutInventoriesInput = {
@@ -1093,6 +1242,7 @@ export type BranchCreateWithoutInventoriesInput = {
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutInventoriesInput = {
@@ -1117,6 +1267,7 @@ export type BranchUncheckedCreateWithoutInventoriesInput = {
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutInventoriesInput = {
@@ -1157,6 +1308,7 @@ export type BranchUpdateWithoutInventoriesInput = {
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutInventoriesInput = {
@@ -1181,6 +1333,7 @@ export type BranchUncheckedUpdateWithoutInventoriesInput = {
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutLedgerEntriesInput = {
@@ -1205,6 +1358,7 @@ export type BranchCreateWithoutLedgerEntriesInput = {
   alerts?: Prisma.AlertCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutLedgerEntriesInput = {
@@ -1229,6 +1383,7 @@ export type BranchUncheckedCreateWithoutLedgerEntriesInput = {
   alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutLedgerEntriesInput = {
@@ -1269,6 +1424,7 @@ export type BranchUpdateWithoutLedgerEntriesInput = {
   alerts?: Prisma.AlertUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutLedgerEntriesInput = {
@@ -1293,6 +1449,7 @@ export type BranchUncheckedUpdateWithoutLedgerEntriesInput = {
   alerts?: Prisma.AlertUncheckedUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutSaleInput = {
@@ -1317,6 +1474,7 @@ export type BranchCreateWithoutSaleInput = {
   alerts?: Prisma.AlertCreateNestedManyWithoutBranchInput
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutSaleInput = {
@@ -1341,6 +1499,7 @@ export type BranchUncheckedCreateWithoutSaleInput = {
   alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBranchInput
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutSaleInput = {
@@ -1381,6 +1540,7 @@ export type BranchUpdateWithoutSaleInput = {
   alerts?: Prisma.AlertUpdateManyWithoutBranchNestedInput
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutSaleInput = {
@@ -1405,6 +1565,7 @@ export type BranchUncheckedUpdateWithoutSaleInput = {
   alerts?: Prisma.AlertUncheckedUpdateManyWithoutBranchNestedInput
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutExpensesInput = {
@@ -1429,6 +1590,7 @@ export type BranchCreateWithoutExpensesInput = {
   alerts?: Prisma.AlertCreateNestedManyWithoutBranchInput
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutExpensesInput = {
@@ -1453,6 +1615,7 @@ export type BranchUncheckedCreateWithoutExpensesInput = {
   alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBranchInput
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutExpensesInput = {
@@ -1493,6 +1656,7 @@ export type BranchUpdateWithoutExpensesInput = {
   alerts?: Prisma.AlertUpdateManyWithoutBranchNestedInput
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutExpensesInput = {
@@ -1517,6 +1681,7 @@ export type BranchUncheckedUpdateWithoutExpensesInput = {
   alerts?: Prisma.AlertUncheckedUpdateManyWithoutBranchNestedInput
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutSnapshotsInput = {
@@ -1541,6 +1706,7 @@ export type BranchCreateWithoutSnapshotsInput = {
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutSnapshotsInput = {
@@ -1565,6 +1731,7 @@ export type BranchUncheckedCreateWithoutSnapshotsInput = {
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutSnapshotsInput = {
@@ -1605,6 +1772,7 @@ export type BranchUpdateWithoutSnapshotsInput = {
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutSnapshotsInput = {
@@ -1629,6 +1797,7 @@ export type BranchUncheckedUpdateWithoutSnapshotsInput = {
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutAlertsInput = {
@@ -1653,6 +1822,7 @@ export type BranchCreateWithoutAlertsInput = {
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutAlertsInput = {
@@ -1677,6 +1847,7 @@ export type BranchUncheckedCreateWithoutAlertsInput = {
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutAlertsInput = {
@@ -1717,6 +1888,7 @@ export type BranchUpdateWithoutAlertsInput = {
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutAlertsInput = {
@@ -1741,6 +1913,7 @@ export type BranchUncheckedUpdateWithoutAlertsInput = {
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutEmployeesInput = {
@@ -1765,6 +1938,7 @@ export type BranchCreateWithoutEmployeesInput = {
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutEmployeesInput = {
@@ -1789,6 +1963,7 @@ export type BranchUncheckedCreateWithoutEmployeesInput = {
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutEmployeesInput = {
@@ -1829,6 +2004,7 @@ export type BranchUpdateWithoutEmployeesInput = {
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutEmployeesInput = {
@@ -1853,6 +2029,7 @@ export type BranchUncheckedUpdateWithoutEmployeesInput = {
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutEmployeeInvitationsInput = {
@@ -1877,6 +2054,7 @@ export type BranchCreateWithoutEmployeeInvitationsInput = {
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutEmployeeInvitationsInput = {
@@ -1901,6 +2079,7 @@ export type BranchUncheckedCreateWithoutEmployeeInvitationsInput = {
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutEmployeeInvitationsInput = {
@@ -1941,6 +2120,7 @@ export type BranchUpdateWithoutEmployeeInvitationsInput = {
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutEmployeeInvitationsInput = {
@@ -1965,6 +2145,7 @@ export type BranchUncheckedUpdateWithoutEmployeeInvitationsInput = {
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutEmployeeCompensationsInput = {
@@ -1989,6 +2170,7 @@ export type BranchCreateWithoutEmployeeCompensationsInput = {
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutEmployeeCompensationsInput = {
@@ -2013,6 +2195,7 @@ export type BranchUncheckedCreateWithoutEmployeeCompensationsInput = {
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutEmployeeCompensationsInput = {
@@ -2053,6 +2236,7 @@ export type BranchUpdateWithoutEmployeeCompensationsInput = {
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutEmployeeCompensationsInput = {
@@ -2077,6 +2261,7 @@ export type BranchUncheckedUpdateWithoutEmployeeCompensationsInput = {
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutEmployeeCompensationHistoryInput = {
@@ -2101,6 +2286,7 @@ export type BranchCreateWithoutEmployeeCompensationHistoryInput = {
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutEmployeeCompensationHistoryInput = {
@@ -2125,6 +2311,7 @@ export type BranchUncheckedCreateWithoutEmployeeCompensationHistoryInput = {
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutEmployeeCompensationHistoryInput = {
@@ -2165,6 +2352,7 @@ export type BranchUpdateWithoutEmployeeCompensationHistoryInput = {
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutEmployeeCompensationHistoryInput = {
@@ -2189,6 +2377,7 @@ export type BranchUncheckedUpdateWithoutEmployeeCompensationHistoryInput = {
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutEmployeeRequestsInput = {
@@ -2213,6 +2402,7 @@ export type BranchCreateWithoutEmployeeRequestsInput = {
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutEmployeeRequestsInput = {
@@ -2237,6 +2427,7 @@ export type BranchUncheckedCreateWithoutEmployeeRequestsInput = {
   ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBranchInput
   sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBranchInput
   expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBranchInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutEmployeeRequestsInput = {
@@ -2277,6 +2468,7 @@ export type BranchUpdateWithoutEmployeeRequestsInput = {
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutEmployeeRequestsInput = {
@@ -2301,6 +2493,7 @@ export type BranchUncheckedUpdateWithoutEmployeeRequestsInput = {
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateManyBusinessInput = {
@@ -2336,6 +2529,7 @@ export type BranchUpdateWithoutBusinessInput = {
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutBusinessInput = {
@@ -2360,6 +2554,7 @@ export type BranchUncheckedUpdateWithoutBusinessInput = {
   ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBranchNestedInput
   sale?: Prisma.SaleUncheckedUpdateManyWithoutBranchNestedInput
   expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutBranchNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateManyWithoutBusinessInput = {
@@ -2392,6 +2587,7 @@ export type BranchCountOutputType = {
   ledgerEntries: number
   sale: number
   expenses: number
+  billingSubscriptionLeases: number
 }
 
 export type BranchCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2408,6 +2604,7 @@ export type BranchCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   ledgerEntries?: boolean | BranchCountOutputTypeCountLedgerEntriesArgs
   sale?: boolean | BranchCountOutputTypeCountSaleArgs
   expenses?: boolean | BranchCountOutputTypeCountExpensesArgs
+  billingSubscriptionLeases?: boolean | BranchCountOutputTypeCountBillingSubscriptionLeasesArgs
 }
 
 /**
@@ -2511,6 +2708,13 @@ export type BranchCountOutputTypeCountExpensesArgs<ExtArgs extends runtime.Types
   where?: Prisma.ExpenseWhereInput
 }
 
+/**
+ * BranchCountOutputType without action
+ */
+export type BranchCountOutputTypeCountBillingSubscriptionLeasesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BillingSubscriptionLeaseWhereInput
+}
+
 
 export type BranchSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2536,6 +2740,7 @@ export type BranchSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   ledgerEntries?: boolean | Prisma.Branch$ledgerEntriesArgs<ExtArgs>
   sale?: boolean | Prisma.Branch$saleArgs<ExtArgs>
   expenses?: boolean | Prisma.Branch$expensesArgs<ExtArgs>
+  billingSubscriptionLeases?: boolean | Prisma.Branch$billingSubscriptionLeasesArgs<ExtArgs>
   _count?: boolean | Prisma.BranchCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["branch"]>
 
@@ -2593,6 +2798,7 @@ export type BranchInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   ledgerEntries?: boolean | Prisma.Branch$ledgerEntriesArgs<ExtArgs>
   sale?: boolean | Prisma.Branch$saleArgs<ExtArgs>
   expenses?: boolean | Prisma.Branch$expensesArgs<ExtArgs>
+  billingSubscriptionLeases?: boolean | Prisma.Branch$billingSubscriptionLeasesArgs<ExtArgs>
   _count?: boolean | Prisma.BranchCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BranchIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2619,6 +2825,7 @@ export type $BranchPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     ledgerEntries: Prisma.$LedgerEntryPayload<ExtArgs>[]
     sale: Prisma.$SalePayload<ExtArgs>[]
     expenses: Prisma.$ExpensePayload<ExtArgs>[]
+    billingSubscriptionLeases: Prisma.$BillingSubscriptionLeasePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3038,6 +3245,7 @@ export interface Prisma__BranchClient<T, Null = never, ExtArgs extends runtime.T
   ledgerEntries<T extends Prisma.Branch$ledgerEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$ledgerEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LedgerEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sale<T extends Prisma.Branch$saleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$saleArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   expenses<T extends Prisma.Branch$expensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$expensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  billingSubscriptionLeases<T extends Prisma.Branch$billingSubscriptionLeasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$billingSubscriptionLeasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BillingSubscriptionLeasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3786,6 +3994,30 @@ export type Branch$expensesArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.ExpenseScalarFieldEnum | Prisma.ExpenseScalarFieldEnum[]
+}
+
+/**
+ * Branch.billingSubscriptionLeases
+ */
+export type Branch$billingSubscriptionLeasesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BillingSubscriptionLease
+   */
+  select?: Prisma.BillingSubscriptionLeaseSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BillingSubscriptionLease
+   */
+  omit?: Prisma.BillingSubscriptionLeaseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BillingSubscriptionLeaseInclude<ExtArgs> | null
+  where?: Prisma.BillingSubscriptionLeaseWhereInput
+  orderBy?: Prisma.BillingSubscriptionLeaseOrderByWithRelationInput | Prisma.BillingSubscriptionLeaseOrderByWithRelationInput[]
+  cursor?: Prisma.BillingSubscriptionLeaseWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BillingSubscriptionLeaseScalarFieldEnum | Prisma.BillingSubscriptionLeaseScalarFieldEnum[]
 }
 
 /**

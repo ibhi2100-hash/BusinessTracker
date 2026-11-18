@@ -28,7 +28,11 @@ export type Scope = (typeof Scope)[keyof typeof Scope]
 
 export const Role = {
   ADMIN: 'ADMIN',
-  STAFF: 'STAFF'
+  CEO: 'CEO',
+  MANAGER: 'MANAGER',
+  SALES_REPS: 'SALES_REPS',
+  STAFF: 'STAFF',
+  CLEANER: 'CLEANER'
 } as const
 
 export type Role = (typeof Role)[keyof typeof Role]
@@ -138,8 +142,11 @@ export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
 
 export const EmployeeRole = {
   ADMIN: 'ADMIN',
+  CEO: 'CEO',
   MANAGER: 'MANAGER',
-  STAFF: 'STAFF'
+  SALES_REPS: 'SALES_REPS',
+  STAFF: 'STAFF',
+  CLEANER: 'CLEANER'
 } as const
 
 export type EmployeeRole = (typeof EmployeeRole)[keyof typeof EmployeeRole]
@@ -183,3 +190,210 @@ export const InvitationDeliveryStatus = {
 } as const
 
 export type InvitationDeliveryStatus = (typeof InvitationDeliveryStatus)[keyof typeof InvitationDeliveryStatus]
+
+
+export const BillingPlanStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  RETIRED: 'RETIRED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type BillingPlanStatus = (typeof BillingPlanStatus)[keyof typeof BillingPlanStatus]
+
+
+export const BillingCycle = {
+  MONTHLY: 'MONTHLY',
+  QUARTERLY: 'QUARTERLY',
+  YEARLY: 'YEARLY',
+  LIFETIME: 'LIFETIME'
+} as const
+
+export type BillingCycle = (typeof BillingCycle)[keyof typeof BillingCycle]
+
+
+export const BillingSubscriptionStatus = {
+  PENDING: 'PENDING',
+  TRIALING: 'TRIALING',
+  ACTIVE: 'ACTIVE',
+  PAST_DUE: 'PAST_DUE',
+  GRACE_PERIOD: 'GRACE_PERIOD',
+  SUSPENDED: 'SUSPENDED',
+  CANCELLED: 'CANCELLED',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type BillingSubscriptionStatus = (typeof BillingSubscriptionStatus)[keyof typeof BillingSubscriptionStatus]
+
+
+export const BillingRequestType = {
+  NEW: 'NEW',
+  UPGRADE: 'UPGRADE',
+  DOWNGRADE: 'DOWNGRADE',
+  RENEWAL: 'RENEWAL'
+} as const
+
+export type BillingRequestType = (typeof BillingRequestType)[keyof typeof BillingRequestType]
+
+
+export const BillingRequestStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type BillingRequestStatus = (typeof BillingRequestStatus)[keyof typeof BillingRequestStatus]
+
+
+export const BillingEntitlementSource = {
+  PLAN: 'PLAN',
+  OVERRIDE: 'OVERRIDE'
+} as const
+
+export type BillingEntitlementSource = (typeof BillingEntitlementSource)[keyof typeof BillingEntitlementSource]
+
+
+export const BillingRecordStatus = {
+  ACTIVE: 'ACTIVE',
+  REVOKED: 'REVOKED',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type BillingRecordStatus = (typeof BillingRecordStatus)[keyof typeof BillingRecordStatus]
+
+
+export const BillingInvoiceStatus = {
+  DRAFT: 'DRAFT',
+  ISSUED: 'ISSUED',
+  PARTIALLY_PAID: 'PARTIALLY_PAID',
+  PAID: 'PAID',
+  OVERDUE: 'OVERDUE',
+  VOIDED: 'VOIDED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type BillingInvoiceStatus = (typeof BillingInvoiceStatus)[keyof typeof BillingInvoiceStatus]
+
+
+export const BillingPaymentStatus = {
+  INITIATED: 'INITIATED',
+  PENDING: 'PENDING',
+  CONFIRMED: 'CONFIRMED',
+  FAILED: 'FAILED',
+  REVERSED: 'REVERSED',
+  REFUNDED: 'REFUNDED',
+  PARTIALLY_REFUNDED: 'PARTIALLY_REFUNDED'
+} as const
+
+export type BillingPaymentStatus = (typeof BillingPaymentStatus)[keyof typeof BillingPaymentStatus]
+
+
+export const BillingPaymentAttemptStatus = {
+  INITIATED: 'INITIATED',
+  PENDING: 'PENDING',
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED',
+  ABANDONED: 'ABANDONED'
+} as const
+
+export type BillingPaymentAttemptStatus = (typeof BillingPaymentAttemptStatus)[keyof typeof BillingPaymentAttemptStatus]
+
+
+export const BillingPaymentMethod = {
+  CARD: 'CARD',
+  BANK_TRANSFER: 'BANK_TRANSFER',
+  USSD: 'USSD',
+  BANK: 'BANK',
+  MOBILE_MONEY: 'MOBILE_MONEY',
+  OTHER: 'OTHER'
+} as const
+
+export type BillingPaymentMethod = (typeof BillingPaymentMethod)[keyof typeof BillingPaymentMethod]
+
+
+export const BillingRefundStatus = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED',
+  REVERSED: 'REVERSED'
+} as const
+
+export type BillingRefundStatus = (typeof BillingRefundStatus)[keyof typeof BillingRefundStatus]
+
+
+export const BillingProvider = {
+  PAYSTACK: 'PAYSTACK',
+  FLUTTERWAVE: 'FLUTTERWAVE',
+  MANUAL: 'MANUAL'
+} as const
+
+export type BillingProvider = (typeof BillingProvider)[keyof typeof BillingProvider]
+
+
+export const BillingProviderOperationStatus = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  SUCCEEDED: 'SUCCEEDED',
+  FAILED: 'FAILED',
+  REQUIRES_RECONCILIATION: 'REQUIRES_RECONCILIATION'
+} as const
+
+export type BillingProviderOperationStatus = (typeof BillingProviderOperationStatus)[keyof typeof BillingProviderOperationStatus]
+
+
+export const BillingWebhookStatus = {
+  RECEIVED: 'RECEIVED',
+  PROCESSING: 'PROCESSING',
+  PROCESSED: 'PROCESSED',
+  FAILED: 'FAILED',
+  IGNORED: 'IGNORED'
+} as const
+
+export type BillingWebhookStatus = (typeof BillingWebhookStatus)[keyof typeof BillingWebhookStatus]
+
+
+export const BillingEventStatus = {
+  PENDING: 'PENDING',
+  PUBLISHED: 'PUBLISHED',
+  FAILED: 'FAILED'
+} as const
+
+export type BillingEventStatus = (typeof BillingEventStatus)[keyof typeof BillingEventStatus]
+
+
+export const BillingCommandStatus = {
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+} as const
+
+export type BillingCommandStatus = (typeof BillingCommandStatus)[keyof typeof BillingCommandStatus]
+
+
+export const BillingLeaseStatus = {
+  ACTIVE: 'ACTIVE',
+  EXPIRED: 'EXPIRED',
+  REVOKED: 'REVOKED'
+} as const
+
+export type BillingLeaseStatus = (typeof BillingLeaseStatus)[keyof typeof BillingLeaseStatus]
+
+
+export const BillingAuditAction = {
+  CREATED: 'CREATED',
+  UPDATED: 'UPDATED',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  SUSPENDED: 'SUSPENDED',
+  ACTIVATED: 'ACTIVATED',
+  CANCELLED: 'CANCELLED',
+  REVOKED: 'REVOKED',
+  REFUNDED: 'REFUNDED',
+  OVERRIDE_GRANTED: 'OVERRIDE_GRANTED',
+  OVERRIDE_REVOKED: 'OVERRIDE_REVOKED',
+  MANUAL_ADJUSTMENT: 'MANUAL_ADJUSTMENT'
+} as const
+
+export type BillingAuditAction = (typeof BillingAuditAction)[keyof typeof BillingAuditAction]

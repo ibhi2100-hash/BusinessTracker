@@ -1,7 +1,10 @@
 export type EmployeeRole =
     | "ADMIN"
+    | "CEO"
     | "MANAGER"
-    | "STAFF";
+    | "SALES_REPS"
+    | "STAFF"
+    | "CLEANER"
 
 export type EmploymentStatus =
     | "INVITED"

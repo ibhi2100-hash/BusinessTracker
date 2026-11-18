@@ -527,14 +527,6 @@ export type AggregateSumOrderByAggregateInput = {
   lastSnapshotVersion?: Prisma.SortOrder
 }
 
-export type NullableBigIntFieldUpdateOperationsInput = {
-  set?: bigint | number | null
-  increment?: bigint | number
-  decrement?: bigint | number
-  multiply?: bigint | number
-  divide?: bigint | number
-}
-
 export type NullableIntFieldUpdateOperationsInput = {
   set?: number | null
   increment?: number

@@ -492,7 +492,7 @@ export function ApplicationProvider({
 
                 const restoredSession =
                     await app.session.restore();
-
+                console.log("This is the user Being restore: ", restoredSession.user)
 
                 /*
                  * ----------------------------------------------------

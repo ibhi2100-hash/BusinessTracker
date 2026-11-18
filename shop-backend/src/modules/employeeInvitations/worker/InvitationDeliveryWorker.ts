@@ -39,11 +39,6 @@ export class InvitationDeliveryWorker {
 
       const now = new Date();
 
-      console.log(`${LOG_PREFIX} Looking for pending jobs`, {
-        batchSize: BATCH_SIZE,
-        now: now.toISOString(),
-      });
-
       const jobs = await prisma.invitationDelivery.findMany({
         where: {
           status: InvitationDeliveryStatus.PENDING,
@@ -55,35 +50,17 @@ export class InvitationDeliveryWorker {
         select: { id: true },
       });
 
-      console.log(`${LOG_PREFIX} Pending jobs found`, {
-        count: jobs.length,
-      });
-
       for (const job of jobs) {
         try {
           await this.processDelivery(job.id);
         } catch (error) {
           // One job must not prevent the rest of the batch
           // from being processed.
-          console.error(
-            `${LOG_PREFIX} Unexpected job-processing error`,
-            {
-              deliveryId: job.id,
-              error:
-                error instanceof Error
-                  ? error.message
-                  : String(error),
-            },
-          );
+    
         }
       }
     } catch (error) {
-      console.error(`${LOG_PREFIX} Polling cycle failed`, {
-        error:
-          error instanceof Error
-            ? error.message
-            : String(error),
-      });
+      
     } finally {
       this.running = false;
     }
@@ -94,10 +71,6 @@ export class InvitationDeliveryWorker {
       Date.now() -
         STALE_PROCESSING_MINUTES * 60 * 1000,
     );
-
-    console.log(`${LOG_PREFIX} Recovering stale jobs`, {
-      staleBefore: staleBefore.toISOString(),
-    });
 
     const result = await prisma.invitationDelivery.updateMany({
       where: {
@@ -133,13 +106,6 @@ export class InvitationDeliveryWorker {
       });
       return;
     }
-
-    console.log(`${LOG_PREFIX} Job claimed`, {
-      deliveryId: delivery.id,
-      invitationId: delivery.invitationId,
-      attempts: delivery.attempts,
-      maxAttempts: delivery.maxAttempts,
-    });
 
     try {
       await this.sendDelivery(delivery);

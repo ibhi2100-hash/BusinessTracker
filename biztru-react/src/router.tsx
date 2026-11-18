@@ -381,6 +381,19 @@ export function AppRouter() {
                   </AuthGuard>
                 }
               />
+              <Route
+                path="/owner/branches/:branchId/settings/team"
+                element={
+                  <AuthGuard
+                    roles={["CEO", "ADMIN", "MANAGER"]}
+                    permissions={["team:read"]}
+                    context={{ type: "BRANCH_OPERATIONS" }}
+                  >
+                    <TeamPage />
+                  </AuthGuard>
+                }
+              />
+
 
               <Route
                 path="/team"

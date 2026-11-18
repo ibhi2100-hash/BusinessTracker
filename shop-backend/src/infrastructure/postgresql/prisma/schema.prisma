@@ -22,7 +22,11 @@ enum Scope {
 
 enum Role {
   ADMIN
+  CEO
+  MANAGER
+  SALES_REPS
   STAFF
+  CLEANER
 }
 
 enum LedgerDirection {
@@ -99,8 +103,11 @@ enum PaymentMethod {
 
 enum EmployeeRole {
   ADMIN
+  CEO
   MANAGER
+  SALES_REPS
   STAFF
+  CLEANER
 }
 
 enum EmploymentStatus {

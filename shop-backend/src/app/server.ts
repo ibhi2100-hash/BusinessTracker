@@ -27,8 +27,6 @@ const FRONTEND_URL =
   process.env.FRONTEND_URL ?? "http://localhost:3000";
 
 async function startServer(): Promise<void> {
-  console.log("[SERVER] Starting BizTru backend...");
-
   const app = express();
   const server = http.createServer(app);
 
@@ -120,12 +118,8 @@ async function startServer(): Promise<void> {
   // Application composition
   // --------------------------------------------------
 
-  console.log("[SERVER] Booting BusinessComposer...");
-
   const businessComposer = new BusinessComposer();
   const sync = await businessComposer.boot();
-
-  console.log("[SERVER] BusinessComposer booted successfully");
 
   const invitationDeliveryWorker =
     new InvitationDeliveryWorker();
@@ -196,9 +190,6 @@ async function startServer(): Promise<void> {
 
     shuttingDown = true;
 
-    console.log(
-      `[SERVER] Received ${signal}; shutting down...`,
-    );
 
     if (projectionInterval) {
       clearInterval(projectionInterval);
@@ -228,8 +219,6 @@ async function startServer(): Promise<void> {
           }
         });
       });
-
-      console.log("[SERVER] Socket.IO and HTTP server closed");
     } catch (error) {
       console.error("[SERVER] Error closing HTTP server:", error);
     }
@@ -273,14 +262,6 @@ async function startServer(): Promise<void> {
 
     server.listen(PORT, "0.0.0.0");
   });
-
-  console.log(
-    `[SERVER] BizTru backend listening at http://localhost:${PORT}`,
-  );
-
-  console.log(
-    `[SERVER] Frontend origin configured as ${FRONTEND_URL}`,
-  );
 
   // --------------------------------------------------
   // Start background processing

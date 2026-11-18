@@ -1,4 +1,4 @@
-export type EmployeeRole = "ADMIN" | "MANAGER" | "STAFF";
+export type EmployeeRole = "ADMIN" | "CEO" | "MANAGER" | "SALES_REPS" | "STAFF" | "CLEANER";
 export type EmploymentStatus = "INVITED" | "ACTIVE" | "SUSPENDED" | "REMOVED";
 export type EmployeeInvitationStatus = "PENDING" | "ACCEPTED" | "EXPIRED" | "REVOKED";
 export type EmployeeRequestType = "LEAVE" | "EXPENSE" | "PURCHASE" | "STOCK_ADJUSTMENT" | "SHIFT_CHANGE" | "ACCESS" | "OTHER";
