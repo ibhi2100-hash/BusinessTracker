@@ -13,14 +13,7 @@ export function PricingHero() {
         Pricing
       </p>
 
-      <h1
-        className="
-        mt-3
-        text-4xl
-        md:text-6xl
-        font-bold
-        "
-      >
+      <h1 className="mt-3 text-4xl md:text-6xl font-bold">
         Simple pricing for
         <br />
         serious businesses

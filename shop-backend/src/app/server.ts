@@ -9,7 +9,6 @@ import { Server } from "socket.io";
 
 import employeeInvitationRouter from "../routes/employee-invitation.route.js";
 import authRoutes from "../routes/auth.route.js";
-import subscriptionRoute from "../routes/subscription.route.js";
 
 import { BusinessComposer } from "../Composer/BusinessComposer.js";
 
@@ -129,7 +128,6 @@ async function startServer(): Promise<void> {
   // --------------------------------------------------
 
   app.use("/auth", authRoutes);
-  app.use("/subscription", subscriptionRoute);
   app.use("/sync", sync.router);
 
   app.use(
