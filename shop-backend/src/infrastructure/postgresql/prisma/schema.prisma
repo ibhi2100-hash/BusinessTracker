@@ -288,6 +288,66 @@ enum BillingAuditAction {
   MANUAL_ADJUSTMENT
 }
 
+
+
+
+enum PlatformUserStatus {
+  INVITED
+  ACTIVE
+  SUSPENDED
+  DISABLED
+}
+
+enum SupportTicketStatus {
+  OPEN
+  IN_PROGRESS
+  WAITING_FOR_CUSTOMER
+  ESCALATED
+  RESOLVED
+  CLOSED
+}
+
+enum SupportPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum SupportMessageVisibility {
+  CUSTOMER
+  INTERNAL
+}
+
+enum SupportAccessStatus {
+  REQUESTED
+  APPROVED
+  DENIED
+  ACTIVE
+  EXPIRED
+  REVOKED
+}
+
+enum SupportAccessMode {
+  READ_ONLY
+  ASSISTED
+}
+
+enum PlatformIncidentStatus {
+  INVESTIGATING
+  IDENTIFIED
+  MONITORING
+  RESOLVED
+}
+
+enum PlatformIncidentSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+
 /////**** MODELS ****/////
 
 model Business {
@@ -310,6 +370,7 @@ model Business {
   owner User? @relation("BusinessOwner", fields: [userId], references: [id])
 
   branches      Branch[]
+  events        Event[]
   users         User[]
   products      Product[]
   inventories   Inventory[]
@@ -342,6 +403,9 @@ billingSubscriptionLeases  BillingSubscriptionLease[]
 
 billingEvents              BillingEvent[]
 billingAuditLogs           BillingAuditLog[]
+supportTicket              SupportTicket[]
+platformTenantsProjection  PlatformTenantProjection[]
+deviceSyncCheckpoints      DeviceSyncCheckpoint[]
 
   @@index([userId])
 }
@@ -1362,6 +1426,8 @@ model Event {
 
   ledgerEntries LedgerEntry[]
 
+  business    Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
   @@unique([aggregateType, aggregateId, aggregateVersion])
 
   @@index([businessId])
@@ -1930,7 +1996,676 @@ model DeviceSyncCheckpoint {
   createdAt               DateTime @default(now())
   updatedAt               DateTime @updatedAt
 
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
   @@id([businessId, deviceId])
   @@index([businessId, lastAcknowledgedPosition])
   @@index([deviceId])
 }
+
+
+
+
+
+
+
+
+
+
+
+model PlatformUser {
+  id           String @id @default(uuid())
+
+  name         String
+  email        String @unique
+  passwordHash String
+
+  status PlatformUserStatus @default(INVITED)
+
+  emailVerifiedAt DateTime?
+  lastLoginAt     DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  roles       PlatformUserRole[]
+  sessions    PlatformSession[]
+  invitationsSent PlatformInvitation[]
+
+  auditLogs PlatformAuditLog[]
+
+  assignedSupportTickets SupportTicket[]
+  supportMessages        SupportMessage[]
+  supportEvents          SupportTicketEvent[]
+
+  requestedAccessGrants SupportAccessGrant[] @relation("SupportAccessRequester")
+  approvedAccessGrants  SupportAccessGrant[] @relation("SupportAccessApprover")
+
+  updatedSettings PlatformSetting[]
+  createdFeatureFlags PlatformFeatureFlag[]
+
+  incidentsCreated PlatformIncident[]
+
+  platformCredentials PlatformMfaCredential[]
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model PlatformRole {
+  id          String @id @default(uuid())
+
+  code        String @unique
+  name        String
+  description String?
+
+  isSystem Boolean @default(false)
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users       PlatformUserRole[]
+  permissions PlatformRolePermission[]
+
+  @@index([isActive])
+}
+
+model PlatformPermission {
+  id          String @id @default(uuid())
+
+  code        String @unique
+  name        String
+  description String?
+
+  module String
+
+  createdAt DateTime @default(now())
+
+  roles PlatformRolePermission[]
+
+  @@index([module])
+}
+
+model PlatformUserRole {
+  id String @id @default(uuid())
+
+  platformUserId String
+  platformRoleId String
+
+  assignedBy String?
+  assignedAt DateTime @default(now())
+  expiresAt DateTime?
+
+  user PlatformUser @relation(fields: [platformUserId], references: [id], onDelete: Cascade)
+
+  role PlatformRole @relation(fields: [platformRoleId], references: [id], onDelete: Restrict )
+
+  @@unique([platformUserId, platformRoleId])
+  @@index([platformRoleId])
+  @@index([expiresAt])
+}
+
+model PlatformRolePermission {
+  id String @id @default(uuid())
+
+  platformRoleId String
+  permissionId String
+
+  grantedAt DateTime @default(now())
+
+  role PlatformRole @relation( fields: [platformRoleId], references: [id], onDelete: Cascade)
+
+  permission PlatformPermission @relation( fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([platformRoleId, permissionId])
+  @@index([permissionId])
+}
+
+model PlatformSession {
+  id String @id @default(uuid())
+
+  platformUserId String
+
+  refreshTokenHash String @unique
+
+  ipAddress String?
+  userAgent String?
+  deviceName String?
+
+  lastUsedAt DateTime @default(now())
+
+  expiresAt DateTime
+  revokedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  user PlatformUser @relation( fields: [platformUserId], references: [id], onDelete: Cascade)
+
+  @@index([platformUserId])
+  @@index([expiresAt])
+  @@index([revokedAt])
+}
+
+model PlatformInvitation {
+  id String @id @default(uuid())
+
+  email String
+  name String?
+
+  tokenHash String @unique
+
+  invitedByPlatformUserId String
+
+  expiresAt DateTime
+  acceptedAt DateTime?
+  revokedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  invitedBy PlatformUser @relation(fields: [invitedByPlatformUserId], references: [id], onDelete: Restrict)
+
+  @@index([email])
+  @@index([expiresAt])
+}
+
+
+
+model PlatformAuditLog {
+  id String @id @default(uuid())
+
+  actorPlatformUserId String?
+
+  action String
+
+  resourceType String
+  resourceId   String?
+
+  targetBusinessId String?
+
+  reason String?
+
+  beforeData Json?
+  afterData  Json?
+  metadata   Json?
+
+  ipAddress String?
+  userAgent String?
+
+  correlationId String?
+
+  createdAt DateTime @default(now())
+
+  actor PlatformUser? @relation( fields: [actorPlatformUserId], references: [id], onDelete: SetNull )
+
+  @@index([actorPlatformUserId, createdAt])
+  @@index([targetBusinessId, createdAt])
+  @@index([resourceType, resourceId])
+  @@index([action, createdAt])
+  @@index([correlationId])
+  @@index([createdAt])
+}
+
+
+model SupportTicket {
+  id String @id @default(uuid())
+
+  businessId String
+
+  createdByTenantUserId String?
+  assignedPlatformUserId String?
+
+  ticketNumber String
+
+  subject String
+  description String
+
+  category String
+
+  priority SupportPriority @default(NORMAL)
+  status SupportTicketStatus @default(OPEN)
+
+  firstResponseAt DateTime?
+  resolvedAt DateTime?
+  closedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  messages SupportMessage[]
+  attachments SupportAttachment[]
+  events SupportTicketEvent[]
+
+  business Business @relation( fields: [businessId], references: [id], onDelete: Restrict)
+
+  assignedTo PlatformUser? @relation( fields: [assignedPlatformUserId], references: [id], onDelete: SetNull)
+
+  @@unique([businessId, ticketNumber])
+  @@index([businessId, status])
+  @@index([assignedPlatformUserId, status])
+  @@index([priority, status])
+  @@index([createdAt])
+}
+
+model SupportMessage {
+  id String @id @default(uuid())
+
+  ticketId String
+
+  platformUserId String?
+  tenantUserId String?
+
+  visibility SupportMessageVisibility @default(CUSTOMER)
+
+  message String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  ticket SupportTicket @relation( fields: [ticketId], references: [id], onDelete: Cascade)
+
+  platformUser PlatformUser? @relation( fields: [platformUserId], references: [id], onDelete: SetNull )
+
+  @@index([ticketId, createdAt])
+  @@index([platformUserId])
+}
+
+model SupportAttachment {
+  id String @id @default(uuid())
+
+  ticketId String
+
+  messageId String?
+
+  fileName String
+  mimeType String
+  fileSize BigInt
+
+  storageKey String
+
+  uploadedAt DateTime @default(now())
+
+  ticket SupportTicket @relation( fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@index([ticketId])
+  @@index([messageId])
+}
+
+model SupportTicketEvent {
+  id String @id @default(uuid())
+
+  ticketId String
+
+  actorPlatformUserId String?
+
+  eventType String
+
+  previousStatus SupportTicketStatus?
+  newStatus SupportTicketStatus?
+
+  metadata Json?
+
+  createdAt DateTime @default(now())
+
+  ticket SupportTicket @relation( fields: [ticketId], references: [id], onDelete: Cascade)
+
+  actor PlatformUser? @relation( fields: [actorPlatformUserId],references: [id], onDelete: SetNull)
+
+  @@index([ticketId, createdAt])
+  @@index([actorPlatformUserId])
+}
+
+
+
+
+model SupportAccessGrant {
+  id String @id @default(uuid())
+
+  businessId String
+
+  requestedByPlatformUserId String
+  approvedByPlatformUserId String?
+
+  status SupportAccessStatus @default(REQUESTED)
+  mode SupportAccessMode @default(READ_ONLY)
+
+  reason String
+
+  approvedAt DateTime?
+  startsAt DateTime?
+  expiresAt DateTime?
+
+  revokedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  requester PlatformUser @relation("SupportAccessRequester", fields: [requestedByPlatformUserId], references: [id], onDelete: Restrict)
+
+  approver PlatformUser? @relation( "SupportAccessApprover", fields: [approvedByPlatformUserId], references: [id], onDelete: Restrict)
+
+  @@index([businessId, status])
+  @@index([expiresAt])
+}
+
+
+
+
+model PlatformTenantProjection {
+  id String @id @default(uuid())
+
+  businessId String @unique
+
+  businessName String
+  businessStatus BusinessStatus
+
+  registeredAt DateTime
+  activatedAt DateTime?
+
+  totalBranches Int @default(0)
+  activeBranches Int @default(0)
+
+  totalEmployees Int @default(0)
+  activeEmployees Int @default(0)
+
+  totalProducts Int @default(0)
+
+  totalSubscriptions Int @default(0)
+  activeSubscriptions Int @default(0)
+
+  currentPlanId String?
+  currentPlanVersion Int?
+
+  currentSubscriptionStatus BillingSubscriptionStatus?
+
+  currency String @default("NGN")
+  recurringAmountMinor BigInt @default(0)
+
+  lastActivityAt DateTime?
+  lastSyncAt DateTime?
+
+  updatedAt DateTime @updatedAt
+
+  business Business @relation( fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@index([businessStatus, registeredAt])
+  @@index([currentSubscriptionStatus])
+  @@index([registeredAt])
+  @@index([recurringAmountMinor])
+}
+
+
+
+model PlatformDailyMetric {
+  id String @id @default(uuid())
+
+  metricDate DateTime @db.Date
+
+  metricKey String
+
+  dimensionKey String @default("ALL")
+  dimensionValue String @default("ALL")
+
+  currency String @default("NGN")
+
+  value Decimal @db.Decimal(24, 6)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([ metricDate,metricKey, dimensionKey,dimensionValue,currency ])
+
+  @@index([metricKey, metricDate])
+  @@index([dimensionKey, dimensionValue, metricDate])
+}
+
+
+
+model PlatformRevenueDaily {
+  id String @id @default(uuid())
+
+  metricDate DateTime @db.Date
+
+  currency String @default("NGN")
+
+  grossCollectedMinor BigInt @default(0)
+  refundsMinor BigInt @default(0)
+  netCollectedMinor BigInt @default(0)
+
+  providerFeesMinor BigInt @default(0)
+
+  invoicesIssuedMinor BigInt @default(0)
+  outstandingMinor BigInt @default(0)
+
+  recurringRevenueMinor BigInt @default(0)
+
+  successfulPayments Int @default(0)
+  failedPayments Int @default(0)
+
+  payingBusinesses Int @default(0)
+
+  updatedAt DateTime @updatedAt
+
+  @@unique([metricDate, currency])
+  @@index([currency, metricDate])
+}
+
+
+
+model PlatformProjectionCheckpoint {
+  id String @id @default(uuid())
+
+  consumerName String @unique
+
+  lastProcessedPosition BigInt @default(0)
+  lastProcessedEventId String?
+
+  lastProcessedAt DateTime?
+
+  updatedAt DateTime @updatedAt
+}
+
+
+model PlatformProcessedEvent {
+  id String @id @default(uuid())
+
+  consumerName String
+  eventId String
+
+  processedAt DateTime @default(now())
+
+  @@unique([consumerName, eventId])
+  @@index([processedAt])
+}
+
+
+
+model BillingEntitlementDefinition {
+  id String @id @default(uuid())
+
+  key String @unique
+
+  name String
+  description String?
+
+  category String
+
+  valueType String
+
+  defaultValue Json?
+  validationSchema Json?
+
+  isLimit Boolean @default(false)
+  isFeature Boolean @default(true)
+
+  isActive Boolean @default(true)
+
+  displayOrder Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([category, isActive])
+  @@index([displayOrder])
+}
+
+
+
+model PlatformSetting {
+  id String @id @default(uuid())
+
+  key String @unique
+
+  value Json
+
+  description String?
+
+  updatedByPlatformUserId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  updatedBy PlatformUser? @relation( fields: [updatedByPlatformUserId], references: [id], onDelete: SetNull)
+
+  @@index([updatedAt])
+}
+
+model PlatformFeatureFlag {
+  id String @id @default(uuid())
+
+  key String @unique
+
+  name String
+  description String?
+
+  enabled Boolean @default(false)
+
+  rolloutPercentage Int @default(0)
+
+  createdByPlatformUserId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  createdBy PlatformUser? @relation( fields: [createdByPlatformUserId], references: [id], onDelete: SetNull)
+
+  overrides PlatformFeatureFlagOverride[]
+}
+
+model PlatformFeatureFlagOverride {
+  id String @id @default(uuid())
+
+  featureFlagId String
+
+  businessId String
+
+  enabled Boolean
+
+  reason String?
+
+  expiresAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  featureFlag PlatformFeatureFlag @relation(fields: [featureFlagId], references: [id], onDelete: Cascade)
+
+  @@unique([featureFlagId, businessId])
+  @@index([businessId])
+  @@index([expiresAt])
+}
+
+
+
+model PlatformIncident {
+  id String @id @default(uuid())
+
+  title String
+  description String?
+
+  severity PlatformIncidentSeverity
+  status PlatformIncidentStatus @default(INVESTIGATING)
+
+  affectedService String?
+
+  startedAt DateTime @default(now())
+  identifiedAt DateTime?
+  resolvedAt DateTime?
+
+  createdByPlatformUserId String?
+
+  metadata Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  createdBy PlatformUser? @relation( fields: [createdByPlatformUserId], references: [id], onDelete: SetNull)
+
+  @@index([status, severity])
+  @@index([startedAt])
+}
+
+model PlatformJobExecution {
+  id String @id @default(uuid())
+
+  jobName String
+
+  executionId String @unique
+
+  status String
+
+  startedAt DateTime
+  completedAt DateTime?
+
+  durationMs Int?
+
+  attempts Int @default(1)
+
+  error String?
+
+  metadata Json?
+
+  createdAt DateTime @default(now())
+
+  @@index([jobName, startedAt])
+  @@index([status, startedAt])
+}
+
+
+
+model PlatformMfaCredential {
+  id String @id @default(uuid())
+
+  platformUserId String
+
+  method String
+
+  secretEncrypted String?
+
+  enabledAt DateTime?
+  lastUsedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user PlatformUser @relation( fields: [platformUserId], references: [id], onDelete: Cascade)
+
+  @@index([platformUserId])
+}
+
+model PlatformLoginAttempt {
+  id String @id @default(uuid())
+
+  email String
+
+  ipAddress String?
+  userAgent String?
+
+  successful Boolean
+
+  failureReason String?
+
+  attemptedAt DateTime @default(now())
+
+  @@index([email, attemptedAt])
+  @@index([ipAddress, attemptedAt])
+  @@index([successful, attemptedAt])
+}
+

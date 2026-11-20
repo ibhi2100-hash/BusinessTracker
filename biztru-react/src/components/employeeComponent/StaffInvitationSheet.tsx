@@ -32,6 +32,8 @@ import {
 ================================================================ */
 
 export type StaffRole =
+  | "ADMIN"
+  | "CEO"
   | "STAFF"
   | "MANAGER"
   | "CLEANER"
@@ -84,7 +86,7 @@ const ROLE_POLICY: Record<InviterRole, readonly StaffRole[]> = {
 };
 
 const ROLE_DETAILS: Record<
-  StaffRole,
+  Exclude<StaffRole, "ADMIN" | "CEO">,
   {
     title: string;
     description: string;
@@ -178,7 +180,7 @@ export default function StaffInvitationSheet({
       fullName: "",
       phone: "",
       email: "",
-      role: defaultRole,
+      role: defaultRole as FormState["role"],
       branchId: "",
     },
   });
@@ -224,7 +226,7 @@ export default function StaffInvitationSheet({
       fullName: "",
       phone: "",
       email: "",
-      role: defaultRole,
+      role: defaultRole as FormState["role"],
       branchId: branches.length === 1 ? branches[0].id : "",
     });
 
@@ -241,7 +243,7 @@ export default function StaffInvitationSheet({
     const currentRole = getValues("role") as StaffRole;
 
     if (!visibleRoles.includes(currentRole)) {
-      setValue("role", defaultRole, {
+      setValue("role", defaultRole as FormState["role"], {
         shouldValidate: true,
         shouldDirty: true,
       });
@@ -513,14 +515,21 @@ export default function StaffInvitationSheet({
             <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
               <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-teal-500/10 text-teal-300">
                 {(() => {
-                  const Icon = ROLE_DETAILS[visibleRoles[0]].icon;
+                  const Icon =
+                    ROLE_DETAILS[
+                      visibleRoles[0] as Exclude<StaffRole, "ADMIN" | "CEO">
+                    ].icon;
                   return <Icon size={20} />;
                 })()}
               </div>
 
               <div>
                 <p className="text-sm font-semibold text-white">
-                  {ROLE_DETAILS[visibleRoles[0]].title}
+                  {
+                    ROLE_DETAILS[
+                      visibleRoles[0] as Exclude<StaffRole, "ADMIN" | "CEO">
+                    ].title
+                  }
                 </p>
 
                 <p className="mt-1 text-xs text-gray-500">
@@ -537,7 +546,7 @@ export default function StaffInvitationSheet({
                   selected={selectedRole === role}
                   disabled={busy}
                   onSelect={(selectedRole) => {
-                    setValue("role", selectedRole, {
+                    setValue("role", selectedRole as FormState["role"], {
                       shouldDirty: true,
                       shouldValidate: true,
                     });
@@ -624,7 +633,11 @@ export default function StaffInvitationSheet({
             </p>
 
             <p className="mt-1 text-xs text-gray-500">
-              {ROLE_DETAILS[selectedRole].title}
+              {
+                ROLE_DETAILS[
+                  selectedRole as Exclude<StaffRole, "ADMIN" | "CEO">
+                ].title
+              }
               {" • "}
               {selectedBranch.name}
             </p>
@@ -676,7 +689,8 @@ function RoleCard({
   disabled,
   onSelect,
 }: RoleCardProps) {
-  const details = ROLE_DETAILS[role];
+  const details =
+    ROLE_DETAILS[role as Exclude<StaffRole, "ADMIN" | "CEO">];
   const Icon = details.icon;
 
   const isManager = role === "MANAGER";

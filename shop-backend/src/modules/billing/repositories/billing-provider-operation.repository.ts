@@ -26,11 +26,17 @@ export class BillingProviderOperationRepository {
   }
 
   async findByIdempotencyKey(
+    accountId: string,
     idempotencyKey: string,
     tx: DbClient
   ) {
     return tx.billingProviderOperation.findUnique({
-      where: { idempotencyKey },
+      where: {
+        accountId_idempotencyKey: {
+            accountId,
+            idempotencyKey,
+        }
+      }
     });
   }
 
@@ -58,19 +64,24 @@ export class BillingProviderOperationRepository {
   async markSucceeded(
     id: string,
     responsePayload: Prisma.InputJsonValue,
+    tx: DbClient,
     providerReference?: string,
-    tx: DbClient
+
   ) {
-    return tx.billingProviderOperation.update({
-      where: { id },
-      data: {
+    const updateData: Prisma.BillingProviderOperationUpdateInput = {
         status: BillingProviderOperationStatus.SUCCEEDED,
         responsePayload,
-        providerReference,
         completedAt: new Date(),
-        lastError: null,
-      },
-    });
+        lastError: null
+    };
+    if(providerReference !== undefined){
+        updateData.providerReference = providerReference
+    };
+
+    return tx.billingProviderOperation.update({
+        where: {id},
+        data: updateData
+    })
   }
 
   async markFailed(

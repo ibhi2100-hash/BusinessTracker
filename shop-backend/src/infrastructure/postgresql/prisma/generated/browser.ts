@@ -262,3 +262,133 @@ export type InvitationDelivery = Prisma.InvitationDeliveryModel
  * 
  */
 export type DeviceSyncCheckpoint = Prisma.DeviceSyncCheckpointModel
+/**
+ * Model PlatformUser
+ * 
+ */
+export type PlatformUser = Prisma.PlatformUserModel
+/**
+ * Model PlatformRole
+ * 
+ */
+export type PlatformRole = Prisma.PlatformRoleModel
+/**
+ * Model PlatformPermission
+ * 
+ */
+export type PlatformPermission = Prisma.PlatformPermissionModel
+/**
+ * Model PlatformUserRole
+ * 
+ */
+export type PlatformUserRole = Prisma.PlatformUserRoleModel
+/**
+ * Model PlatformRolePermission
+ * 
+ */
+export type PlatformRolePermission = Prisma.PlatformRolePermissionModel
+/**
+ * Model PlatformSession
+ * 
+ */
+export type PlatformSession = Prisma.PlatformSessionModel
+/**
+ * Model PlatformInvitation
+ * 
+ */
+export type PlatformInvitation = Prisma.PlatformInvitationModel
+/**
+ * Model PlatformAuditLog
+ * 
+ */
+export type PlatformAuditLog = Prisma.PlatformAuditLogModel
+/**
+ * Model SupportTicket
+ * 
+ */
+export type SupportTicket = Prisma.SupportTicketModel
+/**
+ * Model SupportMessage
+ * 
+ */
+export type SupportMessage = Prisma.SupportMessageModel
+/**
+ * Model SupportAttachment
+ * 
+ */
+export type SupportAttachment = Prisma.SupportAttachmentModel
+/**
+ * Model SupportTicketEvent
+ * 
+ */
+export type SupportTicketEvent = Prisma.SupportTicketEventModel
+/**
+ * Model SupportAccessGrant
+ * 
+ */
+export type SupportAccessGrant = Prisma.SupportAccessGrantModel
+/**
+ * Model PlatformTenantProjection
+ * 
+ */
+export type PlatformTenantProjection = Prisma.PlatformTenantProjectionModel
+/**
+ * Model PlatformDailyMetric
+ * 
+ */
+export type PlatformDailyMetric = Prisma.PlatformDailyMetricModel
+/**
+ * Model PlatformRevenueDaily
+ * 
+ */
+export type PlatformRevenueDaily = Prisma.PlatformRevenueDailyModel
+/**
+ * Model PlatformProjectionCheckpoint
+ * 
+ */
+export type PlatformProjectionCheckpoint = Prisma.PlatformProjectionCheckpointModel
+/**
+ * Model PlatformProcessedEvent
+ * 
+ */
+export type PlatformProcessedEvent = Prisma.PlatformProcessedEventModel
+/**
+ * Model BillingEntitlementDefinition
+ * 
+ */
+export type BillingEntitlementDefinition = Prisma.BillingEntitlementDefinitionModel
+/**
+ * Model PlatformSetting
+ * 
+ */
+export type PlatformSetting = Prisma.PlatformSettingModel
+/**
+ * Model PlatformFeatureFlag
+ * 
+ */
+export type PlatformFeatureFlag = Prisma.PlatformFeatureFlagModel
+/**
+ * Model PlatformFeatureFlagOverride
+ * 
+ */
+export type PlatformFeatureFlagOverride = Prisma.PlatformFeatureFlagOverrideModel
+/**
+ * Model PlatformIncident
+ * 
+ */
+export type PlatformIncident = Prisma.PlatformIncidentModel
+/**
+ * Model PlatformJobExecution
+ * 
+ */
+export type PlatformJobExecution = Prisma.PlatformJobExecutionModel
+/**
+ * Model PlatformMfaCredential
+ * 
+ */
+export type PlatformMfaCredential = Prisma.PlatformMfaCredentialModel
+/**
+ * Model PlatformLoginAttempt
+ * 
+ */
+export type PlatformLoginAttempt = Prisma.PlatformLoginAttemptModel

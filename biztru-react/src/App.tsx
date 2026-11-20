@@ -1,39 +1,46 @@
+
+// src/App.tsx
+
 import { Toaster } from "sonner";
 import { BrowserRouter } from "react-router-dom";
 
 import { Providers } from "./providers";
-import { ApplicationProvider } from "./Biztru/services/ApplicationService/ApplicationProvider";
-import { BusinessProvider } from "./Biztru/context/BusinessContext";
+
+import { PlatformSessionContext } from "./Biztru/services/PlatformSessionContext"; 
+
 import { ServiceWorkerRegistration } from "./components/serviceWorker";
-import { AppRouter } from "./router";
-import { NavigationPersistence } from "./pages/NavigationPersistence";
+
+import { RootRouter } from "./router/router";
 
 function App() {
-    return (
-        <Providers>
+  return (
+    <Providers>
 
-            <BrowserRouter>
+      <BrowserRouter>
 
-                <ApplicationProvider>
+        {/* Platform identity is available to both planes */}
 
-                    <BusinessProvider>
-                            <NavigationPersistence />
-                            <ServiceWorkerRegistration />
+          {/* Global application services */}
 
-                            <AppRouter />
-                        <Toaster
-                            richColors
-                            position="top-right"
-                        />
+          <ServiceWorkerRegistration />
 
-                    </BusinessProvider>
+          {/* Selects the correct application plane */}
 
-                </ApplicationProvider>
+          <RootRouter />
 
-            </BrowserRouter>
+          {/* Global notifications */}
 
-        </Providers>
-    );
+          <Toaster
+            richColors
+            position="top-right"
+          />
+
+        
+
+      </BrowserRouter>
+
+    </Providers>
+  );
 }
 
 export default App;

@@ -251,6 +251,8 @@ export type BusinessWhereInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseListRelationFilter
   billingEvents?: Prisma.BillingEventListRelationFilter
   billingAuditLogs?: Prisma.BillingAuditLogListRelationFilter
+  supportTicket?: Prisma.SupportTicketListRelationFilter
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionListRelationFilter
 }
 
 export type BusinessOrderByWithRelationInput = {
@@ -293,6 +295,8 @@ export type BusinessOrderByWithRelationInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseOrderByRelationAggregateInput
   billingEvents?: Prisma.BillingEventOrderByRelationAggregateInput
   billingAuditLogs?: Prisma.BillingAuditLogOrderByRelationAggregateInput
+  supportTicket?: Prisma.SupportTicketOrderByRelationAggregateInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionOrderByRelationAggregateInput
 }
 
 export type BusinessWhereUniqueInput = Prisma.AtLeast<{
@@ -338,6 +342,8 @@ export type BusinessWhereUniqueInput = Prisma.AtLeast<{
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseListRelationFilter
   billingEvents?: Prisma.BillingEventListRelationFilter
   billingAuditLogs?: Prisma.BillingAuditLogListRelationFilter
+  supportTicket?: Prisma.SupportTicketListRelationFilter
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionListRelationFilter
 }, "id">
 
 export type BusinessOrderByWithAggregationInput = {
@@ -411,6 +417,8 @@ export type BusinessCreateInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateInput = {
@@ -452,6 +460,8 @@ export type BusinessUncheckedCreateInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUpdateInput = {
@@ -493,6 +503,8 @@ export type BusinessUpdateInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateInput = {
@@ -534,6 +546,8 @@ export type BusinessUncheckedUpdateInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateManyInput = {
@@ -1097,6 +1111,34 @@ export type BusinessUpdateOneRequiredWithoutEmployeeNotificationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutEmployeeNotificationsInput, Prisma.BusinessUpdateWithoutEmployeeNotificationsInput>, Prisma.BusinessUncheckedUpdateWithoutEmployeeNotificationsInput>
 }
 
+export type BusinessCreateNestedOneWithoutSupportTicketInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutSupportTicketInput, Prisma.BusinessUncheckedCreateWithoutSupportTicketInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutSupportTicketInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutSupportTicketNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutSupportTicketInput, Prisma.BusinessUncheckedCreateWithoutSupportTicketInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutSupportTicketInput
+  upsert?: Prisma.BusinessUpsertWithoutSupportTicketInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutSupportTicketInput, Prisma.BusinessUpdateWithoutSupportTicketInput>, Prisma.BusinessUncheckedUpdateWithoutSupportTicketInput>
+}
+
+export type BusinessCreateNestedOneWithoutPlatformTenantsProjectionInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutPlatformTenantsProjectionInput, Prisma.BusinessUncheckedCreateWithoutPlatformTenantsProjectionInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutPlatformTenantsProjectionInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutPlatformTenantsProjectionNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutPlatformTenantsProjectionInput, Prisma.BusinessUncheckedCreateWithoutPlatformTenantsProjectionInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutPlatformTenantsProjectionInput
+  upsert?: Prisma.BusinessUpsertWithoutPlatformTenantsProjectionInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutPlatformTenantsProjectionInput, Prisma.BusinessUpdateWithoutPlatformTenantsProjectionInput>, Prisma.BusinessUncheckedUpdateWithoutPlatformTenantsProjectionInput>
+}
+
 export type BusinessCreateWithoutBranchesInput = {
   id: string
   name: string
@@ -1135,6 +1177,8 @@ export type BusinessCreateWithoutBranchesInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBranchesInput = {
@@ -1175,6 +1219,8 @@ export type BusinessUncheckedCreateWithoutBranchesInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBranchesInput = {
@@ -1231,6 +1277,8 @@ export type BusinessUpdateWithoutBranchesInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBranchesInput = {
@@ -1271,6 +1319,8 @@ export type BusinessUncheckedUpdateWithoutBranchesInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutUsersInput = {
@@ -1311,6 +1361,8 @@ export type BusinessCreateWithoutUsersInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutUsersInput = {
@@ -1351,6 +1403,8 @@ export type BusinessUncheckedCreateWithoutUsersInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutUsersInput = {
@@ -1396,6 +1450,8 @@ export type BusinessCreateWithoutOwnerInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutOwnerInput = {
@@ -1436,6 +1492,8 @@ export type BusinessUncheckedCreateWithoutOwnerInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutOwnerInput = {
@@ -1497,6 +1555,8 @@ export type BusinessUpdateWithoutUsersInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutUsersInput = {
@@ -1537,6 +1597,8 @@ export type BusinessUncheckedUpdateWithoutUsersInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUpsertWithWhereUniqueWithoutOwnerInput = {
@@ -1609,6 +1671,8 @@ export type BusinessCreateWithoutBillingSubscriptionsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingSubscriptionsInput = {
@@ -1649,6 +1713,8 @@ export type BusinessUncheckedCreateWithoutBillingSubscriptionsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingSubscriptionsInput = {
@@ -1705,6 +1771,8 @@ export type BusinessUpdateWithoutBillingSubscriptionsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingSubscriptionsInput = {
@@ -1745,6 +1813,8 @@ export type BusinessUncheckedUpdateWithoutBillingSubscriptionsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBillingSubscriptionRequestsInput = {
@@ -1785,6 +1855,8 @@ export type BusinessCreateWithoutBillingSubscriptionRequestsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingSubscriptionRequestsInput = {
@@ -1825,6 +1897,8 @@ export type BusinessUncheckedCreateWithoutBillingSubscriptionRequestsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingSubscriptionRequestsInput = {
@@ -1881,6 +1955,8 @@ export type BusinessUpdateWithoutBillingSubscriptionRequestsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingSubscriptionRequestsInput = {
@@ -1921,6 +1997,8 @@ export type BusinessUncheckedUpdateWithoutBillingSubscriptionRequestsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBillingEntitlementsInput = {
@@ -1961,6 +2039,8 @@ export type BusinessCreateWithoutBillingEntitlementsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingEntitlementsInput = {
@@ -2001,6 +2081,8 @@ export type BusinessUncheckedCreateWithoutBillingEntitlementsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingEntitlementsInput = {
@@ -2057,6 +2139,8 @@ export type BusinessUpdateWithoutBillingEntitlementsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingEntitlementsInput = {
@@ -2097,6 +2181,8 @@ export type BusinessUncheckedUpdateWithoutBillingEntitlementsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBillingEntitlementOverridesInput = {
@@ -2137,6 +2223,8 @@ export type BusinessCreateWithoutBillingEntitlementOverridesInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingEntitlementOverridesInput = {
@@ -2177,6 +2265,8 @@ export type BusinessUncheckedCreateWithoutBillingEntitlementOverridesInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingEntitlementOverridesInput = {
@@ -2233,6 +2323,8 @@ export type BusinessUpdateWithoutBillingEntitlementOverridesInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingEntitlementOverridesInput = {
@@ -2273,6 +2365,8 @@ export type BusinessUncheckedUpdateWithoutBillingEntitlementOverridesInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBillingInvoicesInput = {
@@ -2313,6 +2407,8 @@ export type BusinessCreateWithoutBillingInvoicesInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingInvoicesInput = {
@@ -2353,6 +2449,8 @@ export type BusinessUncheckedCreateWithoutBillingInvoicesInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingInvoicesInput = {
@@ -2409,6 +2507,8 @@ export type BusinessUpdateWithoutBillingInvoicesInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingInvoicesInput = {
@@ -2449,6 +2549,8 @@ export type BusinessUncheckedUpdateWithoutBillingInvoicesInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBillingPaymentsInput = {
@@ -2489,6 +2591,8 @@ export type BusinessCreateWithoutBillingPaymentsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingPaymentsInput = {
@@ -2529,6 +2633,8 @@ export type BusinessUncheckedCreateWithoutBillingPaymentsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingPaymentsInput = {
@@ -2585,6 +2691,8 @@ export type BusinessUpdateWithoutBillingPaymentsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingPaymentsInput = {
@@ -2625,6 +2733,8 @@ export type BusinessUncheckedUpdateWithoutBillingPaymentsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBillingPaymentAttemptsInput = {
@@ -2665,6 +2775,8 @@ export type BusinessCreateWithoutBillingPaymentAttemptsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingPaymentAttemptsInput = {
@@ -2705,6 +2817,8 @@ export type BusinessUncheckedCreateWithoutBillingPaymentAttemptsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingPaymentAttemptsInput = {
@@ -2761,6 +2875,8 @@ export type BusinessUpdateWithoutBillingPaymentAttemptsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingPaymentAttemptsInput = {
@@ -2801,6 +2917,8 @@ export type BusinessUncheckedUpdateWithoutBillingPaymentAttemptsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBillingPaymentAllocationsInput = {
@@ -2841,6 +2959,8 @@ export type BusinessCreateWithoutBillingPaymentAllocationsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingPaymentAllocationsInput = {
@@ -2881,6 +3001,8 @@ export type BusinessUncheckedCreateWithoutBillingPaymentAllocationsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingPaymentAllocationsInput = {
@@ -2937,6 +3059,8 @@ export type BusinessUpdateWithoutBillingPaymentAllocationsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingPaymentAllocationsInput = {
@@ -2977,6 +3101,8 @@ export type BusinessUncheckedUpdateWithoutBillingPaymentAllocationsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBillingRefundsInput = {
@@ -3017,6 +3143,8 @@ export type BusinessCreateWithoutBillingRefundsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingRefundsInput = {
@@ -3057,6 +3185,8 @@ export type BusinessUncheckedCreateWithoutBillingRefundsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingRefundsInput = {
@@ -3113,6 +3243,8 @@ export type BusinessUpdateWithoutBillingRefundsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingRefundsInput = {
@@ -3153,6 +3285,8 @@ export type BusinessUncheckedUpdateWithoutBillingRefundsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBillingProviderCustomersInput = {
@@ -3193,6 +3327,8 @@ export type BusinessCreateWithoutBillingProviderCustomersInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingProviderCustomersInput = {
@@ -3233,6 +3369,8 @@ export type BusinessUncheckedCreateWithoutBillingProviderCustomersInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingProviderCustomersInput = {
@@ -3289,6 +3427,8 @@ export type BusinessUpdateWithoutBillingProviderCustomersInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingProviderCustomersInput = {
@@ -3329,6 +3469,8 @@ export type BusinessUncheckedUpdateWithoutBillingProviderCustomersInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBillingEventsInput = {
@@ -3369,6 +3511,8 @@ export type BusinessCreateWithoutBillingEventsInput = {
   billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingEventsInput = {
@@ -3409,6 +3553,8 @@ export type BusinessUncheckedCreateWithoutBillingEventsInput = {
   billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingEventsInput = {
@@ -3465,6 +3611,8 @@ export type BusinessUpdateWithoutBillingEventsInput = {
   billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingEventsInput = {
@@ -3505,6 +3653,8 @@ export type BusinessUncheckedUpdateWithoutBillingEventsInput = {
   billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBillingSubscriptionLeasesInput = {
@@ -3545,6 +3695,8 @@ export type BusinessCreateWithoutBillingSubscriptionLeasesInput = {
   billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingSubscriptionLeasesInput = {
@@ -3585,6 +3737,8 @@ export type BusinessUncheckedCreateWithoutBillingSubscriptionLeasesInput = {
   billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingSubscriptionLeasesInput = {
@@ -3641,6 +3795,8 @@ export type BusinessUpdateWithoutBillingSubscriptionLeasesInput = {
   billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingSubscriptionLeasesInput = {
@@ -3681,6 +3837,8 @@ export type BusinessUncheckedUpdateWithoutBillingSubscriptionLeasesInput = {
   billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBillingAuditLogsInput = {
@@ -3721,6 +3879,8 @@ export type BusinessCreateWithoutBillingAuditLogsInput = {
   billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingAuditLogsInput = {
@@ -3761,6 +3921,8 @@ export type BusinessUncheckedCreateWithoutBillingAuditLogsInput = {
   billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingAuditLogsInput = {
@@ -3817,6 +3979,8 @@ export type BusinessUpdateWithoutBillingAuditLogsInput = {
   billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingAuditLogsInput = {
@@ -3857,6 +4021,8 @@ export type BusinessUncheckedUpdateWithoutBillingAuditLogsInput = {
   billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutProductsInput = {
@@ -3897,6 +4063,8 @@ export type BusinessCreateWithoutProductsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutProductsInput = {
@@ -3937,6 +4105,8 @@ export type BusinessUncheckedCreateWithoutProductsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutProductsInput = {
@@ -3993,6 +4163,8 @@ export type BusinessUpdateWithoutProductsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutProductsInput = {
@@ -4033,6 +4205,8 @@ export type BusinessUncheckedUpdateWithoutProductsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutInventoriesInput = {
@@ -4073,6 +4247,8 @@ export type BusinessCreateWithoutInventoriesInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutInventoriesInput = {
@@ -4113,6 +4289,8 @@ export type BusinessUncheckedCreateWithoutInventoriesInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutInventoriesInput = {
@@ -4169,6 +4347,8 @@ export type BusinessUpdateWithoutInventoriesInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutInventoriesInput = {
@@ -4209,6 +4389,8 @@ export type BusinessUncheckedUpdateWithoutInventoriesInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutLedgerEntriesInput = {
@@ -4249,6 +4431,8 @@ export type BusinessCreateWithoutLedgerEntriesInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutLedgerEntriesInput = {
@@ -4289,6 +4473,8 @@ export type BusinessUncheckedCreateWithoutLedgerEntriesInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutLedgerEntriesInput = {
@@ -4345,6 +4531,8 @@ export type BusinessUpdateWithoutLedgerEntriesInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutLedgerEntriesInput = {
@@ -4385,6 +4573,8 @@ export type BusinessUncheckedUpdateWithoutLedgerEntriesInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutSaleInput = {
@@ -4425,6 +4615,8 @@ export type BusinessCreateWithoutSaleInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutSaleInput = {
@@ -4465,6 +4657,8 @@ export type BusinessUncheckedCreateWithoutSaleInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutSaleInput = {
@@ -4521,6 +4715,8 @@ export type BusinessUpdateWithoutSaleInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutSaleInput = {
@@ -4561,6 +4757,8 @@ export type BusinessUncheckedUpdateWithoutSaleInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutExpenseInput = {
@@ -4601,6 +4799,8 @@ export type BusinessCreateWithoutExpenseInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutExpenseInput = {
@@ -4641,6 +4841,8 @@ export type BusinessUncheckedCreateWithoutExpenseInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutExpenseInput = {
@@ -4697,6 +4899,8 @@ export type BusinessUpdateWithoutExpenseInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutExpenseInput = {
@@ -4737,6 +4941,8 @@ export type BusinessUncheckedUpdateWithoutExpenseInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutSnapshotsInput = {
@@ -4777,6 +4983,8 @@ export type BusinessCreateWithoutSnapshotsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutSnapshotsInput = {
@@ -4817,6 +5025,8 @@ export type BusinessUncheckedCreateWithoutSnapshotsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutSnapshotsInput = {
@@ -4873,6 +5083,8 @@ export type BusinessUpdateWithoutSnapshotsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutSnapshotsInput = {
@@ -4913,6 +5125,8 @@ export type BusinessUncheckedUpdateWithoutSnapshotsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutAlertsInput = {
@@ -4953,6 +5167,8 @@ export type BusinessCreateWithoutAlertsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutAlertsInput = {
@@ -4993,6 +5209,8 @@ export type BusinessUncheckedCreateWithoutAlertsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutAlertsInput = {
@@ -5049,6 +5267,8 @@ export type BusinessUpdateWithoutAlertsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutAlertsInput = {
@@ -5089,6 +5309,8 @@ export type BusinessUncheckedUpdateWithoutAlertsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutEmployeesInput = {
@@ -5129,6 +5351,8 @@ export type BusinessCreateWithoutEmployeesInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutEmployeesInput = {
@@ -5169,6 +5393,8 @@ export type BusinessUncheckedCreateWithoutEmployeesInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutEmployeesInput = {
@@ -5225,6 +5451,8 @@ export type BusinessUpdateWithoutEmployeesInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutEmployeesInput = {
@@ -5265,6 +5493,8 @@ export type BusinessUncheckedUpdateWithoutEmployeesInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutEmployeeInvitationsInput = {
@@ -5305,6 +5535,8 @@ export type BusinessCreateWithoutEmployeeInvitationsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutEmployeeInvitationsInput = {
@@ -5345,6 +5577,8 @@ export type BusinessUncheckedCreateWithoutEmployeeInvitationsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutEmployeeInvitationsInput = {
@@ -5401,6 +5635,8 @@ export type BusinessUpdateWithoutEmployeeInvitationsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutEmployeeInvitationsInput = {
@@ -5441,6 +5677,8 @@ export type BusinessUncheckedUpdateWithoutEmployeeInvitationsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutEmployeeCompensationsInput = {
@@ -5481,6 +5719,8 @@ export type BusinessCreateWithoutEmployeeCompensationsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutEmployeeCompensationsInput = {
@@ -5521,6 +5761,8 @@ export type BusinessUncheckedCreateWithoutEmployeeCompensationsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutEmployeeCompensationsInput = {
@@ -5577,6 +5819,8 @@ export type BusinessUpdateWithoutEmployeeCompensationsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutEmployeeCompensationsInput = {
@@ -5617,6 +5861,8 @@ export type BusinessUncheckedUpdateWithoutEmployeeCompensationsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutEmployeeCompensationHistoryInput = {
@@ -5657,6 +5903,8 @@ export type BusinessCreateWithoutEmployeeCompensationHistoryInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutEmployeeCompensationHistoryInput = {
@@ -5697,6 +5945,8 @@ export type BusinessUncheckedCreateWithoutEmployeeCompensationHistoryInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutEmployeeCompensationHistoryInput = {
@@ -5753,6 +6003,8 @@ export type BusinessUpdateWithoutEmployeeCompensationHistoryInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutEmployeeCompensationHistoryInput = {
@@ -5793,6 +6045,8 @@ export type BusinessUncheckedUpdateWithoutEmployeeCompensationHistoryInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutEmployeeRequestsInput = {
@@ -5833,6 +6087,8 @@ export type BusinessCreateWithoutEmployeeRequestsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutEmployeeRequestsInput = {
@@ -5873,6 +6129,8 @@ export type BusinessUncheckedCreateWithoutEmployeeRequestsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutEmployeeRequestsInput = {
@@ -5929,6 +6187,8 @@ export type BusinessUpdateWithoutEmployeeRequestsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutEmployeeRequestsInput = {
@@ -5969,6 +6229,8 @@ export type BusinessUncheckedUpdateWithoutEmployeeRequestsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutEmployeeNotificationsInput = {
@@ -6009,6 +6271,8 @@ export type BusinessCreateWithoutEmployeeNotificationsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutEmployeeNotificationsInput = {
@@ -6049,6 +6313,8 @@ export type BusinessUncheckedCreateWithoutEmployeeNotificationsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutEmployeeNotificationsInput = {
@@ -6105,6 +6371,8 @@ export type BusinessUpdateWithoutEmployeeNotificationsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutEmployeeNotificationsInput = {
@@ -6145,6 +6413,376 @@ export type BusinessUncheckedUpdateWithoutEmployeeNotificationsInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutSupportTicketInput = {
+  id: string
+  name: string
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
+  branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutSupportTicketInput = {
+  id: string
+  name: string
+  userId?: string | null
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutSupportTicketInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutSupportTicketInput, Prisma.BusinessUncheckedCreateWithoutSupportTicketInput>
+}
+
+export type BusinessUpsertWithoutSupportTicketInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutSupportTicketInput, Prisma.BusinessUncheckedUpdateWithoutSupportTicketInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutSupportTicketInput, Prisma.BusinessUncheckedCreateWithoutSupportTicketInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutSupportTicketInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutSupportTicketInput, Prisma.BusinessUncheckedUpdateWithoutSupportTicketInput>
+}
+
+export type BusinessUpdateWithoutSupportTicketInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
+  branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutSupportTicketInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutPlatformTenantsProjectionInput = {
+  id: string
+  name: string
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
+  branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutPlatformTenantsProjectionInput = {
+  id: string
+  name: string
+  userId?: string | null
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutPlatformTenantsProjectionInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutPlatformTenantsProjectionInput, Prisma.BusinessUncheckedCreateWithoutPlatformTenantsProjectionInput>
+}
+
+export type BusinessUpsertWithoutPlatformTenantsProjectionInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutPlatformTenantsProjectionInput, Prisma.BusinessUncheckedUpdateWithoutPlatformTenantsProjectionInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutPlatformTenantsProjectionInput, Prisma.BusinessUncheckedCreateWithoutPlatformTenantsProjectionInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutPlatformTenantsProjectionInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutPlatformTenantsProjectionInput, Prisma.BusinessUncheckedUpdateWithoutPlatformTenantsProjectionInput>
+}
+
+export type BusinessUpdateWithoutPlatformTenantsProjectionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
+  branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutPlatformTenantsProjectionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateManyOwnerInput = {
@@ -6197,6 +6835,8 @@ export type BusinessUpdateWithoutOwnerInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutOwnerInput = {
@@ -6237,6 +6877,8 @@ export type BusinessUncheckedUpdateWithoutOwnerInput = {
   billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateManyWithoutOwnerInput = {
@@ -6285,6 +6927,8 @@ export type BusinessCountOutputType = {
   billingSubscriptionLeases: number
   billingEvents: number
   billingAuditLogs: number
+  supportTicket: number
+  platformTenantsProjection: number
 }
 
 export type BusinessCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -6316,6 +6960,8 @@ export type BusinessCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   billingSubscriptionLeases?: boolean | BusinessCountOutputTypeCountBillingSubscriptionLeasesArgs
   billingEvents?: boolean | BusinessCountOutputTypeCountBillingEventsArgs
   billingAuditLogs?: boolean | BusinessCountOutputTypeCountBillingAuditLogsArgs
+  supportTicket?: boolean | BusinessCountOutputTypeCountSupportTicketArgs
+  platformTenantsProjection?: boolean | BusinessCountOutputTypeCountPlatformTenantsProjectionArgs
 }
 
 /**
@@ -6524,6 +7170,20 @@ export type BusinessCountOutputTypeCountBillingAuditLogsArgs<ExtArgs extends run
   where?: Prisma.BillingAuditLogWhereInput
 }
 
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountSupportTicketArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SupportTicketWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountPlatformTenantsProjectionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PlatformTenantProjectionWhereInput
+}
+
 
 export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -6565,6 +7225,8 @@ export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   billingSubscriptionLeases?: boolean | Prisma.Business$billingSubscriptionLeasesArgs<ExtArgs>
   billingEvents?: boolean | Prisma.Business$billingEventsArgs<ExtArgs>
   billingAuditLogs?: boolean | Prisma.Business$billingAuditLogsArgs<ExtArgs>
+  supportTicket?: boolean | Prisma.Business$supportTicketArgs<ExtArgs>
+  platformTenantsProjection?: boolean | Prisma.Business$platformTenantsProjectionArgs<ExtArgs>
   _count?: boolean | Prisma.BusinessCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["business"]>
 
@@ -6640,6 +7302,8 @@ export type BusinessInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   billingSubscriptionLeases?: boolean | Prisma.Business$billingSubscriptionLeasesArgs<ExtArgs>
   billingEvents?: boolean | Prisma.Business$billingEventsArgs<ExtArgs>
   billingAuditLogs?: boolean | Prisma.Business$billingAuditLogsArgs<ExtArgs>
+  supportTicket?: boolean | Prisma.Business$supportTicketArgs<ExtArgs>
+  platformTenantsProjection?: boolean | Prisma.Business$platformTenantsProjectionArgs<ExtArgs>
   _count?: boolean | Prisma.BusinessCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BusinessIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -6681,6 +7345,8 @@ export type $BusinessPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     billingSubscriptionLeases: Prisma.$BillingSubscriptionLeasePayload<ExtArgs>[]
     billingEvents: Prisma.$BillingEventPayload<ExtArgs>[]
     billingAuditLogs: Prisma.$BillingAuditLogPayload<ExtArgs>[]
+    supportTicket: Prisma.$SupportTicketPayload<ExtArgs>[]
+    platformTenantsProjection: Prisma.$PlatformTenantProjectionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -7116,6 +7782,8 @@ export interface Prisma__BusinessClient<T, Null = never, ExtArgs extends runtime
   billingSubscriptionLeases<T extends Prisma.Business$billingSubscriptionLeasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$billingSubscriptionLeasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BillingSubscriptionLeasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   billingEvents<T extends Prisma.Business$billingEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$billingEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BillingEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   billingAuditLogs<T extends Prisma.Business$billingAuditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$billingAuditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BillingAuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  supportTicket<T extends Prisma.Business$supportTicketArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$supportTicketArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  platformTenantsProjection<T extends Prisma.Business$platformTenantsProjectionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$platformTenantsProjectionArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlatformTenantProjectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8244,6 +8912,54 @@ export type Business$billingAuditLogsArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.BillingAuditLogScalarFieldEnum | Prisma.BillingAuditLogScalarFieldEnum[]
+}
+
+/**
+ * Business.supportTicket
+ */
+export type Business$supportTicketArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SupportTicket
+   */
+  select?: Prisma.SupportTicketSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SupportTicket
+   */
+  omit?: Prisma.SupportTicketOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SupportTicketInclude<ExtArgs> | null
+  where?: Prisma.SupportTicketWhereInput
+  orderBy?: Prisma.SupportTicketOrderByWithRelationInput | Prisma.SupportTicketOrderByWithRelationInput[]
+  cursor?: Prisma.SupportTicketWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SupportTicketScalarFieldEnum | Prisma.SupportTicketScalarFieldEnum[]
+}
+
+/**
+ * Business.platformTenantsProjection
+ */
+export type Business$platformTenantsProjectionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlatformTenantProjection
+   */
+  select?: Prisma.PlatformTenantProjectionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PlatformTenantProjection
+   */
+  omit?: Prisma.PlatformTenantProjectionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlatformTenantProjectionInclude<ExtArgs> | null
+  where?: Prisma.PlatformTenantProjectionWhereInput
+  orderBy?: Prisma.PlatformTenantProjectionOrderByWithRelationInput | Prisma.PlatformTenantProjectionOrderByWithRelationInput[]
+  cursor?: Prisma.PlatformTenantProjectionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PlatformTenantProjectionScalarFieldEnum | Prisma.PlatformTenantProjectionScalarFieldEnum[]
 }
 
 /**

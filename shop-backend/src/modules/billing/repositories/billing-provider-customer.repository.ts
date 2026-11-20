@@ -60,43 +60,62 @@ export class BillingProviderCustomerRepository {
     });
   }
 
-  async upsert(
+
+    async upsert(
     businessId: string,
     accountId: string,
     data: {
-      providerCustomerId: string;
-      email?: string | null;
-      metadata?: Prisma.InputJsonValue;
+        providerCustomerId: string;
+        email?: string | null;
+        metadata?: Prisma.InputJsonValue;
     },
     tx: DbClient
-  ) {
+    ) {
     const existing = await this.findByBusinessAndAccount(
-      businessId,
-      accountId,
-      tx
+        businessId,
+        accountId,
+        tx
     );
 
     if (existing) {
-      return tx.billingProviderCustomer.update({
+        const updateData: Prisma.BillingProviderCustomerUpdateInput = {
+        providerCustomerId: data.providerCustomerId,
+        };
+
+        if (data.email !== undefined) {
+        updateData.email = data.email;
+        }
+
+        if (data.metadata !== undefined) {
+        updateData.metadata = data.metadata;
+        }
+
+        return tx.billingProviderCustomer.update({
         where: { id: existing.id },
-        data: {
-          providerCustomerId: data.providerCustomerId,
-          ...(data.email !== undefined ? { email: data.email } : {}),
-          ...(data.metadata !== undefined ? { metadata: data.metadata } : {}),
-        },
-      });
+        data: updateData,
+        });
     }
 
-    return tx.billingProviderCustomer.create({
-      data: {
+    const createData: Prisma.BillingProviderCustomerCreateInput = {
+        id: crypto.randomUUID(),
         business: { connect: { id: businessId } },
         account: { connect: { id: accountId } },
         providerCustomerId: data.providerCustomerId,
-        ...(data.email !== undefined ? { email: data.email } : {}),
-        ...(data.metadata !== undefined ? { metadata: data.metadata } : {}),
-      },
+    };
+
+    if (data.email !== undefined) {
+        createData.email = data.email;
+    }
+
+    if (data.metadata !== undefined) {
+        createData.metadata = data.metadata;
+    }
+
+    return tx.billingProviderCustomer.create({
+        data: createData,
     });
-  }
+    }
+
 
   async delete(id: string, tx: DbClient) {
     return tx.billingProviderCustomer.delete({

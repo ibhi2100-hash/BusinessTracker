@@ -397,3 +397,83 @@ export const BillingAuditAction = {
 } as const
 
 export type BillingAuditAction = (typeof BillingAuditAction)[keyof typeof BillingAuditAction]
+
+
+export const PlatformUserStatus = {
+  INVITED: 'INVITED',
+  ACTIVE: 'ACTIVE',
+  SUSPENDED: 'SUSPENDED',
+  DISABLED: 'DISABLED'
+} as const
+
+export type PlatformUserStatus = (typeof PlatformUserStatus)[keyof typeof PlatformUserStatus]
+
+
+export const SupportTicketStatus = {
+  OPEN: 'OPEN',
+  IN_PROGRESS: 'IN_PROGRESS',
+  WAITING_FOR_CUSTOMER: 'WAITING_FOR_CUSTOMER',
+  ESCALATED: 'ESCALATED',
+  RESOLVED: 'RESOLVED',
+  CLOSED: 'CLOSED'
+} as const
+
+export type SupportTicketStatus = (typeof SupportTicketStatus)[keyof typeof SupportTicketStatus]
+
+
+export const SupportPriority = {
+  LOW: 'LOW',
+  NORMAL: 'NORMAL',
+  HIGH: 'HIGH',
+  URGENT: 'URGENT'
+} as const
+
+export type SupportPriority = (typeof SupportPriority)[keyof typeof SupportPriority]
+
+
+export const SupportMessageVisibility = {
+  CUSTOMER: 'CUSTOMER',
+  INTERNAL: 'INTERNAL'
+} as const
+
+export type SupportMessageVisibility = (typeof SupportMessageVisibility)[keyof typeof SupportMessageVisibility]
+
+
+export const SupportAccessStatus = {
+  REQUESTED: 'REQUESTED',
+  APPROVED: 'APPROVED',
+  DENIED: 'DENIED',
+  ACTIVE: 'ACTIVE',
+  EXPIRED: 'EXPIRED',
+  REVOKED: 'REVOKED'
+} as const
+
+export type SupportAccessStatus = (typeof SupportAccessStatus)[keyof typeof SupportAccessStatus]
+
+
+export const SupportAccessMode = {
+  READ_ONLY: 'READ_ONLY',
+  ASSISTED: 'ASSISTED'
+} as const
+
+export type SupportAccessMode = (typeof SupportAccessMode)[keyof typeof SupportAccessMode]
+
+
+export const PlatformIncidentStatus = {
+  INVESTIGATING: 'INVESTIGATING',
+  IDENTIFIED: 'IDENTIFIED',
+  MONITORING: 'MONITORING',
+  RESOLVED: 'RESOLVED'
+} as const
+
+export type PlatformIncidentStatus = (typeof PlatformIncidentStatus)[keyof typeof PlatformIncidentStatus]
+
+
+export const PlatformIncidentSeverity = {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH',
+  CRITICAL: 'CRITICAL'
+} as const
+
+export type PlatformIncidentSeverity = (typeof PlatformIncidentSeverity)[keyof typeof PlatformIncidentSeverity]

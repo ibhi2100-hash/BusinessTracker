@@ -5,85 +5,85 @@ import { Routes, Route } from "react-router-dom";
 /* PUBLIC PAGES                                                       */
 /* ------------------------------------------------------------------ */
 
-import HomePage from "./pages/HomePage";
-import RegisterPage from "./pages/auth/RegisterPage";
-import LoginPage from "./pages/auth/Login";
-import EmployeeSignupPage from "./pages/team/EmployeeSignupPage";
+import HomePage from "../pages/HomePage";
+import RegisterPage from "../pages/auth/RegisterPage";
+import LoginPage from "../pages/auth/Login";
+import EmployeeSignupPage from "../pages/team/EmployeeSignupPage";
 
 /* ------------------------------------------------------------------ */
 /* ONBOARDING                                                         */
 /* ------------------------------------------------------------------ */
 
-import OnboardingPage from "./pages/onboarding/Onboard";
-import OnboardingBusinessPage from "./pages/onboarding/BusinessOnboarding";
-import OnboardingInventoryPage from "./pages/onboarding/OnboardingInventory";
-import OpeningCashPage from "./pages/onboarding/OnboardingCash";
+import OnboardingPage from "../pages/onboarding/Onboard";
+import OnboardingBusinessPage from "../pages/onboarding/BusinessOnboarding";
+import OnboardingInventoryPage from "../pages/onboarding/OnboardingInventory";
+import OpeningCashPage from "../pages/onboarding/OnboardingCash";
 
 /* ------------------------------------------------------------------ */
 /* DASHBOARDS                                                         */
 /* ------------------------------------------------------------------ */
 
-import DashboardPage from "./pages/Dashboard";
-import OwnerDashboardPage from "./pages/owner/OwnerDashboardPage";
-import AddBranchPage from "./pages/owner/AddBranchPage";
+import DashboardPage from "../pages/Dashboard";
+import OwnerDashboardPage from "../pages/owner/OwnerDashboardPage";
+import AddBranchPage from "../pages/owner/AddBranchPage";
 
 /* ------------------------------------------------------------------ */
 /* BRANCH INITIALIZATION                                              */
 /* ------------------------------------------------------------------ */
 
-import BranchProductAllocationPage from "./pages/branches/BranchProductAllocationPage";
+import BranchProductAllocationPage from "../pages/branches/BranchProductAllocationPage";
 
 /* ------------------------------------------------------------------ */
 /* SALES AND OPERATIONS                                               */
 /* ------------------------------------------------------------------ */
 
-import SalesPage from "./pages/SalesPage";
-import ListSalesPage from "./pages/SalesList";
-import InventoriesPage from "./pages/InventoryPage";
-import AnalysisBuyPage from "./pages/BuyingAnalysis";
+import SalesPage from "../pages/SalesPage";
+import ListSalesPage from "../pages/SalesList";
+import InventoriesPage from "../pages/InventoryPage";
+import AnalysisBuyPage from "../pages/BuyingAnalysis";
 
-import OwnerBranchInventoryPage from "./pages/owner/OwnerBranchInventoryPage";
-import CapitalInjectPage from "./pages/CapitalInject";
-import CapitalWithdrawPage from "./pages/CapitalWithdraw";
-import ExpensePage from "./pages/ExpensePage";
+import OwnerBranchInventoryPage from "../pages/owner/OwnerBranchInventoryPage";
+import CapitalInjectPage from "../pages/CapitalInject";
+import CapitalWithdrawPage from "../pages/CapitalWithdraw";
+import ExpensePage from "../pages/ExpensePage";
 
 /* ------------------------------------------------------------------ */
 /* REPORTS                                                            */
 /* ------------------------------------------------------------------ */
 
-import ReportsDashboardPage from "./components/reports/ReportDashboardPage";
-import ComparisontReportsPage from "./pages/reports/comparison/page";
-import YearlyReportsPage from "./pages/reports/yearly/page";
-import BusinessReportPage from "./components/reports/BusinessReportPage";
+import ReportsDashboardPage from "../components/reports/ReportDashboardPage";
+import ComparisontReportsPage from "../pages/reports/comparison/page";
+import YearlyReportsPage from "../pages/reports/yearly/page";
+import BusinessReportPage from "../components/reports/BusinessReportPage";
 
 /* ------------------------------------------------------------------ */
 /* ADMINISTRATION                                                     */
 /* ------------------------------------------------------------------ */
 
-import SyncMgtpage from "./pages/sync/SyncMgtPage";
-import TeamPage from "./pages/team/TeamPage";
+import SyncMgtpage from "../pages/sync/SyncMgtPage";
+import TeamPage from "../pages/team/TeamPage";
 
 import {
   BillingManagementPage,
-} from "./components/pricing/BillingManagementPage";
+} from "../components/pricing/BillingManagementPage";
 
 /* ------------------------------------------------------------------ */
 /* LAYOUT AND GUARDS                                                  */
 /* ------------------------------------------------------------------ */
 
-import { AuthGuard } from "./hooks/useAuthGuard";
+import { AuthGuard } from "../hooks/useAuthGuard";
 
-import { AppShell } from "./components/layout/AppShell";
-import { ApplicationShell } from "./components/layout/ApplicatonShell";
+import { AppShell } from "../components/layout/AppShell";
+import { ApplicationShell } from "../components/layout/ApplicatonShell";
 
 import {
   RoleHomeRedirect,
-} from "./components/navigation/RoleHomeRedirect";
+} from "../components/navigation/RoleHomeRedirect";
 
-import NotFoundPage from "./pages/NotFoundPage";
-import OwnerBranchSalesPage from "./pages/owner/OwnerSalesPage";
-import BranchesPage from "./components/BusinessDashboard/control/BranchesPage";
-import BranchControlRoomPage from "./pages/owner/BranchControlRoomPage";
+import NotFoundPage from "../pages/NotFoundPage";
+import OwnerBranchSalesPage from "../pages/owner/OwnerSalesPage";
+import BranchesPage from "../components/BusinessDashboard/control/BranchesPage";
+import BranchControlRoomPage from "../pages/owner/BranchControlRoomPage";
 
 /* ------------------------------------------------------------------ */
 /* ROUTER                                                             */

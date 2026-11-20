@@ -1,0 +1,133 @@
+
+import type {
+  EntitlementDefinition,
+  TenantEntitlement,
+  AccessRole,
+} from "../types/entitlement.types";
+
+export const entitlementDefinitionsMock: EntitlementDefinition[] = [
+  {
+    id: "ent_def_001",
+    key: "branches.max",
+    name: "Maximum Branches",
+    description: "Maximum branches permitted for a business.",
+    type: "QUANTITY",
+    unit: "branches",
+  },
+  {
+    id: "ent_def_002",
+    key: "employees.per_branch",
+    name: "Employees Per Branch",
+    description: "Maximum employees allowed per branch.",
+    type: "QUANTITY",
+    unit: "employees",
+  },
+  {
+    id: "ent_def_003",
+    key: "products.per_branch",
+    name: "Products Per Branch",
+    description: "Maximum product records per branch.",
+    type: "QUANTITY",
+    unit: "products",
+  },
+  {
+    id: "ent_def_004",
+    key: "analytics.advanced",
+    name: "Advanced Analytics",
+    description: "Access to advanced analytics.",
+    type: "FEATURE",
+  },
+  {
+    id: "ent_def_005",
+    key: "inventory.multi_location",
+    name: "Multi-location Inventory",
+    description: "Access to multi-location inventory.",
+    type: "FEATURE",
+  },
+];
+
+export const tenantEntitlementsMock: TenantEntitlement[] = [
+  {
+    id: "grant_001",
+    businessId: "ten_001",
+    businessName: "MrShrek Phone Service",
+    entitlementKey: "branches.max",
+    name: "Maximum Branches",
+    source: "PLAN",
+    allowedValue: 5,
+    consumedValue: 2,
+    effectiveFrom: "2026-01-10T00:00:00Z",
+    active: true,
+  },
+  {
+    id: "grant_002",
+    businessId: "ten_001",
+    businessName: "MrShrek Phone Service",
+    entitlementKey: "employees.per_branch",
+    name: "Employees Per Branch",
+    source: "PLAN",
+    allowedValue: 15,
+    consumedValue: 8,
+    effectiveFrom: "2026-01-10T00:00:00Z",
+    active: true,
+  },
+  {
+    id: "grant_003",
+    businessId: "ten_001",
+    businessName: "MrShrek Phone Service",
+    entitlementKey: "analytics.advanced",
+    name: "Advanced Analytics",
+    source: "ADDON",
+    allowedValue: true,
+    consumedValue: 0,
+    effectiveFrom: "2026-05-10T00:00:00Z",
+    active: true,
+  },
+  {
+    id: "grant_004",
+    businessId: "ten_002",
+    businessName: "Prime Fashion House",
+    entitlementKey: "branches.max",
+    name: "Maximum Branches",
+    source: "PLAN",
+    allowedValue: 25,
+    consumedValue: 5,
+    effectiveFrom: "2026-03-14T00:00:00Z",
+    active: true,
+  },
+];
+
+export const accessRolesMock: AccessRole[] = [
+  {
+    id: "role_founder",
+    name: "Founder",
+    description: "Full platform governance access.",
+    permissionCount: 120,
+    assignedUsers: 1,
+    systemRole: true,
+  },
+  {
+    id: "role_platform_admin",
+    name: "Platform Administrator",
+    description: "Authorized platform administration.",
+    permissionCount: 85,
+    assignedUsers: 3,
+    systemRole: true,
+  },
+  {
+    id: "role_billing",
+    name: "Billing Operator",
+    description: "Commercial and billing operations.",
+    permissionCount: 24,
+    assignedUsers: 2,
+    systemRole: false,
+  },
+  {
+    id: "role_support",
+    name: "Support Operator",
+    description: "Customer support and tenant assistance.",
+    permissionCount: 18,
+    assignedUsers: 5,
+    systemRole: false,
+  },
+];

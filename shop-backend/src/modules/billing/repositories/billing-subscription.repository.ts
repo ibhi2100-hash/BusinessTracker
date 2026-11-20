@@ -1,8 +1,9 @@
+
 import { BillingSubscriptionStatus } from "../../../infrastructure/postgresql/prisma/generated/enums.js";
 import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
 import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
 
-type DbClient = Prisma.TransactionClient 
+type DbClient = Prisma.TransactionClient;
 
 export class BillingSubscriptionRepository {
 
@@ -26,7 +27,7 @@ export class BillingSubscriptionRepository {
     return tx.billingSubscription.findUnique({
       where: { id },
       include: {
-        planVersion: true,
+        planVersionRecord: true,
         requests: {
           orderBy: { createdAt: "desc" },
         },
@@ -61,7 +62,7 @@ export class BillingSubscriptionRepository {
     return prisma.billingSubscription.findMany({
       where: {
         businessId,
-        ...(status ? { status } : {}),
+        ...(status !== undefined ? { status } : {}),
       },
       skip,
       take,
@@ -69,7 +70,7 @@ export class BillingSubscriptionRepository {
         createdAt: "desc",
       },
       include: {
-        planVersion: true,
+        planVersionRecord: true,
       },
     });
   }
@@ -83,7 +84,7 @@ export class BillingSubscriptionRepository {
    */
   async findCurrentByBusinessId(
     businessId: string,
-    tx: DbClient 
+    tx: DbClient
   ) {
     const currentStatuses: BillingSubscriptionStatus[] = [
       BillingSubscriptionStatus.PENDING,
@@ -105,7 +106,7 @@ export class BillingSubscriptionRepository {
         createdAt: "desc",
       },
       include: {
-        planVersion: true,
+        planVersionRecord: true,
       },
     });
   }
@@ -126,7 +127,7 @@ export class BillingSubscriptionRepository {
         createdAt: "desc",
       },
       include: {
-        planVersion: true,
+        planVersionRecord: true,
       },
     });
   }
@@ -201,20 +202,31 @@ export class BillingSubscriptionRepository {
     },
     tx: DbClient
   ) {
+    const updateData: Prisma.BillingSubscriptionUpdateInput = {
+      status: period.trialEnd
+        ? BillingSubscriptionStatus.TRIALING
+        : BillingSubscriptionStatus.ACTIVE,
+
+      currentPeriodStart: period.currentPeriodStart,
+      currentPeriodEnd: period.currentPeriodEnd,
+
+      activatedAt: period.activatedAt ?? new Date(),
+
+      cancelledAt: null,
+      expiredAt: null,
+    };
+
+    if (period.trialStart !== undefined) {
+      updateData.trialStart = period.trialStart;
+    }
+
+    if (period.trialEnd !== undefined) {
+      updateData.trialEnd = period.trialEnd;
+    }
+
     return tx.billingSubscription.update({
       where: { id },
-      data: {
-        status: period.trialEnd
-          ? BillingSubscriptionStatus.TRIALING
-          : BillingSubscriptionStatus.ACTIVE,
-        currentPeriodStart: period.currentPeriodStart,
-        currentPeriodEnd: period.currentPeriodEnd,
-        activatedAt: period.activatedAt ?? new Date(),
-        trialStart: period.trialStart,
-        trialEnd: period.trialEnd,
-        cancelledAt: null,
-        expiredAt: null,
-      },
+      data: updateData,
     });
   }
 
@@ -230,13 +242,18 @@ export class BillingSubscriptionRepository {
     },
     tx: DbClient
   ) {
+    const updateData: Prisma.BillingSubscriptionUpdateInput = {
+      currentPeriodStart: data.currentPeriodStart,
+      currentPeriodEnd: data.currentPeriodEnd,
+    };
+
+    if (data.gracePeriodEnd !== undefined) {
+      updateData.gracePeriodEnd = data.gracePeriodEnd;
+    }
+
     return tx.billingSubscription.update({
       where: { id },
-      data: {
-        currentPeriodStart: data.currentPeriodStart,
-        currentPeriodEnd: data.currentPeriodEnd,
-        gracePeriodEnd: data.gracePeriodEnd,
-      },
+      data: updateData,
     });
   }
 
@@ -292,7 +309,10 @@ export class BillingSubscriptionRepository {
   /**
    * Find subscriptions whose billing periods have ended.
    */
-  async findDueForExpiration(now = new Date(), take = 100) {
+  async findDueForExpiration(
+    now = new Date(),
+    take = 100
+  ) {
     return prisma.billingSubscription.findMany({
       where: {
         currentPeriodEnd: {
@@ -316,7 +336,10 @@ export class BillingSubscriptionRepository {
   /**
    * Find subscriptions whose scheduled cancellation is due.
    */
-  async findDueForCancellation(now = new Date(), take = 100) {
+  async findDueForCancellation(
+    now = new Date(),
+    take = 100
+  ) {
     return prisma.billingSubscription.findMany({
       where: {
         cancelAtPeriodEnd: true,
@@ -341,7 +364,10 @@ export class BillingSubscriptionRepository {
   /**
    * Find subscriptions requiring grace-period follow-up.
    */
-  async findExpiredGracePeriods(now = new Date(), take = 100) {
+  async findExpiredGracePeriods(
+    now = new Date(),
+    take = 100
+  ) {
     return prisma.billingSubscription.findMany({
       where: {
         status: BillingSubscriptionStatus.GRACE_PERIOD,
@@ -366,7 +392,7 @@ export class BillingSubscriptionRepository {
     return prisma.billingSubscription.count({
       where: {
         businessId,
-        ...(status ? { status } : {}),
+        ...(status !== undefined ? { status } : {}),
       },
     });
   }
