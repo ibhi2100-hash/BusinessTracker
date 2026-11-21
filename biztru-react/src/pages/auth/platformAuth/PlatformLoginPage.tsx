@@ -19,7 +19,9 @@ import {
   AlertCircle,
 } from "lucide-react";
 
-import { usePlatformSession } from "../../../Biztru/services/PlatformSessionContext"; 
+import {
+  usePlatformSession,
+} from "../../../Biztru/services/PlatformSession/PlatformSessionContext";
 
 /* -------------------------------------------------------------------------- */
 /* PLATFORM LOGIN PAGE                                                        */
@@ -57,50 +59,48 @@ export default function PlatformLoginPage() {
   /* LOGIN HANDLER                                                            */
   /* ------------------------------------------------------------------------ */
 
-  const handleSubmit = async (
-    event: FormEvent<HTMLFormElement>
-  ) => {
-    event.preventDefault();
 
-    if (submitting || !email.trim() || !password) {
-      return;
+const handleSubmit = async (
+  event: FormEvent<HTMLFormElement>
+) => {
+  event.preventDefault();
+
+  if (submitting || !email.trim() || !password) {
+    return;
+  }
+
+  setSubmitting(true);
+  setServerError(null);
+
+  try {
+    const authenticatedSession = await login({
+      email: email.trim().toLowerCase(),
+      password,
+    });
+
+    if (
+      !authenticatedSession.user ||
+      authenticatedSession.user.status !== "ACTIVE"
+    ) {
+      throw new Error(
+        "Your platform account is inactive or unavailable."
+      );
     }
 
-    setSubmitting(true);
-    setServerError(null);
+    navigate("/command/dashboard", {
+      replace: true,
+    });
+  } catch (error: unknown) {
+    setServerError(
+      error instanceof Error
+        ? error.message
+        : "Unable to sign in. Please try again."
+    );
+  } finally {
+    setSubmitting(false);
+  }
+};
 
-    try {
-      const session = await login({
-        email: email.trim().toLowerCase(),
-        password,
-      });
-
-      // The backend determines the user's platform role.
-      // Frontend route guards enforce module permissions.
-      if (!session.user || !session.user.isActive) {
-        throw new Error(
-          "Your platform account is inactive or unavailable."
-        );
-      }
-
-      navigate("/command/dashboard", {
-        replace: true,
-      });
-    } catch (error: unknown) {
-      console.error(
-        "[PlatformLoginPage] Login failed:",
-        error
-      );
-
-      setServerError(
-        error instanceof Error
-          ? error.message
-          : "Unable to sign in. Please try again."
-      );
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
   /* ------------------------------------------------------------------------ */
   /* RENDER                                                                   */
@@ -109,9 +109,7 @@ export default function PlatformLoginPage() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-black text-white">
 
-      {/* ------------------------------------------------------------------ */}
-      {/* BACKGROUND                                                         */}
-      {/* ------------------------------------------------------------------ */}
+      {/* BACKGROUND */}
 
       <div
         aria-hidden="true"
@@ -124,17 +122,13 @@ export default function PlatformLoginPage() {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] bg-[size:50px_50px] opacity-[0.035]" />
       </div>
 
-      {/* ------------------------------------------------------------------ */}
-      {/* CONTENT                                                            */}
-      {/* ------------------------------------------------------------------ */}
+      {/* CONTENT */}
 
       <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-12">
 
         <div className="w-full max-w-md space-y-7">
 
-          {/* ---------------------------------------------------------------- */}
-          {/* HEADER                                                           */}
-          {/* ---------------------------------------------------------------- */}
+          {/* HEADER */}
 
           <header className="space-y-4 text-center">
 
@@ -161,9 +155,7 @@ export default function PlatformLoginPage() {
 
           </header>
 
-          {/* ---------------------------------------------------------------- */}
-          {/* SECURITY FEATURE CHIPS                                           */}
-          {/* ---------------------------------------------------------------- */}
+          {/* SECURITY FEATURE CHIPS */}
 
           <div className="grid grid-cols-3 gap-2 text-center text-[10px] text-gray-400">
 
@@ -184,9 +176,7 @@ export default function PlatformLoginPage() {
 
           </div>
 
-          {/* ---------------------------------------------------------------- */}
-          {/* LOGIN CARD                                                       */}
-          {/* ---------------------------------------------------------------- */}
+          {/* LOGIN CARD */}
 
           <section className="rounded-3xl border border-white/10 bg-white/[0.045] p-6 shadow-[0_20px_80px_rgba(0,0,0,0.5)] backdrop-blur-2xl sm:p-7">
 
@@ -200,9 +190,7 @@ export default function PlatformLoginPage() {
               </p>
             </div>
 
-            {/* -------------------------------------------------------------- */}
-            {/* SERVER ERROR                                                    */}
-            {/* -------------------------------------------------------------- */}
+            {/* SERVER ERROR */}
 
             {serverError && (
               <div
@@ -216,13 +204,10 @@ export default function PlatformLoginPage() {
               </div>
             )}
 
-            {/* -------------------------------------------------------------- */}
-            {/* LOGIN FORM                                                     */}
-            {/* -------------------------------------------------------------- */}
+            {/* LOGIN FORM */}
 
             <form
               onSubmit={handleSubmit}
-              noValidate
               className="space-y-4"
             >
 
@@ -245,9 +230,10 @@ export default function PlatformLoginPage() {
                   required
                   disabled={submitting}
                   value={email}
-                  onChange={(event) =>
-                    setEmail(event.target.value)
-                  }
+                  onChange={(event) => {
+                    setEmail(event.target.value);
+                    setServerError(null);
+                  }}
                   placeholder="you@biztru.com"
                   className="min-h-12 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-teal-400/60 focus:ring-2 focus:ring-teal-400/10 disabled:cursor-not-allowed disabled:opacity-60"
                 />
@@ -274,9 +260,10 @@ export default function PlatformLoginPage() {
                     required
                     disabled={submitting}
                     value={password}
-                    onChange={(event) =>
-                      setPassword(event.target.value)
-                    }
+                    onChange={(event) => {
+                      setPassword(event.target.value);
+                      setServerError(null);
+                    }}
                     placeholder="Enter your password"
                     className="min-h-12 w-full rounded-2xl border border-white/10 bg-white/5 py-3 pl-4 pr-12 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-teal-400/60 focus:ring-2 focus:ring-teal-400/10 disabled:cursor-not-allowed disabled:opacity-60"
                   />
@@ -312,8 +299,6 @@ export default function PlatformLoginPage() {
                 type="submit"
                 disabled={
                   submitting ||
-                  status === "LOADING" ||
-                  status === "INITIALIZING" ||
                   !email.trim() ||
                   !password
                 }
@@ -334,9 +319,7 @@ export default function PlatformLoginPage() {
 
             </form>
 
-            {/* -------------------------------------------------------------- */}
-            {/* CARD FOOTER                                                    */}
-            {/* -------------------------------------------------------------- */}
+            {/* CARD FOOTER */}
 
             <div className="mt-6 border-t border-white/10 pt-5 text-center">
               <p className="text-[11px] leading-5 text-gray-500">
@@ -347,9 +330,7 @@ export default function PlatformLoginPage() {
 
           </section>
 
-          {/* ---------------------------------------------------------------- */}
-          {/* BOTTOM NOTE                                                      */}
-          {/* ---------------------------------------------------------------- */}
+          {/* FOOTER */}
 
           <footer className="space-y-2 text-center">
 

@@ -27,7 +27,6 @@ import {
   Package,
   Activity,
   ChartNoAxesCombined,
-  Settings,
   MoreHorizontal,
   ChevronRight,
   X,
@@ -40,33 +39,34 @@ import {
   Wallet,
   LockKeyhole,
   ArrowLeftRight,
+  RefreshCw,
+  ScrollText,
+  Layers,
 } from "lucide-react";
+
 import { GlassCard } from "../ui/GlassCard";
 import { GlassIcon } from "../ui/GlassIcon";
 import { cn } from "../../lib/utils";
 
+import {
+  usePlatformSession,
+} from "../../Biztru/services/PlatformSession/PlatformSessionContext";
 
-/* ------------------------------------------------------------------ */
-/* Types                                                              */
-/* ------------------------------------------------------------------ */
+/* -------------------------------------------------------------------------- */
+/* TYPES                                                                      */
+/* -------------------------------------------------------------------------- */
 
 type IconComponent = ComponentType<{
   className?: string;
 }>;
 
-export type PlatformRole =
-  | "FOUNDER"
-  | "PLATFORM_ADMIN"
-  | "BILLING_OPERATOR"
-  | "SUPPORT_OPERATOR"
-  | "SECURITY_ADMIN"
-  | "PLATFORM_ENGINEER"
-  | "PLATFORM_ANALYST";
+type PlatformRole = string;
 
 interface NavigationItem {
   label: string;
   icon: IconComponent;
   href: string;
+  permission: string;
 }
 
 interface MoreItem extends NavigationItem {
@@ -78,518 +78,6 @@ interface MoreGroup {
   items: MoreItem[];
 }
 
-interface CommandNavProps {
-  role: PlatformRole;
-  displayName?: string;
-}
-
-/* ------------------------------------------------------------------ */
-/* Founder navigation                                                 */
-/* ------------------------------------------------------------------ */
-
-const founderPrimaryNav: NavigationItem[] = [
-  {
-    label: "Overview",
-    icon: LayoutDashboard,
-    href: "/command",
-  },
-  {
-    label: "Businesses",
-    icon: Building2,
-    href: "/command/tenants",
-  },
-  {
-    label: "Billing",
-    icon: CreditCard,
-    href: "/command/commercial",
-  },
-  {
-    label: "Intelligence",
-    icon: BrainCircuit,
-    href: "/command/intelligence",
-  },
-];
-
-const founderMoreGroups: MoreGroup[] = [
-  {
-    title: "Platform Management",
-    items: [
-      {
-        label: "Business registry",
-        description: "All registered businesses and tenants",
-        icon: Building2,
-        href: "/command/tenants",
-      },
-      {
-        label: "Subscriptions and billing",
-        description: "Plans, subscriptions and payments",
-        icon: CreditCard,
-        href: "/command/commercial",
-      },
-      {
-        label: "Entitlements",
-        description: "Plans, limits and business access",
-        icon: ShieldCheck,
-        href: "/command/entitlements",
-      },
-    ],
-  },
-  {
-    title: "Intelligence",
-    items: [
-      {
-        label: "Platform analytics",
-        description: "Platform-wide performance and metrics",
-        icon: BrainCircuit,
-        href: "/command/intelligence",
-      },
-      {
-        label: "Business performance",
-        description: "Tenant growth and usage",
-        icon: ChartNoAxesCombined,
-        href: "/command/intelligence",
-      },
-    ],
-  },
-  {
-    title: "Customer Operations",
-    items: [
-      {
-        label: "Support centre",
-        description: "Customer requests and escalations",
-        icon: Headset,
-        href: "/command/support",
-      },
-    ],
-  },
-  {
-    title: "Governance",
-    items: [
-      {
-        label: "Administrators",
-        description: "Platform operators and identities",
-        icon: Users,
-        href: "/command/governance",
-      },
-      {
-        label: "Security and access",
-        description: "Platform security and permissions",
-        icon: Fingerprint,
-        href: "/command/governance",
-      },
-      {
-        label: "Audit trail",
-        description: "Administrative activities",
-        icon: ClipboardList,
-        href: "/command/governance",
-      },
-    ],
-  },
-  {
-    title: "Infrastructure",
-    items: [
-      {
-        label: "Infrastructure overview",
-        description: "Services and system health",
-        icon: Server,
-        href: "/command/infrastructure",
-      },
-      {
-        label: "Database monitoring",
-        description: "Database health and capacity",
-        icon: Database,
-        href: "/command/infrastructure",
-      },
-      {
-        label: "System incidents",
-        description: "Technical incidents and failures",
-        icon: AlertTriangle,
-        href: "/command/infrastructure",
-      },
-    ],
-  },
-];
-
-/* ------------------------------------------------------------------ */
-/* Platform administrator navigation                                  */
-/* ------------------------------------------------------------------ */
-
-const adminPrimaryNav: NavigationItem[] = [
-  {
-    label: "Overview",
-    icon: LayoutDashboard,
-    href: "/command",
-  },
-  {
-    label: "Businesses",
-    icon: Building2,
-    href: "/command/tenants",
-  },
-  {
-    label: "Entitlements",
-    icon: ShieldCheck,
-    href: "/command/entitlements",
-  },
-  {
-    label: "Support",
-    icon: Headset,
-    href: "/command/support",
-  },
-];
-
-const adminMoreGroups: MoreGroup[] = [
-  {
-    title: "Platform Operations",
-    items: [
-      {
-        label: "Business registry",
-        description: "Inspect registered businesses",
-        icon: Building2,
-        href: "/command/tenants",
-      },
-      {
-        label: "Entitlements",
-        description: "Manage business access limits",
-        icon: ShieldCheck,
-        href: "/command/entitlements",
-      },
-    ],
-  },
-  {
-    title: "Customer Operations",
-    items: [
-      {
-        label: "Support centre",
-        description: "Assist businesses",
-        icon: Headset,
-        href: "/command/support",
-      },
-    ],
-  },
-];
-
-/* ------------------------------------------------------------------ */
-/* Billing operator navigation                                        */
-/* ------------------------------------------------------------------ */
-
-const billingPrimaryNav: NavigationItem[] = [
-  {
-    label: "Overview",
-    icon: LayoutDashboard,
-    href: "/command/commercial",
-  },
-  {
-    label: "Subscriptions",
-    icon: CreditCard,
-    href: "/command/commercial/subscriptions",
-  },
-  {
-    label: "Invoices",
-    icon: Receipt,
-    href: "/command/commercial/invoices",
-  },
-  {
-    label: "Payments",
-    icon: Wallet,
-    href: "/command/commercial/payments",
-  },
-];
-
-const billingMoreGroups: MoreGroup[] = [
-  {
-    title: "Commercial Operations",
-    items: [
-      {
-        label: "Plans and pricing",
-        description: "Manage platform subscription plans",
-        icon: Package,
-        href: "/command/commercial/plans",
-      },
-      {
-        label: "Subscriptions",
-        description: "Business subscription registry",
-        icon: CreditCard,
-        href: "/command/commercial/subscriptions",
-      },
-      {
-        label: "Invoices",
-        description: "Review billing documents",
-        icon: FileText,
-        href: "/command/commercial/invoices",
-      },
-      {
-        label: "Payments",
-        description: "Payment transactions",
-        icon: Wallet,
-        href: "/command/commercial/payments",
-      },
-      {
-        label: "Billing events",
-        description: "Billing lifecycle events",
-        icon: Activity,
-        href: "/command/commercial/events",
-      },
-    ],
-  },
-];
-
-/* ------------------------------------------------------------------ */
-/* Support operator navigation                                        */
-/* ------------------------------------------------------------------ */
-
-const supportPrimaryNav: NavigationItem[] = [
-  {
-    label: "Overview",
-    icon: LayoutDashboard,
-    href: "/command/support",
-  },
-  {
-    label: "Tickets",
-    icon: Headset,
-    href: "/command/support/tickets",
-  },
-  {
-    label: "Businesses",
-    icon: Building2,
-    href: "/command/support/businesses",
-  },
-];
-
-const supportMoreGroups: MoreGroup[] = [
-  {
-    title: "Customer Operations",
-    items: [
-      {
-        label: "All tickets",
-        description: "Customer support requests",
-        icon: Headset,
-        href: "/command/support/tickets",
-      },
-      {
-        label: "Escalations",
-        description: "Tickets requiring special attention",
-        icon: AlertTriangle,
-        href: "/command/support/escalations",
-      },
-      {
-        label: "Business accounts",
-        description: "Customer account lookup",
-        icon: Building2,
-        href: "/command/support/businesses",
-      },
-      {
-        label: "Support activity",
-        description: "Support resolution history",
-        icon: ClipboardList,
-        href: "/command/support/activity",
-      },
-    ],
-  },
-];
-
-/* ------------------------------------------------------------------ */
-/* Security administrator navigation                                  */
-/* ------------------------------------------------------------------ */
-
-const securityPrimaryNav: NavigationItem[] = [
-  {
-    label: "Overview",
-    icon: LayoutDashboard,
-    href: "/command/governance",
-  },
-  {
-    label: "Identities",
-    icon: Users,
-    href: "/command/governance/administrators",
-  },
-  {
-    label: "Audit",
-    icon: ClipboardList,
-    href: "/command/governance/audit",
-  },
-  {
-    label: "Incidents",
-    icon: ShieldCheck,
-    href: "/command/governance/incidents",
-  },
-];
-
-const securityMoreGroups: MoreGroup[] = [
-  {
-    title: "Identity Management",
-    items: [
-      {
-        label: "Administrators",
-        description: "Platform administrative identities",
-        icon: Users,
-        href: "/command/governance/administrators",
-      },
-      {
-        label: "Roles and permissions",
-        description: "Platform access control",
-        icon: LockKeyhole,
-        href: "/command/governance/permissions",
-      },
-    ],
-  },
-  {
-    title: "Security Monitoring",
-    items: [
-      {
-        label: "Audit trail",
-        description: "Administrative action history",
-        icon: ClipboardList,
-        href: "/command/governance/audit",
-      },
-      {
-        label: "Security incidents",
-        description: "Security events and investigations",
-        icon: ShieldCheck,
-        href: "/command/governance/incidents",
-      },
-    ],
-  },
-];
-
-/* ------------------------------------------------------------------ */
-/* Platform engineer navigation                                       */
-/* ------------------------------------------------------------------ */
-
-const engineerPrimaryNav: NavigationItem[] = [
-  {
-    label: "Overview",
-    icon: LayoutDashboard,
-    href: "/command/infrastructure",
-  },
-  {
-    label: "Services",
-    icon: Server,
-    href: "/command/infrastructure/services",
-  },
-  {
-    label: "Database",
-    icon: Database,
-    href: "/command/infrastructure/database",
-  },
-  {
-    label: "Incidents",
-    icon: AlertTriangle,
-    href: "/command/infrastructure/incidents",
-  },
-];
-
-const engineerMoreGroups: MoreGroup[] = [
-  {
-    title: "Infrastructure",
-    items: [
-      {
-        label: "Services",
-        description: "API and application services",
-        icon: Server,
-        href: "/command/infrastructure/services",
-      },
-      {
-        label: "Database",
-        description: "Database performance and capacity",
-        icon: Database,
-        href: "/command/infrastructure/database",
-      },
-      {
-        label: "Background workers",
-        description: "Queue and job processing",
-        icon: Workflow,
-        href: "/command/infrastructure/workers",
-      },
-      {
-        label: "Synchronization",
-        description: "Synchronization engine monitoring",
-        icon: ArrowLeftRight,
-        href: "/command/infrastructure/synchronization",
-      },
-    ],
-  },
-  {
-    title: "Reliability",
-    items: [
-      {
-        label: "Incidents",
-        description: "Infrastructure incidents",
-        icon: AlertTriangle,
-        href: "/command/infrastructure/incidents",
-      },
-      {
-        label: "Performance",
-        description: "Latency and service health",
-        icon: Gauge,
-        href: "/command/infrastructure/performance",
-      },
-    ],
-  },
-];
-
-/* ------------------------------------------------------------------ */
-/* Platform analyst navigation                                       */
-/* ------------------------------------------------------------------ */
-
-const analystPrimaryNav: NavigationItem[] = [
-  {
-    label: "Overview",
-    icon: LayoutDashboard,
-    href: "/command/intelligence",
-  },
-  {
-    label: "Businesses",
-    icon: Building2,
-    href: "/command/intelligence/businesses",
-  },
-  {
-    label: "Growth",
-    icon: ChartNoAxesCombined,
-    href: "/command/intelligence/growth",
-  },
-  {
-    label: "Usage",
-    icon: Activity,
-    href: "/command/intelligence/usage",
-  },
-];
-
-const analystMoreGroups: MoreGroup[] = [
-  {
-    title: "Platform Intelligence",
-    items: [
-      {
-        label: "Business analytics",
-        description: "Tenant performance and segmentation",
-        icon: Building2,
-        href: "/command/intelligence/businesses",
-      },
-      {
-        label: "Growth analytics",
-        description: "Acquisition and retention",
-        icon: ChartNoAxesCombined,
-        href: "/command/intelligence/growth",
-      },
-      {
-        label: "Usage analytics",
-        description: "Platform usage and activity",
-        icon: Activity,
-        href: "/command/intelligence/usage",
-      },
-      {
-        label: "Reports",
-        description: "Platform intelligence reports",
-        icon: FileText,
-        href: "/command/intelligence/reports",
-      },
-    ],
-  },
-];
-
-/* ------------------------------------------------------------------ */
-/* Role configuration                                                 */
-/* ------------------------------------------------------------------ */
-
 interface RoleNavigation {
   label: string;
   title: string;
@@ -598,11 +86,810 @@ interface RoleNavigation {
   more: MoreGroup[];
 }
 
-const roleNavigation: Record<PlatformRole, RoleNavigation> = {
+/* -------------------------------------------------------------------------- */
+/* PERMISSION CODES                                                           */
+/*                                                                            */
+/* These must match the permission codes registered in your backend RBAC.    */
+/* -------------------------------------------------------------------------- */
+
+const PERMISSION = {
+  /* Dashboard */
+
+  DASHBOARD_READ: "platform.analytics.read",
+
+  /* Tenant management */
+
+  TENANTS_READ: "platform.tenants.read",
+
+  /* Commercial management - legacy module */
+
+  COMMERCIAL_READ: "platform.commercial.read",
+  COMMERCIAL_PLANS_READ: "platform.commercial.plans.read",
+  COMMERCIAL_SUBSCRIPTIONS_READ: "platform.commercial.subscriptions.read",
+  COMMERCIAL_INVOICES_READ: "platform.commercial.invoices.read",
+  COMMERCIAL_PAYMENTS_READ: "platform.commercial.payments.read",
+  COMMERCIAL_EVENTS_READ: "platform.commercial.events.read",
+
+  /* Billing management */
+
+  BILLING_READ: "platform.billing.read",
+
+  BILLING_PLANS_READ: "platform.billing.plans.read",
+  BILLING_PLANS_CREATE: "platform.billing.plans.create",
+  BILLING_PLANS_UPDATE: "platform.billing.plans.update",
+  BILLING_PLANS_PUBLISH: "platform.billing.plans.publish",
+  BILLING_PLANS_RETIRE: "platform.billing.plans.retire",
+
+  BILLING_SUBSCRIPTIONS_READ: "platform.billing.subscriptions.read",
+  BILLING_SUBSCRIPTIONS_MANAGE: "platform.billing.subscriptions.manage",
+
+  BILLING_ENTITLEMENTS_READ: "platform.billing.entitlements.read",
+  BILLING_ENTITLEMENTS_MANAGE: "platform.billing.entitlements.manage",
+
+  BILLING_FINANCIAL_READ: "platform.billing.financial.read",
+  BILLING_FINANCIAL_MANAGE: "platform.billing.financial.manage",
+
+  BILLING_EVENTS_READ: "platform.billing.events.read",
+
+  BILLING_SYNCHRONIZATION_READ:
+    "platform.billing.synchronization.read",
+
+  /* General platform entitlements */
+
+  ENTITLEMENTS_READ: "platform.entitlements.read",
+
+  /* Intelligence */
+
+  INTELLIGENCE_READ: "platform.intelligence.read",
+  INTELLIGENCE_BUSINESSES_READ: "platform.intelligence.businesses.read",
+  INTELLIGENCE_GROWTH_READ: "platform.intelligence.growth.read",
+  INTELLIGENCE_USAGE_READ: "platform.intelligence.usage.read",
+  INTELLIGENCE_REPORTS_READ: "platform.intelligence.reports.read",
+
+  /* Support */
+
+  SUPPORT_READ: "platform.support.read",
+  SUPPORT_TICKETS_READ: "platform.support.tickets.read",
+  SUPPORT_ESCALATIONS_READ: "platform.support.escalations.read",
+  SUPPORT_BUSINESSES_READ: "platform.support.businesses.read",
+  SUPPORT_ACTIVITY_READ: "platform.support.activity.read",
+
+  /* Governance */
+
+  USERS_READ: "platform.users.read",
+  ROLES_READ: "platform.roles.read",
+  PERMISSIONS_READ: "platform.permissions.read",
+  AUDIT_READ: "platform.audit.read",
+  SECURITY_INCIDENTS_READ: "platform.security.incidents.read",
+
+  /* Infrastructure */
+
+  INFRASTRUCTURE_READ: "platform.infrastructure.read",
+  INFRASTRUCTURE_SERVICES_READ: "platform.infrastructure.services.read",
+  INFRASTRUCTURE_DATABASE_READ: "platform.infrastructure.database.read",
+  INFRASTRUCTURE_WORKERS_READ: "platform.infrastructure.workers.read",
+  INFRASTRUCTURE_SYNC_READ:
+    "platform.infrastructure.synchronization.read",
+  INFRASTRUCTURE_INCIDENTS_READ: "platform.infrastructure.incidents.read",
+  INFRASTRUCTURE_PERFORMANCE_READ:
+    "platform.infrastructure.performance.read",
+} as const;
+
+/* -------------------------------------------------------------------------- */
+/* NAVIGATION ITEM HELPERS                                                    */
+/* -------------------------------------------------------------------------- */
+
+function nav(
+  label: string,
+  icon: IconComponent,
+  href: string,
+  permission: string,
+): NavigationItem {
+  return {
+    label,
+    icon,
+    href,
+    permission,
+  };
+}
+
+function more(
+  label: string,
+  description: string,
+  icon: IconComponent,
+  href: string,
+  permission: string,
+): MoreItem {
+  return {
+    label,
+    description,
+    icon,
+    href,
+    permission,
+  };
+}
+
+/* -------------------------------------------------------------------------- */
+/* FOUNDER BILLING NAVIGATION                                                 */
+/* -------------------------------------------------------------------------- */
+
+const founderBillingMoreGroup: MoreGroup = {
+  title: "Billing Management",
+  items: [
+    more(
+      "Billing overview",
+      "Platform billing performance and metrics",
+      CreditCard,
+      "/command/billing",
+      PERMISSION.BILLING_READ,
+    ),
+    more(
+      "Plans and pricing",
+      "Create, configure and publish subscription plans",
+      Package,
+      "/command/billing/plans",
+      PERMISSION.BILLING_PLANS_READ,
+    ),
+    more(
+      "Create billing plan",
+      "Configure a new subscription plan",
+      Layers,
+      "/command/billing/plans/create",
+      PERMISSION.BILLING_PLANS_CREATE,
+    ),
+    more(
+      "Subscriptions",
+      "Manage business subscriptions",
+      CreditCard,
+      "/command/billing/subscriptions",
+      PERMISSION.BILLING_SUBSCRIPTIONS_READ,
+    ),
+    more(
+      "Billing entitlements",
+      "Review subscription features and business limits",
+      ShieldCheck,
+      "/command/billing/entitlements",
+      PERMISSION.BILLING_ENTITLEMENTS_READ,
+    ),
+    more(
+      "Financial operations",
+      "Invoices, payments and billing revenue",
+      Wallet,
+      "/command/billing/financial",
+      PERMISSION.BILLING_FINANCIAL_READ,
+    ),
+    more(
+      "Billing events",
+      "Subscription and payment lifecycle events",
+      Activity,
+      "/command/billing/events",
+      PERMISSION.BILLING_EVENTS_READ,
+    ),
+    more(
+      "Business synchronization",
+      "Monitor published billing catalogue delivery",
+      RefreshCw,
+      "/command/billing/synchronization",
+      PERMISSION.BILLING_SYNCHRONIZATION_READ,
+    ),
+  ],
+};
+
+/* -------------------------------------------------------------------------- */
+/* FOUNDER NAVIGATION                                                         */
+/* -------------------------------------------------------------------------- */
+
+const founderPrimaryNav: NavigationItem[] = [
+  nav(
+    "Overview",
+    LayoutDashboard,
+    "/command/dashboard",
+    PERMISSION.DASHBOARD_READ,
+  ),
+  nav(
+    "Businesses",
+    Building2,
+    "/command/tenants",
+    PERMISSION.TENANTS_READ,
+  ),
+  nav(
+    "Billing",
+    CreditCard,
+    "/command/billing",
+    PERMISSION.BILLING_READ,
+  ),
+  nav(
+    "Intelligence",
+    BrainCircuit,
+    "/command/intelligence",
+    PERMISSION.INTELLIGENCE_READ,
+  ),
+];
+
+const founderMoreGroups: MoreGroup[] = [
+  {
+    title: "Platform Management",
+    items: [
+      more(
+        "Business registry",
+        "All registered businesses and tenants",
+        Building2,
+        "/command/tenants",
+        PERMISSION.TENANTS_READ,
+      ),
+      more(
+        "Commercial management",
+        "Platform commercial configuration",
+        CreditCard,
+        "/command/commercial",
+        PERMISSION.COMMERCIAL_READ,
+      ),
+      more(
+        "Platform entitlements",
+        "General platform access and entitlement configuration",
+        ShieldCheck,
+        "/command/entitlements",
+        PERMISSION.ENTITLEMENTS_READ,
+      ),
+    ],
+  },
+
+  founderBillingMoreGroup,
+
+  {
+    title: "Intelligence",
+    items: [
+      more(
+        "Platform analytics",
+        "Platform-wide performance and metrics",
+        BrainCircuit,
+        "/command/intelligence",
+        PERMISSION.INTELLIGENCE_READ,
+      ),
+      more(
+        "Business performance",
+        "Tenant growth and usage",
+        ChartNoAxesCombined,
+        "/command/intelligence/businesses",
+        PERMISSION.INTELLIGENCE_BUSINESSES_READ,
+      ),
+    ],
+  },
+
+  {
+    title: "Customer Operations",
+    items: [
+      more(
+        "Support centre",
+        "Customer requests and escalations",
+        Headset,
+        "/command/support",
+        PERMISSION.SUPPORT_READ,
+      ),
+    ],
+  },
+
+  {
+    title: "Governance",
+    items: [
+      more(
+        "Administrators",
+        "Platform operators and identities",
+        Users,
+        "/command/governance/administrators",
+        PERMISSION.USERS_READ,
+      ),
+      more(
+        "Security and access",
+        "Platform security and permissions",
+        Fingerprint,
+        "/command/governance/permissions",
+        PERMISSION.PERMISSIONS_READ,
+      ),
+      more(
+        "Audit trail",
+        "Administrative activities",
+        ClipboardList,
+        "/command/governance/audit",
+        PERMISSION.AUDIT_READ,
+      ),
+    ],
+  },
+
+  {
+    title: "Infrastructure",
+    items: [
+      more(
+        "Infrastructure overview",
+        "Services and system health",
+        Server,
+        "/command/infrastructure",
+        PERMISSION.INFRASTRUCTURE_READ,
+      ),
+      more(
+        "Database monitoring",
+        "Database health and capacity",
+        Database,
+        "/command/infrastructure/database",
+        PERMISSION.INFRASTRUCTURE_DATABASE_READ,
+      ),
+      more(
+        "System incidents",
+        "Technical incidents and failures",
+        AlertTriangle,
+        "/command/infrastructure/incidents",
+        PERMISSION.INFRASTRUCTURE_INCIDENTS_READ,
+      ),
+    ],
+  },
+];
+
+/* -------------------------------------------------------------------------- */
+/* PLATFORM ADMINISTRATOR NAVIGATION                                          */
+/* -------------------------------------------------------------------------- */
+
+const adminPrimaryNav: NavigationItem[] = [
+  nav(
+    "Overview",
+    LayoutDashboard,
+    "/command/dashboard",
+    PERMISSION.DASHBOARD_READ,
+  ),
+  nav(
+    "Businesses",
+    Building2,
+    "/command/tenants",
+    PERMISSION.TENANTS_READ,
+  ),
+  nav(
+    "Entitlements",
+    ShieldCheck,
+    "/command/entitlements",
+    PERMISSION.ENTITLEMENTS_READ,
+  ),
+  nav(
+    "Support",
+    Headset,
+    "/command/support",
+    PERMISSION.SUPPORT_READ,
+  ),
+];
+
+const adminMoreGroups: MoreGroup[] = [
+  {
+    title: "Platform Operations",
+    items: [
+      more(
+        "Business registry",
+        "Inspect registered businesses",
+        Building2,
+        "/command/tenants",
+        PERMISSION.TENANTS_READ,
+      ),
+      more(
+        "Entitlements",
+        "Manage general business access limits",
+        ShieldCheck,
+        "/command/entitlements",
+        PERMISSION.ENTITLEMENTS_READ,
+      ),
+    ],
+  },
+  {
+    title: "Customer Operations",
+    items: [
+      more(
+        "Support centre",
+        "Assist businesses",
+        Headset,
+        "/command/support",
+        PERMISSION.SUPPORT_READ,
+      ),
+    ],
+  },
+];
+
+/* -------------------------------------------------------------------------- */
+/* BILLING OPERATOR NAVIGATION                                                */
+/* -------------------------------------------------------------------------- */
+
+const billingPrimaryNav: NavigationItem[] = [
+  nav(
+    "Overview",
+    LayoutDashboard,
+    "/command/billing",
+    PERMISSION.BILLING_READ,
+  ),
+  nav(
+    "Plans",
+    Package,
+    "/command/billing/plans",
+    PERMISSION.BILLING_PLANS_READ,
+  ),
+  nav(
+    "Subscriptions",
+    CreditCard,
+    "/command/billing/subscriptions",
+    PERMISSION.BILLING_SUBSCRIPTIONS_READ,
+  ),
+  nav(
+    "Financials",
+    Wallet,
+    "/command/billing/financial",
+    PERMISSION.BILLING_FINANCIAL_READ,
+  ),
+];
+
+const billingMoreGroups: MoreGroup[] = [
+  {
+    title: "Plan Management",
+    items: [
+      more(
+        "Plan catalogue",
+        "View configured subscription plans",
+        Package,
+        "/command/billing/plans",
+        PERMISSION.BILLING_PLANS_READ,
+      ),
+      more(
+        "Create billing plan",
+        "Create a new subscription plan",
+        Layers,
+        "/command/billing/plans/create",
+        PERMISSION.BILLING_PLANS_CREATE,
+      ),
+    ],
+  },
+
+  {
+    title: "Subscription Operations",
+    items: [
+      more(
+        "Subscriptions",
+        "Business subscription registry",
+        CreditCard,
+        "/command/billing/subscriptions",
+        PERMISSION.BILLING_SUBSCRIPTIONS_READ,
+      ),
+      more(
+        "Billing entitlements",
+        "Subscription limits and enabled features",
+        ShieldCheck,
+        "/command/billing/entitlements",
+        PERMISSION.BILLING_ENTITLEMENTS_READ,
+      ),
+    ],
+  },
+
+  {
+    title: "Financial Operations",
+    items: [
+      more(
+        "Invoices and payments",
+        "Review billing documents and payment transactions",
+        Receipt,
+        "/command/billing/financial",
+        PERMISSION.BILLING_FINANCIAL_READ,
+      ),
+    ],
+  },
+
+  {
+    title: "Billing Monitoring",
+    items: [
+      more(
+        "Billing events",
+        "Billing lifecycle and transaction events",
+        Activity,
+        "/command/billing/events",
+        PERMISSION.BILLING_EVENTS_READ,
+      ),
+      more(
+        "Business synchronization",
+        "Monitor catalogue revisions and acknowledgements",
+        ArrowLeftRight,
+        "/command/billing/synchronization",
+        PERMISSION.BILLING_SYNCHRONIZATION_READ,
+      ),
+    ],
+  },
+];
+
+/* -------------------------------------------------------------------------- */
+/* SUPPORT OPERATOR NAVIGATION                                                */
+/* -------------------------------------------------------------------------- */
+
+const supportPrimaryNav: NavigationItem[] = [
+  nav(
+    "Overview",
+    LayoutDashboard,
+    "/command/support",
+    PERMISSION.SUPPORT_READ,
+  ),
+  nav(
+    "Tickets",
+    Headset,
+    "/command/support/tickets",
+    PERMISSION.SUPPORT_TICKETS_READ,
+  ),
+  nav(
+    "Businesses",
+    Building2,
+    "/command/support/businesses",
+    PERMISSION.SUPPORT_BUSINESSES_READ,
+  ),
+];
+
+const supportMoreGroups: MoreGroup[] = [
+  {
+    title: "Customer Operations",
+    items: [
+      more(
+        "All tickets",
+        "Customer support requests",
+        Headset,
+        "/command/support/tickets",
+        PERMISSION.SUPPORT_TICKETS_READ,
+      ),
+      more(
+        "Escalations",
+        "Tickets requiring special attention",
+        AlertTriangle,
+        "/command/support/escalations",
+        PERMISSION.SUPPORT_ESCALATIONS_READ,
+      ),
+      more(
+        "Business accounts",
+        "Customer account lookup",
+        Building2,
+        "/command/support/businesses",
+        PERMISSION.SUPPORT_BUSINESSES_READ,
+      ),
+      more(
+        "Support activity",
+        "Support resolution history",
+        ClipboardList,
+        "/command/support/activity",
+        PERMISSION.SUPPORT_ACTIVITY_READ,
+      ),
+    ],
+  },
+];
+
+/* -------------------------------------------------------------------------- */
+/* SECURITY ADMINISTRATOR NAVIGATION                                          */
+/* -------------------------------------------------------------------------- */
+
+const securityPrimaryNav: NavigationItem[] = [
+  nav(
+    "Overview",
+    LayoutDashboard,
+    "/command/governance",
+    PERMISSION.DASHBOARD_READ,
+  ),
+  nav(
+    "Identities",
+    Users,
+    "/command/governance/administrators",
+    PERMISSION.USERS_READ,
+  ),
+  nav(
+    "Audit",
+    ClipboardList,
+    "/command/governance/audit",
+    PERMISSION.AUDIT_READ,
+  ),
+  nav(
+    "Incidents",
+    ShieldCheck,
+    "/command/governance/incidents",
+    PERMISSION.SECURITY_INCIDENTS_READ,
+  ),
+];
+
+const securityMoreGroups: MoreGroup[] = [
+  {
+    title: "Identity Management",
+    items: [
+      more(
+        "Administrators",
+        "Platform administrative identities",
+        Users,
+        "/command/governance/administrators",
+        PERMISSION.USERS_READ,
+      ),
+      more(
+        "Roles and permissions",
+        "Platform access control",
+        LockKeyhole,
+        "/command/governance/permissions",
+        PERMISSION.PERMISSIONS_READ,
+      ),
+    ],
+  },
+  {
+    title: "Security Monitoring",
+    items: [
+      more(
+        "Audit trail",
+        "Administrative action history",
+        ClipboardList,
+        "/command/governance/audit",
+        PERMISSION.AUDIT_READ,
+      ),
+      more(
+        "Security incidents",
+        "Security events and investigations",
+        ShieldCheck,
+        "/command/governance/incidents",
+        PERMISSION.SECURITY_INCIDENTS_READ,
+      ),
+    ],
+  },
+];
+
+/* -------------------------------------------------------------------------- */
+/* PLATFORM ENGINEER NAVIGATION                                               */
+/* -------------------------------------------------------------------------- */
+
+const engineerPrimaryNav: NavigationItem[] = [
+  nav(
+    "Overview",
+    LayoutDashboard,
+    "/command/infrastructure",
+    PERMISSION.INFRASTRUCTURE_READ,
+  ),
+  nav(
+    "Services",
+    Server,
+    "/command/infrastructure/services",
+    PERMISSION.INFRASTRUCTURE_SERVICES_READ,
+  ),
+  nav(
+    "Database",
+    Database,
+    "/command/infrastructure/database",
+    PERMISSION.INFRASTRUCTURE_DATABASE_READ,
+  ),
+  nav(
+    "Incidents",
+    AlertTriangle,
+    "/command/infrastructure/incidents",
+    PERMISSION.INFRASTRUCTURE_INCIDENTS_READ,
+  ),
+];
+
+const engineerMoreGroups: MoreGroup[] = [
+  {
+    title: "Infrastructure",
+    items: [
+      more(
+        "Services",
+        "API and application services",
+        Server,
+        "/command/infrastructure/services",
+        PERMISSION.INFRASTRUCTURE_SERVICES_READ,
+      ),
+      more(
+        "Database",
+        "Database performance and capacity",
+        Database,
+        "/command/infrastructure/database",
+        PERMISSION.INFRASTRUCTURE_DATABASE_READ,
+      ),
+      more(
+        "Background workers",
+        "Queue and job processing",
+        Workflow,
+        "/command/infrastructure/workers",
+        PERMISSION.INFRASTRUCTURE_WORKERS_READ,
+      ),
+      more(
+        "Synchronization",
+        "Synchronization engine monitoring",
+        ArrowLeftRight,
+        "/command/infrastructure/synchronization",
+        PERMISSION.INFRASTRUCTURE_SYNC_READ,
+      ),
+    ],
+  },
+  {
+    title: "Reliability",
+    items: [
+      more(
+        "Incidents",
+        "Infrastructure incidents",
+        AlertTriangle,
+        "/command/infrastructure/incidents",
+        PERMISSION.INFRASTRUCTURE_INCIDENTS_READ,
+      ),
+      more(
+        "Performance",
+        "Latency and service health",
+        Gauge,
+        "/command/infrastructure/performance",
+        PERMISSION.INFRASTRUCTURE_PERFORMANCE_READ,
+      ),
+    ],
+  },
+];
+
+/* -------------------------------------------------------------------------- */
+/* PLATFORM ANALYST NAVIGATION                                                */
+/* -------------------------------------------------------------------------- */
+
+const analystPrimaryNav: NavigationItem[] = [
+  nav(
+    "Overview",
+    LayoutDashboard,
+    "/command/intelligence",
+    PERMISSION.INTELLIGENCE_READ,
+  ),
+  nav(
+    "Businesses",
+    Building2,
+    "/command/intelligence/businesses",
+    PERMISSION.INTELLIGENCE_BUSINESSES_READ,
+  ),
+  nav(
+    "Growth",
+    ChartNoAxesCombined,
+    "/command/intelligence/growth",
+    PERMISSION.INTELLIGENCE_GROWTH_READ,
+  ),
+  nav(
+    "Usage",
+    Activity,
+    "/command/intelligence/usage",
+    PERMISSION.INTELLIGENCE_USAGE_READ,
+  ),
+];
+
+const analystMoreGroups: MoreGroup[] = [
+  {
+    title: "Platform Intelligence",
+    items: [
+      more(
+        "Business analytics",
+        "Tenant performance and segmentation",
+        Building2,
+        "/command/intelligence/businesses",
+        PERMISSION.INTELLIGENCE_BUSINESSES_READ,
+      ),
+      more(
+        "Growth analytics",
+        "Acquisition and retention",
+        ChartNoAxesCombined,
+        "/command/intelligence/growth",
+        PERMISSION.INTELLIGENCE_GROWTH_READ,
+      ),
+      more(
+        "Usage analytics",
+        "Platform usage and activity",
+        Activity,
+        "/command/intelligence/usage",
+        PERMISSION.INTELLIGENCE_USAGE_READ,
+      ),
+      more(
+        "Reports",
+        "Platform intelligence reports",
+        FileText,
+        "/command/intelligence/reports",
+        PERMISSION.INTELLIGENCE_REPORTS_READ,
+      ),
+    ],
+  },
+];
+
+/* -------------------------------------------------------------------------- */
+/* ROLE CONFIGURATION                                                         */
+/* -------------------------------------------------------------------------- */
+
+const roleNavigation: Partial<Record<PlatformRole, RoleNavigation>> = {
   FOUNDER: {
     label: "FOUNDER CONTROL",
     title: "Command Centre",
-    description: "Complete platform administration",
+    description: "Platform administration",
     primary: founderPrimaryNav,
     more: founderMoreGroups,
   },
@@ -656,25 +943,157 @@ const roleNavigation: Record<PlatformRole, RoleNavigation> = {
   },
 };
 
-/* ------------------------------------------------------------------ */
-/* Route matching                                                     */
-/* ------------------------------------------------------------------ */
+/* -------------------------------------------------------------------------- */
+/* NAVIGATION COMPOSITION                                                     */
+/* -------------------------------------------------------------------------- */
+
+const ROLE_PRIORITY: PlatformRole[] = [
+  "FOUNDER",
+  "PLATFORM_ADMIN",
+  "SECURITY_ADMIN",
+  "BILLING_OPERATOR",
+  "SUPPORT_OPERATOR",
+  "PLATFORM_ENGINEER",
+  "PLATFORM_ANALYST",
+];
+
+function uniqueNavigationItems<T extends NavigationItem>(
+  items: T[],
+): T[] {
+  const seen = new Set<string>();
+
+  return items.filter((item) => {
+    const key = `${item.href}:${item.label}`;
+
+    if (seen.has(key)) {
+      return false;
+    }
+
+    seen.add(key);
+    return true;
+  });
+}
+
+function composeMoreGroups(groups: MoreGroup[]): MoreGroup[] {
+  const grouped = new Map<string, MoreItem[]>();
+
+  for (const group of groups) {
+    const existing = grouped.get(group.title) ?? [];
+
+    grouped.set(
+      group.title,
+      uniqueNavigationItems([...existing, ...group.items]),
+    );
+  }
+
+  return Array.from(grouped.entries())
+    .map(([title, items]) => ({
+      title,
+      items,
+    }))
+    .filter((group) => group.items.length > 0);
+}
+
+function getRoleConfigurations(
+  roleCodes: string[],
+): RoleNavigation[] {
+  return roleCodes
+    .map((code) => roleNavigation[code])
+    .filter(
+      (config): config is RoleNavigation => config !== undefined,
+    );
+}
+
+function getNavigationConfiguration(
+  roleCodes: string[],
+): RoleNavigation {
+  const sortedRoles = [...roleCodes].sort((a, b) => {
+    const aIndex = ROLE_PRIORITY.indexOf(a);
+    const bIndex = ROLE_PRIORITY.indexOf(b);
+
+    return (
+      (aIndex === -1 ? Number.MAX_SAFE_INTEGER : aIndex) -
+      (bIndex === -1 ? Number.MAX_SAFE_INTEGER : bIndex)
+    );
+  });
+
+  const configurations = getRoleConfigurations(sortedRoles);
+
+  if (configurations.length === 0) {
+    return {
+      label: "PLATFORM ACCESS",
+      title: "Platform Workspace",
+      description: "Available platform operations",
+      primary: [],
+      more: [],
+    };
+  }
+
+  const primary = uniqueNavigationItems(
+    configurations.flatMap((config) => config.primary),
+  );
+
+  const moreGroups = composeMoreGroups(
+    configurations.flatMap((config) => config.more),
+  );
+
+  return {
+    label:
+      configurations.length > 1
+        ? "MULTI-ROLE ACCESS"
+        : configurations[0].label,
+
+    title:
+      configurations.length > 1
+        ? "Platform Workspace"
+        : configurations[0].title,
+
+    description:
+      configurations.length > 1
+        ? "Combined authorized workspaces"
+        : configurations[0].description,
+
+    primary,
+    more: moreGroups,
+  };
+}
+
+/* -------------------------------------------------------------------------- */
+/* PERMISSION FILTERING                                                       */
+/* -------------------------------------------------------------------------- */
+
+function filterByPermissions<T extends NavigationItem>(
+  items: T[],
+  permissionSet: Set<string>,
+): T[] {
+  return items.filter((item) =>
+    permissionSet.has(item.permission),
+  );
+}
+
+function filterGroupsByPermissions(
+  groups: MoreGroup[],
+  permissionSet: Set<string>,
+): MoreGroup[] {
+  return groups
+    .map((group) => ({
+      ...group,
+      items: filterByPermissions(group.items, permissionSet),
+    }))
+    .filter((group) => group.items.length > 0);
+}
+
+/* -------------------------------------------------------------------------- */
+/* ROUTE MATCHING                                                             */
+/* -------------------------------------------------------------------------- */
 
 function isActive(
   pathname: string,
   href: string,
 ): boolean {
-  const exactMatchRoutes = [
-    "/command",
-    "/command/commercial",
-    "/command/support",
-    "/command/governance",
-    "/command/infrastructure",
-    "/command/intelligence",
-  ];
-
-  if (exactMatchRoutes.includes(href)) {
-    return pathname === href;
+  if (href === "/command") {
+    return pathname === "/command" ||
+      pathname === "/command/";
   }
 
   return (
@@ -683,9 +1102,9 @@ function isActive(
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* Navigation row                                                     */
-/* ------------------------------------------------------------------ */
+/* -------------------------------------------------------------------------- */
+/* NAVIGATION ROW                                                             */
+/* -------------------------------------------------------------------------- */
 
 function NavLinkRow({
   to,
@@ -722,42 +1141,138 @@ function NavLinkRow({
         )}
       />
 
-      <span className="truncate">
-        {label}
-      </span>
+      <span className="truncate">{label}</span>
     </Link>
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* Main navigation                                                     */
-/* ------------------------------------------------------------------ */
+/* -------------------------------------------------------------------------- */
+/* MOBILE MORE LINK                                                           */
+/* -------------------------------------------------------------------------- */
 
-export default function CommandNav({
-  role,
-  displayName = "Platform Operator",
-}: CommandNavProps) {
+function MobileMoreLink({
+  item,
+  Icon,
+  active,
+  onClick,
+}: {
+  item: MoreItem | NavigationItem;
+  Icon: IconComponent;
+  active: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-current={active ? "page" : undefined}
+      className={cn(
+        "flex w-full items-center gap-3 rounded-2xl border px-3 py-3 text-left transition-all active:scale-[0.98]",
+        active
+          ? "border-teal-500/20 bg-teal-500/10"
+          : "border-white/10 bg-white/[0.03] hover:bg-white/[0.06]",
+      )}
+    >
+      <GlassIcon size="sm" variant="primary">
+        <Icon className="h-4 w-4" />
+      </GlassIcon>
+
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-medium text-white">
+          {item.label}
+        </p>
+
+        {"description" in item && (
+          <p className="truncate text-[11px] text-gray-500">
+            {item.description}
+          </p>
+        )}
+      </div>
+
+      <ChevronRight className="h-4 w-4 shrink-0 text-gray-600" />
+    </button>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* MAIN COMMAND NAVIGATION                                                    */
+/* -------------------------------------------------------------------------- */
+
+export default function CommandNav() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
-  const config = useMemo(
-    () => roleNavigation[role],
-    [role],
-  );
+  const {
+    session,
+    status,
+    isAuthenticated,
+    logout,
+  } = usePlatformSession();
 
   const [moreOpen, setMoreOpen] = useState(false);
 
-  /* -------------------------------------------------------------- */
-  /* Close mobile navigation on route changes                       */
-  /* -------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------- */
+  /* SESSION DATA                                                            */
+  /* ---------------------------------------------------------------------- */
+
+  const roleCodes = useMemo(
+    () => session.authorization.roles.map((role) => role.code),
+    [session.authorization.roles],
+  );
+
+  const permissionSet = useMemo(
+    () => new Set(session.authorization.permissions),
+    [session.authorization.permissions],
+  );
+
+  /* ---------------------------------------------------------------------- */
+  /* ROLE-BASED WORKSPACE                                                    */
+  /* ---------------------------------------------------------------------- */
+
+  const config = useMemo(
+    () => getNavigationConfiguration(roleCodes),
+    [roleCodes],
+  );
+
+  /* ---------------------------------------------------------------------- */
+  /* PERMISSION-BASED NAVIGATION                                             */
+  /* ---------------------------------------------------------------------- */
+
+  const primaryNavigation = useMemo(
+    () => filterByPermissions(config.primary, permissionSet),
+    [config.primary, permissionSet],
+  );
+
+  const moreNavigation = useMemo(
+    () => filterGroupsByPermissions(config.more, permissionSet),
+    [config.more, permissionSet],
+  );
+
+  /* ---------------------------------------------------------------------- */
+  /* OPERATOR IDENTITY                                                       */
+  /* ---------------------------------------------------------------------- */
+
+  const displayName =
+    session.user?.name ?? "Platform Operator";
+
+  const email =
+    session.user?.email ?? "";
+
+  const roleLabel = roleCodes.length
+    ? roleCodes.map((role) => role.replaceAll("_", " ")).join(" · ")
+    : "NO ASSIGNED ROLE";
+
+  /* ---------------------------------------------------------------------- */
+  /* CLOSE MOBILE NAVIGATION ON ROUTE CHANGES                                */
+  /* ---------------------------------------------------------------------- */
 
   useEffect(() => {
     setMoreOpen(false);
   }, [pathname]);
 
-  /* -------------------------------------------------------------- */
-  /* Body scroll lock                                                */
-  /* -------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------- */
+  /* BODY SCROLL LOCK                                                        */
+  /* ---------------------------------------------------------------------- */
 
   useEffect(() => {
     if (!moreOpen) return;
@@ -771,9 +1286,9 @@ export default function CommandNav({
     };
   }, [moreOpen]);
 
-  /* -------------------------------------------------------------- */
-  /* Navigation helpers                                              */
-  /* -------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------- */
+  /* NAVIGATION HELPERS                                                      */
+  /* ---------------------------------------------------------------------- */
 
   const closeMore = useCallback(() => {
     setMoreOpen(false);
@@ -787,15 +1302,33 @@ export default function CommandNav({
     [navigate],
   );
 
-  /* -------------------------------------------------------------- */
-  /* Render                                                          */
-  /* -------------------------------------------------------------- */
+  const handleLogout = useCallback(async () => {
+    setMoreOpen(false);
+    await logout();
+    navigate("/command/login", { replace: true });
+  }, [logout, navigate]);
+
+  /* ---------------------------------------------------------------------- */
+  /* AUTHENTICATION STATE                                                    */
+  /* ---------------------------------------------------------------------- */
+
+  if (
+    status !== "AUTHENTICATED" ||
+    !isAuthenticated ||
+    !session.user
+  ) {
+    return null;
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* RENDER                                                                  */
+  /* ---------------------------------------------------------------------- */
 
   return (
     <>
-      {/* ========================================================== */}
-      {/* Desktop sidebar                                            */}
-      {/* ========================================================== */}
+      {/* ================================================================ */}
+      {/* DESKTOP SIDEBAR                                                    */}
+      {/* ================================================================ */}
 
       <aside
         className="
@@ -824,28 +1357,30 @@ export default function CommandNav({
           </p>
         </div>
 
-        {/* Primary and grouped navigation */}
+        {/* Navigation */}
 
         <nav className="flex-1 space-y-6 overflow-y-auto px-3 py-4">
-          <section>
-            <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-wider text-gray-500">
-              WORKSPACE
-            </p>
+          {primaryNavigation.length > 0 && (
+            <section>
+              <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-wider text-gray-500">
+                WORKSPACE
+              </p>
 
-            <div className="space-y-1">
-              {config.primary.map((item) => (
-                <NavLinkRow
-                  key={item.href}
-                  to={item.href}
-                  label={item.label}
-                  icon={item.icon}
-                  active={isActive(pathname, item.href)}
-                />
-              ))}
-            </div>
-          </section>
+              <div className="space-y-1">
+                {primaryNavigation.map((item) => (
+                  <NavLinkRow
+                    key={`${item.href}:${item.label}`}
+                    to={item.href}
+                    label={item.label}
+                    icon={item.icon}
+                    active={isActive(pathname, item.href)}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
 
-          {config.more.map((group) => (
+          {moreNavigation.map((group) => (
             <section key={group.title}>
               <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-wider text-gray-500">
                 {group.title}
@@ -854,7 +1389,7 @@ export default function CommandNav({
               <div className="space-y-1">
                 {group.items.map((item) => (
                   <NavLinkRow
-                    key={item.href + item.label}
+                    key={`${item.href}:${item.label}`}
                     to={item.href}
                     label={item.label}
                     icon={item.icon}
@@ -865,6 +1400,20 @@ export default function CommandNav({
               </div>
             </section>
           ))}
+
+          {primaryNavigation.length === 0 &&
+            moreNavigation.length === 0 && (
+              <div className="rounded-xl border border-white/10 bg-white/[0.035] p-4">
+                <p className="text-sm font-medium text-white">
+                  No navigation access
+                </p>
+
+                <p className="mt-1 text-xs leading-5 text-gray-500">
+                  Your account does not currently have permissions
+                  for any command centre section.
+                </p>
+              </div>
+            )}
         </nav>
 
         {/* Operator identity */}
@@ -880,17 +1429,34 @@ export default function CommandNav({
                 {displayName}
               </p>
 
-              <p className="mt-1 text-[10px] text-gray-500">
-                {role.replaceAll("_", " ")}
+              <p className="mt-1 truncate text-[10px] text-gray-500">
+                {email}
+              </p>
+
+              <p className="mt-1 truncate text-[9px] uppercase tracking-wide text-teal-400/80">
+                {roleLabel}
               </p>
             </div>
           </div>
+
+          <button
+            type="button"
+            onClick={() => void handleLogout()}
+            className="
+              mt-3 w-full rounded-xl border border-white/10
+              px-3 py-2 text-left text-xs text-gray-400
+              transition hover:border-red-500/20
+              hover:bg-red-500/10 hover:text-red-300
+            "
+          >
+            Sign out
+          </button>
         </div>
       </aside>
 
-      {/* ========================================================== */}
-      {/* Mobile bottom navigation                                   */}
-      {/* ========================================================== */}
+      {/* ================================================================ */}
+      {/* MOBILE BOTTOM NAVIGATION                                          */}
+      {/* ================================================================ */}
 
       <div className="fixed bottom-4 left-3 right-3 z-50 pb-[env(safe-area-inset-bottom)] lg:hidden">
         <GlassCard
@@ -901,13 +1467,13 @@ export default function CommandNav({
             className="flex items-center justify-between"
             aria-label="Primary navigation"
           >
-            {config.primary.slice(0, 4).map((item) => {
+            {primaryNavigation.slice(0, 4).map((item) => {
               const Icon = item.icon;
               const active = isActive(pathname, item.href);
 
               return (
                 <Link
-                  key={item.href}
+                  key={`${item.href}:${item.label}`}
                   to={item.href}
                   aria-current={active ? "page" : undefined}
                   className="
@@ -940,45 +1506,48 @@ export default function CommandNav({
               );
             })}
 
-            <button
-              type="button"
-              aria-label="Open more navigation"
-              aria-expanded={moreOpen}
-              onClick={() => setMoreOpen(true)}
-              className="
-                flex flex-1 flex-col
-                items-center justify-center
-                gap-0.5 rounded-2xl py-1.5
-                transition-all active:scale-95
-              "
-            >
-              <div
-                className={cn(
-                  "rounded-xl p-2 transition-colors",
-                  moreOpen
-                    ? "bg-teal-500/15 text-teal-400"
-                    : "text-gray-400",
-                )}
+            {(moreNavigation.length > 0 ||
+              primaryNavigation.length > 4) && (
+              <button
+                type="button"
+                aria-label="Open more navigation"
+                aria-expanded={moreOpen}
+                onClick={() => setMoreOpen(true)}
+                className="
+                  flex flex-1 flex-col
+                  items-center justify-center
+                  gap-0.5 rounded-2xl py-1.5
+                  transition-all active:scale-95
+                "
               >
-                <MoreHorizontal className="h-5 w-5" />
-              </div>
+                <div
+                  className={cn(
+                    "rounded-xl p-2 transition-colors",
+                    moreOpen
+                      ? "bg-teal-500/15 text-teal-400"
+                      : "text-gray-400",
+                  )}
+                >
+                  <MoreHorizontal className="h-5 w-5" />
+                </div>
 
-              <span
-                className={cn(
-                  "text-[10px] font-medium",
-                  moreOpen ? "text-teal-400" : "text-gray-500",
-                )}
-              >
-                More
-              </span>
-            </button>
+                <span
+                  className={cn(
+                    "text-[10px] font-medium",
+                    moreOpen ? "text-teal-400" : "text-gray-500",
+                  )}
+                >
+                  More
+                </span>
+              </button>
+            )}
           </nav>
         </GlassCard>
       </div>
 
-      {/* ========================================================== */}
-      {/* Mobile More sheet                                          */}
-      {/* ========================================================== */}
+      {/* ================================================================ */}
+      {/* MOBILE MORE SHEET                                                  */}
+      {/* ================================================================ */}
 
       {moreOpen && (
         <div
@@ -1045,51 +1614,80 @@ export default function CommandNav({
             {/* Content */}
 
             <div className="flex-1 space-y-6 overflow-y-auto px-4 py-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
-              {config.more.map((group) => (
+              {primaryNavigation.length > 4 && (
+                <section>
+                  <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-wider text-gray-500">
+                    WORKSPACE
+                  </p>
+
+                  <div className="space-y-1.5">
+                    {primaryNavigation.slice(4).map((item) => (
+                      <MobileMoreLink
+                        key={`${item.href}:${item.label}`}
+                        item={item}
+                        Icon={item.icon}
+                        active={isActive(pathname, item.href)}
+                        onClick={() => navigateTo(item.href)}
+                      />
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {moreNavigation.map((group) => (
                 <section key={group.title}>
                   <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-wider text-gray-500">
                     {group.title}
                   </p>
 
                   <div className="space-y-1.5">
-                    {group.items.map((item) => {
-                      const Icon = item.icon;
-                      const active = isActive(pathname, item.href);
-
-                      return (
-                        <Link
-                          key={item.href + item.label}
-                          to={item.href}
-                          onClick={closeMore}
-                          aria-current={active ? "page" : undefined}
-                          className={cn(
-                            "flex items-center gap-3 rounded-2xl border px-3 py-3 transition-all active:scale-[0.98]",
-                            active
-                              ? "border-teal-500/20 bg-teal-500/10"
-                              : "border-white/8 bg-white/3 hover:bg-white/6",
-                          )}
-                        >
-                          <GlassIcon size="sm" variant="primary">
-                            <Icon className="h-4 w-4" />
-                          </GlassIcon>
-
-                          <div className="min-w-0 flex-1">
-                            <p className="text-sm font-medium text-white">
-                              {item.label}
-                            </p>
-
-                            <p className="truncate text-[11px] text-gray-500">
-                              {item.description}
-                            </p>
-                          </div>
-
-                          <ChevronRight className="h-4 w-4 shrink-0 text-gray-600" />
-                        </Link>
-                      );
-                    })}
+                    {group.items.map((item) => (
+                      <MobileMoreLink
+                        key={`${item.href}:${item.label}`}
+                        item={item}
+                        Icon={item.icon}
+                        active={isActive(pathname, item.href)}
+                        onClick={() => navigateTo(item.href)}
+                      />
+                    ))}
                   </div>
                 </section>
               ))}
+
+              <section className="border-t border-white/10 pt-4">
+                <div className="mb-3 flex items-center gap-3 rounded-xl bg-white/[0.035] p-3">
+                  <GlassIcon size="sm" variant="primary">
+                    <Fingerprint className="h-4 w-4" />
+                  </GlassIcon>
+
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-xs font-semibold text-white">
+                      {displayName}
+                    </p>
+
+                    <p className="truncate text-[10px] text-gray-500">
+                      {email}
+                    </p>
+
+                    <p className="mt-1 truncate text-[9px] uppercase tracking-wide text-teal-400/80">
+                      {roleLabel}
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => void handleLogout()}
+                  className="
+                    w-full rounded-xl border border-white/10
+                    px-3 py-3 text-left text-sm text-gray-400
+                    transition hover:border-red-500/20
+                    hover:bg-red-500/10 hover:text-red-300
+                  "
+                >
+                  Sign out
+                </button>
+              </section>
             </div>
           </div>
         </div>

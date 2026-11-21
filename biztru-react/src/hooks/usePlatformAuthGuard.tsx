@@ -1,6 +1,4 @@
 
-// src/hooks/command/usePlatformAuthGuard.tsx
-
 import {
   createContext,
   useContext,
@@ -12,325 +10,66 @@ import {
   Outlet,
   useLocation,
 } from "react-router-dom";
-import { usePlatformSession, type PlatformRole, type PlatformPermission } from "../Biztru/services/PlatformSessionContext";
 
-
-/* ------------------------------------------------------------------ */
-/* ROLE PERMISSIONS                                                   */
-/* ------------------------------------------------------------------ */
-
-export const PLATFORM_ROLE_PERMISSIONS: Record<
-  PlatformRole,
-  readonly PlatformPermission[]
-> = {
-
-  /* ================================================================ */
-  /* FOUNDER                                                          */
-  /* ================================================================ */
-
-  FOUNDER: [
-    "platform:dashboard:read",
-
-    "tenant:read",
-    "tenant:manage",
-    "tenant:suspend",
-    "tenant:activate",
-
-    "commercial:read",
-    "commercial:manage",
-    "subscription:read",
-    "subscription:manage",
-    "invoice:read",
-    "invoice:manage",
-    "payment:read",
-
-    "entitlement:read",
-    "entitlement:manage",
-
-    "intelligence:read",
-    "analytics:read",
-
-    "support:read",
-    "support:manage",
-
-    "governance:read",
-    "audit:read",
-    "security:manage",
-
-    "infrastructure:read",
-    "infrastructure:manage",
-
-    "platform:users:read",
-    "platform:users:manage",
-    "platform:settings:manage",
-  ],
-
-  /* ================================================================ */
-  /* PLATFORM ADMIN                                                   */
-  /* ================================================================ */
-
-  PLATFORM_ADMIN: [
-    "platform:dashboard:read",
-
-    "tenant:read",
-    "tenant:manage",
-    "tenant:activate",
-
-    "entitlement:read",
-    "intelligence:read",
-    "analytics:read",
-
-    "support:read",
-
-    "governance:read",
-    "audit:read",
-
-    "platform:users:read",
-  ],
-
-  /* ================================================================ */
-  /* BILLING OPERATOR                                                 */
-  /* ================================================================ */
-
-  BILLING_OPERATOR: [
-    "platform:dashboard:read",
-
-    "tenant:read",
-
-    "commercial:read",
-    "commercial:manage",
-
-    "subscription:read",
-    "subscription:manage",
-
-    "invoice:read",
-    "invoice:manage",
-
-    "payment:read",
-
-    "entitlement:read",
-    "entitlement:manage",
-  ],
-
-  /* ================================================================ */
-  /* SUPPORT OPERATOR                                                 */
-  /* ================================================================ */
-
-  SUPPORT_OPERATOR: [
-    "platform:dashboard:read",
-
-    "tenant:read",
-
-    "support:read",
-    "support:manage",
-
-    "intelligence:read",
-  ],
-
-  /* ================================================================ */
-  /* SECURITY ADMIN                                                   */
-  /* ================================================================ */
-
-  SECURITY_ADMIN: [
-    "platform:dashboard:read",
-
-    "tenant:read",
-
-    "governance:read",
-    "audit:read",
-    "security:manage",
-
-    "platform:users:read",
-  ],
-
-  /* ================================================================ */
-  /* PLATFORM ENGINEER                                                */
-  /* ================================================================ */
-
-  PLATFORM_ENGINEER: [
-    "platform:dashboard:read",
-
-    "infrastructure:read",
-    "infrastructure:manage",
-
-    "governance:read",
-    "audit:read",
-  ],
-
-  /* ================================================================ */
-  /* PLATFORM ANALYST                                                 */
-  /* ================================================================ */
-
-  PLATFORM_ANALYST: [
-    "platform:dashboard:read",
-
-    "tenant:read",
-
-    "intelligence:read",
-    "analytics:read",
-
-    "commercial:read",
-    "subscription:read",
-    "payment:read",
-
-    "infrastructure:read",
-
-    "governance:read",
-    "audit:read",
-  ],
-};
+import {
+  usePlatformSession,
+} from "../Biztru/services/PlatformSession/PlatformSessionContext";
 
 /* ------------------------------------------------------------------ */
-/* ACCESS CONTEXT                                                     */
+/* AUTHORIZATION TYPES                                                */
 /* ------------------------------------------------------------------ */
+
+export type PlatformRole = string;
+export type PlatformPermission = string;
 
 export type PlatformAccessContext =
-
   | "PLATFORM"
-
   | "TENANT_MANAGEMENT"
-
   | "COMMERCIAL"
-
   | "ENTITLEMENTS"
-
   | "INTELLIGENCE"
-
   | "SUPPORT"
-
   | "GOVERNANCE"
-
   | "INFRASTRUCTURE";
 
 /* ------------------------------------------------------------------ */
-/* CONTEXT PERMISSIONS                                                */
-/* ------------------------------------------------------------------ */
-
-const CONTEXT_PERMISSIONS: Record<
-  PlatformAccessContext,
-  readonly PlatformPermission[]
-> = {
-
-  PLATFORM: [
-    "platform:dashboard:read",
-    "platform:users:read",
-    "platform:users:manage",
-    "platform:settings:manage",
-  ],
-
-  TENANT_MANAGEMENT: [
-    "tenant:read",
-    "tenant:manage",
-    "tenant:suspend",
-    "tenant:activate",
-  ],
-
-  COMMERCIAL: [
-    "commercial:read",
-    "commercial:manage",
-    "subscription:read",
-    "subscription:manage",
-    "invoice:read",
-    "invoice:manage",
-    "payment:read",
-  ],
-
-  ENTITLEMENTS: [
-    "entitlement:read",
-    "entitlement:manage",
-  ],
-
-  INTELLIGENCE: [
-    "intelligence:read",
-    "analytics:read",
-  ],
-
-  SUPPORT: [
-    "support:read",
-    "support:manage",
-  ],
-
-  GOVERNANCE: [
-    "governance:read",
-    "audit:read",
-    "security:manage",
-  ],
-
-  INFRASTRUCTURE: [
-    "infrastructure:read",
-    "infrastructure:manage",
-  ],
-};
-
-/* ------------------------------------------------------------------ */
 /* MUTABLE PERMISSIONS                                                */
+/*                                                                      */
+/* These are permission codes confirmed by the supplied /me response. */
+/* A permission is never granted by this list. It must also be present */
+/* in session.authorization.permissions.                              */
 /* ------------------------------------------------------------------ */
 
 const MUTABLE_PERMISSIONS: readonly PlatformPermission[] = [
+  "platform.users.invite",
+  "platform.users.manage",
+  "platform.users.sessions.revoke",
 
-  "tenant:manage",
-  "tenant:suspend",
-  "tenant:activate",
+  "platform.roles.manage",
+  "platform.roles.assign",
+  "platform.roles.permissions.manage",
 
-  "commercial:manage",
+  "platform.permissions.manage",
 
-  "subscription:manage",
+  "platform.tenants.suspend",
+  "platform.tenants.reactivate",
 
-  "invoice:manage",
-
-  "entitlement:manage",
-
-  "support:manage",
-
-  "security:manage",
-
-  "infrastructure:manage",
-
-  "platform:users:manage",
-
-  "platform:settings:manage",
+  "platform.analytics.projections.rebuild",
 ];
-
-/* ------------------------------------------------------------------ */
-/* ROLE VALIDATION                                                    */
-/* ------------------------------------------------------------------ */
-
-function isPlatformRole(
-  value: unknown,
-): value is PlatformRole {
-
-  return (
-    value === "FOUNDER" ||
-    value === "PLATFORM_ADMIN" ||
-    value === "BILLING_OPERATOR" ||
-    value === "SUPPORT_OPERATOR" ||
-    value === "SECURITY_ADMIN" ||
-    value === "PLATFORM_ENGINEER" ||
-    value === "PLATFORM_ANALYST"
-  );
-}
 
 /* ------------------------------------------------------------------ */
 /* ROUTE ACCESS                                                       */
 /* ------------------------------------------------------------------ */
 
 export interface PlatformRouteAccess {
-
   role: PlatformRole | null;
-
+  roles: readonly PlatformRole[];
   context: PlatformAccessContext;
-
   readOnly: boolean;
-
   permissions: readonly PlatformPermission[];
 
-  can: (
-    permission: PlatformPermission,
-  ) => boolean;
-
-  canMutate: (
-    permission: PlatformPermission,
-  ) => boolean;
+  can: (permission: PlatformPermission) => boolean;
+  canMutate: (permission: PlatformPermission) => boolean;
 }
 
 /* ------------------------------------------------------------------ */
@@ -338,17 +77,12 @@ export interface PlatformRouteAccess {
 /* ------------------------------------------------------------------ */
 
 const DEFAULT_ACCESS: PlatformRouteAccess = {
-
   role: null,
-
+  roles: [],
   context: "PLATFORM",
-
   readOnly: true,
-
   permissions: [],
-
   can: () => false,
-
   canMutate: () => false,
 };
 
@@ -359,7 +93,7 @@ const PlatformAccessContextProvider =
 /* ACCESS HOOK                                                        */
 /* ------------------------------------------------------------------ */
 
-export function usePlatformAccess() {
+export function usePlatformAccess(): PlatformRouteAccess {
   return useContext(PlatformAccessContextProvider);
 }
 
@@ -368,20 +102,68 @@ export function usePlatformAccess() {
 /* ------------------------------------------------------------------ */
 
 interface PlatformAuthGuardProps {
-
   requireAuth?: boolean;
-
   roles?: PlatformRole[];
-
   permissions?: PlatformPermission[];
-
   readOnlyRoles?: PlatformRole[];
-
   readOnly?: boolean;
-
   context?: PlatformAccessContext;
-
   children?: ReactNode;
+}
+
+/* ------------------------------------------------------------------ */
+/* LOADING VIEW                                                       */
+/* ------------------------------------------------------------------ */
+
+function PlatformAuthLoading() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-neutral-950">
+      <div className="text-center">
+        <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-white/20 border-t-teal-400" />
+
+        <p className="mt-4 text-sm text-neutral-400">
+          Verifying platform access...
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* UNAUTHORIZED VIEW                                                  */
+/* ------------------------------------------------------------------ */
+
+function PlatformUnauthorized() {
+  const handleGoBack = () => {
+    window.history.back();
+  };
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-neutral-950 px-6 text-white">
+      <div className="max-w-md text-center">
+        <div className="text-4xl font-semibold text-red-400">
+          403
+        </div>
+
+        <h1 className="mt-4 text-xl font-semibold">
+          Access denied
+        </h1>
+
+        <p className="mt-2 text-sm text-neutral-400">
+          Your platform account does not have permission to access
+          this resource.
+        </p>
+
+        <button
+          type="button"
+          onClick={handleGoBack}
+          className="mt-6 rounded-xl border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-white/10"
+        >
+          Go back
+        </button>
+      </div>
+    </div>
+  );
 }
 
 /* ------------------------------------------------------------------ */
@@ -389,233 +171,165 @@ interface PlatformAuthGuardProps {
 /* ------------------------------------------------------------------ */
 
 export function PlatformAuthGuard({
-
   requireAuth = true,
-
   roles,
-
   permissions,
-
   readOnlyRoles = [],
-
   readOnly = false,
-
   context = "PLATFORM",
-
   children,
-
 }: PlatformAuthGuardProps) {
-
   const location = useLocation();
 
-  const { session, status } = usePlatformSession();
+  const {
+    session,
+    status,
+  } = usePlatformSession();
 
-  /* ================================================================ */
+  /* ---------------------------------------------------------------- */
   /* SESSION INITIALIZATION                                           */
-  /* ================================================================ */
+  /* ---------------------------------------------------------------- */
 
   if (status === "INITIALIZING") {
-
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-neutral-950">
-
-        <div className="text-center">
-
-          <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-white/20 border-t-teal-400" />
-
-          <p className="mt-4 text-sm text-neutral-400">
-            Verifying platform access...
-          </p>
-
-        </div>
-
-      </div>
-    );
+    return <PlatformAuthLoading />;
   }
 
-  /* ================================================================ */
+  /* ---------------------------------------------------------------- */
   /* AUTHENTICATION                                                   */
-  /* ================================================================ */
+  /* ---------------------------------------------------------------- */
 
-  if (
-    requireAuth &&
-    (
-      status !== "AUTHENTICATED" ||
-      !session.user
-    )
-  ) {
+  const user = session?.user ?? null;
 
+  if (requireAuth && (!user || status !== "AUTHENTICATED")) {
     return (
       <Navigate
-        to="/platform/login"
+        to="/command/login"
         replace
-        state={{
-          from: location,
-        }}
+        state={{ from: location }}
       />
     );
   }
 
-  /* ================================================================ */
-  /* PLATFORM ACCOUNT VALIDATION                                      */
-  /* ================================================================ */
+  /* ---------------------------------------------------------------- */
+  /* PUBLIC ROUTE                                                     */
+  /* ---------------------------------------------------------------- */
 
-  const user = session.user;
-
-  if (!user || !user.isActive) {
-
+  if (!user) {
     return (
-      <Navigate
-        to="/unauthorized"
-        replace
-      />
+      <PlatformAccessContextProvider.Provider
+        value={DEFAULT_ACCESS}
+      >
+        {children ?? <Outlet />}
+      </PlatformAccessContextProvider.Provider>
     );
   }
 
-  /* ================================================================ */
-  /* ROLE RESOLUTION                                                  */
-  /* ================================================================ */
+  /* ---------------------------------------------------------------- */
+  /* ACCOUNT STATUS                                                   */
+  /* ---------------------------------------------------------------- */
 
-  const role: PlatformRole | null =
-    isPlatformRole(user.role)
-      ? user.role
-      : null;
-
-  if (!role) {
-
-    return (
-      <Navigate
-        to="/unauthorized"
-        replace
-      />
-    );
+  if (user.status !== "ACTIVE") {
+    return <PlatformUnauthorized />;
   }
 
-  /* ================================================================ */
-  /* ROLE AUTHORIZATION                                               */
-  /* ================================================================ */
+  /* ---------------------------------------------------------------- */
+  /* BACKEND-ASSIGNED ROLES                                           */
+  /* ---------------------------------------------------------------- */
 
-  if (
-    roles &&
-    !roles.includes(role)
-  ) {
+  const assignedRoles: PlatformRole[] = (
+    session.authorization?.roles ?? []
+  ).map((role) => role.code);
 
-    return (
-      <Navigate
-        to="/unauthorized"
-        replace
-      />
-    );
-  }
+  /* ---------------------------------------------------------------- */
+  /* BACKEND-ASSIGNED PERMISSIONS                                     */
+  /* ---------------------------------------------------------------- */
 
-  /* ================================================================ */
-  /* ROLE DEFAULT PERMISSIONS                                         */
-  /* ================================================================ */
-
-  const rolePermissions =
-    PLATFORM_ROLE_PERMISSIONS[role];
-
-  /* ================================================================ */
-  /* TRUSTED ASSIGNED PERMISSIONS                                     */
-  /* ================================================================ */
-
-  const assignedPermissions: readonly PlatformPermission[] = [
-    ...new Set<PlatformPermission>([
-      ...rolePermissions,
-      ...user.permissions,
-    ]),
+  // Do not filter these by context. The backend is authoritative.
+  const assignedPermissions: PlatformPermission[] = [
+    ...new Set(
+      session.authorization?.permissions ?? []
+    ),
   ];
 
-  /* ================================================================ */
-  /* CONTEXT PERMISSION FILTER                                        */
-  /* ================================================================ */
+  const permissionSet = new Set(assignedPermissions);
 
-  const allowedContextPermissions =
-    CONTEXT_PERMISSIONS[context];
+  /* ---------------------------------------------------------------- */
+  /* ROLE VALIDATION                                                  */
+  /* ---------------------------------------------------------------- */
 
-  const effectivePermissions =
-    assignedPermissions.filter(
-      (permission) =>
-        allowedContextPermissions.includes(permission),
-    );
+  if (
+    roles?.length &&
+    !roles.some((requiredRole) =>
+      assignedRoles.includes(requiredRole)
+    )
+  ) {
+    return <PlatformUnauthorized />;
+  }
 
-  /* ================================================================ */
+  /* ---------------------------------------------------------------- */
   /* READ-ONLY POLICY                                                 */
-  /* ================================================================ */
+  /* ---------------------------------------------------------------- */
 
   const isReadOnly =
     readOnly ||
-    readOnlyRoles.includes(role);
+    assignedRoles.some((role) =>
+      readOnlyRoles.includes(role)
+    );
 
-  /* ================================================================ */
+  /* ---------------------------------------------------------------- */
   /* AUTHORIZATION FUNCTIONS                                         */
-  /* ================================================================ */
+  /* ---------------------------------------------------------------- */
 
   const can = (
-    permission: PlatformPermission,
+    permission: PlatformPermission
   ): boolean => {
-
-    return effectivePermissions.includes(permission);
+    return permissionSet.has(permission);
   };
 
   const canMutate = (
-    permission: PlatformPermission,
+    permission: PlatformPermission
   ): boolean => {
-
     return (
       !isReadOnly &&
       MUTABLE_PERMISSIONS.includes(permission) &&
-      effectivePermissions.includes(permission)
+      permissionSet.has(permission)
     );
   };
 
-  /* ================================================================ */
+  /* ---------------------------------------------------------------- */
   /* ROUTE PERMISSION REQUIREMENTS                                    */
-  /* ================================================================ */
+  /* ---------------------------------------------------------------- */
 
   if (
     permissions?.length &&
     !permissions.every((permission) => can(permission))
   ) {
-
-    return (
-      <Navigate
-        to="/unauthorized"
-        replace
-      />
-    );
+    return <PlatformUnauthorized />;
   }
 
-  /* ================================================================ */
+  /* ---------------------------------------------------------------- */
   /* ROUTE ACCESS                                                     */
-  /* ================================================================ */
+  /* ---------------------------------------------------------------- */
 
   const routeAccess: PlatformRouteAccess = {
-
-    role,
-
+    role: assignedRoles[0] ?? null,
+    roles: assignedRoles,
     context,
-
     readOnly: isReadOnly,
-
-    permissions: effectivePermissions,
-
+    permissions: assignedPermissions,
     can,
-
     canMutate,
   };
 
-  /* ================================================================ */
+  /* ---------------------------------------------------------------- */
   /* RENDER                                                           */
-  /* ================================================================ */
+  /* ---------------------------------------------------------------- */
 
   return (
-
-    <PlatformAccessContextProvider.Provider value={routeAccess}>
-
+    <PlatformAccessContextProvider.Provider
+      value={routeAccess}
+    >
       {children ?? <Outlet />}
-
     </PlatformAccessContextProvider.Provider>
-
   );
 }

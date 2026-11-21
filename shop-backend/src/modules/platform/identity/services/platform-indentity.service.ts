@@ -256,6 +256,71 @@ export class PlatformIdentityService {
     });
   }
 
+
+async getMyAuthorization(platformUserId: string) {
+  return prisma.$transaction(async (tx) => {
+    const user = await tx.platformUser.findUnique({
+      where: {
+        id: platformUserId,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        status: true,
+      },
+    });
+
+    if (!user || user.status !== PlatformUserStatus.ACTIVE) {
+      throw new Error("Active platform account required");
+    }
+
+    const now = new Date();
+
+    const assignments = await tx.platformUserRole.findMany({
+      where: {
+        platformUserId,
+        OR: [
+          { expiresAt: null },
+          { expiresAt: { gt: now } },
+        ],
+        role: {
+          isActive: true,
+        },
+      },
+      select: {
+        role: {
+          select: {
+            id: true,
+            code: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    const roles = assignments.map((assignment) => ({
+      id: assignment.role.id,
+      code: assignment.role.code,
+      name: assignment.role.name,
+    }));
+
+    const permissions = await this.getPermissionCodes(
+      platformUserId,
+      tx
+    );
+
+    return {
+      user,
+      authorization: {
+        roles,
+        permissions,
+      },
+    };
+  });
+}
+
+
     async inviteUser(input: InviteUserInput) {
     const email = normalizeEmail(input.email);
     const name = input.name.trim();

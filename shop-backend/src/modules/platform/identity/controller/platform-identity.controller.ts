@@ -53,14 +53,23 @@ export class PlatformIdentityController {
     return res.status(400).json({ message });
   }
 
-  private setRefreshCookie(res: Response, token: string): void {
-    res.cookie("platformRefreshToken", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      path: "/api/platform/identity",
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-    });
+  private readonly refreshCookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict" as const,
+    path: "/platform/identity",
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+  };
+
+  private setRefreshCookie(
+    res: Response,
+    token: string
+  ): void {
+    res.cookie(
+      "platformRefreshToken",
+      token,
+      this.refreshCookieOptions
+    );
   }
 
   // --------------------------------------------------
@@ -81,8 +90,10 @@ export class PlatformIdentityController {
         email,
         password,
         metadata: {
-          ...(req.ip !== undefined ? { ipAddress: req.ip } : {}),
-          ...(req.get("user-agent") !== undefined
+          ...(req.ip !== undefined
+            ? { ipAddress: req.ip }
+            : {}),
+          ...(req.get("user-agent")
             ? { userAgent: req.get("user-agent")! }
             : {}),
           ...(typeof req.body.deviceName === "string"
@@ -91,6 +102,7 @@ export class PlatformIdentityController {
         },
       });
 
+      // Attach refresh token as an HttpOnly cookie.
       this.setRefreshCookie(res, result.refreshToken);
 
       return res.status(200).json({
@@ -107,46 +119,46 @@ export class PlatformIdentityController {
   async refresh(req: Request, res: Response): Promise<Response> {
     try {
       const refreshToken =
-        req.cookies?.platformRefreshToken ??
-        req.body.refreshToken;
+        req.cookies?.platformRefreshToken;
 
       if (!refreshToken) {
         return res.status(401).json({
-          message: "Refresh token is required",
+          message: "Refresh token is missing or expired.",
         });
       }
 
       const result =
         await this.identityService.refreshSession(refreshToken);
 
+      // Rotate the refresh token cookie.
       this.setRefreshCookie(res, result.refreshToken);
 
       return res.status(200).json({
-        message: "Session refreshed",
+        message: "Session refreshed successfully",
         accessToken: result.accessToken,
       });
     } catch (error) {
-      res.clearCookie("platformRefreshToken", {
-        path: "/api/platform/identity",
-      });
-
       return this.handleError(res, error);
     }
   }
-
   async logout(req: Request, res: Response): Promise<Response> {
     try {
       const refreshToken =
-        req.cookies?.platformRefreshToken ??
-        req.body.refreshToken;
+        req.cookies?.platformRefreshToken;
 
       if (refreshToken) {
         await this.identityService.logout(refreshToken);
       }
 
-      res.clearCookie("platformRefreshToken", {
-        path: "/api/platform/identity",
-      });
+      res.clearCookie(
+        "platformRefreshToken",
+        {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          path: "/platform/identity",
+        }
+      );
 
       return res.status(200).json({
         message: "Logged out successfully",
@@ -187,20 +199,21 @@ export class PlatformIdentityController {
   // CURRENT PLATFORM USER
   // --------------------------------------------------
 
-  async me(
-    req: AuthenticatedPlatformRequest,
-    res: Response
-  ): Promise<Response> {
-    try {
-      const user = await this.identityService.getUser(
-        this.getActor(req)
-      );
+  
+async me(
+  req: AuthenticatedPlatformRequest,
+  res: Response
+): Promise<Response> {
+  try {
+    const result = await this.identityService.getMyAuthorization(
+      this.getActor(req)
+    );
 
-      return res.status(200).json({ user });
-    } catch (error) {
-      return this.handleError(res, error);
-    }
+    return res.status(200).json(result);
+  } catch (error) {
+    return this.handleError(res, error);
   }
+}
 
   async myPermissions(
     req: AuthenticatedPlatformRequest,
