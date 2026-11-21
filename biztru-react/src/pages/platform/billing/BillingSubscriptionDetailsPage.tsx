@@ -13,7 +13,7 @@ import {
 import { GlassCard } from "../../../components/ui/GlassCard";
 import { GlassButton } from "../../../components/ui/GlassButton";
 
-import { platformSubscriptionApi } from "../../../services/platform/billing/platform-subscription.api";
+import { platformSubscriptionApi } from "../../../Biztru/services/platform/billing/platform-subscription.api"; 
 
 import type { PlatformSubscription } from "../../../types/billing/platform-billing.types";
 

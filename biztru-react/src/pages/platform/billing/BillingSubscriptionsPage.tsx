@@ -16,7 +16,7 @@ import { GlassCard } from "../../../components/ui/GlassCard";
 import { GlassButton } from "../../../components/ui/GlassButton";
 import { GlassIcon } from "../../../components/ui/GlassIcon";
 
-import { platformSubscriptionApi } from "../../../services/platform/billing/platform-subscription.api";
+import { platformSubscriptionApi } from "../../../Biztru/services/platform/billing/platform-subscription.api";
 
 import type {
   PlatformSubscription,

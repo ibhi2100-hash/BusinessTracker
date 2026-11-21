@@ -13,7 +13,7 @@ import {
 import { GlassCard } from "../../../components/ui/GlassCard";
 import { GlassButton } from "../../../components/ui/GlassButton";
 
-import type { BillingEvent } from "../../../types/billing/billing-event.types";
+import type { BillingEvent } from "../../../types/billing/billingeventTypes"; 
 
 export default function BillingEventsPage() {
   const [events, setEvents] = useState<BillingEvent[]>([]);

@@ -15,7 +15,7 @@ import {
 import { GlassCard } from "../../../components/ui/GlassCard";
 import { GlassButton } from "../../../components/ui/GlassButton";
 
-import { useBusinessBilling } from "../../../Biztru/hooks/useBusinessBilling";
+import { useBusinessBilling } from "../../../hooks/useBusinessBilling"; 
 
 export default function BusinessEntitlementsPage() {
   const navigate = useNavigate();

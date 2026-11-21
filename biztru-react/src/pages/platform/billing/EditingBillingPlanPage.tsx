@@ -12,13 +12,13 @@ import {
 import { GlassCard } from "../../../components/ui/GlassCard";
 import { GlassButton } from "../../../components/ui/GlassButton";
 
-import { billingPlanApi } from "../../../services/platform/billing/billing-plan.api";
+import { billingPlanApi } from "../../../Biztru/services/platform/billing/billing-plan.api"; 
 
 import type {
   BillingPlan,
   BillingCycle,
   UpdateBillingPlanInput,
-} from "../../../types/billing/billing-plan.types";
+} from "../../../types/billing/billingPlan.types";
 
 const features = [
   ["inventory", "Inventory Management"],

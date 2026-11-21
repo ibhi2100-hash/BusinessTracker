@@ -17,8 +17,8 @@ import { GlassCard } from "../../../components/ui/GlassCard";
 import { GlassButton } from "../../../components/ui/GlassButton";
 import { GlassIcon } from "../../../components/ui/GlassIcon";
 
-import { billingPlanApi } from "../../../services/platform/billing/billing-plan.api";
-import { platformSubscriptionApi } from "../../../services/platform/billing/platform-subscription.api";
+import { billingPlanApi } from "../../../Biztru/services/platform/billing/billing-plan.api"; 
+import { platformSubscriptionApi } from "../../../Biztru/services/platform/billing/platform-subscription.api";
 
 interface BillingOverviewData {
   plans: number;

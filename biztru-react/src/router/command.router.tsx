@@ -36,8 +36,8 @@ import BillingOverviewPage from "../pages/platform/billing/BillingOverviewPage";
 
 // Plan management
 import BillingPlansPage from "../pages/platform/billing/BillingPlansPage";
-import CreateBillingPlanPage from "../pages/platform/billing/CreateBillingPlanPage";
-import EditBillingPlanPage from "../pages/platform/billing/EditBillingPlanPage";
+import CreateBillingPlanPage from "../pages/platform/billing/CreatingBillingPlanPage";
+import EditBillingPlanPage from "../pages/platform/billing/EditingBillingPlanPage";
 import BillingPlanDetailsPage from "../pages/platform/billing/BillingPlanDetailsPage";
 
 // Subscription management
@@ -48,13 +48,10 @@ import BillingSubscriptionDetailsPage from "../pages/platform/billing/BillingSub
 import BillingEntitlementsPage from "../pages/platform/billing/BillingEntitlementsPage";
 
 // Financial operations
-import BillingFinancialOperationsPage from "../pages/platform/billing/BillingFinancialOperationsPage";
-
 // Billing events
 import BillingEventsPage from "../pages/platform/billing/BillingEventsPage";
 
-// Business catalogue synchronization
-import BillingSynchronizationPage from "../pages/platform/billing/BillingSynchronizationPage";
+
 
 /* ------------------------------------------------------------------ */
 /* LAYOUT AND GUARDS                                                  */
@@ -326,20 +323,6 @@ export function CommandRouter() {
         {/* FINANCIAL OPERATIONS                                       */}
         {/* ---------------------------------------------------------- */}
 
-        <Route
-          path="billing/financial"
-          element={
-            <PlatformAuthGuard
-              permissions={[
-                "platform.billing.financial.read",
-              ]}
-              context="BILLING"
-            >
-              <BillingFinancialOperationsPage />
-            </PlatformAuthGuard>
-          }
-        />
-
         {/* ---------------------------------------------------------- */}
         {/* BILLING EVENT HISTORY                                      */}
         {/* ---------------------------------------------------------- */}
@@ -362,19 +345,7 @@ export function CommandRouter() {
         {/* BUSINESS BILLING SYNCHRONIZATION                           */}
         {/* ---------------------------------------------------------- */}
 
-        <Route
-          path="billing/synchronization"
-          element={
-            <PlatformAuthGuard
-              permissions={[
-                "platform.billing.synchronization.read",
-              ]}
-              context="BILLING"
-            >
-              <BillingSynchronizationPage />
-            </PlatformAuthGuard>
-          }
-        />
+      
       </Route>
 
       {/* ============================================================ */}

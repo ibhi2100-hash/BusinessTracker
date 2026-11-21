@@ -26,6 +26,7 @@ export type PlatformAccessContext =
   | "PLATFORM"
   | "TENANT_MANAGEMENT"
   | "COMMERCIAL"
+  | "BILLING"
   | "ENTITLEMENTS"
   | "INTELLIGENCE"
   | "SUPPORT"
@@ -34,16 +35,27 @@ export type PlatformAccessContext =
 
 /* ------------------------------------------------------------------ */
 /* MUTABLE PERMISSIONS                                                */
-/*                                                                      */
-/* These are permission codes confirmed by the supplied /me response. */
-/* A permission is never granted by this list. It must also be present */
-/* in session.authorization.permissions.                              */
+/*                                                                    */
+/* These permissions must also be assigned by the backend.           */
+/* This list never grants a permission by itself.                    */
+/*                                                                    */
+/* A permission must satisfy BOTH conditions:                        */
+/* 1. It exists in the backend-assigned session permissions.         */
+/* 2. It exists in this mutation allowlist.                           */
 /* ------------------------------------------------------------------ */
 
 const MUTABLE_PERMISSIONS: readonly PlatformPermission[] = [
+  /* -------------------------------------------------------------- */
+  /* PLATFORM USERS                                                  */
+  /* -------------------------------------------------------------- */
+
   "platform.users.invite",
   "platform.users.manage",
   "platform.users.sessions.revoke",
+
+  /* -------------------------------------------------------------- */
+  /* PLATFORM ROLES AND PERMISSIONS                                 */
+  /* -------------------------------------------------------------- */
 
   "platform.roles.manage",
   "platform.roles.assign",
@@ -51,10 +63,45 @@ const MUTABLE_PERMISSIONS: readonly PlatformPermission[] = [
 
   "platform.permissions.manage",
 
+  /* -------------------------------------------------------------- */
+  /* TENANT MANAGEMENT                                               */
+  /* -------------------------------------------------------------- */
+
   "platform.tenants.suspend",
   "platform.tenants.reactivate",
 
+  /* -------------------------------------------------------------- */
+  /* PLATFORM ANALYTICS                                              */
+  /* -------------------------------------------------------------- */
+
   "platform.analytics.projections.rebuild",
+
+  /* -------------------------------------------------------------- */
+  /* BILLING PLAN MANAGEMENT                                         */
+  /* -------------------------------------------------------------- */
+
+  "platform.billing.plans.create",
+  "platform.billing.plans.update",
+  "platform.billing.plans.publish",
+  "platform.billing.plans.retire",
+
+  /* -------------------------------------------------------------- */
+  /* BILLING SUBSCRIPTION MANAGEMENT                                 */
+  /* -------------------------------------------------------------- */
+
+  "platform.billing.subscriptions.manage",
+
+  /* -------------------------------------------------------------- */
+  /* BILLING ENTITLEMENT MANAGEMENT                                  */
+  /* -------------------------------------------------------------- */
+
+  "platform.billing.entitlements.manage",
+
+  /* -------------------------------------------------------------- */
+  /* BILLING FINANCIAL OPERATIONS                                    */
+  /* -------------------------------------------------------------- */
+
+  "platform.billing.financial.manage",
 ];
 
 /* ------------------------------------------------------------------ */
@@ -64,12 +111,20 @@ const MUTABLE_PERMISSIONS: readonly PlatformPermission[] = [
 export interface PlatformRouteAccess {
   role: PlatformRole | null;
   roles: readonly PlatformRole[];
+
   context: PlatformAccessContext;
+
   readOnly: boolean;
+
   permissions: readonly PlatformPermission[];
 
-  can: (permission: PlatformPermission) => boolean;
-  canMutate: (permission: PlatformPermission) => boolean;
+  can: (
+    permission: PlatformPermission,
+  ) => boolean;
+
+  canMutate: (
+    permission: PlatformPermission,
+  ) => boolean;
 }
 
 /* ------------------------------------------------------------------ */
@@ -82,7 +137,9 @@ const DEFAULT_ACCESS: PlatformRouteAccess = {
   context: "PLATFORM",
   readOnly: true,
   permissions: [],
+
   can: () => false,
+
   canMutate: () => false,
 };
 
@@ -103,11 +160,17 @@ export function usePlatformAccess(): PlatformRouteAccess {
 
 interface PlatformAuthGuardProps {
   requireAuth?: boolean;
+
   roles?: PlatformRole[];
+
   permissions?: PlatformPermission[];
+
   readOnlyRoles?: PlatformRole[];
+
   readOnly?: boolean;
+
   context?: PlatformAccessContext;
+
   children?: ReactNode;
 }
 
@@ -172,11 +235,17 @@ function PlatformUnauthorized() {
 
 export function PlatformAuthGuard({
   requireAuth = true,
+
   roles,
+
   permissions,
+
   readOnlyRoles = [],
+
   readOnly = false,
+
   context = "PLATFORM",
+
   children,
 }: PlatformAuthGuardProps) {
   const location = useLocation();
@@ -200,12 +269,17 @@ export function PlatformAuthGuard({
 
   const user = session?.user ?? null;
 
-  if (requireAuth && (!user || status !== "AUTHENTICATED")) {
+  if (
+    requireAuth &&
+    (!user || status !== "AUTHENTICATED")
+  ) {
     return (
       <Navigate
         to="/command/login"
         replace
-        state={{ from: location }}
+        state={{
+          from: location,
+        }}
       />
     );
   }
@@ -244,10 +318,12 @@ export function PlatformAuthGuard({
   /* BACKEND-ASSIGNED PERMISSIONS                                     */
   /* ---------------------------------------------------------------- */
 
-  // Do not filter these by context. The backend is authoritative.
+  // The backend is authoritative.
+  // Never grant or filter permissions using the current context.
+
   const assignedPermissions: PlatformPermission[] = [
     ...new Set(
-      session.authorization?.permissions ?? []
+      session.authorization?.permissions ?? [],
     ),
   ];
 
@@ -260,7 +336,7 @@ export function PlatformAuthGuard({
   if (
     roles?.length &&
     !roles.some((requiredRole) =>
-      assignedRoles.includes(requiredRole)
+      assignedRoles.includes(requiredRole),
     )
   ) {
     return <PlatformUnauthorized />;
@@ -273,7 +349,7 @@ export function PlatformAuthGuard({
   const isReadOnly =
     readOnly ||
     assignedRoles.some((role) =>
-      readOnlyRoles.includes(role)
+      readOnlyRoles.includes(role),
     );
 
   /* ---------------------------------------------------------------- */
@@ -281,13 +357,13 @@ export function PlatformAuthGuard({
   /* ---------------------------------------------------------------- */
 
   const can = (
-    permission: PlatformPermission
+    permission: PlatformPermission,
   ): boolean => {
     return permissionSet.has(permission);
   };
 
   const canMutate = (
-    permission: PlatformPermission
+    permission: PlatformPermission,
   ): boolean => {
     return (
       !isReadOnly &&
@@ -313,11 +389,17 @@ export function PlatformAuthGuard({
 
   const routeAccess: PlatformRouteAccess = {
     role: assignedRoles[0] ?? null,
+
     roles: assignedRoles,
+
     context,
+
     readOnly: isReadOnly,
+
     permissions: assignedPermissions,
+
     can,
+
     canMutate,
   };
 

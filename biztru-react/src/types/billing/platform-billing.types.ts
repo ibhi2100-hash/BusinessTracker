@@ -1,8 +1,7 @@
 
 import type {
   BusinessSubscriptionStatus,
-} from "./business-billing.types";
-
+} from "./"
 export interface PlatformSubscription {
   id: string;
   businessId: string;

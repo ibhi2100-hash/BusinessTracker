@@ -20,12 +20,12 @@ import { GlassCard } from "../../../components/ui/GlassCard";
 import { GlassButton } from "../../../components/ui/GlassButton";
 import { GlassIcon } from "../../../components/ui/GlassIcon";
 
-import { billingPlanApi } from "../../../services/platform/billing/billing-plan.api";
+import { billingPlanApi } from "../../../Biztru/services/platform/billing/billing-plan.api"; 
 
 import type {
   BillingPlan,
   BillingPlanStatus,
-} from "../../../types/billing/billing-plan.types";
+} from "../../../types/billing/billingPlan.types";
 
 function formatPrice(plan: BillingPlan) {
   const amount = Number(plan.priceMinor) / 100;

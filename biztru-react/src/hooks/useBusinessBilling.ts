@@ -1,9 +1,9 @@
 
 import { useCallback, useEffect } from "react";
 
-import { businessBillingApi } from "../../services/business/billing/business-billing.api";
 
-import { useBusinessBillingStore } from "../store/useBusinessBillingStore";
+
+import { useBusinessBillingStore } from "../Biztru/store/useBusinessBillingStore"; 
 
 export function useBusinessBilling() {
   const plans = useBusinessBillingStore((s) => s.plans);
@@ -20,15 +20,12 @@ export function useBusinessBilling() {
     try {
       setLoading(true);
 
-      const catalogue =
-        await businessBillingApi.getCatalogue();
-
+      const catalogue ={}
       setPlans(catalogue.plans, catalogue.revision);
       setOffline(false);
 
-      const current =
-        await businessBillingApi.getMySubscription();
-
+      const current = {}
+        
       setSubscription(current);
     } catch {
       setOffline(true);
