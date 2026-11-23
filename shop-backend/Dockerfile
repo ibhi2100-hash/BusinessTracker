@@ -6,6 +6,9 @@
 FROM node:20-slim AS builder
 
 WORKDIR /app
+COPY package*.json ./
+
+RUN  npm install
 
 # Install OpenSSL for Prisma compatibility
 RUN apt-get update \
@@ -15,8 +18,7 @@ RUN apt-get update \
 # Copy monorepo
 COPY . .
 
-# Install all workspace dependencies
-RUN npm install
+
 
 # Temporary build URL.
 # Real database credentials are supplied at container runtime.

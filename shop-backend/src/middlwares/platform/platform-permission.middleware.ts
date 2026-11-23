@@ -5,7 +5,7 @@ import type {
   RequestHandler,
 } from "express";
 
-import { PlatformIdentityService } from "../services/platform-identity.service.js";
+import { PlatformIdentityService } from "../../modules/platform/identity/services/platform-indentity.service.js";
 
 interface AuthenticatedPlatformRequest extends Request {
   platformUser?: {

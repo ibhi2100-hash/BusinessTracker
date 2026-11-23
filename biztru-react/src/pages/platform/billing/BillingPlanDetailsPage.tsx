@@ -29,6 +29,7 @@ import type {
   BillingPlan,
   BillingPlanVersion,
 } from "../../../types/billing/billingPlan.types";
+import { usePlatformSession } from "../../../Biztru/services/PlatformSession/PlatformSessionContext";
 
 function formatPrice(plan: BillingPlan) {
   const amount = Number(plan.priceMinor) / 100;
@@ -59,7 +60,7 @@ function DetailItem({
 export default function BillingPlanDetailsPage() {
   const { planId } = useParams();
   const navigate = useNavigate();
-
+    const {session, isAuthenticated } = usePlatformSession()
   const [plan, setPlan] = useState<BillingPlan | null>(null);
   const [versions, setVersions] = useState<BillingPlanVersion[]>([]);
 
@@ -69,14 +70,16 @@ export default function BillingPlanDetailsPage() {
 
   const load = useCallback(async () => {
     if (!planId) return;
-
+    if (!isAuthenticated || !session.accessToken) {
+      throw new Error("Platform authentication required");
+    }
     try {
       setLoading(true);
       setError("");
 
       const [planResult, versionResult] = await Promise.all([
-        billingPlanApi.get(planId),
-        billingPlanApi.versions(planId),
+        billingPlanApi.get(planId, session.accessToken),
+        billingPlanApi.versions(planId, session.accessToken),
       ]);
 
       setPlan(planResult);
@@ -100,10 +103,12 @@ export default function BillingPlanDetailsPage() {
     if (!plan || !window.confirm(
       `Publish ${plan.name}?`
     )) return;
-
+     if (!isAuthenticated || !session.accessToken) {
+      throw new Error("Platform authentication required");
+    }
     try {
       setProcessing(true);
-      await billingPlanApi.publish(plan.id);
+      await billingPlanApi.publish(plan.id, session.accessToken);
       await load();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Publication failed");
@@ -116,10 +121,13 @@ export default function BillingPlanDetailsPage() {
     if (!plan || !window.confirm(
       `Retire ${plan.name} from new subscriptions?`
     )) return;
+     if (!isAuthenticated || !session.accessToken) {
+      throw new Error("Platform authentication required");
+    }
 
     try {
       setProcessing(true);
-      await billingPlanApi.retire(plan.id);
+      await billingPlanApi.retire(plan.id, session.accessToken);
       await load();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Retirement failed");

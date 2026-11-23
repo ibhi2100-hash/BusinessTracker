@@ -534,7 +534,7 @@ model PasswordResetToken {
   @@index([expiresAt])
 }
 model BillingPlan {
-  id          String @id
+  id          String @id    @default(uuid())
   code        String @unique
   name        String
   description String?

@@ -23,6 +23,7 @@ import { SQLiteEmployeeRepository } from "./EmployeeRepositories/SQLiteEmployeeR
 import { SQLiteEventInboxRepository } from "./EventInboxRepository/SQLiteEventInboxRepository";
 import { SQLiteSyncCursorRepository } from "./Cursor/CursorRepository";
 import { SQLiteBusinessDashboardRepository } from "./DashboardRepository/BusinessDashbaordRepositories";
+import { SQLiteRefundRepository } from "./SQLiteProjectionRepository/SQLiteRefundRepository";
 
 export class BusinessRepositoryRegistry {
     readonly events: SQLiteEventRepository;
@@ -39,6 +40,8 @@ export class BusinessRepositoryRegistry {
     readonly inventory: SQLiteInventoryRepository;
 
     readonly sales: SQLiteSalesRepository;
+
+    readonly refund: SQLiteRefundRepository;
 
     readonly expenses: SQLiteExpenseRepository;
 
@@ -103,6 +106,10 @@ export class BusinessRepositoryRegistry {
         this.sales = 
             new SQLiteSalesRepository(
                 statements.sales
+            )
+        this.refund = 
+            new SQLiteRefundRepository(
+                statements.refund
             )
 
         this.expenses = 

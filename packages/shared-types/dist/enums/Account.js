@@ -11,4 +11,5 @@ export var Account;
     Account["OWNER_DRAWINGS"] = "OWNER_DRAWINGS";
     Account["FIXED_ASSETS"] = "FIXED_ASSETS";
     Account["INTER_BRANCH"] = "INTER_BRANCH";
+    Account["SALES_RETURNS"] = "SALES_RETURNS";
 })(Account || (Account = {}));

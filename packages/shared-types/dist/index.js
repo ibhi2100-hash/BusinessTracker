@@ -11,6 +11,7 @@ export * from "./entities/Conflicts.js";
 export * from "./entities/SyncState.js";
 export * from "./entities/Employee.js";
 export * from "./entities/Subscription.js";
+export * from "./entities/Refund.js";
 export * from "./events/DomainEvents.js";
 export * from "./events/OutboxEntry.js";
 export * from "./events/cononicalEvent.js";

@@ -224,6 +224,7 @@ export type BusinessWhereInput = {
   activatedAt?: Prisma.DateTimeNullableFilter<"Business"> | Date | string | null
   owner?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   branches?: Prisma.BranchListRelationFilter
+  events?: Prisma.EventListRelationFilter
   users?: Prisma.UserListRelationFilter
   products?: Prisma.ProductListRelationFilter
   inventories?: Prisma.InventoryListRelationFilter
@@ -253,6 +254,7 @@ export type BusinessWhereInput = {
   billingAuditLogs?: Prisma.BillingAuditLogListRelationFilter
   supportTicket?: Prisma.SupportTicketListRelationFilter
   platformTenantsProjection?: Prisma.PlatformTenantProjectionListRelationFilter
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointListRelationFilter
 }
 
 export type BusinessOrderByWithRelationInput = {
@@ -268,6 +270,7 @@ export type BusinessOrderByWithRelationInput = {
   activatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   owner?: Prisma.UserOrderByWithRelationInput
   branches?: Prisma.BranchOrderByRelationAggregateInput
+  events?: Prisma.EventOrderByRelationAggregateInput
   users?: Prisma.UserOrderByRelationAggregateInput
   products?: Prisma.ProductOrderByRelationAggregateInput
   inventories?: Prisma.InventoryOrderByRelationAggregateInput
@@ -297,6 +300,7 @@ export type BusinessOrderByWithRelationInput = {
   billingAuditLogs?: Prisma.BillingAuditLogOrderByRelationAggregateInput
   supportTicket?: Prisma.SupportTicketOrderByRelationAggregateInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionOrderByRelationAggregateInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointOrderByRelationAggregateInput
 }
 
 export type BusinessWhereUniqueInput = Prisma.AtLeast<{
@@ -315,6 +319,7 @@ export type BusinessWhereUniqueInput = Prisma.AtLeast<{
   activatedAt?: Prisma.DateTimeNullableFilter<"Business"> | Date | string | null
   owner?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   branches?: Prisma.BranchListRelationFilter
+  events?: Prisma.EventListRelationFilter
   users?: Prisma.UserListRelationFilter
   products?: Prisma.ProductListRelationFilter
   inventories?: Prisma.InventoryListRelationFilter
@@ -344,6 +349,7 @@ export type BusinessWhereUniqueInput = Prisma.AtLeast<{
   billingAuditLogs?: Prisma.BillingAuditLogListRelationFilter
   supportTicket?: Prisma.SupportTicketListRelationFilter
   platformTenantsProjection?: Prisma.PlatformTenantProjectionListRelationFilter
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointListRelationFilter
 }, "id">
 
 export type BusinessOrderByWithAggregationInput = {
@@ -390,6 +396,7 @@ export type BusinessCreateInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -419,6 +426,7 @@ export type BusinessCreateInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateInput = {
@@ -433,6 +441,7 @@ export type BusinessUncheckedCreateInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -462,6 +471,7 @@ export type BusinessUncheckedCreateInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUpdateInput = {
@@ -476,6 +486,7 @@ export type BusinessUpdateInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -505,6 +516,7 @@ export type BusinessUpdateInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateInput = {
@@ -519,6 +531,7 @@ export type BusinessUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -548,6 +561,7 @@ export type BusinessUncheckedUpdateInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateManyInput = {
@@ -957,6 +971,20 @@ export type BusinessUpdateOneRequiredWithoutInventoriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutInventoriesInput, Prisma.BusinessUpdateWithoutInventoriesInput>, Prisma.BusinessUncheckedUpdateWithoutInventoriesInput>
 }
 
+export type BusinessCreateNestedOneWithoutEventsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutEventsInput, Prisma.BusinessUncheckedCreateWithoutEventsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutEventsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutEventsInput, Prisma.BusinessUncheckedCreateWithoutEventsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutEventsInput
+  upsert?: Prisma.BusinessUpsertWithoutEventsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutEventsInput, Prisma.BusinessUpdateWithoutEventsInput>, Prisma.BusinessUncheckedUpdateWithoutEventsInput>
+}
+
 export type BusinessCreateNestedOneWithoutLedgerEntriesInput = {
   create?: Prisma.XOR<Prisma.BusinessCreateWithoutLedgerEntriesInput, Prisma.BusinessUncheckedCreateWithoutLedgerEntriesInput>
   connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutLedgerEntriesInput
@@ -1111,6 +1139,20 @@ export type BusinessUpdateOneRequiredWithoutEmployeeNotificationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutEmployeeNotificationsInput, Prisma.BusinessUpdateWithoutEmployeeNotificationsInput>, Prisma.BusinessUncheckedUpdateWithoutEmployeeNotificationsInput>
 }
 
+export type BusinessCreateNestedOneWithoutDeviceSyncCheckpointsInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutDeviceSyncCheckpointsInput, Prisma.BusinessUncheckedCreateWithoutDeviceSyncCheckpointsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutDeviceSyncCheckpointsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+}
+
+export type BusinessUpdateOneRequiredWithoutDeviceSyncCheckpointsNestedInput = {
+  create?: Prisma.XOR<Prisma.BusinessCreateWithoutDeviceSyncCheckpointsInput, Prisma.BusinessUncheckedCreateWithoutDeviceSyncCheckpointsInput>
+  connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutDeviceSyncCheckpointsInput
+  upsert?: Prisma.BusinessUpsertWithoutDeviceSyncCheckpointsInput
+  connect?: Prisma.BusinessWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BusinessUpdateToOneWithWhereWithoutDeviceSyncCheckpointsInput, Prisma.BusinessUpdateWithoutDeviceSyncCheckpointsInput>, Prisma.BusinessUncheckedUpdateWithoutDeviceSyncCheckpointsInput>
+}
+
 export type BusinessCreateNestedOneWithoutSupportTicketInput = {
   create?: Prisma.XOR<Prisma.BusinessCreateWithoutSupportTicketInput, Prisma.BusinessUncheckedCreateWithoutSupportTicketInput>
   connectOrCreate?: Prisma.BusinessCreateOrConnectWithoutSupportTicketInput
@@ -1150,6 +1192,7 @@ export type BusinessCreateWithoutBranchesInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -1179,6 +1222,7 @@ export type BusinessCreateWithoutBranchesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBranchesInput = {
@@ -1192,6 +1236,7 @@ export type BusinessUncheckedCreateWithoutBranchesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   activatedAt?: Date | string | null
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -1221,6 +1266,7 @@ export type BusinessUncheckedCreateWithoutBranchesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBranchesInput = {
@@ -1250,6 +1296,7 @@ export type BusinessUpdateWithoutBranchesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -1279,6 +1326,7 @@ export type BusinessUpdateWithoutBranchesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBranchesInput = {
@@ -1292,6 +1340,7 @@ export type BusinessUncheckedUpdateWithoutBranchesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1321,6 +1370,7 @@ export type BusinessUncheckedUpdateWithoutBranchesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutUsersInput = {
@@ -1335,6 +1385,7 @@ export type BusinessCreateWithoutUsersInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
@@ -1363,6 +1414,7 @@ export type BusinessCreateWithoutUsersInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutUsersInput = {
@@ -1377,6 +1429,7 @@ export type BusinessUncheckedCreateWithoutUsersInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
@@ -1405,6 +1458,7 @@ export type BusinessUncheckedCreateWithoutUsersInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutUsersInput = {
@@ -1423,6 +1477,7 @@ export type BusinessCreateWithoutOwnerInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -1452,6 +1507,7 @@ export type BusinessCreateWithoutOwnerInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutOwnerInput = {
@@ -1465,6 +1521,7 @@ export type BusinessUncheckedCreateWithoutOwnerInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -1494,6 +1551,7 @@ export type BusinessUncheckedCreateWithoutOwnerInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutOwnerInput = {
@@ -1529,6 +1587,7 @@ export type BusinessUpdateWithoutUsersInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
@@ -1557,6 +1616,7 @@ export type BusinessUpdateWithoutUsersInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutUsersInput = {
@@ -1571,6 +1631,7 @@ export type BusinessUncheckedUpdateWithoutUsersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1599,6 +1660,7 @@ export type BusinessUncheckedUpdateWithoutUsersInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUpsertWithWhereUniqueWithoutOwnerInput = {
@@ -1645,6 +1707,7 @@ export type BusinessCreateWithoutBillingSubscriptionsInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -1673,6 +1736,7 @@ export type BusinessCreateWithoutBillingSubscriptionsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingSubscriptionsInput = {
@@ -1687,6 +1751,7 @@ export type BusinessUncheckedCreateWithoutBillingSubscriptionsInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -1715,6 +1780,7 @@ export type BusinessUncheckedCreateWithoutBillingSubscriptionsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingSubscriptionsInput = {
@@ -1745,6 +1811,7 @@ export type BusinessUpdateWithoutBillingSubscriptionsInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -1773,6 +1840,7 @@ export type BusinessUpdateWithoutBillingSubscriptionsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingSubscriptionsInput = {
@@ -1787,6 +1855,7 @@ export type BusinessUncheckedUpdateWithoutBillingSubscriptionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1815,6 +1884,7 @@ export type BusinessUncheckedUpdateWithoutBillingSubscriptionsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBillingSubscriptionRequestsInput = {
@@ -1829,6 +1899,7 @@ export type BusinessCreateWithoutBillingSubscriptionRequestsInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -1857,6 +1928,7 @@ export type BusinessCreateWithoutBillingSubscriptionRequestsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingSubscriptionRequestsInput = {
@@ -1871,6 +1943,7 @@ export type BusinessUncheckedCreateWithoutBillingSubscriptionRequestsInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -1899,6 +1972,7 @@ export type BusinessUncheckedCreateWithoutBillingSubscriptionRequestsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingSubscriptionRequestsInput = {
@@ -1929,6 +2003,7 @@ export type BusinessUpdateWithoutBillingSubscriptionRequestsInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -1957,6 +2032,7 @@ export type BusinessUpdateWithoutBillingSubscriptionRequestsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingSubscriptionRequestsInput = {
@@ -1971,6 +2047,7 @@ export type BusinessUncheckedUpdateWithoutBillingSubscriptionRequestsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -1999,6 +2076,7 @@ export type BusinessUncheckedUpdateWithoutBillingSubscriptionRequestsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBillingEntitlementsInput = {
@@ -2013,6 +2091,7 @@ export type BusinessCreateWithoutBillingEntitlementsInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -2041,6 +2120,7 @@ export type BusinessCreateWithoutBillingEntitlementsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingEntitlementsInput = {
@@ -2055,6 +2135,7 @@ export type BusinessUncheckedCreateWithoutBillingEntitlementsInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -2083,6 +2164,7 @@ export type BusinessUncheckedCreateWithoutBillingEntitlementsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingEntitlementsInput = {
@@ -2113,6 +2195,7 @@ export type BusinessUpdateWithoutBillingEntitlementsInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -2141,6 +2224,7 @@ export type BusinessUpdateWithoutBillingEntitlementsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingEntitlementsInput = {
@@ -2155,6 +2239,7 @@ export type BusinessUncheckedUpdateWithoutBillingEntitlementsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2183,6 +2268,7 @@ export type BusinessUncheckedUpdateWithoutBillingEntitlementsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBillingEntitlementOverridesInput = {
@@ -2197,6 +2283,7 @@ export type BusinessCreateWithoutBillingEntitlementOverridesInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -2225,6 +2312,7 @@ export type BusinessCreateWithoutBillingEntitlementOverridesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingEntitlementOverridesInput = {
@@ -2239,6 +2327,7 @@ export type BusinessUncheckedCreateWithoutBillingEntitlementOverridesInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -2267,6 +2356,7 @@ export type BusinessUncheckedCreateWithoutBillingEntitlementOverridesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingEntitlementOverridesInput = {
@@ -2297,6 +2387,7 @@ export type BusinessUpdateWithoutBillingEntitlementOverridesInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -2325,6 +2416,7 @@ export type BusinessUpdateWithoutBillingEntitlementOverridesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingEntitlementOverridesInput = {
@@ -2339,6 +2431,7 @@ export type BusinessUncheckedUpdateWithoutBillingEntitlementOverridesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2367,6 +2460,7 @@ export type BusinessUncheckedUpdateWithoutBillingEntitlementOverridesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBillingInvoicesInput = {
@@ -2381,6 +2475,7 @@ export type BusinessCreateWithoutBillingInvoicesInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -2409,6 +2504,7 @@ export type BusinessCreateWithoutBillingInvoicesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingInvoicesInput = {
@@ -2423,6 +2519,7 @@ export type BusinessUncheckedCreateWithoutBillingInvoicesInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -2451,6 +2548,7 @@ export type BusinessUncheckedCreateWithoutBillingInvoicesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingInvoicesInput = {
@@ -2481,6 +2579,7 @@ export type BusinessUpdateWithoutBillingInvoicesInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -2509,6 +2608,7 @@ export type BusinessUpdateWithoutBillingInvoicesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingInvoicesInput = {
@@ -2523,6 +2623,7 @@ export type BusinessUncheckedUpdateWithoutBillingInvoicesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2551,6 +2652,7 @@ export type BusinessUncheckedUpdateWithoutBillingInvoicesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBillingPaymentsInput = {
@@ -2565,6 +2667,7 @@ export type BusinessCreateWithoutBillingPaymentsInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -2593,6 +2696,7 @@ export type BusinessCreateWithoutBillingPaymentsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingPaymentsInput = {
@@ -2607,6 +2711,7 @@ export type BusinessUncheckedCreateWithoutBillingPaymentsInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -2635,6 +2740,7 @@ export type BusinessUncheckedCreateWithoutBillingPaymentsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingPaymentsInput = {
@@ -2665,6 +2771,7 @@ export type BusinessUpdateWithoutBillingPaymentsInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -2693,6 +2800,7 @@ export type BusinessUpdateWithoutBillingPaymentsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingPaymentsInput = {
@@ -2707,6 +2815,7 @@ export type BusinessUncheckedUpdateWithoutBillingPaymentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2735,6 +2844,7 @@ export type BusinessUncheckedUpdateWithoutBillingPaymentsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBillingPaymentAttemptsInput = {
@@ -2749,6 +2859,7 @@ export type BusinessCreateWithoutBillingPaymentAttemptsInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -2777,6 +2888,7 @@ export type BusinessCreateWithoutBillingPaymentAttemptsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingPaymentAttemptsInput = {
@@ -2791,6 +2903,7 @@ export type BusinessUncheckedCreateWithoutBillingPaymentAttemptsInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -2819,6 +2932,7 @@ export type BusinessUncheckedCreateWithoutBillingPaymentAttemptsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingPaymentAttemptsInput = {
@@ -2849,6 +2963,7 @@ export type BusinessUpdateWithoutBillingPaymentAttemptsInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -2877,6 +2992,7 @@ export type BusinessUpdateWithoutBillingPaymentAttemptsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingPaymentAttemptsInput = {
@@ -2891,6 +3007,7 @@ export type BusinessUncheckedUpdateWithoutBillingPaymentAttemptsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -2919,6 +3036,7 @@ export type BusinessUncheckedUpdateWithoutBillingPaymentAttemptsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBillingPaymentAllocationsInput = {
@@ -2933,6 +3051,7 @@ export type BusinessCreateWithoutBillingPaymentAllocationsInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -2961,6 +3080,7 @@ export type BusinessCreateWithoutBillingPaymentAllocationsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingPaymentAllocationsInput = {
@@ -2975,6 +3095,7 @@ export type BusinessUncheckedCreateWithoutBillingPaymentAllocationsInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -3003,6 +3124,7 @@ export type BusinessUncheckedCreateWithoutBillingPaymentAllocationsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingPaymentAllocationsInput = {
@@ -3033,6 +3155,7 @@ export type BusinessUpdateWithoutBillingPaymentAllocationsInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -3061,6 +3184,7 @@ export type BusinessUpdateWithoutBillingPaymentAllocationsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingPaymentAllocationsInput = {
@@ -3075,6 +3199,7 @@ export type BusinessUncheckedUpdateWithoutBillingPaymentAllocationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -3103,6 +3228,7 @@ export type BusinessUncheckedUpdateWithoutBillingPaymentAllocationsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBillingRefundsInput = {
@@ -3117,6 +3243,7 @@ export type BusinessCreateWithoutBillingRefundsInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -3145,6 +3272,7 @@ export type BusinessCreateWithoutBillingRefundsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingRefundsInput = {
@@ -3159,6 +3287,7 @@ export type BusinessUncheckedCreateWithoutBillingRefundsInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -3187,6 +3316,7 @@ export type BusinessUncheckedCreateWithoutBillingRefundsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingRefundsInput = {
@@ -3217,6 +3347,7 @@ export type BusinessUpdateWithoutBillingRefundsInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -3245,6 +3376,7 @@ export type BusinessUpdateWithoutBillingRefundsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingRefundsInput = {
@@ -3259,6 +3391,7 @@ export type BusinessUncheckedUpdateWithoutBillingRefundsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -3287,6 +3420,7 @@ export type BusinessUncheckedUpdateWithoutBillingRefundsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBillingProviderCustomersInput = {
@@ -3301,6 +3435,7 @@ export type BusinessCreateWithoutBillingProviderCustomersInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -3329,6 +3464,7 @@ export type BusinessCreateWithoutBillingProviderCustomersInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingProviderCustomersInput = {
@@ -3343,6 +3479,7 @@ export type BusinessUncheckedCreateWithoutBillingProviderCustomersInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -3371,6 +3508,7 @@ export type BusinessUncheckedCreateWithoutBillingProviderCustomersInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingProviderCustomersInput = {
@@ -3401,6 +3539,7 @@ export type BusinessUpdateWithoutBillingProviderCustomersInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -3429,6 +3568,7 @@ export type BusinessUpdateWithoutBillingProviderCustomersInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingProviderCustomersInput = {
@@ -3443,6 +3583,7 @@ export type BusinessUncheckedUpdateWithoutBillingProviderCustomersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -3471,6 +3612,7 @@ export type BusinessUncheckedUpdateWithoutBillingProviderCustomersInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBillingEventsInput = {
@@ -3485,6 +3627,7 @@ export type BusinessCreateWithoutBillingEventsInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -3513,6 +3656,7 @@ export type BusinessCreateWithoutBillingEventsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingEventsInput = {
@@ -3527,6 +3671,7 @@ export type BusinessUncheckedCreateWithoutBillingEventsInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -3555,6 +3700,7 @@ export type BusinessUncheckedCreateWithoutBillingEventsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingEventsInput = {
@@ -3585,6 +3731,7 @@ export type BusinessUpdateWithoutBillingEventsInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -3613,6 +3760,7 @@ export type BusinessUpdateWithoutBillingEventsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingEventsInput = {
@@ -3627,6 +3775,7 @@ export type BusinessUncheckedUpdateWithoutBillingEventsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -3655,6 +3804,7 @@ export type BusinessUncheckedUpdateWithoutBillingEventsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBillingSubscriptionLeasesInput = {
@@ -3669,6 +3819,7 @@ export type BusinessCreateWithoutBillingSubscriptionLeasesInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -3697,6 +3848,7 @@ export type BusinessCreateWithoutBillingSubscriptionLeasesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingSubscriptionLeasesInput = {
@@ -3711,6 +3863,7 @@ export type BusinessUncheckedCreateWithoutBillingSubscriptionLeasesInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -3739,6 +3892,7 @@ export type BusinessUncheckedCreateWithoutBillingSubscriptionLeasesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingSubscriptionLeasesInput = {
@@ -3769,6 +3923,7 @@ export type BusinessUpdateWithoutBillingSubscriptionLeasesInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -3797,6 +3952,7 @@ export type BusinessUpdateWithoutBillingSubscriptionLeasesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingSubscriptionLeasesInput = {
@@ -3811,6 +3967,7 @@ export type BusinessUncheckedUpdateWithoutBillingSubscriptionLeasesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -3839,6 +3996,7 @@ export type BusinessUncheckedUpdateWithoutBillingSubscriptionLeasesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutBillingAuditLogsInput = {
@@ -3853,6 +4011,7 @@ export type BusinessCreateWithoutBillingAuditLogsInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -3881,6 +4040,7 @@ export type BusinessCreateWithoutBillingAuditLogsInput = {
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutBillingAuditLogsInput = {
@@ -3895,6 +4055,7 @@ export type BusinessUncheckedCreateWithoutBillingAuditLogsInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -3923,6 +4084,7 @@ export type BusinessUncheckedCreateWithoutBillingAuditLogsInput = {
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutBillingAuditLogsInput = {
@@ -3953,6 +4115,7 @@ export type BusinessUpdateWithoutBillingAuditLogsInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -3981,6 +4144,7 @@ export type BusinessUpdateWithoutBillingAuditLogsInput = {
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutBillingAuditLogsInput = {
@@ -3995,6 +4159,7 @@ export type BusinessUncheckedUpdateWithoutBillingAuditLogsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -4023,6 +4188,7 @@ export type BusinessUncheckedUpdateWithoutBillingAuditLogsInput = {
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutProductsInput = {
@@ -4037,6 +4203,7 @@ export type BusinessCreateWithoutProductsInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
@@ -4065,6 +4232,7 @@ export type BusinessCreateWithoutProductsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutProductsInput = {
@@ -4079,6 +4247,7 @@ export type BusinessUncheckedCreateWithoutProductsInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
@@ -4107,6 +4276,7 @@ export type BusinessUncheckedCreateWithoutProductsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutProductsInput = {
@@ -4137,6 +4307,7 @@ export type BusinessUpdateWithoutProductsInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
@@ -4165,6 +4336,7 @@ export type BusinessUpdateWithoutProductsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutProductsInput = {
@@ -4179,6 +4351,7 @@ export type BusinessUncheckedUpdateWithoutProductsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
@@ -4207,6 +4380,7 @@ export type BusinessUncheckedUpdateWithoutProductsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutInventoriesInput = {
@@ -4221,6 +4395,7 @@ export type BusinessCreateWithoutInventoriesInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
@@ -4249,6 +4424,7 @@ export type BusinessCreateWithoutInventoriesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutInventoriesInput = {
@@ -4263,6 +4439,7 @@ export type BusinessUncheckedCreateWithoutInventoriesInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
@@ -4291,6 +4468,7 @@ export type BusinessUncheckedCreateWithoutInventoriesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutInventoriesInput = {
@@ -4321,6 +4499,7 @@ export type BusinessUpdateWithoutInventoriesInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
@@ -4349,6 +4528,7 @@ export type BusinessUpdateWithoutInventoriesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutInventoriesInput = {
@@ -4363,6 +4543,7 @@ export type BusinessUncheckedUpdateWithoutInventoriesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
@@ -4391,6 +4572,199 @@ export type BusinessUncheckedUpdateWithoutInventoriesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutEventsInput = {
+  id: string
+  name: string
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
+  branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutEventsInput = {
+  id: string
+  name: string
+  userId?: string | null
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutEventsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutEventsInput, Prisma.BusinessUncheckedCreateWithoutEventsInput>
+}
+
+export type BusinessUpsertWithoutEventsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutEventsInput, Prisma.BusinessUncheckedUpdateWithoutEventsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutEventsInput, Prisma.BusinessUncheckedCreateWithoutEventsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutEventsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutEventsInput, Prisma.BusinessUncheckedUpdateWithoutEventsInput>
+}
+
+export type BusinessUpdateWithoutEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
+  branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutLedgerEntriesInput = {
@@ -4405,6 +4779,7 @@ export type BusinessCreateWithoutLedgerEntriesInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -4433,6 +4808,7 @@ export type BusinessCreateWithoutLedgerEntriesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutLedgerEntriesInput = {
@@ -4447,6 +4823,7 @@ export type BusinessUncheckedCreateWithoutLedgerEntriesInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -4475,6 +4852,7 @@ export type BusinessUncheckedCreateWithoutLedgerEntriesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutLedgerEntriesInput = {
@@ -4505,6 +4883,7 @@ export type BusinessUpdateWithoutLedgerEntriesInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -4533,6 +4912,7 @@ export type BusinessUpdateWithoutLedgerEntriesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutLedgerEntriesInput = {
@@ -4547,6 +4927,7 @@ export type BusinessUncheckedUpdateWithoutLedgerEntriesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -4575,6 +4956,7 @@ export type BusinessUncheckedUpdateWithoutLedgerEntriesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutSaleInput = {
@@ -4589,6 +4971,7 @@ export type BusinessCreateWithoutSaleInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -4617,6 +5000,7 @@ export type BusinessCreateWithoutSaleInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutSaleInput = {
@@ -4631,6 +5015,7 @@ export type BusinessUncheckedCreateWithoutSaleInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -4659,6 +5044,7 @@ export type BusinessUncheckedCreateWithoutSaleInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutSaleInput = {
@@ -4689,6 +5075,7 @@ export type BusinessUpdateWithoutSaleInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -4717,6 +5104,7 @@ export type BusinessUpdateWithoutSaleInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutSaleInput = {
@@ -4731,6 +5119,7 @@ export type BusinessUncheckedUpdateWithoutSaleInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -4759,6 +5148,7 @@ export type BusinessUncheckedUpdateWithoutSaleInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutExpenseInput = {
@@ -4773,6 +5163,7 @@ export type BusinessCreateWithoutExpenseInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -4801,6 +5192,7 @@ export type BusinessCreateWithoutExpenseInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutExpenseInput = {
@@ -4815,6 +5207,7 @@ export type BusinessUncheckedCreateWithoutExpenseInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -4843,6 +5236,7 @@ export type BusinessUncheckedCreateWithoutExpenseInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutExpenseInput = {
@@ -4873,6 +5267,7 @@ export type BusinessUpdateWithoutExpenseInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -4901,6 +5296,7 @@ export type BusinessUpdateWithoutExpenseInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutExpenseInput = {
@@ -4915,6 +5311,7 @@ export type BusinessUncheckedUpdateWithoutExpenseInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -4943,6 +5340,7 @@ export type BusinessUncheckedUpdateWithoutExpenseInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutSnapshotsInput = {
@@ -4957,6 +5355,7 @@ export type BusinessCreateWithoutSnapshotsInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -4985,6 +5384,7 @@ export type BusinessCreateWithoutSnapshotsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutSnapshotsInput = {
@@ -4999,6 +5399,7 @@ export type BusinessUncheckedCreateWithoutSnapshotsInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -5027,6 +5428,7 @@ export type BusinessUncheckedCreateWithoutSnapshotsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutSnapshotsInput = {
@@ -5057,6 +5459,7 @@ export type BusinessUpdateWithoutSnapshotsInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -5085,6 +5488,7 @@ export type BusinessUpdateWithoutSnapshotsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutSnapshotsInput = {
@@ -5099,6 +5503,7 @@ export type BusinessUncheckedUpdateWithoutSnapshotsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -5127,6 +5532,7 @@ export type BusinessUncheckedUpdateWithoutSnapshotsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutAlertsInput = {
@@ -5141,6 +5547,7 @@ export type BusinessCreateWithoutAlertsInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -5169,6 +5576,7 @@ export type BusinessCreateWithoutAlertsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutAlertsInput = {
@@ -5183,6 +5591,7 @@ export type BusinessUncheckedCreateWithoutAlertsInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -5211,6 +5620,7 @@ export type BusinessUncheckedCreateWithoutAlertsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutAlertsInput = {
@@ -5241,6 +5651,7 @@ export type BusinessUpdateWithoutAlertsInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -5269,6 +5680,7 @@ export type BusinessUpdateWithoutAlertsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutAlertsInput = {
@@ -5283,6 +5695,7 @@ export type BusinessUncheckedUpdateWithoutAlertsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -5311,6 +5724,7 @@ export type BusinessUncheckedUpdateWithoutAlertsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutEmployeesInput = {
@@ -5325,6 +5739,7 @@ export type BusinessCreateWithoutEmployeesInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -5353,6 +5768,7 @@ export type BusinessCreateWithoutEmployeesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutEmployeesInput = {
@@ -5367,6 +5783,7 @@ export type BusinessUncheckedCreateWithoutEmployeesInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -5395,6 +5812,7 @@ export type BusinessUncheckedCreateWithoutEmployeesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutEmployeesInput = {
@@ -5425,6 +5843,7 @@ export type BusinessUpdateWithoutEmployeesInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -5453,6 +5872,7 @@ export type BusinessUpdateWithoutEmployeesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutEmployeesInput = {
@@ -5467,6 +5887,7 @@ export type BusinessUncheckedUpdateWithoutEmployeesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -5495,6 +5916,7 @@ export type BusinessUncheckedUpdateWithoutEmployeesInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutEmployeeInvitationsInput = {
@@ -5509,6 +5931,7 @@ export type BusinessCreateWithoutEmployeeInvitationsInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -5537,6 +5960,7 @@ export type BusinessCreateWithoutEmployeeInvitationsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutEmployeeInvitationsInput = {
@@ -5551,6 +5975,7 @@ export type BusinessUncheckedCreateWithoutEmployeeInvitationsInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -5579,6 +6004,7 @@ export type BusinessUncheckedCreateWithoutEmployeeInvitationsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutEmployeeInvitationsInput = {
@@ -5609,6 +6035,7 @@ export type BusinessUpdateWithoutEmployeeInvitationsInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -5637,6 +6064,7 @@ export type BusinessUpdateWithoutEmployeeInvitationsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutEmployeeInvitationsInput = {
@@ -5651,6 +6079,7 @@ export type BusinessUncheckedUpdateWithoutEmployeeInvitationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -5679,6 +6108,7 @@ export type BusinessUncheckedUpdateWithoutEmployeeInvitationsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutEmployeeCompensationsInput = {
@@ -5693,6 +6123,7 @@ export type BusinessCreateWithoutEmployeeCompensationsInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -5721,6 +6152,7 @@ export type BusinessCreateWithoutEmployeeCompensationsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutEmployeeCompensationsInput = {
@@ -5735,6 +6167,7 @@ export type BusinessUncheckedCreateWithoutEmployeeCompensationsInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -5763,6 +6196,7 @@ export type BusinessUncheckedCreateWithoutEmployeeCompensationsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutEmployeeCompensationsInput = {
@@ -5793,6 +6227,7 @@ export type BusinessUpdateWithoutEmployeeCompensationsInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -5821,6 +6256,7 @@ export type BusinessUpdateWithoutEmployeeCompensationsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutEmployeeCompensationsInput = {
@@ -5835,6 +6271,7 @@ export type BusinessUncheckedUpdateWithoutEmployeeCompensationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -5863,6 +6300,7 @@ export type BusinessUncheckedUpdateWithoutEmployeeCompensationsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutEmployeeCompensationHistoryInput = {
@@ -5877,6 +6315,7 @@ export type BusinessCreateWithoutEmployeeCompensationHistoryInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -5905,6 +6344,7 @@ export type BusinessCreateWithoutEmployeeCompensationHistoryInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutEmployeeCompensationHistoryInput = {
@@ -5919,6 +6359,7 @@ export type BusinessUncheckedCreateWithoutEmployeeCompensationHistoryInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -5947,6 +6388,7 @@ export type BusinessUncheckedCreateWithoutEmployeeCompensationHistoryInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutEmployeeCompensationHistoryInput = {
@@ -5977,6 +6419,7 @@ export type BusinessUpdateWithoutEmployeeCompensationHistoryInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -6005,6 +6448,7 @@ export type BusinessUpdateWithoutEmployeeCompensationHistoryInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutEmployeeCompensationHistoryInput = {
@@ -6019,6 +6463,7 @@ export type BusinessUncheckedUpdateWithoutEmployeeCompensationHistoryInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -6047,6 +6492,7 @@ export type BusinessUncheckedUpdateWithoutEmployeeCompensationHistoryInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutEmployeeRequestsInput = {
@@ -6061,6 +6507,7 @@ export type BusinessCreateWithoutEmployeeRequestsInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -6089,6 +6536,7 @@ export type BusinessCreateWithoutEmployeeRequestsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutEmployeeRequestsInput = {
@@ -6103,6 +6551,7 @@ export type BusinessUncheckedCreateWithoutEmployeeRequestsInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -6131,6 +6580,7 @@ export type BusinessUncheckedCreateWithoutEmployeeRequestsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutEmployeeRequestsInput = {
@@ -6161,6 +6611,7 @@ export type BusinessUpdateWithoutEmployeeRequestsInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -6189,6 +6640,7 @@ export type BusinessUpdateWithoutEmployeeRequestsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutEmployeeRequestsInput = {
@@ -6203,6 +6655,7 @@ export type BusinessUncheckedUpdateWithoutEmployeeRequestsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -6231,6 +6684,7 @@ export type BusinessUncheckedUpdateWithoutEmployeeRequestsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutEmployeeNotificationsInput = {
@@ -6245,6 +6699,7 @@ export type BusinessCreateWithoutEmployeeNotificationsInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -6273,6 +6728,7 @@ export type BusinessCreateWithoutEmployeeNotificationsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutEmployeeNotificationsInput = {
@@ -6287,6 +6743,7 @@ export type BusinessUncheckedCreateWithoutEmployeeNotificationsInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -6315,6 +6772,7 @@ export type BusinessUncheckedCreateWithoutEmployeeNotificationsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutEmployeeNotificationsInput = {
@@ -6345,6 +6803,7 @@ export type BusinessUpdateWithoutEmployeeNotificationsInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -6373,6 +6832,7 @@ export type BusinessUpdateWithoutEmployeeNotificationsInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutEmployeeNotificationsInput = {
@@ -6387,6 +6847,7 @@ export type BusinessUncheckedUpdateWithoutEmployeeNotificationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -6400,6 +6861,199 @@ export type BusinessUncheckedUpdateWithoutEmployeeNotificationsInput = {
   employeeCompensations?: Prisma.EmployeeCompensationUncheckedUpdateManyWithoutBusinessNestedInput
   employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
   employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUncheckedUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessCreateWithoutDeviceSyncCheckpointsInput = {
+  id: string
+  name: string
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
+  branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessUncheckedCreateWithoutDeviceSyncCheckpointsInput = {
+  id: string
+  name: string
+  userId?: string | null
+  address?: string | null
+  isOnboarding?: boolean
+  onboardingCompleted?: boolean
+  status?: $Enums.BusinessStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activatedAt?: Date | string | null
+  branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
+  inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
+  snapshots?: Prisma.SnapshotUncheckedCreateNestedManyWithoutBusinessInput
+  alerts?: Prisma.AlertUncheckedCreateNestedManyWithoutBusinessInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutBusinessInput
+  sale?: Prisma.SaleUncheckedCreateNestedManyWithoutBusinessInput
+  expense?: Prisma.ExpenseUncheckedCreateNestedManyWithoutBusinessInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedCreateNestedManyWithoutBusinessInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedCreateNestedManyWithoutBusinessInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedCreateNestedManyWithoutBusinessInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlements?: Prisma.BillingEntitlementUncheckedCreateNestedManyWithoutBusinessInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUncheckedCreateNestedManyWithoutBusinessInput
+  billingInvoices?: Prisma.BillingInvoiceUncheckedCreateNestedManyWithoutBusinessInput
+  billingPayments?: Prisma.BillingPaymentUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUncheckedCreateNestedManyWithoutBusinessInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUncheckedCreateNestedManyWithoutBusinessInput
+  billingRefunds?: Prisma.BillingRefundUncheckedCreateNestedManyWithoutBusinessInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUncheckedCreateNestedManyWithoutBusinessInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUncheckedCreateNestedManyWithoutBusinessInput
+  billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
+  billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
+  supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+}
+
+export type BusinessCreateOrConnectWithoutDeviceSyncCheckpointsInput = {
+  where: Prisma.BusinessWhereUniqueInput
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutDeviceSyncCheckpointsInput, Prisma.BusinessUncheckedCreateWithoutDeviceSyncCheckpointsInput>
+}
+
+export type BusinessUpsertWithoutDeviceSyncCheckpointsInput = {
+  update: Prisma.XOR<Prisma.BusinessUpdateWithoutDeviceSyncCheckpointsInput, Prisma.BusinessUncheckedUpdateWithoutDeviceSyncCheckpointsInput>
+  create: Prisma.XOR<Prisma.BusinessCreateWithoutDeviceSyncCheckpointsInput, Prisma.BusinessUncheckedCreateWithoutDeviceSyncCheckpointsInput>
+  where?: Prisma.BusinessWhereInput
+}
+
+export type BusinessUpdateToOneWithWhereWithoutDeviceSyncCheckpointsInput = {
+  where?: Prisma.BusinessWhereInput
+  data: Prisma.XOR<Prisma.BusinessUpdateWithoutDeviceSyncCheckpointsInput, Prisma.BusinessUncheckedUpdateWithoutDeviceSyncCheckpointsInput>
+}
+
+export type BusinessUpdateWithoutDeviceSyncCheckpointsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
+  branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUpdateManyWithoutBusinessNestedInput
+  billingSubscriptions?: Prisma.BillingSubscriptionUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUpdateManyWithoutBusinessNestedInput
+  billingEntitlements?: Prisma.BillingEntitlementUpdateManyWithoutBusinessNestedInput
+  billingEntitlementOverrides?: Prisma.BillingEntitlementOverrideUpdateManyWithoutBusinessNestedInput
+  billingInvoices?: Prisma.BillingInvoiceUpdateManyWithoutBusinessNestedInput
+  billingPayments?: Prisma.BillingPaymentUpdateManyWithoutBusinessNestedInput
+  billingPaymentAttempts?: Prisma.BillingPaymentAttemptUpdateManyWithoutBusinessNestedInput
+  billingPaymentAllocations?: Prisma.BillingPaymentAllocationUpdateManyWithoutBusinessNestedInput
+  billingRefunds?: Prisma.BillingRefundUpdateManyWithoutBusinessNestedInput
+  billingProviderCustomers?: Prisma.BillingProviderCustomerUpdateManyWithoutBusinessNestedInput
+  billingSubscriptionLeases?: Prisma.BillingSubscriptionLeaseUpdateManyWithoutBusinessNestedInput
+  billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
+  billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
+  supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+}
+
+export type BusinessUncheckedUpdateWithoutDeviceSyncCheckpointsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onboardingCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
+  inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
+  snapshots?: Prisma.SnapshotUncheckedUpdateManyWithoutBusinessNestedInput
+  alerts?: Prisma.AlertUncheckedUpdateManyWithoutBusinessNestedInput
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutBusinessNestedInput
+  sale?: Prisma.SaleUncheckedUpdateManyWithoutBusinessNestedInput
+  expense?: Prisma.ExpenseUncheckedUpdateManyWithoutBusinessNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeInvitations?: Prisma.EmployeeInvitationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensations?: Prisma.EmployeeCompensationUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeCompensationHistory?: Prisma.EmployeeCompensationHistoryUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeRequests?: Prisma.EmployeeRequestUncheckedUpdateManyWithoutBusinessNestedInput
+  employeeNotifications?: Prisma.EmployeeNotificationUncheckedUpdateManyWithoutBusinessNestedInput
   billingSubscriptions?: Prisma.BillingSubscriptionUncheckedUpdateManyWithoutBusinessNestedInput
   billingSubscriptionRequests?: Prisma.BillingSubscriptionRequestUncheckedUpdateManyWithoutBusinessNestedInput
   billingEntitlements?: Prisma.BillingEntitlementUncheckedUpdateManyWithoutBusinessNestedInput
@@ -6429,6 +7083,7 @@ export type BusinessCreateWithoutSupportTicketInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -6457,6 +7112,7 @@ export type BusinessCreateWithoutSupportTicketInput = {
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutSupportTicketInput = {
@@ -6471,6 +7127,7 @@ export type BusinessUncheckedCreateWithoutSupportTicketInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -6499,6 +7156,7 @@ export type BusinessUncheckedCreateWithoutSupportTicketInput = {
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutSupportTicketInput = {
@@ -6529,6 +7187,7 @@ export type BusinessUpdateWithoutSupportTicketInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -6557,6 +7216,7 @@ export type BusinessUpdateWithoutSupportTicketInput = {
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutSupportTicketInput = {
@@ -6571,6 +7231,7 @@ export type BusinessUncheckedUpdateWithoutSupportTicketInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -6599,6 +7260,7 @@ export type BusinessUncheckedUpdateWithoutSupportTicketInput = {
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateWithoutPlatformTenantsProjectionInput = {
@@ -6613,6 +7275,7 @@ export type BusinessCreateWithoutPlatformTenantsProjectionInput = {
   activatedAt?: Date | string | null
   owner?: Prisma.UserCreateNestedOneWithoutOwnedBusinessesInput
   branches?: Prisma.BranchCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryCreateNestedManyWithoutBusinessInput
@@ -6641,6 +7304,7 @@ export type BusinessCreateWithoutPlatformTenantsProjectionInput = {
   billingEvents?: Prisma.BillingEventCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessUncheckedCreateWithoutPlatformTenantsProjectionInput = {
@@ -6655,6 +7319,7 @@ export type BusinessUncheckedCreateWithoutPlatformTenantsProjectionInput = {
   updatedAt?: Date | string
   activatedAt?: Date | string | null
   branches?: Prisma.BranchUncheckedCreateNestedManyWithoutBusinessInput
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutBusinessInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutBusinessInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutBusinessInput
   inventories?: Prisma.InventoryUncheckedCreateNestedManyWithoutBusinessInput
@@ -6683,6 +7348,7 @@ export type BusinessUncheckedCreateWithoutPlatformTenantsProjectionInput = {
   billingEvents?: Prisma.BillingEventUncheckedCreateNestedManyWithoutBusinessInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedCreateNestedManyWithoutBusinessInput
   supportTicket?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutBusinessInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput
 }
 
 export type BusinessCreateOrConnectWithoutPlatformTenantsProjectionInput = {
@@ -6713,6 +7379,7 @@ export type BusinessUpdateWithoutPlatformTenantsProjectionInput = {
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   owner?: Prisma.UserUpdateOneWithoutOwnedBusinessesNestedInput
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -6741,6 +7408,7 @@ export type BusinessUpdateWithoutPlatformTenantsProjectionInput = {
   billingEvents?: Prisma.BillingEventUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutPlatformTenantsProjectionInput = {
@@ -6755,6 +7423,7 @@ export type BusinessUncheckedUpdateWithoutPlatformTenantsProjectionInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -6783,6 +7452,7 @@ export type BusinessUncheckedUpdateWithoutPlatformTenantsProjectionInput = {
   billingEvents?: Prisma.BillingEventUncheckedUpdateManyWithoutBusinessNestedInput
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessCreateManyOwnerInput = {
@@ -6808,6 +7478,7 @@ export type BusinessUpdateWithoutOwnerInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUpdateManyWithoutBusinessNestedInput
@@ -6837,6 +7508,7 @@ export type BusinessUpdateWithoutOwnerInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateWithoutOwnerInput = {
@@ -6850,6 +7522,7 @@ export type BusinessUncheckedUpdateWithoutOwnerInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   branches?: Prisma.BranchUncheckedUpdateManyWithoutBusinessNestedInput
+  events?: Prisma.EventUncheckedUpdateManyWithoutBusinessNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutBusinessNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutBusinessNestedInput
   inventories?: Prisma.InventoryUncheckedUpdateManyWithoutBusinessNestedInput
@@ -6879,6 +7552,7 @@ export type BusinessUncheckedUpdateWithoutOwnerInput = {
   billingAuditLogs?: Prisma.BillingAuditLogUncheckedUpdateManyWithoutBusinessNestedInput
   supportTicket?: Prisma.SupportTicketUncheckedUpdateManyWithoutBusinessNestedInput
   platformTenantsProjection?: Prisma.PlatformTenantProjectionUncheckedUpdateManyWithoutBusinessNestedInput
+  deviceSyncCheckpoints?: Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput
 }
 
 export type BusinessUncheckedUpdateManyWithoutOwnerInput = {
@@ -6900,6 +7574,7 @@ export type BusinessUncheckedUpdateManyWithoutOwnerInput = {
 
 export type BusinessCountOutputType = {
   branches: number
+  events: number
   users: number
   products: number
   inventories: number
@@ -6929,10 +7604,12 @@ export type BusinessCountOutputType = {
   billingAuditLogs: number
   supportTicket: number
   platformTenantsProjection: number
+  deviceSyncCheckpoints: number
 }
 
 export type BusinessCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   branches?: boolean | BusinessCountOutputTypeCountBranchesArgs
+  events?: boolean | BusinessCountOutputTypeCountEventsArgs
   users?: boolean | BusinessCountOutputTypeCountUsersArgs
   products?: boolean | BusinessCountOutputTypeCountProductsArgs
   inventories?: boolean | BusinessCountOutputTypeCountInventoriesArgs
@@ -6962,6 +7639,7 @@ export type BusinessCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   billingAuditLogs?: boolean | BusinessCountOutputTypeCountBillingAuditLogsArgs
   supportTicket?: boolean | BusinessCountOutputTypeCountSupportTicketArgs
   platformTenantsProjection?: boolean | BusinessCountOutputTypeCountPlatformTenantsProjectionArgs
+  deviceSyncCheckpoints?: boolean | BusinessCountOutputTypeCountDeviceSyncCheckpointsArgs
 }
 
 /**
@@ -6979,6 +7657,13 @@ export type BusinessCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
  */
 export type BusinessCountOutputTypeCountBranchesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.BranchWhereInput
+}
+
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EventWhereInput
 }
 
 /**
@@ -7184,6 +7869,13 @@ export type BusinessCountOutputTypeCountPlatformTenantsProjectionArgs<ExtArgs ex
   where?: Prisma.PlatformTenantProjectionWhereInput
 }
 
+/**
+ * BusinessCountOutputType without action
+ */
+export type BusinessCountOutputTypeCountDeviceSyncCheckpointsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DeviceSyncCheckpointWhereInput
+}
+
 
 export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -7198,6 +7890,7 @@ export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   activatedAt?: boolean
   owner?: boolean | Prisma.Business$ownerArgs<ExtArgs>
   branches?: boolean | Prisma.Business$branchesArgs<ExtArgs>
+  events?: boolean | Prisma.Business$eventsArgs<ExtArgs>
   users?: boolean | Prisma.Business$usersArgs<ExtArgs>
   products?: boolean | Prisma.Business$productsArgs<ExtArgs>
   inventories?: boolean | Prisma.Business$inventoriesArgs<ExtArgs>
@@ -7227,6 +7920,7 @@ export type BusinessSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   billingAuditLogs?: boolean | Prisma.Business$billingAuditLogsArgs<ExtArgs>
   supportTicket?: boolean | Prisma.Business$supportTicketArgs<ExtArgs>
   platformTenantsProjection?: boolean | Prisma.Business$platformTenantsProjectionArgs<ExtArgs>
+  deviceSyncCheckpoints?: boolean | Prisma.Business$deviceSyncCheckpointsArgs<ExtArgs>
   _count?: boolean | Prisma.BusinessCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["business"]>
 
@@ -7275,6 +7969,7 @@ export type BusinessOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type BusinessInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   owner?: boolean | Prisma.Business$ownerArgs<ExtArgs>
   branches?: boolean | Prisma.Business$branchesArgs<ExtArgs>
+  events?: boolean | Prisma.Business$eventsArgs<ExtArgs>
   users?: boolean | Prisma.Business$usersArgs<ExtArgs>
   products?: boolean | Prisma.Business$productsArgs<ExtArgs>
   inventories?: boolean | Prisma.Business$inventoriesArgs<ExtArgs>
@@ -7304,6 +7999,7 @@ export type BusinessInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   billingAuditLogs?: boolean | Prisma.Business$billingAuditLogsArgs<ExtArgs>
   supportTicket?: boolean | Prisma.Business$supportTicketArgs<ExtArgs>
   platformTenantsProjection?: boolean | Prisma.Business$platformTenantsProjectionArgs<ExtArgs>
+  deviceSyncCheckpoints?: boolean | Prisma.Business$deviceSyncCheckpointsArgs<ExtArgs>
   _count?: boolean | Prisma.BusinessCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BusinessIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -7318,6 +8014,7 @@ export type $BusinessPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   objects: {
     owner: Prisma.$UserPayload<ExtArgs> | null
     branches: Prisma.$BranchPayload<ExtArgs>[]
+    events: Prisma.$EventPayload<ExtArgs>[]
     users: Prisma.$UserPayload<ExtArgs>[]
     products: Prisma.$ProductPayload<ExtArgs>[]
     inventories: Prisma.$InventoryPayload<ExtArgs>[]
@@ -7347,6 +8044,7 @@ export type $BusinessPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     billingAuditLogs: Prisma.$BillingAuditLogPayload<ExtArgs>[]
     supportTicket: Prisma.$SupportTicketPayload<ExtArgs>[]
     platformTenantsProjection: Prisma.$PlatformTenantProjectionPayload<ExtArgs>[]
+    deviceSyncCheckpoints: Prisma.$DeviceSyncCheckpointPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -7755,6 +8453,7 @@ export interface Prisma__BusinessClient<T, Null = never, ExtArgs extends runtime
   readonly [Symbol.toStringTag]: "PrismaPromise"
   owner<T extends Prisma.Business$ownerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$ownerArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   branches<T extends Prisma.Business$branchesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$branchesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  events<T extends Prisma.Business$eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   users<T extends Prisma.Business$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   products<T extends Prisma.Business$productsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$productsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   inventories<T extends Prisma.Business$inventoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$inventoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InventoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -7784,6 +8483,7 @@ export interface Prisma__BusinessClient<T, Null = never, ExtArgs extends runtime
   billingAuditLogs<T extends Prisma.Business$billingAuditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$billingAuditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BillingAuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   supportTicket<T extends Prisma.Business$supportTicketArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$supportTicketArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   platformTenantsProjection<T extends Prisma.Business$platformTenantsProjectionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$platformTenantsProjectionArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlatformTenantProjectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  deviceSyncCheckpoints<T extends Prisma.Business$deviceSyncCheckpointsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Business$deviceSyncCheckpointsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DeviceSyncCheckpointPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8264,6 +8964,30 @@ export type Business$branchesArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.BranchScalarFieldEnum | Prisma.BranchScalarFieldEnum[]
+}
+
+/**
+ * Business.events
+ */
+export type Business$eventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Event
+   */
+  select?: Prisma.EventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Event
+   */
+  omit?: Prisma.EventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EventInclude<ExtArgs> | null
+  where?: Prisma.EventWhereInput
+  orderBy?: Prisma.EventOrderByWithRelationInput | Prisma.EventOrderByWithRelationInput[]
+  cursor?: Prisma.EventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EventScalarFieldEnum | Prisma.EventScalarFieldEnum[]
 }
 
 /**
@@ -8960,6 +9684,30 @@ export type Business$platformTenantsProjectionArgs<ExtArgs extends runtime.Types
   take?: number
   skip?: number
   distinct?: Prisma.PlatformTenantProjectionScalarFieldEnum | Prisma.PlatformTenantProjectionScalarFieldEnum[]
+}
+
+/**
+ * Business.deviceSyncCheckpoints
+ */
+export type Business$deviceSyncCheckpointsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DeviceSyncCheckpoint
+   */
+  select?: Prisma.DeviceSyncCheckpointSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DeviceSyncCheckpoint
+   */
+  omit?: Prisma.DeviceSyncCheckpointOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeviceSyncCheckpointInclude<ExtArgs> | null
+  where?: Prisma.DeviceSyncCheckpointWhereInput
+  orderBy?: Prisma.DeviceSyncCheckpointOrderByWithRelationInput | Prisma.DeviceSyncCheckpointOrderByWithRelationInput[]
+  cursor?: Prisma.DeviceSyncCheckpointWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DeviceSyncCheckpointScalarFieldEnum | Prisma.DeviceSyncCheckpointScalarFieldEnum[]
 }
 
 /**

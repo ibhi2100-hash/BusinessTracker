@@ -2,68 +2,72 @@
 import type {
   PlatformSubscription,
   PlatformBillingMetrics,
-} from "../../../types/billing/platform-billing.types";
+} from "../../../../types/billing/platform-billing.types";
 
-const BASE_URL = "/api/platform/billing/subscriptions";
+import { platformRequest } from "../platformApiClient"; 
 
-async function request<T>(
-  endpoint: string,
-  options: RequestInit = {}
-): Promise<T> {
-  const response = await fetch(`${BASE_URL}${endpoint}`, {
-    ...options,
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
-  });
-
-  const data = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    throw new Error(data.message || "Platform billing request failed");
-  }
-
-  return data as T;
-}
+const BASE = "/platform/billing/subscriptions";
 
 export const platformSubscriptionApi = {
-  async list(): Promise<PlatformSubscription[]> {
-    const result = await request<{
+  async list(accessToken: string): Promise<PlatformSubscription[]> {
+    const result = await platformRequest<{
       subscriptions: PlatformSubscription[];
-    }>("");
+    }>(BASE, accessToken);
 
     return result.subscriptions;
   },
 
-  async getMetrics(): Promise<PlatformBillingMetrics> {
-    const result = await request<{
+  async getMetrics(
+    accessToken: string
+  ): Promise<PlatformBillingMetrics> {
+    const result = await platformRequest<{
       metrics: PlatformBillingMetrics;
-    }>("/metrics");
+    }>(`${BASE}/metrics`, accessToken);
 
     return result.metrics;
   },
 
-  async get(id: string): Promise<PlatformSubscription> {
-    const result = await request<{
+  async get(
+    id: string,
+    accessToken: string
+  ): Promise<PlatformSubscription> {
+    const result = await platformRequest<{
       subscription: PlatformSubscription;
-    }>(`/${encodeURIComponent(id)}`);
+    }>(
+      `${BASE}/${encodeURIComponent(id)}`,
+      accessToken
+    );
 
     return result.subscription;
   },
 
-  async suspend(id: string, reason: string): Promise<void> {
-    await request(`/${encodeURIComponent(id)}/suspend`, {
-      method: "POST",
-      body: JSON.stringify({ reason }),
-    });
+  async suspend(
+    id: string,
+    reason: string,
+    accessToken: string
+  ): Promise<void> {
+    await platformRequest<unknown>(
+      `${BASE}/${encodeURIComponent(id)}/suspend`,
+      accessToken,
+      {
+        method: "POST",
+        body: JSON.stringify({ reason }),
+      }
+    );
   },
 
-  async reactivate(id: string, reason: string): Promise<void> {
-    await request(`/${encodeURIComponent(id)}/reactivate`, {
-      method: "POST",
-      body: JSON.stringify({ reason }),
-    });
+  async reactivate(
+    id: string,
+    reason: string,
+    accessToken: string
+  ): Promise<void> {
+    await platformRequest<unknown>(
+      `${BASE}/${encodeURIComponent(id)}/reactivate`,
+      accessToken,
+      {
+        method: "POST",
+        body: JSON.stringify({ reason }),
+      }
+    );
   },
 };

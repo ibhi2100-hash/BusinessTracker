@@ -1,159 +1,172 @@
 
+/* =========================================================
+   ENUMS
+========================================================= */
+
 export type BillingPlanStatus =
   | "DRAFT"
   | "PUBLISHED"
-  | "RETIRED";
+  | "RETIRED"
+  | "ARCHIVED";
 
 export type BillingCycle =
   | "MONTHLY"
   | "QUARTERLY"
-  | "YEARLY";
+  | "YEARLY"
+  | "LIFETIME";
 
-export type BillingPlanLimits = {
-  maxStaff: number | null;
-  maxBranches: number | null;
-  maxProducts: number | null;
-  maxStorageMb: number | null;
-};
+/* =========================================================
+   PLAN LIMITS
+========================================================= */
+
+export interface BillingPlanLimits {
+  maxStaff: number;
+  maxBranch: number;
+  maxProduct: number;
+  maxStorageMb?: number;
+}
+
+/* =========================================================
+   PLAN FEATURES
+========================================================= */
 
 export type BillingPlanFeatures = Record<string, boolean>;
 
+/* =========================================================
+   PLAN VERSION
+========================================================= */
+
+export interface BillingPlanVersion {
+  id: string;
+  planId: string;
+
+  // Sequential version number belonging to this plan.
+  planVersion: number;
+
+  // BigInt is serialized as a decimal string.
+  priceMinor: string;
+
+  currency: string;
+  billingCycle: BillingCycle;
+  intervalCount: number;
+
+  trialDays: number;
+
+  maxStaff: number;
+  maxBranch: number;
+  maxProduct: number;
+
+  features: BillingPlanFeatures;
+
+  publishedAt: string | null;
+  createdAt: string;
+}
+
+/* =========================================================
+   BILLING PLAN
+========================================================= */
+
 export interface BillingPlan {
   id: string;
+
   code: string;
   name: string;
   description: string | null;
 
-  priceMinor: string;
-  currency: string;
-  billingCycle: BillingCycle;
-
-  trialDays: number;
-
-  limits: BillingPlanLimits;
-  features: BillingPlanFeatures;
+  status: BillingPlanStatus;
 
   displayOrder: number;
   isFeatured: boolean;
 
-  status: BillingPlanStatus;
-
-  currentVersion: number;
-  publishedAt: string | null;
   createdAt: string;
   updatedAt: string;
+
+  // Versions are ordered by planVersion DESC from the API.
+  versions: BillingPlanVersion[];
 }
+
+/* =========================================================
+   CREATE PLAN VERSION INPUT
+========================================================= */
+
+export interface CreateBillingPlanVersionInput {
+  priceMinor: string;
+  currency: string;
+
+  billingCycle: BillingCycle;
+  intervalCount?: number;
+
+  trialDays: number;
+
+  maxStaff: number;
+  maxBranch: number;
+  maxProduct: number;
+
+  features: BillingPlanFeatures;
+}
+
+/* =========================================================
+   CREATE BILLING PLAN INPUT
+========================================================= */
 
 export interface CreateBillingPlanInput {
   code: string;
   name: string;
-  description?: string;
-
-  priceMinor: string;
-  currency: string;
-  billingCycle: BillingCycle;
-
-  trialDays: number;
-
-  limits: BillingPlanLimits;
-  features: BillingPlanFeatures;
+  description?: string | null;
 
   displayOrder: number;
   isFeatured: boolean;
+
+  // Initial commercial configuration (version 1).
+  initialVersion: CreateBillingPlanVersionInput;
 }
 
-export type UpdateBillingPlanInput =
-  Partial<CreateBillingPlanInput>;
+/* =========================================================
+   UPDATE BILLING PLAN INPUT
+========================================================= */
+
+// Updates stable plan metadata only.
+// Pricing and entitlements must be changed through a new version.
+
+export interface UpdateBillingPlanInput {
+  code?: string;
+  name?: string;
+  description?: string | null;
+
+  displayOrder?: number;
+  isFeatured?: boolean;
+}
+
+/* =========================================================
+   CREATE NEW VERSION INPUT
+========================================================= */
+
+export type CreateBillingPlanVersionRequest =
+  CreateBillingPlanVersionInput;
+
+/* =========================================================
+   API RESPONSES
+========================================================= */
 
 export interface BillingPlanResponse {
+  message?: string;
   plan: BillingPlan;
 }
 
 export interface BillingPlansResponse {
   plans: BillingPlan[];
+  pagination?: {
+    total: number;
+    skip: number;
+    take: number;
+  };
 }
 
-export interface BillingPlanVersion {
-  id: string;
-  planId: string;
-  version: number;
-  snapshot: BillingPlan;
-  createdAt: string;
-  publishedAt: string | null;
+export interface BillingPlanVersionResponse {
+  message?: string;
+  version: BillingPlanVersion;
 }
 
-
-import type {
-  BillingCycle,
-  BillingPlan,
-  BillingPlanFeatures,
-  BillingPlanLimits,
-} from "./billing-plan.types";
-
-export interface PublicBillingPlan {
-  id: string;
-  code: string;
-  name: string;
-  description: string | null;
-
-  priceMinor: string;
-  currency: string;
-  billingCycle: BillingCycle;
-
-  trialDays: number;
-
-  limits: BillingPlanLimits;
-  features: BillingPlanFeatures;
-
-  displayOrder: number;
-  isFeatured: boolean;
-
-  version: number;
-  publishedAt: string;
+export interface BillingPlanVersionsResponse {
+  versions: BillingPlanVersion[];
 }
-
-export type BusinessSubscriptionStatus =
-  | "PENDING"
-  | "TRIALING"
-  | "ACTIVE"
-  | "PAST_DUE"
-  | "SUSPENDED"
-  | "CANCELLED"
-  | "EXPIRED";
-
-export interface BusinessSubscription {
-  id: string;
-  businessId: string;
-  planId: string;
-
-  planVersion: number;
-  planName: string;
-
-  status: BusinessSubscriptionStatus;
-
-  priceMinor: string;
-  currency: string;
-  billingCycle: BillingCycle;
-
-  startedAt: string | null;
-  trialEndsAt: string | null;
-  currentPeriodStart: string | null;
-  currentPeriodEnd: string | null;
-
-  cancelAtPeriodEnd: boolean;
-}
-
-export interface PublicBillingCatalogue {
-  revision: number;
-  plans: PublicBillingPlan[];
-  generatedAt: string;
-}
-
-export interface BusinessBillingState {
-  subscription: BusinessSubscription | null;
-  plans: PublicBillingPlan[];
-  catalogueRevision: number;
-  lastSyncedAt: string | null;
-  isOffline: boolean;
-}
-

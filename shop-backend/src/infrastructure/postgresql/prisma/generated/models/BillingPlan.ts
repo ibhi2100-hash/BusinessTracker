@@ -313,7 +313,7 @@ export type BillingPlanScalarWhereWithAggregatesInput = {
 }
 
 export type BillingPlanCreateInput = {
-  id: string
+  id?: string
   code: string
   name: string
   description?: string | null
@@ -326,7 +326,7 @@ export type BillingPlanCreateInput = {
 }
 
 export type BillingPlanUncheckedCreateInput = {
-  id: string
+  id?: string
   code: string
   name: string
   description?: string | null
@@ -365,7 +365,7 @@ export type BillingPlanUncheckedUpdateInput = {
 }
 
 export type BillingPlanCreateManyInput = {
-  id: string
+  id?: string
   code: string
   name: string
   description?: string | null
@@ -476,7 +476,7 @@ export type BillingPlanUpdateOneRequiredWithoutVersionsNestedInput = {
 }
 
 export type BillingPlanCreateWithoutVersionsInput = {
-  id: string
+  id?: string
   code: string
   name: string
   description?: string | null
@@ -488,7 +488,7 @@ export type BillingPlanCreateWithoutVersionsInput = {
 }
 
 export type BillingPlanUncheckedCreateWithoutVersionsInput = {
-  id: string
+  id?: string
   code: string
   name: string
   description?: string | null

@@ -1,26 +1,44 @@
+
 import { Router } from "express";
 
-import { PlatformIdentityService } from
-    "../modules/platform/identity/services/platform-indentity.service.js";
+import { createPlatformAuthMiddleware } from
+    "../middlwares/platform/platform-auth.middleware.js";
 
-import { PlatformAuditService } from "../modules/platform/audit/service/platform-audit.service.js"; 
-// Import your actual token issuer and verifier implementations.
-import type { PlatformAccessTokenIssuer } from "../modules/platform/identity/services/platform-indentity.service.js";
-
-import { createPlatformAuthMiddleware } from "../middlwares/platform/platform-auth.middleware.js"
-
-// Import your platform route factories.
 import { createPlatformIdentityRoutes } from
     "../routes/platform/platform-identity.route.js";
 
 import { createPlatformAuditRoutes } from
     "../routes/platform/platform-audit.route.js";
-import { PlatformRepositoryRegistry } from "../modules/platform/platformRepositoryRegistry.js";
-import { PlatformServiceRegistry } from "../modules/platform/platformServiceRegistry.js";
-import { PlatformControllerRegistry } from "../modules/platform/platformControllersRegistry.js";
-import { createPlatformTenantRoutes } from "../routes/platform/platform-tenant.route.js";
-import { PlatformJwtService } from "../modules/platform/identity/services/platform-jwt.service.js";
-import { createPlatformAnalyticsRoutes } from "../routes/platform/platform-analytics.routes.js";
+
+import { createPlatformTenantRoutes } from
+    "../routes/platform/platform-tenant.route.js";
+
+import { createPlatformAnalyticsRoutes } from
+    "../routes/platform/platform-analytics.routes.js";
+
+import { createBillingPlansRoutes } from
+    "../routes/billing/billingPlansRoute.js";
+
+import { PlatformRepositoryRegistry } from
+    "../modules/platform/platformRepositoryRegistry.js";
+
+import { PlatformServiceRegistry } from
+    "../modules/platform/platformServiceRegistry.js";
+
+import { PlatformControllerRegistry } from
+    "../modules/platform/platformControllersRegistry.js";
+
+import { PlatformJwtService } from
+    "../modules/platform/identity/services/platform-jwt.service.js";
+
+import { BillingRepositoryRegistry } from
+    "../modules/billing/billingRepositoryRegistry.js";
+
+import { BillingServiceRegistry } from
+    "../modules/billing/billingServiceRegistry.js";
+
+import { BillingControllerRegistry } from
+    "../modules/billing/billingControllerRegistry.js";
 
 // ------------------------------------------
 // DEPENDENCIES
@@ -39,6 +57,9 @@ export interface PlatformRouters {
     audit: Router;
     tenant: Router;
     analytics: Router;
+
+    // Commercial / Billing
+    plans: Router;
 }
 
 // ------------------------------------------
@@ -48,8 +69,6 @@ export interface PlatformRouters {
 export interface PlatformModule {
     router: PlatformRouters;
     services: PlatformServiceRegistry;
-    repositories: PlatformRepositoryRegistry;
-    controllers: PlatformControllerRegistry;
 }
 
 // ------------------------------------------
@@ -71,14 +90,14 @@ export class PlatformComposer {
         const jwtService = this.dependencies.jwtService;
 
         // ------------------------------------------
-        // REPOSITORIES
+        // PLATFORM REPOSITORIES
         // ------------------------------------------
 
         const repositories =
             new PlatformRepositoryRegistry();
 
         // ------------------------------------------
-        // SERVICES
+        // PLATFORM SERVICES
         // ------------------------------------------
 
         const services =
@@ -87,17 +106,43 @@ export class PlatformComposer {
                 jwtService
             );
 
-        const identityService = services.identityService;
+        const identityService =
+            services.identityService;
 
         // ------------------------------------------
-        // CONTROLLERS
+        // PLATFORM CONTROLLERS
         // ------------------------------------------
 
         const controllers =
             new PlatformControllerRegistry(services);
 
         // ------------------------------------------
-        // AUTHENTICATION
+        // BILLING REPOSITORIES
+        // ------------------------------------------
+
+        const billingRepositories =
+            new BillingRepositoryRegistry();
+
+        // ------------------------------------------
+        // BILLING SERVICES
+        // ------------------------------------------
+
+        const billingServices =
+            new BillingServiceRegistry(
+                billingRepositories
+            );
+
+        // ------------------------------------------
+        // BILLING CONTROLLERS
+        // ------------------------------------------
+
+        const billingControllers =
+            new BillingControllerRegistry(
+                billingServices
+            );
+
+        // ------------------------------------------
+        // SHARED PLATFORM AUTHENTICATION
         // ------------------------------------------
 
         const authenticatePlatform =
@@ -151,6 +196,17 @@ export class PlatformComposer {
             );
 
         // ------------------------------------------
+        // BILLING PLANS ROUTES
+        // ------------------------------------------
+
+        const plansRoutes =
+            createBillingPlansRoutes(
+                billingControllers.billingPlanController,
+                identityService,
+                authenticatePlatform
+            );
+
+        // ------------------------------------------
         // RETURN PLATFORM MODULE
         // ------------------------------------------
 
@@ -160,11 +216,10 @@ export class PlatformComposer {
                 audit: auditRoutes,
                 tenant: tenantRoutes,
                 analytics: analyticsRoutes,
+                plans: plansRoutes,
             },
 
             services,
-            repositories,
-            controllers,
         };
     }
 }

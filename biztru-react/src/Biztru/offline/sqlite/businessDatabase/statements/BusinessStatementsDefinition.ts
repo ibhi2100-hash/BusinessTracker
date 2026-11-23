@@ -17,6 +17,7 @@ import { LogicClockDefinition } from "./logicClock/logicClockDefinition"
 import { OutboxStatementsDefinition } from "./outbox/outboxStatementDefinition";
 import { ProductStatementDefinition } from "./products/productStatementsDefinition";
 import { ProjectionResetStatementDefinitions } from "./projectionRebuilder/projectionRebuilderDefinition";
+import { RefundStatementDefinition } from "./refund/refundsStatementDefinition";
 import { ReportStatementDefinition } from "./report/reportStatementDefinition";
 import { SalesStatementDefinition } from "./sales/salesStatementDefinition";
 import { SyncActivityStatementDefinition } from "./syncActivities/ActivitiesStatementDefinition";
@@ -30,6 +31,7 @@ export const BusinessStatementsDefinitions: StatementDefinition[] = [
     ...ProductStatementDefinition,
     ...InventoryStatementDefinition,
     ...SalesStatementDefinition,
+    ...RefundStatementDefinition,
     ...ExpenseStatementDefinition,
     ...LedgerStatementDefinition,
     ...BranchDashboardStatementDefinition,

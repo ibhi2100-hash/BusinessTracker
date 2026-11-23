@@ -329,6 +329,7 @@ export type EventWhereInput = {
   checksum?: Prisma.StringFilter<"Event"> | string
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   ledgerEntries?: Prisma.LedgerEntryListRelationFilter
+  business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
 }
 
 export type EventOrderByWithRelationInput = {
@@ -351,6 +352,7 @@ export type EventOrderByWithRelationInput = {
   checksum?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   ledgerEntries?: Prisma.LedgerEntryOrderByRelationAggregateInput
+  business?: Prisma.BusinessOrderByWithRelationInput
 }
 
 export type EventWhereUniqueInput = Prisma.AtLeast<{
@@ -378,6 +380,7 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   checksum?: Prisma.StringFilter<"Event"> | string
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   ledgerEntries?: Prisma.LedgerEntryListRelationFilter
+  business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
 }, "id" | "aggregateType_aggregateId_aggregateVersion" | "businessId_businessPosition">
 
 export type EventOrderByWithAggregationInput = {
@@ -432,7 +435,6 @@ export type EventScalarWhereWithAggregatesInput = {
 
 export type EventCreateInput = {
   id: string
-  businessId: string
   businessPosition: bigint | number
   branchId?: string | null
   aggregateId: string
@@ -450,6 +452,7 @@ export type EventCreateInput = {
   checksum: string
   createdAt?: Date | string
   ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutEventInput
+  business: Prisma.BusinessCreateNestedOneWithoutEventsInput
 }
 
 export type EventUncheckedCreateInput = {
@@ -476,7 +479,6 @@ export type EventUncheckedCreateInput = {
 
 export type EventUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  businessId?: Prisma.StringFieldUpdateOperationsInput | string
   businessPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -494,6 +496,7 @@ export type EventUpdateInput = {
   checksum?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutEventNestedInput
+  business?: Prisma.BusinessUpdateOneRequiredWithoutEventsNestedInput
 }
 
 export type EventUncheckedUpdateInput = {
@@ -541,7 +544,6 @@ export type EventCreateManyInput = {
 
 export type EventUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  businessId?: Prisma.StringFieldUpdateOperationsInput | string
   businessPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -579,6 +581,16 @@ export type EventUncheckedUpdateManyInput = {
   logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   checksum?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type EventListRelationFilter = {
+  every?: Prisma.EventWhereInput
+  some?: Prisma.EventWhereInput
+  none?: Prisma.EventWhereInput
+}
+
+export type EventOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type EventAggregateTypeAggregateIdAggregateVersionCompoundUniqueInput = {
@@ -672,6 +684,48 @@ export type EventScalarRelationFilter = {
   isNot?: Prisma.EventWhereInput
 }
 
+export type EventCreateNestedManyWithoutBusinessInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutBusinessInput, Prisma.EventUncheckedCreateWithoutBusinessInput> | Prisma.EventCreateWithoutBusinessInput[] | Prisma.EventUncheckedCreateWithoutBusinessInput[]
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutBusinessInput | Prisma.EventCreateOrConnectWithoutBusinessInput[]
+  createMany?: Prisma.EventCreateManyBusinessInputEnvelope
+  connect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+}
+
+export type EventUncheckedCreateNestedManyWithoutBusinessInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutBusinessInput, Prisma.EventUncheckedCreateWithoutBusinessInput> | Prisma.EventCreateWithoutBusinessInput[] | Prisma.EventUncheckedCreateWithoutBusinessInput[]
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutBusinessInput | Prisma.EventCreateOrConnectWithoutBusinessInput[]
+  createMany?: Prisma.EventCreateManyBusinessInputEnvelope
+  connect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+}
+
+export type EventUpdateManyWithoutBusinessNestedInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutBusinessInput, Prisma.EventUncheckedCreateWithoutBusinessInput> | Prisma.EventCreateWithoutBusinessInput[] | Prisma.EventUncheckedCreateWithoutBusinessInput[]
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutBusinessInput | Prisma.EventCreateOrConnectWithoutBusinessInput[]
+  upsert?: Prisma.EventUpsertWithWhereUniqueWithoutBusinessInput | Prisma.EventUpsertWithWhereUniqueWithoutBusinessInput[]
+  createMany?: Prisma.EventCreateManyBusinessInputEnvelope
+  set?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+  disconnect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+  delete?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+  connect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+  update?: Prisma.EventUpdateWithWhereUniqueWithoutBusinessInput | Prisma.EventUpdateWithWhereUniqueWithoutBusinessInput[]
+  updateMany?: Prisma.EventUpdateManyWithWhereWithoutBusinessInput | Prisma.EventUpdateManyWithWhereWithoutBusinessInput[]
+  deleteMany?: Prisma.EventScalarWhereInput | Prisma.EventScalarWhereInput[]
+}
+
+export type EventUncheckedUpdateManyWithoutBusinessNestedInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutBusinessInput, Prisma.EventUncheckedCreateWithoutBusinessInput> | Prisma.EventCreateWithoutBusinessInput[] | Prisma.EventUncheckedCreateWithoutBusinessInput[]
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutBusinessInput | Prisma.EventCreateOrConnectWithoutBusinessInput[]
+  upsert?: Prisma.EventUpsertWithWhereUniqueWithoutBusinessInput | Prisma.EventUpsertWithWhereUniqueWithoutBusinessInput[]
+  createMany?: Prisma.EventCreateManyBusinessInputEnvelope
+  set?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+  disconnect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+  delete?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+  connect?: Prisma.EventWhereUniqueInput | Prisma.EventWhereUniqueInput[]
+  update?: Prisma.EventUpdateWithWhereUniqueWithoutBusinessInput | Prisma.EventUpdateWithWhereUniqueWithoutBusinessInput[]
+  updateMany?: Prisma.EventUpdateManyWithWhereWithoutBusinessInput | Prisma.EventUpdateManyWithWhereWithoutBusinessInput[]
+  deleteMany?: Prisma.EventScalarWhereInput | Prisma.EventScalarWhereInput[]
+}
+
 export type EnumModeFieldUpdateOperationsInput = {
   set?: $Enums.Mode
 }
@@ -690,9 +744,8 @@ export type EventUpdateOneRequiredWithoutLedgerEntriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.EventUpdateToOneWithWhereWithoutLedgerEntriesInput, Prisma.EventUpdateWithoutLedgerEntriesInput>, Prisma.EventUncheckedUpdateWithoutLedgerEntriesInput>
 }
 
-export type EventCreateWithoutLedgerEntriesInput = {
+export type EventCreateWithoutBusinessInput = {
   id: string
-  businessId: string
   businessPosition: bigint | number
   branchId?: string | null
   aggregateId: string
@@ -709,6 +762,99 @@ export type EventCreateWithoutLedgerEntriesInput = {
   logicClock: bigint | number
   checksum: string
   createdAt?: Date | string
+  ledgerEntries?: Prisma.LedgerEntryCreateNestedManyWithoutEventInput
+}
+
+export type EventUncheckedCreateWithoutBusinessInput = {
+  id: string
+  businessPosition: bigint | number
+  branchId?: string | null
+  aggregateId: string
+  aggregateType: string
+  aggregateVersion: number
+  globalPosition?: bigint | number
+  type: string
+  payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  mode: $Enums.Mode
+  userId: string
+  deviceId: string
+  causationId: string
+  correlationId: string
+  logicClock: bigint | number
+  checksum: string
+  createdAt?: Date | string
+  ledgerEntries?: Prisma.LedgerEntryUncheckedCreateNestedManyWithoutEventInput
+}
+
+export type EventCreateOrConnectWithoutBusinessInput = {
+  where: Prisma.EventWhereUniqueInput
+  create: Prisma.XOR<Prisma.EventCreateWithoutBusinessInput, Prisma.EventUncheckedCreateWithoutBusinessInput>
+}
+
+export type EventCreateManyBusinessInputEnvelope = {
+  data: Prisma.EventCreateManyBusinessInput | Prisma.EventCreateManyBusinessInput[]
+  skipDuplicates?: boolean
+}
+
+export type EventUpsertWithWhereUniqueWithoutBusinessInput = {
+  where: Prisma.EventWhereUniqueInput
+  update: Prisma.XOR<Prisma.EventUpdateWithoutBusinessInput, Prisma.EventUncheckedUpdateWithoutBusinessInput>
+  create: Prisma.XOR<Prisma.EventCreateWithoutBusinessInput, Prisma.EventUncheckedCreateWithoutBusinessInput>
+}
+
+export type EventUpdateWithWhereUniqueWithoutBusinessInput = {
+  where: Prisma.EventWhereUniqueInput
+  data: Prisma.XOR<Prisma.EventUpdateWithoutBusinessInput, Prisma.EventUncheckedUpdateWithoutBusinessInput>
+}
+
+export type EventUpdateManyWithWhereWithoutBusinessInput = {
+  where: Prisma.EventScalarWhereInput
+  data: Prisma.XOR<Prisma.EventUpdateManyMutationInput, Prisma.EventUncheckedUpdateManyWithoutBusinessInput>
+}
+
+export type EventScalarWhereInput = {
+  AND?: Prisma.EventScalarWhereInput | Prisma.EventScalarWhereInput[]
+  OR?: Prisma.EventScalarWhereInput[]
+  NOT?: Prisma.EventScalarWhereInput | Prisma.EventScalarWhereInput[]
+  id?: Prisma.StringFilter<"Event"> | string
+  businessId?: Prisma.StringFilter<"Event"> | string
+  businessPosition?: Prisma.BigIntFilter<"Event"> | bigint | number
+  branchId?: Prisma.StringNullableFilter<"Event"> | string | null
+  aggregateId?: Prisma.StringFilter<"Event"> | string
+  aggregateType?: Prisma.StringFilter<"Event"> | string
+  aggregateVersion?: Prisma.IntFilter<"Event"> | number
+  globalPosition?: Prisma.BigIntFilter<"Event"> | bigint | number
+  type?: Prisma.StringFilter<"Event"> | string
+  payload?: Prisma.JsonFilter<"Event">
+  mode?: Prisma.EnumModeFilter<"Event"> | $Enums.Mode
+  userId?: Prisma.StringFilter<"Event"> | string
+  deviceId?: Prisma.StringFilter<"Event"> | string
+  causationId?: Prisma.StringFilter<"Event"> | string
+  correlationId?: Prisma.StringFilter<"Event"> | string
+  logicClock?: Prisma.BigIntFilter<"Event"> | bigint | number
+  checksum?: Prisma.StringFilter<"Event"> | string
+  createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
+}
+
+export type EventCreateWithoutLedgerEntriesInput = {
+  id: string
+  businessPosition: bigint | number
+  branchId?: string | null
+  aggregateId: string
+  aggregateType: string
+  aggregateVersion: number
+  globalPosition?: bigint | number
+  type: string
+  payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  mode: $Enums.Mode
+  userId: string
+  deviceId: string
+  causationId: string
+  correlationId: string
+  logicClock: bigint | number
+  checksum: string
+  createdAt?: Date | string
+  business: Prisma.BusinessCreateNestedOneWithoutEventsInput
 }
 
 export type EventUncheckedCreateWithoutLedgerEntriesInput = {
@@ -750,6 +896,27 @@ export type EventUpdateToOneWithWhereWithoutLedgerEntriesInput = {
 
 export type EventUpdateWithoutLedgerEntriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceId?: Prisma.StringFieldUpdateOperationsInput | string
+  causationId?: Prisma.StringFieldUpdateOperationsInput | string
+  correlationId?: Prisma.StringFieldUpdateOperationsInput | string
+  logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  checksum?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  business?: Prisma.BusinessUpdateOneRequiredWithoutEventsNestedInput
+}
+
+export type EventUncheckedUpdateWithoutLedgerEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   businessId?: Prisma.StringFieldUpdateOperationsInput | string
   businessPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -769,9 +936,70 @@ export type EventUpdateWithoutLedgerEntriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type EventUncheckedUpdateWithoutLedgerEntriesInput = {
+export type EventCreateManyBusinessInput = {
+  id: string
+  businessPosition: bigint | number
+  branchId?: string | null
+  aggregateId: string
+  aggregateType: string
+  aggregateVersion: number
+  globalPosition?: bigint | number
+  type: string
+  payload: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  mode: $Enums.Mode
+  userId: string
+  deviceId: string
+  causationId: string
+  correlationId: string
+  logicClock: bigint | number
+  checksum: string
+  createdAt?: Date | string
+}
+
+export type EventUpdateWithoutBusinessInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  businessId?: Prisma.StringFieldUpdateOperationsInput | string
+  businessPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceId?: Prisma.StringFieldUpdateOperationsInput | string
+  causationId?: Prisma.StringFieldUpdateOperationsInput | string
+  correlationId?: Prisma.StringFieldUpdateOperationsInput | string
+  logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  checksum?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ledgerEntries?: Prisma.LedgerEntryUpdateManyWithoutEventNestedInput
+}
+
+export type EventUncheckedUpdateWithoutBusinessInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  businessPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateType?: Prisma.StringFieldUpdateOperationsInput | string
+  aggregateVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  globalPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  payload?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  mode?: Prisma.EnumModeFieldUpdateOperationsInput | $Enums.Mode
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  deviceId?: Prisma.StringFieldUpdateOperationsInput | string
+  causationId?: Prisma.StringFieldUpdateOperationsInput | string
+  correlationId?: Prisma.StringFieldUpdateOperationsInput | string
+  logicClock?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  checksum?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ledgerEntries?: Prisma.LedgerEntryUncheckedUpdateManyWithoutEventNestedInput
+}
+
+export type EventUncheckedUpdateManyWithoutBusinessInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   businessPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   branchId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   aggregateId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -841,6 +1069,7 @@ export type EventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   checksum?: boolean
   createdAt?: boolean
   ledgerEntries?: boolean | Prisma.Event$ledgerEntriesArgs<ExtArgs>
+  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.EventCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["event"]>
 
@@ -863,6 +1092,7 @@ export type EventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   logicClock?: boolean
   checksum?: boolean
   createdAt?: boolean
+  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["event"]>
 
 export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -884,6 +1114,7 @@ export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   logicClock?: boolean
   checksum?: boolean
   createdAt?: boolean
+  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["event"]>
 
 export type EventSelectScalar = {
@@ -910,15 +1141,21 @@ export type EventSelectScalar = {
 export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "businessPosition" | "branchId" | "aggregateId" | "aggregateType" | "aggregateVersion" | "globalPosition" | "type" | "payload" | "mode" | "userId" | "deviceId" | "causationId" | "correlationId" | "logicClock" | "checksum" | "createdAt", ExtArgs["result"]["event"]>
 export type EventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ledgerEntries?: boolean | Prisma.Event$ledgerEntriesArgs<ExtArgs>
+  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.EventCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type EventIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type EventIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type EventIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
+}
+export type EventIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
+}
 
 export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Event"
   objects: {
     ledgerEntries: Prisma.$LedgerEntryPayload<ExtArgs>[]
+    business: Prisma.$BusinessPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1334,6 +1571,7 @@ readonly fields: EventFieldRefs;
 export interface Prisma__EventClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   ledgerEntries<T extends Prisma.Event$ledgerEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$ledgerEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LedgerEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  business<T extends Prisma.BusinessDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BusinessDefaultArgs<ExtArgs>>): Prisma.Prisma__BusinessClient<runtime.Types.Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1635,6 +1873,10 @@ export type EventCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    */
   data: Prisma.EventCreateManyInput | Prisma.EventCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EventIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1705,6 +1947,10 @@ export type EventUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many Events to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EventIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

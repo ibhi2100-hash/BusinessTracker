@@ -20,6 +20,7 @@ import { EmployeeStatements } from "./employees/employeesStatements";
 import { EventInboxStatements } from "./eventInbox/EventInboxStatements";
 import { SyncCursorStatements } from "./cursor/CursorStatement";
 import { BusinessDashboardStatements } from "./dashboard/business/BusinessStatements";
+import { RefundStatement } from "./refund/refundsStatements";
 
 
 
@@ -30,6 +31,7 @@ export class BusinessStatementRegistry {
     readonly inventory: InventoryStatements;
     readonly products: ProductStatements;
     readonly sales: SalesStatement;
+    readonly refund: RefundStatement;
     readonly expenses: ExpenseStatement;
     readonly employees: EmployeeStatements;
     readonly ledger: LedgerStatements;
@@ -59,6 +61,9 @@ export class BusinessStatementRegistry {
         
         this.sales =  
             new SalesStatement(manager)
+
+        this.refund =
+            new RefundStatement(manager)
 
         this.ledger = 
             new LedgerStatements(manager)

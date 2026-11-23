@@ -39,6 +39,7 @@ import { EmployeeInvitationConsumer } from "../../Biztru/offline/sqlite/business
 import { EmployeeConsumer } from "../../Biztru/offline/sqlite/businessDatabase/projections/employee/EmployeeProjection";
 import { EventInboxProcessor } from "../../Biztru/offline/sqlite/businessDatabase/processors/EventInboxProcessors";
 import { ExpenseConsumer } from "../../Biztru/offline/sqlite/businessDatabase/projections/ExpenseProjectionConsumer";
+import { RefundConsumer } from "../../Biztru/offline/sqlite/businessDatabase/projections/RefundConsumer";
 
 export class BusinessBootstrapper
 implements Lifecycle {
@@ -377,6 +378,12 @@ private async createSynchronization(
         bus.subscribe(
             new EmployeeConsumer(
                 repositories.employee
+            )
+        )
+
+        bus.subscribe(
+            new RefundConsumer(
+                repositories.refund
             )
         )
    }

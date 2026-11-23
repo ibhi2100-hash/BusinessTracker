@@ -1,11 +1,8 @@
-import {
-  BillingEntitlementSource,
-  BillingRecordStatus,
-  BillingSubscriptionStatus,
-  Prisma,
-  PrismaClient,
-} from "../../generated/client";
-
+import { BillingEntitlementSource, BillingRecordStatus, BillingSubscriptionStatus } from "../../../infrastructure/postgresql/prisma/generated/enums.js";
+import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
+import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
+import { BillingEntitlementOverrideRepository } from "../repositories/billing-entitlement-override.repository.js";
+import { BillingEntitlementRepository } from "../repositories/billing-entitlement.repository.js";
 type JsonObject = Record<string, Prisma.InputJsonValue>;
 
 type CapacityKey = "max_staff" | "max_branches" | "max_products";
@@ -67,8 +64,12 @@ function toLimit(value: Prisma.JsonValue | undefined): number | null {
 }
 
 export class BillingEntitlementService {
-  constructor(private readonly prisma: PrismaClient) {}
-
+  constructor(
+    private readonly entitlementOverrideRepository: 
+      BillingEntitlementOverrideRepository,
+    private readonly entitlementRepository: 
+      BillingEntitlementRepository
+  ){}
   /**
    * Rebuilds the business entitlement projection from:
    * 1. The current subscription's exact plan version.
@@ -79,7 +80,7 @@ export class BillingEntitlementService {
    */
   async rebuildForBusiness(
     businessId: string,
-    tx: Prisma.TransactionClient = this.prisma,
+    tx: Prisma.TransactionClient
   ) {
     const now = new Date();
 
@@ -97,14 +98,14 @@ export class BillingEntitlementService {
       },
       orderBy: [{ createdAt: "desc" }],
       include: {
-        planVersionRef: true,
+        planVersionRecord: true,
       },
     });
 
     const planValues: JsonObject = {};
 
-    if (subscription?.planVersionRef) {
-      const version = subscription.planVersionRef;
+    if (subscription?.planVersionRecord) {
+      const version = subscription.planVersionRecord;
 
       planValues.max_staff = version.maxStaff;
       planValues.max_branches = version.maxBranch;
@@ -153,6 +154,7 @@ export class BillingEntitlementService {
           },
         },
         create: {
+          id: crypto.randomUUID(),
           businessId,
           subscriptionId: subscription?.id ?? null,
           entitlementKey,
@@ -209,7 +211,7 @@ export class BillingEntitlementService {
   async getEffectiveEntitlements(businessId: string) {
     const now = new Date();
 
-    const records = await this.prisma.billingEntitlement.findMany({
+    const records = await prisma.billingEntitlement.findMany({
       where: {
         businessId,
         status: BillingRecordStatus.ACTIVE,
@@ -326,7 +328,7 @@ export class BillingEntitlementService {
       throw new Error("Override expiry must be later than its start time");
     }
 
-    return this.prisma.$transaction(async (tx) => {
+    return prisma.$transaction(async (tx) => {
       const business = await tx.business.findUnique({
         where: { id: input.businessId },
         select: { id: true },
@@ -350,6 +352,7 @@ export class BillingEntitlementService {
 
       const override = await tx.billingEntitlementOverride.create({
         data: {
+          id: crypto.randomUUID(),
           businessId: input.businessId,
           subscriptionId: input.subscriptionId ?? null,
           entitlementKey: input.entitlementKey,
@@ -366,6 +369,7 @@ export class BillingEntitlementService {
 
       await tx.billingAuditLog.create({
         data: {
+          id: crypto.randomUUID(),
           businessId: input.businessId,
           actorUserId: input.createdBy,
           action: "OVERRIDE_GRANTED",
@@ -393,7 +397,7 @@ export class BillingEntitlementService {
       throw new Error("A revocation reason is required");
     }
 
-    return this.prisma.$transaction(async (tx) => {
+    return prisma.$transaction(async (tx) => {
       const override = await tx.billingEntitlementOverride.findUnique({
         where: { id: overrideId },
       });
@@ -411,6 +415,7 @@ export class BillingEntitlementService {
 
       await tx.billingAuditLog.create({
         data: {
+          id: crypto.randomUUID(),
           businessId: override.businessId,
           actorUserId,
           action: "OVERRIDE_REVOKED",

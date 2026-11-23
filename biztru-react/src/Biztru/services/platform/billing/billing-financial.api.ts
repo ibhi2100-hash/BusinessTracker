@@ -2,48 +2,39 @@
 import type {
   BusinessInvoice,
   BusinessPayment,
-} from "../../../types/billing/billing-financial.types";
+} from "../../../../types/billing/billing-financia.types";
 
-const BASE_URL = "/api/business/billing";
+import { platformRequest } from "../platformApiClient";
 
-async function request<T>(endpoint: string): Promise<T> {
-  const response = await fetch(`${BASE_URL}${endpoint}`, {
-    credentials: "include",
-    headers: {
-      Accept: "application/json",
-    },
-  });
-
-  const data = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    throw new Error(data.message || "Unable to load billing records");
-  }
-
-  return data as T;
-}
+const BASE = "";
 
 export const billingFinancialApi = {
-  async invoices(): Promise<BusinessInvoice[]> {
-    const result = await request<{
+  async invoices(accessToken: string): Promise<BusinessInvoice[]> {
+    const result = await platformRequest<{
       invoices: BusinessInvoice[];
-    }>("/invoices");
+    }>(`${BASE}/invoices`, accessToken);
 
     return result.invoices;
   },
 
-  async payments(): Promise<BusinessPayment[]> {
-    const result = await request<{
+  async payments(accessToken: string): Promise<BusinessPayment[]> {
+    const result = await platformRequest<{
       payments: BusinessPayment[];
-    }>("/payments");
+    }>(`${BASE}/payments`, accessToken);
 
     return result.payments;
   },
 
-  async getInvoice(invoiceId: string): Promise<BusinessInvoice> {
-    const result = await request<{
+  async getInvoice(
+    invoiceId: string,
+    accessToken: string
+  ): Promise<BusinessInvoice> {
+    const result = await platformRequest<{
       invoice: BusinessInvoice;
-    }>(`/invoices/${encodeURIComponent(invoiceId)}`);
+    }>(
+      `${BASE}/invoices/${encodeURIComponent(invoiceId)}`,
+      accessToken
+    );
 
     return result.invoice;
   },

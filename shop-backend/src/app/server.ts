@@ -280,6 +280,14 @@ async function startServer(): Promise<void> {
         "/platform/analytics",
         platformModule.router.analytics
     );
+    //--------------------------------------------
+    // BILLING SYSTEMS
+    //--------------------------------------------
+
+    app.use(
+        "/platform/billing",
+        platformModule.router.plans
+    );
 
     // ------------------------------------------
     // NOT FOUND

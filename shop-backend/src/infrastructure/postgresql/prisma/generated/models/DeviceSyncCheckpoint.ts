@@ -224,6 +224,7 @@ export type DeviceSyncCheckpointWhereInput = {
   lastSeenAt?: Prisma.DateTimeNullableFilter<"DeviceSyncCheckpoint"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"DeviceSyncCheckpoint"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DeviceSyncCheckpoint"> | Date | string
+  business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
 }
 
 export type DeviceSyncCheckpointOrderByWithRelationInput = {
@@ -233,6 +234,7 @@ export type DeviceSyncCheckpointOrderByWithRelationInput = {
   lastSeenAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  business?: Prisma.BusinessOrderByWithRelationInput
 }
 
 export type DeviceSyncCheckpointWhereUniqueInput = Prisma.AtLeast<{
@@ -246,6 +248,7 @@ export type DeviceSyncCheckpointWhereUniqueInput = Prisma.AtLeast<{
   lastSeenAt?: Prisma.DateTimeNullableFilter<"DeviceSyncCheckpoint"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"DeviceSyncCheckpoint"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DeviceSyncCheckpoint"> | Date | string
+  business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
 }, "businessId_deviceId">
 
 export type DeviceSyncCheckpointOrderByWithAggregationInput = {
@@ -275,12 +278,12 @@ export type DeviceSyncCheckpointScalarWhereWithAggregatesInput = {
 }
 
 export type DeviceSyncCheckpointCreateInput = {
-  businessId: string
   deviceId: string
   lastAcknowledgedPosition?: bigint | number
   lastSeenAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  business: Prisma.BusinessCreateNestedOneWithoutDeviceSyncCheckpointsInput
 }
 
 export type DeviceSyncCheckpointUncheckedCreateInput = {
@@ -293,12 +296,12 @@ export type DeviceSyncCheckpointUncheckedCreateInput = {
 }
 
 export type DeviceSyncCheckpointUpdateInput = {
-  businessId?: Prisma.StringFieldUpdateOperationsInput | string
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   lastAcknowledgedPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  business?: Prisma.BusinessUpdateOneRequiredWithoutDeviceSyncCheckpointsNestedInput
 }
 
 export type DeviceSyncCheckpointUncheckedUpdateInput = {
@@ -320,7 +323,6 @@ export type DeviceSyncCheckpointCreateManyInput = {
 }
 
 export type DeviceSyncCheckpointUpdateManyMutationInput = {
-  businessId?: Prisma.StringFieldUpdateOperationsInput | string
   deviceId?: Prisma.StringFieldUpdateOperationsInput | string
   lastAcknowledgedPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -335,6 +337,16 @@ export type DeviceSyncCheckpointUncheckedUpdateManyInput = {
   lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DeviceSyncCheckpointListRelationFilter = {
+  every?: Prisma.DeviceSyncCheckpointWhereInput
+  some?: Prisma.DeviceSyncCheckpointWhereInput
+  none?: Prisma.DeviceSyncCheckpointWhereInput
+}
+
+export type DeviceSyncCheckpointOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type DeviceSyncCheckpointBusinessIdDeviceIdCompoundUniqueInput = {
@@ -377,6 +389,134 @@ export type DeviceSyncCheckpointSumOrderByAggregateInput = {
   lastAcknowledgedPosition?: Prisma.SortOrder
 }
 
+export type DeviceSyncCheckpointCreateNestedManyWithoutBusinessInput = {
+  create?: Prisma.XOR<Prisma.DeviceSyncCheckpointCreateWithoutBusinessInput, Prisma.DeviceSyncCheckpointUncheckedCreateWithoutBusinessInput> | Prisma.DeviceSyncCheckpointCreateWithoutBusinessInput[] | Prisma.DeviceSyncCheckpointUncheckedCreateWithoutBusinessInput[]
+  connectOrCreate?: Prisma.DeviceSyncCheckpointCreateOrConnectWithoutBusinessInput | Prisma.DeviceSyncCheckpointCreateOrConnectWithoutBusinessInput[]
+  createMany?: Prisma.DeviceSyncCheckpointCreateManyBusinessInputEnvelope
+  connect?: Prisma.DeviceSyncCheckpointWhereUniqueInput | Prisma.DeviceSyncCheckpointWhereUniqueInput[]
+}
+
+export type DeviceSyncCheckpointUncheckedCreateNestedManyWithoutBusinessInput = {
+  create?: Prisma.XOR<Prisma.DeviceSyncCheckpointCreateWithoutBusinessInput, Prisma.DeviceSyncCheckpointUncheckedCreateWithoutBusinessInput> | Prisma.DeviceSyncCheckpointCreateWithoutBusinessInput[] | Prisma.DeviceSyncCheckpointUncheckedCreateWithoutBusinessInput[]
+  connectOrCreate?: Prisma.DeviceSyncCheckpointCreateOrConnectWithoutBusinessInput | Prisma.DeviceSyncCheckpointCreateOrConnectWithoutBusinessInput[]
+  createMany?: Prisma.DeviceSyncCheckpointCreateManyBusinessInputEnvelope
+  connect?: Prisma.DeviceSyncCheckpointWhereUniqueInput | Prisma.DeviceSyncCheckpointWhereUniqueInput[]
+}
+
+export type DeviceSyncCheckpointUpdateManyWithoutBusinessNestedInput = {
+  create?: Prisma.XOR<Prisma.DeviceSyncCheckpointCreateWithoutBusinessInput, Prisma.DeviceSyncCheckpointUncheckedCreateWithoutBusinessInput> | Prisma.DeviceSyncCheckpointCreateWithoutBusinessInput[] | Prisma.DeviceSyncCheckpointUncheckedCreateWithoutBusinessInput[]
+  connectOrCreate?: Prisma.DeviceSyncCheckpointCreateOrConnectWithoutBusinessInput | Prisma.DeviceSyncCheckpointCreateOrConnectWithoutBusinessInput[]
+  upsert?: Prisma.DeviceSyncCheckpointUpsertWithWhereUniqueWithoutBusinessInput | Prisma.DeviceSyncCheckpointUpsertWithWhereUniqueWithoutBusinessInput[]
+  createMany?: Prisma.DeviceSyncCheckpointCreateManyBusinessInputEnvelope
+  set?: Prisma.DeviceSyncCheckpointWhereUniqueInput | Prisma.DeviceSyncCheckpointWhereUniqueInput[]
+  disconnect?: Prisma.DeviceSyncCheckpointWhereUniqueInput | Prisma.DeviceSyncCheckpointWhereUniqueInput[]
+  delete?: Prisma.DeviceSyncCheckpointWhereUniqueInput | Prisma.DeviceSyncCheckpointWhereUniqueInput[]
+  connect?: Prisma.DeviceSyncCheckpointWhereUniqueInput | Prisma.DeviceSyncCheckpointWhereUniqueInput[]
+  update?: Prisma.DeviceSyncCheckpointUpdateWithWhereUniqueWithoutBusinessInput | Prisma.DeviceSyncCheckpointUpdateWithWhereUniqueWithoutBusinessInput[]
+  updateMany?: Prisma.DeviceSyncCheckpointUpdateManyWithWhereWithoutBusinessInput | Prisma.DeviceSyncCheckpointUpdateManyWithWhereWithoutBusinessInput[]
+  deleteMany?: Prisma.DeviceSyncCheckpointScalarWhereInput | Prisma.DeviceSyncCheckpointScalarWhereInput[]
+}
+
+export type DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessNestedInput = {
+  create?: Prisma.XOR<Prisma.DeviceSyncCheckpointCreateWithoutBusinessInput, Prisma.DeviceSyncCheckpointUncheckedCreateWithoutBusinessInput> | Prisma.DeviceSyncCheckpointCreateWithoutBusinessInput[] | Prisma.DeviceSyncCheckpointUncheckedCreateWithoutBusinessInput[]
+  connectOrCreate?: Prisma.DeviceSyncCheckpointCreateOrConnectWithoutBusinessInput | Prisma.DeviceSyncCheckpointCreateOrConnectWithoutBusinessInput[]
+  upsert?: Prisma.DeviceSyncCheckpointUpsertWithWhereUniqueWithoutBusinessInput | Prisma.DeviceSyncCheckpointUpsertWithWhereUniqueWithoutBusinessInput[]
+  createMany?: Prisma.DeviceSyncCheckpointCreateManyBusinessInputEnvelope
+  set?: Prisma.DeviceSyncCheckpointWhereUniqueInput | Prisma.DeviceSyncCheckpointWhereUniqueInput[]
+  disconnect?: Prisma.DeviceSyncCheckpointWhereUniqueInput | Prisma.DeviceSyncCheckpointWhereUniqueInput[]
+  delete?: Prisma.DeviceSyncCheckpointWhereUniqueInput | Prisma.DeviceSyncCheckpointWhereUniqueInput[]
+  connect?: Prisma.DeviceSyncCheckpointWhereUniqueInput | Prisma.DeviceSyncCheckpointWhereUniqueInput[]
+  update?: Prisma.DeviceSyncCheckpointUpdateWithWhereUniqueWithoutBusinessInput | Prisma.DeviceSyncCheckpointUpdateWithWhereUniqueWithoutBusinessInput[]
+  updateMany?: Prisma.DeviceSyncCheckpointUpdateManyWithWhereWithoutBusinessInput | Prisma.DeviceSyncCheckpointUpdateManyWithWhereWithoutBusinessInput[]
+  deleteMany?: Prisma.DeviceSyncCheckpointScalarWhereInput | Prisma.DeviceSyncCheckpointScalarWhereInput[]
+}
+
+export type DeviceSyncCheckpointCreateWithoutBusinessInput = {
+  deviceId: string
+  lastAcknowledgedPosition?: bigint | number
+  lastSeenAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DeviceSyncCheckpointUncheckedCreateWithoutBusinessInput = {
+  deviceId: string
+  lastAcknowledgedPosition?: bigint | number
+  lastSeenAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DeviceSyncCheckpointCreateOrConnectWithoutBusinessInput = {
+  where: Prisma.DeviceSyncCheckpointWhereUniqueInput
+  create: Prisma.XOR<Prisma.DeviceSyncCheckpointCreateWithoutBusinessInput, Prisma.DeviceSyncCheckpointUncheckedCreateWithoutBusinessInput>
+}
+
+export type DeviceSyncCheckpointCreateManyBusinessInputEnvelope = {
+  data: Prisma.DeviceSyncCheckpointCreateManyBusinessInput | Prisma.DeviceSyncCheckpointCreateManyBusinessInput[]
+  skipDuplicates?: boolean
+}
+
+export type DeviceSyncCheckpointUpsertWithWhereUniqueWithoutBusinessInput = {
+  where: Prisma.DeviceSyncCheckpointWhereUniqueInput
+  update: Prisma.XOR<Prisma.DeviceSyncCheckpointUpdateWithoutBusinessInput, Prisma.DeviceSyncCheckpointUncheckedUpdateWithoutBusinessInput>
+  create: Prisma.XOR<Prisma.DeviceSyncCheckpointCreateWithoutBusinessInput, Prisma.DeviceSyncCheckpointUncheckedCreateWithoutBusinessInput>
+}
+
+export type DeviceSyncCheckpointUpdateWithWhereUniqueWithoutBusinessInput = {
+  where: Prisma.DeviceSyncCheckpointWhereUniqueInput
+  data: Prisma.XOR<Prisma.DeviceSyncCheckpointUpdateWithoutBusinessInput, Prisma.DeviceSyncCheckpointUncheckedUpdateWithoutBusinessInput>
+}
+
+export type DeviceSyncCheckpointUpdateManyWithWhereWithoutBusinessInput = {
+  where: Prisma.DeviceSyncCheckpointScalarWhereInput
+  data: Prisma.XOR<Prisma.DeviceSyncCheckpointUpdateManyMutationInput, Prisma.DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessInput>
+}
+
+export type DeviceSyncCheckpointScalarWhereInput = {
+  AND?: Prisma.DeviceSyncCheckpointScalarWhereInput | Prisma.DeviceSyncCheckpointScalarWhereInput[]
+  OR?: Prisma.DeviceSyncCheckpointScalarWhereInput[]
+  NOT?: Prisma.DeviceSyncCheckpointScalarWhereInput | Prisma.DeviceSyncCheckpointScalarWhereInput[]
+  businessId?: Prisma.StringFilter<"DeviceSyncCheckpoint"> | string
+  deviceId?: Prisma.StringFilter<"DeviceSyncCheckpoint"> | string
+  lastAcknowledgedPosition?: Prisma.BigIntFilter<"DeviceSyncCheckpoint"> | bigint | number
+  lastSeenAt?: Prisma.DateTimeNullableFilter<"DeviceSyncCheckpoint"> | Date | string | null
+  createdAt?: Prisma.DateTimeFilter<"DeviceSyncCheckpoint"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"DeviceSyncCheckpoint"> | Date | string
+}
+
+export type DeviceSyncCheckpointCreateManyBusinessInput = {
+  deviceId: string
+  lastAcknowledgedPosition?: bigint | number
+  lastSeenAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DeviceSyncCheckpointUpdateWithoutBusinessInput = {
+  deviceId?: Prisma.StringFieldUpdateOperationsInput | string
+  lastAcknowledgedPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DeviceSyncCheckpointUncheckedUpdateWithoutBusinessInput = {
+  deviceId?: Prisma.StringFieldUpdateOperationsInput | string
+  lastAcknowledgedPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DeviceSyncCheckpointUncheckedUpdateManyWithoutBusinessInput = {
+  deviceId?: Prisma.StringFieldUpdateOperationsInput | string
+  lastAcknowledgedPosition?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 
 
 export type DeviceSyncCheckpointSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -386,6 +526,7 @@ export type DeviceSyncCheckpointSelect<ExtArgs extends runtime.Types.Extensions.
   lastSeenAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["deviceSyncCheckpoint"]>
 
 export type DeviceSyncCheckpointSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -395,6 +536,7 @@ export type DeviceSyncCheckpointSelectCreateManyAndReturn<ExtArgs extends runtim
   lastSeenAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["deviceSyncCheckpoint"]>
 
 export type DeviceSyncCheckpointSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -404,6 +546,7 @@ export type DeviceSyncCheckpointSelectUpdateManyAndReturn<ExtArgs extends runtim
   lastSeenAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["deviceSyncCheckpoint"]>
 
 export type DeviceSyncCheckpointSelectScalar = {
@@ -416,10 +559,21 @@ export type DeviceSyncCheckpointSelectScalar = {
 }
 
 export type DeviceSyncCheckpointOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"businessId" | "deviceId" | "lastAcknowledgedPosition" | "lastSeenAt" | "createdAt" | "updatedAt", ExtArgs["result"]["deviceSyncCheckpoint"]>
+export type DeviceSyncCheckpointInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
+}
+export type DeviceSyncCheckpointIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
+}
+export type DeviceSyncCheckpointIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
+}
 
 export type $DeviceSyncCheckpointPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "DeviceSyncCheckpoint"
-  objects: {}
+  objects: {
+    business: Prisma.$BusinessPayload<ExtArgs>
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     businessId: string
     deviceId: string
@@ -821,6 +975,7 @@ readonly fields: DeviceSyncCheckpointFieldRefs;
  */
 export interface Prisma__DeviceSyncCheckpointClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  business<T extends Prisma.BusinessDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BusinessDefaultArgs<ExtArgs>>): Prisma.Prisma__BusinessClient<runtime.Types.Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -873,6 +1028,10 @@ export type DeviceSyncCheckpointFindUniqueArgs<ExtArgs extends runtime.Types.Ext
    */
   omit?: Prisma.DeviceSyncCheckpointOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeviceSyncCheckpointInclude<ExtArgs> | null
+  /**
    * Filter, which DeviceSyncCheckpoint to fetch.
    */
   where: Prisma.DeviceSyncCheckpointWhereUniqueInput
@@ -891,6 +1050,10 @@ export type DeviceSyncCheckpointFindUniqueOrThrowArgs<ExtArgs extends runtime.Ty
    */
   omit?: Prisma.DeviceSyncCheckpointOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeviceSyncCheckpointInclude<ExtArgs> | null
+  /**
    * Filter, which DeviceSyncCheckpoint to fetch.
    */
   where: Prisma.DeviceSyncCheckpointWhereUniqueInput
@@ -908,6 +1071,10 @@ export type DeviceSyncCheckpointFindFirstArgs<ExtArgs extends runtime.Types.Exte
    * Omit specific fields from the DeviceSyncCheckpoint
    */
   omit?: Prisma.DeviceSyncCheckpointOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeviceSyncCheckpointInclude<ExtArgs> | null
   /**
    * Filter, which DeviceSyncCheckpoint to fetch.
    */
@@ -957,6 +1124,10 @@ export type DeviceSyncCheckpointFindFirstOrThrowArgs<ExtArgs extends runtime.Typ
    */
   omit?: Prisma.DeviceSyncCheckpointOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeviceSyncCheckpointInclude<ExtArgs> | null
+  /**
    * Filter, which DeviceSyncCheckpoint to fetch.
    */
   where?: Prisma.DeviceSyncCheckpointWhereInput
@@ -1004,6 +1175,10 @@ export type DeviceSyncCheckpointFindManyArgs<ExtArgs extends runtime.Types.Exten
    * Omit specific fields from the DeviceSyncCheckpoint
    */
   omit?: Prisma.DeviceSyncCheckpointOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeviceSyncCheckpointInclude<ExtArgs> | null
   /**
    * Filter, which DeviceSyncCheckpoints to fetch.
    */
@@ -1053,6 +1228,10 @@ export type DeviceSyncCheckpointCreateArgs<ExtArgs extends runtime.Types.Extensi
    */
   omit?: Prisma.DeviceSyncCheckpointOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeviceSyncCheckpointInclude<ExtArgs> | null
+  /**
    * The data needed to create a DeviceSyncCheckpoint.
    */
   data: Prisma.XOR<Prisma.DeviceSyncCheckpointCreateInput, Prisma.DeviceSyncCheckpointUncheckedCreateInput>
@@ -1086,6 +1265,10 @@ export type DeviceSyncCheckpointCreateManyAndReturnArgs<ExtArgs extends runtime.
    */
   data: Prisma.DeviceSyncCheckpointCreateManyInput | Prisma.DeviceSyncCheckpointCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeviceSyncCheckpointIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1100,6 +1283,10 @@ export type DeviceSyncCheckpointUpdateArgs<ExtArgs extends runtime.Types.Extensi
    * Omit specific fields from the DeviceSyncCheckpoint
    */
   omit?: Prisma.DeviceSyncCheckpointOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeviceSyncCheckpointInclude<ExtArgs> | null
   /**
    * The data needed to update a DeviceSyncCheckpoint.
    */
@@ -1152,6 +1339,10 @@ export type DeviceSyncCheckpointUpdateManyAndReturnArgs<ExtArgs extends runtime.
    * Limit how many DeviceSyncCheckpoints to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeviceSyncCheckpointIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1166,6 +1357,10 @@ export type DeviceSyncCheckpointUpsertArgs<ExtArgs extends runtime.Types.Extensi
    * Omit specific fields from the DeviceSyncCheckpoint
    */
   omit?: Prisma.DeviceSyncCheckpointOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeviceSyncCheckpointInclude<ExtArgs> | null
   /**
    * The filter to search for the DeviceSyncCheckpoint to update in case it exists.
    */
@@ -1192,6 +1387,10 @@ export type DeviceSyncCheckpointDeleteArgs<ExtArgs extends runtime.Types.Extensi
    * Omit specific fields from the DeviceSyncCheckpoint
    */
   omit?: Prisma.DeviceSyncCheckpointOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeviceSyncCheckpointInclude<ExtArgs> | null
   /**
    * Filter which DeviceSyncCheckpoint to delete.
    */
@@ -1224,4 +1423,8 @@ export type DeviceSyncCheckpointDefaultArgs<ExtArgs extends runtime.Types.Extens
    * Omit specific fields from the DeviceSyncCheckpoint
    */
   omit?: Prisma.DeviceSyncCheckpointOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeviceSyncCheckpointInclude<ExtArgs> | null
 }

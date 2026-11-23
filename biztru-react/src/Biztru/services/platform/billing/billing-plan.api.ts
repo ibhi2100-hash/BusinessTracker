@@ -1,119 +1,114 @@
 
 import type { BillingPlanVersion } from "../../../../types/billing/billingPlan.types";
+
 import type {
   BillingPlan,
   BillingPlanResponse,
   BillingPlansResponse,
   CreateBillingPlanInput,
   UpdateBillingPlanInput,
-} from "../../../types/billing/billing-plan.types";
+} from "../../../../types/billing/billingPlan.types";
 
-const BASE_URL = "/api/platform/billing/plans";
+import { platformRequest } from "../platformApiClient"; 
 
-async function request<T>(
-  endpoint: string,
-  options: RequestInit = {}
-): Promise<T> {
-  const response = await fetch(`${BASE_URL}${endpoint}`, {
-    ...options,
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
-  });
-
-  const data = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    throw new Error(
-      data.message || "Billing operation failed"
-    );
-  }
-
-  return data as T;
-}
+const BASE = "/platform/billing/plans";
 
 export const billingPlanApi = {
-  async list(): Promise<BillingPlan[]> {
-    const result =
-      await request<BillingPlansResponse>("");
+  async list(accessToken: string): Promise<BillingPlan[]> {
+    const result = await platformRequest<BillingPlansResponse>(
+      BASE,
+      accessToken
+    );
 
     return result.plans;
   },
 
-  async get(planId: string): Promise<BillingPlan> {
-    const result =
-      await request<BillingPlanResponse>(
-        `/${encodeURIComponent(planId)}`
-      );
+  async get(
+    planId: string,
+    accessToken: string
+  ): Promise<BillingPlan> {
+    const result = await platformRequest<BillingPlanResponse>(
+      `${BASE}/${encodeURIComponent(planId)}`,
+      accessToken
+    );
 
     return result.plan;
   },
 
   async create(
-    payload: CreateBillingPlanInput
+    payload: CreateBillingPlanInput,
+    accessToken: string
   ): Promise<BillingPlan> {
-    const result =
-      await request<BillingPlanResponse>("", {
+    const result = await platformRequest<BillingPlanResponse>(
+      `${BASE}/create`,
+      accessToken,
+      {
         method: "POST",
         body: JSON.stringify(payload),
-      });
+      }
+    );
 
     return result.plan;
   },
 
   async update(
     planId: string,
-    payload: UpdateBillingPlanInput
+    payload: UpdateBillingPlanInput,
+    accessToken: string
   ): Promise<BillingPlan> {
-    const result =
-      await request<BillingPlanResponse>(
-        `/${encodeURIComponent(planId)}`,
-        {
-          method: "PATCH",
-          body: JSON.stringify(payload),
-        }
-      );
+    const result = await platformRequest<BillingPlanResponse>(
+      `${BASE}/${encodeURIComponent(planId)}`,
+      accessToken,
+      {
+        method: "PATCH",
+        body: JSON.stringify(payload),
+      }
+    );
 
     return result.plan;
   },
 
   async publish(
-    planId: string
+    planId: string,
+    accessToken: string
   ): Promise<BillingPlan> {
-    const result =
-      await request<BillingPlanResponse>(
-        `/${encodeURIComponent(planId)}/publish`,
-        {
-          method: "POST",
-        }
-      );
+    const result = await platformRequest<BillingPlanResponse>(
+      `${BASE}/${encodeURIComponent(planId)}/publish`,
+      accessToken,
+      {
+        method: "POST",
+      }
+    );
 
     return result.plan;
   },
 
   async retire(
-    planId: string
+    planId: string,
+    accessToken: string
   ): Promise<BillingPlan> {
-    const result =
-      await request<BillingPlanResponse>(
-        `/${encodeURIComponent(planId)}/retire`,
-        {
-          method: "POST",
-        }
-      );
+    const result = await platformRequest<BillingPlanResponse>(
+      `${BASE}/${encodeURIComponent(planId)}/retire`,
+      accessToken,
+      {
+        method: "POST",
+      }
+    );
 
     return result.plan;
   },
 
-  async versions(planId: string): Promise<BillingPlanVersion[]> {
-  const result = await request<{
-    versions: BillingPlanVersion[];
-  }>(
-    `/${encodeURIComponent(planId)}/versions`
-  );
+  async versions(
+    planId: string,
+    accessToken: string
+  ): Promise<BillingPlanVersion[]> {
+    const result = await platformRequest<{
+      versions: BillingPlanVersion[];
+    }>(
+      `${BASE}/${encodeURIComponent(planId)}/versions`,
+      accessToken
+    );
 
-  return result.versions;
-},
+    return result.versions;
+  },
 };

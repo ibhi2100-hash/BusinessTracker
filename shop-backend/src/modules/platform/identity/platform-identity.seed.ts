@@ -126,16 +126,76 @@ const auditPermissions = [
     },
 ] as const;
 
+
+const commercialPermissions = [
+  {
+    code: "platform.commercial.read",
+    name: "View commercial management",
+    module: "commercial",
+  },
+] as const;
+
+const platformEntitlementPermissions = [
+  {
+    code: "platform.entitlements.read",
+    name: "View platform entitlements",
+    module: "entitlements",
+  },
+] as const;
+
+const billingPermissions = [
+  {
+    code: "platform.billing.read",
+    name: "View billing overview",
+    module: "billing",
+  },
+  {
+    code: "platform.billing.plans.read",
+    name: "View billing plans",
+    module: "billing",
+  },
+  {
+    code: "platform.billing.plans.create",
+    name: "Create billing plans",
+    module: "billing",
+  },
+  {
+    code: "platform.billing.plans.update",
+    name: "Update billing plans",
+    module: "billing",
+  },
+  {
+    code: "platform.billing.subscriptions.read",
+    name: "View subscriptions",
+    module: "billing",
+  },
+  {
+    code: "platform.billing.entitlements.read",
+    name: "View billing entitlements",
+    module: "billing",
+  },
+  {
+    code: "platform.billing.events.read",
+    name: "View billing events",
+    module: "billing",
+  },
+] as const;
+
+
 /**
  * All platform permissions are registered here.
  *
  * Add future module permissions to this collection.
  */
+
 const permissionDefinitions = [
-    ...identityPermissions,
-    ...tenantPermissions,
-    ...analyticsPermissions,
-    ...auditPermissions,
+  ...identityPermissions,
+  ...tenantPermissions,
+  ...analyticsPermissions,
+  ...auditPermissions,
+  ...commercialPermissions,
+  ...platformEntitlementPermissions,
+  ...billingPermissions,
 ] as const;
 
 
@@ -205,57 +265,65 @@ const roleDefinitions = [
  * Roles with no permissions here remain unprivileged until their
  * module permissions have been implemented and assigned.
  */
+
 const rolePermissionAssignments: Record<
-    string,
-    readonly string[]
+  string,
+  readonly string[]
 > = {
-    FOUNDER: permissionDefinitions.map(
-        (permission) => permission.code
-    ),
+  FOUNDER: permissionDefinitions.map(
+    (permission) => permission.code
+  ),
 
-    SUPER_ADMIN: permissionDefinitions.map(
-        (permission) => permission.code
-    ),
+  SUPER_ADMIN: permissionDefinitions.map(
+    (permission) => permission.code
+  ),
 
-    SECURITY_ADMIN: [
-        "platform.users.read",
-        "platform.users.manage",
-        "platform.users.sessions.revoke",
-        "platform.roles.read",
-        "platform.permissions.read",
-        "platform.audit.read",
-    ],
+  SECURITY_ADMIN: [
+    "platform.users.read",
+    "platform.users.manage",
+    "platform.users.sessions.revoke",
+    "platform.roles.read",
+    "platform.permissions.read",
+    "platform.audit.read",
+  ],
 
-    ANALYST: [
-        "platform.analytics.read",
-        "platform.analytics.revenue.read",
-        "platform.analytics.projections.read",
-        "platform.tenants.read",
-    ],
+  ANALYST: [
+    "platform.analytics.read",
+    "platform.analytics.revenue.read",
+    "platform.analytics.projections.read",
+    "platform.tenants.read",
+  ],
 
-    SUPPORT_MANAGER: [
-        "platform.tenants.read",
-        "platform.tenants.branches.read",
-        "platform.tenants.employees.read",
-        "platform.tenants.operations.read",
-        "platform.audit.business.read",
-    ],
+  SUPPORT_MANAGER: [
+    "platform.tenants.read",
+    "platform.tenants.branches.read",
+    "platform.tenants.employees.read",
+    "platform.tenants.operations.read",
+    "platform.audit.business.read",
+  ],
 
-    SUPPORT_AGENT: [
-        "platform.tenants.read",
-        "platform.tenants.branches.read",
-        "platform.tenants.employees.read",
-    ],
+  SUPPORT_AGENT: [
+    "platform.tenants.read",
+    "platform.tenants.branches.read",
+    "platform.tenants.employees.read",
+  ],
 
-    /**
-     * Billing and finance permissions will be assigned
-     * when their respective permission definitions exist.
-     */
-    BILLING_ADMIN: [],
+  BILLING_ADMIN: [
+    "platform.commercial.read",
+    "platform.billing.read",
+    "platform.billing.plans.read",
+    "platform.billing.plans.create",
+    "platform.billing.plans.update",
+    "platform.billing.subscriptions.read",
+    "platform.billing.entitlements.read",
+    "platform.billing.events.read",
+  ],
 
-    FINANCE_ADMIN: [],
+  FINANCE_ADMIN: [
+    "platform.billing.read",
+    "platform.billing.subscriptions.read",
+  ],
 };
-
 
 /* ============================================================
    RBAC SEED

@@ -58,6 +58,139 @@ export function generateLedgerEntries(event: DomainEvent<any>): LedgerEntry[] {
       ];
       break;
 
+    
+    /**
+ * REFUND COMPLETED
+ *
+ * Dr Sales Returns
+ * Cr Cash / actual refund payment account
+ *
+ * For returned goods accepted back into stock:
+ * Dr Inventory
+ * Cr COGS
+ *
+ * Only process after refund payment succeeds.
+ */
+  case salesEventType.SALE_REFUNDED: {
+    const payments = Array.isArray(payload.payments)
+      ? payload.payments
+      : [];
+
+    let entryIndex = 0;
+
+    // Record actual refund payments.
+    if (payments.length > 0) {
+      for (const payment of payments) {
+        const amount = Number(payment.amount);
+
+        if (!Number.isFinite(amount) || amount <= 0) {
+          throw new Error(
+            `Invalid refund payment amount: ${payment.amount}`
+          );
+        }
+
+        const refundAccount =
+          (payment.account ?? Account.CASH) as Account;
+
+        entries.push(
+          buildEntry(event, entryIndex++, Account.SALES_RETURNS, "DEBIT", amount),
+          buildEntry(event, entryIndex++, refundAccount, "CREDIT", amount)
+        );
+      }
+    } else {
+      // Single-payment compatibility.
+      const amount = Number(
+        payload.refundAmount ??
+        payload.amount ??
+        payload.total
+      );
+
+      if (!Number.isFinite(amount) || amount <= 0) {
+        throw new Error(
+          `REFUND_COMPLETED requires a valid refund amount: ${event.id}`
+        );
+      }
+
+      entries.push(
+        buildEntry(
+          event,
+          entryIndex++,
+          Account.SALES_RETURNS,
+          "DEBIT",
+          amount
+        ),
+        buildEntry(
+          event,
+          entryIndex++,
+          (payload.refundAccount ?? Account.CASH) as Account,
+          "CREDIT",
+          amount
+        )
+      );
+    }
+
+    // Restore only goods accepted back into inventory.
+    const refundItems = Array.isArray(payload.items)
+      ? payload.items
+      : [];
+
+    for (const item of refundItems) {
+      const disposition = String(
+        item.inventoryDisposition ??
+        item.disposition ??
+        "NO_RESTOCK"
+      ).toUpperCase();
+
+      if (disposition !== "RESTOCK") {
+        continue;
+      }
+
+      const quantity = Number(item.quantity);
+
+      // Must be the original sale item's cost, not current catalogue cost.
+      const unitCost = Number(
+        item.unitCostPrice ??
+        item.unitCost ??
+        item.costPrice
+      );
+
+      if (
+        !Number.isFinite(quantity) ||
+        quantity <= 0 ||
+        !Number.isFinite(unitCost) ||
+        unitCost < 0
+      ) {
+        throw new Error(
+          `Invalid restocked refund item on event ${event.id}`
+        );
+      }
+
+      const inventoryValue = quantity * unitCost;
+
+      if (inventoryValue <= 0) {
+        continue;
+      }
+
+      entries.push(
+        buildEntry(
+          event,
+          entryIndex++,
+          Account.INVENTORY,
+          "DEBIT",
+          inventoryValue
+        ),
+        buildEntry(
+          event,
+          entryIndex++,
+          Account.COGS,
+          "CREDIT",
+          inventoryValue
+        )
+      );
+    }
+
+    break;
+  }
     /**
      * INVENTORY (Opening or Purchase)
      */

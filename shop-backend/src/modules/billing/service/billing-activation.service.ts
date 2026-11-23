@@ -1,12 +1,11 @@
-import {
-  BillingSubscriptionStatus,
-  Prisma,
-  PrismaClient,
-} from "../../generated/client";
+import { randomUUID } from "node:crypto";
+import { BillingSubscriptionStatus } from "../../../infrastructure/postgresql/prisma/generated/enums.js";
+import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
+import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
 
-import { BillingEntitlementService } from "./billing-entitlement.service";
-import { BillingLeaseService } from "./billing-lease.service";
 
+import { BillingEntitlementService } from "./billing-entitlement.service.js"; 
+import { BillingLeaseService } from "./billing-lease.service.js";
 interface ActivateBusinessInput {
   businessId: string;
   userId: string;
@@ -16,13 +15,12 @@ interface ActivateBusinessInput {
 
 export class BillingActivationService {
   constructor(
-    private readonly prisma: PrismaClient,
     private readonly entitlements: BillingEntitlementService,
     private readonly leases: BillingLeaseService,
   ) {}
 
   async activate(input: ActivateBusinessInput) {
-    return this.prisma.$transaction(
+    return prisma.$transaction(
       async (tx) => {
         const business = await tx.business.findUnique({
           where: { id: input.businessId },
@@ -166,6 +164,7 @@ export class BillingActivationService {
 
         await tx.billingAuditLog.create({
           data: {
+            id: randomUUID(),
             businessId: input.businessId,
             actorUserId: input.userId,
             action: "ACTIVATED",
@@ -196,7 +195,7 @@ export class BillingActivationService {
         businessId: input.businessId,
         subscriptionId: result.subscriptionId,
         deviceId: input.deviceId,
-        branchId: input.branchId,
+        ...(input.branchId !== undefined && { branchId: input.branchId }),
       });
 
       return {

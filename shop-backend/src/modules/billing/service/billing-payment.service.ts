@@ -2,10 +2,11 @@ import {
   BillingPaymentAttemptStatus,
   BillingPaymentStatus,
   BillingProvider,
-  BillingProviderOperationStatus,
-  Prisma,
-  PrismaClient,
-} from "../../generated/client";
+  BillingProviderOperationStatus
+}from "../../../infrastructure/postgresql/prisma/generated/enums.js";
+import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
+import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
+
 
 interface InitiatePaymentInput {
   businessId: string;
@@ -26,7 +27,6 @@ interface ProviderPaymentResult {
 }
 
 export class BillingPaymentService {
-  constructor(private readonly prisma: PrismaClient) {}
 
   async initiate(input: InitiatePaymentInput) {
     if (input.amountMinor <= 0n) {
@@ -37,7 +37,7 @@ export class BillingPaymentService {
       throw new Error("An idempotency key is required");
     }
 
-    return this.prisma.$transaction(
+    return prisma.$transaction(
       async (tx) => {
         const invoice = await tx.billingInvoice.findFirst({
           where: {
@@ -86,6 +86,7 @@ export class BillingPaymentService {
 
         const payment = await tx.billingPayment.create({
           data: {
+            id: crypto.randomUUID(),
             businessId: input.businessId,
             subscriptionId: input.subscriptionId ?? null,
             invoiceId: input.invoiceId,
@@ -101,6 +102,7 @@ export class BillingPaymentService {
 
         const attempt = await tx.billingPaymentAttempt.create({
           data: {
+            id: crypto.randomUUID(),
             businessId: input.businessId,
             paymentId: payment.id,
             provider: input.provider,
@@ -112,6 +114,7 @@ export class BillingPaymentService {
 
         await tx.billingProviderOperation.create({
           data: {
+            id: crypto.randomUUID(),
             provider: input.provider,
             operationType: "INITIALIZE_PAYMENT",
             idempotencyKey: input.idempotencyKey,
@@ -131,6 +134,7 @@ export class BillingPaymentService {
 
         await tx.billingCommandIdempotency.create({
           data: {
+            id: crypto.randomUUID(),
             scope: `payment:${input.businessId}`,
             idempotencyKey: input.idempotencyKey,
             commandType: "INITIATE_PAYMENT",
@@ -160,7 +164,7 @@ export class BillingPaymentService {
     attemptId: string,
     result: ProviderPaymentResult,
   ) {
-    return this.prisma.$transaction(async (tx) => {
+    return prisma.$transaction(async (tx) => {
       const payment = await tx.billingPayment.findUnique({
         where: { id: paymentId },
       });
@@ -240,7 +244,7 @@ export class BillingPaymentService {
     providerFeeMinor?: bigint;
     netAmountMinor?: bigint;
   }) {
-    return this.prisma.$transaction(
+    return prisma.$transaction(
       async (tx) => {
         const payment = await tx.billingPayment.findUnique({
           where: { id: input.paymentId },
@@ -292,7 +296,7 @@ export class BillingPaymentService {
     reason: string,
     providerReference?: string,
   ) {
-    return this.prisma.$transaction(async (tx) => {
+    return prisma.$transaction(async (tx) => {
       const payment = await tx.billingPayment.findUnique({
         where: { id: paymentId },
       });
@@ -336,7 +340,7 @@ export class BillingPaymentService {
   }
 
   async getPayment(businessId: string, paymentId: string) {
-    return this.prisma.billingPayment.findFirst({
+    return prisma.billingPayment.findFirst({
       where: { id: paymentId, businessId },
       include: {
         attempts: true,
@@ -349,7 +353,7 @@ export class BillingPaymentService {
   }
 
   async listPayments(businessId: string, take = 50) {
-    return this.prisma.billingPayment.findMany({
+    return prisma.billingPayment.findMany({
       where: { businessId },
       take: Math.min(Math.max(take, 1), 100),
       orderBy: { createdAt: "desc" },

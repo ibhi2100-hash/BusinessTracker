@@ -22,6 +22,7 @@ import type {
   BillingCycle,
   CreateBillingPlanInput,
 } from "../../../types/billing/billingPlan.types";
+import { usePlatformSession } from "../../../Biztru/services/PlatformSession/PlatformSessionContext";
 
 const featureDefinitions = [
   { key: "inventory", label: "Inventory Management" },
@@ -72,6 +73,7 @@ export default function CreateBillingPlanPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
+  const { session, isAuthenticated} = usePlatformSession()
   const update = <K extends keyof CreateBillingPlanInput>(
     key: K,
     value: CreateBillingPlanInput[K]
@@ -111,12 +113,16 @@ export default function CreateBillingPlanPage() {
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
+    if (!isAuthenticated || !session.accessToken) {
+      throw new Error("Platform authentication required");
+    }
     event.preventDefault();
 
     if (!form.name.trim() || !form.code.trim()) {
       setError("Plan name and plan code are required.");
       return;
     }
+
 
     const numericPrice = Number(price);
 
@@ -144,7 +150,7 @@ export default function CreateBillingPlanPage() {
         ),
       };
 
-      const plan = await billingPlanApi.create(payload);
+      const plan = await billingPlanApi.create(payload, session.accessToken);
 
       navigate(
         `/platform/billing/plans/${plan.id}`
