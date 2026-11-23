@@ -535,6 +535,73 @@ export class BillingPlanService {
     );
   }
 
+
+
+  /**
+   * Get the complete version history for a billing plan.
+   */
+  async getPlanVersions(planId: string) {
+    if (!planId.trim()) {
+      throw new Error("Billing plan ID is required.");
+    }
+
+    const plan = await this.planRepository.findById(planId);
+
+    if (!plan) {
+      throw new Error("Billing plan not found.");
+    }
+
+    return {
+      planId: plan.id,
+      planCode: plan.code,
+      planName: plan.name,
+      planStatus: plan.status,
+      versions: plan.versions.map((version) => ({
+        ...version,
+        priceMinor: version.priceMinor.toString(),
+      })),
+    };
+  }
+
+  /**
+   * Get one specific version of a billing plan.
+   */
+  async getPlanVersion(
+    planId: string,
+    planVersion: number
+  ) {
+    if (!planId.trim()) {
+      throw new Error("Billing plan ID is required.");
+    }
+
+    if (
+      !Number.isSafeInteger(planVersion) ||
+      planVersion < 1
+    ) {
+      throw new Error("A valid plan version is required.");
+    }
+
+    const plan = await this.planRepository.findById(planId);
+
+    if (!plan) {
+      throw new Error("Billing plan not found.");
+    }
+
+    const version = await this.planRepository.findVersion(
+      planId,
+      planVersion
+    );
+
+    if (!version) {
+      throw new Error("Billing plan version not found.");
+    }
+
+    return {
+      ...version,
+      priceMinor: version.priceMinor.toString(),
+    };
+  }
+
   /* ------------------------------------------------------------------------ */
   /* PUBLISH PLAN                                                             */
   /* ------------------------------------------------------------------------ */
@@ -852,4 +919,94 @@ export class BillingPlanService {
       })),
     };
   }
+
+
+  /* ------------------------------------------------------------------------ */
+  /* PUBLIC PLAN VERSIONS                                                     */
+  /* ------------------------------------------------------------------------ */
+
+  /**
+   * Get published versions of a published plan.
+   *
+   * This method is safe for business-facing catalogue requests.
+   * Draft versions and retired plans are not exposed.
+   */
+  async getPublicPlanVersions(planId: string) {
+    if (!planId.trim()) {
+      throw new Error("Billing plan ID is required.");
+    }
+
+    const plan =
+      await this.planRepository.findById(planId);
+
+    if (!plan) {
+      throw new Error("Billing plan not found.");
+    }
+
+    if (plan.status !== BillingPlanStatus.PUBLISHED) {
+      throw new Error("This billing plan is not publicly available.");
+    }
+
+    const versions = plan.versions
+      .filter((version) => version.publishedAt !== null)
+      .map((version) => ({
+        ...version,
+        priceMinor: version.priceMinor.toString(),
+      }));
+
+    return {
+      planId: plan.id,
+      planCode: plan.code,
+      planName: plan.name,
+      versions,
+    };
+  }
+
+  /**
+   * Get one specific published version of a published plan.
+   *
+   * Never exposes a draft or unpublished version.
+   */
+  async getPublicPlanVersion(
+    planId: string,
+    planVersion: number
+  ) {
+    if (!planId.trim()) {
+      throw new Error("Billing plan ID is required.");
+    }
+
+    if (
+      !Number.isSafeInteger(planVersion) ||
+      planVersion < 1
+    ) {
+      throw new Error("A valid plan version is required.");
+    }
+
+    const plan =
+      await this.planRepository.findById(planId);
+
+    if (!plan) {
+      throw new Error("Billing plan not found.");
+    }
+
+    if (plan.status !== BillingPlanStatus.PUBLISHED) {
+      throw new Error("This billing plan is not publicly available.");
+    }
+
+    const version =
+      await this.planRepository.findVersion(
+        planId,
+        planVersion
+      );
+
+    if (!version || !version.publishedAt) {
+      throw new Error("Published billing plan version not found.");
+    }
+
+    return {
+      ...version,
+      priceMinor: version.priceMinor.toString(),
+    };
+  }
+
 }

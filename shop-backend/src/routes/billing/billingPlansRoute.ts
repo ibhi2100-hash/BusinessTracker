@@ -10,6 +10,11 @@ import { PlatformIdentityService } from
 import { requirePlatformPermission } from
   "../../middlwares/platform/platform-permission.middleware.js";
 
+/* -------------------------------------------------------------------------- */
+/* PLATFORM BILLING ROUTES                                                    */
+/* Mount: /platform/billing                                                   */
+/* -------------------------------------------------------------------------- */
+
 export function createBillingPlansRoutes(
   controller: BillingPlanController,
   identityService: PlatformIdentityService,
@@ -17,9 +22,6 @@ export function createBillingPlansRoutes(
 ): Router {
   const router = Router();
 
-  /**
-   * Platform permission middleware.
-   */
   const permit = (permission: string): RequestHandler =>
     requirePlatformPermission(identityService, permission);
 
@@ -27,23 +29,13 @@ export function createBillingPlansRoutes(
   const createPlans = permit("platform.billing.plans.create");
   const updatePlans = permit("platform.billing.plans.update");
 
-  // =====================================================
-  // PUBLIC BILLING PLAN CATALOGUE
-  // =====================================================
-
-  // GET /platform/billing/public/plans
-  // No platform authentication required.
+  // Public catalogue (no platform authentication required).
   router.get(
     "/public/plans",
     controller.listPublic.bind(controller)
   );
 
-  // =====================================================
-  // ADMIN BILLING PLAN MANAGEMENT
-  // =====================================================
-
-  // GET /platform/billing/plans
-  // List plans with pagination, search and status filters.
+  // Admin plan management.
   router.get(
     "/plans",
     authenticatePlatform,
@@ -51,8 +43,6 @@ export function createBillingPlansRoutes(
     controller.listAdmin.bind(controller)
   );
 
-  // GET /platform/billing/plans/:planId
-  // Retrieve one plan and its version history.
   router.get(
     "/plans/:planId",
     authenticatePlatform,
@@ -60,8 +50,21 @@ export function createBillingPlansRoutes(
     controller.get.bind(controller)
   );
 
-  // POST /platform/billing/plans
-  // Create a plan with its initial version.
+  router.get(
+    "/plans/:planId/versions",
+    authenticatePlatform,
+    readPlans,
+    controller.listVersions.bind(controller)
+  );
+
+  router.get(
+    "/plans/:planId/versions/:planVersion",
+    authenticatePlatform,
+    readPlans,
+    controller.getVersion.bind(controller)
+  );
+
+  // Create plan.
   router.post(
     "/plans",
     authenticatePlatform,
@@ -69,8 +72,7 @@ export function createBillingPlansRoutes(
     controller.create.bind(controller)
   );
 
-  // Backwards-compatible create endpoint.
-  // POST /platform/billing/plans/create
+  // Backwards-compatible creation endpoint.
   router.post(
     "/plans/create",
     authenticatePlatform,
@@ -78,7 +80,6 @@ export function createBillingPlansRoutes(
     controller.create.bind(controller)
   );
 
-  // PATCH /platform/billing/plans/:planId
   // Update stable plan metadata.
   router.patch(
     "/plans/:planId",
@@ -87,8 +88,7 @@ export function createBillingPlansRoutes(
     controller.update.bind(controller)
   );
 
-  // POST /platform/billing/plans/:planId/publish
-  // Publish a draft billing plan.
+  // Publish latest unpublished version.
   router.post(
     "/plans/:planId/publish",
     authenticatePlatform,
@@ -96,13 +96,62 @@ export function createBillingPlansRoutes(
     controller.publish.bind(controller)
   );
 
-  // POST /platform/billing/plans/:planId/retire
-  // Retire a published billing plan.
+  // Retire plan.
   router.post(
     "/plans/:planId/retire",
     authenticatePlatform,
     updatePlans,
     controller.retire.bind(controller)
+  );
+
+  return router;
+}
+
+/* -------------------------------------------------------------------------- */
+/* BUSINESS BILLING PLAN ROUTES                                               */
+/* Mount: /business/billing                                                  */
+/* Uses business authMiddleware, NOT platform authentication.                */
+/* -------------------------------------------------------------------------- */
+
+export function createBusinessBillingPlanRoutes(
+  controller: BillingPlanController,
+  authenticateBusiness: RequestHandler
+): Router {
+  const router = Router();
+
+  /**
+   * GET /business/billing/plans
+   *
+   * Retrieve published plans and their latest published versions.
+   * Requires a valid business access token.
+   */
+  router.get(
+    "/plans",
+    authenticateBusiness,
+    controller.listPublic.bind(controller)
+  );
+
+  /**
+   * GET /business/billing/plans/:planId/versions
+   *
+   * Retrieve only published versions of a published plan.
+   */
+  router.get(
+    "/plans/:planId/versions",
+    authenticateBusiness,
+    controller.listPublicVersions.bind(controller)
+  );
+
+  /**
+   * GET /business/billing/plans/:planId/versions/:planVersion
+   *
+   * Retrieve one specific published version.
+   * Draft versions are never exposed.
+   */
+  router.get(
+    "/plans/:planId/versions/:planVersion",
+    authenticateBusiness,
+    controller.getPublicVersion.bind(controller)
   );
 
   return router;

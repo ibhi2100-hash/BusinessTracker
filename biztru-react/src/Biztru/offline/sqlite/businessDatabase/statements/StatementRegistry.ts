@@ -21,6 +21,15 @@ import { EventInboxStatements } from "./eventInbox/EventInboxStatements";
 import { SyncCursorStatements } from "./cursor/CursorStatement";
 import { BusinessDashboardStatements } from "./dashboard/business/BusinessStatements";
 import { RefundStatement } from "./refund/refundsStatements";
+import { BillingEntitlementStatement } from "./billing/entitlements/billingEntitlementStatements";
+import { BillingInvoiceStatement } from "./billing/invoices/billingInvoiceStatements";
+import { BillingSubscriptionLeaseStatement } from "./billing/leases/billingSubscriptionLeaseStatements";
+import { BillingEntitlementOverrideStatement } from "./billing/overrides/billingEntitlementOverrideStatements";
+import { BillingPaymentStatement } from "./billing/payments/billingPaymentStatements";
+import { BillingPlanStatement } from "./billing/plans/billingPlanStatements";
+import { BillingPlanVersionStatement } from "./billing/planVersions/billingPlanVersionStatements";
+import { BillingSubscriptionRequestStatement } from "./billing/requests/billingSubscriptionRequestStatements";
+import { BillingSubscriptionStatement } from "./billing/subscriptions/billingSubscriptionStatements";
 
 
 
@@ -47,6 +56,17 @@ export class BusinessStatementRegistry {
     readonly conflict: ConflictsStatements;
     readonly syncActivity: SyncActivityStatements;
     readonly cursor: SyncCursorStatements
+
+    //BillingSystems
+    readonly entitlements: BillingEntitlementStatement;
+    readonly invoices: BillingInvoiceStatement;
+    readonly leases: BillingSubscriptionLeaseStatement;
+    readonly override: BillingEntitlementOverrideStatement;
+    readonly payments: BillingPaymentStatement;
+    readonly plans: BillingPlanStatement;
+    readonly planVersion: BillingPlanVersionStatement;
+    readonly requests: BillingSubscriptionRequestStatement;
+    readonly subscriptions: BillingSubscriptionStatement;
     constructor(
         manager: PreparedStatementManager
     ){
@@ -111,5 +131,33 @@ export class BusinessStatementRegistry {
 
         this.cursor = 
             new SyncCursorStatements(manager)
+
+        // Billing Systems
+        this.entitlements = 
+            new BillingEntitlementStatement(manager);
+
+        this.invoices = 
+            new BillingInvoiceStatement(manager);
+
+        this.leases = 
+            new BillingSubscriptionLeaseStatement(manager);
+
+        this.override = 
+            new BillingEntitlementOverrideStatement(manager);
+        
+        this.payments = 
+            new BillingPaymentStatement(manager);
+
+        this.plans = 
+             new BillingPlanStatement(manager);
+            
+        this.planVersion = 
+            new BillingPlanVersionStatement(manager);
+
+        this.requests = 
+            new BillingSubscriptionRequestStatement(manager);
+
+        this.subscriptions = 
+            new BillingSubscriptionStatement(manager)
     }
 }

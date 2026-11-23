@@ -1,6 +1,14 @@
 import type{ StatementDefinition } from "../../PreparedStatement/StatementRegistry/statementDefinition";
 import { AggregateStatementDefinition } from "./aggregates/aggregateStatementDefinition";
-import { BillingStatementDefinition } from "./billing/billingStatementDefinition";
+import { BillingEntitlementStatementDefinition } from "./billing/entitlements/billingEntitlementStatementDefinition";
+import { BillingInvoiceStatementDefinition } from "./billing/invoices/billingInvoiceStatementDefinition";
+import { BillingSubscriptionLeaseStatementDefinition } from "./billing/leases/billingSubscriptionLeaseStatementDefinition";
+import { BillingEntitlementOverrideStatementDefinition } from "./billing/overrides/billingEntitlementOverrideStatementDefinition";
+import { BillingPaymentStatementDefinition } from "./billing/payments/billingPaymentStatementDefinition";
+import { BillingPlanStatementDefinition } from "./billing/plans/billingPlanStatementDefinition";
+import { BillingPlanVersionStatementDefinition } from "./billing/planVersions/billingPlanVersionStatementDefinition";
+import { BillingSubscriptionRequestStatementDefinition } from "./billing/requests/billingSubscriptionRequestStatementDefinition";
+import { BillingSubscriptionStatementDefinition } from "./billing/subscriptions/billingSubscriptionStatementDefinition";
 import { BranchStatementDefinition } from "./branch/BranchStatementDefintion";
 import { BusinessStatementDefinition } from "./business/BusinessDefiinition";
 import { ConflictStatementDefinition } from "./conflicts/conflictsStatementDefinition";
@@ -45,6 +53,17 @@ export const BusinessStatementsDefinitions: StatementDefinition[] = [
     ...ProjectionResetStatementDefinitions,
     ...EmployeeStatementDefinitions,
     ...SyncCursorStatementsDefinition,
-    ...EventInboxStatementsDefinition
+    ...EventInboxStatementsDefinition,
+
+    //Billing System
+    ...BillingEntitlementStatementDefinition,
+    ...BillingInvoiceStatementDefinition,
+    ...BillingSubscriptionLeaseStatementDefinition,
+    ...BillingEntitlementOverrideStatementDefinition,
+    ...BillingPaymentStatementDefinition,
+    ...BillingPlanStatementDefinition,
+    ...BillingPlanVersionStatementDefinition,
+    ...BillingSubscriptionRequestStatementDefinition,
+    ...BillingSubscriptionStatementDefinition
 
 ]

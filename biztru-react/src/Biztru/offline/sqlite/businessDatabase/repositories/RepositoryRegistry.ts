@@ -24,6 +24,15 @@ import { SQLiteEventInboxRepository } from "./EventInboxRepository/SQLiteEventIn
 import { SQLiteSyncCursorRepository } from "./Cursor/CursorRepository";
 import { SQLiteBusinessDashboardRepository } from "./DashboardRepository/BusinessDashbaordRepositories";
 import { SQLiteRefundRepository } from "./SQLiteProjectionRepository/SQLiteRefundRepository";
+import { SQLiteBillingEntitlementOverrideRepository } from "./SQLiteBillings/SQLiteBillingEntitlementOverrideRepository";
+import { SQLiteBillingEntitlementRepository } from "./SQLiteBillings/SQLiteBillingEntitlementRepository";
+import { SQLiteBillingInvoiceRepository } from "./SQLiteBillings/SQLiteBillingInvoiceRepository";
+import { SQLiteBillingPaymentRepository } from "./SQLiteBillings/SQLiteBillingPaymentRepository";
+import { SQLiteBillingSubscriptionRepository } from "./SQLiteBillings/SQLiteBillingSubscriptionRepository";
+import { SQLiteBillingSubscriptionLeaseRepository } from "./SQLiteBillings/SQLiteBillingSubscriptionLeaseRepository";
+import { SQLiteBillingSubscriptionRequestRepository } from "./SQLiteBillings/SQLiteBillingSubscriptionRequestRepository";
+import { SQLiteBillingPlanRepository } from "./SQLiteBillings/SQLitePlanRepository";
+import { SQLiteBillingPlanVersionRepository } from "./SQLiteBillings/SQLitePlanVersion";
 
 export class BusinessRepositoryRegistry {
     readonly events: SQLiteEventRepository;
@@ -68,6 +77,17 @@ export class BusinessRepositoryRegistry {
     readonly syncState: SQLiteSyncStateRepository;
 
     readonly cursor: SQLiteSyncCursorRepository;
+
+    //Billing Systems
+    readonly entitlementOverrides: SQLiteBillingEntitlementOverrideRepository;
+    readonly entitlement: SQLiteBillingEntitlementRepository;
+    readonly billingInvoice: SQLiteBillingInvoiceRepository;
+    readonly billingPayments: SQLiteBillingPaymentRepository;
+    readonly billingSubscription: SQLiteBillingSubscriptionRepository;
+    readonly billinglease: SQLiteBillingSubscriptionLeaseRepository;
+    readonly billingRequest: SQLiteBillingSubscriptionRequestRepository;
+    readonly billingPlans: SQLiteBillingPlanRepository;
+    readonly billingPlanVersion: SQLiteBillingPlanVersionRepository
 
     readonly eventInbox: SQLiteEventInboxRepository
     readonly queryRunner: QueryRunner;
@@ -183,7 +203,16 @@ export class BusinessRepositoryRegistry {
                 transaction
 
              )
-
+        //Billing Systems
+        this.entitlementOverrides = new SQLiteBillingEntitlementOverrideRepository(statements.override);
+        this.entitlement = new SQLiteBillingEntitlementRepository(statements.entitlements);
+        this.billingInvoice  = new SQLiteBillingInvoiceRepository(statements.invoices);
+        this.billingPayments = new SQLiteBillingPaymentRepository(statements.payments);
+        this.billingSubscription = new SQLiteBillingSubscriptionRepository(statements.subscriptions);
+        this.billinglease = new  SQLiteBillingSubscriptionLeaseRepository(statements.leases);
+        this.billingRequest = new SQLiteBillingSubscriptionRequestRepository(statements.requests);
+        this.billingPlans = new SQLiteBillingPlanRepository(statements.plans);
+        this.billingPlanVersion = new SQLiteBillingPlanVersionRepository(statements.planVersion)
         this.eventInbox = new SQLiteEventInboxRepository(statements.eventInbox);
         
         this.transaction = transaction;

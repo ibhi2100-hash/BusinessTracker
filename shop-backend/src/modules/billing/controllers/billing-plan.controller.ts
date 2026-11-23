@@ -107,9 +107,17 @@ export class BillingPlanController {
     res: Response
   ): Promise<Response> {
     try {
+      const planId = req.params.planId;
+
+      if (typeof planId !== "string" || !planId) {
+        return res.status(400).json({
+          message: "Invalid billing plan ID",
+        });
+      }
+
       const plan =
         await this.billingPlanService.getPlanDetails(
-          req.params.planId
+          planId
         );
 
       if (!plan) {
@@ -303,9 +311,17 @@ export class BillingPlanController {
     res: Response
   ): Promise<Response> {
     try {
+      const planId = req.params.planId;
+
+      if (typeof planId !== "string" || !planId) {
+        return res.status(400).json({
+          message: "Invalid billing plan ID",
+        });
+      }
+
       const plan =
         await this.billingPlanService.updatePlan(
-          req.params.planId,
+          planId,
           req.body
         );
 
@@ -318,14 +334,100 @@ export class BillingPlanController {
     }
   }
 
+
+  /**
+   * GET /plans/:planId/versions
+   *
+   * Retrieve the complete version history of a plan.
+   */
+  async listVersions(
+    req: Request,
+    res: Response
+  ): Promise<Response> {
+    try {
+      const planId = req.params.planId;
+
+      if (typeof planId !== "string" || !planId) {
+        return res.status(400).json({
+          message: "Invalid billing plan ID",
+        });
+      }
+
+      const result =
+        await this.billingPlanService.getPlanVersions(
+          planId
+        );
+
+      return res.status(200).json({
+        message: "Billing plan versions retrieved successfully",
+        ...result,
+      });
+    } catch (error) {
+      return this.handleError(res, error);
+    }
+  }
+
+  /**
+   * GET /plans/:planId/versions/:planVersion
+   *
+   * Retrieve a specific version of a plan.
+   */
+  async getVersion(
+    req: Request,
+    res: Response
+  ): Promise<Response> {
+    try {
+      const planId = req.params.planId;
+
+      if (typeof planId !== "string" || !planId) {
+        return res.status(400).json({
+          message: "Invalid billing plan ID",
+        });
+      }
+
+      const planVersion = Number(req.params.planVersion);
+
+      if (
+        !Number.isSafeInteger(planVersion) ||
+        planVersion < 1
+      ) {
+        return res.status(400).json({
+          message: "Invalid billing plan version",
+        });
+      }
+
+      const version =
+        await this.billingPlanService.getPlanVersion(
+          planId,
+          planVersion
+        );
+
+      return res.status(200).json({
+        message: "Billing plan version retrieved successfully",
+        version,
+      });
+    } catch (error) {
+      return this.handleError(res, error);
+    }
+  }
+
+
   async publish(
     req: Request,
     res: Response
   ): Promise<Response> {
     try {
+      const planId = req.params.planId;
+
+      if (typeof planId !== "string" || !planId) {
+        return res.status(400).json({
+          message: "Invalid billing plan ID",
+        });
+      }
+
       const plan =
         await this.billingPlanService.publishPlan(
-          req.params.planId
+          planId
         );
 
       return res.status(200).json({
@@ -342,9 +444,17 @@ export class BillingPlanController {
     res: Response
   ): Promise<Response> {
     try {
+      const planId = req.params.planId;
+
+      if (typeof planId !== "string" || !planId) {
+        return res.status(400).json({
+          message: "Invalid billing plan ID",
+        });
+      }
+
       const plan =
         await this.billingPlanService.retirePlan(
-          req.params.planId
+          planId
         );
 
       return res.status(200).json({
@@ -355,6 +465,85 @@ export class BillingPlanController {
       return this.handleError(res, error);
     }
   }
+
+
+  /**
+   * GET /business/billing/plans/:planId/versions
+   *
+   * Retrieve only published versions of a published plan.
+   */
+  async listPublicVersions(
+    req: Request,
+    res: Response
+  ): Promise<Response> {
+    try {
+      const planId = req.params.planId;
+
+      if (typeof planId !== "string" || !planId.trim()) {
+        return res.status(400).json({
+          message: "Invalid billing plan ID",
+        });
+      }
+
+      const result =
+        await this.billingPlanService.getPublicPlanVersions(
+          planId
+        );
+
+      return res.status(200).json({
+        message: "Published billing plan versions retrieved successfully",
+        ...result,
+      });
+    } catch (error) {
+      return this.handleError(res, error);
+    }
+  }
+
+  /**
+   * GET /business/billing/plans/:planId/versions/:planVersion
+   *
+   * Retrieve one published version.
+   * Draft and unpublished versions are not accessible.
+   */
+  async getPublicVersion(
+    req: Request,
+    res: Response
+  ): Promise<Response> {
+    try {
+      const planId = req.params.planId;
+
+      if (typeof planId !== "string" || !planId.trim()) {
+        return res.status(400).json({
+          message: "Invalid billing plan ID",
+        });
+      }
+
+      const planVersion = Number(req.params.planVersion);
+
+      if (
+        !Number.isSafeInteger(planVersion) ||
+        planVersion < 1
+      ) {
+        return res.status(400).json({
+          message: "Invalid billing plan version",
+        });
+      }
+
+      const version =
+        await this.billingPlanService.getPublicPlanVersion(
+          planId,
+          planVersion
+        );
+
+      return res.status(200).json({
+        message: "Published billing plan version retrieved successfully",
+        version,
+      });
+    } catch (error) {
+      return this.handleError(res, error);
+    }
+  }
+
 
   private handleError(
     res: Response,
