@@ -39,6 +39,7 @@ import { BillingServiceRegistry } from
 
 import { BillingControllerRegistry } from
     "../modules/billing/billingControllerRegistry.js";
+import { createBillingSubscriptionRoutes } from "../routes/billing/billingSubscriptionRoutes.js";
 
 // ------------------------------------------
 // DEPENDENCIES
@@ -60,6 +61,7 @@ export interface PlatformRouters {
 
     // Commercial / Billing
     plans: Router;
+    subscription: Router;
 }
 
 // ------------------------------------------
@@ -206,6 +208,13 @@ export class PlatformComposer {
                 authenticatePlatform
             );
 
+        const subscriptionRoutes = 
+            createBillingSubscriptionRoutes(
+                billingControllers.billingSubscriptionController,
+                services.identityService,
+                authenticatePlatform
+            )
+
         // ------------------------------------------
         // RETURN PLATFORM MODULE
         // ------------------------------------------
@@ -217,6 +226,7 @@ export class PlatformComposer {
                 tenant: tenantRoutes,
                 analytics: analyticsRoutes,
                 plans: plansRoutes,
+                subscription: subscriptionRoutes
             },
 
             services,

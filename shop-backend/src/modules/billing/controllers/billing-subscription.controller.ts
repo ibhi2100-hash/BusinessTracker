@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
-import { BillingRequestType } from "../../../generated/client/index.js";
-import { BillingSubscriptionService } from "../services/billing-subscription.service.js";
+import { BillingRequestType } from "../../../infrastructure/postgresql/prisma/generated/enums.js"; 
+import { BillingSubscriptionService } from "../service/billing-subscription.service.js"; 
 
 interface AuthenticatedRequest extends Request {
   user?: {

@@ -6,6 +6,7 @@ import type {
 import { BillingPlanVersionStatement } from "../../statements/billing/planVersions/billingPlanVersionStatements";
 
 import { billingPlanVersionKeys } from "../../statements/billing/planVersions/billingPlanVersionStatementKey"; 
+import type { BillingPlanVersionRecord } from "../../../../../services/ApplicationService/API/billing/billingplanApi";
 
 export type LocalBillingCycle =
   | "MONTHLY"
@@ -13,27 +14,7 @@ export type LocalBillingCycle =
   | "YEARLY"
   | "LIFETIME";
 
-export interface LocalBillingPlanVersion {
-  id: string;
-  planId: string;
-  planVersion: number;
 
-  priceMinor: number;
-  currency: string;
-  billingCycle: LocalBillingCycle;
-
-  intervalCount: number;
-  trialDays: number;
-
-  maxStaff: number | null;
-  maxBranch: number | null;
-  maxProduct: number | null;
-
-  featuresJson: string;
-
-  publishedAt: number | null;
-  createdAt: number;
-}
 
 export interface BillingPlanVersionCountRow {
   count: number;
@@ -51,7 +32,7 @@ export class SQLiteBillingPlanVersionRepository {
   // ============================================================
 
   insertOperation(
-    version: LocalBillingPlanVersion,
+    version: BillingPlanVersionRecord,
   ): SQLiteStatementOperation {
     return {
       statementKey: billingPlanVersionKeys.insert,
@@ -79,7 +60,7 @@ export class SQLiteBillingPlanVersionRepository {
   // ============================================================
 
   async insert(
-    version: LocalBillingPlanVersion,
+    version: BillingPlanVersionRecord,
   ): Promise<void> {
     this.validate(version);
 
@@ -106,9 +87,9 @@ export class SQLiteBillingPlanVersionRepository {
 
   async findById(
     id: string,
-  ): Promise<LocalBillingPlanVersion | null> {
+  ): Promise<BillingPlanVersionRecord | null> {
     const rows =
-      await this.statements.findById.query<LocalBillingPlanVersion>([
+      await this.statements.findById.query<BillingPlanVersionRecord>([
         id,
       ]);
 
@@ -118,9 +99,9 @@ export class SQLiteBillingPlanVersionRepository {
   async findByPlanAndVersion(
     planId: string,
     planVersion: number,
-  ): Promise<LocalBillingPlanVersion | null> {
+  ): Promise<BillingPlanVersionRecord | null> {
     const rows =
-      await this.statements.findByPlanAndVersion.query<LocalBillingPlanVersion>([
+      await this.statements.findByPlanAndVersion.query<BillingPlanVersionRecord>([
         planId,
         planVersion,
       ]);
@@ -130,9 +111,9 @@ export class SQLiteBillingPlanVersionRepository {
 
   async findLatest(
     planId: string,
-  ): Promise<LocalBillingPlanVersion | null> {
+  ): Promise<BillingPlanVersionRecord | null> {
     const rows =
-      await this.statements.findLatest.query<LocalBillingPlanVersion>([
+      await this.statements.findLatest.query<BillingPlanVersionRecord>([
         planId,
       ]);
 
@@ -141,9 +122,9 @@ export class SQLiteBillingPlanVersionRepository {
 
   async findLatestPublished(
     planId: string,
-  ): Promise<LocalBillingPlanVersion | null> {
+  ): Promise<BillingPlanVersionRecord | null> {
     const rows =
-      await this.statements.findLatestPublished.query<LocalBillingPlanVersion>([
+      await this.statements.findLatestPublished.query<BillingPlanVersionRecord>([
         planId,
       ]);
 
@@ -156,26 +137,26 @@ export class SQLiteBillingPlanVersionRepository {
 
   async findByPlan(
     planId: string,
-  ): Promise<LocalBillingPlanVersion[]> {
-    return this.statements.findByPlan.query<LocalBillingPlanVersion>([
+  ): Promise<BillingPlanVersionRecord[]> {
+    return this.statements.findByPlan.query<BillingPlanVersionRecord>([
       planId,
     ]);
   }
 
   async findPublishedByPlan(
     planId: string,
-  ): Promise<LocalBillingPlanVersion[]> {
-    return this.statements.findPublishedByPlan.query<LocalBillingPlanVersion>([
+  ): Promise<BillingPlanVersionRecord[]> {
+    return this.statements.findPublishedByPlan.query<BillingPlanVersionRecord>([
       planId,
     ]);
   }
 
-  async findAll(): Promise<LocalBillingPlanVersion[]> {
-    return this.statements.findAll.query<LocalBillingPlanVersion>([]);
+  async findAll(): Promise<BillingPlanVersionRecord[]> {
+    return this.statements.findAll.query<BillingPlanVersionRecord>([]);
   }
 
-  async getAll(): Promise<LocalBillingPlanVersion[]> {
-    return this.statements.getAll.query<LocalBillingPlanVersion>([]);
+  async getAll(): Promise<BillingPlanVersionRecord[]> {
+    return this.statements.getAll.query<BillingPlanVersionRecord>([]);
   }
 
   // ============================================================
@@ -202,7 +183,7 @@ export class SQLiteBillingPlanVersionRepository {
    * same transaction as the related billing-plan upserts.
    */
   syncOperations(
-    versions: LocalBillingPlanVersion[],
+    versions: BillingPlanVersionRecord[],
   ): SQLiteStatementOperation[] {
     for (const version of versions) {
       this.validate(version);
@@ -220,7 +201,7 @@ export class SQLiteBillingPlanVersionRepository {
    * the local record.
    */
   async hasMatchingVersion(
-    incoming: LocalBillingPlanVersion,
+    incoming: BillingPlanVersionRecord,
   ): Promise<boolean> {
     const existing = await this.findByPlanAndVersion(
       incoming.planId,
@@ -239,7 +220,7 @@ export class SQLiteBillingPlanVersionRepository {
       existing.maxStaff === incoming.maxStaff &&
       existing.maxBranch === incoming.maxBranch &&
       existing.maxProduct === incoming.maxProduct &&
-      existing.featuresJson === incoming.featuresJson
+      existing.features === incoming.features
     );
   }
 
@@ -248,7 +229,7 @@ export class SQLiteBillingPlanVersionRepository {
   // ============================================================
 
   private validate(
-    version: LocalBillingPlanVersion,
+    version: BillingPlanVersionRecord,
   ): void {
     if (!version.id || !version.planId) {
       throw new Error("Billing plan version requires id and planId.");
@@ -259,13 +240,6 @@ export class SQLiteBillingPlanVersionRepository {
       version.planVersion < 1
     ) {
       throw new Error("Invalid billing plan version number.");
-    }
-
-    if (
-      !Number.isSafeInteger(version.priceMinor) ||
-      version.priceMinor < 0
-    ) {
-      throw new Error("Invalid billing plan version price.");
     }
 
     if (
@@ -283,7 +257,7 @@ export class SQLiteBillingPlanVersionRepository {
     }
 
     try {
-      const features = JSON.parse(version.featuresJson);
+      const features = version.features;
 
       if (
         features === null ||
@@ -304,7 +278,7 @@ export class SQLiteBillingPlanVersionRepository {
 
 export class BillingPlanVersionMapper {
   static toInsert(
-    version: LocalBillingPlanVersion,
+    version: BillingPlanVersionRecord,
   ): unknown[] {
     return [
       version.id,
@@ -318,7 +292,7 @@ export class BillingPlanVersionMapper {
       version.maxStaff,
       version.maxBranch,
       version.maxProduct,
-      version.featuresJson,
+      version.features,
       version.publishedAt,
       version.createdAt,
     ];

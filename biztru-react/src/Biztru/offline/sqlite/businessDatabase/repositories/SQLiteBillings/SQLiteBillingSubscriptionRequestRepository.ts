@@ -1,23 +1,7 @@
 import type { SQLiteStatementOperation } from "../../../../../storage/statement/worker/WorkerProtocol";
 import { BillingSubscriptionRequestStatement } from "../../statements/billing/requests/billingSubscriptionRequestStatements";
 import { billingSubscriptionRequestKeys } from "../../statements/billing/requests/billingSubscriptionRequestStatementKey";
-export interface LocalBillingSubscriptionRequest {
-  id: string;
-  businessId: string;
-  requestedPlanId: string;
-  requestedPlanVersion: number;
-  requestType: string;
-  status: string;
-  requestedBy: string | null;
-  reviewedBy: string | null;
-  reviewedAt: number | null;
-  rejectionReason: string | null;
-  effectiveAt: number | null;
-  aggregateVersion: number;
-  lastEventId: string | null;
-  createdAt: number;
-  updatedAt: number;
-}
+import type { BillingSubscriptionRequestRecord } from "../../../../../services/ApplicationService/API/billing/billingplanApi";
 
 export interface BillingCountRow { count: number; }
 
@@ -27,7 +11,7 @@ export class SQLiteBillingSubscriptionRequestRepository {
     this.statements  = statements
   }
 
-  upsertOperation(record: LocalBillingSubscriptionRequest): SQLiteStatementOperation {
+  upsertOperation(record: BillingSubscriptionRequestRecord): SQLiteStatementOperation {
     return { statementKey: billingSubscriptionRequestKeys.upsert, params: LocalBillingSubscriptionRequestMapper.toInsert(record) };
   }
 
@@ -35,7 +19,7 @@ export class SQLiteBillingSubscriptionRequestRepository {
     return { statementKey: billingSubscriptionRequestKeys.delete, params: [id] };
   }
 
-  async upsert(record: LocalBillingSubscriptionRequest): Promise<void> {
+  async upsert(record: BillingSubscriptionRequestRecord): Promise<void> {
     LocalBillingSubscriptionRequestMapper.validate(record);
     await this.statements.upsert.execute(LocalBillingSubscriptionRequestMapper.toInsert(record));
   }
@@ -44,29 +28,29 @@ export class SQLiteBillingSubscriptionRequestRepository {
     await this.statements.delete.execute([id]);
   }
 
-  async findById(id: string): Promise<LocalBillingSubscriptionRequest | null> {
-    const rows = await this.statements.findById.query<LocalBillingSubscriptionRequest>([id]);
+  async findById(id: string): Promise<BillingSubscriptionRequestRecord | null> {
+    const rows = await this.statements.findById.query<BillingSubscriptionRequestRecord>([id]);
     return rows[0] ?? null;
   }
 
-  async findByBusiness(businessId: string): Promise<LocalBillingSubscriptionRequest[]> {
-    return this.statements.findByBusiness.query<LocalBillingSubscriptionRequest>([businessId]);
+  async findByBusiness(businessId: string): Promise<BillingSubscriptionRequestRecord[]> {
+    return this.statements.findByBusiness.query<BillingSubscriptionRequestRecord>([businessId]);
   }
 
-  async findPendingByBusiness(businessId: string): Promise<LocalBillingSubscriptionRequest[]> {
-    return this.statements.findPendingByBusiness.query<LocalBillingSubscriptionRequest>([businessId]);
+  async findPendingByBusiness(businessId: string): Promise<BillingSubscriptionRequestRecord[]> {
+    return this.statements.findPendingByBusiness.query<BillingSubscriptionRequestRecord>([businessId]);
   }
 
-  async findByBusinessAndStatus(businessId: string, status: string): Promise<LocalBillingSubscriptionRequest[]> {
-    return this.statements.findByBusinessAndStatus.query<LocalBillingSubscriptionRequest>([businessId, status]);
+  async findByBusinessAndStatus(businessId: string, status: string): Promise<BillingSubscriptionRequestRecord[]> {
+    return this.statements.findByBusinessAndStatus.query<BillingSubscriptionRequestRecord>([businessId, status]);
   }
 
-  async findByPlan(requestedPlanId: string, requestedPlanVersion: string): Promise<LocalBillingSubscriptionRequest[]> {
-    return this.statements.findByPlan.query<LocalBillingSubscriptionRequest>([requestedPlanId, requestedPlanVersion]);
+  async findByPlan(requestedPlanId: string, requestedPlanVersion: string): Promise<BillingSubscriptionRequestRecord[]> {
+    return this.statements.findByPlan.query<BillingSubscriptionRequestRecord>([requestedPlanId, requestedPlanVersion]);
   }
 
-  async findAll(): Promise<LocalBillingSubscriptionRequest[]> {
-    return this.statements.findAll.query<LocalBillingSubscriptionRequest>([]);
+  async findAll(): Promise<BillingSubscriptionRequestRecord[]> {
+    return this.statements.findAll.query<BillingSubscriptionRequestRecord>([]);
   }
 
   async countAll(): Promise<number> {
@@ -74,14 +58,14 @@ export class SQLiteBillingSubscriptionRequestRepository {
     return Number(rows[0]?.count ?? 0);
   }
 
-  syncOperations(records: LocalBillingSubscriptionRequest[]): SQLiteStatementOperation[] {
+  syncOperations(records: BillingSubscriptionRequestRecord[]): SQLiteStatementOperation[] {
     for (const record of records) LocalBillingSubscriptionRequestMapper.validate(record);
     return records.map((record) => this.upsertOperation(record));
   }
 }
 
 export class LocalBillingSubscriptionRequestMapper {
-  static toInsert(record: LocalBillingSubscriptionRequest): unknown[] {
+  static toInsert(record: BillingSubscriptionRequestRecord): unknown[] {
     return [
       record.id,
       record.businessId,
@@ -101,7 +85,7 @@ export class LocalBillingSubscriptionRequestMapper {
     ];
   }
 
-  static validate(record: LocalBillingSubscriptionRequest): void {
+  static validate(record: BillingSubscriptionRequestRecord): void {
     if (!record.id || !record.businessId) throw new Error("Billing projection requires id and businessId.");
     if (!Number.isSafeInteger(record.aggregateVersion) || record.aggregateVersion < 0) throw new Error("Invalid aggregateVersion.");
     if (!Number.isSafeInteger(record.createdAt) || !Number.isSafeInteger(record.updatedAt)) throw new Error("Invalid billing projection timestamps.");

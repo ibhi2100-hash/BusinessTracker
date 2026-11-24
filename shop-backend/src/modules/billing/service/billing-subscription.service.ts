@@ -1,13 +1,7 @@
-import {
-  BillingRequestStatus,
-  BillingRequestType,
-  BillingSubscriptionStatus,
-  Prisma,
-  PrismaClient,
-} from "../../generated/client";
-
-import { BillingEntitlementService } from "./billing-entitlement.service";
-
+import { Prisma } from "../../../infrastructure/postgresql/prisma/generated/client.js";
+import { BillingRequestStatus, BillingRequestType, BillingSubscriptionStatus } from "../../../infrastructure/postgresql/prisma/generated/enums.js";
+import { BillingEntitlementService } from "./billing-entitlement.service.js"; 
+import { prisma } from "../../../infrastructure/postgresql/prismaClient.js";
 interface CreateSubscriptionRequestInput {
   businessId: string;
   requestedPlanId: string;
@@ -26,12 +20,11 @@ interface ApproveRequestInput {
 
 export class BillingSubscriptionService {
   constructor(
-    private readonly prisma: PrismaClient,
     private readonly entitlementService: BillingEntitlementService,
   ) {}
 
   async createRequest(input: CreateSubscriptionRequestInput) {
-    return this.prisma.$transaction(
+    return prisma.$transaction(
       async (tx) => {
         const business = await tx.business.findUnique({
           where: { id: input.businessId },
@@ -80,6 +73,7 @@ export class BillingSubscriptionService {
 
         return tx.billingSubscriptionRequest.create({
           data: {
+            id: crypto.randomUUID(),
             businessId: input.businessId,
             requestedPlanId: input.requestedPlanId,
             requestedPlanVersion: input.requestedPlanVersion,
@@ -96,7 +90,7 @@ export class BillingSubscriptionService {
   }
 
   async approveRequest(input: ApproveRequestInput) {
-    return this.prisma.$transaction(
+    return prisma.$transaction(
       async (tx) => {
         const request = await tx.billingSubscriptionRequest.findUnique({
           where: { id: input.requestId },
@@ -167,6 +161,7 @@ export class BillingSubscriptionService {
         } else {
           subscription = await tx.billingSubscription.create({
             data: {
+              id: crypto.randomUUID(),
               businessId: request.businessId,
               planId: request.requestedPlanId,
               planVersion: request.requestedPlanVersion,
@@ -198,6 +193,7 @@ export class BillingSubscriptionService {
 
         await tx.billingAuditLog.create({
           data: {
+            id: crypto.randomUUID(),
             businessId: request.businessId,
             actorUserId: input.reviewerId,
             action: "APPROVED",
@@ -221,7 +217,7 @@ export class BillingSubscriptionService {
   ) {
     if (!reason.trim()) throw new Error("A rejection reason is required");
 
-    return this.prisma.$transaction(async (tx) => {
+    return prisma.$transaction(async (tx) => {
       const request = await tx.billingSubscriptionRequest.findUnique({
         where: { id: requestId },
       });
@@ -245,6 +241,7 @@ export class BillingSubscriptionService {
 
       await tx.billingAuditLog.create({
         data: {
+          id: crypto.randomUUID(),
           businessId: request.businessId,
           actorUserId: reviewerId,
           action: "REJECTED",
@@ -262,7 +259,7 @@ export class BillingSubscriptionService {
     subscriptionId: string,
     verifiedPaymentId: string,
   ) {
-    return this.prisma.$transaction(
+    return prisma.$transaction(
       async (tx) => {
         const subscription = await tx.billingSubscription.findUnique({
           where: { id: subscriptionId },
@@ -314,6 +311,7 @@ export class BillingSubscriptionService {
 
         await tx.billingAuditLog.create({
           data: {
+            id: crypto.randomUUID(),
             businessId: subscription.businessId,
             action: "ACTIVATED",
             entityType: "BillingSubscription",
@@ -330,7 +328,7 @@ export class BillingSubscriptionService {
   }
 
   async cancelAtPeriodEnd(subscriptionId: string, businessId: string) {
-    const subscription = await this.prisma.billingSubscription.findFirst({
+    const subscription = await prisma.billingSubscription.findFirst({
       where: { id: subscriptionId, businessId },
     });
 
@@ -347,7 +345,7 @@ export class BillingSubscriptionService {
       throw new Error("Subscription cannot be scheduled for cancellation");
     }
 
-    return this.prisma.billingSubscription.update({
+    return prisma.billingSubscription.update({
       where: { id: subscriptionId },
       data: {
         cancelAtPeriodEnd: true,
@@ -357,7 +355,7 @@ export class BillingSubscriptionService {
   }
 
   async expireSubscription(subscriptionId: string, reason = "Period ended") {
-    return this.prisma.$transaction(async (tx) => {
+    return prisma.$transaction(async (tx) => {
       const subscription = await tx.billingSubscription.findUnique({
         where: { id: subscriptionId },
       });
@@ -392,6 +390,7 @@ export class BillingSubscriptionService {
 
       await tx.billingAuditLog.create({
         data: {
+          id: crypto.randomUUID(),
           businessId: subscription.businessId,
           action: "CANCELLED",
           entityType: "BillingSubscription",
@@ -405,7 +404,7 @@ export class BillingSubscriptionService {
   }
 
   async getCurrentSubscription(businessId: string) {
-    return this.prisma.billingSubscription.findFirst({
+    return prisma.billingSubscription.findFirst({
       where: {
         businessId,
         status: {
@@ -420,7 +419,7 @@ export class BillingSubscriptionService {
         },
       },
       include: {
-        planVersionRef: {
+        planVersionRecord: {
           include: { plan: true },
         },
       },

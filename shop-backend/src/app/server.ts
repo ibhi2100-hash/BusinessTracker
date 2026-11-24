@@ -289,6 +289,11 @@ async function startServer(): Promise<void> {
         platformModule.router.plans
     );
 
+    app.use(
+        "/platform/billing",
+        platformModule.router.subscription
+    );
+
     // ------------------------------------------
     // NOT FOUND
     // ------------------------------------------

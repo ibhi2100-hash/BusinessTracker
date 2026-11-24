@@ -84,6 +84,7 @@ import NotFoundPage from "../pages/NotFoundPage";
 import OwnerBranchSalesPage from "../pages/owner/OwnerSalesPage";
 import BranchesPage from "../components/BusinessDashboard/control/BranchesPage";
 import BranchControlRoomPage from "../pages/owner/BranchControlRoomPage";
+import SalesListPage from "../components/SellingComponents/SaleListingPage";
 
 /* ------------------------------------------------------------------ */
 /* ROUTER                                                             */
@@ -256,6 +257,19 @@ export function AppRouter() {
                     context={{ type: "BRANCH_OPERATIONS" }}
                   >
                     <OwnerBranchSalesPage />
+                  </AuthGuard>
+                }
+              />
+
+              <Route
+                path="/owner/branches/:branchId/sales/list"
+                element={
+                  <AuthGuard
+                    roles={["CEO", "ADMIN"]}
+                    permissions={["sales:read"]}
+                    context={{ type: "BRANCH_OPERATIONS" }}
+                  >
+                    <SalesListPage />
                   </AuthGuard>
                 }
               />

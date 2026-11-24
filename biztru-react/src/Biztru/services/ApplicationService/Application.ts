@@ -17,6 +17,8 @@ import { ExpenseApi } from "./API/expenses/expensesApi";
 import { SessionApi } from "./API/session/ApplicationSession";
 import { EmployeeApi } from "./API/employee/EmployeeApi";
 import { BusinessDashboardApi } from "./API/dashboard/BusinessDashboardApi"
+import { BillingApi, type BillingBackendClient } from "./API/billing/billingplanApi";
+import { SQLiteBillingLocalGateway } from "./API/billing/adapter";
 
 export class Application {
     readonly onboarding: OnboardingApi;
@@ -37,13 +39,14 @@ export class Application {
     readonly syncService: SyncApplicationService
     readonly session: SessionApi;
     readonly employee: EmployeeApi
-
     readonly manager: BusinessManager
-    
+    readonly billing: BillingApi;
+   
     constructor(
         client: ApplicationContext,
-        manager: BusinessManager
-
+        manager: BusinessManager,
+        billingsGate: SQLiteBillingLocalGateway,
+        backendClient: BillingBackendClient
     ){
         this.client = client;
         this.manager = manager;
@@ -107,7 +110,6 @@ export class Application {
                 manager
             )
 
-
         this.business = 
             new BusinessApi(
                 manager,
@@ -123,6 +125,14 @@ export class Application {
         this.syncService = 
             new SyncApplicationService(
                 manager
+            )
+
+        
+        this.billing = 
+            new BillingApi(
+                manager,
+                backendClient,
+                billingsGate
             )
 
         this.session = 

@@ -1,22 +1,9 @@
 import type { SQLiteStatementOperation } from "../../../../../storage/statement/worker/WorkerProtocol";
 import { BillingEntitlementStatement } from "../../statements/billing/entitlements/billingEntitlementStatements"; 
 import { billingEntitlementKeys } from "../../statements/billing/entitlements/billingEntitlementStatementKey";
+import type { BillingEntitlementRecord } from "../../../../../services/ApplicationService/API/billing/billingplanApi";
 
-export interface LocalBillingEntitlement {
-  id: string;
-  businessId: string;
-  subscriptionId: string;
-  entitlementKey: string;
-  valueJson: string;
-  source: string;
-  status: string;
-  validFrom: number | null;
-  validUntil: number | null;
-  aggregateVersion: number;
-  lastEventId: string | null;
-  createdAt: number;
-  updatedAt: number;
-}
+
 
 export interface BillingCountRow { count: number; }
 
@@ -26,7 +13,7 @@ export class SQLiteBillingEntitlementRepository {
     this.statements = statements
   }
 
-  upsertOperation(record: LocalBillingEntitlement): SQLiteStatementOperation {
+  upsertOperation(record: BillingEntitlementRecord): SQLiteStatementOperation {
     return { statementKey: billingEntitlementKeys.upsert, params: LocalBillingEntitlementMapper.toInsert(record) };
   }
 
@@ -34,7 +21,7 @@ export class SQLiteBillingEntitlementRepository {
     return { statementKey: billingEntitlementKeys.delete, params: [id] };
   }
 
-  async upsert(record: LocalBillingEntitlement): Promise<void> {
+  async upsert(record: BillingEntitlementRecord): Promise<void> {
     LocalBillingEntitlementMapper.validate(record);
     await this.statements.upsert.execute(LocalBillingEntitlementMapper.toInsert(record));
   }
@@ -43,30 +30,30 @@ export class SQLiteBillingEntitlementRepository {
     await this.statements.delete.execute([id]);
   }
 
-  async findById(id: string): Promise<LocalBillingEntitlement | null> {
-    const rows = await this.statements.findById.query<LocalBillingEntitlement>([id]);
+  async findById(id: string): Promise<BillingEntitlementRecord | null> {
+    const rows = await this.statements.findById.query<BillingEntitlementRecord>([id]);
     return rows[0] ?? null;
   }
 
-  async findByBusinessAndKey(businessId: string, entitlementKey: string): Promise<LocalBillingEntitlement | null> {
-    const rows = await this.statements.findByBusinessAndKey.query<LocalBillingEntitlement>([businessId, entitlementKey]);
+  async findByBusinessAndKey(businessId: string, entitlementKey: string): Promise<BillingEntitlementRecord | null> {
+    const rows = await this.statements.findByBusinessAndKey.query<BillingEntitlementRecord>([businessId, entitlementKey]);
     return rows[0] ?? null;
   }
 
-  async findByBusiness(businessId: string): Promise<LocalBillingEntitlement[]> {
-    return this.statements.findByBusiness.query<LocalBillingEntitlement>([businessId]);
+  async findByBusiness(businessId: string): Promise<BillingEntitlementRecord[]> {
+    return this.statements.findByBusiness.query<BillingEntitlementRecord>([businessId]);
   }
 
-  async findActiveByBusiness(businessId: string, now: number,): Promise<LocalBillingEntitlement[]> {
-    return this.statements.findActiveByBusiness.query<LocalBillingEntitlement>([businessId, now, now]);
+  async findActiveByBusiness(businessId: string, now: number,): Promise<BillingEntitlementRecord[]> {
+    return this.statements.findActiveByBusiness.query<BillingEntitlementRecord>([businessId, now, now]);
   }
 
-  async findBySubscription(subscriptionId: string): Promise<LocalBillingEntitlement[]> {
-    return this.statements.findBySubscription.query<LocalBillingEntitlement>([subscriptionId]);
+  async findBySubscription(subscriptionId: string): Promise<BillingEntitlementRecord[]> {
+    return this.statements.findBySubscription.query<BillingEntitlementRecord>([subscriptionId]);
   }
 
-  async findAll(): Promise<LocalBillingEntitlement[]> {
-    return this.statements.findAll.query<LocalBillingEntitlement>([]);
+  async findAll(): Promise<BillingEntitlementRecord[]> {
+    return this.statements.findAll.query<BillingEntitlementRecord>([]);
   }
 
   async countAll(): Promise<number> {
@@ -74,14 +61,14 @@ export class SQLiteBillingEntitlementRepository {
     return Number(rows[0]?.count ?? 0);
   }
 
-  syncOperations(records: LocalBillingEntitlement[]): SQLiteStatementOperation[] {
+  syncOperations(records: BillingEntitlementRecord[]): SQLiteStatementOperation[] {
     for (const record of records) LocalBillingEntitlementMapper.validate(record);
     return records.map((record) => this.upsertOperation(record));
   }
 }
 
 export class LocalBillingEntitlementMapper {
-  static toInsert(record: LocalBillingEntitlement): unknown[] {
+  static toInsert(record: BillingEntitlementRecord): unknown[] {
     return [
       record.id,
       record.businessId,
@@ -99,7 +86,7 @@ export class LocalBillingEntitlementMapper {
     ];
   }
 
-  static validate(record: LocalBillingEntitlement): void {
+  static validate(record: BillingEntitlementRecord): void {
     if (!record.id || !record.businessId) throw new Error("Billing projection requires id and businessId.");
     if (!Number.isSafeInteger(record.aggregateVersion) || record.aggregateVersion < 0) throw new Error("Invalid aggregateVersion.");
     if (!Number.isSafeInteger(record.createdAt) || !Number.isSafeInteger(record.updatedAt)) throw new Error("Invalid billing projection timestamps.");

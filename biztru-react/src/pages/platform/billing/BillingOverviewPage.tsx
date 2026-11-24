@@ -19,6 +19,7 @@ import { GlassIcon } from "../../../components/ui/GlassIcon";
 
 import { billingPlanApi } from "../../../Biztru/services/platform/billing/billing-plan.api"; 
 import { platformSubscriptionApi } from "../../../Biztru/services/platform/billing/platform-subscription.api";
+import { usePlatformSession } from "../../../Biztru/services/PlatformSession/PlatformSessionContext";
 
 interface BillingOverviewData {
   plans: number;
@@ -35,15 +36,19 @@ export default function BillingOverviewPage() {
   const [data, setData] = useState<BillingOverviewData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+  const { session, isAuthenticated} = usePlatformSession();
   const load = useCallback(async () => {
     try {
+      if (!isAuthenticated || !session.accessToken) {
+        setError("Platform authentication required.");
+        return;
+        }
       setLoading(true);
       setError("");
 
       const [plans, metrics] = await Promise.all([
-        billingPlanApi.list(),
-        platformSubscriptionApi.getMetrics(),
+        billingPlanApi.list(session.accessToken),
+        platformSubscriptionApi.getMetrics(session.accessToken),
       ]);
 
       setData({

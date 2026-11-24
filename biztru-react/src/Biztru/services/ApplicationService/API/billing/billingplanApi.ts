@@ -1,7 +1,5 @@
-
-// BillingApi.ts
-
 import { BusinessManager } from "../../../../Composer/BusinessManager";
+import type { LocalBillingCycle } from "../../../../offline/sqlite/businessDatabase/repositories/SQLiteBillings/SQLitePlanVersion";
 
 /* =========================================================
    TYPES
@@ -43,7 +41,7 @@ export interface BillingPlanVersionRecord {
   planVersion: number;
   priceMinor: string;
   currency: string;
-  billingCycle: string;
+  billingCycle: LocalBillingCycle;
   intervalCount: number;
   trialDays: number;
   maxStaff: number;

@@ -5,6 +5,7 @@ import type {
 
 import { BillingPlanStatement } from "../../statements/billing/plans/billingPlanStatements";
 import { billingPlanKeys } from "../../statements/billing/plans/billingPlanStatementKey";
+import type { BillingPlanRecord } from "../../../../../services/ApplicationService/API/billing/billingplanApi";
 
 export type LocalBillingPlanStatus =
   | "DRAFT"
@@ -12,17 +13,6 @@ export type LocalBillingPlanStatus =
   | "RETIRED"
   | "ARCHIVED";
 
-export interface LocalBillingPlan {
-  id: string;
-  code: string;
-  name: string;
-  description: string | null;
-  status: LocalBillingPlanStatus;
-  displayOrder: number;
-  isFeatured: number;
-  createdAt: number;
-  updatedAt: number;
-}
 
 export interface BillingPlanListFilters {
   status?: LocalBillingPlanStatus | "all";
@@ -47,7 +37,7 @@ export class SQLiteBillingPlanRepository {
   // ============================================================
 
   upsertOperation(
-    plan: LocalBillingPlan,
+    plan: BillingPlanRecord,
   ): SQLiteStatementOperation {
     return {
       statementKey: billingPlanKeys.upsert,
@@ -56,7 +46,7 @@ export class SQLiteBillingPlanRepository {
   }
 
   updateOperation(
-    plan: LocalBillingPlan,
+    plan: BillingPlanRecord,
   ): SQLiteStatementOperation {
     return {
       statementKey: billingPlanKeys.update,
@@ -77,13 +67,13 @@ export class SQLiteBillingPlanRepository {
   // IMMEDIATE WRITES
   // ============================================================
 
-  async upsert(plan: LocalBillingPlan): Promise<void> {
+  async upsert(plan: BillingPlanRecord): Promise<void> {
     await this.statements.upsert.execute(
       BillingPlanMapper.toInsert(plan),
     );
   }
 
-  async update(plan: LocalBillingPlan): Promise<void> {
+  async update(plan: BillingPlanRecord): Promise<void> {
     await this.statements.update.execute(
       BillingPlanMapper.toUpdate(plan),
     );
@@ -99,8 +89,8 @@ export class SQLiteBillingPlanRepository {
 
   async findById(
     id: string,
-  ): Promise<LocalBillingPlan | null> {
-    const rows = await this.statements.findById.query<LocalBillingPlan>([
+  ): Promise<BillingPlanRecord| null> {
+    const rows = await this.statements.findById.query<BillingPlanRecord>([
       id,
     ]);
 
@@ -109,8 +99,8 @@ export class SQLiteBillingPlanRepository {
 
   async findByCode(
     code: string,
-  ): Promise<LocalBillingPlan | null> {
-    const rows = await this.statements.findByCode.query<LocalBillingPlan>([
+  ): Promise<BillingPlanRecord | null> {
+    const rows = await this.statements.findByCode.query<BillingPlanRecord>([
       code,
     ]);
 
@@ -121,13 +111,13 @@ export class SQLiteBillingPlanRepository {
   // LIST
   // ============================================================
 
-  async findAll(): Promise<LocalBillingPlan[]> {
-    return this.statements.findAll.query<LocalBillingPlan>([]);
+  async findAll(): Promise<BillingPlanRecord[]> {
+    return this.statements.findAll.query<BillingPlanRecord>([]);
   }
 
   async list(
     filters: BillingPlanListFilters = {},
-  ): Promise<LocalBillingPlan[]> {
+  ): Promise<BillingPlanRecord[]> {
     const status = filters.status ?? "all";
     const search = filters.search?.trim() || null;
 
@@ -141,7 +131,7 @@ export class SQLiteBillingPlanRepository {
       0,
     );
 
-    return this.statements.list.query<LocalBillingPlan>([
+    return this.statements.list.query<BillingPlanRecord>([
       status,
       status,
       search,
@@ -152,12 +142,12 @@ export class SQLiteBillingPlanRepository {
     ]);
   }
 
-  async findPublished(): Promise<LocalBillingPlan[]> {
-    return this.statements.findPublished.query<LocalBillingPlan>([]);
+  async findPublished(): Promise<BillingPlanRecord[]> {
+    return this.statements.findPublished.query<BillingPlanRecord>([]);
   }
 
-  async getAll(): Promise<LocalBillingPlan[]> {
-    return this.statements.getAll.query<LocalBillingPlan>([]);
+  async getAll(): Promise<BillingPlanRecord[]> {
+    return this.statements.getAll.query<BillingPlanRecord>([]);
   }
 
   // ============================================================
@@ -196,7 +186,7 @@ export class SQLiteBillingPlanRepository {
    * before removing or archiving missing catalogue records.
    */
   syncOperations(
-    plans: LocalBillingPlan[],
+    plans: BillingPlanRecord[],
   ): SQLiteStatementOperation[] {
     return plans.map((plan) => this.upsertOperation(plan));
   }
@@ -207,7 +197,7 @@ export class SQLiteBillingPlanRepository {
 // ================================================================
 
 export class BillingPlanMapper {
-  static toInsert(plan: LocalBillingPlan): unknown[] {
+  static toInsert(plan: BillingPlanRecord): unknown[] {
     return [
       plan.id,
       plan.code,
@@ -221,7 +211,7 @@ export class BillingPlanMapper {
     ];
   }
 
-  static toUpdate(plan: LocalBillingPlan): unknown[] {
+  static toUpdate(plan: BillingPlanRecord): unknown[] {
     return [
       plan.code,
       plan.name,
